@@ -1,3 +1,16 @@
 <resources>
+
     <string name="app_name">Android Tasks</string>
+
+    <!-- Values for the Tasks -->
+    <string name="task_title">Title</string>
+    <string name="task_location">Location</string>
+    <string name="task_description">Description</string>
+    <string name="task_start">Start</string>
+    <string name="task_due">Due</string>
+    <string name="task_completed">Completed</string>
+    <string name="task_percent_complete">Percent complete</string>
+    <string name="task_status">Status</string>
+    <string name="task_url">URL</string>
+
 </resources>
