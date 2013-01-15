@@ -27,7 +27,7 @@ import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
-import org.dmsf.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import android.app.Activity;
 import android.content.ContentValues;

@@ -21,7 +21,7 @@ package org.dmfs.tasks.model;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
-import org.dmsf.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import android.content.Context;
 
