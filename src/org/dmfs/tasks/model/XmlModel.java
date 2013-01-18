@@ -28,7 +28,7 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
-import org.dmsf.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;

@@ -23,7 +23,7 @@ import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dmsf.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
