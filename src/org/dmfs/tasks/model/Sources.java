@@ -168,6 +168,19 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 
 			mAccountModelMap.put(authenticator.type, model);
 		}
+
+		try
+		{
+			Model defaultModel = new DefaultModel(mContext);
+			defaultModel.inflate();
+
+			mAccountModelMap.put(TaskContract.LOCAL_ACCOUNT, defaultModel);
+		}
+		catch (ModelInflaterException e)
+		{
+			Log.e(TAG, "could not inflate default model", e);
+		}
+
 	}
 
 
@@ -202,6 +215,17 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	public Model getModel(String accountType)
 	{
 		return mAccountModelMap.get(accountType);
+	}
+
+
+	/**
+	 * Return a default model. This model can be used if {@link #getModel(String)} returned {@code null}. Which should not happen btw.
+	 * 
+	 * @return A {@link Model} instance.
+	 */
+	public Model getDefaultModel()
+	{
+		return mAccountModelMap.get(TaskContract.LOCAL_ACCOUNT);
 	}
 
 
