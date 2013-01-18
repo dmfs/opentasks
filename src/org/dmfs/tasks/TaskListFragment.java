@@ -5,7 +5,9 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.dummy.DummyContent;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,7 +70,7 @@ public class TaskListFragment extends ListFragment {
 		/**
 		 * Callback for when an item has been selected.
 		 */
-		public void onItemSelected(String id);
+		public void onItemSelected(Uri taskUri);
 	}
 
 	/**
@@ -77,7 +79,7 @@ public class TaskListFragment extends ListFragment {
 	 */
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
-		public void onItemSelected(String id) {
+		public void onItemSelected(Uri uri) {
 		}
 	};
 
@@ -97,7 +99,7 @@ public class TaskListFragment extends ListFragment {
 		//CursorLoader taskCursorLoader = new CursorLoader(appContext, tasksURI,
 		//		new String[] { "_id", "title" }, null, null, null);
 		Cursor tasksCursor = appContext.getContentResolver().query(TaskContract.Tasks.CONTENT_URI,
-				new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE }, null, null, null);
+				new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE,  }, null, null, null);
 
 		// TODO: replace with a real list adapter.
 		//setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
@@ -182,7 +184,9 @@ public class TaskListFragment extends ListFragment {
 		Toast.makeText(appContext, "Selected ID is : " + selectedId, Toast.LENGTH_SHORT).show();
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		mCallbacks.onItemSelected(selectedId);
+		Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, Long.parseLong(selectedId));
+		mCallbacks.onItemSelected(taskUri);
+		
 	}
 
 	@Override

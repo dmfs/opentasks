@@ -59,8 +59,8 @@ public class XmlModel extends Model
 
 	private final static String TAG = "org.dmfs.tasks.model.XmlModel";
 
-	public final static String METADATA_TASKS = "org.dmfs.tasks.TASKS";
-	public final static String NAMESPACE = "org.dmfs.tasks";
+	public final static String METADATA_TASKS = "ms.jung.android.caldavtodo.TASKS";
+    public final static String NAMESPACE = "ms.jung.android.caldavtodo";
 
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
 	private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();
@@ -311,7 +311,7 @@ public class XmlModel extends Model
 			}
 		});
 
-		FIELD_INFLATER_MAP.put("start", new FieldInflater()
+		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater()
 		{
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
@@ -472,6 +472,22 @@ public class XmlModel extends Model
 		});
 
 		FIELD_INFLATER_MAP.put("status", new FieldInflater()
+		{
+			@Override
+			public FieldAdapter<?> getFieldAdapter()
+			{
+				return new IntegerFieldAdapter(TaskContract.Tasks.STATUS);
+			}
+
+
+			@Override
+			int getDefaultTitleId()
+			{
+				return R.string.task_status;
+			}
+		});
+		
+		FIELD_INFLATER_MAP.put("priority", new FieldInflater()
 		{
 			@Override
 			public FieldAdapter<?> getFieldAdapter()

@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class TaskViewActivity extends Activity implements OnContentLoadedListene
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION)
 		.addInteger(Tasks.PRIORITY, Tasks.COLOR, Tasks.COMPLETED, Tasks.DTSTART, Tasks.DUE, Tasks.STATUS, Tasks.CLASSIFICATION).addLong(Tasks.LIST_ID);
+
+	private static final String TAG = null;
 
 	private ArrayList<ContentValues> mValues = new ArrayList<ContentValues>();
 	private ViewGroup mContent;
@@ -87,6 +90,7 @@ public class TaskViewActivity extends Activity implements OnContentLoadedListene
 		{
 			TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
 			editor.setModel(mModel);
+			Log.d(TAG, "Values : " + values.toString());
 			editor.setValues(values);
 			mContent.addView(editor);
 		}
