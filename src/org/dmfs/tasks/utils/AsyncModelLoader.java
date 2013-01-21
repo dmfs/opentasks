@@ -64,8 +64,12 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 		{
 
 			Sources sources = Sources.getInstance(mContext);
-
-			return sources.getModel(accountTypes[0]);
+			Model rModel;
+			rModel = sources.getModel(accountTypes[0]);
+			if(rModel == null){
+				rModel = sources.getDefaultModel();
+			}
+			return rModel;
 		}
 		else
 		{

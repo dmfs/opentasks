@@ -2,23 +2,19 @@ package org.dmfs.tasks;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.dummy.DummyContent;
 
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.CursorAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -94,32 +90,35 @@ public class TaskListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		
-
-		//CursorLoader taskCursorLoader = new CursorLoader(appContext, tasksURI,
-		//		new String[] { "_id", "title" }, null, null, null);
-		Cursor tasksCursor = appContext.getContentResolver().query(TaskContract.Tasks.CONTENT_URI,
-				new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE,  }, null, null, null);
+		// CursorLoader taskCursorLoader = new CursorLoader(appContext,
+		// tasksURI,
+		// new String[] { "_id", "title" }, null, null, null);
+		Cursor tasksCursor = appContext.getContentResolver().query(
+				TaskContract.Tasks.CONTENT_URI,
+				new String[] { TaskContract.Tasks._ID,
+						TaskContract.Tasks.TITLE, }, null, null, null);
 
 		// TODO: replace with a real list adapter.
-		//setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-		//		android.R.layout.simple_list_item_activated_1,
-		//		android.R.id.text1, DummyContent.ITEMS));
+		// setListAdapter(new
+		// ArrayAdapter<DummyContent.DummyItem>(getActivity(),
+		// android.R.layout.simple_list_item_activated_1,
+		// android.R.id.text1, DummyContent.ITEMS));
 		Log.d(TAG, "No of tasks are :" + tasksCursor.getCount());
 		setListAdapter(new TaskCursorAdapter(appContext, tasksCursor));
 	}
-	
-	
-	private class TaskCursorAdapter extends CursorAdapter{
-		
+
+	private class TaskCursorAdapter extends CursorAdapter {
+
 		LayoutInflater viewInflater;
 		int columnIndex;
-		public TaskCursorAdapter(Context context, Cursor cursor){
+
+		public TaskCursorAdapter(Context context, Cursor cursor) {
 			super(context, cursor, false);
-			viewInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			viewInflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			columnIndex = cursor.getColumnIndex("title");
 		}
-		
+
 		@Override
 		public void bindView(View view, Context context, Cursor cursor) {
 			TextView tv = (TextView) view.findViewById(R.id.task_title);
@@ -129,13 +128,14 @@ public class TaskListFragment extends ListFragment {
 
 		@Override
 		public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-			View inflatedView = viewInflater.inflate(R.layout.task_title_display, null);
+			View inflatedView = viewInflater.inflate(
+					R.layout.task_title_display, null);
 			TextView tv = (TextView) inflatedView.findViewById(R.id.task_title);
 			String taskName = cursor.getString(columnIndex);
 			tv.setText(taskName);
 			return inflatedView;
 		}
-		
+
 	};
 
 	@Override
@@ -178,15 +178,17 @@ public class TaskListFragment extends ListFragment {
 			long id) {
 		super.onListItemClick(listView, view, position, id);
 		ListAdapter la = listView.getAdapter();
-		Cursor selectedItem = (Cursor)la.getItem(position);
+		Cursor selectedItem = (Cursor) la.getItem(position);
 		int taskIdIndex = selectedItem.getColumnIndex(Tasks._ID);
 		String selectedId = selectedItem.getString(taskIdIndex);
-		Toast.makeText(appContext, "Selected ID is : " + selectedId, Toast.LENGTH_SHORT).show();
+		Toast.makeText(appContext, "Selected ID is : " + selectedId,
+				Toast.LENGTH_SHORT).show();
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
-		Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, Long.parseLong(selectedId));
+		Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI,
+				Long.parseLong(selectedId));
 		mCallbacks.onItemSelected(taskUri);
-		
+
 	}
 
 	@Override

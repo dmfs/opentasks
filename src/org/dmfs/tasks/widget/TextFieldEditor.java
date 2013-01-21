@@ -30,6 +30,11 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * Editor Field for simple text.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 
 public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 {

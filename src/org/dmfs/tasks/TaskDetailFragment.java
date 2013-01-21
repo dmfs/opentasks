@@ -21,11 +21,19 @@ package org.dmfs.tasks;
 
 import java.util.ArrayList;
 
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.utils.AsyncContentLoader;
+import org.dmfs.tasks.utils.AsyncModelLoader;
+import org.dmfs.tasks.utils.ContentValueMapper;
+import org.dmfs.tasks.utils.OnContentLoadedListener;
+import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.widget.TaskView;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,15 +41,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.model.Model;
-import org.dmfs.tasks.model.Sources;
-import org.dmfs.tasks.utils.AsyncContentLoader;
-import org.dmfs.tasks.utils.ContentValueMapper;
-import org.dmfs.tasks.utils.OnContentLoadedListener;
+import android.widget.Toast;
 
 /**
  * A fragment representing a single Task detail screen. This fragment is either
@@ -52,7 +52,7 @@ import org.dmfs.tasks.utils.OnContentLoadedListener;
  */
 
 public class TaskDetailFragment extends Fragment implements
-		OnContentLoadedListener {
+		OnContentLoadedListener, OnModelLoadedListener {
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -70,11 +70,17 @@ public class TaskDetailFragment extends Fragment implements
 					Tasks.DTSTART, Tasks.DUE, Tasks.STATUS,
 					Tasks.CLASSIFICATION).addLong(Tasks.LIST_ID);
 
+	private static final String TASK_MODEL = null;
+
 	/**
 	 * The dummy content this fragment is presenting.
 	 */
 	private String taskUri;
 	private Context appContext;
+
+	ArrayList<ContentValues> mValues;
+	ViewGroup mContent;
+	Model mModel;
 
 	private Intent appIntent;
 
@@ -90,6 +96,7 @@ public class TaskDetailFragment extends Fragment implements
 		super.onCreate(savedInstanceState);
 
 		taskUri = getArguments().getString(ARG_ITEM_ID);
+		mValues = new ArrayList<ContentValues>();
 	}
 
 	@Override
@@ -106,47 +113,9 @@ public class TaskDetailFragment extends Fragment implements
 		View rootView = inflater.inflate(R.layout.fragment_task_detail,
 				container, false);
 
-		// Show the dummy content as text in a TextView.
-		/*
-		 * if (taskId != null) {
-		 * 
-		 * Cursor selectedTaskCursor = appContext.getContentResolver().query(
-		 * TaskContract.Tasks.CONTENT_URI, new String[] {
-		 * TaskContract.Tasks._ID, TaskContract.Tasks.TITLE,
-		 * TaskContract.Tasks.PRIORITY, TaskContract.Tasks.DESCRIPTION },
-		 * TaskContract.Tasks._ID + "=?", new String[] { taskId }, null);
-		 * 
-		 * Log.d(TAG, "Are there results :" + (selectedTaskCursor.getCount() > 0
-		 * ? "Yes" : "No"));
-		 * 
-		 * 
-		 * int titleColumn =
-		 * selectedTaskCursor.getColumnIndex(TaskContract.Tasks.TITLE); int
-		 * priorityColumn =
-		 * selectedTaskCursor.getColumnIndex(TaskContract.Tasks.PRIORITY); int
-		 * descriptionColumn =
-		 * selectedTaskCursor.getColumnIndex(TaskContract.Tasks.DESCRIPTION);
-		 * 
-		 * selectedTaskCursor.moveToFirst(); String taskTitle =
-		 * selectedTaskCursor.getString(titleColumn); int taskPriority =
-		 * selectedTaskCursor.getInt(priorityColumn); String taskDescription =
-		 * selectedTaskCursor.getString(descriptionColumn);
-		 * 
-		 * Log.d(TAG, taskTitle); Log.d(TAG, "" + taskDescription); Log.d(TAG,
-		 * "" + taskPriority);
-		 * 
-		 * ((TextView) rootView.findViewById(R.id.task_title))
-		 * .setText(taskTitle); }
-		 */
-
 		if (taskUri != null) {
-			((TextView) rootView.findViewById(R.id.task_title))
-					.setText(taskUri);
-
-			ViewGroup mContent = (ViewGroup) rootView
-					.findViewById(R.id.content);
-
-			Model mModel = Sources.getInstance(appContext).getModel("");
+			
+			mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
 			Uri data = Uri.parse(taskUri);
 
@@ -154,18 +123,62 @@ public class TaskDetailFragment extends Fragment implements
 				new AsyncContentLoader(appContext, this, CONTENT_VALUE_MAPPER)
 						.execute(data);
 			} else {
-				ArrayList<ContentValues> mValues = savedInstanceState
-						.getParcelableArrayList(KEY_VALUES);
-
+				mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
+				new AsyncModelLoader(appContext, this).execute("");
 			}
 		}
 
 		return rootView;
 	}
 
+	private void updateView() {
+		final LayoutInflater inflater = (LayoutInflater) appContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		mContent.removeAllViews();
+		for (ContentValues values : mValues) {
+			TaskView editor = (TaskView) inflater.inflate(R.layout.task_view,
+					mContent, false);
+			editor.setModel(mModel);
+			Log.d(TAG, "Values : " + values.toString());
+			editor.setValues(values);
+			mContent.addView(editor);
+		}
+		Log.d(TAG, "At the end of updateView");
+	}
+
 	@Override
 	public void onContentLoaded(ContentValues values) {
-		// TODO Auto-generated method stub
+		if (values == null) {
+			Toast.makeText(appContext, "Could not load Task", Toast.LENGTH_LONG)
+					.show();
+			return;
+		}
+		
+		new AsyncModelLoader(appContext, this).execute("");
+		
+		mValues.add(values);
+		//updateView();
 
+	}
+
+	@Override
+	public void onModelLoaded(Model model) {
+		if (model == null) {
+			Toast.makeText(appContext, "Could not load Model", Toast.LENGTH_LONG)
+					.show();
+			return;
+		}
+		
+		mModel = model;
+		
+		updateView();
+		
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState){
+		super.onSaveInstanceState(outState);
+		outState.putParcelableArrayList(KEY_VALUES, mValues);
 	}
 }
