@@ -64,9 +64,9 @@ public class TaskDetailFragment extends Fragment implements
 	private static final String KEY_VALUES = "key_values";
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
-			.addString(Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION,
+			.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION,
 					Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION)
-			.addInteger(Tasks.PRIORITY, Tasks.COLOR, Tasks.COMPLETED,
+			.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.COMPLETED,
 					Tasks.DTSTART, Tasks.DUE, Tasks.STATUS,
 					Tasks.CLASSIFICATION).addLong(Tasks.LIST_ID);
 
@@ -155,7 +155,7 @@ public class TaskDetailFragment extends Fragment implements
 			return;
 		}
 		
-		new AsyncModelLoader(appContext, this).execute("");
+		new AsyncModelLoader(appContext, this).execute(values.getAsString(Tasks.ACCOUNT_TYPE));
 		
 		mValues.add(values);
 		//updateView();
