@@ -48,7 +48,7 @@ public class TaskViewActivity extends Activity implements OnContentLoadedListene
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION)
-		.addInteger(Tasks.PRIORITY, Tasks.COLOR, Tasks.COMPLETED, Tasks.DTSTART, Tasks.DUE, Tasks.STATUS, Tasks.CLASSIFICATION).addLong(Tasks.LIST_ID);
+		.addInteger(Tasks.PRIORITY, Tasks.TASK_COLOR, Tasks.COMPLETED, Tasks.DTSTART, Tasks.DUE, Tasks.STATUS, Tasks.CLASSIFICATION).addLong(Tasks.LIST_ID);
 
 	private static final String TAG = null;
 
