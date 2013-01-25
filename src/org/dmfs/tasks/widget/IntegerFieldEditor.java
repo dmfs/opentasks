@@ -1,5 +1,5 @@
 /*
- * TextFieldEditor.java
+ * IntegerFieldEditor.java
  *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
@@ -16,50 +16,47 @@
  * limitations under the License.
  * 
  */
-
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
+
 
 /**
- * Editor Field for simple text.
+ * Widget to edit Integer values
  * 
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Arjun Naik <arjun@arjunnaik.in>
+ * 
  */
 
-public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
+public class IntegerFieldEditor extends AbstractFieldEditor implements TextWatcher
 {
-
-	private StringFieldAdapter mAdapter;
-	private TextView mTitle;
+	private IntegerFieldAdapter mAdapter;
 	private EditText mText;
 
 
-	public TextFieldEditor(Context context)
+	public IntegerFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
-		super(context);
+		super(context, attrs, defStyle);
 	}
 
 
-	public TextFieldEditor(Context context, AttributeSet attrs)
+	public IntegerFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public TextFieldEditor(Context context, AttributeSet attrs, int defStyle)
+	public IntegerFieldEditor(Context context)
 	{
-		super(context, attrs, defStyle);
+		super(context);
 	}
 
 
@@ -75,7 +72,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	public void setup(FieldDescriptor descriptor)
 	{
 		super.setup(descriptor);
-		mAdapter = (StringFieldAdapter) descriptor.getFieldAdapter();
+		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
 
@@ -85,7 +82,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	{
 		if (mValues != null)
 		{
-			mText.setText(mAdapter.get(mValues));
+			mText.setText(mAdapter.get(mValues).toString());
 		}
 	}
 
@@ -95,7 +92,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	{
 		if (mValues != null)
 		{
-			mAdapter.set(mValues, mText.getText().toString());
+			mAdapter.set(mValues, Integer.parseInt(mText.getText().toString()));
 		}
 	}
 

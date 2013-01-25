@@ -256,14 +256,14 @@ public final class FieldDescriptor
 	}
 
 
-	void setEditorLayout(int id)
+	void setEditorLayout(LayoutDescriptor ld)
 	{
-		mEditLayout = new LayoutDescriptor(id);
+		mEditLayout = ld;
 	}
 
 
-	void setViewLayout(int id)
+	void setViewLayout(LayoutDescriptor ld)
 	{
-		mViewLayout = new LayoutDescriptor(id);
+		mViewLayout = ld;
 	}
 }

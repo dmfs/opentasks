@@ -28,6 +28,7 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.provider.tasks.TaskContract;
 
 import android.content.Context;
@@ -60,7 +61,7 @@ public class XmlModel extends Model
 	private final static String TAG = "org.dmfs.tasks.model.XmlModel";
 
 	public final static String METADATA_TASKS = "ms.jung.android.caldavtodo.TASKS";
-    public final static String NAMESPACE = "ms.jung.android.caldavtodo";
+	public final static String NAMESPACE = "ms.jung.android.caldavtodo";
 
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
 	private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();
@@ -325,13 +326,14 @@ public class XmlModel extends Model
 			{
 				return R.string.task_start;
 			}
-			
+
+
 			@Override
-			void customizeDescriptor (Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(modelContext, descriptor, parser);
-				descriptor.setViewLayout(0);
-				descriptor.setEditorLayout(0);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
 		});
 
@@ -349,6 +351,15 @@ public class XmlModel extends Model
 			{
 				return R.string.task_start;
 			}
+
+
+			@Override
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("start_time", new FieldInflater()
@@ -364,6 +375,15 @@ public class XmlModel extends Model
 			int getDefaultTitleId()
 			{
 				return R.string.task_start;
+			}
+
+
+			@Override
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
 		});
 
@@ -477,6 +497,16 @@ public class XmlModel extends Model
 			{
 				return R.string.task_percent_complete;
 			}
+
+
+			@Override
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+			}
+
 		});
 
 		FIELD_INFLATER_MAP.put("status", new FieldInflater()
@@ -493,8 +523,17 @@ public class XmlModel extends Model
 			{
 				return R.string.task_status;
 			}
+
+
+			@Override
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+			}
 		});
-		
+
 		FIELD_INFLATER_MAP.put("priority", new FieldInflater()
 		{
 			@Override
@@ -507,7 +546,15 @@ public class XmlModel extends Model
 			@Override
 			int getDefaultTitleId()
 			{
-				return R.string.task_status;
+				return R.string.task_priority;
+			}
+			
+			@Override
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 			}
 		});
 
