@@ -253,6 +253,17 @@ public final class FieldDescriptor
 		{
 			return (AbstractFieldView) mViewLayout.inflate(inflater);
 		}
+	}
 
+
+	void setEditorLayout(int id)
+	{
+		mEditLayout = new LayoutDescriptor(id);
+	}
+
+
+	void setViewLayout(int id)
+	{
+		mViewLayout = new LayoutDescriptor(id);
 	}
 }

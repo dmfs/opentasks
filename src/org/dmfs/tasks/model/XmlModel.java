@@ -325,6 +325,14 @@ public class XmlModel extends Model
 			{
 				return R.string.task_start;
 			}
+			
+			@Override
+			void customizeDescriptor (Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(0);
+				descriptor.setEditorLayout(0);
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("start_date", new FieldInflater()
