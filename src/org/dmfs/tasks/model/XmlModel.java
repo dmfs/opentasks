@@ -232,7 +232,7 @@ public class XmlModel extends Model
 			{
 				descriptor = new FieldDescriptor(context, getDefaultTitleId(), getContentType(), getFieldAdapter());
 			}
-			customizeDescriptor(modelContext, descriptor, parser);
+			customizeDescriptor(context, modelContext, descriptor, parser);
 			return descriptor;
 		}
 
@@ -240,7 +240,7 @@ public class XmlModel extends Model
 		abstract FieldAdapter<?> getFieldAdapter();
 
 
-		void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+		void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 		{
 			int hintId = parser.getAttributeResourceValue(null, "hint_id", -1);
 			if (hintId != -1)
@@ -330,9 +330,9 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
@@ -355,9 +355,9 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
@@ -380,9 +380,9 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
@@ -501,9 +501,9 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 			}
@@ -527,17 +527,17 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(Tasks.STATUS_CANCELLED, modelContext.getString(R.string.status_cancelled), null);
-				aca.addChoice(Tasks.STATUS_IN_PROCESS, modelContext.getString(R.string.status_in_process), null);
-				aca.addChoice(Tasks.STATUS_COMPLETED, modelContext.getString(R.string.status_completed), null);
-				aca.addChoice(Tasks.STATUS_CANCELLED, modelContext.getString(R.string.status_cancelled), null);
+				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
+				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), null);
+				aca.addChoice(Tasks.STATUS_COMPLETED, context.getString(R.string.status_completed), null);
+				aca.addChoice(Tasks.STATUS_CANCELLED, context.getString(R.string.status_cancelled), null);
 				descriptor.setChoices(aca);
 			}
 		});
@@ -547,7 +547,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new IntegerFieldAdapter(TaskContract.Tasks.STATUS);
+				return new IntegerFieldAdapter(TaskContract.Tasks.PRIORITY);
 			}
 
 
@@ -559,23 +559,23 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(0, modelContext.getString(R.string.priority_low), null);
-				aca.addChoice(1, modelContext.getString(R.string.priority_low), null);
-				aca.addChoice(2, modelContext.getString(R.string.priority_low), null);
-				aca.addChoice(3, modelContext.getString(R.string.priority_default), null);
-				aca.addChoice(4, modelContext.getString(R.string.priority_default), null);
-				aca.addChoice(5, modelContext.getString(R.string.priority_default), null);
-				aca.addChoice(6, modelContext.getString(R.string.priority_high), null);
-				aca.addChoice(7, modelContext.getString(R.string.priority_high), null);
-				aca.addChoice(8, modelContext.getString(R.string.priority_high), null);
-				aca.addChoice(9, modelContext.getString(R.string.priority_urgent), null);
+				aca.addChoice(0, context.getString(R.string.priority_low), null);
+				aca.addChoice(1, context.getString(R.string.priority_low), null);
+				aca.addChoice(2, context.getString(R.string.priority_low), null);
+				aca.addChoice(3, context.getString(R.string.priority_default), null);
+				aca.addChoice(4, context.getString(R.string.priority_default), null);
+				aca.addChoice(5, context.getString(R.string.priority_default), null);
+				aca.addChoice(6, context.getString(R.string.priority_high), null);
+				aca.addChoice(7, context.getString(R.string.priority_high), null);
+				aca.addChoice(8, context.getString(R.string.priority_high), null);
+				aca.addChoice(9, context.getString(R.string.priority_urgent), null);
 				descriptor.setChoices(aca);
 			}
 		});
@@ -596,16 +596,16 @@ public class XmlModel extends Model
 
 
 			@Override
-			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
-				super.customizeDescriptor(modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, modelContext.getString(R.string.classification_private), null);
-				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, modelContext.getString(R.string.classification_private), null);
-				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, modelContext.getString(R.string.classification_confidential), null);
+				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, context.getString(R.string.classification_private), null);
+				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, context.getString(R.string.classification_private), null);
+				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, context.getString(R.string.classification_confidential), null);
 				descriptor.setChoices(aca);
 			}
 		});
