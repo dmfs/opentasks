@@ -18,8 +18,15 @@
  */
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+
 import android.content.Context;
+import android.text.format.Time;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.widget.EditText;
 
 
 /**
@@ -31,6 +38,10 @@ import android.util.AttributeSet;
 
 public class TimeFieldEditor extends AbstractFieldEditor
 {
+	private static final String TAG = "TimeFieldEditor";
+	TimeFieldAdapter mAdapter;
+	EditText mText;
+
 
 	public TimeFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
@@ -51,9 +62,35 @@ public class TimeFieldEditor extends AbstractFieldEditor
 
 
 	@Override
+	protected void onFinishInflate()
+	{
+		super.onFinishInflate();
+		mText = (EditText) findViewById(R.id.text);
+	}
+
+
+	@Override
+	public void setup(FieldDescriptor descriptor)
+	{
+		super.setup(descriptor);
+		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
+		mText.setHint(descriptor.getHint());
+	}
+
+
+	@Override
 	protected void updateView()
 	{
-		// TODO Auto-generated method stub
+		Log.d("TimeFieldEditor", "CALLED");
+		if (mValues != null && mAdapter.get(mValues) != null)
+		{
+			Log.d(TAG, "mValues is not null");
+			Time dateTime = mAdapter.get(mValues);
+			Log.d(TAG, Long.toString(dateTime.toMillis(true)));
+			String formattedTime = dateTime.format("%d/%m/%Y %H:%M:%S");
+			mText.setText(formattedTime);
+
+		}
 
 	}
 

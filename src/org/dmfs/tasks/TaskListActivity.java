@@ -1,9 +1,12 @@
 package org.dmfs.tasks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.widget.Toast;
 
 /**
  * An activity representing a list of Tasks. This activity has different
@@ -15,25 +18,28 @@ import android.support.v4.app.FragmentActivity;
  * <p>
  * The activity makes heavy use of fragments. The list of items is a
  * {@link TaskListFragment} and the item details (if present) is a
- * {@link TaskDetailFragment}.
+ * {@link TaskViewDetailFragment}.
  * <p>
  * This activity also implements the required {@link TaskListFragment.Callbacks}
  * interface to listen for item selections.
  */
 public class TaskListActivity extends FragmentActivity implements
-		TaskListFragment.Callbacks {
+		TaskListFragment.Callbacks, TaskViewDetailFragment.Callback {
 
+	private static final String TAG = "TaskListActivity";
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
 	 * device.
 	 */
 	private boolean mTwoPane;
-
+	Context appContext;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
-
+		appContext = getApplicationContext();
+		
 		if (findViewById(R.id.task_detail_container) != null) {
 			// The detail container view will be present only in the
 			// large-screen layouts (res/values-large and
@@ -61,8 +67,8 @@ public class TaskListActivity extends FragmentActivity implements
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(TaskDetailFragment.ARG_ITEM_ID, uri.toString());
-			TaskDetailFragment fragment = new TaskDetailFragment();
+			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, uri);
+			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.task_detail_container, fragment).commit();
@@ -71,8 +77,27 @@ public class TaskListActivity extends FragmentActivity implements
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, TaskDetailActivity.class);
-			detailIntent.putExtra(TaskDetailFragment.ARG_ITEM_ID, uri.toString());
+			detailIntent.putExtra(TaskViewDetailFragment.ARG_ITEM_ID, uri);
 			startActivity(detailIntent);
 		}
+	}
+
+	@Override
+	public void displayEditTask(Uri taskUri)
+	{
+		if (mTwoPane) {
+			Toast.makeText(appContext, "Edit Task : " + taskUri, Toast.LENGTH_SHORT).show();
+			Log.d(TAG,"Display Edit Task");
+			
+			Bundle arguments = new Bundle();
+			arguments.putParcelable(TaskEditDetailFragment.ARG_ITEM_ID, taskUri);
+			
+			TaskEditDetailFragment fragment = new TaskEditDetailFragment();
+			fragment.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.task_detail_container, fragment).commit();
+
+		}
+		
 	}
 }

@@ -21,10 +21,12 @@ package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.IChoicesAdapter;
+import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
 
 
@@ -38,7 +40,8 @@ import android.widget.TextView;
 public class IntegerFieldView extends AbstractFieldView
 {
 
-	private FieldAdapter<?> mAdapter;
+	private static final String TAG = "IntegerFieldView";
+	private IntegerFieldAdapter mAdapter;
 	private TextView mText;
 
 
@@ -75,7 +78,7 @@ public class IntegerFieldView extends AbstractFieldView
 	public void setup(FieldDescriptor descriptor)
 	{
 		super.setup(descriptor);
-		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
+		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
 
@@ -83,9 +86,15 @@ public class IntegerFieldView extends AbstractFieldView
 	@Override
 	protected void updateView()
 	{
-		if (mValues != null)
+		Log.d(TAG, "mValues : " + mValues);
+		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
+		Log.d(TAG, "mText:" + mText);
+
+		if (mValues != null && mAdapter.get(mValues) != null)
 		{
-			mText.setText(mAdapter.get(mValues).toString());
+			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
+			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
+			mText.setText(choicesAdapter == null ? mAdapter.get(mValues).toString() : choicesAdapter.getTitle(mAdapter.get(mValues)));
 		}
 	}
 

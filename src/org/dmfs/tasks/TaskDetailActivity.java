@@ -1,26 +1,35 @@
 package org.dmfs.tasks;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
+
 
 /**
- * An activity representing a single Task detail screen. This activity is only
- * used on handset devices. On tablet-size devices, item details are presented
+ * An activity representing a single Task detail screen. This activity is only used on handset devices. On tablet-size devices, item details are presented
  * side-by-side with a list of items in a {@link TaskListActivity}.
  * <p>
- * This activity is mostly just a 'shell' activity containing nothing more than
- * a {@link TaskDetailFragment}.
+ * This activity is mostly just a 'shell' activity containing nothing more than a {@link TaskViewDetailFragment}.
  */
-public class TaskDetailActivity extends FragmentActivity {
+public class TaskDetailActivity extends FragmentActivity implements TaskViewDetailFragment.Callback
+{
+
+	private static final String TAG = "TaskDetailActivity";
+	Context appContext;
+
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_detail);
-
+		appContext = getApplicationContext();
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -33,34 +42,49 @@ public class TaskDetailActivity extends FragmentActivity {
 		//
 		// http://developer.android.com/guide/components/fragments.html
 		//
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null)
+		{
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putString(TaskDetailFragment.ARG_ITEM_ID, getIntent()
-					.getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
-			TaskDetailFragment fragment = new TaskDetailFragment();
+			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));
+			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
 			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.task_detail_container, fragment).commit();
+			getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
 		}
 	}
 
+
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			NavUtils.navigateUpTo(this,
-					new Intent(this, TaskListActivity.class));
-			return true;
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case android.R.id.home:
+				// This ID represents the Home or Up button. In the case of this
+				// activity, the Up button is shown. Use NavUtils to allow users
+				// to navigate up one level in the application structure. For
+				// more details, see the Navigation pattern on Android Design:
+				//
+				// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+				//
+				NavUtils.navigateUpTo(this, new Intent(this, TaskListActivity.class));
+				return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+
+	@Override
+	public void displayEditTask(Uri taskUri)
+	{
+		Toast.makeText(appContext, "Edit Task", Toast.LENGTH_SHORT).show();
+		Log.d(TAG, "Display Task Edit details");
+		Bundle arguments = new Bundle();
+		arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));
+		TaskEditDetailFragment fragment = new TaskEditDetailFragment();
+		fragment.setArguments(arguments);
+		getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, fragment).commit();
+
 	}
 }

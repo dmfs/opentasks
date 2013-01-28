@@ -2,7 +2,8 @@
 <org.dmfs.tasks.widget.IntegerFieldView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="8dip" >
 
     <TextView
         android:id="@android:id/title"
@@ -11,18 +12,21 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
+        android:textSize="10sp"
         android:text="" />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1px"
+        android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
     <TextView
         android:id="@+id/text"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip" >
+        android:layout_marginTop="2dip" >
     </TextView>
 
 </org.dmfs.tasks.widget.IntegerFieldView>

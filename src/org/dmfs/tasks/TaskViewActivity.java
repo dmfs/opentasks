@@ -26,6 +26,7 @@ import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
+import org.dmfs.tasks.widget.TaskEdit;
 import org.dmfs.tasks.widget.TaskView;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 

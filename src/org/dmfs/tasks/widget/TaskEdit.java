@@ -28,26 +28,26 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
 
-public class TaskView extends BaseTaskView
+public class TaskEdit extends BaseTaskView
 {
 
 	private ContentValues mValues;
 	private Model mModel;
 
 
-	public TaskView(Context context)
+	public TaskEdit(Context context)
 	{
 		super(context);
 	}
 
 
-	public TaskView(Context context, AttributeSet attrs)
+	public TaskEdit(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public TaskView(Context context, AttributeSet attrs, int defStyle)
+	public TaskEdit(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 	}
@@ -79,11 +79,11 @@ public class TaskView extends BaseTaskView
 		for (FieldDescriptor field : mModel.getFields())
 		{
 
-			AbstractFieldView detailView = field.getViewView(inflater);
-			detailView.setup(field);
-			detailView.setValue(mValues);
-			detailView.updateView();
-			this.addView(detailView);
+			AbstractFieldView editView = field.getEditorView(inflater);
+			editView.setup(field);
+			editView.setValue(mValues);
+			editView.updateView();
+			this.addView(editView);
 		}
 	}
 

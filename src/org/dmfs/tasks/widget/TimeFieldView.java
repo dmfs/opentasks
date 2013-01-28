@@ -19,8 +19,15 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+
 import android.content.Context;
+import android.text.format.Time;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.widget.TextView;
 
 
 /**
@@ -31,6 +38,10 @@ import android.util.AttributeSet;
  */
 public class TimeFieldView extends AbstractFieldView
 {
+	private static final String TAG = "TimeFieldView";
+	private TimeFieldAdapter mAdapter;
+	private TextView mText;
+
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
@@ -51,10 +62,41 @@ public class TimeFieldView extends AbstractFieldView
 
 
 	@Override
-	protected void updateView()
+	protected void onFinishInflate()
 	{
-		// TODO Auto-generated method stub
-		
+		super.onFinishInflate();
+		mText = (TextView) findViewById(R.id.text);
+	}
+
+
+	@Override
+	public void setup(FieldDescriptor descriptor)
+	{
+		Log.d(TAG, "setup is called");
+		super.setup(descriptor);
+		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
+		mText.setHint(descriptor.getHint());
+	}
+
+
+	@Override
+	protected void updateView()
+	{	
+		Log.d(TAG, "mText" + mText);
+		Log.d(TAG, "mAdapter" + mAdapter);
+		if (mValues != null && mAdapter.get(mValues) != null)
+		{
+			Log.d(TAG, "mValues is not null");
+			Time dateTime = mAdapter.get(mValues);
+			Log.d(TAG, Long.toString(dateTime.toMillis(true)));
+			String formattedTime = dateTime.format("%d/%m/%Y %H:%M:%S");
+			mText.setText(formattedTime);
+
+		}
+		else
+		{
+			Log.d(TAG, "mValues is null");
+		}
 	}
 
 }

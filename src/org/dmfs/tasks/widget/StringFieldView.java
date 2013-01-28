@@ -25,6 +25,7 @@ import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.TextView;
 
 
@@ -36,6 +37,7 @@ import android.widget.TextView;
 public class StringFieldView extends AbstractFieldView
 {
 
+	private static final String TAG = "StringFieldView";
 	private FieldAdapter<?> mAdapter;
 	private TextView mText;
 
@@ -77,8 +79,10 @@ public class StringFieldView extends AbstractFieldView
 
 	@Override
 	protected void updateView()
-	{
-		if (mValues != null)
+	{	
+		Object adapterValue = mAdapter.get(mValues);
+		Log.d(TAG, "mText : " + mText);
+		if (mValues != null && adapterValue != null)
 		{
 			mText.setText(mAdapter.get(mValues).toString());
 		}

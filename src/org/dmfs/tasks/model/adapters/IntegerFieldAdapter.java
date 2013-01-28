@@ -33,7 +33,7 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 	/**
 	 * The field name this adapter uses to store the values.
 	 */
-	private final String mFieldName;
+	private final String fieldName;
 
 
 	/**
@@ -44,7 +44,7 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 	 */
 	public IntegerFieldAdapter(String fieldName)
 	{
-		mFieldName = fieldName;
+		this.fieldName = fieldName;
 	}
 
 
@@ -52,14 +52,14 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 	public Integer get(ContentValues values)
 	{
 		// return the value as Integer
-		return values.getAsInteger(mFieldName);
+		return values.getAsInteger(fieldName);
 	}
 
 
 	@Override
 	public void set(ContentValues values, Integer value)
 	{
-		values.put(mFieldName, value);
+		values.put(fieldName, value);
 	}
 
 }

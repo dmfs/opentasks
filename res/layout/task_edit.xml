@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.TaskEdit xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+</org.dmfs.tasks.widget.TaskEdit>

@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="8dip"
-    android:paddingRight="8dip" >
+    android:padding="8dip" >
 
     <TextView
         android:id="@android:id/title"
@@ -13,18 +12,22 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
-        android:text="" />
+        android:text=""
+        android:textColor="@android:color/darker_gray"
+        android:textSize="10sp" />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1px"
+        android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
     <TextView
         android:id="@+id/text"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip" >
+        android:layout_marginTop="2dip" >
     </TextView>
 
 </org.dmfs.tasks.widget.StringFieldView>

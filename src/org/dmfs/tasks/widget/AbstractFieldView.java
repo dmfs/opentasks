@@ -40,7 +40,7 @@ public abstract class AbstractFieldView extends LinearLayout
 	private final static String TAG = "AbstractFieldView";
 	protected ContentValues mValues;
 	private TextView mTitleId;
-
+	protected FieldDescriptor fieldDescriptor;
 
 	public AbstractFieldView(Context context)
 	{
@@ -86,6 +86,7 @@ public abstract class AbstractFieldView extends LinearLayout
 
 	public void setup(FieldDescriptor descriptor)
 	{
+		fieldDescriptor = descriptor;
 		if (mTitleId != null)
 		{
 			mTitleId.setText(descriptor.getTitle());
