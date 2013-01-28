@@ -37,6 +37,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
+import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
@@ -533,11 +534,13 @@ public class XmlModel extends Model
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
+				Resources res = context.getResources();
+
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
-				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), null);
-				aca.addChoice(Tasks.STATUS_COMPLETED, context.getString(R.string.status_completed), null);
-				aca.addChoice(Tasks.STATUS_CANCELLED, context.getString(R.string.status_cancelled), null);
+				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), res.getDrawable(R.drawable.ic_status_needs_action));
+				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), res.getDrawable(R.drawable.ic_status_in_process));
+				aca.addChoice(Tasks.STATUS_COMPLETED, context.getString(R.string.status_completed), res.getDrawable(R.drawable.ic_status_completed));
+				aca.addChoice(Tasks.STATUS_CANCELLED, context.getString(R.string.status_cancelled), res.getDrawable(R.drawable.ic_status_cancelled));
 				descriptor.setChoices(aca);
 			}
 		});
@@ -602,10 +605,15 @@ public class XmlModel extends Model
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
+				Resources res = context.getResources();
+
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, context.getString(R.string.classification_private), null);
-				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, context.getString(R.string.classification_private), null);
-				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, context.getString(R.string.classification_confidential), null);
+				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, context.getString(R.string.classification_public),
+					res.getDrawable(R.drawable.ic_classification_public));
+				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, context.getString(R.string.classification_private),
+					res.getDrawable(R.drawable.ic_classification_private));
+				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, context.getString(R.string.classification_confidential),
+					res.getDrawable(R.drawable.ic_classification_confidential));
 				descriptor.setChoices(aca);
 			}
 		});
