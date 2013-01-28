@@ -21,18 +21,27 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 
 
 	@Override
-	public String getTitle(Object id)
+	public String getTitle(Object object)
 	{
-		// TODO Auto-generated method stub
+		int index = mChoices.indexOf(object);
+		if (index >= 0)
+		{
+			return mTitles.get(index);
+		}
 		return null;
 	}
 
 
 	@Override
-	public Drawable getDrawable(Object id)
+	public Drawable getDrawable(Object object)
 	{
-		// TODO Auto-generated method stub
+		int index = mChoices.indexOf(object);
+		if (index >= 0)
+		{
+			return mDrawables.get(index);
+		}
 		return null;
+
 	}
 
 
@@ -43,7 +52,8 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 		mDrawables.add(drawable);
 		return this;
 	}
-	
+
+
 	public List<Object> getChoices()
 	{
 		return Collections.unmodifiableList(mChoices);
