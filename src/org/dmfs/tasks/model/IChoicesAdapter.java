@@ -22,9 +22,9 @@ package org.dmfs.tasks.model;
 import android.graphics.drawable.Drawable;
 import android.widget.Adapter;
 
-public interface IChoicesAdapter extends Adapter {
+public interface IChoicesAdapter {
 
-    public String getTitle(int id);
+    public String getTitle(Object id);
 
-    public Drawable getDrawable(int id);
+    public Drawable getDrawable(Object id);
 }

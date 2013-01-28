@@ -30,6 +30,7 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -531,6 +532,13 @@ public class XmlModel extends Model
 				super.customizeDescriptor(modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+
+				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+				aca.addChoice(Tasks.STATUS_CANCELLED, modelContext.getString(R.string.status_cancelled), null);
+				aca.addChoice(Tasks.STATUS_IN_PROCESS, modelContext.getString(R.string.status_in_process), null);
+				aca.addChoice(Tasks.STATUS_COMPLETED, modelContext.getString(R.string.status_completed), null);
+				aca.addChoice(Tasks.STATUS_CANCELLED, modelContext.getString(R.string.status_cancelled), null);
+				descriptor.setChoices(aca);
 			}
 		});
 
@@ -548,13 +556,57 @@ public class XmlModel extends Model
 			{
 				return R.string.task_priority;
 			}
-			
+
+
 			@Override
 			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+
+				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+				aca.addChoice(0, modelContext.getString(R.string.priority_low), null);
+				aca.addChoice(1, modelContext.getString(R.string.priority_low), null);
+				aca.addChoice(2, modelContext.getString(R.string.priority_low), null);
+				aca.addChoice(3, modelContext.getString(R.string.priority_default), null);
+				aca.addChoice(4, modelContext.getString(R.string.priority_default), null);
+				aca.addChoice(5, modelContext.getString(R.string.priority_default), null);
+				aca.addChoice(6, modelContext.getString(R.string.priority_high), null);
+				aca.addChoice(7, modelContext.getString(R.string.priority_high), null);
+				aca.addChoice(8, modelContext.getString(R.string.priority_high), null);
+				aca.addChoice(9, modelContext.getString(R.string.priority_urgent), null);
+				descriptor.setChoices(aca);
+			}
+		});
+		FIELD_INFLATER_MAP.put("classification", new FieldInflater()
+		{
+			@Override
+			public FieldAdapter<?> getFieldAdapter()
+			{
+				return new IntegerFieldAdapter(TaskContract.Tasks.CLASSIFICATION);
+			}
+
+
+			@Override
+			int getDefaultTitleId()
+			{
+				return R.string.task_classification;
+			}
+
+
+			@Override
+			void customizeDescriptor(Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+
+				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, modelContext.getString(R.string.classification_private), null);
+				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, modelContext.getString(R.string.classification_private), null);
+				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, modelContext.getString(R.string.classification_confidential), null);
+				descriptor.setChoices(aca);
 			}
 		});
 
