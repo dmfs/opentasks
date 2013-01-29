@@ -13,20 +13,37 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
-        android:text="" />
+        android:text=""
+        android:textColor="@android:color/black"
+        android:textSize="10sp" />
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1px"
+        android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
-    <EditText
-        android:id="@+id/text"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip" >
+        android:orientation="horizontal" >
 
-        <requestFocus />
-    </EditText>
+        <Button
+            android:layout_weight="2"
+            android:id="@+id/task_date_picker"
+            style="@android:style/Widget.Holo.Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip" >
+        </Button>
+
+        <Button
+            android:layout_weight="1"
+            android:id="@+id/task_time_picker"
+            style="@android:style/Widget.Holo.Spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip" >
+        </Button>
+    </LinearLayout>
 
 </org.dmfs.tasks.widget.TimeFieldEditor>

@@ -80,7 +80,7 @@ public class TaskEdit extends BaseTaskView
 		{
 
 			AbstractFieldView editView = field.getEditorView(inflater);
-			editView.setup(field);
+			editView.setup(field, getActivity());
 			editView.setValue(mValues);
 			editView.updateView();
 			this.addView(editView);

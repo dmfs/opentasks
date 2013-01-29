@@ -23,6 +23,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.format.Time;
 import android.util.AttributeSet;
@@ -70,10 +71,10 @@ public class TimeFieldView extends AbstractFieldView
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor)
+	public void setup(FieldDescriptor descriptor, Activity context)
 	{
 		Log.d(TAG, "setup is called");
-		super.setup(descriptor);
+		super.setup(descriptor, context);
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
@@ -81,17 +82,23 @@ public class TimeFieldView extends AbstractFieldView
 
 	@Override
 	protected void updateView()
-	{	
+	{
 		Log.d(TAG, "mText" + mText);
 		Log.d(TAG, "mAdapter" + mAdapter);
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
 			Log.d(TAG, "mValues is not null");
 			Time dateTime = mAdapter.get(mValues);
-			Log.d(TAG, Long.toString(dateTime.toMillis(true)));
-			String formattedTime = dateTime.format("%d/%m/%Y %H:%M:%S");
+			String formattedTime;
+			if (!dateTime.allDay)
+			{
+				formattedTime = dateTime.format("%d/%m/%Y %H:%M:%S");
+			}
+			else
+			{
+				formattedTime = dateTime.format("%d/%m/%Y");
+			}
 			mText.setText(formattedTime);
-
 		}
 		else
 		{

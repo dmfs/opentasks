@@ -21,6 +21,7 @@ package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.model.FieldDescriptor;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -41,7 +42,8 @@ public abstract class AbstractFieldView extends LinearLayout
 	protected ContentValues mValues;
 	private TextView mTitleId;
 	protected FieldDescriptor fieldDescriptor;
-
+	protected Activity mContext;
+	
 	public AbstractFieldView(Context context)
 	{
 		super(context);
@@ -84,8 +86,9 @@ public abstract class AbstractFieldView extends LinearLayout
 	}
 
 
-	public void setup(FieldDescriptor descriptor)
+	public void setup(FieldDescriptor descriptor, Activity context)
 	{
+		mContext = context;
 		fieldDescriptor = descriptor;
 		if (mTitleId != null)
 		{

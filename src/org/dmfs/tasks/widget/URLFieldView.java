@@ -22,6 +22,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -70,8 +71,8 @@ public class URLFieldView extends AbstractFieldView {
 	}
 
 	@Override
-	public void setup(FieldDescriptor descriptor) {
-		super.setup(descriptor);
+	public void setup(FieldDescriptor descriptor, Activity context) {
+		super.setup(descriptor, context);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}

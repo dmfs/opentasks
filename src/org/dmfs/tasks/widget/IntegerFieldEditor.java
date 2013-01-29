@@ -22,6 +22,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -69,9 +70,9 @@ public class IntegerFieldEditor extends AbstractFieldEditor implements TextWatch
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor)
+	public void setup(FieldDescriptor descriptor, Activity context)
 	{
-		super.setup(descriptor);
+		super.setup(descriptor, context);
 		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}

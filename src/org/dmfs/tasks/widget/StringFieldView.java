@@ -23,6 +23,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -69,9 +70,9 @@ public class StringFieldView extends AbstractFieldView
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor)
+	public void setup(FieldDescriptor descriptor, Activity context)
 	{
-		super.setup(descriptor);
+		super.setup(descriptor, context);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}

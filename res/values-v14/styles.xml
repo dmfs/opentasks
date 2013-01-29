@@ -1,5 +1,7 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
+    <style name="AppTheme" parent="android:Theme.Holo.Dark.DarkActionBar"></style>
+
+    <style name="CorrectionTheme" parent="android:Theme.Holo"></style>
 
 </resources>

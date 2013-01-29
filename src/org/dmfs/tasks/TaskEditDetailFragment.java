@@ -81,6 +81,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 
 	private Intent appIntent;
 	private Callback callback;
+	private Activity mActivity;
 
 
 	/**
@@ -106,6 +107,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	{
 		super.onAttach(activity);
 
+		mActivity = activity;
 		appContext = activity.getApplicationContext();
 		appIntent = activity.getIntent();
 	}
@@ -145,6 +147,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 		{
 			TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
 			editor.setModel(mModel);
+			editor.setActivity(mActivity);
 			Log.d(TAG, "Values : " + values.toString());
 			editor.setValues(values);
 			mContent.addView(editor);

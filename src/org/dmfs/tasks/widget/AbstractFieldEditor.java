@@ -21,6 +21,7 @@ package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.model.FieldDescriptor;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -68,9 +69,9 @@ public abstract class AbstractFieldEditor extends AbstractFieldView
 	}
 
 
-	public void setup(FieldDescriptor descriptor)
+	public void setup(FieldDescriptor descriptor, Activity context)
 	{
-		super.setup(descriptor);
+		super.setup(descriptor, context);
 	}
 
 

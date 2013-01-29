@@ -22,6 +22,7 @@ package org.dmfs.tasks.widget;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.Model;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -64,7 +65,7 @@ public class TaskView extends BaseTaskView
 		mModel = model;
 	}
 
-
+	
 	public void setValues(ContentValues values)
 	{
 		mValues = values;
@@ -80,7 +81,7 @@ public class TaskView extends BaseTaskView
 		{
 
 			AbstractFieldView detailView = field.getViewView(inflater);
-			detailView.setup(field);
+			detailView.setup(field, getActivity());
 			detailView.setValue(mValues);
 			detailView.updateView();
 			this.addView(detailView);

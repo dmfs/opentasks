@@ -22,11 +22,20 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.EditText;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 /**
@@ -36,28 +45,33 @@ import android.widget.EditText;
  * 
  */
 
-public class TimeFieldEditor extends AbstractFieldEditor
+public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetListener, OnTimeSetListener
 {
 	private static final String TAG = "TimeFieldEditor";
 	TimeFieldAdapter mAdapter;
-	EditText mText;
+	Button datePicker, timePicker;
+	private Context appContext;
+	private Time dateTime;
 
 
 	public TimeFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
+		appContext = context.getApplicationContext();
 	}
 
 
 	public TimeFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		appContext = context.getApplicationContext();
 	}
 
 
 	public TimeFieldEditor(Context context)
 	{
 		super(context);
+		appContext = context.getApplicationContext();
 	}
 
 
@@ -65,16 +79,17 @@ public class TimeFieldEditor extends AbstractFieldEditor
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (EditText) findViewById(R.id.text);
+		datePicker = (Button) findViewById(R.id.task_date_picker);
+		timePicker = (Button) findViewById(R.id.task_time_picker);
+		// appContext = getContext();
 	}
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor)
+	public void setup(FieldDescriptor descriptor, Activity context)
 	{
-		super.setup(descriptor);
+		super.setup(descriptor, context);
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
 	}
 
 
@@ -84,14 +99,79 @@ public class TimeFieldEditor extends AbstractFieldEditor
 		Log.d("TimeFieldEditor", "CALLED");
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
-			Log.d(TAG, "mValues is not null");
-			Time dateTime = mAdapter.get(mValues);
-			Log.d(TAG, Long.toString(dateTime.toMillis(true)));
-			String formattedTime = dateTime.format("%d/%m/%Y %H:%M:%S");
-			mText.setText(formattedTime);
+			// Log.d(TAG, "mValues is not null");
+			dateTime = mAdapter.get(mValues);
+			// Log.d(TAG, Long.toString(dateTime.toMillis(true)));
+			String formattedDate = dateTime.format("%d/%m/%Y");
+			datePicker.setText(formattedDate);
+			datePicker.setOnClickListener(new DatePickerHandler());
+			if (dateTime.allDay)
+			{
+				timePicker.setVisibility(View.GONE);
+
+			}
+			else
+			{
+				String formattedTime = dateTime.format("%H:%M:%S");
+				timePicker.setText(formattedTime);
+				timePicker.setOnClickListener(new TimePickerHandler());
+			}
 
 		}
 
 	}
 
+	private class DatePickerHandler implements OnClickListener
+	{
+
+		@Override
+		public void onClick(View v)
+		{
+			DatePickerDialog dateDialog = new DatePickerDialog(mContext, TimeFieldEditor.this, dateTime.year, dateTime.month, dateTime.monthDay);
+			dateDialog.show();
+		}
+
+	}
+
+	private class TimePickerHandler implements OnClickListener
+	{
+
+		@Override
+		public void onClick(View v)
+		{
+			TimePickerDialog timeDialog = new TimePickerDialog(mContext, TimeFieldEditor.this, dateTime.hour, dateTime.minute, dateTime.allDay);
+			timeDialog.show();
+		}
+
+	}
+
+
+	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
+	{
+		dateTime.year = year;
+		dateTime.month = monthOfYear;
+		dateTime.monthDay = dayOfMonth;
+		updateDateTimeSpinners();
+	}
+
+
+	@Override
+	public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+	{
+		dateTime.hour = hourOfDay;
+		dateTime.minute = minute;
+		updateDateTimeSpinners();
+		
+	}
+	
+	private void updateDateTimeSpinners(){
+		String formattedDate = dateTime.format("%d/%m/%Y");
+		datePicker.setText(formattedDate);
+		if(!dateTime.allDay){
+			String formattedTime = dateTime.format("%H:%M:%S");
+			timePicker.setText(formattedTime);
+		}
+	}
+	
 }

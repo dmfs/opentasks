@@ -22,6 +22,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
@@ -63,8 +64,8 @@ public class URLFieldEditor extends AbstractFieldEditor {
 	}
 
 	@Override
-	public void setup(FieldDescriptor descriptor) {
-		super.setup(descriptor);
+	public void setup(FieldDescriptor descriptor, Activity context) {
+		super.setup(descriptor, context);
 		mAdapter = (UrlFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
