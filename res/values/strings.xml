@@ -4,6 +4,7 @@
     <string name="app_name">Android Tasks</string>
 
     <!-- Values for the Tasks -->
+    <string name="task_list">List</string>
     <string name="task_title">Title</string>
     <string name="task_location">Location</string>
     <string name="task_description">Description</string>

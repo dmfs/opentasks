@@ -31,6 +31,7 @@ import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.TaskContract.WriteableTaskLists;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -109,6 +110,11 @@ public class XmlModel extends Model
 
 		try
 		{
+			// add a field for the list
+			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new IntegerFieldAdapter(Tasks.LIST_ID)).setChoices(new CursorChoicesAdapter(
+				mContext.getContentResolver().query(WriteableTaskLists.CONTENT_URI, null, null, null, null)).setKeyColumn(WriteableTaskLists._ID)
+				.setTitleColumn(WriteableTaskLists.LIST_NAME)));
+
 			int eventType;
 
 			// find first tag
