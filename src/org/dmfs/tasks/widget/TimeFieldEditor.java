@@ -18,6 +18,9 @@
  */
 package org.dmfs.tasks.widget;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -35,7 +38,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 
 /**
@@ -50,28 +52,25 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	private static final String TAG = "TimeFieldEditor";
 	TimeFieldAdapter mAdapter;
 	Button datePicker, timePicker;
-	private Context appContext;
 	private Time dateTime;
+	private DateFormat defaultDateFormat, defaultTimeFormat;
 
 
 	public TimeFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-		appContext = context.getApplicationContext();
 	}
 
 
 	public TimeFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		appContext = context.getApplicationContext();
 	}
 
 
 	public TimeFieldEditor(Context context)
 	{
 		super(context);
-		appContext = context.getApplicationContext();
 	}
 
 
@@ -90,6 +89,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	{
 		super.setup(descriptor, context);
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
+		defaultDateFormat = android.text.format.DateFormat.getDateFormat(mContext);
+		defaultTimeFormat = android.text.format.DateFormat.getTimeFormat(mContext);
 	}
 
 
@@ -102,8 +103,6 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			// Log.d(TAG, "mValues is not null");
 			dateTime = mAdapter.get(mValues);
 			// Log.d(TAG, Long.toString(dateTime.toMillis(true)));
-			String formattedDate = dateTime.format("%d/%m/%Y");
-			datePicker.setText(formattedDate);
 			datePicker.setOnClickListener(new DatePickerHandler());
 			if (dateTime.allDay)
 			{
@@ -112,10 +111,9 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			}
 			else
 			{
-				String formattedTime = dateTime.format("%H:%M:%S");
-				timePicker.setText(formattedTime);
 				timePicker.setOnClickListener(new TimePickerHandler());
 			}
+			updateDateTimeSpinners();
 
 		}
 
@@ -162,16 +160,21 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		dateTime.hour = hourOfDay;
 		dateTime.minute = minute;
 		updateDateTimeSpinners();
-		
+
 	}
-	
-	private void updateDateTimeSpinners(){
-		String formattedDate = dateTime.format("%d/%m/%Y");
+
+
+	private void updateDateTimeSpinners()
+	{
+		Date currentDate = new Date(dateTime.toMillis(false));
+		String formattedDate = defaultDateFormat.format(currentDate);
 		datePicker.setText(formattedDate);
-		if(!dateTime.allDay){
-			String formattedTime = dateTime.format("%H:%M:%S");
+
+		if (!dateTime.allDay)
+		{
+			String formattedTime = defaultTimeFormat.format(currentDate);
 			timePicker.setText(formattedTime);
 		}
 	}
-	
+
 }

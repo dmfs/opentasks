@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:paddingLeft="8dip"
     android:paddingRight="8dip" >
-	
+
     <TextView
         android:id="@android:id/title"
         android:layout_width="wrap_content"
@@ -17,17 +17,13 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_height="1px"
+        android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
-    <EditText
-        android:id="@+id/text"
-        android:inputType="number"
+    <Spinner
+        android:id="@+id/integer_choices_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip" >
+        android:spinnerMode="dropdown" />
 
-        <requestFocus />
-    </EditText>
-    
 </org.dmfs.tasks.widget.IntegerFieldEditor>

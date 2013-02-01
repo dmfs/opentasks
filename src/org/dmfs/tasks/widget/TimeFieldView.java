@@ -19,12 +19,15 @@
 
 package org.dmfs.tasks.widget;
 
+import java.util.Date;
+
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -42,7 +45,7 @@ public class TimeFieldView extends AbstractFieldView
 	private static final String TAG = "TimeFieldView";
 	private TimeFieldAdapter mAdapter;
 	private TextView mText;
-
+	java.text.DateFormat defaultDateFormat, defaultTimeFormat;
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
@@ -77,6 +80,8 @@ public class TimeFieldView extends AbstractFieldView
 		super.setup(descriptor, context);
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
+		defaultDateFormat = DateFormat.getDateFormat(getContext());
+		defaultTimeFormat = DateFormat.getTimeFormat(getContext());
 	}
 
 
@@ -89,14 +94,13 @@ public class TimeFieldView extends AbstractFieldView
 		{
 			Log.d(TAG, "mValues is not null");
 			Time dateTime = mAdapter.get(mValues);
+			Date fullDate = new Date(dateTime.toMillis(false));
 			String formattedTime;
+			formattedTime = defaultDateFormat.format(fullDate);
 			if (!dateTime.allDay)
 			{
-				formattedTime = dateTime.format("%d/%m/%Y %H:%M:%S");
-			}
-			else
-			{
-				formattedTime = dateTime.format("%d/%m/%Y");
+				//formattedTime = dateTime.format("%d/%m/%Y");
+				formattedTime = formattedTime + " " + defaultTimeFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);
 		}

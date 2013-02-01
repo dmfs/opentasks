@@ -48,6 +48,9 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 
 	}
 
+	public int getIndex(Object object){
+		return mChoices.indexOf(object);
+	}
 
 	public ArrayChoicesAdapter addChoice(Object choice, String title, Drawable drawable)
 	{

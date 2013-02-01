@@ -28,6 +28,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -44,6 +46,7 @@ public class IntegerFieldView extends AbstractFieldView
 	private static final String TAG = "IntegerFieldView";
 	private IntegerFieldAdapter mAdapter;
 	private TextView mText;
+	private ImageView mImage;
 
 
 	public IntegerFieldView(Context context, AttributeSet attrs, int defStyle)
@@ -72,6 +75,7 @@ public class IntegerFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
+		mImage = (ImageView) findViewById(R.id.choice_drawable);
 	}
 
 
@@ -95,7 +99,16 @@ public class IntegerFieldView extends AbstractFieldView
 		{
 			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
 			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
-			mText.setText(choicesAdapter == null ? mAdapter.get(mValues).toString() : choicesAdapter.getTitle(mAdapter.get(mValues)));
+			if (choicesAdapter == null)
+			{
+				mText.setText(mAdapter.get(mValues).toString());
+				mImage.setVisibility(View.GONE);
+			}
+			else
+			{
+				mText.setText(choicesAdapter.getTitle(mAdapter.get(mValues)));
+				mImage.setImageDrawable(choicesAdapter.getDrawable(mAdapter.get(mValues)));
+			}
 		}
 	}
 

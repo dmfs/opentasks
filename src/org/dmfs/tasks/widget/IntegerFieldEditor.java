@@ -18,16 +18,27 @@
  */
 package org.dmfs.tasks.widget;
 
+import java.util.List;
+
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ArrayChoicesAdapter;
 import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.IChoicesAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.EditText;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 
 /**
@@ -37,10 +48,11 @@ import android.widget.EditText;
  * 
  */
 
-public class IntegerFieldEditor extends AbstractFieldEditor implements TextWatcher
+public class IntegerFieldEditor extends AbstractFieldEditor
 {
+	private static final String TAG = "IntegerFieldEditor";
 	private IntegerFieldAdapter mAdapter;
-	private EditText mText;
+	private Spinner mSpinner;
 
 
 	public IntegerFieldEditor(Context context, AttributeSet attrs, int defStyle)
@@ -65,7 +77,7 @@ public class IntegerFieldEditor extends AbstractFieldEditor implements TextWatch
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (EditText) findViewById(R.id.text);
+		mSpinner = (Spinner) findViewById(R.id.integer_choices_spinner);
 	}
 
 
@@ -74,7 +86,7 @@ public class IntegerFieldEditor extends AbstractFieldEditor implements TextWatch
 	{
 		super.setup(descriptor, context);
 		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
+
 	}
 
 
@@ -83,30 +95,97 @@ public class IntegerFieldEditor extends AbstractFieldEditor implements TextWatch
 	{
 		if (mValues != null)
 		{
-			mText.setText(mAdapter.get(mValues).toString());
+
+			Log.d(TAG, "mValues : " + mValues);
+			Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
+
+			if (mValues != null && mAdapter.get(mValues) != null)
+			{
+				IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
+				Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
+				if (choicesAdapter == null)
+				{
+
+				}
+				else
+				{
+					if (choicesAdapter instanceof ArrayChoicesAdapter)
+					{
+						ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
+						List<Object> choicesList = arrayAdapter.getChoices();
+						IntegerSpinnerAdapter sAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item,
+							R.id.integer_choice_item_text, choicesList, arrayAdapter);
+						mSpinner.setAdapter(sAdapter);
+						int selectedIndex = arrayAdapter.getIndex(mAdapter.get(mValues));
+						mSpinner.setSelection(selectedIndex);
+					}
+				}
+			}
 		}
 	}
 
-
-	@Override
-	public void afterTextChanged(Editable s)
+	private class IntegerSpinnerAdapter extends ArrayAdapter<Object> implements SpinnerAdapter
 	{
-		if (mValues != null)
+		LayoutInflater layoutInflater;
+		ArrayChoicesAdapter adapter;
+
+
+		public IntegerSpinnerAdapter(Context context, int resource, int textViewResourceId, List<Object> objects, ArrayChoicesAdapter a)
 		{
-			mAdapter.set(mValues, Integer.parseInt(mText.getText().toString()));
+			super(context, resource, textViewResourceId, objects);
+			layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			adapter = a;
 		}
-	}
 
 
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after)
-	{
-	}
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			SpinnerItemTag tag;
+			if (convertView == null)
+			{
+				convertView = layoutInflater.inflate(R.layout.integer_choices_spinner_item, null);
+				tag = new SpinnerItemTag();
+				tag.iv = (ImageView) convertView.findViewById(R.id.integer_choice_item_image);
+				tag.tv = (TextView) convertView.findViewById(R.id.integer_choice_item_text);
+				convertView.setTag(tag);
+			}
+			else
+			{
+				tag = (SpinnerItemTag) convertView.getTag();
+			}
+
+			String title = adapter.getTitle(getItem(position));
+			Log.d(TAG, Integer.toString(position) + " Title : " + title);
+
+			Drawable image = adapter.getDrawable(getItem(position));
+
+			if (image != null)
+			{
+				tag.iv.setImageDrawable(image);
+			}
+			else
+			{
+				tag.iv.setVisibility(View.GONE);
+			}
+			tag.tv.setText(title);
+
+			return convertView;
+		}
 
 
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count)
-	{
+		@Override
+		public View getDropDownView(int position, View convertView, ViewGroup parent)
+		{
+			return getView(position, convertView, parent);
+		}
+
+		private class SpinnerItemTag
+		{
+			ImageView iv;
+			TextView tv;
+		}
+
 	}
 
 }

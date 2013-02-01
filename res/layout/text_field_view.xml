@@ -11,10 +11,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
-        android:singleLine="true"
-        android:text=""
-        android:textColor="@android:color/darker_gray"
-        android:textSize="10sp" />
+        android:singleLine="true" />
 
     <View
         android:layout_width="fill_parent"
@@ -23,8 +20,6 @@
 
     <TextView
         android:id="@+id/text"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dip" >

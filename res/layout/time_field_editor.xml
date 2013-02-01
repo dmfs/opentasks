@@ -13,9 +13,7 @@
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="10sp" />
+        android:text="" />
 
     <View
         android:layout_width="fill_parent"
@@ -28,21 +26,21 @@
         android:orientation="horizontal" >
 
         <Button
-            android:layout_weight="2"
             android:id="@+id/task_date_picker"
             style="@android:style/Widget.Holo.Spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dip" >
+            android:layout_marginTop="4dip"
+            android:layout_weight="2" >
         </Button>
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/task_time_picker"
             style="@android:style/Widget.Holo.Spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dip" >
+            android:layout_marginTop="4dip"
+            android:layout_weight="1" >
         </Button>
     </LinearLayout>
 
