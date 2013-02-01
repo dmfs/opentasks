@@ -62,7 +62,7 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	 */
 	public static final String ARG_ITEM_ID = "item_id";
 
-	private static final String TAG = "TaskDetailFragment";
+	private static final String TAG = "TaskViewDetailFragment";
 
 	private static final String KEY_VALUES = "key_values";
 
@@ -128,7 +128,7 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 
 		if (taskUri != null)
 		{
-
+			Log.d(TAG, "taskUri is not null");
 			mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
 			if (savedInstanceState == null)
@@ -140,6 +140,9 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 				mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
 				new AsyncModelLoader(appContext, this).execute("");
 			}
+		}
+		else{
+			Log.w(TAG, "taskUri is null!!!");
 		}
 
 		return rootView;

@@ -43,6 +43,15 @@
             android:authorities="ms.jung.android.caldavtodo.provider"
             android:label="@string/provider_label"
             android:multiprocess="false" />
+
+        <activity
+            android:name="org.dmfs.tasks.AddTaskActivity"
+            android:label="@string/title_activity_add_task"
+            android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.dmfs.tasks.TaskListActivity" />
+        </activity>
     </application>
 
 </manifest>

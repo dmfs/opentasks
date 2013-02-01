@@ -67,6 +67,7 @@ public class TaskListActivity extends FragmentActivity implements
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
 			Bundle arguments = new Bundle();
+			Log.d(TAG, "Added Fragment Intent");
 			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, uri);
 			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
 			fragment.setArguments(arguments);
@@ -91,12 +92,30 @@ public class TaskListActivity extends FragmentActivity implements
 			
 			Bundle arguments = new Bundle();
 			arguments.putParcelable(TaskEditDetailFragment.ARG_ITEM_ID, taskUri);
-			
+			arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.EDIT_TASK);
 			TaskEditDetailFragment fragment = new TaskEditDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.task_detail_container, fragment).commit();
 
+		}
+		
+	}
+
+	@Override
+	public void onAddNewTask()
+	{
+		if (mTwoPane) {
+			Bundle arguments = new Bundle();
+			arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.NEW_TASK);
+			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
+			fragment.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction()
+					.replace(R.id.task_detail_container, fragment).commit();
+
+		} else {
+			Intent addTaskIntent = new Intent(this, AddTaskActivity.class);
+			startActivity(addTaskIntent);
 		}
 		
 	}

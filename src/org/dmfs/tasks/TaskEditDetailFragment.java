@@ -57,7 +57,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 {
 
 	public static final String ARG_ITEM_ID = "item_id";
-	
+
 	private static final String TAG = "TaskEditDetailFragment";
 
 	private static final String KEY_VALUES = "key_values";
@@ -68,6 +68,12 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE);
 
 	private static final String TASK_MODEL = null;
+
+	public static final String FRAGMENT_INTENT = "fragment_intent";
+
+	public static final String EDIT_TASK = "edit_task";
+
+	public static final String NEW_TASK = "new_task";
 
 	/**
 	 * The dummy content this fragment is presenting.
@@ -82,6 +88,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	private Intent appIntent;
 	private Callback callback;
 	private Activity mActivity;
+	String fragmentIntent;
 
 
 	/**
@@ -96,8 +103,11 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		taskUri = getArguments().getParcelable(TaskViewDetailFragment.ARG_ITEM_ID);
+		fragmentIntent = getArguments().getString(TaskEditDetailFragment.FRAGMENT_INTENT);
+		if (fragmentIntent.equals(TaskEditDetailFragment.EDIT_TASK))
+		{
+			taskUri = getArguments().getParcelable(TaskViewDetailFragment.ARG_ITEM_ID);
+		}
 		mValues = new ArrayList<ContentValues>();
 	}
 
@@ -118,19 +128,22 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
 
-		if (taskUri != null)
+		if (fragmentIntent.equals(TaskEditDetailFragment.EDIT_TASK))
 		{
-
-			mContent = (ViewGroup) rootView.findViewById(R.id.content);
-
-			if (savedInstanceState == null)
+			if (taskUri != null)
 			{
-				new AsyncContentLoader(appContext, this, CONTENT_VALUE_MAPPER).execute(taskUri);
-			}
-			else
-			{
-				mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-				new AsyncModelLoader(appContext, this).execute("");
+
+				mContent = (ViewGroup) rootView.findViewById(R.id.content);
+
+				if (savedInstanceState == null)
+				{
+					new AsyncContentLoader(appContext, this, CONTENT_VALUE_MAPPER).execute(taskUri);
+				}
+				else
+				{
+					mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
+					new AsyncModelLoader(appContext, this).execute("");
+				}
 			}
 		}
 

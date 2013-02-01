@@ -111,9 +111,11 @@ public class XmlModel extends Model
 		try
 		{
 			// add a field for the list
-			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new IntegerFieldAdapter(Tasks.LIST_ID)).setChoices(new CursorChoicesAdapter(
-				mContext.getContentResolver().query(WriteableTaskLists.CONTENT_URI, null, null, null, null)).setKeyColumn(WriteableTaskLists._ID)
-				.setTitleColumn(WriteableTaskLists.LIST_NAME)));
+			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new IntegerFieldAdapter(Tasks.LIST_ID))
+				.setChoices(
+					new CursorChoicesAdapter(mContext.getContentResolver().query(WriteableTaskLists.CONTENT_URI, null, null, null, null)).setKeyColumn(
+						WriteableTaskLists._ID).setTitleColumn(WriteableTaskLists.LIST_NAME))
+				.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor)).setViewLayout(new LayoutDescriptor(R.layout.integer_field_view)));
 
 			int eventType;
 
