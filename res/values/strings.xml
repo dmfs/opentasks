@@ -40,5 +40,8 @@
     <string name="priority_default">default</string>
     <string name="priority_high">high</string>
     <string name="priority_urgent">urgent</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_add_task">AddTaskActivity</string>
 
 </resources>

@@ -22,7 +22,8 @@ public class CursorChoicesAdapter implements IChoicesAdapter
 	@Override
 	public String getTitle(Object object)
 	{
-		return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
+		//return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
+		return null;
 	}
 
 
