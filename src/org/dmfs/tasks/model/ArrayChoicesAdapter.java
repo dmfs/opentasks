@@ -13,6 +13,7 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 
 	private static final String TAG = "ArrayChoicesAdapter";
 	private final List<Object> mChoices = new ArrayList<Object>();
+	private final List<Object> mVisibleChoices = new ArrayList<Object>();
 	private final List<String> mTitles = new ArrayList<String>();
 	private final List<Drawable> mDrawables = new ArrayList<Drawable>();
 
@@ -49,10 +50,19 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 	}
 
 	public int getIndex(Object object){
-		return mChoices.indexOf(object);
+		return mVisibleChoices.indexOf(object);
 	}
 
 	public ArrayChoicesAdapter addChoice(Object choice, String title, Drawable drawable)
+	{
+		mVisibleChoices.add(choice);
+		mChoices.add(choice);
+		mTitles.add(title);
+		mDrawables.add(drawable);
+		return this;
+	}
+
+	public ArrayChoicesAdapter addHiddenChoice(Object choice, String title, Drawable drawable)
 	{
 		mChoices.add(choice);
 		mTitles.add(title);
@@ -63,7 +73,7 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 
 	public List<Object> getChoices()
 	{
-		return Collections.unmodifiableList(mChoices);
+		return Collections.unmodifiableList(mVisibleChoices);
 	}
 
 }

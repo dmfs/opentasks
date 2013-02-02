@@ -411,6 +411,15 @@ public class XmlModel extends Model
 			{
 				return R.string.task_due;
 			}
+
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("due_date", new FieldInflater()
@@ -426,6 +435,15 @@ public class XmlModel extends Model
 			int getDefaultTitleId()
 			{
 				return R.string.task_due;
+			}
+
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
 		});
 
@@ -443,6 +461,15 @@ public class XmlModel extends Model
 			{
 				return R.string.task_due;
 			}
+
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("completed", new FieldInflater()
@@ -458,6 +485,15 @@ public class XmlModel extends Model
 			int getDefaultTitleId()
 			{
 				return R.string.task_completed;
+			}
+
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
 		});
 
@@ -475,6 +511,15 @@ public class XmlModel extends Model
 			{
 				return R.string.task_completed;
 			}
+
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("completed_time", new FieldInflater()
@@ -490,6 +535,15 @@ public class XmlModel extends Model
 			int getDefaultTitleId()
 			{
 				return R.string.task_completed;
+			}
+
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
 			}
 		});
 
@@ -578,14 +632,14 @@ public class XmlModel extends Model
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(0, context.getString(R.string.priority_low), null);
-				aca.addChoice(1, context.getString(R.string.priority_low), null);
-				aca.addChoice(2, context.getString(R.string.priority_low), null);
-				aca.addChoice(3, context.getString(R.string.priority_default), null);
+				aca.addHiddenChoice(1, context.getString(R.string.priority_low), null);
+				aca.addHiddenChoice(2, context.getString(R.string.priority_low), null);
+				aca.addHiddenChoice(3, context.getString(R.string.priority_default), null);
 				aca.addChoice(4, context.getString(R.string.priority_default), null);
-				aca.addChoice(5, context.getString(R.string.priority_default), null);
-				aca.addChoice(6, context.getString(R.string.priority_high), null);
+				aca.addHiddenChoice(5, context.getString(R.string.priority_default), null);
+				aca.addHiddenChoice(6, context.getString(R.string.priority_high), null);
 				aca.addChoice(7, context.getString(R.string.priority_high), null);
-				aca.addChoice(8, context.getString(R.string.priority_high), null);
+				aca.addHiddenChoice(8, context.getString(R.string.priority_high), null);
 				aca.addChoice(9, context.getString(R.string.priority_urgent), null);
 				descriptor.setChoices(aca);
 			}
@@ -631,7 +685,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new UrlFieldAdapter(TaskContract.Tasks.URL);
+				return new StringFieldAdapter(TaskContract.Tasks.URL);
 			}
 
 
