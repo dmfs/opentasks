@@ -33,18 +33,39 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 	/**
 	 * The field name this adapter uses to store the values.
 	 */
-	private final String fieldName;
+	private final String mFieldName;
+
+	/**
+	 * The default value, if any.
+	 */
+	private final Integer mDefaultValue;
 
 
 	/**
-	 * Constructor for a new IntegerFieldAdapter.
+	 * Constructor for a new IntegerFieldAdapter without default value.
 	 * 
 	 * @param fieldName
 	 *            The name of the field to use when loading or storing the value.
 	 */
 	public IntegerFieldAdapter(String fieldName)
 	{
-		this.fieldName = fieldName;
+		mFieldName = fieldName;
+		mDefaultValue = null;
+	}
+
+
+	/**
+	 * Constructor for a new IntegerFieldAdapter with default value.
+	 * 
+	 * @param fieldName
+	 *            The name of the field to use when loading or storing the value.
+	 * @param defaultValue
+	 *            The defaultValue.
+	 */
+	public IntegerFieldAdapter(String fieldName, Integer defaultValue)
+	{
+		mFieldName = fieldName;
+		mDefaultValue = defaultValue;
 	}
 
 
@@ -52,14 +73,20 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 	public Integer get(ContentValues values)
 	{
 		// return the value as Integer
-		return values.getAsInteger(fieldName);
+		return values.getAsInteger(mFieldName);
+	}
+
+
+	@Override
+	public Integer getDefault(ContentValues values)
+	{
+		return mDefaultValue;
 	}
 
 
 	@Override
 	public void set(ContentValues values, Integer value)
 	{
-		values.put(fieldName, value);
+		values.put(mFieldName, value);
 	}
-
 }

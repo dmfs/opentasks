@@ -21,37 +21,73 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 
+
 /**
  * A StringFieldAdapter stores {@link String} values in a certain field of {@link ContentValues}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class StringFieldAdapter extends FieldAdapter<String> {
+public final class StringFieldAdapter extends FieldAdapter<String>
+{
 
-    /**
-     * The field name this adapter uses to store the values.
-     */
-    private final String mFieldName;
+	/**
+	 * The field name this adapter uses to store the values.
+	 */
+	private final String mFieldName;
 
-    /**
-     * Constructor for a new StringFieldAdapter.
-     * 
-     * @param fieldName
-     *            The name of the field to use when loading or storing the value.
-     */
-    public StringFieldAdapter(String fieldName) {
-	mFieldName = fieldName;
-    }
+	/**
+	 * The default value, if any.
+	 */
+	private final String mDefaultValue;
 
-    @Override
-    public String get(ContentValues values) {
-	// return the value as String
-	return values.getAsString(mFieldName);
-    }
 
-    @Override
-    public void set(ContentValues values, String value) {
-	values.put(mFieldName, value);
-    }
+	/**
+	 * Constructor for a new StringFieldAdapter without default value.
+	 * 
+	 * @param fieldName
+	 *            The name of the field to use when loading or storing the value.
+	 */
+	public StringFieldAdapter(String fieldName)
+	{
+		mFieldName = fieldName;
+		mDefaultValue = null;
+	}
+
+
+	/**
+	 * Constructor for a new StringFieldAdapter with default value.
+	 * 
+	 * @param fieldName
+	 *            The name of the field to use when loading or storing the value.
+	 * @param defaultValue
+	 *            The defaultValue.
+	 */
+	public StringFieldAdapter(String fieldName, String defaultValue)
+	{
+		mFieldName = fieldName;
+		mDefaultValue = defaultValue;
+	}
+
+
+	@Override
+	public String get(ContentValues values)
+	{
+		// return the value as String
+		return values.getAsString(mFieldName);
+	}
+
+
+	@Override
+	public String getDefault(ContentValues values)
+	{
+		return mDefaultValue;
+	}
+
+
+	@Override
+	public void set(ContentValues values, String value)
+	{
+		values.put(mFieldName, value);
+	}
 
 }

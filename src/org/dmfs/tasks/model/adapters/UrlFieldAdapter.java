@@ -24,37 +24,73 @@ import java.net.URL;
 
 import android.content.ContentValues;
 
+
 /**
  * A UrlFieldAdapter stores {@link URL} values in {@link ContentValues}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class UrlFieldAdapter extends FieldAdapter<URL> {
+public final class UrlFieldAdapter extends FieldAdapter<URL>
+{
 
-    private final String mField;
+	private final String mField;
 
-    /**
-     * Constructor for a new TimeFieldAdapter.
-     * 
-     * @param urlField
-     *            The field name that holds the URL.
-     */
-    public UrlFieldAdapter(String urlField) {
-	mField = urlField;
-    }
+	private final URL mDefaultValue;
 
-    @Override
-    public URL get(ContentValues values) {
-	try {
-	    return new URL(values.getAsString(mField));
-	} catch (MalformedURLException e) {
-	    return null;
+
+	/**
+	 * Constructor for a new urlFieldAdapter without default value.
+	 * 
+	 * @param urlField
+	 *            The field name that holds the URL.
+	 */
+	public UrlFieldAdapter(String urlField)
+	{
+		mField = urlField;
+		mDefaultValue = null;
 	}
-    }
 
-    @Override
-    public void set(ContentValues values, URL value) {
-	values.put(mField, value.toString());
-    }
+
+	/**
+	 * Constructor for a new UrlFieldAdapter with default value.
+	 * 
+	 * @param fieldName
+	 *            The name of the field to use when loading or storing the value.
+	 * @param defaultValue
+	 *            The defaultValue.
+	 */
+	public UrlFieldAdapter(String fieldName, URL defaultValue)
+	{
+		mField = fieldName;
+		mDefaultValue = defaultValue;
+	}
+
+
+	@Override
+	public URL get(ContentValues values)
+	{
+		try
+		{
+			return new URL(values.getAsString(mField));
+		}
+		catch (MalformedURLException e)
+		{
+			return null;
+		}
+	}
+
+
+	@Override
+	public URL getDefault(ContentValues values)
+	{
+		return mDefaultValue;
+	}
+
+
+	@Override
+	public void set(ContentValues values, URL value)
+	{
+		values.put(mField, value.toString());
+	}
 
 }

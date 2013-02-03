@@ -20,7 +20,7 @@
 package org.dmfs.tasks.model.adapters;
 
 /**
- * This type holds all the information that's necessary to show which list a task belongs to.
+ * This class holds all the information that's necessary to show which list a task belongs to.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

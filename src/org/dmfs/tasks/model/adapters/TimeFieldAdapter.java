@@ -19,9 +19,10 @@
 
 package org.dmfs.tasks.model.adapters;
 
+import java.util.TimeZone;
+
 import android.content.ContentValues;
 import android.text.format.Time;
-import android.util.Log;
 
 
 /**
@@ -40,8 +41,6 @@ import android.util.Log;
  */
 public final class TimeFieldAdapter extends FieldAdapter<Time>
 {
-
-	private static final String TAG = "TimeFieldAdapter";
 	private final String mTimestampField;
 	private final String mTzField;
 	private final String mAllDayField;
@@ -69,7 +68,6 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	public Time get(ContentValues values)
 	{
 		Long timestamp = values.getAsLong(mTimestampField);
-		Log.d(TAG, Long.toString(timestamp));
 		if (timestamp == null)
 		{
 			// if the time stamp is null we return null
@@ -83,8 +81,27 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 		// set the allday flag appropriately
 		Integer allDayInt = values.getAsInteger(mAllDayField);
-		
+
 		value.allDay = allDayInt != null && allDayInt != 0;
+		return value;
+	}
+
+
+	@Override
+	public Time getDefault(ContentValues values)
+	{
+		// create a new Time for the given time zone, falling back to the default time zone if none is given
+		String timezone = values.getAsString(mTzField);
+		Time value = new Time(timezone == null ? TimeZone.getDefault().getID() : timezone);
+
+		value.setToNow();
+
+		Integer allDayInt = values.getAsInteger(mAllDayField);
+		if (allDayInt != null && allDayInt != 0)
+		{
+			value.set(value.year, value.month, value.monthDay);
+		}
+
 		return value;
 	}
 

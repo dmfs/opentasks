@@ -44,6 +44,17 @@ public abstract class FieldAdapter<Type>
 
 
 	/**
+	 * Get a default value for this Adapter.
+	 * 
+	 * @param values
+	 *            The {link ContentValues}.
+	 * 
+	 * @return A default Value
+	 */
+	public abstract Type getDefault(ContentValues values);
+
+
+	/**
 	 * Set a value in the given {@link ContentValues}.
 	 * 
 	 * @param values

@@ -1,5 +1,5 @@
 /*
- * ListTitleFiledAdapter.java
+ * ListDetailsFieldAdapter.java
  *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
@@ -81,6 +81,14 @@ public final class ListDetailsFieldAdapter extends FieldAdapter<ListDetails>
 	{
 		return new ListDetails(values.getAsInteger(mListIdFieldName), values.getAsString(mTitleFieldName), values.getAsString(mAccountNameFieldName),
 			values.getAsInteger(mColorFieldName));
+	}
+
+
+	@Override
+	public ListDetails getDefault(ContentValues values)
+	{
+		// return null, it doesn't make sense to return a default here
+		return null;
 	}
 
 
