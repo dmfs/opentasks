@@ -68,8 +68,8 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION)
-		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.COMPLETED, Tasks.STATUS, Tasks.CLASSIFICATION)
-		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE);
+		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE)
+		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED);
 
 	private static final String TASK_MODEL = null;
 
@@ -113,9 +113,9 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 
 		appContext = activity.getApplicationContext();
 		appIntent = activity.getIntent();
-		if (!(activity instanceof Callback)) {
-			throw new IllegalStateException(
-					"Activity must implement TaskViewDetailFragment callback.");
+		if (!(activity instanceof Callback))
+		{
+			throw new IllegalStateException("Activity must implement TaskViewDetailFragment callback.");
 		}
 		callback = (Callback) activity;
 	}
@@ -141,7 +141,8 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 				new AsyncModelLoader(appContext, this).execute("");
 			}
 		}
-		else{
+		else
+		{
 			Log.w(TAG, "taskUri is null!!!");
 		}
 
