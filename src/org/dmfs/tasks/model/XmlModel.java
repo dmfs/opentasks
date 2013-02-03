@@ -412,7 +412,7 @@ public class XmlModel extends Model
 				return R.string.task_due;
 			}
 
-			
+
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
@@ -437,7 +437,7 @@ public class XmlModel extends Model
 				return R.string.task_due;
 			}
 
-			
+
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
@@ -462,7 +462,7 @@ public class XmlModel extends Model
 				return R.string.task_due;
 			}
 
-			
+
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
@@ -487,7 +487,7 @@ public class XmlModel extends Model
 				return R.string.task_completed;
 			}
 
-			
+
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
@@ -512,7 +512,7 @@ public class XmlModel extends Model
 				return R.string.task_completed;
 			}
 
-			
+
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
@@ -537,7 +537,7 @@ public class XmlModel extends Model
 				return R.string.task_completed;
 			}
 
-			
+
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
@@ -631,16 +631,16 @@ public class XmlModel extends Model
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(0, context.getString(R.string.priority_low), null);
-				aca.addHiddenChoice(1, context.getString(R.string.priority_low), null);
-				aca.addHiddenChoice(2, context.getString(R.string.priority_low), null);
-				aca.addHiddenChoice(3, context.getString(R.string.priority_default), null);
-				aca.addChoice(4, context.getString(R.string.priority_default), null);
-				aca.addHiddenChoice(5, context.getString(R.string.priority_default), null);
-				aca.addHiddenChoice(6, context.getString(R.string.priority_high), null);
-				aca.addChoice(7, context.getString(R.string.priority_high), null);
-				aca.addHiddenChoice(8, context.getString(R.string.priority_high), null);
-				aca.addChoice(9, context.getString(R.string.priority_urgent), null);
+				aca.addChoice(0, context.getString(R.string.priority_undefined), null);
+				aca.addChoice(9, context.getString(R.string.priority_low), null);
+				aca.addHiddenChoice(8, context.getString(R.string.priority_low), null);
+				aca.addHiddenChoice(7, context.getString(R.string.priority_low), null);
+				aca.addHiddenChoice(6, context.getString(R.string.priority_low), null);
+				aca.addChoice(5, context.getString(R.string.priority_medium), null);
+				aca.addHiddenChoice(4, context.getString(R.string.priority_high), null);
+				aca.addHiddenChoice(3, context.getString(R.string.priority_high), null);
+				aca.addHiddenChoice(2, context.getString(R.string.priority_high), null);
+				aca.addChoice(1, context.getString(R.string.priority_high), null);
 				descriptor.setChoices(aca);
 			}
 		});

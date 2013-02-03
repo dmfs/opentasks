@@ -36,8 +36,9 @@
 
     <!-- Priority labels -->
 
+    <string name="priority_undefined">undefined</string>
     <string name="priority_low">low</string>
-    <string name="priority_default">default</string>
+    <string name="priority_medium">medium</string>
     <string name="priority_high">high</string>
     <string name="priority_urgent">urgent</string>
     <string name="hello_world">Hello world!</string>
