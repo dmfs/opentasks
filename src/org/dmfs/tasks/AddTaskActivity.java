@@ -35,7 +35,7 @@ public class AddTaskActivity extends FragmentActivity
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_add_task, menu);
+		getMenuInflater().inflate(R.menu.activity_edit_task, menu);
 		return true;
 	}
 
