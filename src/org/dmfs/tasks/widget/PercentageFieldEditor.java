@@ -21,7 +21,6 @@ package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.IChoicesAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
 import android.app.Activity;
@@ -29,7 +28,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 
@@ -40,30 +41,30 @@ import android.widget.TextView;
  * 
  */
 
-public class IntegerFieldView extends AbstractFieldView
+public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeekBarChangeListener
 {
 
-	private static final String TAG = "IntegerFieldView";
+	private static final String TAG = "PercentageFieldView";
 	private IntegerFieldAdapter mAdapter;
 	private TextView mText;
-	private ImageView mImage;
+	private SeekBar mSeek;
 
 
-	public IntegerFieldView(Context context, AttributeSet attrs, int defStyle)
+	public PercentageFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 
 	}
 
 
-	public IntegerFieldView(Context context, AttributeSet attrs)
+	public PercentageFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 
 	}
 
 
-	public IntegerFieldView(Context context)
+	public PercentageFieldEditor(Context context)
 	{
 		super(context);
 
@@ -75,7 +76,8 @@ public class IntegerFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
-		mImage = (ImageView) findViewById(R.id.choice_drawable);
+		mSeek = (SeekBar) findViewById(R.id.percentage_seek_bar);
+		mSeek.setOnSeekBarChangeListener(this);
 	}
 
 
@@ -97,22 +99,38 @@ public class IntegerFieldView extends AbstractFieldView
 
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
-			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
-			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
-			if (choicesAdapter == null)
-			{
-				mText.setText(mAdapter.get(mValues).toString());
-				mImage.setVisibility(View.GONE);
-			}
-			else
-			{
-				mText.setText(choicesAdapter.getTitle(mAdapter.get(mValues)));
-				mImage.setImageDrawable(choicesAdapter.getDrawable(mAdapter.get(mValues)));
-			}
+			int percentage = mAdapter.get(mValues);
+			Log.d(TAG, "Percentage : " + percentage);
+			mSeek.setProgress(percentage);
+			mText.setText(Integer.toString(percentage));
 		}
 		else{
 			setVisibility(View.GONE);
 		}
+	}
+
+
+	@Override
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+	{
+		mText.setText(Integer.toString(progress));
+		
+	}
+
+
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar)
+	{
+		
+		
+	}
+
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar)
+	{
+		
+		
 	}
 
 }

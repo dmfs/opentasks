@@ -1,5 +1,5 @@
 /*
- * TextFieldEditor.java
+ * IntegerFieldView.java
  *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
@@ -21,44 +21,53 @@ package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.IChoicesAdapter;
+import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
 /**
- * A view that shows the string representation of an object.
+ * Widget to display Integer values.
  * 
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Arjun Naik <arjun@arjunnaik.in>
+ * 
  */
-public class StringFieldView extends AbstractFieldView
+
+public class PercentageFieldView extends AbstractFieldView
 {
 
-	private static final String TAG = "StringFieldView";
-	private FieldAdapter<?> mAdapter;
+	private static final String TAG = "PercentageFieldView";
+	private IntegerFieldAdapter mAdapter;
 	private TextView mText;
+	private ProgressBar mProgress;
 
 
-	public StringFieldView(Context context)
-	{
-		super(context);
-	}
-
-
-	public StringFieldView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
-
-
-	public StringFieldView(Context context, AttributeSet attrs, int defStyle)
+	public PercentageFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
+
+	}
+
+
+	public PercentageFieldView(Context context, AttributeSet attrs)
+	{
+		super(context, attrs);
+
+	}
+
+
+	public PercentageFieldView(Context context)
+	{
+		super(context);
+
 	}
 
 
@@ -67,6 +76,7 @@ public class StringFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
+		mProgress = (ProgressBar) findViewById(R.id.percentage_progress_bar);
 	}
 
 
@@ -74,22 +84,28 @@ public class StringFieldView extends AbstractFieldView
 	public void setup(FieldDescriptor descriptor, Activity context)
 	{
 		super.setup(descriptor, context);
-		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
+		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
 
 
 	@Override
 	protected void updateView()
-	{	
-		Object adapterValue = mAdapter.get(mValues);
-		Log.d(TAG, "mText : " + mText);
-		if (mValues != null && adapterValue != null)
+	{
+		Log.d(TAG, "mValues : " + mValues);
+		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
+		Log.d(TAG, "mText:" + mText);
+
+		if (mValues != null && mAdapter.get(mValues) != null)
 		{
-			mText.setText(mAdapter.get(mValues).toString());
+			int percentage = mAdapter.get(mValues);
+			Log.d(TAG, "Percentage : " + percentage);
+			mProgress.setProgress(percentage);
+			mText.setText(Integer.toString(percentage));
 		}
 		else{
 			setVisibility(View.GONE);
 		}
 	}
+
 }
