@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/edit_task" android:title="Edit Task" android:titleCondensed="Edit"></item>
-    
+
+    <item
+        android:id="@+id/edit_task"
+        android:icon="@drawable/content_edit"
+        android:showAsAction="always"
+        android:title="Edit Task"
+        android:titleCondensed="Edit">
+    </item>
+    <item
+        android:id="@+id/delete_task"
+        android:icon="@drawable/content_discard"
+        android:showAsAction="always"
+        android:title="Delete Task"
+        android:titleCondensed="Delete">
+    </item>
 
 </menu>

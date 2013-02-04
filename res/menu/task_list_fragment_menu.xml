@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/add_task_item" android:title="Add Task" android:titleCondensed="Add"></item>
-    
+
+    <item
+        android:id="@+id/add_task_item"
+        android:icon="@drawable/content_new"
+        android:showAsAction="always"
+        android:title="Add Task"
+        android:titleCondensed="Add">
+    </item>
 
 </menu>

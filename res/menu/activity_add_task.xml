@@ -1,9 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/task_save"
+        android:icon="@drawable/content_save"
+        android:orderInCategory="99"
+        android:showAsAction="always"
+        android:title="@string/action_save"/>
+    <item
+        android:id="@+id/task_cancel"
+        android:icon="@drawable/content_remove"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/menu_settings"/>
+        android:showAsAction="always"
+        android:title="@string/action_cancel"/>
 
 </menu>
