@@ -89,7 +89,7 @@ public class TaskListFragment extends ListFragment
 		// tasksURI,
 		// new String[] { "_id", "title" }, null, null, null);
 		Cursor tasksCursor = appContext.getContentResolver().query(TaskContract.Tasks.CONTENT_URI,
-			new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE, }, null, null, null);
+			new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE, TaskContract.Tasks.LIST_COLOR}, null, null, null);
 
 		// TODO: replace with a real list adapter.
 		// setListAdapter(new
@@ -105,15 +105,17 @@ public class TaskListFragment extends ListFragment
 	private class TaskCursorAdapter extends CursorAdapter
 	{
 
-		LayoutInflater viewInflater;
-		int columnIndex;
+		private LayoutInflater mViewInflater;
+		private int mTitleColumnIndex;
+		private int mListColorColumnIndex;
 
 
 		public TaskCursorAdapter(Context context, Cursor cursor)
 		{
 			super(context, cursor, false);
-			viewInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			columnIndex = cursor.getColumnIndex("title");
+			mViewInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			mTitleColumnIndex = cursor.getColumnIndex(Tasks.TITLE);
+			mListColorColumnIndex = cursor.getColumnIndex(Tasks.LIST_COLOR);
 		}
 
 
@@ -121,18 +123,22 @@ public class TaskListFragment extends ListFragment
 		public void bindView(View view, Context context, Cursor cursor)
 		{
 			TextView tv = (TextView) view.findViewById(R.id.task_title);
-			String taskName = cursor.getString(columnIndex);
+			View cv =view.findViewById(R.id.colorbar);
+			String taskName = cursor.getString(mTitleColumnIndex);
 			tv.setText(taskName);
+			cv.setBackgroundColor(cursor.getInt(mListColorColumnIndex));
 		}
 
 
 		@Override
 		public View newView(Context context, Cursor cursor, ViewGroup viewGroup)
 		{
-			View inflatedView = viewInflater.inflate(R.layout.task_title_display, null);
+			View inflatedView = mViewInflater.inflate(R.layout.task_list_element, null);
 			TextView tv = (TextView) inflatedView.findViewById(R.id.task_title);
-			String taskName = cursor.getString(columnIndex);
+			View cv =inflatedView.findViewById(R.id.colorbar);
+			String taskName = cursor.getString(mTitleColumnIndex);
 			tv.setText(taskName);
+			cv.setBackgroundColor(cursor.getInt(mListColorColumnIndex));
 			return inflatedView;
 		}
 
