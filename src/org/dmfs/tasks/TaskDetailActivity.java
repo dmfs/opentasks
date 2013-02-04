@@ -81,6 +81,7 @@ public class TaskDetailActivity extends FragmentActivity implements TaskViewDeta
 		Toast.makeText(appContext, "Edit Task", Toast.LENGTH_SHORT).show();
 		Log.d(TAG, "Display Task Edit details");
 		Bundle arguments = new Bundle();
+		arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.EDIT_TASK);
 		arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));
 		TaskEditDetailFragment fragment = new TaskEditDetailFragment();
 		fragment.setArguments(arguments);

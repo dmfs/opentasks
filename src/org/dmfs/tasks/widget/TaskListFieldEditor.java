@@ -1,5 +1,5 @@
 /*
- * IntegerFieldView.java
+ * 
  *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
@@ -16,57 +16,44 @@
  * limitations under the License.
  * 
  */
-
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.IChoicesAdapter;
-import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.adapters.ListDetails;
+import org.dmfs.tasks.model.adapters.ListDetailsFieldAdapter;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
-/**
- * Widget to display Integer values.
- * 
- * @author Arjun Naik <arjun@arjunnaik.in>
- * 
- */
-
-public class IntegerFieldView extends AbstractFieldView
+public class TaskListFieldEditor extends AbstractFieldEditor
 {
+	private static final String TAG = "TaskListFieldEditor";
+	TextView mTextListName;
+	TextView mTextListAccount;
+	ListDetailsFieldAdapter mAdapter;
 
-	private static final String TAG = "IntegerFieldView";
-	private IntegerFieldAdapter mAdapter;
-	private TextView mText;
-	private ImageView mImage;
 
-
-	public IntegerFieldView(Context context, AttributeSet attrs, int defStyle)
+	public TaskListFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-
 	}
 
 
-	public IntegerFieldView(Context context, AttributeSet attrs)
+	public TaskListFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-
 	}
 
 
-	public IntegerFieldView(Context context)
+	public TaskListFieldEditor(Context context)
 	{
 		super(context);
-
 	}
 
 
@@ -74,8 +61,8 @@ public class IntegerFieldView extends AbstractFieldView
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (TextView) findViewById(R.id.text);
-		mImage = (ImageView) findViewById(R.id.choice_drawable);
+		mTextListName = (TextView) findViewById(R.id.task_list_name);
+		mTextListAccount = (TextView) findViewById(R.id.task_list_account);
 	}
 
 
@@ -83,8 +70,8 @@ public class IntegerFieldView extends AbstractFieldView
 	public void setup(FieldDescriptor descriptor, Activity context)
 	{
 		super.setup(descriptor, context);
-		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
+		mAdapter = (ListDetailsFieldAdapter) descriptor.getFieldAdapter();
+		mTextListName.setHint(descriptor.getHint());
 	}
 
 
@@ -93,25 +80,17 @@ public class IntegerFieldView extends AbstractFieldView
 	{
 		Log.d(TAG, "mValues : " + mValues);
 		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
-		Log.d(TAG, "mText:" + mText);
 
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
-			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
-			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
-			if (choicesAdapter == null)
-			{
-				mText.setText(mAdapter.get(mValues).toString());
-				mImage.setVisibility(View.GONE);
-			}
-			else
-			{
-				mText.setText(choicesAdapter.getTitle(mAdapter.get(mValues)));
-				mImage.setImageDrawable(choicesAdapter.getDrawable(mAdapter.get(mValues)));
-			}
-		}
-		else{
-			setVisibility(View.GONE);
+			ListDetails dets = mAdapter.get(mValues);
+			mTextListName.setText(dets.listName);
+			mTextListAccount.setText(dets.listAccountName);
+			int selectedColor = TaskListFieldView.getTextColorFromBackground(dets.listColor);
+			setBackgroundColor(dets.listColor);
+			mTextListAccount.setTextColor(selectedColor);
+			mTextListName.setTextColor(selectedColor);
+			
 		}
 	}
 

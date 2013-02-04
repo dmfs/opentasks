@@ -27,6 +27,7 @@ import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -55,11 +56,14 @@ public class URLFieldView extends AbstractFieldView {
 
 	@Override
 	protected void updateView() {
-		if (mValues != null) {
+		if (mValues != null && mAdapter.get(mValues) != null) {
 			String urlString = mAdapter.get(mValues).toString();
 			mText.setText(Html.fromHtml("<a href='" + urlString + "'>"
 					+ urlString + "</a>"));
 			mText.setMovementMethod(LinkMovementMethod.getInstance());
+		}
+		else{
+			setVisibility(View.GONE);
 		}
 
 	}

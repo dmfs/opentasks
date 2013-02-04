@@ -27,44 +27,59 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
+
 /**
  * Editor Field for URLs.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
 
-public class URLFieldEditor extends AbstractFieldEditor {
+public class URLFieldEditor extends AbstractFieldEditor
+{
 
 	private UrlFieldAdapter mAdapter;
 	private EditText mText;
 
-	public URLFieldEditor(Context context) {
+
+	public URLFieldEditor(Context context)
+	{
 		super(context);
 	}
 
-	public URLFieldEditor(Context context, AttributeSet attrs) {
+
+	public URLFieldEditor(Context context, AttributeSet attrs)
+	{
 		super(context, attrs);
 	}
 
-	public URLFieldEditor(Context context, AttributeSet attrs, int defStyle) {
+
+	public URLFieldEditor(Context context, AttributeSet attrs, int defStyle)
+	{
 		super(context, attrs, defStyle);
 	}
 
+
 	@Override
-	protected void updateView() {
-		if (mValues != null) {
+	protected void updateView()
+	{
+		if (mValues != null && mAdapter.get(mValues) != null)
+		{
 			mText.setText(mAdapter.get(mValues).toString());
 		}
 	}
 
+
 	@Override
-	protected void onFinishInflate() {
+	protected void onFinishInflate()
+	{
 		super.onFinishInflate();
 		mText = (EditText) findViewById(R.id.text);
 	}
 
+
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context) {
+	public void setup(FieldDescriptor descriptor, Activity context)
+	{
 		super.setup(descriptor, context);
 		mAdapter = (UrlFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());

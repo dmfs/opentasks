@@ -21,7 +21,6 @@ package org.dmfs.tasks;
 import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.TaskViewDetailFragment.Callback;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.AsyncModelLoader;
@@ -29,12 +28,10 @@ import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskEdit;
-import org.dmfs.tasks.widget.TaskView;
 
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -63,11 +60,9 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	private static final String KEY_VALUES = "key_values";
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
-		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION)
+		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION, Tasks.LIST_NAME)
 		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE)
-		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED);
-
-	private static final String TASK_MODEL = null;
+		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
 	public static final String FRAGMENT_INTENT = "fragment_intent";
 
@@ -85,8 +80,6 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	ViewGroup mContent;
 	Model mModel;
 
-	private Intent appIntent;
-	private Callback callback;
 	private Activity mActivity;
 	String fragmentIntent;
 
@@ -119,7 +112,6 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 
 		mActivity = activity;
 		appContext = activity.getApplicationContext();
-		appIntent = activity.getIntent();
 	}
 
 
@@ -127,14 +119,15 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
+		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
+		
 		if (fragmentIntent.equals(TaskEditDetailFragment.EDIT_TASK))
 		{
 			if (taskUri != null)
 			{
 
-				mContent = (ViewGroup) rootView.findViewById(R.id.content);
-
+		
 				if (savedInstanceState == null)
 				{
 					new AsyncContentLoader(appContext, this, CONTENT_VALUE_MAPPER).execute(taskUri);
@@ -145,6 +138,12 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 					new AsyncModelLoader(appContext, this).execute("");
 				}
 			}
+		}
+		else if(fragmentIntent.equals(TaskEditDetailFragment.NEW_TASK)){
+			mValues = new ArrayList<ContentValues>();
+			ContentValues emptyCV = new ContentValues();
+			mValues.add(emptyCV);
+			new AsyncModelLoader(appContext, this).execute("");
 		}
 
 		return rootView;

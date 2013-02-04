@@ -31,6 +31,7 @@ import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 
@@ -106,6 +107,7 @@ public class TimeFieldView extends AbstractFieldView
 		}
 		else
 		{
+			setVisibility(View.GONE);
 			Log.d(TAG, "mValues is null");
 		}
 	}

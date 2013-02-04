@@ -1,6 +1,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light"></style>
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar"></style>
+    
+    <style name="CaldavProgressBar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
+    
+    <style name="CaldavSeekBar" parent="android:Widget.Holo.SeekBar"></style>
 
     <!-- <style name="CorrectionTheme" parent="android:Theme.Holo"></style> -->
 

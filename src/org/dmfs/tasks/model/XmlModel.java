@@ -25,6 +25,7 @@ import java.util.Map;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.adapters.ListDetailsFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
@@ -111,11 +112,11 @@ public class XmlModel extends Model
 		try
 		{
 			// add a field for the list
-			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new IntegerFieldAdapter(Tasks.LIST_ID))
+			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new ListDetailsFieldAdapter(Tasks.LIST_ID, Tasks.LIST_NAME, Tasks.ACCOUNT_NAME, Tasks.LIST_COLOR))
 				.setChoices(
 					new CursorChoicesAdapter(mContext.getContentResolver().query(WriteableTaskLists.CONTENT_URI, null, null, null, null)).setKeyColumn(
 						WriteableTaskLists._ID).setTitleColumn(WriteableTaskLists.LIST_NAME))
-				.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor)).setViewLayout(new LayoutDescriptor(R.layout.integer_field_view)));
+				.setEditorLayout(new LayoutDescriptor(R.layout.task_list_field_editor)).setViewLayout(new LayoutDescriptor(R.layout.task_list_field_view)));
 
 			int eventType;
 
@@ -567,8 +568,8 @@ public class XmlModel extends Model
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.percentage_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.percentage_field_editor));
 			}
 
 		});
@@ -685,7 +686,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new StringFieldAdapter(TaskContract.Tasks.URL);
+				return new UrlFieldAdapter(TaskContract.Tasks.URL);
 			}
 
 
@@ -694,6 +695,14 @@ public class XmlModel extends Model
 			{
 				return R.string.task_url;
 			}
+			
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser){
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.url_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.url_field_editor));
+			}
+			
 		});
 
 		/*
