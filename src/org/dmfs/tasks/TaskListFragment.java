@@ -98,7 +98,6 @@ public class TaskListFragment extends ListFragment
 		// android.R.id.text1, DummyContent.ITEMS));
 		Log.d(TAG, "No of tasks are :" + tasksCursor.getCount());
 		setListAdapter(new TaskCursorAdapter(appContext, tasksCursor));
-
 		setHasOptionsMenu(true);
 	}
 

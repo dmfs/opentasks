@@ -6,6 +6,7 @@
     android:padding="8dip" >
 
     <TextView
+        style="@style/DarkText"
         android:id="@android:id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +20,7 @@
         android:background="?android:attr/listDivider" />
 
     <TextView
+        style="@style/DarkText"
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
