@@ -30,6 +30,7 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.ContentValues;
 import android.content.Context;
 import android.text.format.Time;
 import android.util.AttributeSet;
@@ -52,8 +53,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	private static final String TAG = "TimeFieldEditor";
 	TimeFieldAdapter mAdapter;
 	Button datePicker, timePicker;
-	private Time dateTime;
 	private DateFormat defaultDateFormat, defaultTimeFormat;
+	private Time mDateTime;
 	private boolean is24hour;
 
 
@@ -81,7 +82,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		super.onFinishInflate();
 		datePicker = (Button) findViewById(R.id.task_date_picker);
 		timePicker = (Button) findViewById(R.id.task_time_picker);
-
+		datePicker.setOnClickListener(DatePickerHandler);
+		timePicker.setOnClickListener(TimePickerHandler);
 	}
 
 
@@ -97,86 +99,95 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 
 
 	@Override
+	public void setValue(ContentValues values)
+	{
+		super.setValue(values);
+		mDateTime = mAdapter.get(mValues);
+	}
+
+
+	@Override
 	protected void updateView()
 	{
 		Log.d("TimeFieldEditor", "CALLED");
-		if (mValues != null && mAdapter.get(mValues) != null)
+
+		if (mDateTime != null)
 		{
 			// Log.d(TAG, "mValues is not null");
-			dateTime = mAdapter.get(mValues);
 			// Log.d(TAG, Long.toString(dateTime.toMillis(true)));
-			datePicker.setOnClickListener(new DatePickerHandler());
-			if (dateTime.allDay)
-			{
-				timePicker.setVisibility(View.GONE);
+			Date currentDate = new Date(mDateTime.toMillis(false));
+			String formattedDate = defaultDateFormat.format(currentDate);
+			datePicker.setText(formattedDate);
 
+			if (!mDateTime.allDay)
+			{
+				String formattedTime = defaultTimeFormat.format(currentDate);
+				timePicker.setText(formattedTime);
+				timePicker.setVisibility(View.VISIBLE);
 			}
 			else
 			{
-				timePicker.setOnClickListener(new TimePickerHandler());
+				timePicker.setVisibility(View.GONE);
 			}
-			updateDateTimeSpinners();
-
 		}
-
+		else
+		{
+			timePicker.setVisibility(View.VISIBLE);
+		}
 	}
 
-	private class DatePickerHandler implements OnClickListener
+	private OnClickListener DatePickerHandler = new OnClickListener()
 	{
 
 		@Override
 		public void onClick(View v)
 		{
-			DatePickerDialog dateDialog = new DatePickerDialog(mContext, TimeFieldEditor.this, dateTime.year, dateTime.month, dateTime.monthDay);
+			if (mDateTime == null)
+			{
+				mDateTime = mAdapter.getDefault(mValues);
+			}
+
+			DatePickerDialog dateDialog = new DatePickerDialog(mContext, TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
+
 			dateDialog.show();
 		}
+	};
 
-	}
-
-	private class TimePickerHandler implements OnClickListener
+	private final OnClickListener TimePickerHandler = new OnClickListener()
 	{
 
 		@Override
 		public void onClick(View v)
 		{
-			TimePickerDialog timeDialog = new TimePickerDialog(mContext, TimeFieldEditor.this, dateTime.hour, dateTime.minute, is24hour);
+			if (mDateTime == null)
+			{
+				mDateTime = mAdapter.getDefault(mValues);
+			}
+
+			TimePickerDialog timeDialog = new TimePickerDialog(mContext, TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, is24hour);
 			timeDialog.show();
 		}
-
-	}
+	};
 
 
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
-		dateTime.year = year;
-		dateTime.month = monthOfYear;
-		dateTime.monthDay = dayOfMonth;
-		updateDateTimeSpinners();
+		mDateTime.year = year;
+		mDateTime.month = monthOfYear;
+		mDateTime.monthDay = dayOfMonth;
+		mAdapter.set(mValues, mDateTime);
+		updateView();
 	}
 
 
 	@Override
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute)
 	{
-		dateTime.hour = hourOfDay;
-		dateTime.minute = minute;
-		updateDateTimeSpinners();
-
-	}
-
-
-	private void updateDateTimeSpinners()
-	{
-		Date currentDate = new Date(dateTime.toMillis(false));
-		String formattedDate = defaultDateFormat.format(currentDate);
-		datePicker.setText(formattedDate);
-
-		if (!dateTime.allDay)
-		{
-			String formattedTime = defaultTimeFormat.format(currentDate);
-			timePicker.setText(formattedTime);
-		}
+		mDateTime.hour = hourOfDay;
+		mDateTime.minute = minute;
+		mAdapter.set(mValues, mDateTime);
+		updateView();
 	}
 
 }
