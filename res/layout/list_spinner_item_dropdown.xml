@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5sp" >
 
-</TextView>
+    <View
+        android:layout_gravity="center_vertical"
+        android:id="@+id/task_list_color"
+        android:layout_width="15sp"
+        android:layout_height="18sp"
+        android:layout_marginLeft="5sp" >
+    </View>
+
+    <TextView
+        android:layout_marginLeft="5sp"
+        android:id="@+id/task_list_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </TextView>
+
+</LinearLayout>

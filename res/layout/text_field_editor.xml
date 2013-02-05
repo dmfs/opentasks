@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="8dip"
-    android:paddingRight="8dip" >
+    android:padding="12dip" >
 
     <TextView
         style="@style/DarkText"

@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-    
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-</TextView>
+    <TextView
+        android:id="@+id/task_list_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </TextView>
+
+    <TextView
+        android:textSize="10sp"
+        android:id="@+id/task_list_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </TextView>
+</LinearLayout>

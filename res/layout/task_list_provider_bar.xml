@@ -7,14 +7,8 @@
 
     <Spinner
         android:id="@+id/task_list_spinner"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown" />
-
-    <TextView
-        android:id="@+id/task_list_account_name_select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp" />
 
 </LinearLayout>
