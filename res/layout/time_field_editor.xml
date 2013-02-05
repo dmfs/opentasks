@@ -27,7 +27,7 @@
 
         <Button
             android:id="@+id/task_date_picker"
-            style="@android:style/Widget.Holo.Spinner"
+            style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dip"
@@ -36,7 +36,7 @@
 
         <Button
             android:id="@+id/task_time_picker"
-            style="@android:style/Widget.Holo.Spinner"
+            style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dip"
