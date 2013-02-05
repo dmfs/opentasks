@@ -6,11 +6,13 @@
     android:padding="8dip" >
 
     <TextView
+        style="@style/DarkText"
         android:id="@+id/task_list_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
+        style="@style/DarkText"
         android:textSize="10sp"
         android:id="@+id/task_list_account"
         android:layout_width="match_parent"

@@ -8,6 +8,7 @@
 
     <TextView
         android:id="@android:id/title"
+        style="@style/DarkText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
@@ -21,13 +22,12 @@
         android:background="?android:attr/listDivider" />
 
     <EditText
-        android:inputType="textUri"
         android:id="@+id/text"
+        style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip" >
-
-        
+        android:layout_marginTop="4dip"
+        android:inputType="textUri" >
     </EditText>
 
 </org.dmfs.tasks.widget.URLFieldEditor>

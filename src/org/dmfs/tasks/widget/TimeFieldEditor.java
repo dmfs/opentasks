@@ -54,6 +54,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	Button datePicker, timePicker;
 	private Time dateTime;
 	private DateFormat defaultDateFormat, defaultTimeFormat;
+	private boolean is24hour;
 
 
 	public TimeFieldEditor(Context context, AttributeSet attrs, int defStyle)
@@ -80,7 +81,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		super.onFinishInflate();
 		datePicker = (Button) findViewById(R.id.task_date_picker);
 		timePicker = (Button) findViewById(R.id.task_time_picker);
-		// appContext = getContext();
+
 	}
 
 
@@ -91,6 +92,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
 		defaultDateFormat = android.text.format.DateFormat.getDateFormat(mContext);
 		defaultTimeFormat = android.text.format.DateFormat.getTimeFormat(mContext);
+		is24hour = android.text.format.DateFormat.is24HourFormat(mContext);
 	}
 
 
@@ -137,7 +139,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		@Override
 		public void onClick(View v)
 		{
-			TimePickerDialog timeDialog = new TimePickerDialog(mContext, TimeFieldEditor.this, dateTime.hour, dateTime.minute, dateTime.allDay);
+			TimePickerDialog timeDialog = new TimePickerDialog(mContext, TimeFieldEditor.this, dateTime.hour, dateTime.minute, is24hour);
 			timeDialog.show();
 		}
 

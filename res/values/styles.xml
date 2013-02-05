@@ -1,6 +1,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Light"></style>
+    <style name="AppTheme" parent="android:Theme.Light">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 
     <style name="ActivityDefault">
         <item name="android:background">@android:color/white</item>
@@ -8,7 +10,11 @@
     </style>
 
     <style name="CaldavProgressBar" parent="android:Widget.ProgressBar.Horizontal"></style>
-    
+
     <style name="CaldavSeekBar" parent="android:Widget.SeekBar"></style>
+
+    <style name="DarkText">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
 
 </resources>
