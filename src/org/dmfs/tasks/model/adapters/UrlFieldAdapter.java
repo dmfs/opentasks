@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 
 /**
@@ -72,6 +73,25 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 		try
 		{
 			return new URL(values.getAsString(mField));
+		}
+		catch (MalformedURLException e)
+		{
+			return null;
+		}
+	}
+
+
+	@Override
+	public URL get(Cursor cursor)
+	{
+		int columnIdx = cursor.getColumnIndex(mField);
+		if (columnIdx < 0)
+		{
+			return null;
+		}
+		try
+		{
+			return new URL(cursor.getString(columnIdx));
 		}
 		catch (MalformedURLException e)
 		{

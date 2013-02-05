@@ -20,6 +20,7 @@
 package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 
 /**
@@ -41,6 +42,16 @@ public abstract class FieldAdapter<Type>
 	 * @return The value.
 	 */
 	public abstract Type get(ContentValues values);
+
+
+	/**
+	 * Get the value form the given {@link Cursor}
+	 * 
+	 * @param values
+	 *            The {link Cursor} that contain the value to return.
+	 * @return The value.
+	 */
+	public abstract Type get(Cursor cursor);
 
 
 	/**

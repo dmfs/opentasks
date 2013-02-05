@@ -20,6 +20,7 @@
 package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 
 /**
@@ -81,6 +82,13 @@ public final class ListDetailsFieldAdapter extends FieldAdapter<ListDetails>
 	{
 		return new ListDetails(values.getAsInteger(mListIdFieldName), values.getAsString(mTitleFieldName), values.getAsString(mAccountNameFieldName),
 			values.getAsInteger(mColorFieldName));
+	}
+
+
+	@Override
+	public ListDetails get(Cursor values)
+	{
+		return null;
 	}
 
 

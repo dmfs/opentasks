@@ -20,6 +20,7 @@
 package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 
 /**
@@ -74,6 +75,18 @@ public final class StringFieldAdapter extends FieldAdapter<String>
 	{
 		// return the value as String
 		return values.getAsString(mFieldName);
+	}
+
+
+	@Override
+	public String get(Cursor cursor)
+	{
+		int columnIdx = cursor.getColumnIndex(mFieldName);
+		if (columnIdx < 0)
+		{
+			return null;
+		}
+		return cursor.getString(columnIdx);
 	}
 
 

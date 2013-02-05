@@ -20,6 +20,7 @@
 package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 
 /**
@@ -74,6 +75,18 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 	{
 		// return the value as Integer
 		return values.getAsInteger(mFieldName);
+	}
+
+
+	@Override
+	public Integer get(Cursor cursor)
+	{
+		int columnIdx = cursor.getColumnIndex(mFieldName);
+		if (columnIdx < 0)
+		{
+			return null;
+		}
+		return cursor.getInt(columnIdx);
 	}
 
 

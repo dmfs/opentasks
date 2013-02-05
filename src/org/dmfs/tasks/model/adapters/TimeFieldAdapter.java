@@ -22,6 +22,7 @@ package org.dmfs.tasks.model.adapters;
 import java.util.TimeZone;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.text.format.Time;
 
 
@@ -81,6 +82,38 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 		// set the allday flag appropriately
 		Integer allDayInt = values.getAsInteger(mAllDayField);
+
+		value.allDay = allDayInt != null && allDayInt != 0;
+		return value;
+	}
+
+
+	@Override
+	public Time get(Cursor cursor)
+	{
+		int tsIdx = cursor.getColumnIndex(mTimestampField);
+		int tzIdx = cursor.getColumnIndex(mTzField);
+		int adIdx = cursor.getColumnIndex(mAllDayField);
+
+		if (tsIdx < 0 || tzIdx < 0 || adIdx < 0)
+		{
+			return null;
+		}
+
+		Long timestamp = cursor.getLong(tsIdx);
+		if (timestamp == null)
+		{
+			// if the time stamp is null we return null
+			return null;
+		}
+		// create a new Time for the given time zone, falling back to UTC if none is given
+		String timezone = cursor.getString(tzIdx);
+		Time value = new Time(timezone == null ? Time.TIMEZONE_UTC : timezone);
+		// set the time stamp
+		value.set(timestamp);
+
+		// set the allday flag appropriately
+		Integer allDayInt = cursor.getInt(adIdx);
 
 		value.allDay = allDayInt != null && allDayInt != 0;
 		return value;
