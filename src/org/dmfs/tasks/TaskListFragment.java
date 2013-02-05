@@ -1,16 +1,22 @@
 package org.dmfs.tasks;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -56,6 +62,7 @@ public class TaskListFragment extends ListFragment
 
 	private Cursor taskCursor;
 	private Context appContext;
+	private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
 
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
@@ -88,8 +95,10 @@ public class TaskListFragment extends ListFragment
 		// CursorLoader taskCursorLoader = new CursorLoader(appContext,
 		// tasksURI,
 		// new String[] { "_id", "title" }, null, null, null);
-		Cursor tasksCursor = appContext.getContentResolver().query(TaskContract.Tasks.CONTENT_URI,
-			new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE, TaskContract.Tasks.LIST_COLOR}, null, null, null);
+		Cursor tasksCursor = appContext.getContentResolver().query(
+			TaskContract.Tasks.CONTENT_URI,
+			new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE, TaskContract.Tasks.LIST_COLOR, TaskContract.Tasks.DUE, TaskContract.Tasks.TZ,
+				TaskContract.Tasks.IS_ALLDAY }, null, null, null);
 
 		// TODO: replace with a real list adapter.
 		// setListAdapter(new
@@ -122,10 +131,21 @@ public class TaskListFragment extends ListFragment
 		public void bindView(View view, Context context, Cursor cursor)
 		{
 			TextView tv = (TextView) view.findViewById(R.id.task_title);
-			View cv =view.findViewById(R.id.colorbar);
+			View cv = view.findViewById(R.id.colorbar);
 			String taskName = cursor.getString(mTitleColumnIndex);
 			tv.setText(taskName);
 			cv.setBackgroundColor(cursor.getInt(mListColorColumnIndex));
+			TextView dueDateTV = (TextView) view.findViewById(R.id.task_due_date);
+			Time dueTime = TFADAPTER.get(cursor);
+			if (dueTime == null)
+			{
+				dueDateTV.setVisibility(View.GONE);
+			}
+			else
+			{
+				dueDateTV.setVisibility(View.VISIBLE);
+				new DueDisplayer(dueTime).display(dueDateTV);
+			}
 		}
 
 
@@ -134,7 +154,7 @@ public class TaskListFragment extends ListFragment
 		{
 			View inflatedView = mViewInflater.inflate(R.layout.task_list_element, null);
 			TextView tv = (TextView) inflatedView.findViewById(R.id.task_title);
-			View cv =inflatedView.findViewById(R.id.colorbar);
+			View cv = inflatedView.findViewById(R.id.colorbar);
 			String taskName = cursor.getString(mTitleColumnIndex);
 			tv.setText(taskName);
 			cv.setBackgroundColor(cursor.getInt(mListColorColumnIndex));
@@ -254,6 +274,48 @@ public class TaskListFragment extends ListFragment
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private class DueDisplayer
+	{
+		Time today, dueDate;
+		DateFormat dateFormatter;
+		DateFormat timeFormatter;
+
+
+		public DueDisplayer(Time d)
+		{
+			dueDate = d;
+			today = new Time();
+			today.setToNow();
+			dateFormatter = android.text.format.DateFormat.getDateFormat(appContext);
+			timeFormatter = android.text.format.DateFormat.getTimeFormat(appContext);
+		}
+
+
+		public void display(TextView tv)
+		{
+			if (dueDate.year == today.year && dueDate.month == today.month && dueDate.monthDay == today.monthDay)
+			{
+				tv.setText(timeFormatter.format(new Date(dueDate.toMillis(false))));
+				if (dueDate.before(today))
+				{
+					Log.d(TAG, "Before Today");
+					tv.setTextColor(Color.RED);
+				}
+
+			}
+			else
+			{
+				tv.setText(dateFormatter.format(new Date(dueDate.toMillis(false))));
+				if (dueDate.before(today))
+				{
+					Log.d(TAG, "Before Today");
+					tv.setTextColor(Color.RED);
+				}
+
+			}
 		}
 	}
 }

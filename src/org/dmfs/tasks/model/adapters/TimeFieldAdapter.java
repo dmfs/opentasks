@@ -100,12 +100,14 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 			return null;
 		}
 
-		Long timestamp = cursor.getLong(tsIdx);
-		if (timestamp == null)
+		if (cursor.isNull(tsIdx))
 		{
 			// if the time stamp is null we return null
 			return null;
 		}
+		
+		Long timestamp = cursor.getLong(tsIdx);
+		
 		// create a new Time for the given time zone, falling back to UTC if none is given
 		String timezone = cursor.getString(tzIdx);
 		Time value = new Time(timezone == null ? Time.TIMEZONE_UTC : timezone);
