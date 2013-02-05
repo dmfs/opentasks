@@ -16,5 +16,8 @@
     <style name="DarkText">
         <item name="android:textColor">@android:color/black</item>
     </style>
-
+    <style name="LabelText">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+    
 </resources>
