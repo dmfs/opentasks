@@ -290,6 +290,15 @@ public class XmlModel extends Model
 			{
 				return R.string.task_title;
 			}
+
+
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.text_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.text_field_editor));
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("location", new FieldInflater()
@@ -305,6 +314,15 @@ public class XmlModel extends Model
 			int getDefaultTitleId()
 			{
 				return R.string.task_location;
+			}
+
+
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.text_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.text_field_editor));
 			}
 		});
 
@@ -322,59 +340,18 @@ public class XmlModel extends Model
 			{
 				return R.string.task_description;
 			}
+
+
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.text_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.text_field_editor));
+			}
 		});
 
 		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater()
-		{
-			@Override
-			public FieldAdapter<?> getFieldAdapter()
-			{
-				return new TimeFieldAdapter(TaskContract.Tasks.DTSTART, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-			}
-
-
-			@Override
-			int getDefaultTitleId()
-			{
-				return R.string.task_start;
-			}
-
-
-			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
-			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
-			}
-		});
-
-		FIELD_INFLATER_MAP.put("start_date", new FieldInflater()
-		{
-			@Override
-			public FieldAdapter<?> getFieldAdapter()
-			{
-				return new TimeFieldAdapter(TaskContract.Tasks.DTSTART, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-			}
-
-
-			@Override
-			int getDefaultTitleId()
-			{
-				return R.string.task_start;
-			}
-
-
-			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
-			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
-			}
-		});
-
-		FIELD_INFLATER_MAP.put("start_time", new FieldInflater()
 		{
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
@@ -424,107 +401,7 @@ public class XmlModel extends Model
 			}
 		});
 
-		FIELD_INFLATER_MAP.put("due_date", new FieldInflater()
-		{
-			@Override
-			public FieldAdapter<?> getFieldAdapter()
-			{
-				return new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-			}
-
-
-			@Override
-			int getDefaultTitleId()
-			{
-				return R.string.task_due;
-			}
-
-
-			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
-			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
-			}
-		});
-
-		FIELD_INFLATER_MAP.put("due_time", new FieldInflater()
-		{
-			@Override
-			public FieldAdapter<?> getFieldAdapter()
-			{
-				return new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-			}
-
-
-			@Override
-			int getDefaultTitleId()
-			{
-				return R.string.task_due;
-			}
-
-
-			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
-			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
-			}
-		});
-
 		FIELD_INFLATER_MAP.put("completed", new FieldInflater()
-		{
-			@Override
-			public FieldAdapter<?> getFieldAdapter()
-			{
-				return new TimeFieldAdapter(TaskContract.Tasks.COMPLETED, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-			}
-
-
-			@Override
-			int getDefaultTitleId()
-			{
-				return R.string.task_completed;
-			}
-
-
-			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
-			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
-			}
-		});
-
-		FIELD_INFLATER_MAP.put("completed_date", new FieldInflater()
-		{
-			@Override
-			public FieldAdapter<?> getFieldAdapter()
-			{
-				return new TimeFieldAdapter(TaskContract.Tasks.COMPLETED, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-			}
-
-
-			@Override
-			int getDefaultTitleId()
-			{
-				return R.string.task_completed;
-			}
-
-
-			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
-			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.time_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.time_field_editor));
-			}
-		});
-
-		FIELD_INFLATER_MAP.put("completed_time", new FieldInflater()
 		{
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
@@ -672,12 +549,9 @@ public class XmlModel extends Model
 				Resources res = context.getResources();
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, context.getString(R.string.classification_public),
-					res.getDrawable(R.drawable.ic_classification_public));
-				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, context.getString(R.string.classification_private),
-					res.getDrawable(R.drawable.ic_classification_private));
-				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, context.getString(R.string.classification_confidential),
-					res.getDrawable(R.drawable.ic_classification_confidential));
+				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, context.getString(R.string.classification_public), null);
+				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, context.getString(R.string.classification_private), null);
+				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, context.getString(R.string.classification_confidential), null);
 				descriptor.setChoices(aca);
 			}
 		});
