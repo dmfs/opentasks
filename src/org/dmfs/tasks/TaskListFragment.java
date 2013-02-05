@@ -2,6 +2,7 @@ package org.dmfs.tasks;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -299,22 +300,16 @@ public class TaskListFragment extends ListFragment
 			if (dueDate.year == today.year && dueDate.month == today.month && dueDate.monthDay == today.monthDay)
 			{
 				tv.setText(timeFormatter.format(new Date(dueDate.toMillis(false))));
-				if (dueDate.before(today))
-				{
-					Log.d(TAG, "Before Today");
-					tv.setTextColor(Color.RED);
-				}
-
 			}
 			else
 			{
 				tv.setText(dateFormatter.format(new Date(dueDate.toMillis(false))));
-				if (dueDate.before(today))
-				{
-					Log.d(TAG, "Before Today");
-					tv.setTextColor(Color.RED);
-				}
+			}
 
+			if (dueDate.before(today))
+			{
+				Log.d(TAG, "Before Today");
+				tv.setTextColor(Color.RED);
 			}
 		}
 	}
