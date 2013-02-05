@@ -163,7 +163,7 @@ public abstract class AbstractFieldView extends LinearLayout
 			* alphaComponent / 255;
 		Log.d(TAG, "Determinant : " + determinant);
 		// Value 190 has been set by trial and error.
-		if (determinant > 190)
+		if (determinant > 180)
 		{
 			return Color.BLACK;
 		}
