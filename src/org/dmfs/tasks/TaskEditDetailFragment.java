@@ -345,9 +345,11 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 					}
 					View listColor = convertView.findViewById(R.id.task_list_color);
 					TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
+					TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
 					TaskProvider prov = (TaskProvider) getItem(position);
 					listColor.setBackgroundColor(prov.getColor());
 					listName.setText(prov.getProvider());
+					accountName.setText(prov.getAccount());
 					return convertView;
 				}
 			});
@@ -361,8 +363,6 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 					TaskProvider provider = (TaskProvider) arg0.getItemAtPosition(arg2);
 
 					taskListBar.setBackgroundColor(provider.getColor());
-					int textColor = TaskListFieldView.getTextColorFromBackground(provider.getColor());
-
 				}
 
 
