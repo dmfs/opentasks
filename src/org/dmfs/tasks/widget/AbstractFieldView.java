@@ -19,13 +19,19 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutDescriptor;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -39,11 +45,18 @@ public abstract class AbstractFieldView extends LinearLayout
 {
 
 	private final static String TAG = "AbstractFieldView";
+
+	private final static IntegerFieldAdapter LIST_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.LIST_COLOR);
+	private final static IntegerFieldAdapter TASK_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.TASK_COLOR);
+
 	protected ContentValues mValues;
 	private TextView mTitleId;
 	protected FieldDescriptor fieldDescriptor;
 	protected Activity mContext;
-	
+
+	protected LayoutOptions layoutOptions;
+
+
 	public AbstractFieldView(Context context)
 	{
 		super(context);
@@ -79,10 +92,37 @@ public abstract class AbstractFieldView extends LinearLayout
 	}
 
 
+	public void setOptions(LayoutOptions options)
+	{
+		this.layoutOptions = options;
+	}
+
+
 	public void setValue(ContentValues values)
 	{
 		mValues = values;
+		Integer customBackgroud = getCustomBackgroudColor();
+		if (customBackgroud != null)
+		{
+			setBackgroundColor(customBackgroud);
+		}
 		updateView();
+
+	}
+
+
+	public Integer getCustomBackgroudColor()
+	{
+		if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
+		{
+			return LIST_COLOR_ADAPTER.get(mValues);
+		}
+		else if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_BACKGROUND_COLOR, false))
+		{
+			Integer taskColor = TASK_COLOR_ADAPTER.get(mValues);
+			return taskColor == null ? LIST_COLOR_ADAPTER.get(mValues) : taskColor;
+		}
+		return null;
 	}
 
 
@@ -92,10 +132,45 @@ public abstract class AbstractFieldView extends LinearLayout
 		fieldDescriptor = descriptor;
 		if (mTitleId != null)
 		{
-			mTitleId.setText(descriptor.getTitle());
+			if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_NO_TITLE, false))
+			{
+				mTitleId.setVisibility(View.GONE);
+			}
+			else
+			{
+				mTitleId.setText(descriptor.getTitle());
+				Integer customBackgroud = getCustomBackgroudColor();
+				if (customBackgroud != null)
+				{
+					mTitleId.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
+				}
+			}
 		}
 	}
 
 
 	protected abstract void updateView();
+
+
+	public static int getTextColorFromBackground(int color)
+	{
+		int redComponent = Color.red(color);
+		int greenComponent = Color.green(color);
+		int blueComponent = Color.blue(color);
+		int alphaComponent = Color.alpha(color);
+		Log.d(TAG, "Red Component : " + redComponent);
+		int determinant = ((redComponent + redComponent + redComponent + blueComponent + greenComponent + greenComponent + greenComponent + greenComponent) >> 3)
+			* alphaComponent / 255;
+		Log.d(TAG, "Determinant : " + determinant);
+		// Value 160 has been set by trial and error.
+		if (determinant > 160)
+		{
+			return Color.BLACK;
+		}
+		else
+		{
+			return Color.WHITE;
+
+		}
+	}
 }

@@ -112,11 +112,12 @@ public class XmlModel extends Model
 		try
 		{
 			// add a field for the list
-			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new ListDetailsFieldAdapter(Tasks.LIST_ID, Tasks.LIST_NAME, Tasks.ACCOUNT_NAME, Tasks.LIST_COLOR))
-				.setChoices(
-					new CursorChoicesAdapter(mContext.getContentResolver().query(WriteableTaskLists.CONTENT_URI, null, null, null, null)).setKeyColumn(
-						WriteableTaskLists._ID).setTitleColumn(WriteableTaskLists.LIST_NAME))
-				.setEditorLayout(new LayoutDescriptor(R.layout.task_list_field_editor)).setViewLayout(new LayoutDescriptor(R.layout.task_list_field_view)));
+			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new StringFieldAdapter(Tasks.LIST_NAME)).setViewLayout(new LayoutDescriptor(
+				R.layout.text_field_view_nodivider_large).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
+				LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
+			mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new StringFieldAdapter(Tasks.ACCOUNT_NAME)).setViewLayout(new LayoutDescriptor(
+				R.layout.text_field_view_nodivider_small).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
+				LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
 
 			int eventType;
 
@@ -695,14 +696,16 @@ public class XmlModel extends Model
 			{
 				return R.string.task_url;
 			}
-			
+
+
 			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser){
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
 				super.customizeDescriptor(context, modelContext, descriptor, parser);
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.url_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.url_field_editor));
 			}
-			
+
 		});
 
 		/*

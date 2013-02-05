@@ -81,15 +81,21 @@ public class StringFieldView extends AbstractFieldView
 
 	@Override
 	protected void updateView()
-	{	
+	{
 		Object adapterValue = mAdapter.get(mValues);
 		Log.d(TAG, "mText : " + mText);
 		if (mValues != null && adapterValue != null)
 		{
 			mText.setText(mAdapter.get(mValues).toString());
 		}
-		else{
+		else
+		{
 			setVisibility(View.GONE);
+		}
+		Integer customBackgroud = getCustomBackgroudColor();
+		if (customBackgroud != null)
+		{
+			mText.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
 		}
 	}
 }

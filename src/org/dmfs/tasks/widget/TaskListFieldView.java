@@ -96,24 +96,4 @@ public class TaskListFieldView extends AbstractFieldView
 	}
 
 
-	public static int getTextColorFromBackground(int color)
-	{
-		int redComponent = Color.red(color);
-		int greenComponent = Color.green(color);
-		int blueComponent = Color.blue(color);
-		int alphaComponent = Color.alpha(color);
-		Log.d(TAG, "Red Component : " + redComponent);
-		int determinant = ((redComponent + redComponent + redComponent + blueComponent + greenComponent + greenComponent + greenComponent + greenComponent) >> 3) * alphaComponent / 255;
-		Log.d(TAG, "Determinant : " + determinant);
-		// Value 160 has been set by trial and error.
-		if (determinant > 160)
-		{
-			return Color.BLACK;
-		}
-		else
-		{
-			return Color.WHITE;
-
-		}
-	}
 }

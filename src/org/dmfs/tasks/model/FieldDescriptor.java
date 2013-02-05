@@ -39,7 +39,6 @@ public final class FieldDescriptor
 {
 
 	private final static LayoutDescriptor DEFAULT_VIEW_LAYOUT = new LayoutDescriptor(R.layout.text_field_view);
-	private final static LayoutDescriptor DEFAULT_EDIT_LAYOUT = new LayoutDescriptor(R.layout.text_field_editor);
 
 	private final String mTitle;
 	private String mHint;
@@ -234,25 +233,25 @@ public final class FieldDescriptor
 	{
 		if (mEditLayout == null)
 		{
-			return (AbstractFieldEditor) DEFAULT_EDIT_LAYOUT.inflate(inflater);
+			return null;
 		}
-		else
-		{
-			return (AbstractFieldEditor) mEditLayout.inflate(inflater);
-		}
+
+		AbstractFieldEditor view;
+
+		view = (AbstractFieldEditor) mEditLayout.inflate(inflater);
+		view.setOptions(mEditLayout.getOptions());
+		return view;
 	}
 
 
-	public AbstractFieldView getViewView(LayoutInflater inflater)
+	public AbstractFieldView getDetailView(LayoutInflater inflater)
 	{
-		if (mViewLayout == null)
-		{
-			return (AbstractFieldView) DEFAULT_VIEW_LAYOUT.inflate(inflater);
-		}
-		else
-		{
-			return (AbstractFieldView) mViewLayout.inflate(inflater);
-		}
+		LayoutDescriptor ld = mViewLayout != null ? mViewLayout : DEFAULT_VIEW_LAYOUT;
+		AbstractFieldView view;
+
+		view = (AbstractFieldView) ld.inflate(inflater);
+		view.setOptions(ld.getOptions());
+		return view;
 	}
 
 

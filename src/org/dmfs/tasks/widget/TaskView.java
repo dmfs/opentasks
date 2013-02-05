@@ -65,7 +65,7 @@ public class TaskView extends BaseTaskView
 		mModel = model;
 	}
 
-	
+
 	public void setValues(ContentValues values)
 	{
 		mValues = values;
@@ -79,12 +79,14 @@ public class TaskView extends BaseTaskView
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (FieldDescriptor field : mModel.getFields())
 		{
-
-			AbstractFieldView detailView = field.getViewView(inflater);
-			detailView.setup(field, getActivity());
-			detailView.setValue(mValues);
-			detailView.updateView();
-			this.addView(detailView);
+			AbstractFieldView detailView = field.getDetailView(inflater);
+			if (detailView != null)
+			{
+				detailView.setup(field, getActivity());
+				detailView.setValue(mValues);
+				detailView.updateView();
+				this.addView(detailView);
+			}
 		}
 	}
 
