@@ -248,7 +248,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 		{
 			final LinearLayout taskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mContent);
 			final Spinner listSpinner = (Spinner) taskListBar.findViewById(R.id.task_list_spinner);
-			final TextView listAccountTV = (TextView) taskListBar.findViewById(R.id.task_list_account_name_select);
+
 			listSpinner.setAdapter(new SpinnerAdapter()
 			{
 
@@ -292,10 +292,17 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 				{
 					if (convertView == null)
 					{
-						convertView = inflater.inflate(R.layout.list_spinner_item_dropdown, null);
+						convertView = inflater.inflate(R.layout.list_spinner_item_selected, null);
 
 					}
-					((TextView) convertView).setText(((TaskProvider) getItem(position)).getProvider());
+					TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
+					TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
+					TaskProvider prov = (TaskProvider) getItem(position);
+					listName.setText(prov.getProvider());
+					accountName.setText(prov.getAccount());
+					int backgroundBasedColor = TaskListFieldView.getTextColorFromBackground(prov.getColor());
+					listName.setTextColor(backgroundBasedColor);
+					accountName.setTextColor(backgroundBasedColor);
 					return convertView;
 				}
 
@@ -333,10 +340,14 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 				{
 					if (convertView == null)
 					{
-						convertView = inflater.inflate(R.layout.list_spinner_item_selected, null);
+						convertView = inflater.inflate(R.layout.list_spinner_item_dropdown, null);
 
 					}
-					((TextView) convertView).setText(((TaskProvider) getItem(position)).getProvider());
+					View listColor = convertView.findViewById(R.id.task_list_color);
+					TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
+					TaskProvider prov = (TaskProvider) getItem(position);
+					listColor.setBackgroundColor(prov.getColor());
+					listName.setText(prov.getProvider());
 					return convertView;
 				}
 			});
@@ -348,10 +359,10 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 				public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
 				{
 					TaskProvider provider = (TaskProvider) arg0.getItemAtPosition(arg2);
-					listAccountTV.setText(provider.getAccount());
+
 					taskListBar.setBackgroundColor(provider.getColor());
 					int textColor = TaskListFieldView.getTextColorFromBackground(provider.getColor());
-					listAccountTV.setTextColor(textColor);
+
 				}
 
 
