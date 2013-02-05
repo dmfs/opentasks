@@ -7,13 +7,14 @@
     <TextView
         android:id="@+id/task_list_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:textAppearance="@android:style/TextAppearance.Large" >
     </TextView>
 
     <TextView
-        android:textSize="10sp"
         android:id="@+id/task_list_account_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </TextView>
+
 </LinearLayout>

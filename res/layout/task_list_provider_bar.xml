@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8sp" >
+    android:paddingLeft="16sp"
+    android:paddingRight="16sp" >
 
     <Spinner
         android:id="@+id/task_list_spinner"

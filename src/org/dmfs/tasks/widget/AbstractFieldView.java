@@ -165,7 +165,7 @@ public abstract class AbstractFieldView extends LinearLayout
 		// Value 190 has been set by trial and error.
 		if (determinant > 180)
 		{
-			return Color.BLACK;
+			return Color.argb(255, 0x33, 0x33, 0x33);
 		}
 		else
 		{

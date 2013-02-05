@@ -14,7 +14,7 @@
     <style name="CaldavSeekBar" parent="android:Widget.SeekBar"></style>
 
     <style name="DarkText">
-        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textColor">#FF333333</item>
     </style>
 
     <style name="LabelText">
