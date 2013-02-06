@@ -105,9 +105,9 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 			// if the time stamp is null we return null
 			return null;
 		}
-		
+
 		Long timestamp = cursor.getLong(tsIdx);
-		
+
 		// create a new Time for the given time zone, falling back to UTC if none is given
 		String timezone = cursor.getString(tzIdx);
 		Time value = new Time(timezone == null ? Time.TIMEZONE_UTC : timezone);
@@ -144,10 +144,18 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	@Override
 	public void set(ContentValues values, Time value)
 	{
-		// just store all three parts separately
-		values.put(mTimestampField, value.toMillis(false));
-		values.put(mTzField, value.timezone);
-		values.put(mAllDayField, value.allDay ? 1 : 0);
+		if (value != null)
+		{
+			// just store all three parts separately
+			values.put(mTimestampField, value.toMillis(false));
+			values.put(mTzField, value.timezone);
+			values.put(mAllDayField, value.allDay ? 1 : 0);
+		}
+		else
+		{
+			// write timestamp only, other fields may still use allday and timezon
+			values.put(mTimestampField, (Long) null);
+		}
 	}
 
 }
