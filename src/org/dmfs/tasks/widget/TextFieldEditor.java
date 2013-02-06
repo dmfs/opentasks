@@ -32,6 +32,7 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 /**
  * Editor Field for simple text.
  * 
@@ -40,6 +41,7 @@ import android.widget.TextView;
 
 public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 {
+	private final static String TAG = "TextFieldEditor";
 
 	private StringFieldAdapter mAdapter;
 	private TextView mTitle;
@@ -69,6 +71,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	{
 		super.onFinishInflate();
 		mText = (EditText) findViewById(R.id.text);
+		mText.addTextChangedListener(this);
 	}
 
 
@@ -97,6 +100,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 		if (mValues != null)
 		{
 			mAdapter.set(mValues, mText.getText().toString());
+			Log.v(TAG, "updated values");
 		}
 	}
 

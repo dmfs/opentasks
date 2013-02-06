@@ -38,6 +38,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 
 
@@ -53,6 +54,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	private static final String TAG = "TimeFieldEditor";
 	TimeFieldAdapter mAdapter;
 	Button datePicker, timePicker;
+	ImageButton clearDate;
 	private DateFormat defaultDateFormat, defaultTimeFormat;
 	private Time mDateTime;
 	private boolean is24hour;
@@ -82,8 +84,20 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		super.onFinishInflate();
 		datePicker = (Button) findViewById(R.id.task_date_picker);
 		timePicker = (Button) findViewById(R.id.task_time_picker);
+		clearDate = (ImageButton) findViewById(R.id.task_time_picker_remove);
 		datePicker.setOnClickListener(DatePickerHandler);
 		timePicker.setOnClickListener(TimePickerHandler);
+		clearDate.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				mDateTime = null;
+				mAdapter.set(mValues, mDateTime);
+				updateView();
+			}
+		});
 	}
 
 
@@ -132,6 +146,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		}
 		else
 		{
+			datePicker.setText("");
+			timePicker.setText("");
 			timePicker.setVisibility(View.VISIBLE);
 		}
 	}

@@ -98,29 +98,29 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 
 			Log.d(TAG, "mValues : " + mValues);
 			Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
-
-			if (mValues != null && mAdapter.get(mValues) != null)
+			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
+			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
+			if (choicesAdapter == null)
 			{
-				IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
-				Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
-				if (choicesAdapter == null)
-				{
 
-				}
-				else
+			}
+			else
+			{
+				if (choicesAdapter instanceof ArrayChoicesAdapter)
 				{
-					if (choicesAdapter instanceof ArrayChoicesAdapter)
+					ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
+					List<Object> choicesList = arrayAdapter.getChoices();
+					IntegerSpinnerAdapter sAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item,
+						R.id.integer_choice_item_text, choicesList, arrayAdapter);
+					mSpinner.setAdapter(sAdapter);
+					if (mAdapter.get(mValues) != null)
 					{
-						ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
-						List<Object> choicesList = arrayAdapter.getChoices();
-						IntegerSpinnerAdapter sAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item,
-							R.id.integer_choice_item_text, choicesList, arrayAdapter);
-						mSpinner.setAdapter(sAdapter);
 						int selectedIndex = arrayAdapter.getIndex(mAdapter.get(mValues));
 						mSpinner.setSelection(selectedIndex);
 					}
 				}
 			}
+
 		}
 	}
 

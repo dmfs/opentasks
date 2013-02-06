@@ -138,7 +138,7 @@ public abstract class AbstractFieldView extends LinearLayout
 			}
 			else
 			{
-				mTitleId.setText(descriptor.getTitle());
+				mTitleId.setText(descriptor.getTitle().toUpperCase());
 				Integer customBackgroud = getCustomBackgroudColor();
 				if (customBackgroud != null)
 				{
