@@ -1,7 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Light">
-        <item name="android:textColor">@android:color/black</item>
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
+        <item name="android:textColor">#FF333333</item>
     </style>
 
     <style name="ActivityDefault">
@@ -24,13 +24,22 @@
     <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">#FF333333</item>
-        <item name="android:layout_marginRight">12dp</item>
+        <!--
+             <item name="android:layout_marginRight">12dp</item>
         <item name="android:layout_marginLeft">12dp</item>
+        -->
     </style>
 
     <style name="TextAppearance.EditTask_SpinnerButton" parent="TextAppearance.EditTask_Spinner">
-        <item name="android:paddingLeft">12dp</item>
+        <!--
+             <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingRight">12dp</item>
+        -->
+    </style>
+
+    <style name="btn_remove">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:src">@drawable/content_remove_light</item>
     </style>
 
 </resources>

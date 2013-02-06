@@ -6,8 +6,8 @@
     android:padding="12dp" >
 
     <TextView
-        style="@style/LabelText"
         android:id="@android:id/title"
+        style="@style/LabelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"

@@ -6,10 +6,11 @@
     android:padding="12dip" >
 
     <TextView
-        style="@style/LabelText"
         android:id="@android:id/title"
+        style="@style/LabelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:capitalize="characters"
         android:ellipsize="marquee"
         android:fadingEdge="horizontal"
         android:singleLine="true"
@@ -21,13 +22,12 @@
         android:background="?android:attr/listDivider" />
 
     <EditText
-        style="@style/DarkText"
         android:id="@+id/text"
+        style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip" >
-
-        
+        android:layout_marginTop="4dip"
+        android:layout_marginLeft="0dip">
     </EditText>
 
 </org.dmfs.tasks.widget.TextFieldEditor>

@@ -23,6 +23,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal" >
 
         <Button
@@ -30,7 +31,6 @@
             style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dip"
             android:layout_weight="2" >
         </Button>
 
@@ -39,9 +39,16 @@
             style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dip"
             android:layout_weight="1" >
         </Button>
+
+        <ImageButton
+            android:id="@+id/task_time_picker_remove"
+            style="@style/btn_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical" >
+        </ImageButton>
     </LinearLayout>
 
 </org.dmfs.tasks.widget.TimeFieldEditor>

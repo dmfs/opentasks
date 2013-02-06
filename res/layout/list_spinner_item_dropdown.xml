@@ -23,13 +23,17 @@
         <TextView
             android:id="@+id/task_list_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true" >
         </TextView>
 
         <TextView
             android:id="@+id/task_list_account_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textSize="10sp" >
         </TextView>
     </LinearLayout>

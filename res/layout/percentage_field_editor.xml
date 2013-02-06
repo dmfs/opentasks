@@ -6,8 +6,8 @@
     android:padding="12dip" >
 
     <TextView
-        style="@style/LabelText"
         android:id="@android:id/title"
+        style="@style/LabelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
@@ -33,8 +33,8 @@
             android:layout_weight="4" />
 
         <TextView
-            style="@style/DarkText"
             android:id="@+id/text"
+            style="@style/DarkText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
