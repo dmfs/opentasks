@@ -1,21 +1,30 @@
 package org.dmfs.tasks;
 
 import java.text.DateFormat;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.helpers.TaskItem;
+import org.dmfs.tasks.helpers.TaskItemGroup;
+import org.dmfs.tasks.helpers.TaskListBucketer;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.utils.AsyncContentLoader;
+import org.dmfs.tasks.utils.AsyncModelLoader;
 
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.CursorAdapter;
 import android.text.format.Time;
 import android.util.Log;
@@ -25,6 +34,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,7 +49,7 @@ import android.widget.Toast;
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
-public class TaskListFragment extends ListFragment
+public class TaskListFragment extends Fragment
 {
 
 	/**
@@ -61,10 +73,11 @@ public class TaskListFragment extends ListFragment
 	 */
 	private int mActivatedPosition = ListView.INVALID_POSITION;
 
-	private Cursor taskCursor;
+	private ExpandableListView expandLV;
 	private Context appContext;
 	private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-
+	
+	private TaskItemGroup[] itemGroupArray;
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
 	 */
@@ -92,74 +105,208 @@ public class TaskListFragment extends ListFragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
+		Time todayTime = new Time();
+		todayTime.setToNow();
+		TaskListBucketer bucketer = new TaskListBucketer(todayTime);
 		// CursorLoader taskCursorLoader = new CursorLoader(appContext,
 		// tasksURI,
 		// new String[] { "_id", "title" }, null, null, null);
 		Cursor tasksCursor = appContext.getContentResolver().query(
 			TaskContract.Tasks.CONTENT_URI,
 			new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE, TaskContract.Tasks.LIST_COLOR, TaskContract.Tasks.DUE, TaskContract.Tasks.TZ,
-				TaskContract.Tasks.IS_ALLDAY }, null, null, null);
-
-		// TODO: replace with a real list adapter.
-		// setListAdapter(new
-		// ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-		// android.R.layout.simple_list_item_activated_1,
-		// android.R.id.text1, DummyContent.ITEMS));
+				TaskContract.Tasks.IS_ALLDAY, TaskContract.Tasks.LIST_ID, TaskContract.Tasks.LIST_NAME }, null, null, null);
 		Log.d(TAG, "No of tasks are :" + tasksCursor.getCount());
-		setListAdapter(new TaskCursorAdapter(appContext, tasksCursor));
+
+		int titleCol, idCol, colorCol, listIdCol, listNameCol;
+		titleCol = tasksCursor.getColumnIndex(TaskContract.Tasks.TITLE);
+		idCol = tasksCursor.getColumnIndex(TaskContract.Tasks._ID);
+		colorCol = tasksCursor.getColumnIndex(TaskContract.Tasks.LIST_COLOR);
+		listIdCol = tasksCursor.getColumnIndex(TaskContract.Tasks.LIST_ID);
+		listNameCol = tasksCursor.getColumnIndex(TaskContract.Tasks.LIST_NAME);
+
+		tasksCursor.moveToFirst();
+		while (!tasksCursor.isAfterLast())
+		{
+
+			String taskTitle = tasksCursor.getString(titleCol);
+			int taskId = tasksCursor.getInt(idCol);
+			int taskColor = tasksCursor.getInt(colorCol);
+			Time dueTime = TFADAPTER.get(tasksCursor);
+			int listId = tasksCursor.getInt(listIdCol);
+			String listName = tasksCursor.getString(listNameCol);
+			bucketer.put(new TaskItem(taskId, taskColor, taskTitle, dueTime));
+
+			tasksCursor.moveToNext();
+		}
+		
+		tasksCursor.close();
+
+		itemGroupArray = bucketer.getArray();
+		
+
 		setHasOptionsMenu(true);
 	}
 
-	private class TaskCursorAdapter extends CursorAdapter
+	private class TaskExpandListAdapter implements ExpandableListAdapter
 	{
-
+		TaskItemGroup[] taskGroupArray;
 		private LayoutInflater mViewInflater;
-		private int mTitleColumnIndex;
-		private int mListColorColumnIndex;
 
 
-		public TaskCursorAdapter(Context context, Cursor cursor)
+		public TaskExpandListAdapter(Context context, TaskItemGroup[] g)
 		{
-			super(context, cursor, false);
+			taskGroupArray = g;
 			mViewInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			mTitleColumnIndex = cursor.getColumnIndex(Tasks.TITLE);
-			mListColorColumnIndex = cursor.getColumnIndex(Tasks.LIST_COLOR);
 		}
 
 
 		@Override
-		public void bindView(View view, Context context, Cursor cursor)
+		public boolean areAllItemsEnabled()
 		{
-			TextView tv = (TextView) view.findViewById(R.id.task_title);
-			View cv = view.findViewById(R.id.colorbar);
-			String taskName = cursor.getString(mTitleColumnIndex);
-			tv.setText(taskName);
-			cv.setBackgroundColor(cursor.getInt(mListColorColumnIndex));
-			TextView dueDateTV = (TextView) view.findViewById(R.id.task_due_date);
-			Time dueTime = TFADAPTER.get(cursor);
-			if (dueTime == null)
-			{
-				dueDateTV.setVisibility(View.GONE);
-			}
-			else
-			{
-				dueDateTV.setVisibility(View.VISIBLE);
-				new DueDisplayer(dueTime).display(dueDateTV);
-			}
+			return true;
 		}
 
 
 		@Override
-		public View newView(Context context, Cursor cursor, ViewGroup viewGroup)
+		public Object getChild(int groupPosition, int childPosition)
 		{
-			View inflatedView = mViewInflater.inflate(R.layout.task_list_element, null);
-			TextView tv = (TextView) inflatedView.findViewById(R.id.task_title);
-			View cv = inflatedView.findViewById(R.id.colorbar);
-			String taskName = cursor.getString(mTitleColumnIndex);
-			tv.setText(taskName);
-			cv.setBackgroundColor(cursor.getInt(mListColorColumnIndex));
-			return inflatedView;
+			return taskGroupArray[groupPosition].getChild(childPosition);
+
+		}
+
+
+		@Override
+		public long getChildId(int groupPosition, int childPosition)
+		{
+			return childPosition;
+		}
+
+
+		@Override
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
+		{
+			TaskItem t = taskGroupArray[groupPosition].getChild(childPosition);
+			if (convertView == null)
+			{
+				convertView = mViewInflater.inflate(R.layout.task_list_element, null);
+			}
+
+			TextView tv = (TextView) convertView.findViewById(R.id.task_title);
+			View cv = convertView.findViewById(R.id.colorbar);
+			Log.d(TAG, "Task Title : " + t.getTaskTitle());
+			tv.setText(t.getTaskTitle());
+			cv.setBackgroundColor(t.getTaskColor());
+
+			return convertView;
+		}
+
+
+		@Override
+		public int getChildrenCount(int groupPosition)
+		{
+			return taskGroupArray[groupPosition].getSize();
+
+		}
+
+
+		@Override
+		public long getCombinedChildId(long groupId, long childId)
+		{
+			return (groupId * 1000) + childId;
+		}
+
+
+		@Override
+		public long getCombinedGroupId(long groupId)
+		{
+			return groupId;
+		}
+
+
+		@Override
+		public Object getGroup(int groupPosition)
+		{
+			return taskGroupArray[groupPosition];
+		}
+
+
+		@Override
+		public int getGroupCount()
+		{
+			return taskGroupArray.length;
+		}
+
+
+		@Override
+		public long getGroupId(int groupPosition)
+		{
+			return groupPosition;
+		}
+
+
+		@Override
+		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+		{
+			if (convertView == null)
+			{
+				convertView = mViewInflater.inflate(R.layout.task_list_element, null);
+			}
+
+			TextView tv = (TextView) convertView.findViewById(R.id.task_title);
+			View cv = convertView.findViewById(R.id.colorbar);
+
+			tv.setText(taskGroupArray[groupPosition].getName());
+			cv.setBackgroundColor(taskGroupArray[groupPosition].getColor());
+			return convertView;
+		}
+
+
+		@Override
+		public boolean hasStableIds()
+		{
+			return true;
+		}
+
+
+		@Override
+		public boolean isChildSelectable(int groupPosition, int childPosition)
+		{
+			return true;
+		}
+
+
+		@Override
+		public boolean isEmpty()
+		{
+			return false;
+		}
+
+
+		@Override
+		public void onGroupCollapsed(int groupPosition)
+		{
+
+		}
+
+
+		@Override
+		public void onGroupExpanded(int groupPosition)
+		{
+
+		}
+
+
+		@Override
+		public void registerDataSetObserver(DataSetObserver observer)
+		{
+
+		}
+
+
+		@Override
+		public void unregisterDataSetObserver(DataSetObserver observer)
+		{
+
 		}
 
 	};
@@ -175,6 +322,17 @@ public class TaskListFragment extends ListFragment
 		{
 			setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
 		}
+	}
+
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
+		expandLV = (ExpandableListView) rootView.findViewById(R.id.expandable_tasks_list);
+		expandLV.setAdapter(new TaskExpandListAdapter(appContext, itemGroupArray));
+		expandLV.setOnChildClickListener(new TaskItemClickListener());
+		return rootView;
 	}
 
 
@@ -202,22 +360,24 @@ public class TaskListFragment extends ListFragment
 
 	}
 
-
-	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id)
+	private class TaskItemClickListener implements OnChildClickListener
 	{
-		super.onListItemClick(listView, view, position, id);
-		ListAdapter la = listView.getAdapter();
-		Cursor selectedItem = (Cursor) la.getItem(position);
-		int taskIdIndex = selectedItem.getColumnIndex(Tasks._ID);
-		String selectedId = selectedItem.getString(taskIdIndex);
-		Toast.makeText(appContext, "Selected ID is : " + selectedId, Toast.LENGTH_SHORT).show();
-		// Notify the active callbacks interface (the activity, if the
-		// fragment is attached to one) that an item has been selected.
-		Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, Long.parseLong(selectedId));
-		mCallbacks.onItemSelected(taskUri);
 
-	}
+		@Override
+		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+		{
+			ExpandableListAdapter la = parent.getExpandableListAdapter();
+			TaskItem selectedItem = (TaskItem) la.getChild(groupPosition, childPosition);
+			int selectTaskId = selectedItem.getTaskId();
+			Toast.makeText(appContext, "Selected ID is : " + selectTaskId, Toast.LENGTH_SHORT).show();
+			// Notify the active callbacks interface (the activity, if the
+			// fragment is attached to one) that an item has been selected.
+			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+			mCallbacks.onItemSelected(taskUri);
+			return true;
+		}
+
+	};
 
 
 	@Override
@@ -239,7 +399,7 @@ public class TaskListFragment extends ListFragment
 	{
 		// When setting CHOICE_MODE_SINGLE, ListView will automatically
 		// give items the 'activated' state when touched.
-		getListView().setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+		expandLV.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 	}
 
 
@@ -247,11 +407,11 @@ public class TaskListFragment extends ListFragment
 	{
 		if (position == ListView.INVALID_POSITION)
 		{
-			getListView().setItemChecked(mActivatedPosition, false);
+			expandLV.setItemChecked(mActivatedPosition, false);
 		}
 		else
 		{
-			getListView().setItemChecked(position, true);
+			expandLV.setItemChecked(position, true);
 		}
 
 		mActivatedPosition = position;
