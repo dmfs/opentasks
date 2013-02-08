@@ -108,7 +108,7 @@ public class TaskListActivity extends FragmentActivity implements
 		if (mTwoPane) {
 			Bundle arguments = new Bundle();
 			arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.NEW_TASK);
-			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
+			TaskEditDetailFragment fragment = new TaskEditDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.task_detail_container, fragment).commit();
