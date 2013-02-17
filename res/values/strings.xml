@@ -21,6 +21,17 @@
     <string name="provider_label">Tasks</string>
     <string name="task_detail_activity">Task Detail</string>
     <string name="task_priority">Priority</string>
+    <string name="title_activity_add_task">Create Task</string>
+
+    <!-- Task list group titles -->
+    <string name="task_group_no_due">No due date</string>
+    <string name="task_group_overdue">Overdue</string>
+    <string name="task_group_due_today">Due today</string>
+    <string name="task_group_due_tomorrow">Due tomorrow</string>
+    <string name="task_group_due_within_7_days">Due within 7 days</string>
+    <string name="task_group_due_in_month">Due in %s</string>
+    <string name="task_group_due_in_year">Due in %s</string>
+    <string name="task_group_due_in_future">Due later</string>
 
     <!-- Task editor labels -->
 
@@ -29,10 +40,10 @@
 
     <!-- Status labels -->
 
-    <string name="status_needs_action">Needs action</string>
-    <string name="status_in_process">In process</string>
-    <string name="status_completed">Done</string>
-    <string name="status_cancelled">Cancelled</string>
+    <string name="status_needs_action">needs action</string>
+    <string name="status_in_process">in process</string>
+    <string name="status_completed">done</string>
+    <string name="status_cancelled">cancelled</string>
 
     <!-- Classification labels -->
 
@@ -47,6 +58,5 @@
     <string name="priority_medium">medium</string>
     <string name="priority_high">high</string>
     <string name="priority_urgent">urgent</string>
-    <string name="title_activity_add_task">Create Task</string>
 
 </resources>

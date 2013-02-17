@@ -1,33 +1,31 @@
 package org.dmfs.tasks;
 
 import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.Collection;
+import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.TimeZone;
 
-import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Instance;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.helpers.TaskItem;
-import org.dmfs.tasks.helpers.TaskItemGroup;
-import org.dmfs.tasks.helpers.TaskListBucketer;
+import org.dmfs.provider.tasks.TaskContract.TimeRanges;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.utils.AsyncContentLoader;
-import org.dmfs.tasks.utils.AsyncModelLoader;
+import org.dmfs.tasks.utils.ExpandableChildDescriptor;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
+import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.CursorAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,35 +46,218 @@ import android.widget.Toast;
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
-public class TaskListFragment extends Fragment
+public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
 
+	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
+
 	/**
-	 * The serialization (saved instance state) Bundle key representing the activated item position. Only used on tablets.
+	 * The projection we use when we load instances. We don't need every detail of a task here.
 	 */
-	private static final String STATE_ACTIVATED_POSITION = "activated_position";
+	private final static String[] INSTANCE_PROJECTION = new String[] { Instance.INSTANCE_START, Instance.INSTANCE_DURATION, Instance.INSTANCE_DUE,
+		Instance.IS_ALLDAY, Instance.TZ, Instance.TITLE, Instance.LIST_COLOR, Instance.PRIORITY, Instance.LIST_ID, Instance.TASK_ID, Instance._ID };
 
-	private static final String AUTHORITY = "ms.jung.android.caldavtodo.provider";
+	/**
+	 * An adapter to load the due date from the instances projection.
+	 */
+	private final static TimeFieldAdapter DUE_ADAPTER = new TimeFieldAdapter(Instance.INSTANCE_DUE, Instance.TZ, Instance.IS_ALLDAY);
 
-	private static final String CONTENT_URI_PATH = "tasks";
+	/**
+	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
+	 */
+	private final static ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
+	{
+		/**
+		 * We use this to get the current time.
+		 */
+		private Time mNow;
 
-	private static final String TAG = "TaskListFragment";
+		/**
+		 * The formatter we use for due dates other than today.
+		 */
+		private final DateFormat mDateFormatter = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
+
+		/**
+		 * The formatter we use for tasks that are due today.
+		 */
+		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
+
+
+		@Override
+		public void populateView(View view, Cursor cursor)
+		{
+			TextView title = (TextView) view.findViewById(android.R.id.title);
+			if (title != null)
+			{
+				String text = cursor.getString(5);
+				title.setText(text);
+			}
+			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
+			if (dueDateField != null)
+			{
+				Time dueDate = DUE_ADAPTER.get(cursor);
+
+				if (dueDate != null)
+				{
+					if (mNow == null)
+					{
+						mNow = new Time();
+					}
+					mNow.clear(TimeZone.getDefault().getID());
+					mNow.setToNow();
+
+					dueDateField.setText(makeDueDate(dueDate));
+
+					// highlight overdue dates & times
+					if (dueDate.before(mNow))
+					{
+						dueDateField.setTextColor(Color.RED);
+					}
+					else
+					{
+						dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
+					}
+				}
+				else
+				{
+					dueDateField.setText("");
+				}
+			}
+
+			View colorbar = view.findViewById(R.id.colorbar);
+			if (colorbar != null)
+			{
+				colorbar.setBackgroundColor(cursor.getInt(6));
+			}
+		}
+
+
+		@Override
+		public int getView()
+		{
+			return R.layout.task_list_element;
+		}
+
+
+		/**
+		 * Get the due date to show. It returns just a time for tasks that are due today and a date otherwise.
+		 * 
+		 * @param due
+		 *            The due date to format.
+		 * @return A String with the formatted date.
+		 */
+		private String makeDueDate(Time due)
+		{
+			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
+			{
+				return mTimeFormatter.format(new Date(due.toMillis(false)));
+			}
+			else
+			{
+				return mDateFormatter.format(new Date(due.toMillis(false)));
+			}
+		}
+	};
+
+	/**
+	 * A {@link ViewDescriptor} that knows how to present due date groups.
+	 */
+	private final ViewDescriptor DUE_GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
+	{
+		private final String[] mMonthNames = DateFormatSymbols.getInstance().getMonths();
+
+
+		@Override
+		public void populateView(View view, Cursor cursor)
+		{
+			TextView title = (TextView) view.findViewById(android.R.id.title);
+			if (title != null)
+			{
+				title.setText(getTitle(cursor));
+			}
+		}
+
+
+		@Override
+		public int getView()
+		{
+			return R.layout.task_list_group;
+		}
+
+
+		/**
+		 * Return the title of a due date group.
+		 * 
+		 * @param cursor
+		 *            A {@link Cursor} pointing to the current group.
+		 * @return A {@link String} with the group name.
+		 */
+		private String getTitle(Cursor cursor)
+		{
+			int type = cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_TYPE));
+			if (type == 0)
+			{
+				return appContext.getString(R.string.task_group_no_due);
+			}
+			if ((type & TimeRanges.TYPE_END_OF_TODAY) == TimeRanges.TYPE_END_OF_TODAY)
+			{
+				return appContext.getString(R.string.task_group_due_today);
+			}
+			if ((type & TimeRanges.TYPE_END_OF_YESTERDAY) == TimeRanges.TYPE_END_OF_YESTERDAY)
+			{
+				return appContext.getString(R.string.task_group_overdue);
+			}
+			if ((type & TimeRanges.TYPE_END_OF_TOMORROW) == TimeRanges.TYPE_END_OF_TOMORROW)
+			{
+				return appContext.getString(R.string.task_group_due_tomorrow);
+			}
+			if ((type & TimeRanges.TYPE_END_IN_7_DAYS) == TimeRanges.TYPE_END_IN_7_DAYS)
+			{
+				return appContext.getString(R.string.task_group_due_within_7_days);
+			}
+			if ((type & TimeRanges.TYPE_END_OF_A_MONTH) != 0)
+			{
+				return appContext.getString(R.string.task_group_due_in_month, mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_MONTH))]);
+			}
+			if ((type & TimeRanges.TYPE_END_OF_A_YEAR) != 0)
+			{
+				return appContext.getString(R.string.task_group_due_in_month, cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_YEAR)));
+			}
+			if ((type & TimeRanges.TYPE_NO_END) != 0)
+			{
+				return appContext.getString(R.string.task_group_due_in_future);
+			}
+			return "";
+		}
+
+	};
+
+	/**
+	 * A descriptor for the "grouped by due date" view.
+	 */
+	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(TimeRanges.CONTENT_URI, TimeRanges.DEFAULT_PROJECTION,
+		null, null, null, DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
+
+	/**
+	 * A descriptor that knows how to load elements in a due date group.
+	 */
+	private final static ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instance.CONTENT_URI, INSTANCE_PROJECTION,
+		Instance.VISIBLE + "=1 and ((" + Instance.INSTANCE_DUE + ">=? and " + Instance.INSTANCE_DUE + "<?) or " + Instance.INSTANCE_DUE + " is ?)",
+		Instance.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
 	 */
 	private Callbacks mCallbacks;
 
-	/**
-	 * The current activated item position. Only used on tablets.
-	 */
-	private int mActivatedPosition = ListView.INVALID_POSITION;
-
 	private ExpandableListView expandLV;
 	private Context appContext;
-	private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-	
-	private TaskItemGroup[] itemGroupArray;
+	private ExpandableGroupDescriptorAdapter mAdapter;
+
+	// private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
+
+	// private TaskItemGroup[] itemGroupArray;
+
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
 	 */
@@ -105,223 +285,21 @@ public class TaskListFragment extends Fragment
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		Time todayTime = new Time();
-		todayTime.setToNow();
-		TaskListBucketer bucketer = new TaskListBucketer(todayTime);
-		// CursorLoader taskCursorLoader = new CursorLoader(appContext,
-		// tasksURI,
-		// new String[] { "_id", "title" }, null, null, null);
-		Cursor tasksCursor = appContext.getContentResolver().query(
-			TaskContract.Tasks.CONTENT_URI,
-			new String[] { TaskContract.Tasks._ID, TaskContract.Tasks.TITLE, TaskContract.Tasks.LIST_COLOR, TaskContract.Tasks.DUE, TaskContract.Tasks.TZ,
-				TaskContract.Tasks.IS_ALLDAY, TaskContract.Tasks.LIST_ID, TaskContract.Tasks.LIST_NAME }, null, null, null);
-		Log.d(TAG, "No of tasks are :" + tasksCursor.getCount());
-
-		int titleCol, idCol, colorCol, listIdCol, listNameCol;
-		titleCol = tasksCursor.getColumnIndex(TaskContract.Tasks.TITLE);
-		idCol = tasksCursor.getColumnIndex(TaskContract.Tasks._ID);
-		colorCol = tasksCursor.getColumnIndex(TaskContract.Tasks.LIST_COLOR);
-		listIdCol = tasksCursor.getColumnIndex(TaskContract.Tasks.LIST_ID);
-		listNameCol = tasksCursor.getColumnIndex(TaskContract.Tasks.LIST_NAME);
-
-		tasksCursor.moveToFirst();
-		while (!tasksCursor.isAfterLast())
-		{
-
-			String taskTitle = tasksCursor.getString(titleCol);
-			int taskId = tasksCursor.getInt(idCol);
-			int taskColor = tasksCursor.getInt(colorCol);
-			Time dueTime = TFADAPTER.get(tasksCursor);
-			int listId = tasksCursor.getInt(listIdCol);
-			String listName = tasksCursor.getString(listNameCol);
-			bucketer.put(new TaskItem(taskId, taskColor, taskTitle, dueTime));
-
-			tasksCursor.moveToNext();
-		}
-		
-		tasksCursor.close();
-
-		itemGroupArray = bucketer.getArray();
-		
-
 		setHasOptionsMenu(true);
 	}
-
-	private class TaskExpandListAdapter implements ExpandableListAdapter
-	{
-		TaskItemGroup[] taskGroupArray;
-		private LayoutInflater mViewInflater;
-
-
-		public TaskExpandListAdapter(Context context, TaskItemGroup[] g)
-		{
-			taskGroupArray = g;
-			mViewInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
-
-
-		@Override
-		public boolean areAllItemsEnabled()
-		{
-			return true;
-		}
-
-
-		@Override
-		public Object getChild(int groupPosition, int childPosition)
-		{
-			return taskGroupArray[groupPosition].getChild(childPosition);
-
-		}
-
-
-		@Override
-		public long getChildId(int groupPosition, int childPosition)
-		{
-			return childPosition;
-		}
-
-
-		@Override
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
-		{
-			TaskItem t = taskGroupArray[groupPosition].getChild(childPosition);
-			if (convertView == null)
-			{
-				convertView = mViewInflater.inflate(R.layout.task_list_element, null);
-			}
-
-			TextView tv = (TextView) convertView.findViewById(R.id.task_title);
-			View cv = convertView.findViewById(R.id.colorbar);
-			Log.d(TAG, "Task Title : " + t.getTaskTitle());
-			tv.setText(t.getTaskTitle());
-			cv.setBackgroundColor(t.getTaskColor());
-
-			return convertView;
-		}
-
-
-		@Override
-		public int getChildrenCount(int groupPosition)
-		{
-			return taskGroupArray[groupPosition].getSize();
-
-		}
-
-
-		@Override
-		public long getCombinedChildId(long groupId, long childId)
-		{
-			return (groupId * 1000) + childId;
-		}
-
-
-		@Override
-		public long getCombinedGroupId(long groupId)
-		{
-			return groupId;
-		}
-
-
-		@Override
-		public Object getGroup(int groupPosition)
-		{
-			return taskGroupArray[groupPosition];
-		}
-
-
-		@Override
-		public int getGroupCount()
-		{
-			return taskGroupArray.length;
-		}
-
-
-		@Override
-		public long getGroupId(int groupPosition)
-		{
-			return groupPosition;
-		}
-
-
-		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
-		{
-			if (convertView == null)
-			{
-				convertView = mViewInflater.inflate(R.layout.task_list_element, null);
-			}
-
-			TextView tv = (TextView) convertView.findViewById(R.id.task_title);
-			View cv = convertView.findViewById(R.id.colorbar);
-
-			tv.setText(taskGroupArray[groupPosition].getName());
-			cv.setBackgroundColor(taskGroupArray[groupPosition].getColor());
-			return convertView;
-		}
-
-
-		@Override
-		public boolean hasStableIds()
-		{
-			return true;
-		}
-
-
-		@Override
-		public boolean isChildSelectable(int groupPosition, int childPosition)
-		{
-			return true;
-		}
-
-
-		@Override
-		public boolean isEmpty()
-		{
-			return false;
-		}
-
-
-		@Override
-		public void onGroupCollapsed(int groupPosition)
-		{
-
-		}
-
-
-		@Override
-		public void onGroupExpanded(int groupPosition)
-		{
-
-		}
-
-
-		@Override
-		public void registerDataSetObserver(DataSetObserver observer)
-		{
-
-		}
-
-
-		@Override
-		public void unregisterDataSetObserver(DataSetObserver observer)
-		{
-
-		}
-
-	};
 
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
 		super.onViewCreated(view, savedInstanceState);
-
-		// Restore the previously serialized activated item position.
-		if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION))
-		{
-			setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-		}
+		/*
+		 * // Restore the previously serialized activated item position.
+		 * if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION))
+		 * {
+		 * setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+		 * }
+		 */
 	}
 
 
@@ -330,8 +308,11 @@ public class TaskListFragment extends Fragment
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		expandLV = (ExpandableListView) rootView.findViewById(R.id.expandable_tasks_list);
-		expandLV.setAdapter(new TaskExpandListAdapter(appContext, itemGroupArray));
-		expandLV.setOnChildClickListener(new TaskItemClickListener());
+		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), GROUP_BY_DUE_DESCRIPTOR);
+		expandLV.setAdapter(mAdapter);
+		expandLV.setOnChildClickListener(mTaskItemClickListener);
+		getLoaderManager().restartLoader(0, null, this);
+
 		return rootView;
 	}
 
@@ -360,19 +341,25 @@ public class TaskListFragment extends Fragment
 
 	}
 
-	private class TaskItemClickListener implements OnChildClickListener
+	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
 
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
-			ExpandableListAdapter la = parent.getExpandableListAdapter();
-			TaskItem selectedItem = (TaskItem) la.getChild(groupPosition, childPosition);
-			int selectTaskId = selectedItem.getTaskId();
+			// a task instance element has been clicked, get it's instance id and notify the activity
+			ExpandableListAdapter listAdapter = parent.getExpandableListAdapter();
+			Cursor cursor = (Cursor) listAdapter.getChild(groupPosition, childPosition);
+
+			// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
+			long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instance.TASK_ID));
+
 			Toast.makeText(appContext, "Selected ID is : " + selectTaskId, Toast.LENGTH_SHORT).show();
-			// Notify the active callbacks interface (the activity, if the
-			// fragment is attached to one) that an item has been selected.
+			// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+
+			// TODO: use the instance URI one we support recurrence
 			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+
 			mCallbacks.onItemSelected(taskUri);
 			return true;
 		}
@@ -384,11 +371,13 @@ public class TaskListFragment extends Fragment
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		if (mActivatedPosition != ListView.INVALID_POSITION)
-		{
-			// Serialize and persist the activated item position.
-			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-		}
+		/*
+		 * if (mActivatedPosition != ListView.INVALID_POSITION)
+		 * {
+		 * // Serialize and persist the activated item position.
+		 * outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+		 * }
+		 */
 	}
 
 
@@ -405,16 +394,18 @@ public class TaskListFragment extends Fragment
 
 	private void setActivatedPosition(int position)
 	{
-		if (position == ListView.INVALID_POSITION)
-		{
-			expandLV.setItemChecked(mActivatedPosition, false);
-		}
-		else
-		{
-			expandLV.setItemChecked(position, true);
-		}
-
-		mActivatedPosition = position;
+		/*
+		 * if (position == ListView.INVALID_POSITION)
+		 * {
+		 * expandLV.setItemChecked(mActivatedPosition, false);
+		 * }
+		 * else
+		 * {
+		 * expandLV.setItemChecked(position, true);
+		 * }
+		 * 
+		 * mActivatedPosition = position;
+		 */
 	}
 
 
@@ -438,39 +429,24 @@ public class TaskListFragment extends Fragment
 		}
 	}
 
-	private class DueDisplayer
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		Time today, dueDate;
-		DateFormat dateFormatter;
-		DateFormat timeFormatter;
+		return GROUP_BY_DUE_DESCRIPTOR.getGroupCursorLoader(appContext);
+	}
 
 
-		public DueDisplayer(Time d)
-		{
-			dueDate = d;
-			today = new Time();
-			today.setToNow();
-			dateFormatter = android.text.format.DateFormat.getDateFormat(appContext);
-			timeFormatter = android.text.format.DateFormat.getTimeFormat(appContext);
-		}
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
+	{
+		mAdapter.changeCursor(cursor);
+	}
 
 
-		public void display(TextView tv)
-		{
-			if (dueDate.year == today.year && dueDate.month == today.month && dueDate.monthDay == today.monthDay)
-			{
-				tv.setText(timeFormatter.format(new Date(dueDate.toMillis(false))));
-			}
-			else
-			{
-				tv.setText(dateFormatter.format(new Date(dueDate.toMillis(false))));
-			}
-
-			if (dueDate.before(today))
-			{
-				Log.d(TAG, "Before Today");
-				tv.setTextColor(Color.RED);
-			}
-		}
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader)
+	{
+		mAdapter.changeCursor(null);
 	}
 }

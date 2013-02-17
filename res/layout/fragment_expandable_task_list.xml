@@ -10,4 +10,6 @@
         android:layout_height="match_parent" >
     </ExpandableListView>
 
+    <!-- use android:groupIndicator="@null" to hide the indicator -->
+
 </LinearLayout>
