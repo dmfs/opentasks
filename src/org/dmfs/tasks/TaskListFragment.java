@@ -221,7 +221,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			}
 			if ((type & TimeRanges.TYPE_END_OF_A_YEAR) != 0)
 			{
-				return appContext.getString(R.string.task_group_due_in_month, cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_YEAR)));
+				return appContext.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_YEAR)));
 			}
 			if ((type & TimeRanges.TYPE_NO_END) != 0)
 			{
