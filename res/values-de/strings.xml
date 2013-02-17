@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android Aufgaben</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Liste</string>
+    <string name="task_title">Titel</string>
+    <string name="task_location">Ort</string>
+    <string name="task_description">Beschreibung</string>
+    <string name="task_start">Beginn</string>
+    <string name="task_due">Fällig</string>
+    <string name="task_completed">Fertiggestellt</string>
+    <string name="task_percent_complete">Fertig in prozent</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Privatsphäre</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Aufgaben Details</string>
+    <string name="title_task_list">Aufgaben</string>
+    <string name="provider_label">Aufgaben</string>
+    <string name="task_detail_activity">Aufgaben Details</string>
+    <string name="task_priority">Priorität</string>
+    <string name="title_activity_add_task">Erstelle Aufgabe</string>
+
+    <!-- Task list group titles -->
+    <string name="task_group_no_due">Ohne Fälligkeit</string>
+    <string name="task_group_overdue">Überfällig</string>
+    <string name="task_group_due_today">Heute fällig</string>
+    <string name="task_group_due_tomorrow">Morgen fällig</string>
+    <string name="task_group_due_within_7_days">Fällig inherhalb 7 Tage</string>
+    <string name="task_group_due_in_month">Fällig im %s</string>
+    <string name="task_group_due_in_year">Fällig %s</string>
+    <string name="task_group_due_in_future">Fällig in Zukunft</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Speichern</string>
+    <string name="action_cancel">Abbrechen</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">benötigt Eingiff</string>
+    <string name="status_in_process">in Arbeit</string>
+    <string name="status_completed">erledigt</string>
+    <string name="status_cancelled">abgebrochen</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_public">öffentlich</string>
+    <string name="classification_private">privat</string>
+    <string name="classification_confidential">vertraulich</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">keine</string>
+    <string name="priority_low">niedrig</string>
+    <string name="priority_medium">mittel</string>
+    <string name="priority_high">hoch</string>
+    <string name="priority_urgent">dringend</string>
+
+</resources>
