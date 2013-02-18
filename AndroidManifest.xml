@@ -33,10 +33,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TaskListActivity" />
         </activity>
-        <activity
-            android:name="org.dmfs.tasks.TaskViewActivity"
-            android:label="@string/task_detail_activity" >
-        </activity>
 
         <provider
             android:name="org.dmfs.provider.tasks.TaskProvider"

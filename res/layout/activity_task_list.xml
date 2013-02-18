@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:padding="10sp"
+    android:padding="0dip"
     android:orientation="vertical" >
 
     <fragment

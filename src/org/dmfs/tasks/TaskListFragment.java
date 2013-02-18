@@ -304,7 +304,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
-		expandLV = (ExpandableListView) rootView.findViewById(R.id.expandable_tasks_list);
+		expandLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
 		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), GROUP_BY_DUE_DESCRIPTOR);
 		expandLV.setAdapter(mAdapter);
 		expandLV.setOnChildClickListener(mTaskItemClickListener);
