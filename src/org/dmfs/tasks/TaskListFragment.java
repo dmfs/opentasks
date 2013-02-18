@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.dmfs.provider.tasks.TaskContract.Instance;
+import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskContract.TimeRanges;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -54,13 +54,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	/**
 	 * The projection we use when we load instances. We don't need every detail of a task here.
 	 */
-	private final static String[] INSTANCE_PROJECTION = new String[] { Instance.INSTANCE_START, Instance.INSTANCE_DURATION, Instance.INSTANCE_DUE,
-		Instance.IS_ALLDAY, Instance.TZ, Instance.TITLE, Instance.LIST_COLOR, Instance.PRIORITY, Instance.LIST_ID, Instance.TASK_ID, Instance._ID };
+	private final static String[] INSTANCE_PROJECTION = new String[] { Instances.INSTANCE_START, Instances.INSTANCE_DURATION, Instances.INSTANCE_DUE,
+		Instances.IS_ALLDAY, Instances.TZ, Instances.TITLE, Instances.LIST_COLOR, Instances.PRIORITY, Instances.LIST_ID, Instances.TASK_ID, Instances._ID };
 
 	/**
 	 * An adapter to load the due date from the instances projection.
 	 */
-	private final static TimeFieldAdapter DUE_ADAPTER = new TimeFieldAdapter(Instance.INSTANCE_DUE, Instance.TZ, Instance.IS_ALLDAY);
+	private final static TimeFieldAdapter DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
 
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
@@ -241,9 +241,9 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	/**
 	 * A descriptor that knows how to load elements in a due date group.
 	 */
-	private final static ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instance.CONTENT_URI, INSTANCE_PROJECTION,
-		Instance.VISIBLE + "=1 and ((" + Instance.INSTANCE_DUE + ">=? and " + Instance.INSTANCE_DUE + "<?) or " + Instance.INSTANCE_DUE + " is ?)",
-		Instance.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+	private final static ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, INSTANCE_PROJECTION,
+		Instances.VISIBLE + "=1 and ((" + Instances.INSTANCE_DUE + ">=? and " + Instances.INSTANCE_DUE + "<?) or " + Instances.INSTANCE_DUE + " is ?)",
+		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
@@ -294,11 +294,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onViewCreated(view, savedInstanceState);
 		/*
-		 * // Restore the previously serialized activated item position.
-		 * if (savedInstanceState != null && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION))
-		 * {
-		 * setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
-		 * }
+		 * // Restore the previously serialized activated item position. if (savedInstanceState != null &&
+		 * savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) { setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION)); }
 		 */
 	}
 
@@ -352,7 +349,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			Cursor cursor = (Cursor) listAdapter.getChild(groupPosition, childPosition);
 
 			// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-			long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instance.TASK_ID));
+			long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
 
 			Toast.makeText(appContext, "Selected ID is : " + selectTaskId, Toast.LENGTH_SHORT).show();
 			// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
@@ -372,11 +369,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onSaveInstanceState(outState);
 		/*
-		 * if (mActivatedPosition != ListView.INVALID_POSITION)
-		 * {
-		 * // Serialize and persist the activated item position.
-		 * outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
-		 * }
+		 * if (mActivatedPosition != ListView.INVALID_POSITION) { // Serialize and persist the activated item position.
+		 * outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition); }
 		 */
 	}
 
@@ -395,14 +389,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private void setActivatedPosition(int position)
 	{
 		/*
-		 * if (position == ListView.INVALID_POSITION)
-		 * {
-		 * expandLV.setItemChecked(mActivatedPosition, false);
-		 * }
-		 * else
-		 * {
-		 * expandLV.setItemChecked(position, true);
-		 * }
+		 * if (position == ListView.INVALID_POSITION) { expandLV.setItemChecked(mActivatedPosition, false); } else { expandLV.setItemChecked(position, true); }
 		 * 
 		 * mActivatedPosition = position;
 		 */
