@@ -7,7 +7,8 @@
     <ExpandableListView
         android:id="@+id/expandable_tasks_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:groupIndicator="@null" >
     </ExpandableListView>
 
     <!-- use android:groupIndicator="@null" to hide the indicator -->

@@ -242,8 +242,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * A descriptor that knows how to load elements in a due date group.
 	 */
 	private final static ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and ((" + Instances.INSTANCE_DUE + ">=? and " + Instances.INSTANCE_DUE + "<?) or " + Instances.INSTANCE_DUE + " is ?)",
-		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		Instances.VISIBLE + "=1 and ((" + Instances.INSTANCE_DUE + ">=? or ? is null) and (" + Instances.INSTANCE_DUE + "<? or ? is null))",
+		Instances.DEFAULT_SORT_ORDER, 0, 0, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.

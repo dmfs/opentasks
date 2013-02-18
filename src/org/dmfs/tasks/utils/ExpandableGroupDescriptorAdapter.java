@@ -57,7 +57,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 
 	public ExpandableGroupDescriptorAdapter(Cursor cursor, Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
 	{
-		super(cursor, context);
+		super(cursor, context, true);
 		mContext = context;
 		mDescriptor = descriptor;
 		mLoaderManager = loaderManager;
