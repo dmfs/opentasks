@@ -28,7 +28,7 @@
     <string name="task_group_overdue">Überfällig</string>
     <string name="task_group_due_today">Heute fällig</string>
     <string name="task_group_due_tomorrow">Morgen fällig</string>
-    <string name="task_group_due_within_7_days">Fällig inherhalb 7 Tage</string>
+    <string name="task_group_due_within_7_days">Bald fällig</string>
     <string name="task_group_due_in_month">Fällig im %s</string>
     <string name="task_group_due_in_year">Fällig %s</string>
     <string name="task_group_due_in_future">Fällig in Zukunft</string>

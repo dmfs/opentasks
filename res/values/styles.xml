@@ -17,8 +17,8 @@
         <item name="android:textColor">#FF333333</item>
     </style>
 
-    <style name="TaskGroupText" parent="DarkText" >
-        <item name="android:textStyle">bold</item>
+    <style name="TaskGroupText" >
+        <item name="android:textColor">#ff33b5e5</item>
     </style>
 
     <style name="LabelText">
