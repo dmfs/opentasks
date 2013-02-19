@@ -13,7 +13,7 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
-import org.dmfs.tasks.utils.TimeRangeCursorBuilder;
+import org.dmfs.tasks.utils.TimeRangeCursorFactory;
 import org.dmfs.tasks.utils.TimeRangeCursorLoaderFactory;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
@@ -28,6 +28,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -198,37 +199,37 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 */
 		private String getTitle(Cursor cursor)
 		{
-			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorBuilder.RANGE_TYPE));
+			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_TYPE));
 			if (type == 0)
 			{
 				return appContext.getString(R.string.task_group_no_due);
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_TODAY) == TimeRangeCursorBuilder.TYPE_END_OF_TODAY)
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TODAY) == TimeRangeCursorFactory.TYPE_END_OF_TODAY)
 			{
 				return appContext.getString(R.string.task_group_due_today);
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_YESTERDAY) == TimeRangeCursorBuilder.TYPE_END_OF_YESTERDAY)
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY) == TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY)
 			{
 				return appContext.getString(R.string.task_group_overdue);
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_TOMORROW) == TimeRangeCursorBuilder.TYPE_END_OF_TOMORROW)
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TOMORROW) == TimeRangeCursorFactory.TYPE_END_OF_TOMORROW)
 			{
 				return appContext.getString(R.string.task_group_due_tomorrow);
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_END_IN_7_DAYS) == TimeRangeCursorBuilder.TYPE_END_IN_7_DAYS)
+			if ((type & TimeRangeCursorFactory.TYPE_END_IN_7_DAYS) == TimeRangeCursorFactory.TYPE_END_IN_7_DAYS)
 			{
 				return appContext.getString(R.string.task_group_due_within_7_days);
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_A_MONTH) != 0)
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_MONTH) != 0)
 			{
 				return appContext.getString(R.string.task_group_due_in_month,
-					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorBuilder.RANGE_MONTH))]);
+					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_MONTH))]);
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_A_YEAR) != 0)
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_YEAR) != 0)
 			{
-				return appContext.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorBuilder.RANGE_YEAR)));
+				return appContext.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_YEAR)));
 			}
-			if ((type & TimeRangeCursorBuilder.TYPE_NO_END) != 0)
+			if ((type & TimeRangeCursorFactory.TYPE_NO_END) != 0)
 			{
 				return appContext.getString(R.string.task_group_due_in_future);
 			}
@@ -241,7 +242,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * A descriptor for the "grouped by due date" view.
 	 */
 	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
-		TimeRangeCursorBuilder.DEFAULT_PROJECTION), DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
+		TimeRangeCursorFactory.DEFAULT_PROJECTION), DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
 
 	/**
 	 * A descriptor that knows how to load elements in a due date group.
@@ -443,7 +444,9 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		/*
 		 * int scrollx = expandLV.getFirstVisiblePosition(); View itemView = expandLV.getChildAt(0); int scrolly = itemView == null ? 0 : itemView.getTop();
 		 * Log.v(TAG, "scrollY " + scrollx + "  " + scrolly);
-		 */mAdapter.changeCursor(cursor);
+		 */
+		Log.v(TAG, "change cursor");
+		mAdapter.changeCursor(cursor);
 		/*
 		 * expandLV.setSelectionFromTop(scrollx, 0); int scrollx2 = expandLV.getFirstVisiblePosition(); View itemView2 = expandLV.getChildAt(0); int scrolly2 =
 		 * itemView == null ? 0 : itemView2.getTop(); Log.v(TAG, "scrollY " + scrollx2 + "  " + scrolly2);
