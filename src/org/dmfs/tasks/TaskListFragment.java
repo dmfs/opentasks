@@ -3,16 +3,18 @@ package org.dmfs.tasks;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.provider.tasks.TaskContract.TimeRanges;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
+import org.dmfs.tasks.utils.TimeRangeCursorBuilder;
+import org.dmfs.tasks.utils.TimeRangeCursorLoaderFactory;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.app.Activity;
@@ -50,6 +52,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
+
+	private static final String PARAM_EXPANDED_GROUPS = "expanded_groups";
 
 	/**
 	 * The projection we use when we load instances. We don't need every detail of a task here.
@@ -173,7 +177,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
 			{
-				title.setText(getTitle(cursor));
+				title.setText(getTitle(cursor) + " (" + mAdapter.getChildrenCount(cursor.getPosition()) + ")");
 			}
 		}
 
@@ -194,36 +198,37 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 */
 		private String getTitle(Cursor cursor)
 		{
-			int type = cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_TYPE));
+			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorBuilder.RANGE_TYPE));
 			if (type == 0)
 			{
 				return appContext.getString(R.string.task_group_no_due);
 			}
-			if ((type & TimeRanges.TYPE_END_OF_TODAY) == TimeRanges.TYPE_END_OF_TODAY)
+			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_TODAY) == TimeRangeCursorBuilder.TYPE_END_OF_TODAY)
 			{
 				return appContext.getString(R.string.task_group_due_today);
 			}
-			if ((type & TimeRanges.TYPE_END_OF_YESTERDAY) == TimeRanges.TYPE_END_OF_YESTERDAY)
+			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_YESTERDAY) == TimeRangeCursorBuilder.TYPE_END_OF_YESTERDAY)
 			{
 				return appContext.getString(R.string.task_group_overdue);
 			}
-			if ((type & TimeRanges.TYPE_END_OF_TOMORROW) == TimeRanges.TYPE_END_OF_TOMORROW)
+			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_TOMORROW) == TimeRangeCursorBuilder.TYPE_END_OF_TOMORROW)
 			{
 				return appContext.getString(R.string.task_group_due_tomorrow);
 			}
-			if ((type & TimeRanges.TYPE_END_IN_7_DAYS) == TimeRanges.TYPE_END_IN_7_DAYS)
+			if ((type & TimeRangeCursorBuilder.TYPE_END_IN_7_DAYS) == TimeRangeCursorBuilder.TYPE_END_IN_7_DAYS)
 			{
 				return appContext.getString(R.string.task_group_due_within_7_days);
 			}
-			if ((type & TimeRanges.TYPE_END_OF_A_MONTH) != 0)
+			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_A_MONTH) != 0)
 			{
-				return appContext.getString(R.string.task_group_due_in_month, mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_MONTH))]);
+				return appContext.getString(R.string.task_group_due_in_month,
+					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorBuilder.RANGE_MONTH))]);
 			}
-			if ((type & TimeRanges.TYPE_END_OF_A_YEAR) != 0)
+			if ((type & TimeRangeCursorBuilder.TYPE_END_OF_A_YEAR) != 0)
 			{
-				return appContext.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRanges.RANGE_YEAR)));
+				return appContext.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorBuilder.RANGE_YEAR)));
 			}
-			if ((type & TimeRanges.TYPE_NO_END) != 0)
+			if ((type & TimeRangeCursorBuilder.TYPE_NO_END) != 0)
 			{
 				return appContext.getString(R.string.task_group_due_in_future);
 			}
@@ -235,15 +240,15 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	/**
 	 * A descriptor for the "grouped by due date" view.
 	 */
-	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(TimeRanges.CONTENT_URI, TimeRanges.DEFAULT_PROJECTION,
-		null, null, null, DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
+	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
+		TimeRangeCursorBuilder.DEFAULT_PROJECTION), DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
 
 	/**
 	 * A descriptor that knows how to load elements in a due date group.
 	 */
 	private final static ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and ((" + Instances.INSTANCE_DUE + ">=? or ? is null) and (" + Instances.INSTANCE_DUE + "<? or ? is null))",
-		Instances.DEFAULT_SORT_ORDER, 0, 0, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or " + Instances.INSTANCE_DUE + " is ?)",
+		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
@@ -253,6 +258,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private ExpandableListView expandLV;
 	private Context appContext;
 	private ExpandableGroupDescriptorAdapter mAdapter;
+
+	private long[] mSavedExpandedGroups = null;
 
 	// private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
 
@@ -310,6 +317,11 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		expandLV.setOnChildClickListener(mTaskItemClickListener);
 		getLoaderManager().restartLoader(0, null, this);
 
+		if (savedInstanceState != null)
+		{
+			// store expanded groups array for later, when the groups have been loaded
+			mSavedExpandedGroups = savedInstanceState.getLongArray(PARAM_EXPANDED_GROUPS);
+		}
 		return rootView;
 	}
 
@@ -368,6 +380,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
+		outState.putLongArray(PARAM_EXPANDED_GROUPS, getExpandedGroups(expandLV));
 		/*
 		 * if (mActivatedPosition != ListView.INVALID_POSITION) { // Serialize and persist the activated item position.
 		 * outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition); }
@@ -427,7 +440,19 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		mAdapter.changeCursor(cursor);
+		/*
+		 * int scrollx = expandLV.getFirstVisiblePosition(); View itemView = expandLV.getChildAt(0); int scrolly = itemView == null ? 0 : itemView.getTop();
+		 * Log.v(TAG, "scrollY " + scrollx + "  " + scrolly);
+		 */mAdapter.changeCursor(cursor);
+		/*
+		 * expandLV.setSelectionFromTop(scrollx, 0); int scrollx2 = expandLV.getFirstVisiblePosition(); View itemView2 = expandLV.getChildAt(0); int scrolly2 =
+		 * itemView == null ? 0 : itemView2.getTop(); Log.v(TAG, "scrollY " + scrollx2 + "  " + scrolly2);
+		 */if (mSavedExpandedGroups != null)
+		{
+			setExpandedGroups(expandLV, mSavedExpandedGroups);
+			mSavedExpandedGroups = null;
+		}
+
 	}
 
 
@@ -435,5 +460,41 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onLoaderReset(Loader<Cursor> loader)
 	{
 		mAdapter.changeCursor(null);
+	}
+
+
+	private static long[] getExpandedGroups(ExpandableListView view)
+	{
+		ExpandableListAdapter adapter = view.getExpandableListAdapter();
+		int count = adapter.getGroupCount();
+
+		long[] result = new long[count];
+
+		int idx = 0;
+		for (int i = 0; i < count; ++i)
+		{
+			if (view.isGroupExpanded(i))
+			{
+				result[idx] = adapter.getGroupId(i);
+				++idx;
+			}
+		}
+		return Arrays.copyOf(result, idx);
+	}
+
+
+	private static void setExpandedGroups(ExpandableListView view, long[] ids)
+	{
+		ExpandableListAdapter adapter = view.getExpandableListAdapter();
+		Arrays.sort(ids);
+
+		int count = adapter.getGroupCount();
+		for (int i = 0; i < count; ++i)
+		{
+			if (Arrays.binarySearch(ids, adapter.getGroupId(i)) >= 0)
+			{
+				view.expandGroup(i);
+			}
+		}
 	}
 }

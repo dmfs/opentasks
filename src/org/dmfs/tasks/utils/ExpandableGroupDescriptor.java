@@ -19,10 +19,10 @@
 
 package org.dmfs.tasks.utils;
 
+
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 
 
 /**
@@ -32,36 +32,28 @@ import android.support.v4.content.CursorLoader;
  */
 public class ExpandableGroupDescriptor
 {
-	private final Uri mUri;
-	private final String[] mProjection;
-	private final String mSelection;
-	private final String[] mSelectionArgs;
-	private final String mSortOrder;
+
+	private final AbstractCursorLoaderFactory mLoaderFactory;
 	private final ExpandableChildDescriptor mChildDescriptor;
 	private ViewDescriptor mGroupViewDescriptor;
 	private int mTitle = -1;
 	private int mDrawable = -1;
 
 
-	public ExpandableGroupDescriptor(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder,
-		ExpandableChildDescriptor childDescriptor)
+	public ExpandableGroupDescriptor(AbstractCursorLoaderFactory loaderFactory, ExpandableChildDescriptor childDescriptor)
 	{
-		mUri = uri;
-		mProjection = projection;
-		mSelection = selection;
-		mSelectionArgs = selectionArgs;
-		mSortOrder = sortOrder;
+		mLoaderFactory = loaderFactory;
 		mChildDescriptor = childDescriptor;
 	}
 
 
-	public CursorLoader getGroupCursorLoader(Context context)
+	public Loader<Cursor> getGroupCursorLoader(Context context)
 	{
-		return new CursorLoader(context, mUri, mProjection, mSelection, mSelectionArgs, mSortOrder);
+		return mLoaderFactory.getLoader(context);
 	}
 
 
-	public CursorLoader getChildCursorLoader(Context context, Cursor cursor)
+	public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor)
 	{
 		return mChildDescriptor.getCursorLoader(context, cursor);
 	}

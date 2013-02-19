@@ -57,7 +57,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 
 	public ExpandableGroupDescriptorAdapter(Cursor cursor, Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
 	{
-		super(cursor, context, true);
+		super(cursor, context, false);
 		mContext = context;
 		mDescriptor = descriptor;
 		mLoaderManager = loaderManager;
@@ -68,7 +68,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	public Loader<Cursor> onCreateLoader(int pos, Bundle arguments)
 	{
-		Cursor cursor = getGroup(pos);
+		Cursor cursor = getGroup(pos - 1);
 		if (cursor != null)
 		{
 			return mDescriptor.getChildCursorLoader(mContext, cursor);
@@ -80,7 +80,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		setChildrenCursor(loader.getId(), cursor);
+		setChildrenCursor(loader.getId() - 1, cursor);
 	}
 
 
@@ -113,7 +113,8 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	protected Cursor getChildrenCursor(Cursor groupCursor)
 	{
-		mLoaderManager.restartLoader(groupCursor.getPosition(), null, this);
+		// android doesn't like it if the id is 0, so add 1 and ensure we always remove 1 when we use the id
+		mLoaderManager.restartLoader(groupCursor.getPosition() + 1, null, this);
 		return null;
 	}
 

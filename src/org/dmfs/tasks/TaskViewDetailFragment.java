@@ -22,7 +22,6 @@ package org.dmfs.tasks;
 import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.TaskListFragment.Callbacks;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.AsyncModelLoader;
