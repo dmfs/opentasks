@@ -13,6 +13,8 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
+import org.dmfs.tasks.utils.TimeChangeListener;
+import org.dmfs.tasks.utils.TimeChangeObserver;
 import org.dmfs.tasks.utils.TimeRangeCursorFactory;
 import org.dmfs.tasks.utils.TimeRangeCursorLoaderFactory;
 import org.dmfs.tasks.utils.ViewDescriptor;
@@ -70,7 +72,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
 	 */
-	private final static ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
+	private final ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
 		/**
 		 * We use this to get the current time.
@@ -240,17 +242,18 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	};
 
 	/**
+	 * A descriptor that knows how to load elements in a due date group.
+	 */
+	private final ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, INSTANCE_PROJECTION,
+		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or " + Instances.INSTANCE_DUE + " is ?)",
+		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+
+	/**
 	 * A descriptor for the "grouped by due date" view.
 	 */
 	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
 		TimeRangeCursorFactory.DEFAULT_PROJECTION), DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
 
-	/**
-	 * A descriptor that knows how to load elements in a due date group.
-	 */
-	private final static ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or " + Instances.INSTANCE_DUE + " is ?)",
-		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
@@ -501,4 +504,5 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			}
 		}
 	}
+
 }

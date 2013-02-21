@@ -6,7 +6,7 @@
     android:padding="12dip" >
 
     <TextView
-        android:id="@style/LabelText"
+        android:id="@+id/LabelText"
         style="@style/DarkText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
