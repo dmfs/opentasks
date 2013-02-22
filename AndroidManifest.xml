@@ -41,7 +41,7 @@
             android:multiprocess="false" />
 
         <activity
-            android:name="org.dmfs.tasks.AddTaskActivity"
+            android:name="org.dmfs.tasks.AddEditTaskActivity"
             android:label="@string/title_activity_add_task"
             android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
             <meta-data

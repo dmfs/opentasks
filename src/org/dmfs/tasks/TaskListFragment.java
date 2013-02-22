@@ -40,6 +40,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,6 +69,9 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * An adapter to load the due date from the instances projection.
 	 */
 	private final static TimeFieldAdapter DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
+
+	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
+	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
 
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
@@ -254,12 +258,12 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
 		TimeRangeCursorFactory.DEFAULT_PROJECTION), DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
 
-
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
 	 */
 	private Callbacks mCallbacks;
-
+	private int mActivatedPositionGroup = ExpandableListView.INVALID_POSITION;
+	private int mActivatedPositionChild = ExpandableListView.INVALID_POSITION;
 	private ExpandableListView expandLV;
 	private Context appContext;
 	private ExpandableGroupDescriptorAdapter mAdapter;
@@ -320,12 +324,21 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), GROUP_BY_DUE_DESCRIPTOR);
 		expandLV.setAdapter(mAdapter);
 		expandLV.setOnChildClickListener(mTaskItemClickListener);
+		
+		
 		getLoaderManager().restartLoader(0, null, this);
 
 		if (savedInstanceState != null)
 		{
+			Log.d(TAG, "savedInstance state is not null");
 			// store expanded groups array for later, when the groups have been loaded
 			mSavedExpandedGroups = savedInstanceState.getLongArray(PARAM_EXPANDED_GROUPS);
+			mActivatedPositionGroup = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_GROUP);
+			mActivatedPositionChild = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_CHILD);
+		}
+		else
+		{
+			Log.d(TAG, "savedInstancestate is null!!");
 		}
 		return rootView;
 	}
@@ -361,35 +374,53 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
-			// a task instance element has been clicked, get it's instance id and notify the activity
-			ExpandableListAdapter listAdapter = parent.getExpandableListAdapter();
-			Cursor cursor = (Cursor) listAdapter.getChild(groupPosition, childPosition);
-
-			// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-			long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
-
-			Toast.makeText(appContext, "Selected ID is : " + selectTaskId, Toast.LENGTH_SHORT).show();
-			// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
-
-			// TODO: use the instance URI one we support recurrence
-			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
-
-			mCallbacks.onItemSelected(taskUri);
+			selectChildView(parent, groupPosition, childPosition);
+			mActivatedPositionGroup = groupPosition;
+			mActivatedPositionChild = childPosition;
 			return true;
 		}
 
 	};
 
 
+	private void selectChildView(ExpandableListView expandLV, int groupPosition, int childPosition)
+	{
+		// a task instance element has been clicked, get it's instance id and notify the activity
+		ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
+		Cursor cursor = (Cursor) listAdapter.getChild(groupPosition, childPosition);
+
+		// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
+		long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
+
+		Toast.makeText(appContext, "Selected ID is : " + selectTaskId, Toast.LENGTH_SHORT).show();
+		// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+
+		// TODO: use the instance URI one we support recurrence
+		Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+
+		mCallbacks.onItemSelected(taskUri);
+	}
+
+
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
+		Log.d(TAG, "onSaveInstanceState called");
 		super.onSaveInstanceState(outState);
 		outState.putLongArray(PARAM_EXPANDED_GROUPS, getExpandedGroups(expandLV));
-		/*
-		 * if (mActivatedPosition != ListView.INVALID_POSITION) { // Serialize and persist the activated item position.
-		 * outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition); }
-		 */
+
+		if (mActivatedPositionGroup != ExpandableListView.INVALID_POSITION)
+		{
+
+			outState.putInt(STATE_ACTIVATED_POSITION_GROUP, mActivatedPositionGroup);
+
+		}
+		if (mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
+		{
+			outState.putInt(STATE_ACTIVATED_POSITION_CHILD, mActivatedPositionChild);
+
+		}
+
 	}
 
 
@@ -454,12 +485,20 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		/*
 		 * expandLV.setSelectionFromTop(scrollx, 0); int scrollx2 = expandLV.getFirstVisiblePosition(); View itemView2 = expandLV.getChildAt(0); int scrolly2 =
 		 * itemView == null ? 0 : itemView2.getTop(); Log.v(TAG, "scrollY " + scrollx2 + "  " + scrolly2);
-		 */if (mSavedExpandedGroups != null)
+		 */
+		if (mSavedExpandedGroups != null)
 		{
 			setExpandedGroups(expandLV, mSavedExpandedGroups);
 			mSavedExpandedGroups = null;
 		}
 
+		if (mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
+		{
+			Log.d(TAG, "Restoring Child Postion : " + mActivatedPositionChild);
+			Log.d(TAG, "Restoring Group Position : " + mActivatedPositionGroup);
+			//selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild);
+
+		}
 	}
 
 
