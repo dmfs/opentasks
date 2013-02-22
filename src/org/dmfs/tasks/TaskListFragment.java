@@ -13,6 +13,7 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
+import org.dmfs.tasks.utils.OnChildLoadedListener;
 import org.dmfs.tasks.utils.TimeChangeListener;
 import org.dmfs.tasks.utils.TimeChangeObserver;
 import org.dmfs.tasks.utils.TimeRangeCursorFactory;
@@ -52,7 +53,7 @@ import android.widget.Toast;
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
-public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
+public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
@@ -325,6 +326,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		expandLV.setAdapter(mAdapter);
 		expandLV.setOnChildClickListener(mTaskItemClickListener);
 		
+		mAdapter.setOnChildLoadedListener(this);
 		
 		getLoaderManager().restartLoader(0, null, this);
 
@@ -492,13 +494,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			mSavedExpandedGroups = null;
 		}
 
-		if (mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
-		{
-			Log.d(TAG, "Restoring Child Postion : " + mActivatedPositionChild);
-			Log.d(TAG, "Restoring Group Position : " + mActivatedPositionGroup);
-			//selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild);
-
-		}
+		
 	}
 
 
@@ -542,6 +538,22 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				view.expandGroup(i);
 			}
 		}
+	}
+
+
+	@Override
+	public void onChildLoaded(int pos)
+	{
+		if(mActivatedPositionGroup != ExpandableListView.INVALID_POSITION){
+			if (pos == mActivatedPositionGroup && mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
+			{
+				Log.d(TAG, "Restoring Child Postion : " + mActivatedPositionChild);
+				Log.d(TAG, "Restoring Group Position : " + mActivatedPositionGroup);
+				selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild);
+
+			}
+		}
+		
 	}
 
 }
