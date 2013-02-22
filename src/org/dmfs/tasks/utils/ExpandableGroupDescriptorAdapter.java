@@ -47,6 +47,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	private final Context mContext;
 	private final LayoutInflater mLayoutInflater;
 	private final LoaderManager mLoaderManager;
+	private OnChildLoadedListener mOnChildLoadedListener;
 
 
 	public ExpandableGroupDescriptorAdapter(Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
@@ -65,6 +66,12 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	}
 
 
+	public void setOnChildLoadedListener(OnChildLoadedListener listener)
+	{
+		mOnChildLoadedListener = listener;
+	}
+
+
 	@Override
 	public Loader<Cursor> onCreateLoader(int pos, Bundle arguments)
 	{
@@ -80,7 +87,12 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		setChildrenCursor(loader.getId() - 1, cursor);
+		int pos = loader.getId() - 1;
+		setChildrenCursor(pos, cursor);
+		if (mOnChildLoadedListener != null)
+		{
+			mOnChildLoadedListener.onChildLoaded(pos);
+		}
 	}
 
 
