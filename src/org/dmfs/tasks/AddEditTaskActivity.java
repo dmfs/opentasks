@@ -56,7 +56,7 @@ public class AddEditTaskActivity extends FragmentActivity
 	}
 
 
-	/*@Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		switch (item.getItemId())
@@ -66,6 +66,6 @@ public class AddEditTaskActivity extends FragmentActivity
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}*/
+	}
 
 }

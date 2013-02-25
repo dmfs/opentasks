@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
     tools:context=".TaskListActivity" >
 
+    <!-- android:divider="?android:attr/dividerHorizontal" -->
     <!--
     This layout is a two-pane layout for the Tasks
     master/detail flow. See res/values-large/refs.xml and
@@ -25,8 +25,7 @@
         android:name="org.dmfs.tasks.TaskListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="2"
-        tools:layout="@android:layout/list_content" />
+        android:layout_weight="2" />
 
     <FrameLayout
         android:id="@+id/task_detail_container"

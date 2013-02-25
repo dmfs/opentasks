@@ -13,23 +13,23 @@
 
     <TextView
         android:id="@android:id/title"
-        style="@style/DarkText"
+      
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/colorbar"
         android:ellipsize="end"
         android:padding="5dip"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
+        android:singleLine="true"/>
+<!--        android:textAppearance="?android:attr/textAppearanceMedium" 
+   style="@style/DarkText" -->
     <TextView
         android:id="@+id/task_due_date"
-        style="@style/LabelText"
+        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:textSize="12dip" />
-
+        android:textSize="12sp" />
+<!-- style="@style/LabelText" -->
 </RelativeLayout>

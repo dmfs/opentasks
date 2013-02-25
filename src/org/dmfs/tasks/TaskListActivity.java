@@ -2,10 +2,14 @@ package org.dmfs.tasks;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ExpandableListView;
+import android.widget.ListView;
 
 
 /**
@@ -22,16 +26,23 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 {
 
 	private static final String TAG = "TaskListActivity";
+	private static final String OPEN_CHILD_PREFERENCE_NAME = "open_child";
+	private static final String OPEN_GROUP_PREFERENCE_NAME = "open_group";
+	private static final String EXPANDED_GROUPS_PREFERENCE_NAME = "expanded_groups";
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
 	private boolean mTwoPane;
 	Context appContext;
+	TaskViewDetailFragment taskDetailFrag;
+	TaskListFragment taskListFrag;
+	SharedPreferences openTaskPrefs;
 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
 		appContext = getApplicationContext();
@@ -46,7 +57,34 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
-			((TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list)).setActivateOnItemClick(true);
+
+			taskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
+			taskListFrag.setActivateOnItemClick(true);
+
+			openTaskPrefs = getPreferences(MODE_PRIVATE);
+			int openChildPosition = openTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
+			int openGroupPosition = openTaskPrefs.getInt(OPEN_GROUP_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
+
+			Log.d(TAG, "Open Child Position : " + openChildPosition);
+			Log.d(TAG, "Open Group Position : " + openGroupPosition);
+
+			if (openChildPosition != ExpandableListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
+			{
+				taskListFrag.setOpenChildPosition(openChildPosition);
+				taskListFrag.setOpenGroupPosition(openGroupPosition);
+			}
+
+			String openGroupsString = openTaskPrefs.getString(EXPANDED_GROUPS_PREFERENCE_NAME, "");
+
+			String[] openGroupsArray = TextUtils.split(openGroupsString, "-");
+			long[] ids = new long[openGroupsArray.length];
+			for (int i = 0; i < openGroupsArray.length; i++)
+			{
+				ids[i] = Long.parseLong(openGroupsArray[i]);
+			}
+
+			taskListFrag.setExpandedGroupsIds(ids);
+
 		}
 
 		// TODO: If exposing deep links into your app, handle intents here.
@@ -67,9 +105,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			Bundle arguments = new Bundle();
 			Log.d(TAG, "Added Fragment Intent");
 			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, uri);
-			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
-			fragment.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, fragment).commit();
+			taskDetailFrag = new TaskViewDetailFragment();
+			taskDetailFrag.setArguments(arguments);
+			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
 
 		}
 		else
@@ -102,6 +140,46 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		Intent addTaskIntent = new Intent(this, AddEditTaskActivity.class);
 		addTaskIntent.setAction(AddEditTaskActivity.NEW_TASK);
 		startActivity(addTaskIntent);
+
+	}
+
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		int openChildPosition = taskListFrag.getOpenChildPosition();
+		int openGroupPosition = taskListFrag.getOpenGroupPosition();
+		SharedPreferences.Editor openPositsEditor = openTaskPrefs.edit();
+
+		if (openChildPosition != ListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
+		{
+
+			openPositsEditor.putInt(OPEN_CHILD_PREFERENCE_NAME, openChildPosition);
+			openPositsEditor.putInt(OPEN_GROUP_PREFERENCE_NAME, openGroupPosition);
+
+			Log.d(TAG, "Saved Child Pos : " + openChildPosition);
+			Log.d(TAG, "Saved Group Pos : " + openGroupPosition);
+		}
+		else
+		{
+			Log.d(TAG, "Nothing Selected. Nothing Saved");
+		}
+
+		long[] ids = taskListFrag.getExpandedGroups();
+
+		StringBuilder openGroupBuilder = new StringBuilder();
+
+		for (long id : ids)
+		{
+			openGroupBuilder.append(Long.toString(id));
+			openGroupBuilder.append("-");
+		}
+
+		openPositsEditor.putString(EXPANDED_GROUPS_PREFERENCE_NAME, openGroupBuilder.substring(0, openGroupBuilder.length() - 1));
+
+		openPositsEditor.commit();
+		Log.d(TAG, "Finished Saving the open positions");
 
 	}
 }

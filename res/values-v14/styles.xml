@@ -8,4 +8,9 @@
 
     <!-- <style name="CorrectionTheme" parent="android:Theme.Holo"></style> -->
 
+	<style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+    </style>
+
 </resources>
