@@ -110,8 +110,8 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 				{
 					ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
 					List<Object> choicesList = arrayAdapter.getChoices();
-					IntegerSpinnerAdapter sAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item,
-						R.id.integer_choice_item_text, choicesList, arrayAdapter);
+					IntegerSpinnerAdapter sAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text,
+						choicesList, arrayAdapter);
 					mSpinner.setAdapter(sAdapter);
 					if (mAdapter.get(mValues) != null)
 					{
@@ -133,7 +133,7 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 		public IntegerSpinnerAdapter(Context context, int resource, int textViewResourceId, List<Object> objects, ArrayChoicesAdapter a)
 		{
 			super(context, resource, textViewResourceId, objects);
-			layoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			adapter = a;
 		}
 

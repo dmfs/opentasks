@@ -2,4 +2,9 @@
 
     <style name="AppTheme" parent="android:Theme.Holo.Light" />
 
+    <style name="btn_remove">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:src">@drawable/content_remove_light</item>
+    </style>
+
 </resources>

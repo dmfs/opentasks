@@ -1,5 +1,6 @@
 package org.dmfs.tasks;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +25,7 @@ public class TaskDetailActivity extends FragmentActivity implements TaskViewDeta
 	Context appContext;
 
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -31,7 +33,10 @@ public class TaskDetailActivity extends FragmentActivity implements TaskViewDeta
 		setContentView(R.layout.activity_task_detail);
 		appContext = getApplicationContext();
 		// Show the Up button in the action bar.
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		{
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		// savedInstanceState is non-null when there is fragment state
 		// saved from previous configurations of this activity

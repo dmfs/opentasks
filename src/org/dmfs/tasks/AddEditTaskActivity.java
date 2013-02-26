@@ -1,5 +1,6 @@
 package org.dmfs.tasks;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,13 +16,17 @@ public class AddEditTaskActivity extends FragmentActivity
 	Intent appIntent;
 
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_task);
 		// Show the Up button in the action bar.
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		{
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
 		appIntent = getIntent();
 		if (appIntent.getAction().equals(AddEditTaskActivity.NEW_TASK))
@@ -37,7 +42,8 @@ public class AddEditTaskActivity extends FragmentActivity
 				getSupportFragmentManager().beginTransaction().add(R.id.add_task_container, fragment).commit();
 			}
 		}
-		else if(appIntent.getAction().equals(AddEditTaskActivity.EDIT_TASK)){
+		else if (appIntent.getAction().equals(AddEditTaskActivity.EDIT_TASK))
+		{
 			Bundle arguments = new Bundle();
 			arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.EDIT_TASK);
 			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, appIntent.getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));

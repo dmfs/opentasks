@@ -6,17 +6,17 @@
     android:padding="12dip" >
 
     <TextView
-        style="@style/DarkText"
         android:id="@+id/task_list_name"
+        style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        style="@style/DarkText"
-        android:textSize="10sp"
         android:id="@+id/task_list_account"
+        style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3sp" />
+        android:layout_marginTop="3sp"
+        android:textSize="10sp" />
 
 </org.dmfs.tasks.widget.TaskListFieldView>

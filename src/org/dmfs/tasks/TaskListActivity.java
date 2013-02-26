@@ -148,38 +148,47 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	public void onPause()
 	{
 		super.onPause();
-		int openChildPosition = taskListFrag.getOpenChildPosition();
-		int openGroupPosition = taskListFrag.getOpenGroupPosition();
-		SharedPreferences.Editor openPositsEditor = openTaskPrefs.edit();
-
-		if (openChildPosition != ListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
+		if (taskListFrag != null)
 		{
+			int openChildPosition = taskListFrag.getOpenChildPosition();
+			int openGroupPosition = taskListFrag.getOpenGroupPosition();
+			SharedPreferences.Editor openPositsEditor = openTaskPrefs.edit();
 
-			openPositsEditor.putInt(OPEN_CHILD_PREFERENCE_NAME, openChildPosition);
-			openPositsEditor.putInt(OPEN_GROUP_PREFERENCE_NAME, openGroupPosition);
+			if (openChildPosition != ListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
+			{
 
-			Log.d(TAG, "Saved Child Pos : " + openChildPosition);
-			Log.d(TAG, "Saved Group Pos : " + openGroupPosition);
+				openPositsEditor.putInt(OPEN_CHILD_PREFERENCE_NAME, openChildPosition);
+				openPositsEditor.putInt(OPEN_GROUP_PREFERENCE_NAME, openGroupPosition);
+
+				Log.d(TAG, "Saved Child Pos : " + openChildPosition);
+				Log.d(TAG, "Saved Group Pos : " + openGroupPosition);
+			}
+			else
+			{
+				Log.d(TAG, "Nothing Selected. Nothing Saved");
+			}
+
+			long[] ids = taskListFrag.getExpandedGroups();
+
+			if(ids.length > 0){
+			StringBuilder openGroupBuilder = new StringBuilder();
+
+			for (long id : ids)
+			{
+				openGroupBuilder.append(Long.toString(id));
+				openGroupBuilder.append("-");
+			}
+
+			openPositsEditor.putString(EXPANDED_GROUPS_PREFERENCE_NAME, openGroupBuilder.substring(0, openGroupBuilder.length() - 1));
+			}
+			else{
+				openPositsEditor.remove(EXPANDED_GROUPS_PREFERENCE_NAME);
+			}
+			openPositsEditor.commit();
+			Log.d(TAG, "Finished Saving the open positions");
 		}
-		else
-		{
-			Log.d(TAG, "Nothing Selected. Nothing Saved");
+		else{
+			Log.d(TAG, "taskListFrag is NULL!!");
 		}
-
-		long[] ids = taskListFrag.getExpandedGroups();
-
-		StringBuilder openGroupBuilder = new StringBuilder();
-
-		for (long id : ids)
-		{
-			openGroupBuilder.append(Long.toString(id));
-			openGroupBuilder.append("-");
-		}
-
-		openPositsEditor.putString(EXPANDED_GROUPS_PREFERENCE_NAME, openGroupBuilder.substring(0, openGroupBuilder.length() - 1));
-
-		openPositsEditor.commit();
-		Log.d(TAG, "Finished Saving the open positions");
-
 	}
 }

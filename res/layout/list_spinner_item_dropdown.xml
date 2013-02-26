@@ -22,6 +22,7 @@
 
         <TextView
             android:id="@+id/task_list_name"
+            style="@style/DarkText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -31,6 +32,7 @@
 
         <TextView
             android:id="@+id/task_list_account_name"
+            style="@style/DarkText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"

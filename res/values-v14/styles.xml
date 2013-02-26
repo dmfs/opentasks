@@ -1,15 +1,17 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar"></style>
-    
+
     <style name="CaldavProgressBar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
-    
+
     <style name="CaldavSeekBar" parent="android:Widget.Holo.SeekBar"></style>
 
-    <!-- <style name="CorrectionTheme" parent="android:Theme.Holo"></style> -->
-
-	<style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
         <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+    </style>
+
+    <style name="DarkText">
         <item name="android:textColor">#FF333333</item>
     </style>
 

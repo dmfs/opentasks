@@ -28,17 +28,19 @@ import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.utils.TasksListCursorAdapter;
 import org.dmfs.tasks.widget.TaskEdit;
-import org.dmfs.tasks.widget.TaskListFieldView;
 
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,8 +49,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -60,7 +60,7 @@ import android.widget.Toast;
  * 
  */
 
-public class TaskEditDetailFragment extends Fragment implements OnContentLoadedListener, OnModelLoadedListener
+public class TaskEditDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnContentLoadedListener, OnModelLoadedListener
 {
 
 	public static final String ARG_ITEM_ID = "item_id";
@@ -81,8 +81,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	public static final String NEW_TASK = "new_task";
 
 	private boolean appForEdit = true;
-	private ArrayList<TaskProvider> providerList;
-
+	private TasksListCursorAdapter taskListAdapter;
 	/**
 	 * The dummy content this fragment is presenting.
 	 */
@@ -137,8 +136,48 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 
+		getLoaderManager().restartLoader(0, null, this);
+
 		appForEdit = fragmentIntent.equals(TaskEditDetailFragment.EDIT_TASK) ? true : false;
 
+		final LinearLayout taskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
+		final Spinner listSpinner = (Spinner) taskListBar.findViewById(R.id.task_list_spinner);
+
+		taskListAdapter = new TasksListCursorAdapter(appContext);
+		listSpinner.setAdapter(taskListAdapter);
+
+		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+			{
+				Cursor c = (Cursor) arg0.getItemAtPosition(arg2);
+
+				int accountTypeColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_TYPE);
+				String accountType = c.getString(accountTypeColumn);
+				int colorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
+				int taskColor = c.getInt(colorColumn);
+				taskListBar.setBackgroundColor(taskColor);
+				new AsyncModelLoader(appContext, TaskEditDetailFragment.this).execute(accountType);
+			}
+
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0)
+			{
+
+			}
+
+		});
+
+		if (android.os.Build.VERSION.SDK_INT < 11)
+		{
+			listSpinner.setBackgroundDrawable(null);
+
+		}
+
+		
 		if (appForEdit)
 		{
 			if (taskUri != null)
@@ -153,6 +192,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 					mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
 					new AsyncModelLoader(appContext, this).execute("");
 				}
+				listSpinner.setEnabled(false);
 			}
 		}
 		else
@@ -161,201 +201,18 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 			ContentValues emptyCV = new ContentValues();
 			mValues.add(emptyCV);
 			new AsyncModelLoader(appContext, this).execute("");
-
-			Cursor taskListCursor = appContext.getContentResolver().query(
-				TaskContract.WriteableTaskLists.CONTENT_URI,
-				new String[] { TaskContract.TaskListColumns.LIST_NAME, TaskContract.TaskListSyncColumns.ACCOUNT_TYPE,
-					TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR, TaskContract.TaskListColumns._ID }, null, null,
-				null);
-			Log.d(TAG, "taskListCursor lenght : " + taskListCursor.getCount());
-			int nameColumn = taskListCursor.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME);
-			int accountColumn = taskListCursor.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
-			int accountTypeColumn = taskListCursor.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_TYPE);
-			int idColumn = taskListCursor.getColumnIndex(TaskContract.TaskListColumns._ID);
-			int colorColumn = taskListCursor.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
-			taskListCursor.moveToFirst();
-			providerList = new ArrayList<TaskEditDetailFragment.TaskProvider>();
-			while (!taskListCursor.isAfterLast())
-			{
-
-				String listName = taskListCursor.getString(nameColumn);
-				String accountName = taskListCursor.getString(accountColumn);
-				String accountType = taskListCursor.getString(accountTypeColumn);
-				int id = taskListCursor.getInt(idColumn);
-				int color = taskListCursor.getInt(colorColumn);
-				TaskProvider provider = new TaskProvider(id, listName, accountName, accountType, color);
-				providerList.add(provider);
-				Log.d(TAG, "List Name : " + listName);
-				Log.d(TAG, "Account Name : " + accountName);
-				Log.d(TAG, "Color : " + color);
-				Log.d(TAG, "ID : " + id);
-				taskListCursor.moveToNext();
-			}
-			taskListCursor.close();
-
-			final LinearLayout taskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
-			final Spinner listSpinner = (Spinner) taskListBar.findViewById(R.id.task_list_spinner);
-
-			listSpinner.setAdapter(new SpinnerAdapter()
-			{
-
-				@Override
-				public void unregisterDataSetObserver(DataSetObserver observer)
-				{
-
-				}
-
-
-				@Override
-				public void registerDataSetObserver(DataSetObserver observer)
-				{
-
-				}
-
-
-				@Override
-				public boolean isEmpty()
-				{
-					return false;
-				}
-
-
-				@Override
-				public boolean hasStableIds()
-				{
-					return true;
-				}
-
-
-				@Override
-				public int getViewTypeCount()
-				{
-					return 0;
-				}
-
-
-				@Override
-				public View getView(int position, View convertView, ViewGroup parent)
-				{
-					if (convertView == null)
-					{
-						convertView = inflater.inflate(R.layout.list_spinner_item_selected, null);
-
-					}
-					TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
-					TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
-					TaskProvider prov = (TaskProvider) getItem(position);
-					listName.setText(prov.listName);
-					accountName.setText(prov.accountName);
-					int backgroundBasedColor = TaskListFieldView.getTextColorFromBackground(prov.listColor);
-					listName.setTextColor(backgroundBasedColor);
-					accountName.setTextColor(backgroundBasedColor);
-					return convertView;
-				}
-
-
-				@Override
-				public int getItemViewType(int position)
-				{
-					return 0;
-				}
-
-
-				@Override
-				public long getItemId(int position)
-				{
-					return position;
-				}
-
-
-				@Override
-				public Object getItem(int position)
-				{
-					return providerList.get(position);
-				}
-
-
-				@Override
-				public int getCount()
-				{
-					return providerList.size();
-				}
-
-
-				@Override
-				public View getDropDownView(int position, View convertView, ViewGroup parent)
-				{
-					if (convertView == null)
-					{
-						convertView = inflater.inflate(R.layout.list_spinner_item_dropdown, null);
-
-					}
-					View listColor = convertView.findViewById(R.id.task_list_color);
-					TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
-					TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
-					TaskProvider prov = (TaskProvider) getItem(position);
-					listColor.setBackgroundColor(prov.listColor);
-					listName.setText(prov.listName);
-					accountName.setText(prov.accountName);
-					return convertView;
-				}
-			});
-
-			listSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
-			{
-
-				@Override
-				public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-				{
-					TaskProvider provider = (TaskProvider) arg0.getItemAtPosition(arg2);
-
-					taskListBar.setBackgroundColor(provider.listColor);
-
-					new AsyncModelLoader(appContext, TaskEditDetailFragment.this).execute(provider.accountType);
-
-				}
-
-
-				@Override
-				public void onNothingSelected(AdapterView<?> arg0)
-				{
-
-				}
-
-			});
-
 		}
 
 		return rootView;
 	}
 
-	private class TaskProvider
-	{
-		public final int _id;
-		public final int listColor;
-		public final String listName;
-		public final String accountName;
-		public final String accountType;
-
-
-		public TaskProvider(int id, String p, String a, String at, int c)
-		{
-			_id = id;
-			listColor = c;
-			listName = p;
-			accountName = a;
-			accountType = at;
-		}
-	}
-
 
 	private void updateView()
 	{
-		final LayoutInflater inflater = (LayoutInflater) appContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mContent.removeAllViews();
-		// if (appForEdit)
-		// {
+
 		for (ContentValues values : mValues)
 		{
 			TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
@@ -365,11 +222,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 			editor.setValues(values);
 			mContent.addView(editor);
 		}
-		// }
-		// else
-		// {
 
-		// }
 		Log.d(TAG, "At the end of updateView");
 	}
 
@@ -387,6 +240,7 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 
 		mValues.add(values);
 		// updateView();
+		long taskListId = values.getAsLong(TaskContract.Tasks.LIST_ID);
 
 	}
 
@@ -412,6 +266,30 @@ public class TaskEditDetailFragment extends Fragment implements OnContentLoadedL
 	{
 		super.onSaveInstanceState(outState);
 		outState.putParcelableArrayList(KEY_VALUES, mValues);
+	}
+
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
+	{
+		return new CursorLoader(mActivity, TaskContract.WriteableTaskLists.CONTENT_URI, new String[] { TaskContract.TaskListColumns.LIST_NAME,
+			TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR,
+			TaskContract.TaskListColumns._ID }, null, null, null);
+	}
+
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1)
+	{
+		taskListAdapter.changeCursor(arg1);
+	}
+
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0)
+	{
+		taskListAdapter.changeCursor(null);
+
 	}
 
 }
