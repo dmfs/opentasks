@@ -1,5 +1,7 @@
 package org.dmfs.tasks;
 
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -104,7 +106,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// fragment transaction.
 			Bundle arguments = new Bundle();
 			Log.d(TAG, "Added Fragment Intent");
-			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, uri);
+			arguments.putParcelable(TaskViewDetailFragment.PARAM_TASK_URI, uri);
 			taskDetailFrag = new TaskViewDetailFragment();
 			taskDetailFrag.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
@@ -114,8 +116,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
-			Intent detailIntent = new Intent(this, TaskDetailActivity.class);
-			detailIntent.putExtra(TaskViewDetailFragment.ARG_ITEM_ID, uri);
+			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
+			detailIntent.setData(uri);
 			startActivity(detailIntent);
 		}
 	}
@@ -124,23 +126,18 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	@Override
 	public void displayEditTask(Uri taskUri)
 	{
-
-		Intent editTaskIntent = new Intent(appContext, AddEditTaskActivity.class);
-		editTaskIntent.setAction(AddEditTaskActivity.EDIT_TASK);
-		editTaskIntent.putExtra(TaskViewDetailFragment.ARG_ITEM_ID, taskUri);
+		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
+		editTaskIntent.setData(taskUri);
 		startActivity(editTaskIntent);
-
 	}
 
 
 	@Override
 	public void onAddNewTask()
 	{
-
-		Intent addTaskIntent = new Intent(this, AddEditTaskActivity.class);
-		addTaskIntent.setAction(AddEditTaskActivity.NEW_TASK);
-		startActivity(addTaskIntent);
-
+		Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
+		editTaskIntent.setData(Tasks.CONTENT_URI);
+		startActivity(editTaskIntent);
 	}
 
 
@@ -170,24 +167,27 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 			long[] ids = taskListFrag.getExpandedGroups();
 
-			if(ids.length > 0){
-			StringBuilder openGroupBuilder = new StringBuilder();
-
-			for (long id : ids)
+			if (ids.length > 0)
 			{
-				openGroupBuilder.append(Long.toString(id));
-				openGroupBuilder.append("-");
-			}
+				StringBuilder openGroupBuilder = new StringBuilder();
 
-			openPositsEditor.putString(EXPANDED_GROUPS_PREFERENCE_NAME, openGroupBuilder.substring(0, openGroupBuilder.length() - 1));
+				for (long id : ids)
+				{
+					openGroupBuilder.append(Long.toString(id));
+					openGroupBuilder.append("-");
+				}
+
+				openPositsEditor.putString(EXPANDED_GROUPS_PREFERENCE_NAME, openGroupBuilder.substring(0, openGroupBuilder.length() - 1));
 			}
-			else{
+			else
+			{
 				openPositsEditor.remove(EXPANDED_GROUPS_PREFERENCE_NAME);
 			}
 			openPositsEditor.commit();
 			Log.d(TAG, "Finished Saving the open positions");
 		}
-		else{
+		else
+		{
 			Log.d(TAG, "taskListFrag is NULL!!");
 		}
 	}

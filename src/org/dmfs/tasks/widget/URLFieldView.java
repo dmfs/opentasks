@@ -19,6 +19,7 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
@@ -30,52 +31,67 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+
 /**
  * A view that shows the URL which is clickable.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
 
-public class URLFieldView extends AbstractFieldView {
+public class URLFieldView extends AbstractFieldView
+{
 
 	private FieldAdapter<?> mAdapter;
 	private TextView mText;
 
-	public URLFieldView(Context context) {
+
+	public URLFieldView(Context context)
+	{
 		super(context);
 
 	}
 
-	public URLFieldView(Context context, AttributeSet attrs) {
+
+	public URLFieldView(Context context, AttributeSet attrs)
+	{
 		super(context, attrs);
 	}
 
-	public URLFieldView(Context context, AttributeSet attrs, int defStyle) {
+
+	public URLFieldView(Context context, AttributeSet attrs, int defStyle)
+	{
 		super(context, attrs, defStyle);
 	}
 
+
 	@Override
-	protected void updateView() {
-		if (mValues != null && mAdapter.get(mValues) != null) {
+	public void onContentChanged(ContentSet contentSet, String key)
+	{
+		if (mValues != null && mAdapter.get(mValues) != null)
+		{
 			String urlString = mAdapter.get(mValues).toString();
-			mText.setText(Html.fromHtml("<a href='" + urlString + "'>"
-					+ urlString + "</a>"));
+			mText.setText(Html.fromHtml("<a href='" + urlString + "'>" + urlString + "</a>"));
 			mText.setMovementMethod(LinkMovementMethod.getInstance());
 		}
-		else{
+		else
+		{
 			setVisibility(View.GONE);
 		}
 
 	}
 
+
 	@Override
-	protected void onFinishInflate() {
+	protected void onFinishInflate()
+	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
 	}
 
+
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context) {
+	public void setup(FieldDescriptor descriptor, Activity context)
+	{
 		super.setup(descriptor, context);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());

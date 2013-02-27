@@ -20,13 +20,14 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -39,7 +40,6 @@ import android.widget.TextView;
 public class StringFieldView extends AbstractFieldView
 {
 
-	private static final String TAG = "StringFieldView";
 	private FieldAdapter<?> mAdapter;
 	private TextView mText;
 
@@ -80,19 +80,19 @@ public class StringFieldView extends AbstractFieldView
 
 
 	@Override
-	protected void updateView()
+	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		Object adapterValue = mAdapter.get(mValues);
-		Log.d(TAG, "mText : " + mText);
-		if (mValues != null && adapterValue != null)
+		String adapterStringValue = adapterValue != null ? adapterValue.toString() : null;
+		if (mValues != null && !TextUtils.isEmpty(adapterStringValue))
 		{
-			mText.setText(mAdapter.get(mValues).toString());
+			mText.setText(adapterStringValue);
 		}
 		else
 		{
 			setVisibility(View.GONE);
 		}
-		Integer customBackgroud = getCustomBackgroudColor();
+		Integer customBackgroud = getCustomBackgroundColor();
 		if (customBackgroud != null)
 		{
 			mText.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));

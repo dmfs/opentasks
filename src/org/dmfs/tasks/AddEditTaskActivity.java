@@ -1,52 +1,30 @@
 package org.dmfs.tasks;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 
 
 public class AddEditTaskActivity extends FragmentActivity
 {
-	public static final String NEW_TASK = "new_task";
-	public static final String EDIT_TASK = "edit_task";
-	Intent appIntent;
-
-
-	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_add_task);
+		setContentView(R.layout.activity_task_editor);
+
 		// Show the Up button in the action bar.
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
-		appIntent = getIntent();
-		if (appIntent.getAction().equals(AddEditTaskActivity.NEW_TASK))
-		{
-			if (savedInstanceState == null)
-			{
-				// Create the detail fragment and add it to the activity
-				// using a fragment transaction.
-				Bundle arguments = new Bundle();
-				arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.NEW_TASK);
-				TaskEditDetailFragment fragment = new TaskEditDetailFragment();
-				fragment.setArguments(arguments);
-				getSupportFragmentManager().beginTransaction().add(R.id.add_task_container, fragment).commit();
-			}
-		}
-		else if (appIntent.getAction().equals(AddEditTaskActivity.EDIT_TASK))
+		if (savedInstanceState == null)
 		{
 			Bundle arguments = new Bundle();
-			arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.EDIT_TASK);
-			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, appIntent.getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));
+			arguments.putParcelable(TaskEditDetailFragment.PARAM_TASK_URI, getIntent().getData());
 			TaskEditDetailFragment fragment = new TaskEditDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.add_task_container, fragment).commit();

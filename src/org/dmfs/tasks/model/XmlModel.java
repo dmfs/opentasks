@@ -22,17 +22,15 @@ package org.dmfs.tasks.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
-import org.dmfs.tasks.model.adapters.ListDetailsFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.provider.tasks.TaskContract.WriteableTaskLists;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -478,10 +476,10 @@ public class XmlModel extends Model
 				Resources res = context.getResources();
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), res.getDrawable(R.drawable.ic_status_needs_action));
-				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), res.getDrawable(R.drawable.ic_status_in_process));
-				aca.addChoice(Tasks.STATUS_COMPLETED, context.getString(R.string.status_completed), res.getDrawable(R.drawable.ic_status_completed));
-				aca.addChoice(Tasks.STATUS_CANCELLED, context.getString(R.string.status_cancelled), res.getDrawable(R.drawable.ic_status_cancelled));
+				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
+				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), null);
+				aca.addChoice(Tasks.STATUS_COMPLETED, context.getString(R.string.status_completed), null);
+				aca.addChoice(Tasks.STATUS_CANCELLED, context.getString(R.string.status_cancelled), null);
 				descriptor.setChoices(aca);
 			}
 		});

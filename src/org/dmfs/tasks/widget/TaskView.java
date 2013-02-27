@@ -19,20 +19,20 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.Model;
 
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 
 
 public class TaskView extends BaseTaskView
 {
 
-	private ContentValues mValues;
+	private ContentSet mValues;
 	private Model mModel;
 
 
@@ -66,7 +66,7 @@ public class TaskView extends BaseTaskView
 	}
 
 
-	public void setValues(ContentValues values)
+	public void setValues(ContentSet values)
 	{
 		mValues = values;
 		updateView();
@@ -79,12 +79,12 @@ public class TaskView extends BaseTaskView
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (FieldDescriptor field : mModel.getFields())
 		{
+			Log.v("------------------------", field.getTitle());
 			AbstractFieldView detailView = field.getDetailView(inflater);
 			if (detailView != null)
 			{
 				detailView.setup(field, getActivity());
 				detailView.setValue(mValues);
-				detailView.updateView();
 				this.addView(detailView);
 			}
 		}

@@ -3,6 +3,10 @@
 
     <string name="app_name">Android Tasks</string>
 
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Edit Task</string>
+    <string name="activity_add_task_title">Create Task</string>
+
     <!-- Names of task attributes -->
 
     <string name="task_list">List</string>
@@ -21,7 +25,6 @@
     <string name="provider_label">Tasks</string>
     <string name="task_detail_activity">Task Detail</string>
     <string name="task_priority">Priority</string>
-    <string name="title_activity_add_task">Create Task</string>
 
     <!-- Task list group titles -->
     <string name="task_group_no_due">No due date</string>

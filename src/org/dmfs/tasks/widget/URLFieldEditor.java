@@ -19,6 +19,7 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 
@@ -60,7 +61,7 @@ public class URLFieldEditor extends AbstractFieldEditor
 
 
 	@Override
-	protected void updateView()
+	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{

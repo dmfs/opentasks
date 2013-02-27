@@ -22,6 +22,7 @@ package org.dmfs.tasks.widget;
 import java.util.Date;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 
@@ -47,6 +48,7 @@ public class TimeFieldView extends AbstractFieldView
 	private TimeFieldAdapter mAdapter;
 	private TextView mText;
 	java.text.DateFormat defaultDateFormat, defaultTimeFormat;
+
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
@@ -86,8 +88,9 @@ public class TimeFieldView extends AbstractFieldView
 	}
 
 
+
 	@Override
-	protected void updateView()
+	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		Log.d(TAG, "mText" + mText);
 		Log.d(TAG, "mAdapter" + mAdapter);
@@ -100,7 +103,7 @@ public class TimeFieldView extends AbstractFieldView
 			formattedTime = defaultDateFormat.format(fullDate);
 			if (!dateTime.allDay)
 			{
-				//formattedTime = dateTime.format("%d/%m/%Y");
+				// formattedTime = dateTime.format("%d/%m/%Y");
 				formattedTime = formattedTime + " " + defaultTimeFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);

@@ -20,6 +20,7 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
@@ -45,6 +46,9 @@ public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeek
 {
 
 	private static final String TAG = "PercentageFieldView";
+
+	private final static int STEPS = 20;
+
 	private IntegerFieldAdapter mAdapter;
 	private TextView mText;
 	private SeekBar mSeek;
@@ -78,6 +82,8 @@ public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeek
 		mText = (TextView) findViewById(R.id.text);
 		mSeek = (SeekBar) findViewById(R.id.percentage_seek_bar);
 		mSeek.setOnSeekBarChangeListener(this);
+
+		mSeek.setMax(STEPS);
 	}
 
 
@@ -91,7 +97,7 @@ public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeek
 
 
 	@Override
-	protected void updateView()
+	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		Log.d(TAG, "mValues : " + mValues);
 		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
@@ -101,10 +107,16 @@ public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeek
 		{
 			int percentage = mAdapter.get(mValues);
 			Log.d(TAG, "Percentage : " + percentage);
-			mSeek.setProgress(percentage);
-			mText.setText(Integer.toString(percentage));
+			mSeek.setProgress(percentage * STEPS / 100);
+			mText.setText(Integer.toString(percentage) + "%");
 		}
-		else{
+		else if (mValues != null)
+		{
+			mSeek.setProgress(0);
+			mText.setText("0%");
+		}
+		else
+		{
 			setVisibility(View.GONE);
 		}
 	}
@@ -113,24 +125,25 @@ public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeek
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-		mText.setText(Integer.toString(progress));
-		
+		mText.setText(Integer.toString(progress * 100 / STEPS) + "%");
+		if (mAdapter != null && mValues != null)
+		{
+			mAdapter.set(mValues, progress * 100 / STEPS);
+		}
 	}
 
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar)
 	{
-		
-		
+
 	}
 
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar)
 	{
-		
-		
+
 	}
 
 }

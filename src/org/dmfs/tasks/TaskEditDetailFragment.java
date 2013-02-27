@@ -21,8 +21,12 @@ package org.dmfs.tasks;
 import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.TaskContract.WriteableTaskLists;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
@@ -32,6 +36,7 @@ import org.dmfs.tasks.utils.TasksListCursorAdapter;
 import org.dmfs.tasks.widget.TaskEdit;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -43,6 +48,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -60,10 +66,13 @@ import android.widget.Toast;
  * 
  */
 
-public class TaskEditDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnContentLoadedListener, OnModelLoadedListener
+public class TaskEditDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener
 {
+	public static final String PARAM_TASK_URI = "task_uri";
 
 	public static final String ARG_ITEM_ID = "item_id";
+
+	public static final String LIST_LOADER_URI = "uri";
 
 	private static final String TAG = "TaskEditDetailFragment";
 
@@ -74,27 +83,21 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 			Tasks.LIST_NAME).addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
-	public static final String FRAGMENT_INTENT = "fragment_intent";
-
-	public static final String EDIT_TASK = "edit_task";
-
-	public static final String NEW_TASK = "new_task";
+	private static final String[] INSTANCE_VALUES = new String[] { Tasks.DTSTART, Tasks.DUE, Tasks.RDATE, Tasks.RRULE };
 
 	private boolean appForEdit = true;
 	private TasksListCursorAdapter taskListAdapter;
 	/**
 	 * The dummy content this fragment is presenting.
 	 */
-	private Uri taskUri;
-	private Context appContext;
+	private Uri mTaskUri;
 
-	ArrayList<ContentValues> mValues;
+	ContentSet mValues;
 	ViewGroup mContent;
 	ViewGroup mHeader;
 	Model mModel;
 
 	private Activity mActivity;
-	String fragmentIntent;
 
 
 	/**
@@ -109,13 +112,8 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		fragmentIntent = getArguments().getString(TaskEditDetailFragment.FRAGMENT_INTENT);
-		if (fragmentIntent.equals(TaskEditDetailFragment.EDIT_TASK))
-		{
-			taskUri = getArguments().getParcelable(TaskViewDetailFragment.ARG_ITEM_ID);
-		}
-		mValues = new ArrayList<ContentValues>();
-
+		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
+		setHasOptionsMenu(true);
 	}
 
 
@@ -123,27 +121,29 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-
 		mActivity = activity;
-		appContext = activity.getApplicationContext();
 	}
 
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		Log.v(TAG, "On create view");
 		View rootView = inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 
-		getLoaderManager().restartLoader(0, null, this);
+		appForEdit = !Tasks.CONTENT_URI.equals(mTaskUri);
 
-		appForEdit = fragmentIntent.equals(TaskEditDetailFragment.EDIT_TASK) ? true : false;
+		if (!appForEdit)
+		{
+			setListUri(WriteableTaskLists.CONTENT_URI);
+		}
 
 		final LinearLayout taskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
 		final Spinner listSpinner = (Spinner) taskListBar.findViewById(R.id.task_list_spinner);
 
-		taskListAdapter = new TasksListCursorAdapter(appContext);
+		taskListAdapter = new TasksListCursorAdapter(mActivity);
 		listSpinner.setAdapter(taskListAdapter);
 
 		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
@@ -159,7 +159,11 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 				int colorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
 				int taskColor = c.getInt(colorColumn);
 				taskListBar.setBackgroundColor(taskColor);
-				new AsyncModelLoader(appContext, TaskEditDetailFragment.this).execute(accountType);
+				if (!appForEdit)
+				{
+					mValues.put(Tasks.LIST_ID, c.getLong(c.getColumnIndex(TaskLists._ID)));
+				}
+				new AsyncModelLoader(mActivity, TaskEditDetailFragment.this).execute(accountType);
 			}
 
 
@@ -177,30 +181,30 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 
 		}
 
-		
 		if (appForEdit)
 		{
-			if (taskUri != null)
+			if (mTaskUri != null)
 			{
 
 				if (savedInstanceState == null)
 				{
-					new AsyncContentLoader(appContext, this, CONTENT_VALUE_MAPPER).execute(taskUri);
+					mValues = new ContentSet(mActivity, mTaskUri, CONTENT_VALUE_MAPPER);
+					mValues.addOnChangeListener(this, null, true);
 				}
 				else
 				{
-					mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-					new AsyncModelLoader(appContext, this).execute("");
+					// mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
+					new AsyncModelLoader(mActivity, this).execute("");
 				}
+				// disable spinner
 				listSpinner.setEnabled(false);
+				// hide spinner background
+				listSpinner.setBackground(null);
 			}
 		}
 		else
 		{
-			mValues = new ArrayList<ContentValues>();
-			ContentValues emptyCV = new ContentValues();
-			mValues.add(emptyCV);
-			new AsyncModelLoader(appContext, this).execute("");
+			mValues = new ContentSet(mActivity, Tasks.CONTENT_URI);
 		}
 
 		return rootView;
@@ -213,35 +217,13 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 
 		mContent.removeAllViews();
 
-		for (ContentValues values : mValues)
-		{
-			TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
-			editor.setModel(mModel);
-			editor.setActivity(mActivity);
-			Log.d(TAG, "Values : " + values.toString());
-			editor.setValues(values);
-			mContent.addView(editor);
-		}
+		TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
+		editor.setModel(mModel);
+		editor.setActivity(mActivity);
+		editor.setValues(mValues);
+		mContent.addView(editor);
 
 		Log.d(TAG, "At the end of updateView");
-	}
-
-
-	@Override
-	public void onContentLoaded(ContentValues values)
-	{
-		if (values == null)
-		{
-			Toast.makeText(appContext, "Could not load Task", Toast.LENGTH_LONG).show();
-			return;
-		}
-
-		new AsyncModelLoader(appContext, this).execute(values.getAsString(Tasks.ACCOUNT_TYPE));
-
-		mValues.add(values);
-		// updateView();
-		long taskListId = values.getAsLong(TaskContract.Tasks.LIST_ID);
-
 	}
 
 
@@ -250,7 +232,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	{
 		if (model == null)
 		{
-			Toast.makeText(appContext, "Could not load Model", Toast.LENGTH_LONG).show();
+			Toast.makeText(mActivity, "Could not load Model", Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -265,31 +247,78 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		outState.putParcelableArrayList(KEY_VALUES, mValues);
+		// outState.putParcelableArrayList(KEY_VALUES, mValues);
 	}
 
 
 	@Override
-	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
+	public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
 	{
-		return new CursorLoader(mActivity, TaskContract.WriteableTaskLists.CONTENT_URI, new String[] { TaskContract.TaskListColumns.LIST_NAME,
+		return new CursorLoader(mActivity, (Uri) bundle.getParcelable(LIST_LOADER_URI), new String[] { TaskContract.TaskListColumns.LIST_NAME,
 			TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR,
 			TaskContract.TaskListColumns._ID }, null, null, null);
 	}
 
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1)
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		taskListAdapter.changeCursor(arg1);
+		taskListAdapter.changeCursor(cursor);
 	}
 
 
 	@Override
-	public void onLoaderReset(Loader<Cursor> arg0)
+	public void onLoaderReset(Loader<Cursor> loader)
 	{
 		taskListAdapter.changeCursor(null);
 
 	}
 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		final int menuId = item.getItemId();
+		if (menuId == R.id.editor_action_save)
+		{
+			Log.v(TAG, "persiting task");
+			/*
+			 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
+			 */
+			mValues.persist();
+			mActivity.finish();
+			return true;
+		}
+		else if (menuId == R.id.editor_action_cancel)
+		{
+			Log.v(TAG, "cancelled");
+			mActivity.finish();
+			return true;
+		}
+		return false;
+	}
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet, String key)
+	{
+		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
+		{
+			new AsyncModelLoader(mActivity, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			setListUri(appForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
+
+		}
+	}
+
+
+	private void setListUri(Uri uri)
+	{
+		if (this.isAdded())
+		{
+			Bundle bundle = new Bundle();
+			bundle.putParcelable(LIST_LOADER_URI, uri);
+
+			getLoaderManager().restartLoader(0, bundle, this);
+		}
+	}
 }

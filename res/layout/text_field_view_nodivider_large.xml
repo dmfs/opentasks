@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="4dip" >
+    android:paddingBottom="4dip"
+    android:paddingLeft="12dip"
+    android:paddingRight="12dip"
+    android:paddingTop="4dip" >
 
     <TextView
         android:id="@android:id/title"
@@ -20,7 +23,7 @@
         android:layout_marginTop="2dip"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textAppearance="@android:style/TextAppearance.Large" >
+        android:textAppearance="@android:style/TextAppearance.Medium" >
     </TextView>
 
 </org.dmfs.tasks.widget.StringFieldView>

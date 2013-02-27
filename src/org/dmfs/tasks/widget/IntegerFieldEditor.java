@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ArrayChoicesAdapter;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.IChoicesAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
@@ -34,17 +35,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 
 /**
- * Widget to edit Integer values
+ * Widget to edit Integer values having a {@link IChoicesAdapter}.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Marten Gajda <marten@dmfs.org>
  * 
  */
 
@@ -53,6 +58,9 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 	private static final String TAG = "IntegerFieldEditor";
 	private IntegerFieldAdapter mAdapter;
 	private Spinner mSpinner;
+
+	private int mSelectedItem = ListView.INVALID_POSITION;
+	private IntegerSpinnerAdapter mSpinnerAdapter;
 
 
 	public IntegerFieldEditor(Context context, AttributeSet attrs, int defStyle)
@@ -78,6 +86,28 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 	{
 		super.onFinishInflate();
 		mSpinner = (Spinner) findViewById(R.id.integer_choices_spinner);
+		mSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			{
+				if (mSelectedItem != position)
+				{
+					Log.v(TAG, "onItemSelected" + position);
+					mAdapter.set(mValues, (Integer) ((ArrayChoicesAdapter) fieldDescriptor.getChoices()).getChoices().get(position));
+					mSelectedItem = position;
+				}
+			}
+
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0)
+			{
+				mSelectedItem = ListView.INVALID_POSITION;
+				mAdapter.set(mValues, null);
+			}
+		});
 	}
 
 
@@ -87,40 +117,15 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 		super.setup(descriptor, context);
 		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 
-	}
+		IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
 
-
-	@Override
-	protected void updateView()
-	{
-		if (mValues != null)
+		if (choicesAdapter instanceof ArrayChoicesAdapter)
 		{
-
-			Log.d(TAG, "mValues : " + mValues);
-			Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
-			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
-			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
-			if (choicesAdapter == null)
-			{
-
-			}
-			else
-			{
-				if (choicesAdapter instanceof ArrayChoicesAdapter)
-				{
-					ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
-					List<Object> choicesList = arrayAdapter.getChoices();
-					IntegerSpinnerAdapter sAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text,
-						choicesList, arrayAdapter);
-					mSpinner.setAdapter(sAdapter);
-					if (mAdapter.get(mValues) != null)
-					{
-						int selectedIndex = arrayAdapter.getIndex(mAdapter.get(mValues));
-						mSpinner.setSelection(selectedIndex);
-					}
-				}
-			}
-
+			ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
+			List<Object> choicesList = arrayAdapter.getChoices();
+			mSpinnerAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text, choicesList,
+				arrayAdapter);
+			mSpinner.setAdapter(mSpinnerAdapter);
 		}
 	}
 
@@ -188,4 +193,21 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 
 	}
 
+
+	@Override
+	public void onContentChanged(ContentSet contentSet, String key)
+	{
+		if (mValues != null)
+		{
+			if (mSpinnerAdapter != null)
+			{
+				int pos = mSpinnerAdapter.getPosition(mAdapter.get(mValues));
+				if (pos != mSelectedItem)
+				{
+					mSelectedItem = pos;
+					mSpinner.setSelection(mSelectedItem);
+				}
+			}
+		}
+	}
 }

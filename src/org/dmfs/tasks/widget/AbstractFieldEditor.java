@@ -19,10 +19,10 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -63,7 +63,7 @@ public abstract class AbstractFieldEditor extends AbstractFieldView
 	}
 
 
-	public void setValue(ContentValues values)
+	public void setValue(ContentSet values)
 	{
 		super.setValue(values);
 	}
@@ -73,9 +73,6 @@ public abstract class AbstractFieldEditor extends AbstractFieldView
 	{
 		super.setup(descriptor, context);
 	}
-
-
-	protected abstract void updateView();
 
 
 	public void setOnChangeListender(OnChangeListener listener)

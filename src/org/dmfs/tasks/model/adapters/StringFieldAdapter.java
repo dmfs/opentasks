@@ -19,6 +19,9 @@
 
 package org.dmfs.tasks.model.adapters;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.OnContentChangeListener;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -71,7 +74,7 @@ public final class StringFieldAdapter extends FieldAdapter<String>
 
 
 	@Override
-	public String get(ContentValues values)
+	public String get(ContentSet values)
 	{
 		// return the value as String
 		return values.getAsString(mFieldName);
@@ -91,16 +94,29 @@ public final class StringFieldAdapter extends FieldAdapter<String>
 
 
 	@Override
-	public String getDefault(ContentValues values)
+	public String getDefault(ContentSet values)
 	{
 		return mDefaultValue;
 	}
 
 
 	@Override
-	public void set(ContentValues values, String value)
+	public void set(ContentSet values, String value)
 	{
 		values.put(mFieldName, value);
 	}
 
+
+	@Override
+	public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+	{
+		values.addOnChangeListener(listener, mFieldName, initalNotification);
+	}
+
+
+	@Override
+	public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+	{
+		values.removeOnChangeListener(listener, mFieldName);
+	}
 }

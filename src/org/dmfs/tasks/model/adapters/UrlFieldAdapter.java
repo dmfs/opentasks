@@ -22,6 +22,9 @@ package org.dmfs.tasks.model.adapters;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.OnContentChangeListener;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -34,7 +37,7 @@ import android.database.Cursor;
 public final class UrlFieldAdapter extends FieldAdapter<URL>
 {
 
-	private final String mField;
+	private final String mFieldName;
 
 	private final URL mDefaultValue;
 
@@ -47,7 +50,7 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 	 */
 	public UrlFieldAdapter(String urlField)
 	{
-		mField = urlField;
+		mFieldName = urlField;
 		mDefaultValue = null;
 	}
 
@@ -62,17 +65,17 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 	 */
 	public UrlFieldAdapter(String fieldName, URL defaultValue)
 	{
-		mField = fieldName;
+		mFieldName = fieldName;
 		mDefaultValue = defaultValue;
 	}
 
 
 	@Override
-	public URL get(ContentValues values)
+	public URL get(ContentSet values)
 	{
 		try
 		{
-			return new URL(values.getAsString(mField));
+			return new URL(values.getAsString(mFieldName));
 		}
 		catch (MalformedURLException e)
 		{
@@ -84,7 +87,7 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 	@Override
 	public URL get(Cursor cursor)
 	{
-		int columnIdx = cursor.getColumnIndex(mField);
+		int columnIdx = cursor.getColumnIndex(mFieldName);
 		if (columnIdx < 0)
 		{
 			return null;
@@ -101,16 +104,29 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 
 
 	@Override
-	public URL getDefault(ContentValues values)
+	public URL getDefault(ContentSet values)
 	{
 		return mDefaultValue;
 	}
 
 
 	@Override
-	public void set(ContentValues values, URL value)
+	public void set(ContentSet values, URL value)
 	{
-		values.put(mField, value.toString());
+		values.put(mFieldName, value.toString());
 	}
 
+
+	@Override
+	public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+	{
+		values.addOnChangeListener(listener, mFieldName, initalNotification);
+	}
+
+
+	@Override
+	public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+	{
+		values.removeOnChangeListener(listener, mFieldName);
+	}
 }

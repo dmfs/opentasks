@@ -20,6 +20,7 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.IChoicesAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
@@ -90,7 +91,7 @@ public class PercentageFieldView extends AbstractFieldView
 
 
 	@Override
-	protected void updateView()
+	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		Log.d(TAG, "mValues : " + mValues);
 		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));

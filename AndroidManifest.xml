@@ -32,6 +32,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TaskListActivity" />
+
+            <intent-filter android:label="edit" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="ms.jung.android.caldavtodo.provider"
+                    android:mimeType="vnd.android.cursor.item/vnd.ms.jung.tasks" />
+            </intent-filter>
         </activity>
 
         <provider
@@ -42,11 +52,28 @@
 
         <activity
             android:name="org.dmfs.tasks.AddEditTaskActivity"
-            android:label="@string/title_activity_add_task"
+            android:label="@string/activity_edit_task_title"
             android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity" />
+
+            <intent-filter android:label="@string/activity_edit_task_title" >
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="ms.jung.android.caldavtodo.provider"
+                    android:mimeType="vnd.android.cursor.item/vnd.ms.jung.tasks" />
+            </intent-filter>
+            <intent-filter android:label="@string/activity_add_task_title" >
+                <action android:name="android.intent.action.INSERT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.ms.jung.tasks" />
+            </intent-filter>
         </activity>
     </application>
 

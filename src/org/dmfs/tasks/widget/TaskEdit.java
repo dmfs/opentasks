@@ -19,10 +19,10 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.Model;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -31,7 +31,7 @@ import android.view.LayoutInflater;
 public class TaskEdit extends BaseTaskView
 {
 
-	private ContentValues mValues;
+	private ContentSet mValues;
 	private Model mModel;
 
 
@@ -65,11 +65,10 @@ public class TaskEdit extends BaseTaskView
 	}
 
 
-	public void setValues(ContentValues values)
+	public void setValues(ContentSet values)
 	{
 		mValues = values;
 		updateView();
-
 	}
 
 
@@ -84,7 +83,6 @@ public class TaskEdit extends BaseTaskView
 			{
 				editView.setup(field, getActivity());
 				editView.setValue(mValues);
-				editView.updateView();
 				this.addView(editView);
 			}
 		}

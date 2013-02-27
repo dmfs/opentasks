@@ -45,6 +45,8 @@ public class DefaultModel extends Model
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
 	private final static LayoutDescriptor INTEGER_VIEW = new LayoutDescriptor(R.layout.integer_field_view);
 	private final static LayoutDescriptor INTEGER_EDIT = new LayoutDescriptor(R.layout.integer_field_editor);
+	private final static LayoutDescriptor PROGRESS_VIEW = new LayoutDescriptor(R.layout.percentage_field_view);
+	private final static LayoutDescriptor PROGRESS_EDIT = new LayoutDescriptor(R.layout.percentage_field_editor);
 	private final static LayoutDescriptor TIME_VIEW = new LayoutDescriptor(R.layout.time_field_view);
 	private final static LayoutDescriptor TIME_EDIT = new LayoutDescriptor(R.layout.time_field_editor);
 
@@ -62,6 +64,13 @@ public class DefaultModel extends Model
 		{
 			return;
 		}
+		// add a field for the list
+		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new StringFieldAdapter(Tasks.LIST_NAME)).setViewLayout(new LayoutDescriptor(
+			R.layout.text_field_view_nodivider_large).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
+			LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new StringFieldAdapter(Tasks.ACCOUNT_NAME)).setViewLayout(new LayoutDescriptor(
+			R.layout.text_field_view_nodivider_small).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
+			LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
 
 		mFields
 			.add(new FieldDescriptor(mContext, R.string.task_title, new StringFieldAdapter(Tasks.TITLE)).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
@@ -69,10 +78,10 @@ public class DefaultModel extends Model
 		Resources res = mContext.getResources();
 
 		ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-		aca.addChoice(Tasks.STATUS_NEEDS_ACTION, mContext.getString(R.string.status_needs_action), res.getDrawable(R.drawable.ic_status_needs_action));
-		aca.addChoice(Tasks.STATUS_IN_PROCESS, mContext.getString(R.string.status_in_process), res.getDrawable(R.drawable.ic_status_in_process));
-		aca.addChoice(Tasks.STATUS_COMPLETED, mContext.getString(R.string.status_completed), res.getDrawable(R.drawable.ic_status_completed));
-		aca.addChoice(Tasks.STATUS_CANCELLED, mContext.getString(R.string.status_cancelled), res.getDrawable(R.drawable.ic_status_cancelled));
+		aca.addChoice(Tasks.STATUS_NEEDS_ACTION, mContext.getString(R.string.status_needs_action), null);
+		aca.addChoice(Tasks.STATUS_IN_PROCESS, mContext.getString(R.string.status_in_process), null);
+		aca.addChoice(Tasks.STATUS_COMPLETED, mContext.getString(R.string.status_completed), null);
+		aca.addChoice(Tasks.STATUS_CANCELLED, mContext.getString(R.string.status_cancelled), null);
 
 		mFields.add(new FieldDescriptor(mContext, R.string.task_status, new IntegerFieldAdapter(Tasks.STATUS)).setViewLayout(INTEGER_VIEW)
 			.setEditorLayout(INTEGER_EDIT).setChoices(aca));
@@ -88,6 +97,8 @@ public class DefaultModel extends Model
 			.setEditorLayout(TIME_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, new TimeFieldAdapter(Tasks.COMPLETED, Tasks.TZ, Tasks.COMPLETED_IS_ALLDAY))
 			.setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_percent_complete, new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE)).setViewLayout(PROGRESS_VIEW)
+			.setEditorLayout(PROGRESS_EDIT));
 
 		ArrayChoicesAdapter aca2 = new ArrayChoicesAdapter();
 		aca2.addChoice(0, mContext.getString(R.string.priority_undefined), null);

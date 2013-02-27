@@ -20,13 +20,15 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -41,7 +43,7 @@ import android.widget.TextView;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public abstract class AbstractFieldView extends LinearLayout
+public abstract class AbstractFieldView extends LinearLayout implements OnContentChangeListener
 {
 
 	private final static String TAG = "AbstractFieldView";
@@ -49,7 +51,7 @@ public abstract class AbstractFieldView extends LinearLayout
 	private final static IntegerFieldAdapter LIST_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.LIST_COLOR);
 	private final static IntegerFieldAdapter TASK_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.TASK_COLOR);
 
-	protected ContentValues mValues;
+	protected ContentSet mValues;
 	private TextView mTitleId;
 	protected FieldDescriptor fieldDescriptor;
 	protected Activity mContext;
@@ -98,20 +100,26 @@ public abstract class AbstractFieldView extends LinearLayout
 	}
 
 
-	public void setValue(ContentValues values)
+	public void setValue(ContentSet values)
 	{
+		FieldAdapter<?> adapter = fieldDescriptor.getFieldAdapter();
+		if (mValues != null)
+		{
+			// remove us if the ContentSet changes
+			adapter.unregisterListener(values, this);
+		}
+
 		mValues = values;
-		Integer customBackgroud = getCustomBackgroudColor();
+		Integer customBackgroud = getCustomBackgroundColor();
 		if (customBackgroud != null)
 		{
 			setBackgroundColor(customBackgroud);
 		}
-		updateView();
-
+		adapter.registerListener(values, this, true);
 	}
 
 
-	public Integer getCustomBackgroudColor()
+	public Integer getCustomBackgroundColor()
 	{
 		if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
 		{
@@ -139,7 +147,7 @@ public abstract class AbstractFieldView extends LinearLayout
 			else
 			{
 				mTitleId.setText(descriptor.getTitle().toUpperCase());
-				Integer customBackgroud = getCustomBackgroudColor();
+				Integer customBackgroud = getCustomBackgroundColor();
 				if (customBackgroud != null)
 				{
 					mTitleId.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
@@ -147,9 +155,6 @@ public abstract class AbstractFieldView extends LinearLayout
 			}
 		}
 	}
-
-
-	protected abstract void updateView();
 
 
 	public static int getTextColorFromBackground(int color)

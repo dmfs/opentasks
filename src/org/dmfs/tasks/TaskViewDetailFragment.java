@@ -19,21 +19,17 @@
 
 package org.dmfs.tasks;
 
-import java.util.ArrayList;
-
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
-import org.dmfs.tasks.utils.AsyncContentLoader;
+import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
-import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -52,37 +48,35 @@ import android.widget.Toast;
  * {@link TaskDetailActivity} on handsets.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Marten Gajda <marten@dmfs.org>
  */
 
-public class TaskViewDetailFragment extends Fragment implements OnContentLoadedListener, OnModelLoadedListener
+public class TaskViewDetailFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
 {
 	/**
 	 * The fragment argument representing the item ID that this fragment represents.
 	 */
-	public static final String ARG_ITEM_ID = "item_id";
+	public static final String PARAM_TASK_URI = "task_uri";
 
 	private static final String TAG = "TaskViewDetailFragment";
 
 	private static final String KEY_VALUES = "key_values";
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
-		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION, Tasks.LIST_NAME)
-		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE)
+		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
+			Tasks.LIST_NAME).addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
-
-	private static final String TASK_MODEL = null;
 
 	/**
 	 * The dummy content this fragment is presenting.
 	 */
-	private Uri taskUri;
-	private Context appContext;
+	private Uri mTaskUri;
+	private Context mActivity;
 
-	ArrayList<ContentValues> mValues;
+	ContentSet mValues;
 	ViewGroup mContent;
 	Model mModel;
 
-	private Intent appIntent;
 	private Callback callback;
 
 
@@ -98,9 +92,12 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		taskUri = getArguments().getParcelable(TaskViewDetailFragment.ARG_ITEM_ID);
-		mValues = new ArrayList<ContentValues>();
+		/*
+		 * Get the URI of the task to show. For now this is always a task URI.
+		 * 
+		 * TODO: properly accept and handle instance URIs
+		 */
+		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
 		setHasOptionsMenu(true);
 	}
 
@@ -110,11 +107,15 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	{
 		super.onAttach(activity);
 
-		appContext = activity.getApplicationContext();
-		appIntent = activity.getIntent();
 		if (!(activity instanceof Callback))
 		{
 			throw new IllegalStateException("Activity must implement TaskViewDetailFragment callback.");
+		}
+
+		mActivity = activity;
+		if (mTaskUri == null)
+		{
+			mTaskUri = activity.getIntent().getData();
 		}
 		callback = (Callback) activity;
 	}
@@ -125,24 +126,25 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
 
-		if (taskUri != null)
+		if (mTaskUri != null)
 		{
 			Log.d(TAG, "taskUri is not null");
 			mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
 			if (savedInstanceState == null)
 			{
-				new AsyncContentLoader(appContext, this, CONTENT_VALUE_MAPPER).execute(taskUri);
+				mValues = new ContentSet(mActivity, mTaskUri, CONTENT_VALUE_MAPPER);
+				mValues.addOnChangeListener(this, null, true);
 			}
 			else
 			{
-				mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-				new AsyncModelLoader(appContext, this).execute("");
+				// mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
+				new AsyncModelLoader(mActivity, this).execute();
 			}
 		}
 		else
 		{
-			Log.w(TAG, "taskUri is null!!!");
+			Log.w(TAG, "task_uri is null!");
 		}
 
 		return rootView;
@@ -151,35 +153,14 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 
 	private void updateView()
 	{
-		final LayoutInflater inflater = (LayoutInflater) appContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mContent.removeAllViews();
-		for (ContentValues values : mValues)
-		{
-			TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
-			editor.setModel(mModel);
-			Log.d(TAG, "Values : " + values.toString());
-			editor.setValues(values);
-			mContent.addView(editor);
-		}
+		TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
+		editor.setModel(mModel);
+		editor.setValues(mValues);
+		mContent.addView(editor);
 		Log.d(TAG, "At the end of updateView");
-	}
-
-
-	@Override
-	public void onContentLoaded(ContentValues values)
-	{
-		if (values == null)
-		{
-			Toast.makeText(appContext, "Could not load Task", Toast.LENGTH_LONG).show();
-			return;
-		}
-
-		new AsyncModelLoader(appContext, this).execute(values.getAsString(Tasks.ACCOUNT_TYPE));
-
-		mValues.add(values);
-		// updateView();
-
 	}
 
 
@@ -188,7 +169,7 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	{
 		if (model == null)
 		{
-			Toast.makeText(appContext, "Could not load Model", Toast.LENGTH_LONG).show();
+			Toast.makeText(mActivity, "Could not load Model", Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -203,7 +184,7 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		outState.putParcelableArrayList(KEY_VALUES, mValues);
+		// outState.putParcelableArrayList(KEY_VALUES, mValues);
 	}
 
 
@@ -220,7 +201,11 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 		switch (item.getItemId())
 		{
 			case R.id.edit_task:
-				callback.displayEditTask(taskUri);
+				callback.displayEditTask(mTaskUri);
+				return true;
+			case R.id.delete_task:
+				Log.v(TAG, "removing task");
+				mValues.delete();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -230,5 +215,17 @@ public class TaskViewDetailFragment extends Fragment implements OnContentLoadedL
 	public interface Callback
 	{
 		public void displayEditTask(Uri taskUri);
+	}
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet, String key)
+	{
+		Log.v(TAG, "modelloader called");
+		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
+		{
+			Log.v(TAG, "modelloader called");
+			new AsyncModelLoader(mActivity, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+		}
 	}
 }

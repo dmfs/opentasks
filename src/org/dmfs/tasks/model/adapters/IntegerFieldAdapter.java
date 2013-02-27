@@ -19,6 +19,9 @@
 
 package org.dmfs.tasks.model.adapters;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.OnContentChangeListener;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -71,7 +74,7 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 
 
 	@Override
-	public Integer get(ContentValues values)
+	public Integer get(ContentSet values)
 	{
 		// return the value as Integer
 		return values.getAsInteger(mFieldName);
@@ -91,15 +94,29 @@ public final class IntegerFieldAdapter extends FieldAdapter<Integer>
 
 
 	@Override
-	public Integer getDefault(ContentValues values)
+	public Integer getDefault(ContentSet values)
 	{
 		return mDefaultValue;
 	}
 
 
 	@Override
-	public void set(ContentValues values, Integer value)
+	public void set(ContentSet values, Integer value)
 	{
 		values.put(mFieldName, value);
+	}
+
+
+	@Override
+	public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+	{
+		values.addOnChangeListener(listener, mFieldName, initalNotification);
+	}
+
+
+	@Override
+	public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+	{
+		values.removeOnChangeListener(listener, mFieldName);
 	}
 }

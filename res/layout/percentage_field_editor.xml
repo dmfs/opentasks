@@ -19,27 +19,27 @@
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dip"
-        android:orientation="horizontal" >
+        android:layout_marginTop="2dip" >
 
         <SeekBar
             android:id="@+id/percentage_seek_bar"
-            style="@style/CaldavSeekBar"
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_weight="4" />
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/text" />
 
         <TextView
             android:id="@+id/text"
             style="@style/DarkText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1" >
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" >
         </TextView>
-    </LinearLayout>
+    </RelativeLayout>
 
 </org.dmfs.tasks.widget.PercentageFieldEditor>

@@ -21,6 +21,9 @@ package org.dmfs.tasks.model.adapters;
 
 import java.util.TimeZone;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.OnContentChangeListener;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.text.format.Time;
@@ -36,7 +39,8 @@ import android.text.format.Time;
  * <li>an allday flag</li>
  * </ul>
  * 
- * This adapter combines those three fields in a {@link ContentValues} to a Time value.
+ * This adapter combines those three fields in a {@link ContentValues} to a Time value. If the time zone field is <code>null</code> the time zone is always read
+ * or written as UTC.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -53,7 +57,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	 * @param timestampField
 	 *            The field name that holds the time stamp in milliseconds.
 	 * @param tzField
-	 *            The field that holds the time zone (as Olson ID).
+	 *            The field that holds the time zone (as Olson ID). Can be <code>null</code> to indicate the time is always loaded and stored in UTC.
 	 * @param alldayField
 	 *            The Field that indicated that this time is a day not a date-time.
 	 */
@@ -66,7 +70,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
 	@Override
-	public Time get(ContentValues values)
+	public Time get(ContentSet values)
 	{
 		Long timestamp = values.getAsLong(mTimestampField);
 		if (timestamp == null)
@@ -75,7 +79,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 			return null;
 		}
 		// create a new Time for the given time zone, falling back to UTC if none is given
-		String timezone = values.getAsString(mTzField);
+		String timezone = mTzField == null ? Time.TIMEZONE_UTC : values.getAsString(mTzField);
 		Time value = new Time(timezone == null ? Time.TIMEZONE_UTC : timezone);
 		// set the time stamp
 		value.set(timestamp);
@@ -92,10 +96,10 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	public Time get(Cursor cursor)
 	{
 		int tsIdx = cursor.getColumnIndex(mTimestampField);
-		int tzIdx = cursor.getColumnIndex(mTzField);
+		int tzIdx = mTzField == null ? -1 : cursor.getColumnIndex(mTzField);
 		int adIdx = cursor.getColumnIndex(mAllDayField);
 
-		if (tsIdx < 0 || tzIdx < 0 || adIdx < 0)
+		if (tsIdx < 0 || (mTzField != null && tzIdx < 0) || adIdx < 0)
 		{
 			return null;
 		}
@@ -109,7 +113,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		Long timestamp = cursor.getLong(tsIdx);
 
 		// create a new Time for the given time zone, falling back to UTC if none is given
-		String timezone = cursor.getString(tzIdx);
+		String timezone = mTzField == null ? Time.TIMEZONE_UTC : cursor.getString(tzIdx);
 		Time value = new Time(timezone == null ? Time.TIMEZONE_UTC : timezone);
 		// set the time stamp
 		value.set(timestamp);
@@ -123,10 +127,10 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
 	@Override
-	public Time getDefault(ContentValues values)
+	public Time getDefault(ContentSet values)
 	{
 		// create a new Time for the given time zone, falling back to the default time zone if none is given
-		String timezone = values.getAsString(mTzField);
+		String timezone = mTzField == null ? Time.TIMEZONE_UTC : values.getAsString(mTzField);
 		Time value = new Time(timezone == null ? TimeZone.getDefault().getID() : timezone);
 
 		value.setToNow();
@@ -142,20 +146,46 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
 	@Override
-	public void set(ContentValues values, Time value)
+	public void set(ContentSet values, Time value)
 	{
 		if (value != null)
 		{
 			// just store all three parts separately
 			values.put(mTimestampField, value.toMillis(false));
-			values.put(mTzField, value.timezone);
+			if (mTzField != null)
+			{
+				values.put(mTzField, value.timezone);
+			}
 			values.put(mAllDayField, value.allDay ? 1 : 0);
 		}
 		else
 		{
-			// write timestamp only, other fields may still use allday and timezon
+			// write timestamp only, other fields may still use allday and timezone
 			values.put(mTimestampField, (Long) null);
 		}
 	}
 
+
+	@Override
+	public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+	{
+		values.addOnChangeListener(listener, mTimestampField, initalNotification);
+		if (mTzField != null)
+		{
+			values.addOnChangeListener(listener, mTzField, initalNotification);
+		}
+		values.addOnChangeListener(listener, mAllDayField, initalNotification);
+	}
+
+
+	@Override
+	public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+	{
+		values.removeOnChangeListener(listener, mTimestampField);
+		if (mTzField != null)
+		{
+			values.removeOnChangeListener(listener, mTzField);
+		}
+		values.removeOnChangeListener(listener, mAllDayField);
+	}
 }

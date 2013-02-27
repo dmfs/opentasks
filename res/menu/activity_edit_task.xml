@@ -1,13 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/task_save"
+        android:id="@+id/editor_action_save"
         android:icon="@drawable/content_save"
         android:orderInCategory="99"
         android:showAsAction="always"
         android:title="@string/action_save"/>
     <item
-        android:id="@+id/task_cancel"
+        android:id="@+id/editor_action_cancel"
         android:icon="@drawable/content_remove"
         android:orderInCategory="100"
         android:showAsAction="always"

@@ -22,6 +22,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 
@@ -30,7 +31,6 @@ import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
-import android.content.ContentValues;
 import android.content.Context;
 import android.text.format.Time;
 import android.util.AttributeSet;
@@ -95,7 +95,6 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			{
 				mDateTime = null;
 				mAdapter.set(mValues, mDateTime);
-				updateView();
 			}
 		});
 	}
@@ -113,43 +112,10 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 
 
 	@Override
-	public void setValue(ContentValues values)
+	public void setValue(ContentSet values)
 	{
 		super.setValue(values);
 		mDateTime = mAdapter.get(mValues);
-	}
-
-
-	@Override
-	protected void updateView()
-	{
-		Log.d("TimeFieldEditor", "CALLED");
-
-		if (mDateTime != null)
-		{
-			// Log.d(TAG, "mValues is not null");
-			// Log.d(TAG, Long.toString(dateTime.toMillis(true)));
-			Date currentDate = new Date(mDateTime.toMillis(false));
-			String formattedDate = defaultDateFormat.format(currentDate);
-			datePicker.setText(formattedDate);
-
-			if (!mDateTime.allDay)
-			{
-				String formattedTime = defaultTimeFormat.format(currentDate);
-				timePicker.setText(formattedTime);
-				timePicker.setVisibility(View.VISIBLE);
-			}
-			else
-			{
-				timePicker.setVisibility(View.GONE);
-			}
-		}
-		else
-		{
-			datePicker.setText("");
-			timePicker.setText("");
-			timePicker.setVisibility(View.VISIBLE);
-		}
 	}
 
 	private OnClickListener DatePickerHandler = new OnClickListener()
@@ -193,7 +159,6 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDateTime.month = monthOfYear;
 		mDateTime.monthDay = dayOfMonth;
 		mAdapter.set(mValues, mDateTime);
-		updateView();
 	}
 
 
@@ -203,7 +168,38 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDateTime.hour = hourOfDay;
 		mDateTime.minute = minute;
 		mAdapter.set(mValues, mDateTime);
-		updateView();
+	}
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet, String key)
+	{
+		mDateTime = mAdapter.get(mValues);
+		if (mDateTime != null)
+		{
+			// Log.d(TAG, "mValues is not null");
+			// Log.d(TAG, Long.toString(dateTime.toMillis(true)));
+			Date currentDate = new Date(mDateTime.toMillis(false));
+			String formattedDate = defaultDateFormat.format(currentDate);
+			datePicker.setText(formattedDate);
+
+			if (!mDateTime.allDay)
+			{
+				String formattedTime = defaultTimeFormat.format(currentDate);
+				timePicker.setText(formattedTime);
+				timePicker.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				timePicker.setVisibility(View.GONE);
+			}
+		}
+		else
+		{
+			datePicker.setText("");
+			timePicker.setText("");
+			timePicker.setVisibility(View.VISIBLE);
+		}
 	}
 
 }

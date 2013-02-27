@@ -27,10 +27,8 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 	public String getTitle(Object object)
 	{
 		int index = mChoices.indexOf(object);
-		Log.d(TAG, "Index : " + index);
 		if (index >= 0)
 		{
-			Log.d(TAG, mTitles.get(index));
 			return mTitles.get(index);
 		}
 		return null;
@@ -49,9 +47,12 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 
 	}
 
-	public int getIndex(Object object){
+
+	public int getIndex(Object object)
+	{
 		return mVisibleChoices.indexOf(object);
 	}
+
 
 	public ArrayChoicesAdapter addChoice(Object choice, String title, Drawable drawable)
 	{
@@ -61,6 +62,7 @@ public class ArrayChoicesAdapter implements IChoicesAdapter
 		mDrawables.add(drawable);
 		return this;
 	}
+
 
 	public ArrayChoicesAdapter addHiddenChoice(Object choice, String title, Drawable drawable)
 	{

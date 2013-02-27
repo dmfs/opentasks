@@ -19,6 +19,9 @@
 
 package org.dmfs.tasks.model.adapters;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.OnContentChangeListener;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 
@@ -41,7 +44,7 @@ public abstract class FieldAdapter<Type>
 	 *            The {link ContentValues} that contain the value to return.
 	 * @return The value.
 	 */
-	public abstract Type get(ContentValues values);
+	public abstract Type get(ContentSet values);
 
 
 	/**
@@ -62,7 +65,7 @@ public abstract class FieldAdapter<Type>
 	 * 
 	 * @return A default Value
 	 */
-	public abstract Type getDefault(ContentValues values);
+	public abstract Type getDefault(ContentSet values);
 
 
 	/**
@@ -73,6 +76,27 @@ public abstract class FieldAdapter<Type>
 	 * @param value
 	 *            The new value to store.
 	 */
-	public abstract void set(ContentValues values, Type value);
+	public abstract void set(ContentSet values, Type value);
 
+
+	/**
+	 * Register a listener for the values that this adapter manages.
+	 * 
+	 * @param values
+	 *            The {@link ContentSet}.
+	 * @param listener
+	 *            The {link {@link OnContentChangeListener} to register.
+	 */
+	public abstract void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification);
+
+
+	/**
+	 * Unregister a listener for the values that this adapter manages.
+	 * 
+	 * @param values
+	 *            The {@link ContentSet}.
+	 * @param listener
+	 *            The {link {@link OnContentChangeListener} to unregister.
+	 */
+	public abstract void unregisterListener(ContentSet values, OnContentChangeListener listener);
 }

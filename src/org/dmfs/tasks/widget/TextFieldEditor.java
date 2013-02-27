@@ -20,12 +20,14 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 
 import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -85,16 +87,6 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 
 
 	@Override
-	protected void updateView()
-	{
-		if (mValues != null)
-		{
-			mText.setText(mAdapter.get(mValues));
-		}
-	}
-
-
-	@Override
 	public void afterTextChanged(Editable s)
 	{
 		if (mValues != null)
@@ -114,6 +106,31 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count)
 	{
+	}
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet, String key)
+	{
+		if (key != null)
+		{
+			if (mValues != null)
+			{
+				String oldValue = mText.getText().toString();
+				String newValue = mAdapter.get(mValues);
+				if (!TextUtils.equals(oldValue, newValue))
+				{
+					mText.setText(newValue);
+				}
+			}
+		}
+		else
+		{
+			if (mValues != null)
+			{
+				mText.setText(mAdapter.get(mValues));
+			}
+		}
 	}
 
 }

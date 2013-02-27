@@ -20,7 +20,7 @@ package org.dmfs.tasks.utils;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.widget.TaskListFieldView;
+import org.dmfs.tasks.widget.AbstractFieldView;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -91,7 +91,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		listName.setText(cursor.getString(taskNameColumn));
 		accountName.setText(cursor.getString(accountNameColumn));
 		int taskListColor = cursor.getInt(taskColorColumn);
-		int backgroundBasedColor = TaskListFieldView.getTextColorFromBackground(taskListColor);
+		int backgroundBasedColor = AbstractFieldView.getTextColorFromBackground(taskListColor);
 
 		listName.setTextColor(backgroundBasedColor);
 		accountName.setTextColor(backgroundBasedColor);

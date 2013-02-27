@@ -1,15 +1,11 @@
 package org.dmfs.tasks;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 
 /**
@@ -17,21 +13,20 @@ import android.widget.Toast;
  * side-by-side with a list of items in a {@link TaskListActivity}.
  * <p>
  * This activity is mostly just a 'shell' activity containing nothing more than a {@link TaskViewDetailFragment}.
+ * </p>
  */
 public class TaskDetailActivity extends FragmentActivity implements TaskViewDetailFragment.Callback
 {
 
 	private static final String TAG = "TaskDetailActivity";
-	Context appContext;
 
 
-	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_detail);
-		appContext = getApplicationContext();
+		
 		// Show the Up button in the action bar.
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
@@ -52,7 +47,7 @@ public class TaskDetailActivity extends FragmentActivity implements TaskViewDeta
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
 			Bundle arguments = new Bundle();
-			arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));
+			arguments.putParcelable(TaskViewDetailFragment.PARAM_TASK_URI, getIntent().getData());
 			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
@@ -83,14 +78,9 @@ public class TaskDetailActivity extends FragmentActivity implements TaskViewDeta
 	@Override
 	public void displayEditTask(Uri taskUri)
 	{
-		Toast.makeText(appContext, "Edit Task", Toast.LENGTH_SHORT).show();
-		Log.d(TAG, "Display Task Edit details");
-		Bundle arguments = new Bundle();
-		arguments.putString(TaskEditDetailFragment.FRAGMENT_INTENT, TaskEditDetailFragment.EDIT_TASK);
-		arguments.putParcelable(TaskViewDetailFragment.ARG_ITEM_ID, getIntent().getParcelableExtra(TaskViewDetailFragment.ARG_ITEM_ID));
-		TaskEditDetailFragment fragment = new TaskEditDetailFragment();
-		fragment.setArguments(arguments);
-		getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, fragment).commit();
 
+		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
+		editTaskIntent.setData(taskUri);
+		startActivity(editTaskIntent);
 	}
 }
