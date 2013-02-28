@@ -140,6 +140,13 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		{
 			value.set(value.year, value.month, value.monthDay);
 		}
+		else
+		{
+			value.second = 0;
+			// round up to next quarter
+			value.minute = ((value.minute + 14) / 15) * 15;
+			value.normalize(false);
+		}
 
 		return value;
 	}
