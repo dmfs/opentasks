@@ -101,7 +101,8 @@ public class DefaultModel extends Model
 			.setEditorLayout(PROGRESS_EDIT));
 
 		ArrayChoicesAdapter aca2 = new ArrayChoicesAdapter();
-		aca2.addChoice(0, mContext.getString(R.string.priority_undefined), null);
+		aca2.addChoice(null, mContext.getString(R.string.priority_undefined), null);
+		aca2.addHiddenChoice(0, mContext.getString(R.string.priority_undefined), null);
 		aca2.addChoice(9, mContext.getString(R.string.priority_low), null);
 		aca2.addHiddenChoice(8, mContext.getString(R.string.priority_low), null);
 		aca2.addHiddenChoice(7, mContext.getString(R.string.priority_low), null);
@@ -116,6 +117,7 @@ public class DefaultModel extends Model
 			.setEditorLayout(INTEGER_EDIT).setChoices(aca2));
 
 		ArrayChoicesAdapter aca3 = new ArrayChoicesAdapter();
+		aca3.addChoice(null, mContext.getString(R.string.classification_not_specified), null);
 		aca3.addChoice(Tasks.CLASSIFICATION_PUBLIC, mContext.getString(R.string.classification_public), null);
 		aca3.addChoice(Tasks.CLASSIFICATION_PRIVATE, mContext.getString(R.string.classification_private), null);
 		aca3.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, mContext.getString(R.string.classification_confidential), null);

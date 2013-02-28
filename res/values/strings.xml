@@ -50,6 +50,7 @@
 
     <!-- Classification labels -->
 
+    <string name="classification_not_specified">not specified</string>
     <string name="classification_public">public</string>
     <string name="classification_private">private</string>
     <string name="classification_confidential">confidential</string>

@@ -37,7 +37,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
-import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
@@ -66,7 +65,7 @@ public class XmlModel extends Model
 	public final static String NAMESPACE = "ms.jung.android.caldavtodo";
 
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
-	private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();
+//	private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();
 
 	private final PackageManager mPackageManager;
 	private final String mPackageName;
@@ -473,8 +472,6 @@ public class XmlModel extends Model
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
-				Resources res = context.getResources();
-
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
 				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), null);
@@ -508,7 +505,8 @@ public class XmlModel extends Model
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
-				aca.addChoice(0, context.getString(R.string.priority_undefined), null);
+				aca.addChoice(null, context.getString(R.string.priority_undefined), null);
+				aca.addHiddenChoice(0, context.getString(R.string.priority_undefined), null);
 				aca.addChoice(9, context.getString(R.string.priority_low), null);
 				aca.addHiddenChoice(8, context.getString(R.string.priority_low), null);
 				aca.addHiddenChoice(7, context.getString(R.string.priority_low), null);
@@ -544,9 +542,8 @@ public class XmlModel extends Model
 				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
 
-				Resources res = context.getResources();
-
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+				aca.addChoice(null, context.getString(R.string.classification_not_specified), null);
 				aca.addChoice(Tasks.CLASSIFICATION_PUBLIC, context.getString(R.string.classification_public), null);
 				aca.addChoice(Tasks.CLASSIFICATION_PRIVATE, context.getString(R.string.classification_private), null);
 				aca.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, context.getString(R.string.classification_confidential), null);

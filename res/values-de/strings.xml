@@ -40,13 +40,14 @@
 
     <!-- Status labels -->
 
-    <string name="status_needs_action">benötigt Eingiff</string>
+    <string name="status_needs_action">benötigt Eingriff</string>
     <string name="status_in_process">in Arbeit</string>
     <string name="status_completed">erledigt</string>
     <string name="status_cancelled">abgebrochen</string>
 
     <!-- Classification labels -->
 
+    <string name="classification_not_specified">keine</string>
     <string name="classification_public">öffentlich</string>
     <string name="classification_private">privat</string>
     <string name="classification_confidential">vertraulich</string>

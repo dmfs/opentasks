@@ -104,7 +104,7 @@ public class TimeFieldView extends AbstractFieldView
 			if (!dateTime.allDay)
 			{
 				// formattedTime = dateTime.format("%d/%m/%Y");
-				formattedTime = formattedTime + " - " + defaultTimeFormat.format(fullDate);
+				formattedTime = formattedTime + " " + defaultTimeFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);
 		}
