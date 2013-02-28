@@ -102,9 +102,10 @@ public class PercentageFieldView extends AbstractFieldView
 			int percentage = mAdapter.get(mValues);
 			Log.d(TAG, "Percentage : " + percentage);
 			mProgress.setProgress(percentage);
-			mText.setText(Integer.toString(percentage));
+			mText.setText(Integer.toString(percentage) + "%");
 		}
-		else{
+		else
+		{
 			setVisibility(View.GONE);
 		}
 	}

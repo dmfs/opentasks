@@ -19,6 +19,7 @@
 
 package org.dmfs.tasks.widget;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.dmfs.tasks.R;
@@ -83,10 +84,9 @@ public class TimeFieldView extends AbstractFieldView
 		super.setup(descriptor, context);
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
-		defaultDateFormat = DateFormat.getDateFormat(getContext());
+		defaultDateFormat = java.text.DateFormat.getDateInstance(SimpleDateFormat.LONG);
 		defaultTimeFormat = DateFormat.getTimeFormat(getContext());
 	}
-
 
 
 	@Override
@@ -104,7 +104,7 @@ public class TimeFieldView extends AbstractFieldView
 			if (!dateTime.allDay)
 			{
 				// formattedTime = dateTime.format("%d/%m/%Y");
-				formattedTime = formattedTime + " " + defaultTimeFormat.format(fullDate);
+				formattedTime = formattedTime + " - " + defaultTimeFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);
 		}

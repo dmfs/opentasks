@@ -143,22 +143,9 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 		}
 
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
+		private void populateView(int position, View view)
 		{
-			SpinnerItemTag tag;
-			if (convertView == null)
-			{
-				convertView = layoutInflater.inflate(R.layout.integer_choices_spinner_item, null);
-				tag = new SpinnerItemTag();
-				tag.iv = (ImageView) convertView.findViewById(R.id.integer_choice_item_image);
-				tag.tv = (TextView) convertView.findViewById(R.id.integer_choice_item_text);
-				convertView.setTag(tag);
-			}
-			else
-			{
-				tag = (SpinnerItemTag) convertView.getTag();
-			}
+			SpinnerItemTag tag = (SpinnerItemTag) view.getTag();
 
 			String title = adapter.getTitle(getItem(position));
 			Log.d(TAG, Integer.toString(position) + " Title : " + title);
@@ -174,6 +161,22 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 				tag.iv.setVisibility(View.GONE);
 			}
 			tag.tv.setText(title);
+		}
+
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			if (convertView == null)
+			{
+				convertView = layoutInflater.inflate(R.layout.integer_choices_spinner_selected_item, null);
+				SpinnerItemTag tag = new SpinnerItemTag();
+				tag.iv = (ImageView) convertView.findViewById(R.id.integer_choice_item_image);
+				tag.tv = (TextView) convertView.findViewById(R.id.integer_choice_item_text);
+				convertView.setTag(tag);
+			}
+
+			populateView(position, convertView);
 
 			return convertView;
 		}
@@ -182,7 +185,18 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 		@Override
 		public View getDropDownView(int position, View convertView, ViewGroup parent)
 		{
-			return getView(position, convertView, parent);
+			if (convertView == null)
+			{
+				convertView = layoutInflater.inflate(R.layout.integer_choices_spinner_item, null);
+				SpinnerItemTag tag = new SpinnerItemTag();
+				tag.iv = (ImageView) convertView.findViewById(R.id.integer_choice_item_image);
+				tag.tv = (TextView) convertView.findViewById(R.id.integer_choice_item_text);
+				convertView.setTag(tag);
+			}
+
+			populateView(position, convertView);
+
+			return convertView;
 		}
 
 		private class SpinnerItemTag

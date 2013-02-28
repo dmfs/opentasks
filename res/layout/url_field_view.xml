@@ -12,7 +12,8 @@
         style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dip" >
+        android:layout_marginTop="2dip"
+        android:textAppearance="@android:style/TextAppearance.Medium" >
     </TextView>
 
 </org.dmfs.tasks.widget.URLFieldView>

@@ -119,7 +119,11 @@ public class URLFieldEditor extends AbstractFieldEditor implements TextWatcher
 		{
 			try
 			{
-				mAdapter.set(mValues, new URL(mText.getText().toString()));
+				String text = mText.getText().toString();
+				if (!TextUtils.isEmpty(text))
+				{
+					mAdapter.set(mValues, new URL(text));
+				}
 			}
 			catch (MalformedURLException e)
 			{
