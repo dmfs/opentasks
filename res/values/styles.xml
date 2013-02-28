@@ -21,8 +21,20 @@
         <item name="android:textColor">#ff33b5e5</item>
     </style>
 
-    <style name="LabelText">
+    <style name="detail_label_text">
         <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="detail_label_line">
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="editor_label_text">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="editor_label_line">
+        <item name="android:background">@android:color/darker_gray</item>
     </style>
 
     <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">

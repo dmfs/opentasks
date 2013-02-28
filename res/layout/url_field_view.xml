@@ -5,19 +5,7 @@
     android:orientation="vertical"
     android:padding="12dip" >
 
-    <TextView
-        android:id="@android:id/title"
-        style="@style/LabelText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:singleLine="true" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
+    <include layout="@layout/detail_header" />
 
     <TextView
         android:id="@+id/text"

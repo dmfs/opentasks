@@ -5,29 +5,15 @@
     android:orientation="vertical"
     android:padding="12dip" >
 
-    <TextView
-        android:id="@android:id/title"
-        style="@style/LabelText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:capitalize="characters"
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:singleLine="true"
-        android:text="" />
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:background="?android:attr/listDivider" />
+    <include layout="@layout/editor_header" />
 
     <EditText
         android:id="@+id/text"
         style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip"
-        android:layout_marginLeft="0dip">
+        android:layout_marginLeft="0dip"
+        android:layout_marginTop="4dip" >
     </EditText>
 
 </org.dmfs.tasks.widget.TextFieldEditor>
