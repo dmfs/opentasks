@@ -115,7 +115,10 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	public void setValue(ContentSet values)
 	{
 		super.setValue(values);
-		mDateTime = mAdapter.get(mValues);
+		if (mValues != null)
+		{
+			mDateTime = mAdapter.get(mValues);
+		}
 	}
 
 	private OnClickListener DatePickerHandler = new OnClickListener()

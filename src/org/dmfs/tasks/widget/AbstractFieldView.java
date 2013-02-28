@@ -115,20 +115,26 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 		{
 			setBackgroundColor(customBackgroud);
 		}
-		adapter.registerListener(values, this, true);
+		if (values != null)
+		{
+			adapter.registerListener(values, this, true);
+		}
 	}
 
 
 	public Integer getCustomBackgroundColor()
 	{
-		if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
+		if (mValues != null)
 		{
-			return LIST_COLOR_ADAPTER.get(mValues);
-		}
-		else if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_BACKGROUND_COLOR, false))
-		{
-			Integer taskColor = TASK_COLOR_ADAPTER.get(mValues);
-			return taskColor == null ? LIST_COLOR_ADAPTER.get(mValues) : taskColor;
+			if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
+			{
+				return LIST_COLOR_ADAPTER.get(mValues);
+			}
+			else if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_BACKGROUND_COLOR, false))
+			{
+				Integer taskColor = TASK_COLOR_ADAPTER.get(mValues);
+				return taskColor == null ? LIST_COLOR_ADAPTER.get(mValues) : taskColor;
+			}
 		}
 		return null;
 	}

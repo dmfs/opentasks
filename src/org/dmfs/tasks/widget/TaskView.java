@@ -27,6 +27,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 
 
 public class TaskView extends BaseTaskView
@@ -63,31 +64,31 @@ public class TaskView extends BaseTaskView
 	public void setModel(Model model)
 	{
 		mModel = model;
+		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		for (FieldDescriptor field : mModel.getFields())
+		{
+			AbstractFieldView detailView = field.getDetailView(inflater);
+			if (detailView != null)
+			{
+				detailView.setup(field, getActivity());
+				detailView.setValue(mValues);
+				addView(detailView);
+			}
+		}
 	}
 
 
 	public void setValues(ContentSet values)
 	{
 		mValues = values;
-		updateView();
-
-	}
-
-
-	private void updateView()
-	{
-		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		for (FieldDescriptor field : mModel.getFields())
+		int children = this.getChildCount();
+		for (int i=0; i<children; ++i)
 		{
-			Log.v("------------------------", field.getTitle());
-			AbstractFieldView detailView = field.getDetailView(inflater);
-			if (detailView != null)
+			View child = getChildAt(i);
+			if (child instanceof AbstractFieldView)
 			{
-				detailView.setup(field, getActivity());
-				detailView.setValue(mValues);
-				this.addView(detailView);
+				((AbstractFieldView) child).setValue(values);
 			}
 		}
 	}
-
 }

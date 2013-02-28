@@ -89,8 +89,12 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	{
 		if (mValues != null)
 		{
-			mAdapter.set(mValues, mText.getText().toString());
-			Log.v(TAG, "updated values");
+			String newText = s.toString();
+			if (!TextUtils.equals(newText, mAdapter.get(mValues))) // don't trigger unnecessary updates
+			{
+				mAdapter.set(mValues, mText.getText().toString());
+				Log.v(TAG, "updated values");
+			}
 		}
 	}
 

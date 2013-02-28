@@ -26,6 +26,7 @@ import org.dmfs.tasks.model.Model;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 
 
 public class TaskEdit extends BaseTaskView
@@ -62,30 +63,31 @@ public class TaskEdit extends BaseTaskView
 	public void setModel(Model model)
 	{
 		mModel = model;
+		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		for (FieldDescriptor field : mModel.getFields())
+		{
+			AbstractFieldView detailView = field.getEditorView(inflater);
+			if (detailView != null)
+			{
+				detailView.setup(field, getActivity());
+				detailView.setValue(mValues);
+				addView(detailView);
+			}
+		}
 	}
 
 
 	public void setValues(ContentSet values)
 	{
 		mValues = values;
-		updateView();
-	}
-
-
-	private void updateView()
-	{
-		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		for (FieldDescriptor field : mModel.getFields())
+		int children = this.getChildCount();
+		for (int i = 0; i < children; ++i)
 		{
-
-			AbstractFieldView editView = field.getEditorView(inflater);
-			if (editView != null)
+			View child = getChildAt(i);
+			if (child instanceof AbstractFieldView)
 			{
-				editView.setup(field, getActivity());
-				editView.setValue(mValues);
-				this.addView(editView);
+				((AbstractFieldView) child).setValue(values);
 			}
 		}
 	}
-
 }

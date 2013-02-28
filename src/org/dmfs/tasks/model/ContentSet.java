@@ -1,9 +1,11 @@
 package org.dmfs.tasks.model;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
@@ -53,6 +55,7 @@ public final class ContentSet implements OnContentLoadedListener
 		mContext = context;
 		mMapper = mapper;
 		mUri = uri;
+		mContext.getContentResolver().registerContentObserver(mUri, false, mObserver);
 		loadContent(uri);
 	}
 
@@ -67,7 +70,6 @@ public final class ContentSet implements OnContentLoadedListener
 	public void onContentLoaded(ContentValues values)
 	{
 		mBeforeContentValues = values;
-		mContext.getContentResolver().registerContentObserver(mUri, false, mObserver);
 		notifyListeners(null);
 	}
 
@@ -259,7 +261,8 @@ public final class ContentSet implements OnContentLoadedListener
 		Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
 		if (listenerSet == null)
 		{
-			listenerSet = new HashSet<OnContentChangeListener>();
+			// using a "WeakHashSet" ensures that we don't prevent listeners from getting garbage-collected.
+			listenerSet = Collections.newSetFromMap(new WeakHashMap<OnContentChangeListener, Boolean>());
 			mOnChangeListeners.put(key, listenerSet);
 		}
 

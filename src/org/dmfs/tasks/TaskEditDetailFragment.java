@@ -218,8 +218,8 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		mContent.removeAllViews();
 
 		TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
-		editor.setModel(mModel);
 		editor.setActivity(mActivity);
+		editor.setModel(mModel);
 		editor.setValues(mValues);
 		mContent.addView(editor);
 
@@ -281,11 +281,14 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		final int menuId = item.getItemId();
 		if (menuId == R.id.editor_action_save)
 		{
-			Log.v(TAG, "persiting task");
-			/*
-			 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
-			 */
-			mValues.persist();
+			if (mValues.isInsert() || mValues.isUpdate())
+			{
+				Log.v(TAG, "persiting task");
+				/*
+				 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
+				 */
+				mValues.persist();
+			}
 			mActivity.finish();
 			return true;
 		}
@@ -306,7 +309,6 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		{
 			new AsyncModelLoader(mActivity, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			setListUri(appForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
-
 		}
 	}
 
