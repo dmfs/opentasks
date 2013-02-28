@@ -32,11 +32,10 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
 /**
- * Editor Field for simple text.
+ * Editor widget for simple text fields.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -46,7 +45,6 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	private final static String TAG = "TextFieldEditor";
 
 	private StringFieldAdapter mAdapter;
-	private TextView mTitle;
 	private EditText mText;
 
 
@@ -112,23 +110,20 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	@Override
 	public void onContentChanged(ContentSet contentSet, String key)
 	{
-		if (key != null)
+		if (mValues != null)
 		{
-			if (mValues != null)
+			String newValue = mAdapter.get(mValues);
+			if (key != null)
 			{
 				String oldValue = mText.getText().toString();
-				String newValue = mAdapter.get(mValues);
 				if (!TextUtils.equals(oldValue, newValue))
 				{
 					mText.setText(newValue);
 				}
 			}
-		}
-		else
-		{
-			if (mValues != null)
+			else
 			{
-				mText.setText(mAdapter.get(mValues));
+				mText.setText(newValue);
 			}
 		}
 	}
