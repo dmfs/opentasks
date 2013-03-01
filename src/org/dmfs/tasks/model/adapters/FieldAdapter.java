@@ -22,12 +22,11 @@ package org.dmfs.tasks.model.adapters;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 
 /**
- * A FieldAdapter knows how to store a certain field in {@link ContentValues}.
+ * A FieldAdapter knows how to store a certain field in a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  * 
@@ -38,7 +37,7 @@ public abstract class FieldAdapter<Type>
 {
 
 	/**
-	 * Get the value form the given {@link ContentValues}
+	 * Get the value from the given {@link ContentSet}
 	 * 
 	 * @param values
 	 *            The {link ContentValues} that contain the value to return.
@@ -48,7 +47,7 @@ public abstract class FieldAdapter<Type>
 
 
 	/**
-	 * Get the value form the given {@link Cursor}
+	 * Get the value from the given {@link Cursor}
 	 * 
 	 * @param values
 	 *            The {link Cursor} that contain the value to return.
@@ -61,7 +60,7 @@ public abstract class FieldAdapter<Type>
 	 * Get a default value for this Adapter.
 	 * 
 	 * @param values
-	 *            The {link ContentValues}.
+	 *            The {link ContentSet}.
 	 * 
 	 * @return A default Value
 	 */
@@ -69,10 +68,10 @@ public abstract class FieldAdapter<Type>
 
 
 	/**
-	 * Set a value in the given {@link ContentValues}.
+	 * Set a value in the given {@link ContentSet}.
 	 * 
 	 * @param values
-	 *            The {@link ContentValues} where to store the new value.
+	 *            The {@link ContentSet} where to store the new value.
 	 * @param value
 	 *            The new value to store.
 	 */
@@ -80,23 +79,23 @@ public abstract class FieldAdapter<Type>
 
 
 	/**
-	 * Register a listener for the values that this adapter manages.
+	 * Register a listener for the fields that this adapter adapts.
 	 * 
 	 * @param values
 	 *            The {@link ContentSet}.
 	 * @param listener
-	 *            The {link {@link OnContentChangeListener} to register.
+	 *            The {@link OnContentChangeListener} to register.
 	 */
 	public abstract void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification);
 
 
 	/**
-	 * Unregister a listener for the values that this adapter manages.
+	 * Unregister a listener for the fields that this adapter adapts.
 	 * 
 	 * @param values
 	 *            The {@link ContentSet}.
 	 * @param listener
-	 *            The {link {@link OnContentChangeListener} to unregister.
+	 *            The {@link OnContentChangeListener} to unregister.
 	 */
 	public abstract void unregisterListener(ContentSet values, OnContentChangeListener listener);
 }

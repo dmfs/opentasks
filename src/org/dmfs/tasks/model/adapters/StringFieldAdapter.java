@@ -22,12 +22,11 @@ package org.dmfs.tasks.model.adapters;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 
 /**
- * A StringFieldAdapter stores {@link String} values in a certain field of {@link ContentValues}.
+ * A StringFieldAdapter stores {@link String} values in a certain field of a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -53,6 +52,10 @@ public final class StringFieldAdapter extends FieldAdapter<String>
 	 */
 	public StringFieldAdapter(String fieldName)
 	{
+		if (fieldName == null)
+		{
+			throw new IllegalArgumentException("fieldName must not be null");
+		}
 		mFieldName = fieldName;
 		mDefaultValue = null;
 	}
@@ -64,10 +67,14 @@ public final class StringFieldAdapter extends FieldAdapter<String>
 	 * @param fieldName
 	 *            The name of the field to use when loading or storing the value.
 	 * @param defaultValue
-	 *            The defaultValue.
+	 *            The default value.
 	 */
 	public StringFieldAdapter(String fieldName, String defaultValue)
 	{
+		if (fieldName == null)
+		{
+			throw new IllegalArgumentException("fieldName must not be null");
+		}
 		mFieldName = fieldName;
 		mDefaultValue = defaultValue;
 	}
@@ -87,7 +94,7 @@ public final class StringFieldAdapter extends FieldAdapter<String>
 		int columnIdx = cursor.getColumnIndex(mFieldName);
 		if (columnIdx < 0)
 		{
-			return null;
+			throw new IllegalArgumentException("The fieldName column missing in cursor.");
 		}
 		return cursor.getString(columnIdx);
 	}

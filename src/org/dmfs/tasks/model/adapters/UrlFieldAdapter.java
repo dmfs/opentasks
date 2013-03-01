@@ -25,12 +25,11 @@ import java.net.URL;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 
 /**
- * A UrlFieldAdapter stores {@link URL} values in {@link ContentValues}.
+ * A UrlFieldAdapter stores {@link URL} values in a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -50,6 +49,10 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 	 */
 	public UrlFieldAdapter(String urlField)
 	{
+		if (urlField == null)
+		{
+			throw new IllegalArgumentException("urlField must not be null");
+		}
 		mFieldName = urlField;
 		mDefaultValue = null;
 	}
@@ -63,9 +66,13 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 	 * @param defaultValue
 	 *            The defaultValue.
 	 */
-	public UrlFieldAdapter(String fieldName, URL defaultValue)
+	public UrlFieldAdapter(String urlField, URL defaultValue)
 	{
-		mFieldName = fieldName;
+		if (urlField == null)
+		{
+			throw new IllegalArgumentException("urlField must not be null");
+		}
+		mFieldName = urlField;
 		mDefaultValue = defaultValue;
 	}
 
@@ -90,7 +97,7 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 		int columnIdx = cursor.getColumnIndex(mFieldName);
 		if (columnIdx < 0)
 		{
-			return null;
+			throw new IllegalArgumentException("The urlField column missing in cursor.");
 		}
 		try
 		{

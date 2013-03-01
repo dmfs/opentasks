@@ -30,17 +30,17 @@ import android.text.format.Time;
 
 
 /**
- * A TimeFieldAdapter stores {@link Time} values in {@link ContentValues}.
+ * A TimeFieldAdapter stores {@link Time} values in a {@link ContentSet}.
  * 
- * Time values are stored in three parts:
+ * Time values are stored as three values:
  * <ul>
  * <li>a timestamp in milliseconds since the epoch</li>
  * <li>a time zone</li>
  * <li>an allday flag</li>
  * </ul>
  * 
- * This adapter combines those three fields in a {@link ContentValues} to a Time value. If the time zone field is <code>null</code> the time zone is always read
- * or written as UTC.
+ * This adapter combines those three fields in a {@link ContentValues} to a Time value. If the time zone field is <code>null</code> the time zone is always set
+ * to UTC.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -49,23 +49,30 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	private final String mTimestampField;
 	private final String mTzField;
 	private final String mAllDayField;
+	private final boolean mAllDayDefault;
 
 
 	/**
 	 * Constructor for a new TimeFieldAdapter.
 	 * 
 	 * @param timestampField
-	 *            The field name that holds the time stamp in milliseconds.
+	 *            The name of the field that holds the time stamp in milliseconds.
 	 * @param tzField
-	 *            The field that holds the time zone (as Olson ID). Can be <code>null</code> to indicate the time is always loaded and stored in UTC.
+	 *            The name of the field that holds the time zone (as Olson ID). If the field name is <code>null</code> the time is always set to UTC.
 	 * @param alldayField
-	 *            The Field that indicated that this time is a day not a date-time.
+	 *            The name of the field that indicated that this time is a date not a date-time. If this fieldName is <code>null</code> all loaded values are
+	 *            non-allday.
 	 */
 	public TimeFieldAdapter(String timestampField, String tzField, String alldayField)
 	{
+		if (timestampField == null)
+		{
+			throw new IllegalArgumentException("timestampField must not be null");
+		}
 		mTimestampField = timestampField;
 		mTzField = tzField;
 		mAllDayField = alldayField;
+		mAllDayDefault = false;
 	}
 
 
@@ -84,10 +91,13 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		// set the time stamp
 		value.set(timestamp);
 
-		// set the allday flag appropriately
-		Integer allDayInt = values.getAsInteger(mAllDayField);
+		// cache mAlldayField locally
+		String allDayField = mAllDayField;
 
-		value.allDay = allDayInt != null && allDayInt != 0;
+		// set the allday flag appropriately
+		Integer allDayInt = allDayField == null ? null : values.getAsInteger(allDayField);
+		value.allDay = (allDayInt != null && allDayInt != 0) || (allDayField == null && mAllDayDefault);
+
 		return value;
 	}
 
@@ -97,11 +107,11 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	{
 		int tsIdx = cursor.getColumnIndex(mTimestampField);
 		int tzIdx = mTzField == null ? -1 : cursor.getColumnIndex(mTzField);
-		int adIdx = cursor.getColumnIndex(mAllDayField);
+		int adIdx = mAllDayField == null ? -1 : cursor.getColumnIndex(mAllDayField);
 
-		if (tsIdx < 0 || (mTzField != null && tzIdx < 0) || adIdx < 0)
+		if (tsIdx < 0 || (mTzField != null && tzIdx < 0) || (mAllDayField != null && adIdx < 0))
 		{
-			return null;
+			throw new IllegalArgumentException("At least one column is missing in cursor.");
 		}
 
 		if (cursor.isNull(tsIdx))
@@ -119,9 +129,9 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		value.set(timestamp);
 
 		// set the allday flag appropriately
-		Integer allDayInt = cursor.getInt(adIdx);
+		Integer allDayInt = adIdx < 0 ? null : cursor.getInt(adIdx);
 
-		value.allDay = allDayInt != null && allDayInt != 0;
+		value.allDay = (allDayInt != null && allDayInt != 0) || (mAllDayField == null && mAllDayDefault);
 		return value;
 	}
 
@@ -135,15 +145,16 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 		value.setToNow();
 
-		Integer allDayInt = values.getAsInteger(mAllDayField);
-		if (allDayInt != null && allDayInt != 0)
+		Integer allDayInt = mAllDayField == null ? null : values.getAsInteger(mAllDayField);
+		if ((allDayInt != null && allDayInt != 0) || (mAllDayField == null && mAllDayDefault))
 		{
+			// make it an allday value
 			value.set(value.year, value.month, value.monthDay);
 		}
 		else
 		{
 			value.second = 0;
-			// round up to next quarter
+			// round up to next quarter-hour
 			value.minute = ((value.minute + 14) / 15) * 15;
 			value.normalize(false);
 		}
@@ -163,7 +174,10 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 			{
 				values.put(mTzField, value.timezone);
 			}
-			values.put(mAllDayField, value.allDay ? 1 : 0);
+			if (mAllDayField != null)
+			{
+				values.put(mAllDayField, value.allDay ? 1 : 0);
+			}
 		}
 		else
 		{
@@ -181,7 +195,10 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		{
 			values.addOnChangeListener(listener, mTzField, initalNotification);
 		}
-		values.addOnChangeListener(listener, mAllDayField, initalNotification);
+		if (mAllDayField != null)
+		{
+			values.addOnChangeListener(listener, mAllDayField, initalNotification);
+		}
 	}
 
 
@@ -193,6 +210,9 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		{
 			values.removeOnChangeListener(listener, mTzField);
 		}
-		values.removeOnChangeListener(listener, mAllDayField);
+		if (mAllDayField != null)
+		{
+			values.removeOnChangeListener(listener, mAllDayField);
+		}
 	}
 }
