@@ -1,6 +1,4 @@
 /*
- * ModelInflaterException.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

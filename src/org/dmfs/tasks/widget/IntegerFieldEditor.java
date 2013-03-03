@@ -1,6 +1,4 @@
 /*
- * IntegerFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +14,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import java.util.List;
@@ -26,8 +25,8 @@ import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.IChoicesAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -92,7 +91,7 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
-				if (mSelectedItem != position)
+				if (mSelectedItem != position && mValues != null)
 				{
 					Log.v(TAG, "onItemSelected" + position);
 					mAdapter.set(mValues, (Integer) ((ArrayChoicesAdapter) fieldDescriptor.getChoices()).getChoices().get(position));
@@ -112,9 +111,9 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 
 		IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
@@ -123,7 +122,7 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 		{
 			ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
 			List<Object> choicesList = arrayAdapter.getChoices();
-			mSpinnerAdapter = new IntegerSpinnerAdapter(mContext, R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text, choicesList,
+			mSpinnerAdapter = new IntegerSpinnerAdapter(getContext(), R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text, choicesList,
 				arrayAdapter);
 			mSpinner.setAdapter(mSpinnerAdapter);
 		}

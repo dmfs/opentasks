@@ -1,6 +1,4 @@
 /*
- * URLFieldView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,14 +14,15 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -37,28 +36,27 @@ import android.widget.TextView;
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
-
-public class URLFieldView extends AbstractFieldView
+public final class UrlFieldView extends AbstractFieldView
 {
 
 	private FieldAdapter<?> mAdapter;
 	private TextView mText;
 
 
-	public URLFieldView(Context context)
+	public UrlFieldView(Context context)
 	{
 		super(context);
 
 	}
 
 
-	public URLFieldView(Context context, AttributeSet attrs)
+	public UrlFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public URLFieldView(Context context, AttributeSet attrs, int defStyle)
+	public UrlFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 	}
@@ -71,7 +69,6 @@ public class URLFieldView extends AbstractFieldView
 		{
 			String urlString = mAdapter.get(mValues).toString();
 			mText.setText(Html.fromHtml("<a href='" + urlString + "'>" + urlString + "</a>"));
-			mText.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 		else
 		{
@@ -86,13 +83,14 @@ public class URLFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
+		mText.setMovementMethod(LinkMovementMethod.getInstance());
 	}
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}

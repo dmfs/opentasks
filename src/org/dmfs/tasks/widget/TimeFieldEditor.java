@@ -1,6 +1,4 @@
 /*
- * TimeFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +14,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import java.text.DateFormat;
@@ -25,8 +24,8 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
@@ -34,7 +33,6 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
 import android.text.format.Time;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -48,16 +46,14 @@ import android.widget.TimePicker;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * 
  */
-
 public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetListener, OnTimeSetListener
 {
-	private static final String TAG = "TimeFieldEditor";
-	TimeFieldAdapter mAdapter;
-	Button datePicker, timePicker;
-	ImageButton clearDate;
-	private DateFormat defaultDateFormat, defaultTimeFormat;
+	private TimeFieldAdapter mAdapter;
+	private Button mDatePickerButton, mTimePickerButton;
+	private ImageButton mClearDateButton;
+	private DateFormat mDefaultDateFormat, mDefaultTimeFormat;
 	private Time mDateTime;
-	private boolean is24hour;
+	private boolean mIs24hour;
 
 
 	public TimeFieldEditor(Context context, AttributeSet attrs, int defStyle)
@@ -82,14 +78,13 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		datePicker = (Button) findViewById(R.id.task_date_picker);
-		timePicker = (Button) findViewById(R.id.task_time_picker);
-		clearDate = (ImageButton) findViewById(R.id.task_time_picker_remove);
-		datePicker.setOnClickListener(DatePickerHandler);
-		timePicker.setOnClickListener(TimePickerHandler);
-		clearDate.setOnClickListener(new OnClickListener()
+		mDatePickerButton = (Button) findViewById(R.id.task_date_picker);
+		mTimePickerButton = (Button) findViewById(R.id.task_time_picker);
+		mClearDateButton = (ImageButton) findViewById(R.id.task_time_picker_remove);
+		mDatePickerButton.setOnClickListener(DatePickerHandler);
+		mTimePickerButton.setOnClickListener(TimePickerHandler);
+		mClearDateButton.setOnClickListener(new OnClickListener()
 		{
-
 			@Override
 			public void onClick(View v)
 			{
@@ -101,13 +96,14 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
+		Context context = getContext();
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
-		defaultDateFormat = android.text.format.DateFormat.getDateFormat(mContext);
-		defaultTimeFormat = android.text.format.DateFormat.getTimeFormat(mContext);
-		is24hour = android.text.format.DateFormat.is24HourFormat(mContext);
+		mDefaultDateFormat = android.text.format.DateFormat.getDateFormat(context);
+		mDefaultTimeFormat = android.text.format.DateFormat.getTimeFormat(context);
+		mIs24hour = android.text.format.DateFormat.is24HourFormat(context);
 	}
 
 
@@ -123,7 +119,6 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 
 	private OnClickListener DatePickerHandler = new OnClickListener()
 	{
-
 		@Override
 		public void onClick(View v)
 		{
@@ -132,7 +127,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				mDateTime = mAdapter.getDefault(mValues);
 			}
 
-			DatePickerDialog dateDialog = new DatePickerDialog(mContext, TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
+			DatePickerDialog dateDialog = new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
 
 			dateDialog.show();
 		}
@@ -140,7 +135,6 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 
 	private final OnClickListener TimePickerHandler = new OnClickListener()
 	{
-
 		@Override
 		public void onClick(View v)
 		{
@@ -149,7 +143,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				mDateTime = mAdapter.getDefault(mValues);
 			}
 
-			TimePickerDialog timeDialog = new TimePickerDialog(mContext, TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, is24hour);
+			TimePickerDialog timeDialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, mIs24hour);
 			timeDialog.show();
 		}
 	};
@@ -180,28 +174,28 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDateTime = mAdapter.get(mValues);
 		if (mDateTime != null)
 		{
-			// Log.d(TAG, "mValues is not null");
-			// Log.d(TAG, Long.toString(dateTime.toMillis(true)));
 			Date currentDate = new Date(mDateTime.toMillis(false));
-			String formattedDate = defaultDateFormat.format(currentDate);
-			datePicker.setText(formattedDate);
+			String formattedDate = mDefaultDateFormat.format(currentDate);
+			mDatePickerButton.setText(formattedDate);
 
 			if (!mDateTime.allDay)
 			{
-				String formattedTime = defaultTimeFormat.format(currentDate);
-				timePicker.setText(formattedTime);
-				timePicker.setVisibility(View.VISIBLE);
+				String formattedTime = mDefaultTimeFormat.format(currentDate);
+				mTimePickerButton.setText(formattedTime);
+				mTimePickerButton.setVisibility(View.VISIBLE);
 			}
 			else
 			{
-				timePicker.setVisibility(View.GONE);
+				mTimePickerButton.setVisibility(View.GONE);
 			}
+			mClearDateButton.setEnabled(true);
 		}
 		else
 		{
-			datePicker.setText("");
-			timePicker.setText("");
-			timePicker.setVisibility(View.VISIBLE);
+			mDatePickerButton.setText("");
+			mTimePickerButton.setText("");
+			mTimePickerButton.setVisibility(View.VISIBLE);
+			mClearDateButton.setEnabled(false);
 		}
 	}
 

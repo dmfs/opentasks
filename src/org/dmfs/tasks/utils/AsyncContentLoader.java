@@ -1,6 +1,4 @@
 /*
- * AsyncContentLoader.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,65 +27,82 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+
 /**
- * An asynchronous content loader. Loads all values of the given {@link Uri}s
- * asynchronously and notifies a listener when the operation is finished.
+ * An asynchronous content loader. Loads all values of the given {@link Uri}s asynchronously and notifies a listener when the operation is finished.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]> {
+public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
+{
 
 	private static final String TAG = "AsyncContentLoader";
 	private WeakReference<OnContentLoadedListener> mListener;
 	private ContentValueMapper mMapper;
 	private Context mContext;
 
-	public AsyncContentLoader(Context context,
-			OnContentLoadedListener listener, ContentValueMapper mapper) {
+
+	public AsyncContentLoader(Context context, OnContentLoadedListener listener, ContentValueMapper mapper)
+	{
 		mContext = context;
 		mListener = new WeakReference<OnContentLoadedListener>(listener);
 		mMapper = mapper;
 	}
 
+
 	@Override
-	protected final ContentValues[] doInBackground(Uri... params) {
+	protected final ContentValues[] doInBackground(Uri... params)
+	{
 		final OnContentLoadedListener target = mListener.get();
 
-		if (target != null) {
+		if (target != null)
+		{
 
 			ContentValues[] result = new ContentValues[params.length];
 
 			ContentResolver resolver = mContext.getContentResolver();
 
 			int len = params.length;
-			for (int i = 0; i < len; ++i) {
+			for (int i = 0; i < len; ++i)
+			{
 				Log.d(TAG, "Loading Content ith Values: " + (i + 1));
-				Cursor c = resolver.query(params[i], mMapper.getColumns(),
-						null, null, null);
-				try {
-					if (c != null) {
-						if (c.moveToNext()) {
+				Cursor c = resolver.query(params[i], mMapper.getColumns(), null, null, null);
+				try
+				{
+					if (c != null)
+					{
+						if (c.moveToNext())
+						{
 							result[i] = mMapper.map(c);
 						}
 					}
-				} finally {
+				}
+				finally
+				{
 					c.close();
 				}
 			}
 			return result;
-		} else {
+		}
+		else
+		{
 			return null;
 		}
 	}
 
+
 	@Override
-	protected final void onPostExecute(ContentValues[] result) {
+	protected final void onPostExecute(ContentValues[] result)
+	{
 		Log.d(TAG, "Executing onPostExecute after loading ContentValues");
 
 		final OnContentLoadedListener target = mListener.get();
-		if (target != null) {
-			if (result != null) {
-				for (ContentValues values : result) {
+		if (target != null)
+		{
+			if (result != null)
+			{
+				for (ContentValues values : result)
+				{
 					target.onContentLoaded(values);
 				}
 			}

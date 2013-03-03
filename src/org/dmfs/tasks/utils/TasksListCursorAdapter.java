@@ -33,7 +33,6 @@ import android.widget.TextView;
 
 public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdapter implements SpinnerAdapter
 {
-	Context mContext;
 	LayoutInflater mInflater;
 
 	private int taskColorColumn;
@@ -44,8 +43,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	public TasksListCursorAdapter(Context context)
 	{
 		super(context, null, false);
-		mContext = context;
-		mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 
@@ -95,7 +93,6 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 
 		listName.setTextColor(backgroundBasedColor);
 		accountName.setTextColor(backgroundBasedColor);
-		convertView.setBackgroundColor(taskListColor);
 		return convertView;
 	}
 

@@ -1,6 +1,4 @@
 /*
- * Sources.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -64,6 +62,9 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	 */
 	private final Context mContext;
 
+	/**
+	 * The cached account manager.
+	 */
 	private final AccountManager mAccountManager;
 
 
@@ -92,11 +93,6 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	{
 		mContext = context.getApplicationContext();
 
-		// get accounts and build model map
-		mAccountManager = AccountManager.get(mContext);
-		mAccountManager.addOnAccountsUpdatedListener(this, null, false);
-		getAccounts();
-
 		// register to receive package changes
 		IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
 		filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
@@ -108,6 +104,11 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 		// titles in that case
 		filter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED);
 		mContext.registerReceiver(this, filter);
+
+		// get accounts and build model map
+		mAccountManager = AccountManager.get(mContext);
+		mAccountManager.addOnAccountsUpdatedListener(this, null, false);
+		getAccounts();
 	}
 
 
@@ -171,9 +172,10 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 
 		try
 		{
+			// add default model for LOCAL account type (i.e. the unsynced account).
 			Model defaultModel = new DefaultModel(mContext);
 			defaultModel.inflate();
-
+			defaultModel.setAccountType(TaskContract.LOCAL_ACCOUNT);
 			mAccountModelMap.put(TaskContract.LOCAL_ACCOUNT, defaultModel);
 		}
 		catch (ModelInflaterException e)

@@ -1,6 +1,4 @@
 /*
- * TimeFieldAdapter.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -96,7 +94,11 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 		// set the allday flag appropriately
 		Integer allDayInt = allDayField == null ? null : values.getAsInteger(allDayField);
-		value.allDay = (allDayInt != null && allDayInt != 0) || (allDayField == null && mAllDayDefault);
+
+		if ((allDayInt != null && allDayInt != 0) || (allDayField == null && mAllDayDefault))
+		{
+			value.set(value.monthDay, value.month, value.year);
+		}
 
 		return value;
 	}
@@ -131,7 +133,10 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		// set the allday flag appropriately
 		Integer allDayInt = adIdx < 0 ? null : cursor.getInt(adIdx);
 
-		value.allDay = (allDayInt != null && allDayInt != 0) || (mAllDayField == null && mAllDayDefault);
+		if ((allDayInt != null && allDayInt != 0) || (mAllDayField == null && mAllDayDefault))
+		{
+			value.set(value.monthDay, value.month, value.year);
+		}
 		return value;
 	}
 
@@ -149,7 +154,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		if ((allDayInt != null && allDayInt != 0) || (mAllDayField == null && mAllDayDefault))
 		{
 			// make it an allday value
-			value.set(value.year, value.month, value.monthDay);
+			value.set(value.monthDay, value.month, value.year);
 		}
 		else
 		{

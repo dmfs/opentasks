@@ -1,8 +1,24 @@
+/*
+ * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
 package org.dmfs.tasks.model;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -10,11 +26,9 @@ import java.util.WeakHashMap;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
-import org.dmfs.tasks.widget.AbstractFieldEditor.OnChangeListener;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.net.Uri;
 
 
@@ -27,7 +41,6 @@ public final class ContentSet implements OnContentLoadedListener
 {
 	private ContentValues mBeforeContentValues;
 	private ContentValues mAfterContentValues;
-	private final Context mContext;
 	private Uri mUri;
 	private ContentValueMapper mMapper;
 	private final Map<String, Set<OnContentChangeListener>> mOnChangeListeners = new HashMap<String, Set<OnContentChangeListener>>();
@@ -39,9 +52,7 @@ public final class ContentSet implements OnContentLoadedListener
 		{
 			throw new IllegalArgumentException("uri must not be null");
 		}
-		mContext = context;
 		mUri = uri;
-
 	}
 
 
@@ -52,17 +63,24 @@ public final class ContentSet implements OnContentLoadedListener
 			throw new IllegalArgumentException("uri must not be null");
 		}
 
-		mContext = context;
 		mMapper = mapper;
 		mUri = uri;
-		mContext.getContentResolver().registerContentObserver(mUri, false, mObserver);
-		loadContent(uri);
+		loadContent(uri, context);
 	}
 
 
-	private void loadContent(Uri uri)
+	public void update(Context context)
 	{
-		new AsyncContentLoader(mContext, this, mMapper).execute(uri);
+		if (!isInsert())
+		{
+			loadContent(mUri, context);
+		}
+	}
+
+
+	private void loadContent(Uri uri, Context context)
+	{
+		new AsyncContentLoader(context, this, mMapper).execute(uri);
 	}
 
 
@@ -74,19 +92,18 @@ public final class ContentSet implements OnContentLoadedListener
 	}
 
 
-	public void delete()
+	public void delete(Context context)
 	{
 		if (mBeforeContentValues != null)
 		{
-			mContext.getContentResolver().unregisterContentObserver(mObserver);
-			mContext.getContentResolver().delete(mUri, null, null);
+			context.getContentResolver().delete(mUri, null, null);
 			mBeforeContentValues = null;
 			mAfterContentValues = null;
 		}
 	}
 
 
-	public Uri persist()
+	public Uri persist(Context context)
 	{
 		if (mAfterContentValues == null || mAfterContentValues.size() == 0)
 		{
@@ -97,11 +114,11 @@ public final class ContentSet implements OnContentLoadedListener
 		if (isInsert())
 		{
 			// update uri with new uri
-			mUri = mContext.getContentResolver().insert(mUri, mAfterContentValues);
+			mUri = context.getContentResolver().insert(mUri, mAfterContentValues);
 		}
 		else if (isUpdate())
 		{
-			mContext.getContentResolver().update(mUri, mAfterContentValues, null, null);
+			context.getContentResolver().update(mUri, mAfterContentValues, null, null);
 		}
 		// else nothing to do
 
@@ -296,23 +313,4 @@ public final class ContentSet implements OnContentLoadedListener
 			}
 		}
 	}
-
-	/**
-	 * An observer for an URI that reloads the content values when the URI changes.
-	 */
-	private ContentObserver mObserver = new ContentObserver(null)
-	{
-		@Override
-		public boolean deliverSelfNotifications()
-		{
-			return false;
-		}
-
-
-		@Override
-		public void onChange(boolean selfChange)
-		{
-			loadContent(mUri);
-		}
-	};
 }

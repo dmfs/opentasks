@@ -1,6 +1,4 @@
 /*
- * IntegerFieldView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,15 +20,13 @@ package org.dmfs.tasks.widget;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.IChoicesAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -82,9 +78,9 @@ public class PercentageFieldView extends AbstractFieldView
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}

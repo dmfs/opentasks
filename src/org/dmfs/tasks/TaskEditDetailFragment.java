@@ -1,6 +1,4 @@
 /*
- * TaskEditDetailFragment.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +16,6 @@
  */
 package org.dmfs.tasks;
 
-import java.util.ArrayList;
-
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -27,17 +23,14 @@ import org.dmfs.provider.tasks.TaskContract.WriteableTaskLists;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
-import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
-import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.TasksListCursorAdapter;
 import org.dmfs.tasks.widget.TaskEdit;
 
 import android.app.Activity;
 import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -76,6 +69,25 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 
 	private static final String TAG = "TaskEditDetailFragment";
 
+	/**
+	 * Projection into the task list.
+	 */
+	private final static String[] TASK_LIST_PROJECTION = new String[] { TaskContract.TaskListColumns._ID, TaskContract.TaskListColumns.LIST_NAME,
+		TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR };
+
+	/**
+	 * This interface provides a convenient way to get column indices of {@link TaskEditDetailFragment#TASK_LIST_PROJECTION} without any overhead.
+	 */
+	@SuppressWarnings("unused")
+	private interface TASK_LIST_PROJECTION_VALUES
+	{
+		public final static int id = 0;
+		public final static int list_name = 1;
+		public final static int account_type = 2;
+		public final static int account_name = 3;
+		public final static int list_color = 4;
+	}
+
 	private static final String KEY_VALUES = "key_values";
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
@@ -96,8 +108,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	ViewGroup mContent;
 	ViewGroup mHeader;
 	Model mModel;
-
-	private Activity mActivity;
+	Context mAppContext;
 
 
 	/**
@@ -121,7 +132,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		mActivity = activity;
+		mAppContext = activity.getApplicationContext();
 	}
 
 
@@ -143,27 +154,24 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		final LinearLayout taskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
 		final Spinner listSpinner = (Spinner) taskListBar.findViewById(R.id.task_list_spinner);
 
-		taskListAdapter = new TasksListCursorAdapter(mActivity);
+		taskListAdapter = new TasksListCursorAdapter(mAppContext);
 		listSpinner.setAdapter(taskListAdapter);
 
 		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
-
 			@Override
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
 			{
 				Cursor c = (Cursor) arg0.getItemAtPosition(arg2);
 
-				int accountTypeColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_TYPE);
-				String accountType = c.getString(accountTypeColumn);
-				int colorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
-				int taskColor = c.getInt(colorColumn);
-				taskListBar.setBackgroundColor(taskColor);
+				String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
+				int listColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
+				taskListBar.setBackgroundColor(listColor);
 				if (!appForEdit)
 				{
-					mValues.put(Tasks.LIST_ID, c.getLong(c.getColumnIndex(TaskLists._ID)));
+					mValues.put(Tasks.LIST_ID, c.getLong(TASK_LIST_PROJECTION_VALUES.id));
 				}
-				new AsyncModelLoader(mActivity, TaskEditDetailFragment.this).execute(accountType);
+				new AsyncModelLoader(mAppContext, TaskEditDetailFragment.this).execute(accountType);
 			}
 
 
@@ -188,13 +196,13 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 
 				if (savedInstanceState == null)
 				{
-					mValues = new ContentSet(mActivity, mTaskUri, CONTENT_VALUE_MAPPER);
+					mValues = new ContentSet(mAppContext, mTaskUri, CONTENT_VALUE_MAPPER);
 					mValues.addOnChangeListener(this, null, true);
 				}
 				else
 				{
 					// mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-					new AsyncModelLoader(mActivity, this).execute("");
+					new AsyncModelLoader(mAppContext, this).execute("");
 				}
 				// disable spinner
 				listSpinner.setEnabled(false);
@@ -204,7 +212,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		}
 		else
 		{
-			mValues = new ContentSet(mActivity, Tasks.CONTENT_URI);
+			mValues = new ContentSet(mAppContext, Tasks.CONTENT_URI);
 		}
 
 		return rootView;
@@ -213,12 +221,11 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 
 	private void updateView()
 	{
-		final LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mContent.removeAllViews();
 
 		TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
-		editor.setActivity(mActivity);
 		editor.setModel(mModel);
 		editor.setValues(mValues);
 		mContent.addView(editor);
@@ -232,14 +239,12 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	{
 		if (model == null)
 		{
-			Toast.makeText(mActivity, "Could not load Model", Toast.LENGTH_LONG).show();
+			Toast.makeText(getActivity(), "Could not load Model", Toast.LENGTH_LONG).show();
 			return;
 		}
-
 		mModel = model;
 
 		updateView();
-
 	}
 
 
@@ -254,9 +259,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
 	{
-		return new CursorLoader(mActivity, (Uri) bundle.getParcelable(LIST_LOADER_URI), new String[] { TaskContract.TaskListColumns.LIST_NAME,
-			TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR,
-			TaskContract.TaskListColumns._ID }, null, null, null);
+		return new CursorLoader(mAppContext, (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, null, null, null);
 	}
 
 
@@ -279,23 +282,21 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		final int menuId = item.getItemId();
+		Activity activity = getActivity();
 		if (menuId == R.id.editor_action_save)
 		{
-			if (mValues.isInsert() || mValues.isUpdate())
-			{
-				Log.v(TAG, "persiting task");
-				/*
-				 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
-				 */
-				mValues.persist();
-			}
-			mActivity.finish();
+			Log.v(TAG, "persiting task");
+			/*
+			 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
+			 */
+			mValues.persist(activity);
+			activity.finish();
 			return true;
 		}
 		else if (menuId == R.id.editor_action_cancel)
 		{
 			Log.v(TAG, "cancelled");
-			mActivity.finish();
+			activity.finish();
 			return true;
 		}
 		return false;
@@ -307,7 +308,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	{
 		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
-			new AsyncModelLoader(mActivity, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			setListUri(appForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
 		}
 	}

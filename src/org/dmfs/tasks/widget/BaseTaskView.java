@@ -1,6 +1,4 @@
 /*
- * BaseTaskView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,35 +17,29 @@
 
 package org.dmfs.tasks.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public abstract class BaseTaskView extends LinearLayout {
 
-	private Activity mContext;
+public abstract class BaseTaskView extends LinearLayout
+{
 
-    public BaseTaskView(Context context) {
-	super(context);
-    }
-
-    public BaseTaskView(Context context, AttributeSet attrs) {
-	super(context, attrs);
-    }
-
-    public BaseTaskView(Context context, AttributeSet attrs, int defStyle) {
-	super(context, attrs, defStyle);
-    }
-
-    protected Activity getActivity()
-    {
-    	return mContext;
-    }
-    
-	public void setActivity(Activity context)
+	public BaseTaskView(Context context)
 	{
-		mContext = context;
+		super(context);
+	}
+
+
+	public BaseTaskView(Context context, AttributeSet attrs)
+	{
+		super(context, attrs);
+	}
+
+
+	public BaseTaskView(Context context, AttributeSet attrs, int defStyle)
+	{
+		super(context, attrs, defStyle);
 	}
 
 }

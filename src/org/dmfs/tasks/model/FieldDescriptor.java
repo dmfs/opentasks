@@ -1,6 +1,4 @@
 /*
- * FieldDescriptor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +25,7 @@ import org.dmfs.tasks.widget.AbstractFieldView;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 
 
@@ -229,7 +228,7 @@ public final class FieldDescriptor
 	}
 
 
-	public AbstractFieldEditor getEditorView(LayoutInflater inflater)
+	public AbstractFieldEditor getEditorView(LayoutInflater inflater, ViewGroup parent)
 	{
 		if (mEditLayout == null)
 		{
@@ -238,9 +237,19 @@ public final class FieldDescriptor
 
 		AbstractFieldEditor view;
 
-		view = (AbstractFieldEditor) mEditLayout.inflate(inflater);
-		view.setOptions(mEditLayout.getOptions());
+		view = (AbstractFieldEditor) mEditLayout.inflate(inflater, parent, false);
+		view.setFieldDescription(this, mEditLayout.getOptions());
 		return view;
+	}
+
+
+	/*
+	 * public AbstractFieldEditor getEditorView(LayoutInflater inflater, ViewGroup parent) { return getEditorView(inflater, parent, true); }
+	 */
+
+	public AbstractFieldEditor getEditorView(LayoutInflater inflater)
+	{
+		return getEditorView(inflater, null);
 	}
 
 
@@ -250,7 +259,7 @@ public final class FieldDescriptor
 		AbstractFieldView view;
 
 		view = (AbstractFieldView) ld.inflate(inflater);
-		view.setOptions(ld.getOptions());
+		view.setFieldDescription(this, ld.getOptions());
 		return view;
 	}
 

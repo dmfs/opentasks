@@ -1,6 +1,4 @@
 /*
- * AbstractFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +26,6 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -52,9 +49,7 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	private final static IntegerFieldAdapter TASK_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.TASK_COLOR);
 
 	protected ContentSet mValues;
-	private TextView mTitleId;
 	protected FieldDescriptor fieldDescriptor;
-	protected Activity mContext;
 
 	protected LayoutOptions layoutOptions;
 
@@ -77,36 +72,13 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-		try
-		{
-			mTitleId = (TextView) findViewById(android.R.id.title);
-		}
-		catch (Throwable e)
-		{
-			// no title
-			Log.i(TAG, "can't find title id ", e);
-			mTitleId = null;
-		}
-	}
-
-
-	public void setOptions(LayoutOptions options)
-	{
-		this.layoutOptions = options;
-	}
-
-
 	public void setValue(ContentSet values)
 	{
 		FieldAdapter<?> adapter = fieldDescriptor.getFieldAdapter();
 		if (mValues != null)
 		{
 			// remove us if the ContentSet changes
-			adapter.unregisterListener(values, this);
+			adapter.unregisterListener(mValues, this);
 		}
 
 		mValues = values;
@@ -140,23 +112,24 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions options)
 	{
-		mContext = context;
+		layoutOptions = options;
 		fieldDescriptor = descriptor;
-		if (mTitleId != null)
+		TextView titleId = (TextView) findViewById(android.R.id.title);
+		if (titleId != null)
 		{
-			if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_NO_TITLE, false))
+			if (options.getBoolean(LayoutDescriptor.OPTION_NO_TITLE, false))
 			{
-				mTitleId.setVisibility(View.GONE);
+				titleId.setVisibility(View.GONE);
 			}
 			else
 			{
-				mTitleId.setText(descriptor.getTitle().toUpperCase());
+				titleId.setText(descriptor.getTitle().toUpperCase());
 				Integer customBackgroud = getCustomBackgroundColor();
 				if (customBackgroud != null)
 				{
-					mTitleId.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
+					titleId.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
 				}
 			}
 		}
@@ -173,7 +146,7 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 		int determinant = ((redComponent + redComponent + redComponent + blueComponent + greenComponent + greenComponent + greenComponent + greenComponent) >> 3)
 			* alphaComponent / 255;
 		Log.d(TAG, "Determinant : " + determinant);
-		// Value 190 has been set by trial and error.
+		// Value 180 has been set by trial and error.
 		if (determinant > 180)
 		{
 			return Color.argb(255, 0x33, 0x33, 0x33);
@@ -181,7 +154,6 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 		else
 		{
 			return Color.WHITE;
-
 		}
 	}
 }

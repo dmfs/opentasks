@@ -8,7 +8,7 @@
     <include layout="@layout/editor_header" />
 
     <EditText
-        android:id="@+id/text"
+        android:id="@android:id/text1"
         style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

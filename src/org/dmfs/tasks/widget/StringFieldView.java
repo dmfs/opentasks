@@ -1,6 +1,4 @@
 /*
- * TextFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +21,8 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -71,9 +69,9 @@ public class StringFieldView extends AbstractFieldView
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
@@ -84,14 +82,17 @@ public class StringFieldView extends AbstractFieldView
 	{
 		Object adapterValue = mAdapter.get(mValues);
 		String adapterStringValue = adapterValue != null ? adapterValue.toString() : null;
+
 		if (mValues != null && !TextUtils.isEmpty(adapterStringValue))
 		{
 			mText.setText(adapterStringValue);
 		}
 		else
 		{
+			// don't show empty values
 			setVisibility(View.GONE);
 		}
+
 		Integer customBackgroud = getCustomBackgroundColor();
 		if (customBackgroud != null)
 		{

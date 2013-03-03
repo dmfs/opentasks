@@ -1,6 +1,4 @@
 /*
- * AsyncModelLoader.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +24,7 @@ import org.dmfs.tasks.model.Sources;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 
 /**
@@ -44,7 +43,7 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 	 * Create a new AsyncModelLoader.
 	 * 
 	 * @param context
-	 *            A Context.
+	 *            The application context.
 	 * @param listener
 	 *            The {@link OnModelLoadedListener} that receives the model.
 	 */
@@ -52,6 +51,7 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 	{
 		mContext = context;
 		mListener = new WeakReference<OnModelLoadedListener>(listener);
+		Log.v("äääääääääää", " ~~~~~~~~~~~~~~~~~~~~~~~~~created " + this);
 	}
 
 
@@ -66,7 +66,8 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 			Sources sources = Sources.getInstance(mContext);
 			Model rModel;
 			rModel = sources.getModel(accountTypes[0]);
-			if(rModel == null){
+			if (rModel == null)
+			{
 				rModel = sources.getDefaultModel();
 			}
 			return rModel;
@@ -76,6 +77,22 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 			return null;
 		}
 	}
+
+	@Override
+	protected void finalize()
+	{
+		try
+		{
+			super.finalize();
+		}
+		catch (Throwable e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Log.v("äääääääääää", " ~~~~~~~~~~~~~~~~~~~~~~~~~finalzed " + this);
+	}
+
 
 
 	@Override

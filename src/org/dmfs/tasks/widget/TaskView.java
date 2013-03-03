@@ -1,6 +1,4 @@
 /*
- * TaskView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,17 +23,12 @@ import org.dmfs.tasks.model.Model;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
 
 public class TaskView extends BaseTaskView
 {
-
-	private ContentSet mValues;
-	private Model mModel;
-
 
 	public TaskView(Context context)
 	{
@@ -55,23 +48,19 @@ public class TaskView extends BaseTaskView
 	}
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-	}
-
-
 	public void setModel(Model model)
 	{
-		mModel = model;
+		Model mModel = model;
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		/*
+		 * Add an detail view for every field that is supported by this model.
+		 */
 		for (FieldDescriptor field : mModel.getFields())
 		{
 			AbstractFieldView detailView = field.getDetailView(inflater);
 			if (detailView != null)
 			{
-				detailView.setup(field, getActivity());
-				detailView.setValue(mValues);
 				addView(detailView);
 			}
 		}
@@ -80,9 +69,8 @@ public class TaskView extends BaseTaskView
 
 	public void setValues(ContentSet values)
 	{
-		mValues = values;
 		int children = this.getChildCount();
-		for (int i=0; i<children; ++i)
+		for (int i = 0; i < children; ++i)
 		{
 			View child = getChildAt(i);
 			if (child instanceof AbstractFieldView)

@@ -1,6 +1,4 @@
 /*
- * TextFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,31 +17,35 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 
 
 /**
  * Editor widget for simple text fields.
+ * <p>
+ * There seems to be an memory leak issue with Android {@link EditText} views, see: <a
+ * href="http://stackoverflow.com/questions/8497965/why-does-editview-retain-its-activitys-context-in-ice-cream-sandwich">Why does EditView retain its
+ * Activity's Context in Ice Cream Sandwich</a> To workaround this issue we have to disable the spell checker for the text field.
+ * </p>
+ * <p>
+ * TODO: find a way to enable the spell checker (at least temporarily).
+ * </p>
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-
 public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 {
-	private final static String TAG = "TextFieldEditor";
-
 	private StringFieldAdapter mAdapter;
 	private EditText mText;
 
@@ -70,15 +72,21 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (EditText) findViewById(R.id.text);
+		mText = (EditText) findViewById(android.R.id.text1);
 		mText.addTextChangedListener(this);
+
+		/*
+		 * enable memory leak workaround: disable spell checker
+		 */
+		int inputType = mText.getInputType();
+		mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 	}
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (StringFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
@@ -89,11 +97,11 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	{
 		if (mValues != null)
 		{
-			String newText = s.toString();
-			if (!TextUtils.equals(newText, mAdapter.get(mValues))) // don't trigger unnecessary updates
+			final String newText = s.toString();
+			final String oldText = mAdapter.get(mValues);
+			if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
 			{
-				mAdapter.set(mValues, mText.getText().toString());
-				Log.v(TAG, "updated values");
+				mAdapter.set(mValues, newText);
 			}
 		}
 	}
@@ -102,12 +110,14 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count, int after)
 	{
+		// nothing to do here
 	}
 
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count)
 	{
+		// nothing to do here
 	}
 
 
@@ -117,19 +127,11 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 		if (mValues != null)
 		{
 			String newValue = mAdapter.get(mValues);
-			if (key != null)
-			{
-				String oldValue = mText.getText().toString();
-				if (!TextUtils.equals(oldValue, newValue))
-				{
-					mText.setText(newValue);
-				}
-			}
-			else
+			String oldValue = mText.getText().toString();
+			if (!TextUtils.equals(oldValue, newValue)) // don't trigger unnecessary updates
 			{
 				mText.setText(newValue);
 			}
 		}
 	}
-
 }

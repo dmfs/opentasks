@@ -1,6 +1,4 @@
 /*
- * AbstractFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,10 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 
@@ -34,10 +28,6 @@ import android.util.AttributeSet;
  */
 public abstract class AbstractFieldEditor extends AbstractFieldView
 {
-
-	private OnChangeListener mListener;
-
-
 	public AbstractFieldEditor(Context context)
 	{
 		super(context);
@@ -53,44 +43,5 @@ public abstract class AbstractFieldEditor extends AbstractFieldView
 	public AbstractFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-	}
-
-
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-	}
-
-
-	public void setValue(ContentSet values)
-	{
-		super.setValue(values);
-	}
-
-
-	public void setup(FieldDescriptor descriptor, Activity context)
-	{
-		super.setup(descriptor, context);
-	}
-
-
-	public void setOnChangeListender(OnChangeListener listener)
-	{
-		mListener = listener;
-	}
-
-
-	protected void notifyChange()
-	{
-		if (mListener != null)
-		{
-			mListener.onChange(this);
-		}
-	}
-
-	public interface OnChangeListener
-	{
-		public void onChange(AbstractFieldEditor sender);
 	}
 }

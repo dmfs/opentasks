@@ -1,6 +1,4 @@
 /*
- * TaskDetailFragment.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +28,7 @@ import org.dmfs.tasks.widget.TaskView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,7 +39,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 /**
@@ -71,11 +69,11 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	 * The dummy content this fragment is presenting.
 	 */
 	private Uri mTaskUri;
-	private Context mActivity;
 
 	ContentSet mValues;
 	ViewGroup mContent;
 	Model mModel;
+	Context mAppContext;
 
 	private Callback callback;
 
@@ -93,7 +91,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	{
 		super.onCreate(savedInstanceState);
 		/*
-		 * Get the URI of the task to show. For now this is always a task URI.
+		 * Get the URI of the task to show. For now this is always a TASK_URI.
 		 * 
 		 * TODO: properly accept and handle instance URIs
 		 */
@@ -112,12 +110,23 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 			throw new IllegalStateException("Activity must implement TaskViewDetailFragment callback.");
 		}
 
-		mActivity = activity;
 		if (mTaskUri == null)
 		{
 			mTaskUri = activity.getIntent().getData();
 		}
 		callback = (Callback) activity;
+		mAppContext = activity.getApplicationContext();
+		Log.v(TAG, "mTaskUri " + mTaskUri.toString());
+		mAppContext.getContentResolver().registerContentObserver(mTaskUri, false, mObserver);
+
+	}
+
+
+	@Override
+	public void onDetach()
+	{
+		super.onDetach();
+		mAppContext.getContentResolver().unregisterContentObserver(mObserver);
 	}
 
 
@@ -133,13 +142,13 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 
 			if (savedInstanceState == null)
 			{
-				mValues = new ContentSet(mActivity, mTaskUri, CONTENT_VALUE_MAPPER);
+				mValues = new ContentSet(mAppContext, mTaskUri, CONTENT_VALUE_MAPPER);
 				mValues.addOnChangeListener(this, null, true);
 			}
 			else
 			{
 				// mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-				new AsyncModelLoader(mActivity, this).execute();
+				new AsyncModelLoader(mAppContext, this).execute();
 			}
 		}
 		else
@@ -153,10 +162,10 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 
 	private void updateView()
 	{
-		final LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		final LayoutInflater inflater = (LayoutInflater) mAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mContent.removeAllViews();
-		TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
+		TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, null);
 		editor.setModel(mModel);
 		editor.setValues(mValues);
 		mContent.addView(editor);
@@ -169,7 +178,6 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	{
 		if (model == null)
 		{
-			Toast.makeText(mActivity, "Could not load Model", Toast.LENGTH_LONG).show();
 			return;
 		}
 
@@ -205,7 +213,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 				return true;
 			case R.id.delete_task:
 				Log.v(TAG, "removing task");
-				mValues.delete();
+				mValues.delete(mAppContext);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -225,7 +233,19 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			Log.v(TAG, "modelloader called");
-			new AsyncModelLoader(mActivity, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 		}
 	}
+
+	private final ContentObserver mObserver = new ContentObserver(null)
+	{
+		@Override
+		public void onChange(boolean selfChange)
+		{
+			if (mValues != null)
+			{
+				mValues.update(mAppContext);
+			}
+		}
+	};
 }

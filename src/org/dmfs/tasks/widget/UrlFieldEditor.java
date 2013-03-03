@@ -1,6 +1,4 @@
 /*
- * URLFieldEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,6 +14,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import java.net.MalformedURLException;
@@ -25,10 +24,11 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -41,27 +41,26 @@ import android.widget.EditText;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
-
-public class URLFieldEditor extends AbstractFieldEditor implements TextWatcher
+public final class UrlFieldEditor extends AbstractFieldEditor implements TextWatcher
 {
 
 	private UrlFieldAdapter mAdapter;
 	private EditText mText;
 
 
-	public URLFieldEditor(Context context)
+	public UrlFieldEditor(Context context)
 	{
 		super(context);
 	}
 
 
-	public URLFieldEditor(Context context, AttributeSet attrs)
+	public UrlFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public URLFieldEditor(Context context, AttributeSet attrs, int defStyle)
+	public UrlFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 	}
@@ -73,6 +72,12 @@ public class URLFieldEditor extends AbstractFieldEditor implements TextWatcher
 		super.onFinishInflate();
 		mText = (EditText) findViewById(R.id.text);
 		mText.addTextChangedListener(this);
+
+		/*
+		 * enable memory leak workaround: disable spell checker
+		 */
+		int inputType = mText.getInputType();
+		mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 	}
 
 
@@ -86,27 +91,23 @@ public class URLFieldEditor extends AbstractFieldEditor implements TextWatcher
 			{
 				mText.setText(null);
 			}
-			else if (key != null)
+			else
 			{
 				String oldValue = mText.getText().toString();
 				String newValue = newUrl.toString();
-				if (!TextUtils.equals(oldValue, newValue))
+				if (!TextUtils.equals(oldValue, newValue)) // don't trigger unnecessary updates
 				{
 					mText.setText(newValue);
 				}
-			}
-			else
-			{
-				mText.setText(mAdapter.get(mValues).toString());
 			}
 		}
 	}
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (UrlFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}

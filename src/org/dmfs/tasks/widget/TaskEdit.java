@@ -1,6 +1,4 @@
 /*
- * TaskView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,10 +30,6 @@ import android.view.View;
 public class TaskEdit extends BaseTaskView
 {
 
-	private ContentSet mValues;
-	private Model mModel;
-
-
 	public TaskEdit(Context context)
 	{
 		super(context);
@@ -54,23 +48,19 @@ public class TaskEdit extends BaseTaskView
 	}
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-	}
-
-
 	public void setModel(Model model)
 	{
-		mModel = model;
+		Model mModel = model;
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		/*
+		 * Add an editor for every field that is supported by this model.
+		 */
 		for (FieldDescriptor field : mModel.getFields())
 		{
-			AbstractFieldView detailView = field.getEditorView(inflater);
+			AbstractFieldView detailView = field.getEditorView(inflater, this);
 			if (detailView != null)
 			{
-				detailView.setup(field, getActivity());
-				detailView.setValue(mValues);
 				addView(detailView);
 			}
 		}
@@ -79,7 +69,6 @@ public class TaskEdit extends BaseTaskView
 
 	public void setValues(ContentSet values)
 	{
-		mValues = values;
 		int children = this.getChildCount();
 		for (int i = 0; i < children; ++i)
 		{

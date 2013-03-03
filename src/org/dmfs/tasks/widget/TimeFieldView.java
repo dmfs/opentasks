@@ -1,6 +1,4 @@
 /*
- * TimeFieldView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,13 +24,12 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.app.Activity;
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -43,12 +40,11 @@ import android.widget.TextView;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * 
  */
-public class TimeFieldView extends AbstractFieldView
+public final class TimeFieldView extends AbstractFieldView
 {
-	private static final String TAG = "TimeFieldView";
 	private TimeFieldAdapter mAdapter;
 	private TextView mText;
-	java.text.DateFormat defaultDateFormat, defaultTimeFormat;
+	private java.text.DateFormat mDefaultDateFormat, mDefaultTimeFormat;
 
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
@@ -74,44 +70,37 @@ public class TimeFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
+		mDefaultDateFormat = java.text.DateFormat.getDateInstance(SimpleDateFormat.LONG);
+		mDefaultTimeFormat = DateFormat.getTimeFormat(getContext());
 	}
 
 
 	@Override
-	public void setup(FieldDescriptor descriptor, Activity context)
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		Log.d(TAG, "setup is called");
-		super.setup(descriptor, context);
+		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
-		defaultDateFormat = java.text.DateFormat.getDateInstance(SimpleDateFormat.LONG);
-		defaultTimeFormat = DateFormat.getTimeFormat(getContext());
 	}
 
 
 	@Override
 	public void onContentChanged(ContentSet contentSet, String key)
 	{
-		Log.d(TAG, "mText" + mText);
-		Log.d(TAG, "mAdapter" + mAdapter);
-		if (mValues != null && mAdapter.get(mValues) != null)
+		Time newValue = mAdapter.get(mValues);
+		if (mValues != null && newValue != null)
 		{
-			Log.d(TAG, "mValues is not null");
-			Time dateTime = mAdapter.get(mValues);
-			Date fullDate = new Date(dateTime.toMillis(false));
-			String formattedTime;
-			formattedTime = defaultDateFormat.format(fullDate);
-			if (!dateTime.allDay)
+			Date fullDate = new Date(newValue.toMillis(false));
+			String formattedTime = mDefaultDateFormat.format(fullDate);
+			if (!newValue.allDay)
 			{
-				// formattedTime = dateTime.format("%d/%m/%Y");
-				formattedTime = formattedTime + " " + defaultTimeFormat.format(fullDate);
+				formattedTime = formattedTime + " " + mDefaultTimeFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);
 		}
 		else
 		{
 			setVisibility(View.GONE);
-			Log.d(TAG, "mValues is null");
 		}
 	}
 
