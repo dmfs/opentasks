@@ -15,7 +15,7 @@
         <ProgressBar
             android:id="@+id/percentage_progress_bar"
             style="@style/CaldavProgressBar"
-            android:layout_width="0dip"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
