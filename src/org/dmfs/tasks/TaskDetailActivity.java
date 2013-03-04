@@ -20,6 +20,7 @@ package org.dmfs.tasks;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -63,14 +64,21 @@ public class TaskDetailActivity extends FragmentActivity implements TaskViewDeta
 		{
 			// Create the detail fragment and add it to the activity
 			// using a fragment transaction.
-			Bundle arguments = new Bundle();
-			arguments.putParcelable(TaskViewDetailFragment.PARAM_TASK_URI, getIntent().getData());
 			TaskViewDetailFragment fragment = new TaskViewDetailFragment();
-			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
 		}
 	}
 
+	
+	@Override
+	public void onAttachFragment(Fragment fragment)
+	{
+		if (fragment instanceof TaskViewDetailFragment)
+		{
+			TaskViewDetailFragment detailFragment = (TaskViewDetailFragment) fragment;
+			detailFragment.loadUri(getIntent().getData());
+		}
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)

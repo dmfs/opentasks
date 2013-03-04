@@ -104,6 +104,11 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 			taskListFrag.setExpandedGroupsIds(ids);
 
+			/*
+			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
+			 */
+			taskDetailFrag = new TaskViewDetailFragment();
+			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
 		}
 
 		// TODO: If exposing deep links into your app, handle intents here.
@@ -114,22 +119,13 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	 * Callback method from {@link TaskListFragment.Callbacks} indicating that the item with the given ID was selected.
 	 */
 	@Override
-	public void onItemSelected(Uri uri)
+	public void onItemSelected(Uri uri, boolean forceReload)
 	{
 		if (mTwoPane)
 		{
-			// In two-pane mode, show the detail view in this activity by
-			// adding or replacing the detail fragment using a
-			// fragment transaction.
-			Bundle arguments = new Bundle();
-			Log.d(TAG, "Added Fragment Intent");
-			arguments.putParcelable(TaskViewDetailFragment.PARAM_TASK_URI, uri);
-			taskDetailFrag = new TaskViewDetailFragment();
-			taskDetailFrag.setArguments(arguments);
-			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
-
+			taskDetailFrag.loadUri(uri);
 		}
-		else
+		else if (forceReload)
 		{
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.

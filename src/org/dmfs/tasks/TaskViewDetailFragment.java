@@ -51,11 +51,6 @@ import android.view.ViewGroup;
 
 public class TaskViewDetailFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
 {
-	/**
-	 * The fragment argument representing the item ID that this fragment represents.
-	 */
-	public static final String PARAM_TASK_URI = "task_uri";
-
 	private static final String TAG = "TaskViewDetailFragment";
 
 	private static final String KEY_VALUES = "key_values";
@@ -95,7 +90,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		 * 
 		 * TODO: properly accept and handle instance URIs
 		 */
-		
+
 		setHasOptionsMenu(true);
 	}
 
@@ -109,16 +104,10 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		{
 			throw new IllegalStateException("Activity must implement TaskViewDetailFragment callback.");
 		}
-		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
-		
-		if (mTaskUri == null)
-		{
-			mTaskUri = activity.getIntent().getData();
-		}
+
 		callback = (Callback) activity;
 		mAppContext = activity.getApplicationContext();
 		Log.v(TAG, "mTaskUri " + mTaskUri);
-		mAppContext.getContentResolver().registerContentObserver(mTaskUri, false, mObserver);
 
 	}
 
@@ -135,46 +124,46 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
+		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
-		if (mTaskUri != null)
+		if (savedInstanceState != null)
 		{
-			Log.d(TAG, "taskUri is not null");
-			mContent = (ViewGroup) rootView.findViewById(R.id.content);
-
-			if (savedInstanceState == null)
-			{
-				mContentSet = new ContentSet(mTaskUri);
-				mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
-				mContentSet.addOnChangeListener(this, null, true);
-			}
-			else
-			{
-				mContentSet = savedInstanceState.getParcelable(KEY_VALUES);
-				new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
-			}
-		}
-		else
-		{
-			Log.w(TAG, "mTaskUri is null!");
+			mContentSet = savedInstanceState.getParcelable(KEY_VALUES);
+			new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
 		}
 
 		return rootView;
 	}
-	
-	public void loadUri(Uri uri){
+
+
+	public void loadUri(Uri uri)
+	{
+		if (mTaskUri != null)
+		{
+			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
+		}
+
 		mTaskUri = uri;
+		mContentSet = new ContentSet(uri);
+		mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
+		mContentSet.addOnChangeListener(this, null, true);
+		mAppContext.getContentResolver().registerContentObserver(uri, false, mObserver);
 	}
+
 
 	private void updateView()
 	{
-		final LayoutInflater inflater = (LayoutInflater) mAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		if (mContent != null)
+		{
+			final LayoutInflater inflater = (LayoutInflater) mAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		mContent.removeAllViews();
-		TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, null);
-		editor.setModel(mModel);
-		editor.setValues(mContentSet);
-		mContent.addView(editor);
-		Log.d(TAG, "At the end of updateView");
+			mContent.removeAllViews();
+			TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, null);
+			editor.setModel(mModel);
+			editor.setValues(mContentSet);
+			mContent.addView(editor);
+			Log.d(TAG, "At the end of updateView");
+		}
 	}
 
 
@@ -253,4 +242,5 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 			}
 		}
 	};
+
 }

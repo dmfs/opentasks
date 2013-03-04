@@ -98,7 +98,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		/**
 		 * Callback for when an item has been selected.
 		 */
-		public void onItemSelected(Uri taskUri);
+		public void onItemSelected(Uri taskUri, boolean forceReload);
 
 
 		public void onAddNewTask();
@@ -192,7 +192,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
-			selectChildView(parent, groupPosition, childPosition);
+			selectChildView(parent, groupPosition, childPosition, true);
 			mActivatedPositionGroup = groupPosition;
 			mActivatedPositionChild = childPosition;
 			return true;
@@ -216,7 +216,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	};
 
 
-	private void selectChildView(ExpandableListView expandLV, int groupPosition, int childPosition)
+	private void selectChildView(ExpandableListView expandLV, int groupPosition, int childPosition, boolean force)
 	{
 		// a task instance element has been clicked, get it's instance id and notify the activity
 		ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
@@ -236,7 +236,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			// TODO: use the instance URI one we support recurrence
 			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
 
-			mCallbacks.onItemSelected(taskUri);
+			mCallbacks.onItemSelected(taskUri, force);
 		}
 	}
 
@@ -415,7 +415,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		@Override
 		public void run()
 		{
-			selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild);
+			selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild, false);
 			setExpandedGroups();
 
 		}
