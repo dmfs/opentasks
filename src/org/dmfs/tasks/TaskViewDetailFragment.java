@@ -70,7 +70,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	 */
 	private Uri mTaskUri;
 
-	ContentSet mValues;
+	ContentSet mContentSet;
 	ViewGroup mContent;
 	Model mModel;
 	Context mAppContext;
@@ -142,13 +142,14 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 
 			if (savedInstanceState == null)
 			{
-				mValues = new ContentSet(mAppContext, mTaskUri, CONTENT_VALUE_MAPPER);
-				mValues.addOnChangeListener(this, null, true);
+				mContentSet = new ContentSet(mTaskUri);
+				mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
+				mContentSet.addOnChangeListener(this, null, true);
 			}
 			else
 			{
-				// mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-				new AsyncModelLoader(mAppContext, this).execute();
+				mContentSet = savedInstanceState.getParcelable(KEY_VALUES);
+				new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			}
 		}
 		else
@@ -167,7 +168,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		mContent.removeAllViews();
 		TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, null);
 		editor.setModel(mModel);
-		editor.setValues(mValues);
+		editor.setValues(mContentSet);
 		mContent.addView(editor);
 		Log.d(TAG, "At the end of updateView");
 	}
@@ -192,7 +193,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		// outState.putParcelableArrayList(KEY_VALUES, mValues);
+		outState.putParcelable(KEY_VALUES, mContentSet);
 	}
 
 
@@ -213,7 +214,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 				return true;
 			case R.id.delete_task:
 				Log.v(TAG, "removing task");
-				mValues.delete(mAppContext);
+				mContentSet.delete(mAppContext);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -242,9 +243,9 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		@Override
 		public void onChange(boolean selfChange)
 		{
-			if (mValues != null)
+			if (mContentSet != null)
 			{
-				mValues.update(mAppContext);
+				mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
 			}
 		}
 	};

@@ -18,6 +18,8 @@
 package org.dmfs.tasks.utils;
 
 
+import org.dmfs.tasks.groups.cursorloaders.AbstractCursorLoaderFactory;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.Loader;

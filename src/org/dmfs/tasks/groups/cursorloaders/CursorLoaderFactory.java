@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.utils;
+package org.dmfs.tasks.groups.cursorloaders;
 
 import android.content.Context;
 import android.database.Cursor;

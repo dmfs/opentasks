@@ -51,7 +51,7 @@
             android:multiprocess="false" />
 
         <activity
-            android:name="org.dmfs.tasks.AddEditTaskActivity"
+            android:name=".AddEditTaskActivity"
             android:label="@string/activity_edit_task_title"
             android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
             <meta-data
@@ -73,6 +73,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.ms.jung.tasks" />
+            </intent-filter>
+            <intent-filter android:label="@string/activity_add_task_title" >
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/vnd.ms.jung.tasks" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.ms.jung.tasks" />
             </intent-filter>
         </activity>
     </application>

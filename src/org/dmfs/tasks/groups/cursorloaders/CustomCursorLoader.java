@@ -15,23 +15,19 @@
  * 
  */
 
-package org.dmfs.tasks.utils;
-
-import java.util.TimeZone;
+package org.dmfs.tasks.groups.cursorloaders;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.Loader;
-import android.text.format.Time;
 
 
 /**
- * A very simple {@link Loader} that returns the {@link Cursor} from a {@link TimeRangeCursorFactory}. It also delivers a new Cursor each time the time or the
- * time zone changes and each day at midnight.
+ * A very simple {@link Loader} that returns the {@link Cursor} from a {@link AbstractCustomCursorFactory}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class TimeRangeCursorLoader extends Loader<Cursor> implements TimeChangeListener
+public class CustomCursorLoader extends Loader<Cursor>
 {
 	/**
 	 * The current Cursor.
@@ -39,24 +35,16 @@ public class TimeRangeCursorLoader extends Loader<Cursor> implements TimeChangeL
 	private Cursor mCursor;
 
 	/**
-	 * A helper to retrieve the timestamp for midnight.
+	 * The factory that creates our Cursor.
 	 */
-	private final Time mMidnight = new Time();
-
-	/**
-	 * The factory that creates our time range Cursor.
-	 */
-	private final TimeRangeCursorFactory mCursorFactory;
+	private final AbstractCustomCursorFactory mCursorFactory;
 
 
-	public TimeRangeCursorLoader(Context context, String[] projection)
+	public CustomCursorLoader(Context context, AbstractCustomCursorFactory factory)
 	{
 		super(context);
 
-		// set trigger at midnight
-		new TimeChangeObserver(context, this).setNextAlarm(getMidnightTimestamp());
-
-		mCursorFactory = new TimeRangeCursorFactory(projection);
+		mCursorFactory = factory;
 	}
 
 
@@ -126,38 +114,4 @@ public class TimeRangeCursorLoader extends Loader<Cursor> implements TimeChangeL
 
 		mCursor = null;
 	}
-
-
-	@Override
-	public void onTimeUpdate(TimeChangeObserver observer)
-	{
-		// reset next alarm
-		observer.setNextAlarm(getMidnightTimestamp());
-
-		// notify LoaderManager
-		onContentChanged();
-	}
-
-
-	@Override
-	public void onAlarm(TimeChangeObserver observer)
-	{
-		// set next alarm
-		observer.setNextAlarm(getMidnightTimestamp());
-
-		// notify LoaderManager
-		onContentChanged();
-	}
-
-
-	private long getMidnightTimestamp()
-	{
-		mMidnight.clear(TimeZone.getDefault().getID());
-		mMidnight.setToNow();
-		mMidnight.set(mMidnight.monthDay, mMidnight.month, mMidnight.year);
-		++mMidnight.monthDay;
-		mMidnight.normalize(true);
-		return mMidnight.toMillis(false);
-	}
-
 }

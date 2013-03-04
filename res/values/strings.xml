@@ -47,6 +47,7 @@
     <string name="status_in_process">in process</string>
     <string name="status_completed">done</string>
     <string name="status_cancelled">cancelled</string>
+    <string name="status_incomplete">incomplete</string>
 
     <!-- Classification labels -->
 

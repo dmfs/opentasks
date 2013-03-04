@@ -30,6 +30,8 @@ import org.dmfs.tasks.utils.OnContentLoadedListener;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 
 /**
@@ -37,50 +39,39 @@ import android.net.Uri;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class ContentSet implements OnContentLoadedListener
+public final class ContentSet implements OnContentLoadedListener, Parcelable
 {
 	private ContentValues mBeforeContentValues;
 	private ContentValues mAfterContentValues;
 	private Uri mUri;
-	private ContentValueMapper mMapper;
 	private final Map<String, Set<OnContentChangeListener>> mOnChangeListeners = new HashMap<String, Set<OnContentChangeListener>>();
 
 
-	public ContentSet(Context context, Uri uri)
+	/**
+	 * Private constructor to read from a parcel;
+	 */
+	private ContentSet()
+	{
+	}
+
+
+	public ContentSet(Uri uri)
 	{
 		if (uri == null)
 		{
 			throw new IllegalArgumentException("uri must not be null");
 		}
+
 		mUri = uri;
 	}
 
 
-	public ContentSet(Context context, Uri uri, ContentValueMapper mapper)
-	{
-		if (uri == null)
-		{
-			throw new IllegalArgumentException("uri must not be null");
-		}
-
-		mMapper = mapper;
-		mUri = uri;
-		loadContent(uri, context);
-	}
-
-
-	public void update(Context context)
+	public void update(Context context, ContentValueMapper mapper)
 	{
 		if (!isInsert())
 		{
-			loadContent(mUri, context);
+			new AsyncContentLoader(context, this, mapper).execute(mUri);
 		}
-	}
-
-
-	private void loadContent(Uri uri, Context context)
-	{
-		new AsyncContentLoader(context, this, mMapper).execute(uri);
 	}
 
 
@@ -313,4 +304,44 @@ public final class ContentSet implements OnContentLoadedListener
 			}
 		}
 	}
+
+
+	@Override
+	public int describeContents()
+	{
+		return 0;
+	}
+
+
+	public void writeToParcel(Parcel dest, int flags)
+	{
+		dest.writeParcelable(mUri, flags);
+		dest.writeParcelable(mBeforeContentValues, flags);
+		dest.writeParcelable(mAfterContentValues, flags);
+	}
+
+
+	public void readFromParcel(Parcel source)
+	{
+		ClassLoader loader = getClass().getClassLoader();
+		mUri = source.readParcelable(loader);
+		mBeforeContentValues = source.readParcelable(loader);
+		mAfterContentValues = source.readParcelable(loader);
+	}
+
+	public static final Parcelable.Creator<ContentSet> CREATOR = new Parcelable.Creator<ContentSet>()
+	{
+		public ContentSet createFromParcel(Parcel in)
+		{
+			final ContentSet state = new ContentSet();
+			state.readFromParcel(in);
+			return state;
+		}
+
+
+		public ContentSet[] newArray(int size)
+		{
+			return new ContentSet[size];
+		}
+	};
 }

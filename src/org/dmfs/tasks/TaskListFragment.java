@@ -17,36 +17,26 @@
 
 package org.dmfs.tasks;
 
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.utils.ExpandableChildDescriptor;
+import org.dmfs.tasks.groups.ByCompleted;
+import org.dmfs.tasks.groups.ByDueDate;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
-import org.dmfs.tasks.utils.TimeRangeCursorFactory;
-import org.dmfs.tasks.utils.TimeRangeCursorLoaderFactory;
-import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -59,7 +49,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
-import android.widget.TextView;
 
 
 /**
@@ -75,204 +64,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private static final String PARAM_EXPANDED_GROUPS = "expanded_groups";
 
-	/**
-	 * The projection we use when we load instances. We don't need every detail of a task here.
-	 */
-	private final static String[] INSTANCE_PROJECTION = new String[] { Instances.INSTANCE_START, Instances.INSTANCE_DURATION, Instances.INSTANCE_DUE,
-		Instances.IS_ALLDAY, Instances.TZ, Instances.TITLE, Instances.LIST_COLOR, Instances.PRIORITY, Instances.LIST_ID, Instances.TASK_ID, Instances._ID };
-
-	/**
-	 * An adapter to load the due date from the instances projection.
-	 */
-	private final static TimeFieldAdapter DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
-
 	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
 	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
 
 	/**
-	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
+	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR} or {@link ByCompleted#GROUP_DESCRIPTOR}.
 	 */
-	private final ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
-	{
-		/**
-		 * We use this to get the current time.
-		 */
-		private Time mNow;
-
-		/**
-		 * The formatter we use for due dates other than today.
-		 */
-		private final DateFormat mDateFormatter = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
-
-		/**
-		 * The formatter we use for tasks that are due today.
-		 */
-		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
-
-
-		@Override
-		public void populateView(View view, Cursor cursor)
-		{
-			TextView title = (TextView) view.findViewById(android.R.id.title);
-			if (title != null)
-			{
-				String text = cursor.getString(5);
-				title.setText(text);
-			}
-			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
-			if (dueDateField != null)
-			{
-				Time dueDate = DUE_ADAPTER.get(cursor);
-
-				if (dueDate != null)
-				{
-					if (mNow == null)
-					{
-						mNow = new Time();
-					}
-					mNow.clear(TimeZone.getDefault().getID());
-					mNow.setToNow();
-
-					dueDateField.setText(makeDueDate(dueDate));
-
-					// highlight overdue dates & times
-					if (dueDate.before(mNow))
-					{
-						dueDateField.setTextColor(Color.RED);
-					}
-					else
-					{
-						dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
-					}
-				}
-				else
-				{
-					dueDateField.setText("");
-				}
-			}
-
-			View colorbar = view.findViewById(R.id.colorbar);
-			if (colorbar != null)
-			{
-				colorbar.setBackgroundColor(cursor.getInt(6));
-			}
-		}
-
-
-		@Override
-		public int getView()
-		{
-			return R.layout.task_list_element;
-		}
-
-
-		/**
-		 * Get the due date to show. It returns just a time for tasks that are due today and a date otherwise.
-		 * 
-		 * @param due
-		 *            The due date to format.
-		 * @return A String with the formatted date.
-		 */
-		private String makeDueDate(Time due)
-		{
-			due.switchTimezone(TimeZone.getDefault().getID());
-			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
-			{
-				return mTimeFormatter.format(new Date(due.toMillis(false)));
-			}
-			else
-			{
-				return mDateFormatter.format(new Date(due.toMillis(false)));
-			}
-		}
-	};
-
-	/**
-	 * A {@link ViewDescriptor} that knows how to present due date groups.
-	 */
-	private final ViewDescriptor DUE_GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
-	{
-		private final String[] mMonthNames = DateFormatSymbols.getInstance().getMonths();
-
-
-		@Override
-		public void populateView(View view, Cursor cursor)
-		{
-			TextView title = (TextView) view.findViewById(android.R.id.title);
-			if (title != null)
-			{
-				title.setText(getTitle(cursor) + " (" + mAdapter.getChildrenCount(cursor.getPosition()) + ")");
-			}
-		}
-
-
-		@Override
-		public int getView()
-		{
-			return R.layout.task_list_group;
-		}
-
-
-		/**
-		 * Return the title of a due date group.
-		 * 
-		 * @param cursor
-		 *            A {@link Cursor} pointing to the current group.
-		 * @return A {@link String} with the group name.
-		 */
-		private String getTitle(Cursor cursor)
-		{
-			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_TYPE));
-			if (type == 0)
-			{
-				return appContext.getString(R.string.task_group_no_due);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TODAY) == TimeRangeCursorFactory.TYPE_END_OF_TODAY)
-			{
-				return appContext.getString(R.string.task_group_due_today);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY) == TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY)
-			{
-				return appContext.getString(R.string.task_group_overdue);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TOMORROW) == TimeRangeCursorFactory.TYPE_END_OF_TOMORROW)
-			{
-				return appContext.getString(R.string.task_group_due_tomorrow);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_IN_7_DAYS) == TimeRangeCursorFactory.TYPE_END_IN_7_DAYS)
-			{
-				return appContext.getString(R.string.task_group_due_within_7_days);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_MONTH) != 0)
-			{
-				return appContext.getString(R.string.task_group_due_in_month,
-					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_MONTH))]);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_YEAR) != 0)
-			{
-				return appContext.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_YEAR)));
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_NO_END) != 0)
-			{
-				return appContext.getString(R.string.task_group_due_in_future);
-			}
-			return "";
-		}
-
-	};
-
-	/**
-	 * A descriptor that knows how to load elements in a due date group.
-	 */
-	private final ExpandableChildDescriptor DUE_DATE_CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or " + Instances.INSTANCE_DUE + " is ?)",
-		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
-
-	/**
-	 * A descriptor for the "grouped by due date" view.
-	 */
-	private final ExpandableGroupDescriptor GROUP_BY_DUE_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
-		TimeRangeCursorFactory.DEFAULT_PROJECTION), DUE_DATE_CHILD_DESCRIPTOR).setViewDescriptor(DUE_GROUP_VIEW_DESCRIPTOR);
+	private final static ExpandableGroupDescriptor CURRENT_GROUP_DESCRIPTOR = ByDueDate.GROUP_DESCRIPTOR;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
@@ -340,7 +138,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		expandLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
-		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), GROUP_BY_DUE_DESCRIPTOR);
+		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
 		expandLV.setAdapter(mAdapter);
 		expandLV.setOnChildClickListener(mTaskItemClickListener);
 		expandLV.setOnGroupCollapseListener(mTaskListCollapseListener);
@@ -500,7 +298,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		return GROUP_BY_DUE_DESCRIPTOR.getGroupCursorLoader(appContext);
+		return CURRENT_GROUP_DESCRIPTOR.getGroupCursorLoader(appContext);
 	}
 
 

@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.utils;
+package org.dmfs.tasks.groups.cursorloaders;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +32,7 @@ import android.text.format.Time;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class TimeRangeCursorFactory
+public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 {
 	
 	public final static String RANGE_ID = "_id";
@@ -95,7 +95,6 @@ public final class TimeRangeCursorFactory
 	private final static long MAX_TIME = Long.MAX_VALUE / 2;
 	private final static long MIN_TIME = Long.MIN_VALUE / 2;
 
-	private final String[] mProjection;
 	private final List<String> mProjectionList;
 
 	private final Time mTime;
@@ -104,7 +103,7 @@ public final class TimeRangeCursorFactory
 
 	public TimeRangeCursorFactory(String[] projection)
 	{
-		mProjection = projection;
+		super (projection);
 		mProjectionList = Arrays.asList(projection);
 		mTime = new Time(TimeZone.getDefault().getID());
 		mEndOfToday = new Time(mTime.timezone);

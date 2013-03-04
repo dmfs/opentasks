@@ -123,7 +123,6 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
 		setHasOptionsMenu(true);
 	}
 
@@ -132,6 +131,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
+		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
 		mAppContext = activity.getApplicationContext();
 	}
 
@@ -196,13 +196,15 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 
 				if (savedInstanceState == null)
 				{
-					mValues = new ContentSet(mAppContext, mTaskUri, CONTENT_VALUE_MAPPER);
+					mValues = new ContentSet(mTaskUri);
+					mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
 					mValues.addOnChangeListener(this, null, true);
 				}
 				else
 				{
-					// mValues = savedInstanceState.getParcelableArrayList(KEY_VALUES);
-					new AsyncModelLoader(mAppContext, this).execute("");
+					mValues = savedInstanceState.getParcelable(KEY_VALUES);
+					new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+					setListUri(ContentUris.withAppendedId(TaskLists.CONTENT_URI, mValues.getAsLong(Tasks.LIST_ID)));
 				}
 				// disable spinner
 				listSpinner.setEnabled(false);
@@ -212,7 +214,16 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		}
 		else
 		{
-			mValues = new ContentSet(mAppContext, Tasks.CONTENT_URI);
+			if (savedInstanceState == null)
+			{
+				mValues = new ContentSet(Tasks.CONTENT_URI);
+			}
+			else
+			{
+				mValues = savedInstanceState.getParcelable(KEY_VALUES);
+				new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+				setListUri(WriteableTaskLists.CONTENT_URI);
+			}
 		}
 
 		return rootView;
@@ -252,7 +263,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		// outState.putParcelableArrayList(KEY_VALUES, mValues);
+		outState.putParcelable(KEY_VALUES, mValues);
 	}
 
 
