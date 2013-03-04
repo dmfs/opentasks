@@ -56,14 +56,13 @@ import android.widget.Toast;
  * Fragment for editing task details.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Marten Gajda <marten@dmfs.org>
  * 
  */
 
 public class TaskEditDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener
 {
 	public static final String PARAM_TASK_URI = "task_uri";
-
-	public static final String ARG_ITEM_ID = "item_id";
 
 	public static final String LIST_LOADER_URI = "uri";
 
@@ -178,7 +177,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0)
 			{
-
+				// nothing to do here
 			}
 
 		});
@@ -285,7 +284,6 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	public void onLoaderReset(Loader<Cursor> loader)
 	{
 		taskListAdapter.changeCursor(null);
-
 	}
 
 
