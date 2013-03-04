@@ -71,13 +71,16 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 	{
 		super.onFinishInflate();
 		mText = (EditText) findViewById(R.id.text);
-		mText.addTextChangedListener(this);
+		if (mText != null)
+		{
+			mText.addTextChangedListener(this);
 
-		/*
-		 * enable memory leak workaround: disable spell checker
-		 */
-		int inputType = mText.getInputType();
-		mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+			/*
+			 * enable memory leak workaround: disable spell checker
+			 */
+			int inputType = mText.getInputType();
+			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		}
 	}
 
 

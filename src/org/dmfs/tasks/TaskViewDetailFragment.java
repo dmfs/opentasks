@@ -95,7 +95,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		 * 
 		 * TODO: properly accept and handle instance URIs
 		 */
-		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
+		
 		setHasOptionsMenu(true);
 	}
 
@@ -109,14 +109,15 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		{
 			throw new IllegalStateException("Activity must implement TaskViewDetailFragment callback.");
 		}
-
+		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
+		
 		if (mTaskUri == null)
 		{
 			mTaskUri = activity.getIntent().getData();
 		}
 		callback = (Callback) activity;
 		mAppContext = activity.getApplicationContext();
-		Log.v(TAG, "mTaskUri " + mTaskUri.toString());
+		Log.v(TAG, "mTaskUri " + mTaskUri);
 		mAppContext.getContentResolver().registerContentObserver(mTaskUri, false, mObserver);
 
 	}
@@ -154,12 +155,15 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 		}
 		else
 		{
-			Log.w(TAG, "task_uri is null!");
+			Log.w(TAG, "mTaskUri is null!");
 		}
 
 		return rootView;
 	}
-
+	
+	public void loadUri(Uri uri){
+		mTaskUri = uri;
+	}
 
 	private void updateView()
 	{

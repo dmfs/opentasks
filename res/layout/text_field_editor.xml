@@ -9,11 +9,9 @@
 
     <EditText
         android:id="@android:id/text1"
-        style="@style/DarkText"
+        style="@style/DarkTextEditText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="0dip"
-        android:layout_marginTop="4dip" >
+        android:layout_height="wrap_content" >
     </EditText>
 
 </org.dmfs.tasks.widget.TextFieldEditor>

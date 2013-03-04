@@ -71,15 +71,18 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 	@Override
 	protected void onFinishInflate()
 	{
-		super.onFinishInflate();
+		// super.onFinishInflate();
 		mText = (EditText) findViewById(android.R.id.text1);
-		mText.addTextChangedListener(this);
+		if (mText != null)
+		{
+			mText.addTextChangedListener(this);
 
-		/*
-		 * enable memory leak workaround: disable spell checker
-		 */
-		int inputType = mText.getInputType();
-		mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+			/*
+			 * enable memory leak workaround: disable spell checker
+			 */
+			int inputType = mText.getInputType();
+			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+		}
 	}
 
 

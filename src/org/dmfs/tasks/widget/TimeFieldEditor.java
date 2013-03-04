@@ -81,17 +81,20 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDatePickerButton = (Button) findViewById(R.id.task_date_picker);
 		mTimePickerButton = (Button) findViewById(R.id.task_time_picker);
 		mClearDateButton = (ImageButton) findViewById(R.id.task_time_picker_remove);
-		mDatePickerButton.setOnClickListener(DatePickerHandler);
-		mTimePickerButton.setOnClickListener(TimePickerHandler);
-		mClearDateButton.setOnClickListener(new OnClickListener()
+		if (mDatePickerButton != null && mTimePickerButton != null && mClearDateButton != null)
 		{
-			@Override
-			public void onClick(View v)
+			mDatePickerButton.setOnClickListener(DatePickerHandler);
+			mTimePickerButton.setOnClickListener(TimePickerHandler);
+			mClearDateButton.setOnClickListener(new OnClickListener()
 			{
-				mDateTime = null;
-				mAdapter.set(mValues, mDateTime);
-			}
-		});
+				@Override
+				public void onClick(View v)
+				{
+					mDateTime = null;
+					mAdapter.set(mValues, mDateTime);
+				}
+			});
+		}
 	}
 
 

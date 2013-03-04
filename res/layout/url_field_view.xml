@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.dmfs.tasks.widget.URLFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+<org.dmfs.tasks.widget.UrlFieldView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,7 +8,7 @@
     <include layout="@layout/detail_header" />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@android:id/text1"
         style="@style/DarkText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,4 +16,4 @@
         android:textAppearance="@android:style/TextAppearance.Medium" >
     </TextView>
 
-</org.dmfs.tasks.widget.URLFieldView>
+</org.dmfs.tasks.widget.UrlFieldView>

@@ -26,6 +26,7 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,26 +36,27 @@ import android.widget.TextView;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class StringFieldView extends AbstractFieldView
+public class TextFieldView extends AbstractFieldView
 {
 
+	private static final String TAG = "StringFieldView";
 	private FieldAdapter<?> mAdapter;
 	private TextView mText;
 
 
-	public StringFieldView(Context context)
+	public TextFieldView(Context context)
 	{
 		super(context);
 	}
 
 
-	public StringFieldView(Context context, AttributeSet attrs)
+	public TextFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public StringFieldView(Context context, AttributeSet attrs, int defStyle)
+	public TextFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 	}
@@ -65,6 +67,7 @@ public class StringFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
+		Log.d(TAG, "mText = " + mText);
 	}
 
 

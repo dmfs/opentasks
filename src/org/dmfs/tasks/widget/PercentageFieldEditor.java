@@ -78,9 +78,12 @@ public class PercentageFieldEditor extends AbstractFieldEditor implements OnSeek
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
 		mSeek = (SeekBar) findViewById(R.id.percentage_seek_bar);
-		mSeek.setOnSeekBarChangeListener(this);
+		if (mText != null && mSeek != null)
+		{
+			mSeek.setOnSeekBarChangeListener(this);
 
-		mSeek.setMax(STEPS);
+			mSeek.setMax(STEPS);
+		}
 	}
 
 

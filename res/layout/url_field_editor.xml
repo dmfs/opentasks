@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.dmfs.tasks.widget.URLFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
+<org.dmfs.tasks.widget.UrlFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,11 +9,10 @@
 
     <EditText
         android:id="@+id/text"
-        style="@style/DarkText"
+        style="@style/DarkTextEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dip"
         android:inputType="textUri" >
     </EditText>
 
-</org.dmfs.tasks.widget.URLFieldEditor>
+</org.dmfs.tasks.widget.UrlFieldEditor>

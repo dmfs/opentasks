@@ -18,7 +18,7 @@
             style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2" >
+            android:layout_weight="6" >
         </Button>
 
         <Button
@@ -26,15 +26,16 @@
             style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
+            android:layout_weight="3" >
         </Button>
 
         <ImageButton
             android:id="@+id/task_time_picker_remove"
             style="@style/btn_remove"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical" >
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1" >
         </ImageButton>
     </LinearLayout>
 

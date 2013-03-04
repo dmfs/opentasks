@@ -7,4 +7,28 @@
         <item name="android:src">@drawable/content_remove_light</item>
     </style>
 
+    <style name="detail_label_line">
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="DarkTextEditText" parent="DarkText">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+    </style>
+
+    <style name="CaldavProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="CaldavSeekBar" parent="android:Widget.SeekBar">
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
 </resources>

@@ -26,7 +26,9 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.text.method.MovementMethod;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -39,6 +41,7 @@ import android.widget.TextView;
 public final class UrlFieldView extends AbstractFieldView
 {
 
+	private static final String TAG = "UrlFieldView";
 	private FieldAdapter<?> mAdapter;
 	private TextView mText;
 
@@ -82,8 +85,17 @@ public final class UrlFieldView extends AbstractFieldView
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (TextView) findViewById(R.id.text);
-		mText.setMovementMethod(LinkMovementMethod.getInstance());
+		mText = (TextView) findViewById(android.R.id.text1);
+
+		if (mText == null)
+		{
+			return;
+		}
+
+		MovementMethod mMethod = LinkMovementMethod.getInstance();
+		Log.d(TAG, "mMethod = " + mMethod);
+		Log.d(TAG, "mText = " + mText);
+		mText.setMovementMethod(mMethod);
 	}
 
 

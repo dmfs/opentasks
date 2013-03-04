@@ -27,7 +27,7 @@ import android.util.AttributeSet;
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
 
-public class RecurrenceRuleView extends StringFieldView {
+public class RecurrenceRuleView extends TextFieldView {
 
 	public RecurrenceRuleView(Context context) {
 		super(context);

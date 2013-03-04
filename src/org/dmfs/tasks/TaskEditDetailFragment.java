@@ -208,7 +208,10 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 				// disable spinner
 				listSpinner.setEnabled(false);
 				// hide spinner background
-				listSpinner.setBackground(null);
+				if (android.os.Build.VERSION.SDK_INT >= 16)
+				{
+					listSpinner.setBackground(null);
+				}
 			}
 		}
 		else

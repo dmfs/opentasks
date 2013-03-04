@@ -85,6 +85,10 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 	{
 		super.onFinishInflate();
 		mSpinner = (Spinner) findViewById(R.id.integer_choices_spinner);
+		if (mSpinner == null)
+		{
+			return;
+		}
 		mSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
 
