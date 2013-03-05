@@ -127,7 +127,8 @@ public interface ByDueDate
 	 */
 	public final ViewDescriptor GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
-		private final String[] mMonthNames = DateFormatSymbols.getInstance().getMonths();
+		// DateFormatSymbols.getInstance() not used because it is not available before API level 9
+		private final String[] mMonthNames = new DateFormatSymbols().getMonths();
 
 
 		@Override

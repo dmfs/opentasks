@@ -348,7 +348,16 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				++idx;
 			}
 		}
-		return Arrays.copyOf(result, idx);
+		
+		//Arrays.copyOf not available in API level 8 and below.
+		if(android.os.Build.VERSION.SDK_INT > 8 ){
+			return Arrays.copyOf(result, idx);
+		}
+		else{
+			long[] returnArray = new long[idx];
+			System.arraycopy(result, 0, returnArray, 0, idx);
+			return returnArray;
+		}
 	}
 
 
