@@ -26,6 +26,7 @@ import java.util.WeakHashMap;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
+import org.dmfs.tasks.utils.SetFromMap;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -270,7 +271,15 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (listenerSet == null)
 		{
 			// using a "WeakHashSet" ensures that we don't prevent listeners from getting garbage-collected.
-			listenerSet = Collections.newSetFromMap(new WeakHashMap<OnContentChangeListener, Boolean>());
+			
+			if (android.os.Build.VERSION.SDK_INT > 8)
+			{
+				listenerSet = Collections.newSetFromMap(new WeakHashMap<OnContentChangeListener, Boolean>());
+			}
+			else
+			{
+				listenerSet = new SetFromMap<OnContentChangeListener>(new WeakHashMap<OnContentChangeListener, Boolean>());
+			}
 			mOnChangeListeners.put(key, listenerSet);
 		}
 

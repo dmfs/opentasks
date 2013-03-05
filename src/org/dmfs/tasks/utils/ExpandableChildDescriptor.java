@@ -79,16 +79,16 @@ public class ExpandableChildDescriptor
 			StringBuilder selectionBuilder = new StringBuilder(mSelection.length() + 20);
 			// temporary array for the selection arguments
 			selectionArgs = new String[mSelectionColumns.length];
-			// the 
+			// the
 			int argPos = 0;
-			
+
 			// for every selection argument
 			for (int i = 0; i < mSelectionColumns.length; ++i)
 			{
 				// find next ?
 				newPos = mSelection.indexOf('?', pos == 0 ? pos : pos + 1);
 				selectionBuilder.append(mSelection.substring(pos, newPos));
-				
+
 				// get the argument
 				String arg = cursor.getString(mSelectionColumns[i]);
 				if (arg == null)
@@ -106,11 +106,20 @@ public class ExpandableChildDescriptor
 
 				pos = newPos;
 			}
-			
+
 			if (argPos != selectionArgs.length)
 			{
 				// we had null values, so we have to shrink the array
-				selectionArgs = Arrays.copyOf(selectionArgs, argPos);
+				if (android.os.Build.VERSION.SDK_INT <= 8)
+				{	
+					String[] tempArray = new String[argPos];
+					System.arraycopy(selectionArgs, 0, tempArray, 0, argPos);
+					selectionArgs = tempArray;
+				}
+				else
+				{
+					selectionArgs = Arrays.copyOf(selectionArgs, argPos);
+				}
 			}
 
 			if (pos > 0)
