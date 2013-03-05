@@ -59,8 +59,8 @@ public class XmlModel extends Model
 
 	private final static String TAG = "org.dmfs.tasks.model.XmlModel";
 
-	public final static String METADATA_TASKS = "ms.jung.android.caldavtodo.TASKS";
-	public final static String NAMESPACE = "ms.jung.android.caldavtodo";
+	public final static String METADATA_TASKS = "org.dmfs.tasks.TASKS";
+	public final static String NAMESPACE = "org.dmfs.tasks";
 
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
 //	private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();

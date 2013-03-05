@@ -8,9 +8,9 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
 
-    <uses-permission android:name="android.permission.READ_TASKS" />
-    <uses-permission android:name="android.permission.WRITE_TASKS" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="org.dmfs.permission.READ_TASKS" />
+    <uses-permission android:name="org.dmfs.permission.WRITE_TASKS" />
+    <uses-permission android:name="org.dmfs.permission.GET_ACCOUNTS" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -39,14 +39,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="ms.jung.android.caldavtodo.provider"
-                    android:mimeType="vnd.android.cursor.item/vnd.ms.jung.tasks" />
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </activity>
 
         <provider
             android:name="org.dmfs.provider.tasks.TaskProvider"
-            android:authorities="ms.jung.android.caldavtodo.provider"
+            android:authorities="org.dmfs.tasks"
             android:label="@string/provider_label"
             android:multiprocess="false" />
 
@@ -64,23 +64,23 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="ms.jung.android.caldavtodo.provider"
-                    android:mimeType="vnd.android.cursor.item/vnd.ms.jung.tasks" />
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/vnd.ms.jung.tasks" />
+                <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT_OR_EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/vnd.ms.jung.tasks" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.ms.jung.tasks" />
+                <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
+                <data android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </activity>
     </application>
