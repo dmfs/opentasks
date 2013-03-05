@@ -4,7 +4,7 @@
     <style name="EditDetailPane">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_gravity">center_horizontal</item>
-        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:background">@color/light_gray</item>
     </style>
 
     <style name="EditDetailLL">

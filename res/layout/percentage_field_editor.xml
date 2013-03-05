@@ -7,7 +7,7 @@
 
     <include layout="@layout/editor_header" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dip" >
@@ -15,21 +15,19 @@
         <SeekBar
             android:id="@+id/percentage_seek_bar"
             style="@style/CaldavSeekBar"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/text" />
+            android:layout_weight="10" />
 
         <TextView
             android:id="@+id/text"
             style="@style/DarkText"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp" >
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:gravity="right" >
         </TextView>
-    </RelativeLayout>
+    </LinearLayout>
 
 </org.dmfs.tasks.widget.PercentageFieldEditor>

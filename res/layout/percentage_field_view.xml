@@ -2,24 +2,22 @@
 <org.dmfs.tasks.widget.PercentageFieldView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dip" >
+    android:orientation="vertical" >
 
     <include layout="@layout/detail_header" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dip" >
+        android:layout_marginTop="8dip"
+        android:orientation="horizontal" >
 
         <ProgressBar
             android:id="@+id/percentage_progress_bar"
             style="@style/CaldavProgressBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/text" >
+            android:layout_weight="3" >
         </ProgressBar>
 
         <TextView
@@ -27,9 +25,9 @@
             style="@style/DarkText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" >
+            android:layout_weight="1"
+            android:gravity="right" >
         </TextView>
-    </RelativeLayout>
+    </LinearLayout>
 
 </org.dmfs.tasks.widget.PercentageFieldView>
