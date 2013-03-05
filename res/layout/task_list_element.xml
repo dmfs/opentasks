@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TasksExpandableListItem"
     android:layout_width="match_parent"
     android:layout_height="0dip"
-    android:minHeight="?android:attr/listPreferredItemHeight" >
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingLeft="5dip"
+    android:paddingRight="5dip" >
 
     <View
         android:id="@+id/colorbar"
@@ -21,7 +24,8 @@
         android:ellipsize="end"
         android:padding="5dip"
         android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
 
     <TextView
         android:id="@+id/task_due_date"
@@ -30,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        android:textIsSelectable="false"
         android:textSize="12sp" />
 
 </RelativeLayout>

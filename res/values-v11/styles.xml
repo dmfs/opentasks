@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppTheme" parent="android:Theme.Holo.Light" />
 
@@ -29,6 +29,10 @@
 
     <style name="CaldavSeekBar" parent="android:Widget.SeekBar">
         <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="TasksExpandableListItem">
+        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
     </style>
 
 </resources>

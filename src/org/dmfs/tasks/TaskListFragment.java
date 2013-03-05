@@ -188,6 +188,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
+		View selectedView = null;
+
 
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
@@ -195,6 +197,12 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			selectChildView(parent, groupPosition, childPosition, true);
 			mActivatedPositionGroup = groupPosition;
 			mActivatedPositionChild = childPosition;
+			if (selectedView != null)
+			{
+				selectedView.setBackgroundResource(android.R.color.white);
+			}
+			v.setBackgroundResource(R.color.light_gray);
+			selectedView = v;
 			return true;
 		}
 
@@ -270,7 +278,9 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		// When setting CHOICE_MODE_SINGLE, ListView will automatically
 		// give items the 'activated' state when touched.
+		Log.d(TAG, "List Selector SET!! : " + activateOnItemClick);
 		expandLV.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+
 	}
 
 
@@ -348,12 +358,14 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				++idx;
 			}
 		}
-		
-		//Arrays.copyOf not available in API level 8 and below.
-		if(android.os.Build.VERSION.SDK_INT > 8 ){
+
+		// Arrays.copyOf not available in API level 8 and below.
+		if (android.os.Build.VERSION.SDK_INT > 8)
+		{
 			return Arrays.copyOf(result, idx);
 		}
-		else{
+		else
+		{
 			long[] returnArray = new long[idx];
 			System.arraycopy(result, 0, returnArray, 0, idx);
 			return returnArray;
