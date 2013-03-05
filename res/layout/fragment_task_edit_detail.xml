@@ -5,8 +5,9 @@
 
     <LinearLayout
         android:id="@+id/body"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        style="@style/EditDetailLL"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:orientation="vertical" >
 
         <LinearLayout

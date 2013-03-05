@@ -70,4 +70,8 @@
         <item name="android:layout_width">fill_parent</item>
     </style>
 
+    <style name="EditDetailLL">
+        <item name="android:layout_width">fill_parent</item>
+    </style>
+
 </resources>

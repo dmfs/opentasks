@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="EditDetailPane">
-        <item name="android:layout_width">600dp</item>
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="EditDetailLL">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:layout_width">600dp</item>
     </style>
 
 </resources>
