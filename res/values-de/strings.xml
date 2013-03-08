@@ -3,6 +3,12 @@
 
     <string name="app_name">Aufgaben</string>
 
+    <!-- Task list -->
+    <string name="menu_add_task">Neue Aufgabe</string>
+    <string name="menu_add_task_condensed">Neu</string>
+    <string name="menu_show_completed">Zeige Erledigte</string>
+    <string name="menu_show_completed_condensed">Erledigte</string>
+
     <!-- Names of task attributes -->
 
     <string name="task_list">Liste</string>
@@ -32,7 +38,6 @@
     <string name="task_group_due_in_month">Fällig im %s</string>
     <string name="task_group_due_in_year">Fällig %s</string>
     <string name="task_group_due_in_future">Fällig in Zukunft</string>
-    
     <string name="today">Heute</string>
 
     <!-- Task editor labels -->

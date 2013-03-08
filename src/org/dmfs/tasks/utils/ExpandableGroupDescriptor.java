@@ -17,7 +17,7 @@
 
 package org.dmfs.tasks.utils;
 
-
+import org.dmfs.tasks.groups.AbstractFilter;
 import org.dmfs.tasks.groups.cursorloaders.AbstractCursorLoaderFactory;
 
 import android.content.Context;
@@ -56,6 +56,12 @@ public class ExpandableGroupDescriptor
 	public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor)
 	{
 		return mChildDescriptor.getCursorLoader(context, cursor);
+	}
+
+
+	public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
+	{
+		return mChildDescriptor.getCursorLoader(context, cursor, filter);
 	}
 
 

@@ -21,9 +21,11 @@ import java.util.Arrays;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.groups.AbstractFilter;
 import org.dmfs.tasks.groups.ByCompleted;
 import org.dmfs.tasks.groups.ByDueDate;
 import org.dmfs.tasks.groups.ByList;
+import org.dmfs.tasks.groups.ConstantFilter;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
@@ -67,6 +69,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
 	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
+
+	private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.STATUS + "<?", Integer.toString(Tasks.STATUS_COMPLETED));
 
 	/**
 	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR} or {@link ByCompleted#GROUP_DESCRIPTOR}.
@@ -144,6 +148,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		expandLV.setOnChildClickListener(mTaskItemClickListener);
 		expandLV.setOnGroupCollapseListener(mTaskListCollapseListener);
 		mAdapter.setOnChildLoadedListener(this);
+		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
 
 		getLoaderManager().restartLoader(0, null, this);
 
@@ -297,8 +302,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		switch (item.getItemId())
 		{
-			case R.id.add_task_item:
+			case R.id.menu_add_task:
 				mCallbacks.onAddNewTask();
+				return true;
+			case R.id.menu_show_completed:
+				item.setChecked(!item.isChecked());
+				mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
+				mAdapter.notifyDataSetChanged();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -361,11 +371,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		}
 
 		// Arrays.copyOf not available in API level 8 and below.
-		if (android.os.Build.VERSION.SDK_INT > 8)
-		{
-			return Arrays.copyOf(result, idx);
-		}
-		else
+		/*
+		 * if (android.os.Build.VERSION.SDK_INT > 8)
+		 * {
+		 * return Arrays.copyOf(result, idx);
+		 * }
+		 * else
+		 */
 		{
 			long[] returnArray = new long[idx];
 			System.arraycopy(result, 0, returnArray, 0, idx);

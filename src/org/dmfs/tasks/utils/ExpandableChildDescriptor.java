@@ -17,7 +17,11 @@
 
 package org.dmfs.tasks.utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import org.dmfs.tasks.groups.AbstractFilter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -57,9 +61,11 @@ public class ExpandableChildDescriptor
 	 *            A {@link Context}.
 	 * @param cursor
 	 *            The {@link Cursor} containing the selection.
+	 * @param filter
+	 *            An additional {@link AbstractFilter} to apply to the selection of the cursor.
 	 * @return A new {@link CursorLoader} instance.
 	 */
-	public CursorLoader getCursorLoader(Context context, Cursor cursor)
+	public CursorLoader getCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
 	{
 		String[] selectionArgs = null;
 		String selection = mSelection;
@@ -77,8 +83,10 @@ public class ExpandableChildDescriptor
 
 			// a StringBuilder to build the new selection string
 			StringBuilder selectionBuilder = new StringBuilder(mSelection.length() + 20);
-			// temporary array for the selection arguments
-			selectionArgs = new String[mSelectionColumns.length];
+			selectionBuilder.append("(");
+
+			// temporary array list for the selection arguments
+			List<String> selectionArgList = new ArrayList<String>();
 			// the
 			int argPos = 0;
 
@@ -101,37 +109,53 @@ public class ExpandableChildDescriptor
 				else
 				{
 					// add argument to argument list
-					selectionArgs[argPos++] = arg;
+					selectionArgList.add(arg);
 				}
 
 				pos = newPos;
 			}
 
-			if (argPos != selectionArgs.length)
+			if (filter != null)
 			{
-				// we had null values, so we have to shrink the array
-				if (android.os.Build.VERSION.SDK_INT <= 8)
-				{	
-					String[] tempArray = new String[argPos];
-					System.arraycopy(selectionArgs, 0, tempArray, 0, argPos);
-					selectionArgs = tempArray;
-				}
-				else
-				{
-					selectionArgs = Arrays.copyOf(selectionArgs, argPos);
-				}
+				selectionArgList.addAll(Arrays.asList(filter.getSelectionArgs()));
 			}
+
+			selectionArgs = selectionArgList.toArray(new String[selectionArgList.size()]);
 
 			if (pos > 0)
 			{
 				// if we had any ?, get the new string
 				selectionBuilder.append(mSelection.substring(pos));
-				selection = selectionBuilder.toString();
 			}
+			if (filter != null)
+			{
+				selectionBuilder.append(") and (" + filter.getSelection() + ")");
+			}
+			else
+			{
+				selectionBuilder.append(")");
+			}
+			selection = selectionBuilder.toString();
 		}
 
 		Log.v("", selection.toString() + " " + TextUtils.join(",", selectionArgs));
 		return new CursorLoader(context, mUri, mProjection, selection.toString(), selectionArgs, mSortOrder);
+	}
+
+
+	/**
+	 * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as definded by {@code selectionColumns} in
+	 * {@link #ExpandableChildDescriptor(Uri, String[], String, String, int...)}
+	 * 
+	 * @param context
+	 *            A {@link Context}.
+	 * @param cursor
+	 *            The {@link Cursor} containing the selection.
+	 * @return A new {@link CursorLoader} instance.
+	 */
+	public CursorLoader getCursorLoader(Context context, Cursor cursor)
+	{
+		return getCursorLoader(context, cursor, null);
 	}
 
 

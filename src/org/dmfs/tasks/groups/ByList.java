@@ -58,7 +58,11 @@ public interface ByList
 				title.setText(text);
 				if (status != null && status > Tasks.STATUS_IN_PROCESS)
 				{
-					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+				}
+				else
+				{
+					title.setPaintFlags(title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 			}
 

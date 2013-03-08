@@ -3,6 +3,12 @@
 
     <string name="app_name">Tasks</string>
 
+    <!-- Task list -->
+    <string name="menu_add_task">Add task</string>
+    <string name="menu_add_task_condensed">Add</string>
+    <string name="menu_show_completed">Show completed</string>
+    <string name="menu_show_completed_condensed">Completed</string>
+
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edit Task</string>
     <string name="activity_add_task_title">Create Task</string>
@@ -35,9 +41,8 @@
     <string name="task_group_due_in_month">Due in %s</string>
     <string name="task_group_due_in_year">Due in %s</string>
     <string name="task_group_due_in_future">Due later</string>
-
     <string name="today">Today</string>
-    
+
     <!-- Task editor labels -->
 
     <string name="action_save">Save</string>

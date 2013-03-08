@@ -17,6 +17,8 @@
 
 package org.dmfs.tasks.utils;
 
+import org.dmfs.tasks.groups.AbstractFilter;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	private final LayoutInflater mLayoutInflater;
 	private final LoaderManager mLoaderManager;
 	private OnChildLoadedListener mOnChildLoadedListener;
+	private AbstractFilter mChildCursorFilter;
 
 
 	public ExpandableGroupDescriptorAdapter(Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
@@ -70,13 +73,19 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	}
 
 
+	public void setChildCursorFilter(AbstractFilter filter)
+	{
+		mChildCursorFilter = filter;
+	}
+
+
 	@Override
 	public Loader<Cursor> onCreateLoader(int pos, Bundle arguments)
 	{
 		Cursor cursor = getGroup(pos - 1);
 		if (cursor != null)
 		{
-			return mDescriptor.getChildCursorLoader(mContext, cursor);
+			return mDescriptor.getChildCursorLoader(mContext, cursor, mChildCursorFilter);
 		}
 		return null;
 	}

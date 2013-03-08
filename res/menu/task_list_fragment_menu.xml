@@ -2,11 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/add_task_item"
+        android:id="@+id/menu_add_task"
         android:icon="@drawable/content_new"
         android:showAsAction="always"
-        android:title="Add Task"
-        android:titleCondensed="Add">
+        android:title="@string/menu_add_task"
+        android:titleCondensed="@string/menu_add_task_condensed">
     </item>
+    <item
+        android:id="@+id/menu_show_completed"
+        android:checkable="true"
+        android:showAsAction="withText|never"
+        android:title="@string/menu_show_completed"
+        android:titleCondensed="@string/menu_show_completed_condensed"/>
 
 </menu>
