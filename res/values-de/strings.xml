@@ -6,8 +6,8 @@
     <!-- Task list -->
     <string name="menu_add_task">Neue Aufgabe</string>
     <string name="menu_add_task_condensed">Neu</string>
-    <string name="menu_show_completed">Zeige Erledigte</string>
-    <string name="menu_show_completed_condensed">Erledigte</string>
+    <string name="menu_show_completed">Zeige alle Aufgaben</string>
+    <string name="menu_show_completed_condensed">Zeige alle</string>
 
     <!-- Names of task attributes -->
 

@@ -203,12 +203,16 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			selectChildView(parent, groupPosition, childPosition, true);
 			mActivatedPositionGroup = groupPosition;
 			mActivatedPositionChild = childPosition;
-			if (selectedView != null)
+			if (parent.getChoiceMode() == ListView.CHOICE_MODE_SINGLE)
 			{
-				selectedView.setBackgroundResource(android.R.color.white);
+				v.setBackgroundResource(R.color.light_gray);
+				if (selectedView != null)
+				{
+					selectedView.setBackgroundResource(android.R.color.white);
+				}
+
+				selectedView = v;
 			}
-			v.setBackgroundResource(R.color.light_gray);
-			selectedView = v;
 			return true;
 		}
 
