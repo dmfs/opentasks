@@ -116,7 +116,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	{
 		ViewDescriptor viewDescriptor = mDescriptor.getElementViewDescriptor();
 
-		viewDescriptor.populateView(view, cursor);
+		viewDescriptor.populateView(view, cursor, this);
 	}
 
 
@@ -125,7 +125,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	{
 		ViewDescriptor viewDescriptor = mDescriptor.getGroupViewDescriptor();
 
-		viewDescriptor.populateView(view, cursor);
+		viewDescriptor.populateView(view, cursor, this);
 	}
 
 

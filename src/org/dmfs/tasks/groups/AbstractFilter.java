@@ -1,9 +1,62 @@
+/*
+ * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
 package org.dmfs.tasks.groups;
 
+import java.util.List;
+
+
+/**
+ * An abstract filter for child cursors in a grouped list.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public abstract class AbstractFilter
 {
+	/**
+	 * The the selection part of this filter.
+	 * 
+	 * @return A selection string.
+	 */
 	public abstract String getSelection();
 
 
+	/**
+	 * Append the selection part of this filter to a {@link StringBuilder}. This is much more efficiently when you're using a StringBuilder anyway.
+	 * 
+	 * @param stringBuilder
+	 *            The {@link StringBuilder} where to append the selection string.
+	 */
+	public abstract void getSelection(StringBuilder stringBuilder);
+
+
+	/**
+	 * Get the selection arguments of this filter.
+	 * 
+	 * @return An array of Strings that contains the actual positional arguments.
+	 */
 	public abstract String[] getSelectionArgs();
+
+
+	/**
+	 * Append the selection arguments of this filter to a {@link List} of {@link String}s.
+	 * 
+	 * @param selectionArgs
+	 *            The List where to append the arguments.
+	 */
+	public abstract void getSelectionArgs(List<String> selectionArgs);
 }

@@ -33,15 +33,15 @@ import android.widget.ListView;
 
 /**
  * An activity representing a list of Tasks. This activity has different presentations for handset and tablet-size devices. On handsets, the activity presents a
- * list of items, which when touched, lead to a {@link TaskDetailActivity} representing item details. On tablets, the activity presents the list of items and
+ * list of items, which when touched, lead to a {@link ViewTaskActivity} representing item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  * <p>
  * The activity makes heavy use of fragments. The list of items is a {@link TaskListFragment} and the item details (if present) is a
- * {@link TaskViewDetailFragment}.
+ * {@link ViewTaskFragment}.
  * <p>
  * This activity also implements the required {@link TaskListFragment.Callbacks} interface to listen for item selections.
  */
-public class TaskListActivity extends FragmentActivity implements TaskListFragment.Callbacks, TaskViewDetailFragment.Callback
+public class TaskListActivity extends FragmentActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
 
 	private static final String TAG = "TaskListActivity";
@@ -53,7 +53,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	 */
 	private boolean mTwoPane;
 	Context appContext;
-	TaskViewDetailFragment taskDetailFrag;
+	ViewTaskFragment taskDetailFrag;
 	TaskListFragment taskListFrag;
 	SharedPreferences openTaskPrefs;
 
@@ -107,7 +107,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			/*
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
 			 */
-			taskDetailFrag = new TaskViewDetailFragment();
+			taskDetailFrag = new ViewTaskFragment();
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
 		}
 

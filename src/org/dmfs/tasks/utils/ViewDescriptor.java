@@ -19,11 +19,12 @@ package org.dmfs.tasks.utils;
 
 import android.database.Cursor;
 import android.view.View;
+import android.widget.BaseExpandableListAdapter;
 
 
 public interface ViewDescriptor
 {
-	public void populateView(View view, Cursor cursor);
+	public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter);
 
 
 	public int getView();

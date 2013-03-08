@@ -60,7 +60,7 @@ import android.widget.Toast;
  * 
  */
 
-public class TaskEditDetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener
+public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener
 {
 	public static final String PARAM_TASK_URI = "task_uri";
 
@@ -75,7 +75,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 		TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR };
 
 	/**
-	 * This interface provides a convenient way to get column indices of {@link TaskEditDetailFragment#TASK_LIST_PROJECTION} without any overhead.
+	 * This interface provides a convenient way to get column indices of {@link EditTaskFragment#TASK_LIST_PROJECTION} without any overhead.
 	 */
 	@SuppressWarnings("unused")
 	private interface TASK_LIST_PROJECTION_VALUES
@@ -113,7 +113,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
 	 */
-	public TaskEditDetailFragment()
+	public EditTaskFragment()
 	{
 	}
 
@@ -170,7 +170,7 @@ public class TaskEditDetailFragment extends Fragment implements LoaderManager.Lo
 				{
 					mValues.put(Tasks.LIST_ID, c.getLong(TASK_LIST_PROJECTION_VALUES.id));
 				}
-				new AsyncModelLoader(mAppContext, TaskEditDetailFragment.this).execute(accountType);
+				new AsyncModelLoader(mAppContext, EditTaskFragment.this).execute(accountType);
 			}
 
 

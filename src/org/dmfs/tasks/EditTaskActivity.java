@@ -24,7 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class AddEditTaskActivity extends FragmentActivity
+public class EditTaskActivity extends FragmentActivity
 {
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -41,8 +41,8 @@ public class AddEditTaskActivity extends FragmentActivity
 		if (savedInstanceState == null)
 		{
 			Bundle arguments = new Bundle();
-			arguments.putParcelable(TaskEditDetailFragment.PARAM_TASK_URI, getIntent().getData());
-			TaskEditDetailFragment fragment = new TaskEditDetailFragment();
+			arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
+			EditTaskFragment fragment = new EditTaskFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.add_task_container, fragment).commit();
 		}

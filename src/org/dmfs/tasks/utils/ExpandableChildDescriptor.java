@@ -117,7 +117,7 @@ public class ExpandableChildDescriptor
 
 			if (filter != null)
 			{
-				selectionArgList.addAll(Arrays.asList(filter.getSelectionArgs()));
+				filter.getSelectionArgs(selectionArgList);
 			}
 
 			selectionArgs = selectionArgList.toArray(new String[selectionArgList.size()]);
@@ -129,7 +129,9 @@ public class ExpandableChildDescriptor
 			}
 			if (filter != null)
 			{
-				selectionBuilder.append(") and (" + filter.getSelection() + ")");
+				selectionBuilder.append(") and (");
+				filter.getSelection(selectionBuilder);
+				selectionBuilder.append(")");
 			}
 			else
 			{

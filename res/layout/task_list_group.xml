@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:orientation="vertical"
     android:minHeight="?android:attr/listPreferredItemHeight" >
 
     <TextView
@@ -14,6 +13,7 @@
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
+        android:layout_alignParentLeft="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView
         android:id="@android:id/text1"
@@ -23,6 +23,20 @@
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
+        android:layout_below="@android:id/title"
+        android:layout_alignParentLeft="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+    <TextView
+        android:id="@android:id/text2"
+        style="@style/editor_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:paddingLeft="0dip"
+        android:singleLine="true"
+        android:layout_below="@android:id/title"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dip"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
-</LinearLayout>
+</RelativeLayout>

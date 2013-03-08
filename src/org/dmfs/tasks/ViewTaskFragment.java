@@ -43,13 +43,13 @@ import android.view.ViewGroup;
 
 /**
  * A fragment representing a single Task detail screen. This fragment is either contained in a {@link TaskListActivity} in two-pane mode (on tablets) or a
- * {@link TaskDetailActivity} on handsets.
+ * {@link ViewTaskActivity} on handsets.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
 
-public class TaskViewDetailFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
+public class ViewTaskFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
 {
 	private static final String TAG = "TaskViewDetailFragment";
 
@@ -76,7 +76,7 @@ public class TaskViewDetailFragment extends Fragment implements OnModelLoadedLis
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
 	 */
-	public TaskViewDetailFragment()
+	public ViewTaskFragment()
 	{
 	}
 
