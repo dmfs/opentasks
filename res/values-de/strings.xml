@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Android Aufgaben</string>
+    <string name="app_name">Aufgaben</string>
 
     <!-- Names of task attributes -->
 
@@ -32,6 +32,8 @@
     <string name="task_group_due_in_month">Fällig im %s</string>
     <string name="task_group_due_in_year">Fällig %s</string>
     <string name="task_group_due_in_future">Fällig in Zukunft</string>
+    
+    <string name="today">Heute</string>
 
     <!-- Task editor labels -->
 

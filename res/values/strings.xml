@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Android Tasks</string>
+    <string name="app_name">Tasks</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edit Task</string>
@@ -36,6 +36,8 @@
     <string name="task_group_due_in_year">Due in %s</string>
     <string name="task_group_due_in_future">Due later</string>
 
+    <string name="today">Today</string>
+    
     <!-- Task editor labels -->
 
     <string name="action_save">Save</string>

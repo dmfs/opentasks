@@ -23,6 +23,7 @@ import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.groups.ByCompleted;
 import org.dmfs.tasks.groups.ByDueDate;
+import org.dmfs.tasks.groups.ByList;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
@@ -70,7 +71,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	/**
 	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR} or {@link ByCompleted#GROUP_DESCRIPTOR}.
 	 */
-	private final static ExpandableGroupDescriptor CURRENT_GROUP_DESCRIPTOR = ByDueDate.GROUP_DESCRIPTOR;
+	private final static ExpandableGroupDescriptor CURRENT_GROUP_DESCRIPTOR = ByList.GROUP_DESCRIPTOR;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.

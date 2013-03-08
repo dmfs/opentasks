@@ -10,7 +10,7 @@
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS" />
     <uses-permission android:name="org.dmfs.permission.WRITE_TASKS" />
-    <uses-permission android:name="org.dmfs.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -80,7 +80,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
-                <data android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </activity>
     </application>
