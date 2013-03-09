@@ -39,10 +39,10 @@ public final class ConstantFilter extends AbstractFilter
 	 * @param selectionArgs
 	 *            The positional selection arguments.
 	 */
-	public ConstantFilter(String selection, String selectionArgs)
+	public ConstantFilter(String selection, String... selectionArgs)
 	{
 		mSelection = selection;
-		mSelectionArgs = new String[] { selectionArgs };
+		mSelectionArgs = selectionArgs;
 	}
 
 

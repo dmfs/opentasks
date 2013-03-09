@@ -70,7 +70,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
 	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
 
-	private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.STATUS + "<?", Integer.toString(Tasks.STATUS_COMPLETED));
+	private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.IS_CLOSED + "=0");
 
 	/**
 	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR} or {@link ByCompleted#GROUP_DESCRIPTOR}.

@@ -68,13 +68,13 @@ public interface ByList
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
-			Integer status = cursor.getInt(11);
+			boolean isClosed = cursor.getInt(13) > 0;
 
 			if (title != null)
 			{
 				String text = cursor.getString(5);
 				title.setText(text);
-				if (status != null && status > Tasks.STATUS_IN_PROCESS)
+				if (isClosed)
 				{
 					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 				}
@@ -101,7 +101,7 @@ public interface ByList
 					dueDateField.setText(makeDueDate(dueDate, view.getContext()));
 
 					// highlight overdue dates & times
-					if (dueDate.before(mNow) && (status == null || status < Tasks.STATUS_COMPLETED))
+					if (dueDate.before(mNow) && !isClosed)
 					{
 						dueDateField.setTextColor(Color.RED);
 					}

@@ -29,7 +29,7 @@ public interface Common
 	 */
 	public final static String[] INSTANCE_PROJECTION = new String[] { Instances.INSTANCE_START, Instances.INSTANCE_DURATION, Instances.INSTANCE_DUE,
 		Instances.IS_ALLDAY, Instances.TZ, Instances.TITLE, Instances.LIST_COLOR, Instances.PRIORITY, Instances.LIST_ID, Instances.TASK_ID, Instances._ID,
-		Instances.STATUS, Instances.COMPLETED };
+		Instances.STATUS, Instances.COMPLETED, Instances.IS_CLOSED };
 
 	/**
 	 * An adapter to load the due date from the instances projection.
