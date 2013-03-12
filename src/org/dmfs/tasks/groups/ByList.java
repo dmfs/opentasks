@@ -65,7 +65,7 @@ public interface ByList
 
 
 		@Override
-		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter)
+		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
@@ -121,6 +121,12 @@ public interface ByList
 			{
 				colorbar.setBackgroundColor(cursor.getInt(6));
 			}
+
+			View divider = view.findViewById(R.id.divider);
+			if (divider != null)
+			{
+				divider.setVisibility((flags & FLAG_IS_LAST_CHILD) != 0 ? View.GONE : View.VISIBLE);
+			}
 		}
 
 
@@ -143,7 +149,14 @@ public interface ByList
 			due.switchTimezone(TimeZone.getDefault().getID());
 			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
 			{
-				return context.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(due.toMillis(false)));
+				if (due.allDay)
+				{
+					return context.getString(R.string.today);
+				}
+				else
+				{
+					return context.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(due.toMillis(false)));
+				}
 			}
 			else
 			{
@@ -159,7 +172,7 @@ public interface ByList
 	{
 
 		@Override
-		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter)
+		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
@@ -172,11 +185,16 @@ public interface ByList
 				text1.setText(cursor.getString(3));
 			}
 			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+			int childrenCount = adapter.getChildrenCount(cursor.getPosition());
 			if (text2 != null)
 			{
-				text2.setText("(" + adapter.getChildrenCount(cursor.getPosition()) + ")");
+				text2.setText(view.getContext().getString(R.string.x_tasks, childrenCount));
 			}
-			// view.setBackgroundColor(cursor.getInt(2));
+			View divider = view.findViewById(R.id.divider);
+			if (divider != null)
+			{
+				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
+			}
 		}
 
 

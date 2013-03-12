@@ -64,7 +64,7 @@ public interface ByDueDate
 
 
 		@Override
-		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter)
+		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
@@ -150,7 +150,7 @@ public interface ByDueDate
 
 
 		@Override
-		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter)
+		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)

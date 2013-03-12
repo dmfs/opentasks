@@ -8,6 +8,7 @@
     <string name="menu_add_task_condensed">Neu</string>
     <string name="menu_show_completed">Zeige alle Aufgaben</string>
     <string name="menu_show_completed_condensed">Zeige alle</string>
+    <string name="x_tasks">%1s Aufgaben</string>
 
     <!-- Names of task attributes -->
 

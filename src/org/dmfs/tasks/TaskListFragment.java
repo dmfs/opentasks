@@ -30,6 +30,7 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -51,6 +52,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 
@@ -61,6 +63,7 @@ import android.widget.ListView;
  * <p>
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
+@SuppressLint("NewApi")
 public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener
 {
 
@@ -150,6 +153,23 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		expandLV.setOnGroupCollapseListener(mTaskListCollapseListener);
 		mAdapter.setOnChildLoadedListener(this);
 		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
+		expandLV.setOnGroupClickListener(new OnGroupClickListener()
+		{
+
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
+			{
+				if (mAdapter.getChildrenCount(groupPosition) > 0)
+				{
+					return false;
+				}
+				else
+				{
+					// don't allow changes of expanded state for empty groups
+					return true;
+				}
+			}
+		});
 
 		getLoaderManager().restartLoader(0, null, this);
 
@@ -198,6 +218,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		View selectedView = null;
 		Drawable savedBackground = null;
 
+
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
@@ -210,10 +231,12 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				v.setBackgroundResource(android.R.color.holo_blue_dark);
 				if (selectedView != null)
 				{
-					if(android.os.Build.VERSION.SDK_INT < 16){
-					selectedView.setBackgroundDrawable(savedBackground);
+					if (android.os.Build.VERSION.SDK_INT < 16)
+					{
+						selectedView.setBackgroundDrawable(savedBackground);
 					}
-					else{
+					else
+					{
 						selectedView.setBackground(savedBackground);
 					}
 				}
@@ -473,7 +496,5 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		expandedIds = ids;
 
 	}
-	
-	
 
 }

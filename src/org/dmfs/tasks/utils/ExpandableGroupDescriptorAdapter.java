@@ -37,7 +37,6 @@ import android.widget.ExpandableListView;
  * It supports asynchronous loading of the group children.
  * 
  * @author Marten Gajda <marten@dmfs.org>
- * 
  */
 public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implements LoaderManager.LoaderCallbacks<Cursor>
 {
@@ -116,7 +115,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	{
 		ViewDescriptor viewDescriptor = mDescriptor.getElementViewDescriptor();
 
-		viewDescriptor.populateView(view, cursor, this);
+		viewDescriptor.populateView(view, cursor, this, isLastChild ? ViewDescriptor.FLAG_IS_LAST_CHILD : 0);
 	}
 
 
@@ -125,7 +124,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	{
 		ViewDescriptor viewDescriptor = mDescriptor.getGroupViewDescriptor();
 
-		viewDescriptor.populateView(view, cursor, this);
+		viewDescriptor.populateView(view, cursor, this, isExpanded ? ViewDescriptor.FLAG_IS_EXPANDED : 0);
 	}
 
 

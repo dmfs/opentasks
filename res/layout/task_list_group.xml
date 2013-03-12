@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingTop="10dp" >
+    android:paddingTop="10dip" >
 
     <TextView
         android:id="@android:id/title"
@@ -16,7 +16,6 @@
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false" />
 
     <TextView
@@ -28,6 +27,7 @@
         android:layout_below="@android:id/title"
         android:layout_marginLeft="8dip"
         android:ellipsize="end"
+        android:paddingBottom="10dip"
         android:paddingLeft="0dip"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
@@ -48,10 +48,10 @@
         android:textIsSelectable="false" />
 
     <View
+        android:id="@+id/divider"
         style="@style/detail_label_line"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@android:id/text2" />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

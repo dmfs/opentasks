@@ -39,9 +39,10 @@
         android:textSize="12sp" />
 
     <View
+        android:id="@+id/divider"
         style="@style/ListItemLine"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="1px"
         android:layout_alignParentBottom="true"
         android:layout_below="@android:id/title" />
 

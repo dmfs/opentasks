@@ -24,7 +24,18 @@ import android.widget.BaseExpandableListAdapter;
 
 public interface ViewDescriptor
 {
-	public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter);
+	/**
+	 * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is the last child in a group.
+	 */
+	public final static int FLAG_IS_LAST_CHILD = 0x0001;
+
+	/**
+	 * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is group that's currently expanded.
+	 */
+	public final static int FLAG_IS_EXPANDED = 0x0002;
+
+
+	public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags);
 
 
 	public int getView();
