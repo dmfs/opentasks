@@ -342,7 +342,11 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			case R.id.menu_show_completed:
 				item.setChecked(!item.isChecked());
 				mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
-				mAdapter.notifyDataSetChanged();
+				// reload the child cursors only
+				for (int i = 0; i < mAdapter.getGroupCount(); ++i)
+				{
+					mAdapter.reloadGroup(i);
+				}
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -366,7 +370,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 */
 		Log.v(TAG, "change cursor");
 		mSavedExpandedGroups = getExpandedGroups();
-		
+
 		mAdapter.changeCursor(cursor);
 		/*
 		 * expandLV.setSelectionFromTop(scrollx, 0); int scrollx2 = expandLV.getFirstVisiblePosition(); View itemView2 = expandLV.getChildAt(0); int scrolly2 =
@@ -408,11 +412,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 		// Arrays.copyOf not available in API level 8 and below.
 		/*
-		 * if (android.os.Build.VERSION.SDK_INT > 8)
-		 * {
-		 * return Arrays.copyOf(result, idx);
-		 * }
-		 * else
+		 * if (android.os.Build.VERSION.SDK_INT > 8) { return Arrays.copyOf(result, idx); } else
 		 */
 		{
 			long[] returnArray = new long[idx];

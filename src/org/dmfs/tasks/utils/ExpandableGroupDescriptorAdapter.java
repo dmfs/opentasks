@@ -137,6 +137,15 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	}
 
 
+	public void reloadGroup(int position)
+	{
+		if (position < getGroupCount())
+		{
+			mLoaderManager.restartLoader(position + 1, null, this);
+		}
+	}
+
+
 	@Override
 	protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent)
 	{
