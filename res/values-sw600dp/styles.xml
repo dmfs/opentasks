@@ -12,4 +12,8 @@
         <item name="android:layout_width">600dp</item>
     </style>
 
+    <style name="TaskListContainer">
+        <item name="android:background">@color/light_gray</item>
+    </style>
+
 </resources>

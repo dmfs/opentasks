@@ -28,7 +28,7 @@
     </style>
 
     <style name="TaskGroupText">
-        <item name="android:textColor">#ff33b5e5</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="detail_label_text">
@@ -38,6 +38,11 @@
     <style name="detail_label_line">
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="ListItemLine">
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@color/light_gray</item>
     </style>
 
     <style name="editor_label_text">
@@ -75,5 +80,23 @@
     </style>
 
     <style name="TasksExpandableListItem"></style>
+
+    <style name="ExpandableTaskList">
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbarSize">20dp</item>
+        <item name="android:cacheColorHint">#00000000</item>
+        <item name="android:divider">@android:color/black</item>
+        <item name="android:dividerHeight">1px</item>
+        <item name="android:childDivider">@android:color/black</item>
+    </style>
+
+    <style name="TaskListContainer"></style>
+
+    <style name="TaskGroupListItem"></style>
+
+    <style name="ListItemLine">
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
 
 </resources>

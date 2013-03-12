@@ -1,4 +1,4 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="android:Theme.Holo.Light" />
 
@@ -33,6 +33,10 @@
 
     <style name="TasksExpandableListItem">
         <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+    </style>
+
+    <style name="TaskGroupText">
+        <item name="android:textColor" tools:targetApi="14">@android:color/holo_blue_dark</item>
     </style>
 
 </resources>

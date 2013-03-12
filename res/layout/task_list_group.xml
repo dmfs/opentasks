@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TaskGroupListItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:minHeight="?android:attr/listPreferredItemHeight" >
+    android:paddingTop="10dp" >
 
     <TextView
         android:id="@android:id/title"
@@ -45,5 +46,12 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false" />
+
+    <View
+        style="@style/detail_label_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@android:id/text2" />
 
 </RelativeLayout>

@@ -207,7 +207,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			if (parent.getChoiceMode() == ListView.CHOICE_MODE_SINGLE)
 			{
 				savedBackground = v.getBackground();
-				v.setBackgroundResource(R.color.light_gray);
+				v.setBackgroundResource(android.R.color.holo_blue_dark);
 				if (selectedView != null)
 				{
 					if(android.os.Build.VERSION.SDK_INT < 16){
@@ -473,5 +473,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		expandedIds = ids;
 
 	}
+	
+	
 
 }

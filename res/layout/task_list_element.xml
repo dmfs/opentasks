@@ -38,4 +38,11 @@
         android:textIsSelectable="false"
         android:textSize="12sp" />
 
+    <View
+        style="@style/ListItemLine"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@android:id/title" />
+
 </RelativeLayout>
