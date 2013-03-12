@@ -32,6 +32,7 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -188,7 +189,9 @@ public interface ByList
 			int childrenCount = adapter.getChildrenCount(cursor.getPosition());
 			if (text2 != null)
 			{
-				text2.setText(view.getContext().getString(R.string.x_tasks, childrenCount));
+				Resources res = view.getContext().getResources();
+
+				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
 			}
 			View divider = view.findViewById(R.id.divider);
 			if (divider != null)
