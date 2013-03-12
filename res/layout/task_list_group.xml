@@ -10,33 +10,40 @@
         style="@style/TaskGroupText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dip"
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
-        android:layout_alignParentLeft="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
+
     <TextView
         android:id="@android:id/text1"
         style="@style/editor_label_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@android:id/title"
+        android:layout_marginLeft="8dip"
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
-        android:layout_below="@android:id/title"
-        android:layout_alignParentLeft="true"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+
     <TextView
         android:id="@android:id/text2"
         style="@style/editor_label_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@android:id/title"
+        android:layout_marginRight="8dip"
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
-        android:layout_below="@android:id/title"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="8dip"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-    
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+
 </RelativeLayout>

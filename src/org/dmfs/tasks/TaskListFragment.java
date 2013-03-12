@@ -34,6 +34,7 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -195,7 +196,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
 		View selectedView = null;
-
+		Drawable savedBackground = null;
 
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
@@ -205,10 +206,16 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			mActivatedPositionChild = childPosition;
 			if (parent.getChoiceMode() == ListView.CHOICE_MODE_SINGLE)
 			{
+				savedBackground = v.getBackground();
 				v.setBackgroundResource(R.color.light_gray);
 				if (selectedView != null)
 				{
-					selectedView.setBackgroundResource(android.R.color.white);
+					if(android.os.Build.VERSION.SDK_INT < 16){
+					selectedView.setBackgroundDrawable(savedBackground);
+					}
+					else{
+						selectedView.setBackground(savedBackground);
+					}
 				}
 
 				selectedView = v;
