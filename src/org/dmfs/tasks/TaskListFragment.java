@@ -365,6 +365,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 * Log.v(TAG, "scrollY " + scrollx + "  " + scrolly);
 		 */
 		Log.v(TAG, "change cursor");
+		mSavedExpandedGroups = getExpandedGroups();
+		
 		mAdapter.changeCursor(cursor);
 		/*
 		 * expandLV.setSelectionFromTop(scrollx, 0); int scrollx2 = expandLV.getFirstVisiblePosition(); View itemView2 = expandLV.getChildAt(0); int scrolly2 =

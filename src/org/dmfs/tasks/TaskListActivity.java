@@ -233,6 +233,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	public void onDelete(Uri taskUri)
 	{
 		// nothing to do here, the loader will take care of reloading the list and the list view will take care of selecting the next element.
+		
+		// TODO: there is one exception: when there is no other element to focus!
 	}
 
 }
