@@ -19,6 +19,7 @@ package org.dmfs.tasks;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,8 +37,7 @@ import android.widget.ListView;
  * list of items, which when touched, lead to a {@link ViewTaskActivity} representing item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  * <p>
- * The activity makes heavy use of fragments. The list of items is a {@link TaskListFragment} and the item details (if present) is a
- * {@link ViewTaskFragment}.
+ * The activity makes heavy use of fragments. The list of items is a {@link TaskListFragment} and the item details (if present) is a {@link ViewTaskFragment}.
  * <p>
  * This activity also implements the required {@link TaskListFragment.Callbacks} interface to listen for item selections.
  */
@@ -48,6 +48,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private static final String OPEN_CHILD_PREFERENCE_NAME = "open_child";
 	private static final String OPEN_GROUP_PREFERENCE_NAME = "open_group";
 	private static final String EXPANDED_GROUPS_PREFERENCE_NAME = "expanded_groups";
+
+	private final static int REQUEST_CODE_NEW_TASK = 2924;
+
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
@@ -150,7 +153,27 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
 		editTaskIntent.setData(Tasks.CONTENT_URI);
-		startActivity(editTaskIntent);
+		startActivityForResult(editTaskIntent, REQUEST_CODE_NEW_TASK);
+	}
+
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent intent)
+	{
+		if (resultCode == Activity.RESULT_OK)
+		{
+
+			switch (requestCode)
+			{
+				case REQUEST_CODE_NEW_TASK:
+					Uri newTaskUri = intent.getData();
+					if (newTaskUri != null)
+					{
+						onItemSelected(newTaskUri, true);
+					}
+			}
+
+		}
 	}
 
 
@@ -203,6 +226,13 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			Log.d(TAG, "taskListFrag is NULL!!");
 		}
+	}
+
+
+	@Override
+	public void onDelete(Uri taskUri)
+	{
+		// nothing to do here, the loader will take care of reloading the list and the list view will take care of selecting the next element.
 	}
 
 }

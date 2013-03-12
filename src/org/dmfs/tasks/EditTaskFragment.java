@@ -32,6 +32,7 @@ import org.dmfs.tasks.widget.TaskEdit;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -297,17 +298,22 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		Activity activity = getActivity();
 		if (menuId == R.id.editor_action_save)
 		{
-			Log.v(TAG, "persiting task");
+			Log.v(TAG, "persisting task");
 			/*
 			 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
 			 */
-			mValues.persist(activity);
+			mTaskUri = mValues.persist(activity);
+			// return proper result
+			Intent result = new Intent();
+			result.setData(mTaskUri);
+			activity.setResult(Activity.RESULT_OK, result);
 			activity.finish();
 			return true;
 		}
 		else if (menuId == R.id.editor_action_cancel)
 		{
 			Log.v(TAG, "cancelled");
+			activity.setResult(Activity.RESULT_CANCELED);
 			activity.finish();
 			return true;
 		}

@@ -109,4 +109,12 @@ public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragme
 		startActivity(editTaskIntent);
 	}
 
+
+	@Override
+	public void onDelete(Uri taskUri)
+	{
+		// the task we're showing has been deleted, just finish
+		finish();
+	}
+
 }

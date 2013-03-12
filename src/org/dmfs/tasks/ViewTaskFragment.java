@@ -208,6 +208,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			case R.id.delete_task:
 				Log.v(TAG, "removing task");
 				mContentSet.delete(mAppContext);
+				callback.onDelete(mTaskUri);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -217,6 +218,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public interface Callback
 	{
 		public void displayEditTask(Uri taskUri);
+		public void onDelete(Uri taskUri);
 	}
 
 
