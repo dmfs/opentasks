@@ -343,6 +343,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				item.setChecked(!item.isChecked());
 				mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
 				// reload the child cursors only
+
+				// TODO: reload only groups that are visible
 				for (int i = 0; i < mAdapter.getGroupCount(); ++i)
 				{
 					mAdapter.reloadGroup(i);
