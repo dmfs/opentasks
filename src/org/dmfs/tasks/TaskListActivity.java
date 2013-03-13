@@ -169,7 +169,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 					Uri newTaskUri = intent.getData();
 					if (newTaskUri != null)
 					{
-						onItemSelected(newTaskUri, true);
+						onItemSelected(newTaskUri, false);
 					}
 			}
 
