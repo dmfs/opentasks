@@ -29,11 +29,14 @@ import org.dmfs.tasks.groups.cursorloaders.TimeRangeCursorFactory;
 import org.dmfs.tasks.groups.cursorloaders.TimeRangeCursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -67,10 +70,19 @@ public interface ByDueDate
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
+			boolean isClosed = cursor.getInt(13) > 0;
 			if (title != null)
 			{
 				String text = cursor.getString(5);
 				title.setText(text);
+				if (isClosed)
+				{
+					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+				}
+				else
+				{
+					title.setPaintFlags(title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+				}
 			}
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
@@ -108,6 +120,12 @@ public interface ByDueDate
 			if (colorbar != null)
 			{
 				colorbar.setBackgroundColor(cursor.getInt(6));
+			}
+
+			View divider = view.findViewById(R.id.divider);
+			if (divider != null)
+			{
+				divider.setVisibility((flags & FLAG_IS_LAST_CHILD) != 0 ? View.GONE : View.VISIBLE);
 			}
 		}
 
@@ -152,10 +170,37 @@ public interface ByDueDate
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
+			int position = cursor.getPosition();
+
+			// set list title
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
 			{
 				title.setText(getTitle(cursor, view.getContext()));
+			}
+
+			// set list account
+			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+			if (text1 != null)
+			{
+				text1.setText(cursor.getString(3));
+			}
+
+			// set list elements
+			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+			int childrenCount = adapter.getChildrenCount(position);
+			if (text2 != null && ((ExpandableGroupDescriptorAdapter) adapter).childCursorLoaded(position))
+			{
+				Resources res = view.getContext().getResources();
+
+				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
+			}
+
+			// show/hide divider
+			View divider = view.findViewById(R.id.divider);
+			if (divider != null)
+			{
+				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
 			}
 		}
 

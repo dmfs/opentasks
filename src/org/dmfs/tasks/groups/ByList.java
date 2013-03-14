@@ -29,6 +29,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.groups.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.content.Context;
@@ -175,24 +176,33 @@ public interface ByList
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
+			int position = cursor.getPosition();
+
+			// set list title
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
 			{
 				title.setText(getTitle(cursor, view.getContext()));
 			}
+
+			// set list account
 			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
 			if (text1 != null)
 			{
 				text1.setText(cursor.getString(3));
 			}
+
+			// set list elements
 			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
-			int childrenCount = adapter.getChildrenCount(cursor.getPosition());
-			if (text2 != null)
+			int childrenCount = adapter.getChildrenCount(position);
+			if (text2 != null && ((ExpandableGroupDescriptorAdapter) adapter).childCursorLoaded(position))
 			{
 				Resources res = view.getContext().getResources();
 
 				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
 			}
+
+			// show/hide divider
 			View divider = view.findViewById(R.id.divider);
 			if (divider != null)
 			{

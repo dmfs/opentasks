@@ -77,7 +77,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.IS_CLOSED + "=0");
 
 	/**
-	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR} or {@link ByCompleted#GROUP_DESCRIPTOR}.
+	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR}, {@link ByCompleted#GROUP_DESCRIPTOR} or
+	 * {@link ByList#GROUP_DESCRIPTOR}.
 	 */
 	private final static ExpandableGroupDescriptor CURRENT_GROUP_DESCRIPTOR = ByList.GROUP_DESCRIPTOR;
 
@@ -171,7 +172,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			}
 		});
 
-		getLoaderManager().restartLoader(0, null, this);
+		getLoaderManager().restartLoader(-1, null, this);
 
 		if (savedInstanceState != null)
 		{

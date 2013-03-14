@@ -17,6 +17,9 @@
 
 package org.dmfs.tasks.utils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.dmfs.tasks.groups.AbstractFilter;
 
 import android.content.Context;
@@ -36,16 +39,19 @@ import android.widget.ExpandableListView;
  * 
  * It supports asynchronous loading of the group children.
  * 
+ * TODO: manage loader ids to avoid clashes with other instances using the {@link LoaderManager}.
+ * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implements LoaderManager.LoaderCallbacks<Cursor>
 {
 
-	private final ExpandableGroupDescriptor mDescriptor;
-
 	private final Context mContext;
 	private final LayoutInflater mLayoutInflater;
 	private final LoaderManager mLoaderManager;
+	private final Set<Integer> mLoadedGroups = new HashSet<Integer>();
+
+	private ExpandableGroupDescriptor mDescriptor;
 	private OnChildLoadedListener mOnChildLoadedListener;
 	private AbstractFilter mChildCursorFilter;
 
@@ -78,10 +84,19 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	}
 
 
+	public boolean childCursorLoaded(int position)
+	{
+		return mLoadedGroups.contains(position);
+	}
+
+
 	@Override
 	public Loader<Cursor> onCreateLoader(int pos, Bundle arguments)
 	{
-		Cursor cursor = getGroup(pos - 1);
+		// the child cursor is no longer valid
+		mLoadedGroups.remove(pos);
+
+		Cursor cursor = getGroup(pos);
 		if (cursor != null)
 		{
 			return mDescriptor.getChildCursorLoader(mContext, cursor, mChildCursorFilter);
@@ -93,7 +108,10 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		int pos = loader.getId() - 1;
+		int pos = loader.getId();
+
+		// the child cursor has been loaded
+		mLoadedGroups.add(pos);
 		setChildrenCursor(pos, cursor);
 		if (mOnChildLoadedListener != null)
 		{
@@ -131,17 +149,20 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	protected Cursor getChildrenCursor(Cursor groupCursor)
 	{
-		// android doesn't like it if the id is 0, so add 1 and ensure we always remove 1 when we use the id
-		mLoaderManager.restartLoader(groupCursor.getPosition() + 1, null, this);
+		// the child cursor is no longer valid
+		mLoadedGroups.remove(groupCursor.getPosition());
+		mLoaderManager.restartLoader(groupCursor.getPosition(), null, this);
 		return null;
 	}
 
 
 	public void reloadGroup(int position)
 	{
+		// the child cursor is no longer valid
+		mLoadedGroups.remove(position);
 		if (position < getGroupCount())
 		{
-			mLoaderManager.restartLoader(position + 1, null, this);
+			mLoaderManager.restartLoader(position, null, this);
 		}
 	}
 
