@@ -160,7 +160,11 @@ public interface ByCompleted
 		 */
 		private String makeDueDate(Time due)
 		{
-			due.switchTimezone(TimeZone.getDefault().getID());
+			if (!due.allDay)
+			{
+				due.switchTimezone(TimeZone.getDefault().getID());
+			}
+
 			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
 			{
 				return mTimeFormatter.format(new Date(due.toMillis(false)));
