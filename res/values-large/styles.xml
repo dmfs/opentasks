@@ -9,7 +9,7 @@
 
     <style name="EditDetailLL">
         <item name="android:background">@android:color/white</item>
-        <item name="android:layout_width">600dp</item>
+        <item name="android:layout_width">fill_parent</item>
     </style>
 
     <style name="TaskListContainer">
