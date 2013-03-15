@@ -85,9 +85,6 @@
         <item name="android:scrollbarStyle">outsideOverlay</item>
         <item name="android:scrollbarSize">20dp</item>
         <item name="android:cacheColorHint">#00000000</item>
-        <item name="android:divider">@android:color/black</item>
-        <item name="android:dividerHeight">1px</item>
-        <item name="android:childDivider">@android:color/black</item>
     </style>
 
     <style name="TaskListContainer"></style>
@@ -97,6 +94,14 @@
     <style name="ListItemLine">
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="TaskListItemDate" parent="DarkText">
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
+    <style name="TaskListGroupCount" parent="editor_label_text">
+        <item name="android:layout_marginRight">8dp</item>
     </style>
 
 </resources>

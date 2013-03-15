@@ -81,8 +81,10 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// 'activated' state when touched.
 
 			taskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
+			
 			taskListFrag.setActivateOnItemClick(true);
-
+			taskListFrag.setListViewScrollbarPositionLeft(true);
+			
 			openTaskPrefs = getPreferences(MODE_PRIVATE);
 			int openChildPosition = openTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
 			int openGroupPosition = openTaskPrefs.getInt(OPEN_GROUP_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);

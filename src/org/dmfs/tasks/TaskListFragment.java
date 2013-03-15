@@ -229,7 +229,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			if (parent.getChoiceMode() == ListView.CHOICE_MODE_SINGLE)
 			{
 				savedBackground = v.getBackground();
-				v.setBackgroundResource(android.R.color.holo_blue_dark);
+				v.setBackgroundResource(R.drawable.list_activated_holo);
 				if (selectedView != null)
 				{
 					if (android.os.Build.VERSION.SDK_INT < 16)
@@ -322,6 +322,23 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		Log.d(TAG, "List Selector SET!! : " + activateOnItemClick);
 		expandLV.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 
+	}
+
+
+	public void setListViewScrollbarPositionLeft(boolean left)
+	{
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		{
+			if (left)
+			{
+				expandLV.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
+				//expandLV.setScrollBarStyle(style);
+			}
+			else
+			{
+				expandLV.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
+			}
+		}
 	}
 
 

@@ -32,9 +32,8 @@
     </style>
 
     <style name="ExpandableTaskList">
-        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbarStyle">outsideInset</item>
         <item name="android:scrollbarSize">20dp</item>
-        <item name="android:divider">@null</item>
     </style>
 
     <style name="ListItemLine">
