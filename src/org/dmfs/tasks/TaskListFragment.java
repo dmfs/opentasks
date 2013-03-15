@@ -195,7 +195,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onAttach(activity);
 
-		appContext = activity.getApplicationContext();
+		appContext = activity.getBaseContext();
 
 		// Activities containing this fragment must implement its callbacks.
 		if (!(activity instanceof Callbacks))
@@ -332,7 +332,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			if (left)
 			{
 				expandLV.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
-				//expandLV.setScrollBarStyle(style);
+				// expandLV.setScrollBarStyle(style);
 			}
 			else
 			{
@@ -368,6 +368,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					mAdapter.reloadGroup(i);
 				}
 				return true;
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}

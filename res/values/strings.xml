@@ -75,5 +75,9 @@
     <string name="priority_medium">medium</string>
     <string name="priority_high">high</string>
     <string name="priority_urgent">urgent</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="visible_task_lists">Displayed Lists</string>
 
 </resources>
