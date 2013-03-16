@@ -8,6 +8,8 @@
     <string name="menu_add_task_condensed">Add</string>
     <string name="menu_show_completed">Show completed tasks</string>
     <string name="menu_show_completed_condensed">Show completed</string>
+    <string name="menu_sync_now">Refresh now</string>
+    <string name="menu_sync_now_condensed">Refresh</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d task</item>

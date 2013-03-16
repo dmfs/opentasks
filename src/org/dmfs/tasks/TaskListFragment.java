@@ -19,6 +19,7 @@ package org.dmfs.tasks;
 
 import java.util.Arrays;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.groups.AbstractFilter;
@@ -30,8 +31,11 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -351,6 +355,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					mAdapter.reloadGroup(i);
 				}
 				return true;
+			case R.id.menu_sync_now:
+				doSyncNow();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -502,4 +508,20 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	}
 
+
+	/**
+	 * Trigger a synchronization for all accounts.
+	 */
+	private void doSyncNow()
+	{
+		AccountManager accountManager = AccountManager.get(appContext);
+		Account[] accounts = accountManager.getAccounts();
+		for (Account account : accounts)
+		{
+			// TODO: do we need a new bundle for each account or can we reuse it?
+			Bundle extras = new Bundle();
+			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+			ContentResolver.requestSync(account, TaskContract.AUTHORITY, extras);
+		}
+	}
 }
