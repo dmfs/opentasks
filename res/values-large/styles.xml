@@ -13,7 +13,15 @@
     </style>
 
     <style name="TaskListContainer">
-        <item name="android:background">@color/light_gray</item>
+        <item name="android:background">@drawable/list_background_holo</item>
+    </style>
+
+    <style name="TaskListItemDate" parent="DarkText">
+        <item name="android:layout_marginRight">25dp</item>
+    </style>
+
+    <style name="TaskListGroupCount" parent="editor_label_text">
+        <item name="android:layout_marginRight">25dp</item>
     </style>
 
 </resources>

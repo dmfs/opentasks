@@ -3,16 +3,15 @@
     style="@style/TasksExpandableListItem"
     android:layout_width="match_parent"
     android:layout_height="0dip"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:paddingLeft="5dip"
-    android:paddingRight="5dip" >
+    android:minHeight="?android:attr/listPreferredItemHeight" >
 
     <View
         android:id="@+id/colorbar"
         android:layout_width="2dip"
         android:layout_height="25dip"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:id="@android:id/title"
@@ -29,12 +28,11 @@
 
     <TextView
         android:id="@+id/task_due_date"
-        style="@style/DarkText"
+        style="@style/TaskListItemDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="8dip"
         android:textIsSelectable="false"
         android:textSize="12sp" />
 
