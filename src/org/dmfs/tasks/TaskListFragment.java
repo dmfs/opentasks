@@ -104,10 +104,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private long[] mSavedExpandedGroups = null;
 
-	// private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-
-	// private TaskItemGroup[] itemGroupArray;
-
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
 	 */

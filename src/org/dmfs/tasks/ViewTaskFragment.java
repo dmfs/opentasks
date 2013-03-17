@@ -48,12 +48,12 @@ import android.view.ViewGroup;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
-
 public class ViewTaskFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
 {
 	private static final String TAG = "TaskViewDetailFragment";
 
-	private static final String KEY_VALUES = "key_values";
+	private static final String STATE_VALUES = "values";
+	private static final String STATE_TASK_URI = "task_uri";
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
@@ -61,17 +61,34 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
-	/**
-	 * The dummy content this fragment is presenting.
-	 */
 	private Uri mTaskUri;
 
-	ContentSet mContentSet;
-	ViewGroup mContent;
-	Model mModel;
-	Context mAppContext;
+	private ContentSet mContentSet;
+	private ViewGroup mContent;
+	private Model mModel;
+	private Context mAppContext;
 
-	private Callback callback;
+	private Callback mCallback;
+
+	public interface Callback
+	{
+		/**
+		 * This is called to instruct the Activity to call the editor for a specific task.
+		 * 
+		 * @param taskUri
+		 *            The {@link Uri} of the task to edit.
+		 */
+		public void onEditTask(Uri taskUri);
+
+
+		/**
+		 * This is called to inform the Activity that a task has been deleted.
+		 * 
+		 * @param taskUri
+		 *            The {@link Uri} of the deleted task. Note that the Uri is likely to have invalid at the time of calling this method.
+		 */
+		public void onDelete(Uri taskUri);
+	}
 
 
 	/**
@@ -86,11 +103,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		/*
-		 * Get the URI of the task to show. For now this is always a TASK_URI.
-		 * 
-		 * TODO: properly accept and handle instance URIs
-		 */
 
 		setHasOptionsMenu(true);
 	}
@@ -106,10 +118,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			throw new IllegalStateException("Activity must implement TaskViewDetailFragment callback.");
 		}
 
-		callback = (Callback) activity;
+		mCallback = (Callback) activity;
 		mAppContext = activity.getApplicationContext();
-		Log.v(TAG, "mTaskUri " + mTaskUri);
-
 	}
 
 
@@ -129,41 +139,93 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 		if (savedInstanceState != null)
 		{
-			mContentSet = savedInstanceState.getParcelable(KEY_VALUES);
-			new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			// We have an incoming state, so load the ContentSet and the task Uri from the saved state.
+			mContentSet = savedInstanceState.getParcelable(STATE_VALUES);
+			mTaskUri = savedInstanceState.getParcelable(STATE_TASK_URI);
+
+			if (mContent != null)
+			{
+				// register listener and observer
+				mContentSet.addOnChangeListener(this, null, true);
+				if (mTaskUri != null)
+				{
+					mAppContext.getContentResolver().registerContentObserver(mTaskUri, false, mObserver);
+				}
+
+				if (mContentSet.getAsString(Tasks.ACCOUNT_TYPE) != null)
+				{
+					// the content set contains a valid task, so load the model
+					new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
+				}
+			}
 		}
 
 		return rootView;
 	}
 
 
+	/**
+	 * Load the task with the given {@link Uri} in the detail view.
+	 * <p>
+	 * At present only Task Uris are supported.
+	 * </p>
+	 * TODO: add support for instance Uris.
+	 * 
+	 * @param uri
+	 *            The {@link Uri} of the task to show.
+	 */
 	public void loadUri(Uri uri)
 	{
 		if (mTaskUri != null)
 		{
+			/*
+			 * Unregister the observer for any previously shown task first.
+			 */
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
 		}
 
 		mTaskUri = uri;
-		mContentSet = new ContentSet(uri);
-		mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
-		mContentSet.addOnChangeListener(this, null, true);
-		mAppContext.getContentResolver().registerContentObserver(uri, false, mObserver);
+		if (uri != null)
+		{
+			/*
+			 * Create a new ContentSet and load the values for the given Uri. Also register listener and observer for changes in the ContentSet and the Uri.
+			 */
+			mContentSet = new ContentSet(uri);
+			mContentSet.addOnChangeListener(this, null, true);
+			mAppContext.getContentResolver().registerContentObserver(uri, false, mObserver);
+			mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
+		}
+		else
+		{
+			/*
+			 * Immediately update the view with the empty task uri, i.e. clear the view.
+			 */
+			mContentSet = null;
+			updateView();
+		}
+
+		getActivity().invalidateOptionsMenu();
 	}
 
 
+	/**
+	 * Update the detail view with the current ContentSet. This removes any previous detail view and creates a new one if {@link #mContentSet} is not
+	 * <code>null</code>.
+	 */
 	private void updateView()
 	{
 		if (mContent != null)
 		{
-			final LayoutInflater inflater = (LayoutInflater) mAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			mContent.removeAllViews();
-			TaskView editor = (TaskView) inflater.inflate(R.layout.task_view, null);
-			editor.setModel(mModel);
-			editor.setValues(mContentSet);
-			mContent.addView(editor);
-			Log.d(TAG, "At the end of updateView");
+			if (mContentSet != null)
+			{
+				TaskView detailView = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
+				detailView.setModel(mModel);
+				detailView.setValues(mContentSet);
+				mContent.addView(detailView);
+			}
 		}
 	}
 
@@ -176,8 +238,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			return;
 		}
 
+		// the model has been loaded, now update the view
 		mModel = model;
-
 		updateView();
 
 	}
@@ -187,14 +249,28 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		outState.putParcelable(KEY_VALUES, mContentSet);
+		if (mTaskUri != null)
+		{
+			/*
+			 * Unregister the observer for any previously shown task first.
+			 */
+			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
+		}
+		outState.putParcelable(STATE_VALUES, mContentSet);
+		outState.putParcelable(STATE_TASK_URI, mTaskUri);
 	}
 
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		inflater.inflate(R.menu.view_task_fragment_menu, menu);
+		/*
+		 * Don't show any options if we don't have a task to show.
+		 */
+		if (mTaskUri != null)
+		{
+			inflater.inflate(R.menu.view_task_fragment_menu, menu);
+		}
 	}
 
 
@@ -204,38 +280,34 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		switch (item.getItemId())
 		{
 			case R.id.edit_task:
-				callback.displayEditTask(mTaskUri);
+				// open editor for this task
+				mCallback.onEditTask(mTaskUri);
 				return true;
 			case R.id.delete_task:
 				Log.v(TAG, "removing task");
+				// TODO: remove the task in a background task
 				mContentSet.delete(mAppContext);
-				callback.onDelete(mTaskUri);
+				mCallback.onDelete(mTaskUri);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 
-	public interface Callback
-	{
-		public void displayEditTask(Uri taskUri);
-
-
-		public void onDelete(Uri taskUri);
-	}
-
 
 	@Override
 	public void onContentChanged(ContentSet contentSet, String key)
 	{
-		Log.v(TAG, "modelloader called");
 		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
-			Log.v(TAG, "modelloader called");
+			// the ContentSet has been (re-)loaded, load the model of this task
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 		}
 	}
 
+	/**
+	 * An observer for the tasks URI. It updates the task view whenever the URI changes.
+	 */
 	private final ContentObserver mObserver = new ContentObserver(null)
 	{
 		@Override
@@ -243,6 +315,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		{
 			if (mContentSet != null)
 			{
+				// reload the task
 				mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
 			}
 		}
