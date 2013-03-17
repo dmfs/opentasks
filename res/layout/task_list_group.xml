@@ -15,11 +15,11 @@
 
     <View
         android:id="@+id/colorbar2"
-        android:layout_width="8dip"
-        android:layout_height="8dip"
+        android:layout_width="10dip"
+        android:layout_height="10dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_margin="4dip"
+        android:layout_margin="3dip"
         android:visibility="gone" />
 
     <TextView
