@@ -207,7 +207,7 @@ public interface ByDueDate
 				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
 			}
 
-			View colorbar = view.findViewById(R.id.colorbar);
+			View colorbar = view.findViewById(R.id.colorbar1);
 			if (colorbar != null)
 			{
 				colorbar.setVisibility(View.GONE);

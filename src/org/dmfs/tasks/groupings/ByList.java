@@ -120,7 +120,7 @@ public interface ByList
 			if (colorbar != null)
 			{
 				colorbar.setVisibility(View.GONE);
-//				colorbar.setBackgroundColor(cursor.getInt(6));
+				// colorbar.setBackgroundColor(cursor.getInt(6));
 			}
 
 			View divider = view.findViewById(R.id.divider);
@@ -211,13 +211,34 @@ public interface ByList
 			{
 				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
 			}
-			
-			View colorbar = view.findViewById(R.id.colorbar);
-			if (colorbar != null)
-			{
-				colorbar.setBackgroundColor(cursor.getInt(2));
-			}
 
+			View colorbar1 = view.findViewById(R.id.colorbar1);
+			View colorbar2 = view.findViewById(R.id.colorbar2);
+
+			if ((flags & FLAG_IS_EXPANDED) != 0)
+			{
+				if (colorbar1 != null)
+				{
+					colorbar1.setBackgroundColor(cursor.getInt(2));
+					colorbar1.setVisibility(View.VISIBLE);
+				}
+				if (colorbar2 != null)
+				{
+					colorbar2.setVisibility(View.GONE);
+				}
+			}
+			else
+			{
+				if (colorbar1 != null)
+				{
+					colorbar1.setVisibility(View.INVISIBLE);
+				}
+				if (colorbar2 != null)
+				{
+					colorbar2.setBackgroundColor(cursor.getInt(2));
+					colorbar2.setVisibility(View.VISIBLE);
+				}
+			}
 		}
 
 
