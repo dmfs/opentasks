@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groupings;
+package org.dmfs.tasks.groupings.filters;
 
 /**
  * A filter that joins a list of {@link AbstractFilter}s using the "OR" operator.

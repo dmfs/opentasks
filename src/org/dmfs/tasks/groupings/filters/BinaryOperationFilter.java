@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groupings;
+package org.dmfs.tasks.groupings.filters;
 
 import java.util.ArrayList;
 import java.util.Arrays;

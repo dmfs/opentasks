@@ -20,7 +20,7 @@ package org.dmfs.tasks.utils;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.dmfs.tasks.groupings.AbstractFilter;
+import org.dmfs.tasks.groupings.filters.AbstractFilter;
 
 import android.content.Context;
 import android.database.Cursor;
