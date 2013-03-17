@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,16 +23,18 @@ import java.util.List;
 
 
 /**
- * A filter that joins a list of {@link AbstractFilter}s using the "AND" operator.
+ * A filter that joins a list of {@link AbstractFilter}s using the "OR" operator.
+ * 
+ * TODO: get rid of duplicate code with {@link AndFilter}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class AndFilter extends AbstractFilter
+public final class OrFilter extends AbstractFilter
 {
 	private final AbstractFilter[] mFilters;
 
 
-	public AndFilter(AbstractFilter... filters)
+	public OrFilter(AbstractFilter... filters)
 	{
 		mFilters = filters;
 	}
@@ -60,7 +62,7 @@ public final class AndFilter extends AbstractFilter
 			}
 			else
 			{
-				selection.append(") AND (");
+				selection.append(") OR (");
 			}
 			selection.append(filter.getSelection());
 		}
@@ -108,7 +110,7 @@ public final class AndFilter extends AbstractFilter
 			}
 			else
 			{
-				stringBuilder.append(") AND (");
+				stringBuilder.append(") OR (");
 			}
 			stringBuilder.append(filter.getSelection());
 		}

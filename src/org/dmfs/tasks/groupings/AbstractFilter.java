@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings;
 
 import java.util.List;
 

@@ -15,28 +15,28 @@
  * 
  */
 
-package org.dmfs.tasks.groups.cursorloaders;
+package org.dmfs.tasks.groupings.cursorloaders;
 
-import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.content.Loader;
 
 
-public class CompletedFlagCursorLoaderFactory extends AbstractCursorLoaderFactory
+/**
+ * A factory that builds shiny new {@link Cursor}s with time ranges.
+ * 
+ * TODO: fix javadoc
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
+public abstract class AbstractCustomCursorFactory
 {
+	protected String[] mProjection;
 
-	private final String[] mProjection;
 
-
-	public CompletedFlagCursorLoaderFactory(String[] projection)
+	public AbstractCustomCursorFactory(String[] projection)
 	{
 		mProjection = projection;
 	}
 
 
-	@Override
-	public Loader<Cursor> getLoader(Context context)
-	{
-		return new CustomCursorLoader(context, new CompletedFlagCursorFactory(mProjection));
-	}
+	public abstract Cursor getCursor();
 }

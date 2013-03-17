@@ -17,8 +17,8 @@
 
 package org.dmfs.tasks.utils;
 
-import org.dmfs.tasks.groups.AbstractFilter;
-import org.dmfs.tasks.groups.cursorloaders.AbstractCursorLoaderFactory;
+import org.dmfs.tasks.groupings.AbstractFilter;
+import org.dmfs.tasks.groupings.cursorloaders.AbstractCursorLoaderFactory;
 
 import android.content.Context;
 import android.database.Cursor;

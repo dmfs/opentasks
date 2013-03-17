@@ -22,15 +22,14 @@ import java.util.Arrays;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.groups.AbstractFilter;
-import org.dmfs.tasks.groups.ByCompleted;
-import org.dmfs.tasks.groups.ByDueDate;
-import org.dmfs.tasks.groups.ByList;
-import org.dmfs.tasks.groups.ConstantFilter;
+import org.dmfs.tasks.groupings.AbstractFilter;
+import org.dmfs.tasks.groupings.ByCompleted;
+import org.dmfs.tasks.groupings.ByDueDate;
+import org.dmfs.tasks.groupings.ByList;
+import org.dmfs.tasks.groupings.ConstantFilter;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
-import org.dmfs.tasks.widget.ExpandableListView;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -56,9 +55,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupExpandListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 
@@ -75,11 +74,14 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
 
-	private static final String PARAM_EXPANDED_GROUPS = "expanded_groups";
+	private static final String STATE_EXPANDED_GROUPS = "expanded_groups";
 
 	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
 	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
 
+	/**
+	 * A filter to hide completed tasks.
+	 */
 	private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.IS_CLOSED + "=0");
 
 	/**
@@ -182,7 +184,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 
 			@Override
-			public boolean onGroupClick(android.widget.ExpandableListView parent, View v, int groupPosition, long id)
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
 			{
 				if (mAdapter.getChildrenCount(groupPosition) > 0)
 				{
@@ -202,7 +204,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			Log.d(TAG, "savedInstance state is not null");
 			// store expanded groups array for later, when the groups have been loaded
-			mSavedExpandedGroups = savedInstanceState.getLongArray(PARAM_EXPANDED_GROUPS);
+			mSavedExpandedGroups = savedInstanceState.getLongArray(STATE_EXPANDED_GROUPS);
 			mActivatedPositionGroup = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_GROUP);
 			mActivatedPositionChild = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_CHILD);
 		}
@@ -244,11 +246,18 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 
 		@Override
-		public boolean onChildClick(android.widget.ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
 			selectChildView(parent, groupPosition, childPosition, true);
-			mActivatedPositionGroup = groupPosition;
-			mActivatedPositionChild = childPosition;
+			if (expandLV.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
+			{
+				mActivatedPositionGroup = groupPosition;
+				mActivatedPositionChild = childPosition;
+			}
+			/*
+			 * In contrast to a ListView an ExpandableListView does not set the activated item on it's own. So we have to do that here.
+			 */
+			setActivatedItem(groupPosition, childPosition);
 			return true;
 		}
 
@@ -270,7 +279,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	};
 
 
-	private void selectChildView(android.widget.ExpandableListView expandLV, int groupPosition, int childPosition, boolean force)
+	private void selectChildView(ExpandableListView expandLV, int groupPosition, int childPosition, boolean force)
 	{
 		// a task instance element has been clicked, get it's instance id and notify the activity
 		ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
@@ -298,33 +307,24 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		Log.d(TAG, "onSaveInstanceState called");
 		super.onSaveInstanceState(outState);
-		outState.putLongArray(PARAM_EXPANDED_GROUPS, getExpandedGroups());
-
-		if (mActivatedPositionGroup != ExpandableListView.INVALID_POSITION)
-		{
-
-			outState.putInt(STATE_ACTIVATED_POSITION_GROUP, mActivatedPositionGroup);
-
-		}
-		if (mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
-		{
-			outState.putInt(STATE_ACTIVATED_POSITION_CHILD, mActivatedPositionChild);
-
-		}
-
+		outState.putLongArray(STATE_EXPANDED_GROUPS, getExpandedGroups());
+		outState.putInt(STATE_ACTIVATED_POSITION_GROUP, mActivatedPositionGroup);
+		outState.putInt(STATE_ACTIVATED_POSITION_CHILD, mActivatedPositionChild);
 	}
 
 
 	/**
 	 * Turns on activate-on-click mode. When this mode is on, list items will be given the 'activated' state when touched.
+	 * <p>
+	 * Note: this does not work 100% with {@link ExpandableListView}, it doesn't check touched items automatically.
+	 * </p>
+	 * 
+	 * @param activateOnItemClick
+	 *            Whether to enable single choice mode or not.
 	 */
 	public void setActivateOnItemClick(boolean activateOnItemClick)
 	{
-		// When setting CHOICE_MODE_SINGLE, ListView will automatically
-		// give items the 'activated' state when touched.
-		Log.d(TAG, "List Selector SET!! : " + activateOnItemClick);
 		expandLV.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 
 	}
@@ -396,7 +396,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 * Log.v(TAG, "scrollY " + scrollx + "  " + scrolly);
 		 */
 		Log.v(TAG, "change cursor");
-		mSavedExpandedGroups = getExpandedGroups();
+		if (mSavedExpandedGroups == null)
+		{
+			mSavedExpandedGroups = getExpandedGroups();
+		}
 
 		mAdapter.changeCursor(cursor);
 		/*
@@ -453,12 +456,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		ExpandableListAdapter adapter = expandLV.getExpandableListAdapter();
 		Arrays.sort(expandedIds);
-		Log.d(TAG, "NOW EXPANDING : " + expandLV.getCount());
+		Log.d(TAG, "NOW EXPANDING : " + adapter.getGroupCount());
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; ++i)
 		{
 			if (Arrays.binarySearch(expandedIds, adapter.getGroupId(i)) >= 0)
 			{
+				Log.d(TAG, "NOW EXPANDING GROUPS: " + i);
 				expandLV.expandGroup(i);
 			}
 		}
@@ -514,7 +518,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild, false);
 			setExpandedGroups();
-
+			setActivatedItem(mActivatedPositionGroup, mActivatedPositionChild);
 		}
 	};
 
@@ -524,6 +528,15 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		Log.d(TAG, "SET EXPAND :" + ids);
 		expandedIds = ids;
 
+	}
+
+
+	public void setActivatedItem(int groupPosition, int childPosition)
+	{
+		if (groupPosition != ExpandableListView.INVALID_POSITION && childPosition != ExpandableListView.INVALID_POSITION)
+		{
+			expandLV.setItemChecked(expandLV.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
+		}
 	}
 
 

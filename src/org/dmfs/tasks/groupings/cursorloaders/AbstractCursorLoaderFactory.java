@@ -15,28 +15,26 @@
  * 
  */
 
-package org.dmfs.tasks.groups.cursorloaders;
+package org.dmfs.tasks.groupings.cursorloaders;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.content.Loader;
 
 
 /**
- * A factory that builds shiny new {@link Cursor}s with time ranges.
- * 
- * TODO: fix javadoc
+ * An abstract factory that can create Loader<Cursor> instances.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public abstract class AbstractCustomCursorFactory
+public abstract class AbstractCursorLoaderFactory
 {
-	protected String[] mProjection;
-
-
-	public AbstractCustomCursorFactory(String[] projection)
-	{
-		mProjection = projection;
-	}
-
-
-	public abstract Cursor getCursor();
+	/**
+	 * Get a new {@link Loader} instance. Override this method to return a custom Loader for Cursors.
+	 * 
+	 * @param context
+	 *            A {@link Context}.
+	 * @return A brand new {@link Loader} for {@link Cursor}s.
+	 */
+	public abstract Loader<Cursor> getLoader(Context context);
 }

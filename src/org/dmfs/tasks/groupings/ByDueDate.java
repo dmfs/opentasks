@@ -15,17 +15,18 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groups.cursorloaders.CursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -34,6 +35,7 @@ import org.dmfs.tasks.utils.ViewDescriptor;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.format.Time;
 import android.view.View;
@@ -41,7 +43,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 
-public interface ByList
+public interface ByDueDate
 {
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
@@ -69,7 +71,6 @@ public interface ByList
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
-
 			if (title != null)
 			{
 				String text = cursor.getString(5);
@@ -83,7 +84,6 @@ public interface ByList
 					title.setPaintFlags(title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 			}
-
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
 			{
@@ -98,16 +98,16 @@ public interface ByList
 					mNow.clear(TimeZone.getDefault().getID());
 					mNow.setToNow();
 
-					dueDateField.setText(makeDueDate(dueDate, view.getContext()));
+					dueDateField.setText(makeDueDate(dueDate));
 
 					// highlight overdue dates & times
-					if (dueDate.before(mNow) && !isClosed)
+					if (dueDate.before(mNow))
 					{
-						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
+						dueDateField.setTextColor(Color.RED);
 					}
 					else
 					{
-						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
+						dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
 					}
 				}
 				else
@@ -144,7 +144,7 @@ public interface ByList
 		 *            The due date to format.
 		 * @return A String with the formatted date.
 		 */
-		private String makeDueDate(Time due, Context context)
+		private String makeDueDate(Time due)
 		{
 			if (!due.allDay)
 			{
@@ -153,14 +153,7 @@ public interface ByList
 
 			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
 			{
-				if (due.allDay)
-				{
-					return context.getString(R.string.today);
-				}
-				else
-				{
-					return context.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(due.toMillis(false)));
-				}
+				return mTimeFormatter.format(new Date(due.toMillis(false)));
 			}
 			else
 			{
@@ -170,10 +163,13 @@ public interface ByList
 	};
 
 	/**
-	 * A {@link ViewDescriptor} that knows how to present list groups.
+	 * A {@link ViewDescriptor} that knows how to present due date groups.
 	 */
 	public final ViewDescriptor GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
+		// DateFormatSymbols.getInstance() not used because it is not available before API level 9
+		private final String[] mMonthNames = new DateFormatSymbols().getMonths();
+
 
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
@@ -221,7 +217,7 @@ public interface ByList
 
 
 		/**
-		 * Return the title of a list group.
+		 * Return the title of a due date group.
 		 * 
 		 * @param cursor
 		 *            A {@link Cursor} pointing to the current group.
@@ -229,22 +225,56 @@ public interface ByList
 		 */
 		private String getTitle(Cursor cursor, Context context)
 		{
-			return cursor.getString(1);
+			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_TYPE));
+			if (type == 0)
+			{
+				return context.getString(R.string.task_group_no_due);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TODAY) == TimeRangeCursorFactory.TYPE_END_OF_TODAY)
+			{
+				return context.getString(R.string.task_group_due_today);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY) == TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY)
+			{
+				return context.getString(R.string.task_group_overdue);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TOMORROW) == TimeRangeCursorFactory.TYPE_END_OF_TOMORROW)
+			{
+				return context.getString(R.string.task_group_due_tomorrow);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_IN_7_DAYS) == TimeRangeCursorFactory.TYPE_END_IN_7_DAYS)
+			{
+				return context.getString(R.string.task_group_due_within_7_days);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_MONTH) != 0)
+			{
+				return context.getString(R.string.task_group_due_in_month,
+					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_MONTH))]);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_YEAR) != 0)
+			{
+				return context.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_YEAR)));
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_NO_END) != 0)
+			{
+				return context.getString(R.string.task_group_due_in_future);
+			}
+			return "";
 		}
 
 	};
 
 	/**
-	 * A descriptor that knows how to load elements in a list group.
+	 * A descriptor that knows how to load elements in a due date group.
 	 */
-	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?", Instances.INSTANCE_DUE + ", " + Instances.TITLE, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+	public final static ExpandableChildDescriptor DUE_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
+		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or " + Instances.INSTANCE_DUE + " is ?)",
+		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
-	 * A descriptor for the "grouped by list" view.
+	 * A descriptor for the "grouped by due date" view.
 	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new CursorLoaderFactory(TaskLists.CONTENT_URI, new String[] {
-		TaskLists._ID, TaskLists.LIST_NAME, TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0", null, TaskLists.ACCOUNT_NAME + ", "
-		+ TaskLists.LIST_NAME), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
+		TimeRangeCursorFactory.DEFAULT_PROJECTION), DUE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 
 }
