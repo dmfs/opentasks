@@ -12,20 +12,7 @@
         android:layout_height="25dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp" />
-
-    <TextView
-        android:id="@android:id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/colorbar"
-        android:ellipsize="end"
-        android:padding="5dip"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/task_list_title_text"
-        android:textIsSelectable="false" />
+        android:layout_marginLeft="2dp" />
 
     <TextView
         android:id="@+id/task_due_date"
@@ -36,6 +23,20 @@
         android:layout_centerVertical="true"
         android:textIsSelectable="false"
         android:textSize="12sp" />
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/task_due_date"
+        android:layout_toRightOf="@id/colorbar"
+        android:ellipsize="end"
+        android:padding="4dip"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/task_list_title_text"
+        android:textIsSelectable="false" />
 
     <View
         android:id="@+id/divider"

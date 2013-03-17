@@ -347,6 +347,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.task_list_fragment_menu, menu);
+		// TODO: set menu_show_completed
 	}
 
 
