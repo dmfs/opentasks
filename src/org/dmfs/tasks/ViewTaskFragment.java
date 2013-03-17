@@ -201,7 +201,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			 * Immediately update the view with the empty task uri, i.e. clear the view.
 			 */
 			mContentSet = null;
-			updateView();
+			if (mContent != null)
+			{
+				mContent.removeAllViews();
+			}
 		}
 
 		getActivity().invalidateOptionsMenu();
@@ -216,7 +219,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	{
 		if (mContent != null)
 		{
-			final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			final LayoutInflater inflater = (LayoutInflater) mAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			mContent.removeAllViews();
 			if (mContentSet != null)

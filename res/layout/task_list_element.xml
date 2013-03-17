@@ -3,8 +3,8 @@
     style="@style/TasksExpandableListItem"
     android:layout_width="match_parent"
     android:layout_height="0dip"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/task_list_background" >
+    android:background="@drawable/task_list_background"
+    android:minHeight="?android:attr/listPreferredItemHeight" >
 
     <View
         android:id="@+id/colorbar"
@@ -39,7 +39,7 @@
 
     <View
         android:id="@+id/divider"
-        style="@style/ListItemLine"
+        style="@style/task_list_item_divider"
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_alignParentBottom="true"

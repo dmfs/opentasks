@@ -24,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignRight="@android:id/text2"
         android:layout_below="@android:id/title"
         android:layout_marginLeft="8dip"
         android:ellipsize="end"
@@ -48,7 +49,7 @@
 
     <View
         android:id="@+id/divider"
-        style="@style/detail_label_line"
+        style="@style/task_list_group_divider"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true" />

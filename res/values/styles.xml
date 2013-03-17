@@ -91,17 +91,24 @@
 
     <style name="TaskGroupListItem"></style>
 
-    <style name="ListItemLine">
+    <style name="TaskListItemDate" parent="DarkText">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+    </style>
+
+    <style name="TaskListGroupCount" parent="editor_label_text">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+    </style>
+
+    <style name="task_list_item_divider">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:background">@android:color/darker_gray</item>
     </style>
 
-    <style name="TaskListItemDate" parent="DarkText">
-        <item name="android:layout_marginRight">8dp</item>
-    </style>
-
-    <style name="TaskListGroupCount" parent="editor_label_text">
-        <item name="android:layout_marginRight">8dp</item>
+    <style name="task_list_group_divider">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
     </style>
 
     <style name="task_list_overdue_text">

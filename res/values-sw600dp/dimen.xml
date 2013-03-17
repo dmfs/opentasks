@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="task_list_right_margin">25dp</dimen>
+    <dimen name="task_list_left_margin">10dp</dimen>
+
+</resources>
