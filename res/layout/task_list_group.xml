@@ -6,13 +6,20 @@
     android:gravity="center_vertical"
     android:paddingTop="10dip" >
 
+    <View
+        android:id="@+id/colorbar"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+
     <TextView
         android:id="@android:id/title"
         style="@style/TaskGroupText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_marginLeft="8dip"
+        android:layout_toRightOf="@id/colorbar"
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
@@ -23,10 +30,10 @@
         style="@style/editor_label_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_below="@android:id/title"
         android:layout_marginLeft="8dip"
         android:layout_toLeftOf="@android:id/text2"
+        android:layout_toRightOf="@id/colorbar"
         android:ellipsize="end"
         android:paddingBottom="10dip"
         android:paddingLeft="0dip"
