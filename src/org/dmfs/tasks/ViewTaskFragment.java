@@ -124,10 +124,13 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 
 	@Override
-	public void onDetach()
+	public void onDestroyView()
 	{
-		super.onDetach();
-		mAppContext.getContentResolver().unregisterContentObserver(mObserver);
+		super.onDestroyView();
+		if (mTaskUri != null)
+		{
+			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
+		}
 	}
 
 
@@ -182,8 +185,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			 * Unregister the observer for any previously shown task first.
 			 */
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
+
 		}
 
+		Uri oldUri = mTaskUri;
 		mTaskUri = uri;
 		if (uri != null)
 		{
@@ -207,7 +212,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			}
 		}
 
-		getActivity().invalidateOptionsMenu();
+		if ((oldUri == null) != (uri == null))
+		{
+			getActivity().invalidateOptionsMenu();
+		}
 	}
 
 
@@ -252,13 +260,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public void onSaveInstanceState(Bundle outState)
 	{
 		super.onSaveInstanceState(outState);
-		if (mTaskUri != null)
-		{
-			/*
-			 * Unregister the observer for any previously shown task first.
-			 */
-			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
-		}
 		outState.putParcelable(STATE_VALUES, mContentSet);
 		outState.putParcelable(STATE_TASK_URI, mTaskUri);
 	}
