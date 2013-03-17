@@ -49,9 +49,9 @@ public class ExpandableListView extends android.widget.ExpandableListView
 
 
 	/**
-	 * Return if the position points to a header or footer item.
+	 * Return whether the position points to a header or footer item.
 	 * 
-	 * Taken from android.widget.ExpandableListView#isHeaderOrFooterPosition(int).
+	 * Taken from {@link android.widget.ExpandableListView#isHeaderOrFooterPosition(int)}.
 	 * 
 	 * @param position
 	 *            An absolute (including header and footer) flat list position.
