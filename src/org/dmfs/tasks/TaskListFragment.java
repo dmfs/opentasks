@@ -30,6 +30,7 @@ import org.dmfs.tasks.groups.ConstantFilter;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
+import org.dmfs.tasks.widget.ExpandableListView;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -39,7 +40,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,10 +53,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
-import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupExpandListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 
@@ -152,17 +154,35 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		expandLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
-		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
+		mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
 		expandLV.setAdapter(mAdapter);
-		expandLV.setOnChildClickListener(mTaskItemClickListener);
-		expandLV.setOnGroupCollapseListener(mTaskListCollapseListener);
+		expandLV.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
+		expandLV.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
 		mAdapter.setOnChildLoadedListener(this);
 		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
+		expandLV.setOnScrollListener(new OnScrollListener()
+		{
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState)
+			{
+
+			}
+
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+			{
+				// TODO Auto-generated method stub
+
+			}
+		});
+
 		expandLV.setOnGroupClickListener(new OnGroupClickListener()
 		{
 
 			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
+			public boolean onGroupClick(android.widget.ExpandableListView parent, View v, int groupPosition, long id)
 			{
 				if (mAdapter.getChildrenCount(groupPosition) > 0)
 				{
@@ -218,36 +238,17 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	}
 
+	View selectedView = null;
+
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
-		View selectedView = null;
-		Drawable savedBackground = null;
-
 
 		@Override
-		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+		public boolean onChildClick(android.widget.ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
 			selectChildView(parent, groupPosition, childPosition, true);
 			mActivatedPositionGroup = groupPosition;
 			mActivatedPositionChild = childPosition;
-			if (parent.getChoiceMode() == ListView.CHOICE_MODE_SINGLE)
-			{
-				savedBackground = v.getBackground();
-				v.setBackgroundResource(R.drawable.list_activated_holo);
-				if (selectedView != null)
-				{
-					if (android.os.Build.VERSION.SDK_INT < 16)
-					{
-						selectedView.setBackgroundDrawable(savedBackground);
-					}
-					else
-					{
-						selectedView.setBackground(savedBackground);
-					}
-				}
-
-				selectedView = v;
-			}
 			return true;
 		}
 
@@ -269,7 +270,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	};
 
 
-	private void selectChildView(ExpandableListView expandLV, int groupPosition, int childPosition, boolean force)
+	private void selectChildView(android.widget.ExpandableListView expandLV, int groupPosition, int childPosition, boolean force)
 	{
 		// a task instance element has been clicked, get it's instance id and notify the activity
 		ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
@@ -336,7 +337,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			if (left)
 			{
 				expandLV.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
-				//expandLV.setScrollBarStyle(style);
+				// expandLV.setScrollBarStyle(style);
 			}
 			else
 			{

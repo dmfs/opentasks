@@ -3,7 +3,8 @@
     style="@style/TasksExpandableListItem"
     android:layout_width="match_parent"
     android:layout_height="0dip"
-    android:minHeight="?android:attr/listPreferredItemHeight" >
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:background="@drawable/task_list_background" >
 
     <View
         android:id="@+id/colorbar"
@@ -15,7 +16,6 @@
 
     <TextView
         android:id="@android:id/title"
-        style="@style/DarkText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -24,6 +24,7 @@
         android:padding="5dip"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/task_list_title_text"
         android:textIsSelectable="false" />
 
     <TextView

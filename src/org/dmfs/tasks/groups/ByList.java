@@ -24,7 +24,6 @@ import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groups.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
@@ -35,7 +34,6 @@ import org.dmfs.tasks.utils.ViewDescriptor;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.format.Time;
 import android.view.View;
@@ -105,11 +103,11 @@ public interface ByList
 					// highlight overdue dates & times
 					if (dueDate.before(mNow) && !isClosed)
 					{
-						dueDateField.setTextColor(Color.RED);
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
 					}
 					else
 					{
-						dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
 					}
 				}
 				else

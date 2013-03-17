@@ -18,7 +18,6 @@
 package org.dmfs.tasks.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.dmfs.tasks.groups.AbstractFilter;
@@ -87,8 +86,6 @@ public class ExpandableChildDescriptor
 
 			// temporary array list for the selection arguments
 			List<String> selectionArgList = new ArrayList<String>();
-			// the
-			int argPos = 0;
 
 			// for every selection argument
 			for (int i = 0; i < mSelectionColumns.length; ++i)

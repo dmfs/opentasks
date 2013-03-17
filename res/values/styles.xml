@@ -104,4 +104,13 @@
         <item name="android:layout_marginRight">8dp</item>
     </style>
 
+    <style name="task_list_overdue_text">
+        <item name="android:textColor">@color/overdue_date_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="task_list_due_text">
+        <item name="android:textColor">@color/due_date_text</item>
+    </style>
+
 </resources>
