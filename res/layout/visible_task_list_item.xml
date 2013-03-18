@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/visible_task_list_color"
-        android:textAppearance="?android:attr/listPreferredItemHeight"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false" />
 
     <CheckBox
