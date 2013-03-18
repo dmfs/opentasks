@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups.cursorloaders;
+package org.dmfs.tasks.groupings.cursorloaders;
 
 import java.util.Arrays;
 import java.util.List;

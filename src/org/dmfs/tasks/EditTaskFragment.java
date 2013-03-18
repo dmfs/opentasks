@@ -298,6 +298,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		Activity activity = getActivity();
 		if (menuId == R.id.editor_action_save)
 		{
+			// TODO: put that in a background task
 			Log.v(TAG, "persisting task");
 			/*
 			 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }

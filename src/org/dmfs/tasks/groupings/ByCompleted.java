@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,8 +25,8 @@ import java.util.TimeZone;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groups.cursorloaders.CompletedFlagCursorFactory;
-import org.dmfs.tasks.groups.cursorloaders.CompletedFlagCursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.CompletedFlagCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.CompletedFlagCursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ViewDescriptor;

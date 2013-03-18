@@ -15,28 +15,17 @@
  * 
  */
 
-package org.dmfs.tasks.groups.cursorloaders;
-
-import android.database.Cursor;
-
+package org.dmfs.tasks.groupings.filters;
 
 /**
- * A factory that builds shiny new {@link Cursor}s with time ranges.
- * 
- * TODO: fix javadoc
+ * A filter that joins a list of {@link AbstractFilter}s using the "AND" operator.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public abstract class AbstractCustomCursorFactory
+public final class AndFilter extends BinaryOperationFilter
 {
-	protected String[] mProjection;
-
-
-	public AbstractCustomCursorFactory(String[] projection)
+	public AndFilter(AbstractFilter... filters)
 	{
-		mProjection = projection;
+		super("AND", filters);
 	}
-
-
-	public abstract Cursor getCursor();
 }

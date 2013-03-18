@@ -39,4 +39,8 @@
         <item name="android:textColor" tools:targetApi="14">@android:color/holo_blue_dark</item>
     </style>
 
+    <style name="TaskListItemText" parent = "android:attr/textAppearanceMedium">
+        <item name="android:textColor" tools:targetApi="14">@style/DarkText</item>
+    </style>
+
 </resources>

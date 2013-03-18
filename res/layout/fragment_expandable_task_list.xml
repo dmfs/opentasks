@@ -10,7 +10,8 @@
         style="@style/ExpandableTaskList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:groupIndicator="@null" >
+        android:groupIndicator="@null"
+        android:paddingLeft="@dimen/task_list_left_margin" >
     </ExpandableListView>
 
     <!-- use android:groupIndicator="@null" to hide the indicator -->

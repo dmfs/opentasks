@@ -28,6 +28,7 @@ import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.utils.SetFromMap;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
@@ -42,20 +43,43 @@ import android.os.Parcelable;
  */
 public final class ContentSet implements OnContentLoadedListener, Parcelable
 {
+	/**
+	 * The {@link ContentValues} that have been read from the database (or <code>null</code> for insert operations).
+	 */
 	private ContentValues mBeforeContentValues;
+
+	/**
+	 * The {@link ContentValues} that have been modified.
+	 */
 	private ContentValues mAfterContentValues;
+
+	/**
+	 * The {@link Uri} we operate on. For insert operations this is a directory URI, otherwise it has to be an item URI.
+	 */
 	private Uri mUri;
+
+	/**
+	 * A {@link Map} for the {@link OnContentChangeListener}s. A listener registers for a specific key in a content set or for <code>null</code> to e notified
+	 * of full reloads.
+	 */
 	private final Map<String, Set<OnContentChangeListener>> mOnChangeListeners = new HashMap<String, Set<OnContentChangeListener>>();
 
 
 	/**
-	 * Private constructor to read from a parcel;
+	 * Private constructor that is used when creating a ContentSet form a parcel.
 	 */
 	private ContentSet()
 	{
 	}
 
 
+	/**
+	 * Create a new ContentSet for a specific {@link Uri}. <code>uri</code> is either a directory URI or an item URI. To load the content of an item URI call
+	 * {@link #update(Context, ContentValueMapper)}.
+	 * 
+	 * @param uri
+	 *            A content URI, either a directory URI or an item URI.
+	 */
 	public ContentSet(Uri uri)
 	{
 		if (uri == null)
@@ -67,11 +91,24 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
+	/**
+	 * Load the content. This method must not be called if the URI of this ContentSet is a directory URI and it has not been persited yet.
+	 * 
+	 * @param context
+	 *            A context.
+	 * @param mapper
+	 *            The {@link ContentValueMapper} to use when loading the values.
+	 */
 	public void update(Context context, ContentValueMapper mapper)
 	{
-		if (!isInsert())
+		String itemType = context.getContentResolver().getType(mUri);
+		if (itemType != null && !itemType.startsWith(ContentResolver.CURSOR_DIR_BASE_TYPE))
 		{
 			new AsyncContentLoader(context, this, mapper).execute(mUri);
+		}
+		else
+		{
+			throw new UnsupportedOperationException("Can not load content from a directoy URI: " + mUri);
 		}
 	}
 
@@ -84,13 +121,25 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
+	/**
+	 * Delete this content. This ContentSet can no longer be used after this method has been called!
+	 * 
+	 * @param context
+	 *            A context.
+	 */
 	public void delete(Context context)
 	{
-		if (mBeforeContentValues != null)
+		String itemType = context.getContentResolver().getType(mUri);
+		if (itemType != null && !itemType.startsWith(ContentResolver.CURSOR_DIR_BASE_TYPE))
 		{
 			context.getContentResolver().delete(mUri, null, null);
 			mBeforeContentValues = null;
 			mAfterContentValues = null;
+			mUri = null;
+		}
+		else
+		{
+			throw new UnsupportedOperationException("Can not load delete a directoy URI: " + mUri);
 		}
 	}
 
@@ -256,11 +305,21 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
+	/**
+	 * Remove the value with the given key from the ContentSet. This is actually replacing the value by <code>null</code>.
+	 * 
+	 * @param key
+	 *            The key of the value to remove.
+	 */
 	public void remove(String key)
 	{
 		if (mAfterContentValues != null)
 		{
-			mAfterContentValues.remove(key);
+			mAfterContentValues.putNull(key);
+		}
+		else if (mBeforeContentValues != null && mBeforeContentValues.get(key) != null)
+		{
+			ensureAfter().putNull(key);
 		}
 	}
 
@@ -271,7 +330,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (listenerSet == null)
 		{
 			// using a "WeakHashSet" ensures that we don't prevent listeners from getting garbage-collected.
-			
+
 			if (android.os.Build.VERSION.SDK_INT > 8)
 			{
 				listenerSet = Collections.newSetFromMap(new WeakHashMap<OnContentChangeListener, Boolean>());
@@ -322,6 +381,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
+	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
 		dest.writeParcelable(mUri, flags);

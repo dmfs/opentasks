@@ -18,10 +18,9 @@
 package org.dmfs.tasks.utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.dmfs.tasks.groups.AbstractFilter;
+import org.dmfs.tasks.groupings.filters.AbstractFilter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -54,8 +53,8 @@ public class ExpandableChildDescriptor
 
 
 	/**
-	 * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as definded by {@code selectionColumns} in
-	 * {@link #ExpandableChildDescriptor(Uri, String[], String, String, int...)}
+	 * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as defined by {@code selectionColumns} in
+	 * {@link #ExpandableChildDescriptor(Uri, String[], String, String, int...)}. Also applies any selection defined by <code>filter</code>.
 	 * 
 	 * @param context
 	 *            A {@link Context}.
@@ -87,13 +86,11 @@ public class ExpandableChildDescriptor
 
 			// temporary array list for the selection arguments
 			List<String> selectionArgList = new ArrayList<String>();
-			// the
-			int argPos = 0;
 
 			// for every selection argument
 			for (int i = 0; i < mSelectionColumns.length; ++i)
 			{
-				// find next ?
+				// find next "?"
 				newPos = mSelection.indexOf('?', pos == 0 ? pos : pos + 1);
 				selectionBuilder.append(mSelection.substring(pos, newPos));
 
@@ -103,7 +100,7 @@ public class ExpandableChildDescriptor
 				{
 					// insert null
 					selectionBuilder.append("null");
-					// skip the ?
+					// skip the "?"
 					newPos++;
 				}
 				else
@@ -122,11 +119,8 @@ public class ExpandableChildDescriptor
 
 			selectionArgs = selectionArgList.toArray(new String[selectionArgList.size()]);
 
-			if (pos > 0)
-			{
-				// if we had any ?, get the new string
-				selectionBuilder.append(mSelection.substring(pos));
-			}
+			selectionBuilder.append(mSelection.substring(pos));
+
 			if (filter != null)
 			{
 				selectionBuilder.append(") and (");

@@ -19,23 +19,26 @@ package org.dmfs.tasks;
 
 import java.util.Arrays;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.groups.AbstractFilter;
-import org.dmfs.tasks.groups.ByCompleted;
-import org.dmfs.tasks.groups.ByDueDate;
-import org.dmfs.tasks.groups.ByList;
-import org.dmfs.tasks.groups.ConstantFilter;
+import org.dmfs.tasks.groupings.ByCompleted;
+import org.dmfs.tasks.groupings.ByDueDate;
+import org.dmfs.tasks.groupings.ByList;
+import org.dmfs.tasks.groupings.filters.AbstractFilter;
+import org.dmfs.tasks.groupings.filters.ConstantFilter;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +52,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -69,11 +74,14 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
 
-	private static final String PARAM_EXPANDED_GROUPS = "expanded_groups";
+	private static final String STATE_EXPANDED_GROUPS = "expanded_groups";
 
 	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
 	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
 
+	/**
+	 * A filter to hide completed tasks.
+	 */
 	private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.IS_CLOSED + "=0");
 
 	/**
@@ -95,10 +103,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	private Handler mHandler;
 
 	private long[] mSavedExpandedGroups = null;
-
-	// private static final TimeFieldAdapter TFADAPTER = new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
-
-	// private TaskItemGroup[] itemGroupArray;
 
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
@@ -148,27 +152,27 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		expandLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
-		mAdapter = new ExpandableGroupDescriptorAdapter(appContext, getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
+		mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
 		expandLV.setAdapter(mAdapter);
-		expandLV.setOnChildClickListener(mTaskItemClickListener);
-		expandLV.setOnGroupCollapseListener(mTaskListCollapseListener);
+		expandLV.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
+		expandLV.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
 		mAdapter.setOnChildLoadedListener(this);
 		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
-		expandLV.setOnGroupClickListener(new OnGroupClickListener()
+		expandLV.setOnScrollListener(new OnScrollListener()
 		{
 
 			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
+			public void onScrollStateChanged(AbsListView view, int scrollState)
 			{
-				if (mAdapter.getChildrenCount(groupPosition) > 0)
-				{
-					return false;
-				}
-				else
-				{
-					// don't allow changes of expanded state for empty groups
-					return true;
-				}
+
+			}
+
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+			{
+				// TODO Auto-generated method stub
+
 			}
 		});
 
@@ -178,7 +182,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			Log.d(TAG, "savedInstance state is not null");
 			// store expanded groups array for later, when the groups have been loaded
-			mSavedExpandedGroups = savedInstanceState.getLongArray(PARAM_EXPANDED_GROUPS);
+			mSavedExpandedGroups = savedInstanceState.getLongArray(STATE_EXPANDED_GROUPS);
 			mActivatedPositionGroup = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_GROUP);
 			mActivatedPositionChild = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_CHILD);
 		}
@@ -214,36 +218,24 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	}
 
+	View selectedView = null;
+
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
-		View selectedView = null;
-		Drawable savedBackground = null;
-
 
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
 			selectChildView(parent, groupPosition, childPosition, true);
-			mActivatedPositionGroup = groupPosition;
-			mActivatedPositionChild = childPosition;
-			if (parent.getChoiceMode() == ListView.CHOICE_MODE_SINGLE)
+			if (expandLV.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
 			{
-				savedBackground = v.getBackground();
-				v.setBackgroundResource(R.drawable.list_activated_holo);
-				if (selectedView != null)
-				{
-					if (android.os.Build.VERSION.SDK_INT < 16)
-					{
-						selectedView.setBackgroundDrawable(savedBackground);
-					}
-					else
-					{
-						selectedView.setBackground(savedBackground);
-					}
-				}
-
-				selectedView = v;
+				mActivatedPositionGroup = groupPosition;
+				mActivatedPositionChild = childPosition;
 			}
+			/*
+			 * In contrast to a ListView an ExpandableListView does not set the activated item on it's own. So we have to do that here.
+			 */
+			setActivatedItem(groupPosition, childPosition);
 			return true;
 		}
 
@@ -293,33 +285,24 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		Log.d(TAG, "onSaveInstanceState called");
 		super.onSaveInstanceState(outState);
-		outState.putLongArray(PARAM_EXPANDED_GROUPS, getExpandedGroups());
-
-		if (mActivatedPositionGroup != ExpandableListView.INVALID_POSITION)
-		{
-
-			outState.putInt(STATE_ACTIVATED_POSITION_GROUP, mActivatedPositionGroup);
-
-		}
-		if (mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
-		{
-			outState.putInt(STATE_ACTIVATED_POSITION_CHILD, mActivatedPositionChild);
-
-		}
-
+		outState.putLongArray(STATE_EXPANDED_GROUPS, getExpandedGroups());
+		outState.putInt(STATE_ACTIVATED_POSITION_GROUP, mActivatedPositionGroup);
+		outState.putInt(STATE_ACTIVATED_POSITION_CHILD, mActivatedPositionChild);
 	}
 
 
 	/**
 	 * Turns on activate-on-click mode. When this mode is on, list items will be given the 'activated' state when touched.
+	 * <p>
+	 * Note: this does not work 100% with {@link ExpandableListView}, it doesn't check touched items automatically.
+	 * </p>
+	 * 
+	 * @param activateOnItemClick
+	 *            Whether to enable single choice mode or not.
 	 */
 	public void setActivateOnItemClick(boolean activateOnItemClick)
 	{
-		// When setting CHOICE_MODE_SINGLE, ListView will automatically
-		// give items the 'activated' state when touched.
-		Log.d(TAG, "List Selector SET!! : " + activateOnItemClick);
 		expandLV.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 
 	}
@@ -346,6 +329,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
 		inflater.inflate(R.menu.task_list_fragment_menu, menu);
+		// TODO: set menu_show_completed
 	}
 
 
@@ -368,7 +352,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					mAdapter.reloadGroup(i);
 				}
 				return true;
-
+			case R.id.menu_sync_now:
+				doSyncNow();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -390,7 +375,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 * Log.v(TAG, "scrollY " + scrollx + "  " + scrolly);
 		 */
 		Log.v(TAG, "change cursor");
-		mSavedExpandedGroups = getExpandedGroups();
+		if (mSavedExpandedGroups == null)
+		{
+			mSavedExpandedGroups = getExpandedGroups();
+		}
 
 		mAdapter.changeCursor(cursor);
 		/*
@@ -447,12 +435,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		ExpandableListAdapter adapter = expandLV.getExpandableListAdapter();
 		Arrays.sort(expandedIds);
-		Log.d(TAG, "NOW EXPANDING : " + expandLV.getCount());
+		Log.d(TAG, "NOW EXPANDING : " + adapter.getGroupCount());
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; ++i)
 		{
 			if (Arrays.binarySearch(expandedIds, adapter.getGroupId(i)) >= 0)
 			{
+				Log.d(TAG, "NOW EXPANDING GROUPS: " + i);
 				expandLV.expandGroup(i);
 			}
 		}
@@ -508,7 +497,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild, false);
 			setExpandedGroups();
-
+			setActivatedItem(mActivatedPositionGroup, mActivatedPositionChild);
 		}
 	};
 
@@ -520,4 +509,29 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	}
 
+
+	public void setActivatedItem(int groupPosition, int childPosition)
+	{
+		if (groupPosition != ExpandableListView.INVALID_POSITION && childPosition != ExpandableListView.INVALID_POSITION)
+		{
+			expandLV.setItemChecked(expandLV.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
+		}
+	}
+
+
+	/**
+	 * Trigger a synchronization for all accounts.
+	 */
+	private void doSyncNow()
+	{
+		AccountManager accountManager = AccountManager.get(appContext);
+		Account[] accounts = accountManager.getAccounts();
+		for (Account account : accounts)
+		{
+			// TODO: do we need a new bundle for each account or can we reuse it?
+			Bundle extras = new Bundle();
+			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+			ContentResolver.requestSync(account, TaskContract.AUTHORITY, extras);
+		}
+	}
 }

@@ -6,13 +6,17 @@
         android:icon="@drawable/content_new"
         android:showAsAction="always"
         android:title="@string/menu_add_task"
-        android:titleCondensed="@string/menu_add_task_condensed">
-    </item>
+        android:titleCondensed="@string/menu_add_task_condensed"/>
     <item
         android:id="@+id/menu_show_completed"
         android:checkable="true"
-        android:showAsAction="withText|never"
+        android:showAsAction="never"
         android:title="@string/menu_show_completed"
         android:titleCondensed="@string/menu_show_completed_condensed"/>
+    <item
+        android:id="@+id/menu_sync_now"
+        android:showAsAction="never"
+        android:title="@string/menu_sync_now"
+        android:titleCondensed="@string/menu_sync_now_condensed"/>
 
 </menu>

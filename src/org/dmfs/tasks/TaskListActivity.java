@@ -58,7 +58,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
 	private boolean mTwoPane;
-	Context appContext;
 	ViewTaskFragment taskDetailFrag;
 	TaskListFragment taskListFrag;
 	SharedPreferences openTaskPrefs;
@@ -70,7 +69,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
-		appContext = getApplicationContext();
 
 		if (findViewById(R.id.task_detail_container) != null)
 		{
@@ -118,8 +116,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			taskDetailFrag = new ViewTaskFragment();
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
 		}
-
-		// TODO: If exposing deep links into your app, handle intents here.
 	}
 
 
@@ -145,7 +141,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 
 	@Override
-	public void displayEditTask(Uri taskUri)
+	public void onEditTask(Uri taskUri)
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
 		editTaskIntent.setData(taskUri);
@@ -258,7 +254,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		switch (item.getItemId())
 		{
 			case R.id.menu_visible_list:
-				Intent settingsIntent = new Intent(appContext, SyncSettingsActivity.class);
+				Intent settingsIntent = new Intent(getBaseContext(), SyncSettingsActivity.class);
 				startActivity(settingsIntent);
 				return true;
 			default:

@@ -3,6 +3,7 @@
     style="@style/TasksExpandableListItem"
     android:layout_width="match_parent"
     android:layout_height="0dip"
+    android:background="@drawable/task_list_background"
     android:minHeight="?android:attr/listPreferredItemHeight" >
 
     <View
@@ -11,20 +12,7 @@
         android:layout_height="25dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp" />
-
-    <TextView
-        android:id="@android:id/title"
-        style="@style/DarkText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/colorbar"
-        android:ellipsize="end"
-        android:padding="5dip"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="false" />
+        android:layout_marginLeft="2dp" />
 
     <TextView
         android:id="@+id/task_due_date"
@@ -36,9 +24,23 @@
         android:textIsSelectable="false"
         android:textSize="12sp" />
 
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/task_due_date"
+        android:ellipsize="end"
+        android:padding="8dip"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/task_list_title_text"
+        android:textIsSelectable="false" />
+
     <View
         android:id="@+id/divider"
-        style="@style/ListItemLine"
+        style="@style/task_list_item_divider"
         android:layout_width="fill_parent"
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
