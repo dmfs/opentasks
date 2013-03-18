@@ -38,6 +38,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
@@ -103,11 +104,11 @@ public interface ByDueDate
 					// highlight overdue dates & times
 					if (dueDate.before(mNow))
 					{
-						dueDateField.setTextColor(Color.RED);
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
 					}
 					else
 					{
-						dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
 					}
 				}
 				else
@@ -196,7 +197,6 @@ public interface ByDueDate
 			if (text2 != null && ((ExpandableGroupDescriptorAdapter) adapter).childCursorLoaded(position))
 			{
 				Resources res = view.getContext().getResources();
-
 				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
 			}
 
