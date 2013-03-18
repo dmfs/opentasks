@@ -28,17 +28,9 @@ import android.widget.TextView;
  * <p />
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
-public class VisibleListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
+public class SettingsListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
 {
 
-	// TODO: Rename parameter arguments, choose names that match
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM1 = "param1";
-	private static final String ARG_PARAM2 = "param2";
-
-	// TODO: Rename and change types of parameters
-	private String mParam1;
-	private String mParam2;
 	private Context mContext;
 	private OnFragmentInteractionListener mListener;
 	private VisibleListAdapter mAdapter;
@@ -46,29 +38,21 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 	 * The fragment's ListView/GridView.
 	 */
 	private AbsListView mListView;
+	private String listSelectionArguments;
+	private String[] listSelectionParam;
+
+	private int fragmentLayout;
 
 
-	/**
-	 * The Adapter which will be used to populate the ListView/GridView with Views.
-	 */
+	public SettingsListFragment(){
 
-	// TODO: Rename and change types of parameters
-	public static VisibleListFragment newInstance(String param1, String param2)
-	{
-		VisibleListFragment fragment = new VisibleListFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_PARAM1, param1);
-		args.putString(ARG_PARAM2, param2);
-		fragment.setArguments(args);
-		return fragment;
 	}
-
-
-	/**
-	 * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
-	 */
-	public VisibleListFragment()
+	
+	public SettingsListFragment(String args, String[] params, int layout)
 	{
+		listSelectionArguments = args;
+		listSelectionParam = params;
+		fragmentLayout = layout;
 	}
 
 
@@ -76,22 +60,13 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-
-		if (getArguments() != null)
-		{
-			mParam1 = getArguments().getString(ARG_PARAM1);
-			mParam2 = getArguments().getString(ARG_PARAM2);
-		}
-
-		// TODO: Change Adapter to display your content
-
 	}
 
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.fragment_visiblelist, container, false);
+		View view = inflater.inflate(fragmentLayout, container, false);
 
 		// Set the adapter
 		mListView = (AbsListView) view.findViewById(android.R.id.list);
@@ -121,7 +96,6 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 		}
 
 		mContext = activity.getBaseContext();
-
 	}
 
 
@@ -168,17 +142,21 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 	 */
 	public interface OnFragmentInteractionListener
 	{
-		// TODO: Update argument type and name
-		public void onFragmentInteraction(String id);
+		public void viewSyncedLists();
+
+
+		public void savedUpdatedSyncedLists();
+
+
+		public void cancelFromSyncedLists();
 	}
 
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		// TODO Auto-generated method stub
-		return new CursorLoader(mContext, TaskContract.TaskLists.CONTENT_URI, new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME },
-			TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" }, null);
+		return new CursorLoader(mContext, TaskContract.TaskLists.CONTENT_URI, new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME,
+			TaskContract.TaskLists.LIST_COLOR }, listSelectionArguments, listSelectionParam, null);
 	}
 
 
@@ -193,14 +171,32 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 	@Override
 	public void onLoaderReset(Loader<Cursor> arg0)
 	{
-		// TODO Auto-generated method stub
+		mAdapter.changeCursor(null);
 
 	}
 
 	private class VisibleListAdapter extends CursorAdapter
 	{
 		LayoutInflater inflater;
-		int accountNameColumn;
+		int listNameColumn, listColorColumn;
+
+
+		@Override
+		public Cursor swapCursor(Cursor c)
+		{
+			if (c != null)
+			{
+				listNameColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_NAME);
+				listColorColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_COLOR);
+			}
+			else
+			{
+				listNameColumn = -1;
+				listColorColumn = -1;
+			}
+			return super.swapCursor(c);
+
+		}
 
 
 		public VisibleListAdapter(Context context, Cursor c, int flags)
@@ -214,10 +210,12 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 		@Override
 		public void bindView(View v, Context c, Cursor cur)
 		{
-			accountNameColumn = cur.getColumnIndex(TaskContract.TaskLists.LIST_NAME);
-			String accountName = cur.getString(accountNameColumn);
-			TextView accountNameTV = (TextView) v.findViewById(R.id.visible_account_name);
-			accountNameTV.setText(accountName);
+			String listName = cur.getString(listNameColumn);
+			TextView listNameTV = (TextView) v.findViewById(R.id.visible_account_name);
+			listNameTV.setText(listName);
+			View listColorView = v.findViewById(R.id.visible_task_list_color);
+			int listColor = cur.getInt(listColorColumn);
+			listColorView.setBackgroundColor(listColor);
 		}
 
 
@@ -229,5 +227,5 @@ public class VisibleListFragment extends ListFragment implements AbsListView.OnI
 		}
 
 	}
-
+	
 }

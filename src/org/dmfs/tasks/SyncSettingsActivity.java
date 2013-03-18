@@ -1,16 +1,22 @@
 package org.dmfs.tasks;
 
+import org.dmfs.provider.tasks.TaskContract;
+
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 
-public class SyncSettingsActivity extends FragmentActivity implements VisibleListFragment.OnFragmentInteractionListener
+public class SyncSettingsActivity extends FragmentActivity implements SettingsListFragment.OnFragmentInteractionListener
 {
+	FragmentManager manager;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -19,6 +25,12 @@ public class SyncSettingsActivity extends FragmentActivity implements VisibleLis
 		setContentView(R.layout.activity_settings);
 		// Show the Up button in the action bar.
 		setupActionBar();
+
+		manager = getSupportFragmentManager();
+
+		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
+			R.layout.fragment_visiblelist);
+		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 
 	}
 
@@ -66,10 +78,46 @@ public class SyncSettingsActivity extends FragmentActivity implements VisibleLis
 
 
 	@Override
-	public void onFragmentInteraction(String id)
+	public void viewSyncedLists()
 	{
-		// TODO Auto-generated method stub
-		
+
+	}
+
+
+	@Override
+	public void savedUpdatedSyncedLists()
+	{
+
+	}
+
+
+	@Override
+	public void cancelFromSyncedLists()
+	{
+
+	}
+
+
+	public void showSyncedList(View v)
+	{
+		SettingsListFragment syncedListFragment = new SettingsListFragment(null, null, R.layout.fragment_synced_task_list);
+		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+	}
+
+
+	public void onSaveUpdated(View v)
+	{
+		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
+			R.layout.fragment_visiblelist);
+		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+	}
+
+
+	public void onCancelUpdated(View v)
+	{
+		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
+			R.layout.fragment_visiblelist);
+		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 	}
 
 }
