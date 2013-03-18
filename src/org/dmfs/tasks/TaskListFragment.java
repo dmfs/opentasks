@@ -176,24 +176,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			}
 		});
 
-		expandLV.setOnGroupClickListener(new OnGroupClickListener()
-		{
-
-			@Override
-			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id)
-			{
-				if (mAdapter.getChildrenCount(groupPosition) > 0)
-				{
-					return false;
-				}
-				else
-				{
-					// don't allow changes of expanded state for empty groups
-					return true;
-				}
-			}
-		});
-
 		getLoaderManager().restartLoader(-1, null, this);
 
 		if (savedInstanceState != null)
