@@ -31,6 +31,7 @@ import android.content.Context;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -214,7 +215,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 		if ((oldUri == null) != (uri == null))
 		{
-			getActivity().invalidateOptionsMenu();
+			/*
+			 * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
+			 */
+			ActivityCompat.invalidateOptionsMenu(getActivity());
 		}
 	}
 
