@@ -29,7 +29,7 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 		manager = getSupportFragmentManager();
 
 		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
-			R.layout.fragment_visiblelist);
+			R.layout.fragment_visiblelist, TaskContract.TaskLists.VISIBLE);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 
 	}
@@ -100,7 +100,7 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 
 	public void showSyncedList(View v)
 	{
-		SettingsListFragment syncedListFragment = new SettingsListFragment(null, null, R.layout.fragment_synced_task_list);
+		SettingsListFragment syncedListFragment = new SettingsListFragment(null, null, R.layout.fragment_synced_task_list, TaskContract.TaskLists.SYNC_ENABLED);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 	}
 
@@ -108,7 +108,7 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 	public void onSaveUpdated(View v)
 	{
 		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
-			R.layout.fragment_visiblelist);
+			R.layout.fragment_visiblelist, TaskContract.TaskLists.VISIBLE);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 	}
 
@@ -116,7 +116,7 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 	public void onCancelUpdated(View v)
 	{
 		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
-			R.layout.fragment_visiblelist);
+			R.layout.fragment_visiblelist, TaskContract.TaskLists.VISIBLE);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 	}
 

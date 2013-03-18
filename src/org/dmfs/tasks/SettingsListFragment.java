@@ -1,23 +1,34 @@
 package org.dmfs.tasks;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.TaskListFragment.Callbacks;
 
 import android.app.Activity;
+import android.content.ContentProviderOperation;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -31,6 +42,7 @@ import android.widget.TextView;
 public class SettingsListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
 {
 
+	private static final String TAG = "SettingsListFragment";
 	private Context mContext;
 	private OnFragmentInteractionListener mListener;
 	private VisibleListAdapter mAdapter;
@@ -40,19 +52,24 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private AbsListView mListView;
 	private String listSelectionArguments;
 	private String[] listSelectionParam;
+	private String listCompareColumnName;
+	private HashMap<Integer, Boolean> savedPositions = new HashMap<Integer, Boolean>();
 
 	private int fragmentLayout;
 
 
-	public SettingsListFragment(){
+	public SettingsListFragment()
+	{
 
 	}
-	
-	public SettingsListFragment(String args, String[] params, int layout)
+
+
+	public SettingsListFragment(String args, String[] params, int layout, String columnName)
 	{
 		listSelectionArguments = args;
 		listSelectionParam = params;
 		fragmentLayout = layout;
+		listCompareColumnName = columnName;
 	}
 
 
@@ -78,6 +95,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		getLoaderManager().restartLoader(-2, null, this);
 		mAdapter = new VisibleListAdapter(mContext, null, 0);
 		setListAdapter(mAdapter);
+		
 		return view;
 	}
 
@@ -104,6 +122,29 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	{
 		super.onDetach();
 		mListener = null;
+		Log.d(TAG, "Length of Changes: " + savedPositions.size());
+		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+		for (Integer posInt : savedPositions.keySet())
+		{
+			boolean val = savedPositions.get(posInt);
+			ContentProviderOperation op = ContentProviderOperation.newUpdate(TaskContract.TaskLists.CONTENT_URI)
+				.withSelection(TaskContract.TaskLists._ID + "=?", new String[] { posInt.toString() }).withValue(listCompareColumnName, val ? "1" : "0").build();
+			ops.add(op);
+		}
+		try
+		{
+			mContext.getContentResolver().applyBatch(TaskContract.AUTHORITY, ops);
+		}
+		catch (RemoteException e)
+		{
+			Log.e(TAG, "Remote Exception :" + e.getMessage());
+			e.printStackTrace();
+		}
+		catch (OperationApplicationException e)
+		{
+			Log.e(TAG, "OperationApplicationException : " + e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 
@@ -156,7 +197,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
 		return new CursorLoader(mContext, TaskContract.TaskLists.CONTENT_URI, new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME,
-			TaskContract.TaskLists.LIST_COLOR }, listSelectionArguments, listSelectionParam, null);
+			TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE }, listSelectionArguments,
+			listSelectionParam, null);
 	}
 
 
@@ -178,7 +220,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private class VisibleListAdapter extends CursorAdapter
 	{
 		LayoutInflater inflater;
-		int listNameColumn, listColorColumn;
+		int listNameColumn, listColorColumn, compareColumn, idColumn;
 
 
 		@Override
@@ -188,11 +230,15 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 			{
 				listNameColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_NAME);
 				listColorColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_COLOR);
+				compareColumn = c.getColumnIndex(listCompareColumnName);
+				idColumn = c.getColumnIndex(TaskContract.TaskLists._ID);
 			}
 			else
 			{
 				listNameColumn = -1;
 				listColorColumn = -1;
+				compareColumn = -1;
+				idColumn = -1;
 			}
 			return super.swapCursor(c);
 
@@ -208,14 +254,43 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 
 		@Override
-		public void bindView(View v, Context c, Cursor cur)
+		public void bindView(View v, Context c, final Cursor cur)
 		{
+			final int listId = cur.getInt(idColumn);
 			String listName = cur.getString(listNameColumn);
 			TextView listNameTV = (TextView) v.findViewById(R.id.visible_account_name);
 			listNameTV.setText(listName);
 			View listColorView = v.findViewById(R.id.visible_task_list_color);
 			int listColor = cur.getInt(listColorColumn);
 			listColorView.setBackgroundColor(listColor);
+
+			CheckBox cb = (CheckBox) v.findViewById(R.id.visible_task_list_checked);
+			if (!cur.isNull(compareColumn))
+			{
+				int checkValue = cur.getInt(compareColumn);
+				cb.setChecked(checkValue == 1);
+			}
+			cb.setOnCheckedChangeListener(new OnCheckedChangeListener()
+			{
+
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+				{
+					Integer posInt = Integer.valueOf(listId);
+					if (savedPositions.containsKey(posInt))
+					{
+						savedPositions.remove(posInt);
+						Log.d(TAG, "Removed ID with : " + posInt.toString());
+					}
+					else
+					{
+						savedPositions.put(posInt, isChecked);
+						Log.d(TAG, "Added ID with : " + posInt.toString());
+					}
+					Log.d(TAG, "Length of ops is : " + savedPositions.size());
+				}
+
+			});
 		}
 
 
@@ -227,5 +302,5 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		}
 
 	}
-	
+
 }
