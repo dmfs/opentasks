@@ -199,7 +199,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onAttach(activity);
 
-		appContext = activity.getApplicationContext();
+		appContext = activity.getBaseContext();
 
 		// Activities containing this fragment must implement its callbacks.
 		if (!(activity instanceof Callbacks))

@@ -28,6 +28,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
@@ -235,4 +238,27 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		// TODO: there is one exception: when there is no other element to focus!
 	}
 
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.task_list_activity_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.menu_visible_list:
+				Intent settingsIntent = new Intent(getBaseContext(), SyncSettingsActivity.class);
+				startActivity(settingsIntent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 }
