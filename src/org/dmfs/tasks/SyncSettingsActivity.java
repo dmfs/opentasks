@@ -16,7 +16,7 @@ import android.view.View;
 public class SyncSettingsActivity extends FragmentActivity implements SettingsListFragment.OnFragmentInteractionListener
 {
 	FragmentManager manager;
-
+	SettingsListFragment currentFrag;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -27,11 +27,34 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 		setupActionBar();
 
 		manager = getSupportFragmentManager();
+		showVisibleListsFragment();
+		
+	
 
-		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
-			R.layout.fragment_visiblelist, TaskContract.TaskLists.VISIBLE);
+	}
+	
+	public void showVisibleListsFragment(){
+		SettingsListFragment syncedListFragment = new SettingsListFragment();
+		Bundle args = new Bundle();
+		args.putStringArray(SettingsListFragment.LIST_STRING_PARAMS, new String[]{"1"});
+		args.putInt(SettingsListFragment.LIST_FRAGMENT_LAYOUT, R.layout.fragment_visiblelist);
+		args.putString(SettingsListFragment.LIST_SELECTION_ARGS, TaskContract.TaskLists.SYNC_ENABLED + "=?");
+		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.VISIBLE);
+		syncedListFragment.setArguments(args);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
-
+		currentFrag = syncedListFragment;
+	}
+	
+	public void showSyncedListsFragment(){
+		SettingsListFragment syncedListFragment = new SettingsListFragment();
+		Bundle args = new Bundle();
+		args.putStringArray(SettingsListFragment.LIST_STRING_PARAMS, null);
+		args.putInt(SettingsListFragment.LIST_FRAGMENT_LAYOUT, R.layout.fragment_synced_task_list);
+		args.putString(SettingsListFragment.LIST_SELECTION_ARGS, null);
+		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.SYNC_ENABLED);
+		syncedListFragment.setArguments(args);
+		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+		currentFrag = syncedListFragment;
 	}
 
 
@@ -51,9 +74,10 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
+		return super.onCreateOptionsMenu(menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.settings, menu);
-		return true;
+		//getMenuInflater().inflate(R.menu.settings, menu);
+		//return true;
 	}
 
 
@@ -100,24 +124,22 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 
 	public void showSyncedList(View v)
 	{
-		SettingsListFragment syncedListFragment = new SettingsListFragment(null, null, R.layout.fragment_synced_task_list, TaskContract.TaskLists.SYNC_ENABLED);
-		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+		currentFrag.saveListState();
+		showSyncedListsFragment();
 	}
 
 
 	public void onSaveUpdated(View v)
 	{
-		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
-			R.layout.fragment_visiblelist, TaskContract.TaskLists.VISIBLE);
-		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+		currentFrag.saveListState();
+		showVisibleListsFragment();
+		
 	}
 
 
 	public void onCancelUpdated(View v)
 	{
-		SettingsListFragment syncedListFragment = new SettingsListFragment(TaskContract.TaskLists.SYNC_ENABLED + "=?", new String[] { "1" },
-			R.layout.fragment_visiblelist, TaskContract.TaskLists.VISIBLE);
-		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+		showVisibleListsFragment();
 	}
 
 }

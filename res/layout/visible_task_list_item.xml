@@ -11,20 +11,24 @@
         android:layout_centerVertical="true"
         android:layout_margin="5dp" />
 
-    <TextView
-        android:id="@+id/visible_account_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/visible_task_list_color"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="false" />
-
     <CheckBox
         android:id="@+id/visible_task_list_checked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
+    <TextView
+        android:id="@+id/visible_account_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/visible_task_list_checked"
+        android:layout_toRightOf="@id/visible_task_list_color"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
 
 </RelativeLayout>

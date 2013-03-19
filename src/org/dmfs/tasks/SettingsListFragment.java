@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.TaskListFragment.Callbacks;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.Context;
@@ -25,10 +26,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -39,10 +36,16 @@ import android.widget.TextView;
  * <p />
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
+
+@SuppressLint("ValidFragment")
 public class SettingsListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
 {
 
 	private static final String TAG = "SettingsListFragment";
+	public static final String LIST_SELECTION_ARGS = "list_selection_args";
+	public static final String LIST_STRING_PARAMS = "list_string_params";
+	public static final String LIST_FRAGMENT_LAYOUT = "list_fragment_layout";
+	public static final String COMPARE_COLUMN_NAME = "column_name";
 	private Context mContext;
 	private OnFragmentInteractionListener mListener;
 	private VisibleListAdapter mAdapter;
@@ -53,23 +56,13 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private String listSelectionArguments;
 	private String[] listSelectionParam;
 	private String listCompareColumnName;
-	private HashMap<Integer, Boolean> savedPositions = new HashMap<Integer, Boolean>();
 
 	private int fragmentLayout;
 
 
 	public SettingsListFragment()
 	{
-
-	}
-
-
-	public SettingsListFragment(String args, String[] params, int layout, String columnName)
-	{
-		listSelectionArguments = args;
-		listSelectionParam = params;
-		fragmentLayout = layout;
-		listCompareColumnName = columnName;
+		
 	}
 
 
@@ -83,20 +76,24 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
+		Bundle args = getArguments();
+		listSelectionArguments = args.getString(LIST_SELECTION_ARGS);
+		listSelectionParam = args.getStringArray(LIST_STRING_PARAMS);
+		fragmentLayout = args.getInt(LIST_FRAGMENT_LAYOUT);
+		listCompareColumnName = args.getString(COMPARE_COLUMN_NAME);
 		View view = inflater.inflate(fragmentLayout, container, false);
+		return view;
+	}
 
-		// Set the adapter
-		mListView = (AbsListView) view.findViewById(android.R.id.list);
-		((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
-		// Set OnItemClickListener so we can be notified on item clicks
-		mListView.setOnItemClickListener(this);
-
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState)
+	{
+		super.onActivityCreated(savedInstanceState);
 		getLoaderManager().restartLoader(-2, null, this);
 		mAdapter = new VisibleListAdapter(mContext, null, 0);
 		setListAdapter(mAdapter);
-		
-		return view;
+		getListView().setOnItemClickListener(this);
 	}
 
 
@@ -122,41 +119,18 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	{
 		super.onDetach();
 		mListener = null;
-		Log.d(TAG, "Length of Changes: " + savedPositions.size());
-		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-		for (Integer posInt : savedPositions.keySet())
-		{
-			boolean val = savedPositions.get(posInt);
-			ContentProviderOperation op = ContentProviderOperation.newUpdate(TaskContract.TaskLists.CONTENT_URI)
-				.withSelection(TaskContract.TaskLists._ID + "=?", new String[] { posInt.toString() }).withValue(listCompareColumnName, val ? "1" : "0").build();
-			ops.add(op);
-		}
-		try
-		{
-			mContext.getContentResolver().applyBatch(TaskContract.AUTHORITY, ops);
-		}
-		catch (RemoteException e)
-		{
-			Log.e(TAG, "Remote Exception :" + e.getMessage());
-			e.printStackTrace();
-		}
-		catch (OperationApplicationException e)
-		{
-			Log.e(TAG, "OperationApplicationException : " + e.getMessage());
-			e.printStackTrace();
-		}
 	}
 
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+	public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowId)
 	{
-		if (null != mListener)
-		{
-			// Notify the active callbacks interface (the activity, if the
-			// fragment is attached to one) that an item has been selected.
-
-		}
+		Log.d(TAG, "Item Clicked");
+		VisibleListAdapter adapter = (VisibleListAdapter) adapterView.getAdapter();
+		VisibleListAdapter.CheckableItem item = (VisibleListAdapter.CheckableItem) view.getTag();
+		boolean checked = item.cb.isChecked();
+		item.cb.setChecked(!checked);
+		adapter.addToState(rowId, !checked);
 	}
 
 
@@ -220,7 +194,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private class VisibleListAdapter extends CursorAdapter
 	{
 		LayoutInflater inflater;
-		int listNameColumn, listColorColumn, compareColumn, idColumn;
+		int listNameColumn, listColorColumn, compareColumn;
+		private HashMap<Long, Boolean> savedPositions = new HashMap<Long, Boolean>();
 
 
 		@Override
@@ -231,14 +206,12 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 				listNameColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_NAME);
 				listColorColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_COLOR);
 				compareColumn = c.getColumnIndex(listCompareColumnName);
-				idColumn = c.getColumnIndex(TaskContract.TaskLists._ID);
 			}
 			else
 			{
 				listNameColumn = -1;
 				listColorColumn = -1;
 				compareColumn = -1;
-				idColumn = -1;
 			}
 			return super.swapCursor(c);
 
@@ -256,51 +229,102 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		@Override
 		public void bindView(View v, Context c, final Cursor cur)
 		{
-			final int listId = cur.getInt(idColumn);
 			String listName = cur.getString(listNameColumn);
-			TextView listNameTV = (TextView) v.findViewById(R.id.visible_account_name);
-			listNameTV.setText(listName);
-			View listColorView = v.findViewById(R.id.visible_task_list_color);
+			CheckableItem item = (CheckableItem) v.getTag();
+			item.nameTV.setText(listName);
 			int listColor = cur.getInt(listColorColumn);
-			listColorView.setBackgroundColor(listColor);
+			item.bgColor.setBackgroundColor(listColor);
 
-			CheckBox cb = (CheckBox) v.findViewById(R.id.visible_task_list_checked);
 			if (!cur.isNull(compareColumn))
 			{
 				int checkValue = cur.getInt(compareColumn);
-				cb.setChecked(checkValue == 1);
+				item.cb.setChecked(checkValue == 1);
 			}
-			cb.setOnCheckedChangeListener(new OnCheckedChangeListener()
-			{
+			/*
+			 * cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			 * 
+			 * @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { Integer posInt = Integer.valueOf(listId); if
+			 * (savedPositions.containsKey(posInt)) { savedPositions.remove(posInt); Log.d(TAG, "Removed ID with : " + posInt.toString()); } else {
+			 * savedPositions.put(posInt, isChecked); Log.d(TAG, "Added ID with : " + posInt.toString()); } Log.d(TAG, "Length of ops is : " +
+			 * savedPositions.size()); }
+			 * 
+			 * });
+			 */
 
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-				{
-					Integer posInt = Integer.valueOf(listId);
-					if (savedPositions.containsKey(posInt))
-					{
-						savedPositions.remove(posInt);
-						Log.d(TAG, "Removed ID with : " + posInt.toString());
-					}
-					else
-					{
-						savedPositions.put(posInt, isChecked);
-						Log.d(TAG, "Added ID with : " + posInt.toString());
-					}
-					Log.d(TAG, "Length of ops is : " + savedPositions.size());
-				}
+		}
 
-			});
+		public class CheckableItem
+		{
+			TextView nameTV;
+			View bgColor;
+			CheckBox cb;
 		}
 
 
 		@Override
 		public View newView(Context c, Cursor cur, ViewGroup vg)
 		{
-
-			return inflater.inflate(R.layout.visible_task_list_item, null);
+			View newInflatedView = inflater.inflate(R.layout.visible_task_list_item, null);
+			CheckableItem item = new CheckableItem();
+			item.nameTV = (TextView) newInflatedView.findViewById(R.id.visible_account_name);
+			item.bgColor = newInflatedView.findViewById(R.id.visible_task_list_color);
+			item.cb = (CheckBox) newInflatedView.findViewById(R.id.visible_task_list_checked);
+			newInflatedView.setFocusable(false);
+			newInflatedView.setTag(item);
+			return newInflatedView;
 		}
 
+
+		public boolean addToState(long id, boolean val)
+		{
+			if (savedPositions.containsKey(Long.valueOf(id)))
+			{
+				savedPositions.remove(id);
+				return false;
+			}
+			else
+			{
+				savedPositions.put(id, val);
+				return true;
+			}
+		}
+
+
+		public HashMap<Long, Boolean> getState()
+		{
+			return savedPositions;
+		}
+
+	}
+	
+	public boolean saveListState(){
+		HashMap<Long, Boolean> savedPositions = ((VisibleListAdapter) getListAdapter()).getState();
+		Log.d(TAG, "Length of Changes: " + savedPositions.size());
+		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+		for (Long posInt : savedPositions.keySet())
+		{
+			boolean val = savedPositions.get(posInt);
+			ContentProviderOperation op = ContentProviderOperation.newUpdate(TaskContract.TaskLists.CONTENT_URI)
+				.withSelection(TaskContract.TaskLists._ID + "=?", new String[] { posInt.toString() }).withValue(listCompareColumnName, val ? "1" : "0").build();
+			ops.add(op);
+		}
+		try
+		{
+			mContext.getContentResolver().applyBatch(TaskContract.AUTHORITY, ops);
+		}
+		catch (RemoteException e)
+		{
+			Log.e(TAG, "Remote Exception :" + e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+		catch (OperationApplicationException e)
+		{
+			Log.e(TAG, "OperationApplicationException : " + e.getMessage());
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 
 }
