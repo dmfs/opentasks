@@ -38,6 +38,7 @@
     <string name="provider_label">Tasks</string>
     <string name="task_detail_activity">Task Detail</string>
     <string name="task_priority">Priority</string>
+    <string name="task_all_day">All Day</string>
 
     <!-- Task list group titles -->
     <string name="task_group_no_due">No due date</string>

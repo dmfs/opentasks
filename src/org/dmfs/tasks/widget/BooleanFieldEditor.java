@@ -25,15 +25,19 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * Editor for boolean values.
  * @author Arjun Naik<arjun@arjunnaik.in>
  *
  */
-public class BooleanFieldEditor extends AbstractFieldEditor
+public class BooleanFieldEditor extends AbstractFieldEditor implements OnCheckedChangeListener
 {
+	private static final String TAG = "BooleanFieldEditor";
 	CheckBox mCheckBox;
 	BooleanFieldAdapter mAdapter;
 
@@ -62,7 +66,10 @@ public class BooleanFieldEditor extends AbstractFieldEditor
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mCheckBox = (CheckBox) findViewById(android.R.id.text1);
+		mCheckBox = (CheckBox) findViewById(android.R.id.checkbox);
+		if(mCheckBox != null){
+			mCheckBox.setOnCheckedChangeListener(this);
+		}
 	}
 
 
@@ -71,7 +78,6 @@ public class BooleanFieldEditor extends AbstractFieldEditor
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (BooleanFieldAdapter) descriptor.getFieldAdapter();
-		mCheckBox.setHint(descriptor.getHint());
 	}
 
 	@Override
@@ -82,6 +88,14 @@ public class BooleanFieldEditor extends AbstractFieldEditor
 		{
 			mCheckBox.setChecked(newValue.booleanValue());
 		}
+	}
+
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+	{
+		Log.d(TAG, "Changed : " + isChecked);
+		mAdapter.set(mValues, isChecked);
 	}
 	
 }

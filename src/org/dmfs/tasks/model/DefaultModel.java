@@ -18,6 +18,7 @@
 package org.dmfs.tasks.model;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -47,6 +48,8 @@ public class DefaultModel extends Model
 	private final static LayoutDescriptor PROGRESS_EDIT = new LayoutDescriptor(R.layout.percentage_field_editor);
 	private final static LayoutDescriptor TIME_VIEW = new LayoutDescriptor(R.layout.time_field_view);
 	private final static LayoutDescriptor TIME_EDIT = new LayoutDescriptor(R.layout.time_field_editor);
+	private final static LayoutDescriptor BOOLEAN_VIEW = new LayoutDescriptor(R.layout.boolean_field_view);
+	private final static LayoutDescriptor BOOLEAN_EDIT = new LayoutDescriptor(R.layout.boolean_field_editor);
 
 
 	public DefaultModel(Context context)
@@ -93,6 +96,8 @@ public class DefaultModel extends Model
 			.setEditorLayout(TIME_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_due, new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY)).setViewLayout(TIME_VIEW)
 			.setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, new BooleanFieldAdapter(Tasks.IS_ALLDAY)).setViewLayout(BOOLEAN_VIEW).setEditorLayout(
+			BOOLEAN_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, new TimeFieldAdapter(Tasks.COMPLETED, Tasks.TZ, Tasks.COMPLETED_IS_ALLDAY))
 			.setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_percent_complete, new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE)).setViewLayout(PROGRESS_VIEW)

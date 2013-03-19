@@ -197,7 +197,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		{
 			mDatePickerButton.setText("");
 			mTimePickerButton.setText("");
-			mTimePickerButton.setVisibility(View.VISIBLE);
+			mTimePickerButton.setVisibility(mAdapter.isAllDay(mValues)? View.GONE : View.VISIBLE);
 			mClearDateButton.setEnabled(false);
 		}
 	}

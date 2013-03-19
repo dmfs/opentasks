@@ -2,16 +2,25 @@
 <org.dmfs.tasks.widget.BooleanFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dip" >
+    android:orientation="horizontal"
+    android:paddingLeft="12dip"
+    android:paddingRight="12dip"
+    android:paddingTop="8dip" >
 
     <!-- <include layout="@layout/editor_header" /> -->
 
     <CheckBox
         android:id="@android:id/checkbox"
         style="@style/DarkTextEditText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
     </CheckBox>
+
+    <TextView
+        android:id="@android:id/title"
+        style="@style/editor_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="false" />
 
 </org.dmfs.tasks.widget.BooleanFieldEditor>

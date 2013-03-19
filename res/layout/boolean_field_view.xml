@@ -14,4 +14,10 @@
         android:layout_marginTop="2dip" >
     </CheckBox>
 
+    <TextView
+        android:id="@android:id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="false" />
+
 </org.dmfs.tasks.widget.BooleanFieldView>
