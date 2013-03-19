@@ -240,17 +240,6 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 				int checkValue = cur.getInt(compareColumn);
 				item.cb.setChecked(checkValue == 1);
 			}
-			/*
-			 * cb.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			 * 
-			 * @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) { Integer posInt = Integer.valueOf(listId); if
-			 * (savedPositions.containsKey(posInt)) { savedPositions.remove(posInt); Log.d(TAG, "Removed ID with : " + posInt.toString()); } else {
-			 * savedPositions.put(posInt, isChecked); Log.d(TAG, "Added ID with : " + posInt.toString()); } Log.d(TAG, "Length of ops is : " +
-			 * savedPositions.size()); }
-			 * 
-			 * });
-			 */
-
 		}
 
 		public class CheckableItem
@@ -269,7 +258,6 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 			item.nameTV = (TextView) newInflatedView.findViewById(R.id.visible_account_name);
 			item.bgColor = newInflatedView.findViewById(R.id.visible_task_list_color);
 			item.cb = (CheckBox) newInflatedView.findViewById(R.id.visible_task_list_checked);
-			newInflatedView.setFocusable(false);
 			newInflatedView.setTag(item);
 			return newInflatedView;
 		}
