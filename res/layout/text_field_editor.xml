@@ -9,7 +9,7 @@
 
     <EditText
         android:id="@android:id/text1"
-        style="@style/DarkTextEditText"
+        style="@style/dark_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
     </EditText>

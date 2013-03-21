@@ -21,7 +21,7 @@
 
         <TextView
             android:id="@+id/text"
-            style="@style/DarkText"
+            style="@style/dark_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

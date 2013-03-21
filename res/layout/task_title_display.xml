@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <TextView
-        style="@style/DarkText"
+        style="@style/dark_text"
         android:id="@+id/task_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

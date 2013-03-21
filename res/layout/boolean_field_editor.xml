@@ -11,7 +11,7 @@
 
     <CheckBox
         android:id="@android:id/checkbox"
-        style="@style/DarkTextEditText"
+        style="@style/dark_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
     </CheckBox>

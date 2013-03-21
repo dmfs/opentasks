@@ -15,7 +15,7 @@
 
         <ProgressBar
             android:id="@+id/percentage_progress_bar"
-            style="@style/CaldavProgressBar"
+            style="@style/caldav_progressbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3" >
@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/text"
-            style="@style/DarkText"
+            style="@style/dark_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

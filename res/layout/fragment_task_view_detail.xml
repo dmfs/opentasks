@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:id="@+id/content"
-        style="@style/DarkText"
+        style="@style/dark_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/TaskListContainer"
+    style="@style/task_list_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <ExpandableListView
         android:id="@android:id/list"
-        style="@style/ExpandableTaskList"
+        style="@style/expandable_task_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:groupIndicator="@null"

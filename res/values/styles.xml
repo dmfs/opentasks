@@ -9,25 +9,25 @@
         <item name="android:textColor">@android:color/darker_gray</item>
     </style>
 
-    <style name="CaldavProgressBar" parent="android:Widget.ProgressBar.Horizontal">
+    <style name="caldav_progressbar" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:layout_marginLeft">10dp</item>
     </style>
 
-    <style name="CaldavSeekBar" parent="android:Widget.SeekBar">
+    <style name="caldav_seekbar" parent="android:Widget.SeekBar">
         <item name="android:layout_marginLeft">15dp</item>
     </style>
 
-    <style name="DarkText">
+    <style name="dark_text">
         <item name="android:textColor">#FF333333</item>
     </style>
 
-    <style name="DarkTextEditText" parent="DarkText">
+    <style name="dark_edit_text" parent="dark_text">
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
     </style>
 
-    <style name="TaskGroupText">
+    <style name="task_group_text">
         <item name="android:textColor">@android:color/black</item>
     </style>
 
@@ -71,31 +71,31 @@
         <item name="android:src">@drawable/content_remove_light</item>
     </style>
 
-    <style name="EditDetailPane">
+    <style name="edit_detail_pane">
         <item name="android:layout_width">fill_parent</item>
     </style>
 
-    <style name="EditDetailLL">
+    <style name="edit_detail_ll">
         <item name="android:layout_width">fill_parent</item>
     </style>
 
-    <style name="TasksExpandableListItem"></style>
+    <style name="tasks_expandable_list_item"></style>
 
-    <style name="ExpandableTaskList">
+    <style name="expandable_task_list">
         <item name="android:scrollbarStyle">outsideOverlay</item>
         <item name="android:scrollbarSize">20dp</item>
         <item name="android:cacheColorHint">#00000000</item>
     </style>
 
-    <style name="TaskListContainer"></style>
+    <style name="task_list_container"></style>
 
-    <style name="TaskGroupListItem"></style>
+    <style name="task_group_list_item"></style>
 
-    <style name="TaskListItemDate" parent="DarkText">
+    <style name="task_list_item_date" parent="dark_text">
         <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
     </style>
 
-    <style name="TaskListGroupCount" parent="editor_label_text">
+    <style name="task_list_group_count" parent="editor_label_text">
         <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
     </style>
 

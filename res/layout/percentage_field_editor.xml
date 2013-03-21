@@ -14,14 +14,14 @@
 
         <SeekBar
             android:id="@+id/percentage_seek_bar"
-            style="@style/CaldavSeekBar"
+            style="@style/caldav_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="10" />
 
         <TextView
             android:id="@+id/text"
-            style="@style/DarkText"
+            style="@style/dark_text"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
