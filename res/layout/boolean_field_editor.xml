@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.BooleanFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:paddingLeft="12dip"
-    android:paddingRight="12dip"
-    android:paddingTop="8dip" >
+    style="@style/caldav_widget"
+    android:orientation="horizontal" >
 
     <!-- <include layout="@layout/editor_header" /> -->
 

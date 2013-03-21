@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.BooleanFieldView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="12dip" >
+    style="@style/caldav_widget" >
 
     <include layout="@layout/detail_header" />
 
