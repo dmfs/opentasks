@@ -1,0 +1,5 @@
+<resources>
+
+    <dimen name="task_list_right_margin">25dp</dimen>
+
+</resources>

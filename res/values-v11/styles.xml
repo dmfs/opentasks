@@ -23,6 +23,10 @@
         <item name="android:layout_marginLeft">12dp</item>
     </style>
 
+    <style name="caldav_widget" parent="caldav_widget_parent">
+        <item name="android:padding">12dp</item>
+    </style>
+
     <style name="caldav_progressbar" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:layout_marginLeft">0dp</item>
     </style>
@@ -47,6 +51,9 @@
         <item name="android:layout_marginTop">2dip</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
     </style>
 
 </resources>

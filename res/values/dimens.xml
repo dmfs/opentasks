@@ -4,6 +4,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="task_list_left_margin">10dp</dimen>
-    <dimen name="task_list_right_margin">25dp</dimen>
+    <dimen name="task_list_right_margin">10dp</dimen>
 
 </resources>

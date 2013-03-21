@@ -9,14 +9,6 @@
         <item name="android:textColor">@android:color/darker_gray</item>
     </style>
 
-    <style name="caldav_progressbar" parent="android:Widget.ProgressBar.Horizontal">
-        <item name="android:layout_marginLeft">10dp</item>
-    </style>
-
-    <style name="caldav_seekbar" parent="android:Widget.SeekBar">
-        <item name="android:layout_marginLeft">15dp</item>
-    </style>
-
     <style name="dark_text">
         <item name="android:textColor">#FF333333</item>
     </style>
@@ -40,10 +32,7 @@
         <item name="android:background">@android:color/darker_gray</item>
     </style>
 
-    <style name="list_item_line">
-        <item name="android:layout_marginLeft">0dp</item>
-        <item name="android:background">@color/light_gray</item>
-    </style>
+    <!-- Styles for Task Editor -->
 
     <style name="editor_label_text">
         <item name="android:textColor">@android:color/darker_gray</item>
@@ -51,24 +40,6 @@
 
     <style name="editor_label_line">
         <item name="android:background">@android:color/darker_gray</item>
-    </style>
-
-    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">#FF333333</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginTop">5dp</item>
-    </style>
-
-    <style name="TextAppearance.EditTask_SpinnerButton" parent="TextAppearance.EditTask_Spinner">
-        <item name="android:paddingLeft">12dp</item>
-        <item name="android:paddingRight">12dp</item>
-    </style>
-
-    <style name="btn_remove">
-        <item name="android:layout_marginTop">5dp</item>
-        <item name="android:src">@drawable/content_remove_light</item>
     </style>
 
     <style name="edit_detail_pane">
@@ -79,11 +50,14 @@
         <item name="android:layout_width">fill_parent</item>
     </style>
 
+    <!-- Styles for main task list -->
+
     <style name="tasks_expandable_list_item"></style>
 
     <style name="expandable_task_list">
+        <item name="android:divider">@null</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
-        <item name="android:scrollbarSize">20dp</item>
+        <item name="android:scrollbarSize">0dp</item>
         <item name="android:cacheColorHint">#00000000</item>
     </style>
 
@@ -121,11 +95,18 @@
     </style>
 
     <!-- Styles for Widgets -->
-    <style name="caldav_widget"> <!-- Common Style for all widgets -->
-        <item name="android:padding">12dp</item>
+
+    <style name="caldav_widget_parent"> <!-- Common Style for all widgets -->
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="caldav_widget" parent="caldav_widget_parent">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
     </style>
 
     <style name="field_view_text_value" parent="dark_text"> <!-- Common style for all text displays in widgets -->
@@ -134,6 +115,32 @@
     </style>
 
     <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
+    </style>
+
+    <style name="caldav_progressbar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+
+    <style name="caldav_seekbar" parent="android:Widget.SeekBar">
+        <item name="android:layout_marginLeft">15dp</item>
+    </style>
+
+    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
+    <style name="TextAppearance.EditTask_SpinnerButton" parent="TextAppearance.EditTask_Spinner">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <style name="btn_remove">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:src">@drawable/content_remove_light</item>
     </style>
 
 </resources>
