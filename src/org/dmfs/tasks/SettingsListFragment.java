@@ -1,14 +1,30 @@
+/*
+ * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
 package org.dmfs.tasks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.tasks.TaskListFragment.Callbacks;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentProviderOperation;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
@@ -30,14 +46,14 @@ import android.widget.TextView;
 
 
 /**
- * A fragment representing a list of Items.
- * <p />
- * Large screen devices (such as tablets) are supported by replacing the ListView with a GridView.
- * <p />
- * Activities containing this fragment MUST implement the {@link Callbacks} interface.
+ * This fragment is used to display a list of task-providers. It show the task-providers which are visible in main {@link TaskListFragment} and also the
+ * task-providers which are synced. The selection between the two lists is made by passing arguments to the fragment in a {@link Bundle} when it created in the
+ * {@link SyncSettingsActivity}.
+ * 
+ * @author Arjun Naik<arjun@arjunnaik.in>
+ * 
  */
 
-@SuppressLint("ValidFragment")
 public class SettingsListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
 {
 
@@ -62,7 +78,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 	public SettingsListFragment()
 	{
-		
+
 	}
 
 
@@ -73,6 +89,10 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	}
 
 
+	/**
+	 * The SQL selection condition used to select synced or visible list, the parameters for the select condition, the layout to be used and the column which is
+	 * used for current selection is passed through a {@link Bundle}. The fragment layout is inflated and returned.
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -133,21 +153,6 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		adapter.addToState(rowId, !checked);
 	}
 
-
-	/**
-	 * The default content for this Fragment has a TextView that is shown when the list is empty. If you would like to change the text, call this method to
-	 * supply the text it should use.
-	 */
-	public void setEmptyText(CharSequence emptyText)
-	{
-		View emptyView = mListView.getEmptyView();
-
-		if (emptyText instanceof TextView)
-		{
-			((TextView) emptyView).setText(emptyText);
-		}
-	}
-
 	/**
 	 * This interface must be implemented by activities that contain this fragment to allow an interaction in this fragment to be communicated to the activity
 	 * and potentially other fragments contained in that activity.
@@ -191,6 +196,14 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 	}
 
+	/**
+	 * This extends the {@link CursorAdapter}. The column index for the list name, list color and the current selection state is computed when the
+	 * {@link Cursor} is swapped. It also maintains the changes made to the current selection state through a {@link HashMap} of ids and selection state. If the
+	 * selection state is modified and then modified again then it is removed from the HashMap because it has reverted to the original state.
+	 * 
+	 * @author Arjun Naik<arjun@arjunnaik.in>
+	 * 
+	 */
 	private class VisibleListAdapter extends CursorAdapter
 	{
 		LayoutInflater inflater;
@@ -263,7 +276,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		}
 
 
-		public boolean addToState(long id, boolean val)
+		private boolean addToState(long id, boolean val)
 		{
 			if (savedPositions.containsKey(Long.valueOf(id)))
 			{
@@ -284,8 +297,17 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		}
 
 	}
-	
-	public boolean saveListState(){
+
+
+	/**
+	 * This function is called to save the any modifications made to the displayed list. It retrieves the {@link HashMap} from the adapter of the list and uses
+	 * it makes the changes persistent. For this it uses a batch operation provided by {@link ContentResolver}. The operations to be performed in the batch
+	 * operation are stored in an {@link ArrayList} of {@link ContentProviderOperation}.
+	 * 
+	 * @return <code>true</code> if the save operation was successful, <code>false</code> otherwise.
+	 */
+	public boolean saveListState()
+	{
 		HashMap<Long, Boolean> savedPositions = ((VisibleListAdapter) getListAdapter()).getState();
 		Log.d(TAG, "Length of Changes: " + savedPositions.size());
 		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();

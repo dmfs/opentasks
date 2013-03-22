@@ -32,8 +32,9 @@ import android.widget.CheckBox;
 
 
 /**
+ * Widget to display boolean values through a {@link CheckBox}.
  * 
- * author: Arjun Naik<arjun@arjunnaik.in>
+ * @author Arjun Naik<arjun@arjunnaik.in>
  */
 public class BooleanFieldView extends AbstractFieldView
 {
