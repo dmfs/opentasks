@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
 package org.dmfs.tasks;
 
 import org.dmfs.provider.tasks.TaskContract;
@@ -7,16 +23,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 
-public class SyncSettingsActivity extends FragmentActivity implements SettingsListFragment.OnFragmentInteractionListener
+/**
+ * This extends the {@link FragmentActivity} for displaying the list of synced or visible task-providers. It displays the visible providers when it is created.
+ * 
+ * @author Arjun Naik<arjun@arjunnaik.in>
+ * 
+ */
+public class SyncSettingsActivity extends FragmentActivity
 {
 	FragmentManager manager;
 	SettingsListFragment currentFrag;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -28,15 +49,18 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 
 		manager = getSupportFragmentManager();
 		showVisibleListsFragment();
-		
-	
 
 	}
-	
-	public void showVisibleListsFragment(){
+
+
+	/**
+	 * This function displays the list of providers which can be visible or hidden in {@link TaskListFragment}.
+	 */
+	public void showVisibleListsFragment()
+	{
 		SettingsListFragment syncedListFragment = new SettingsListFragment();
 		Bundle args = new Bundle();
-		args.putStringArray(SettingsListFragment.LIST_STRING_PARAMS, new String[]{"1"});
+		args.putStringArray(SettingsListFragment.LIST_STRING_PARAMS, new String[] { "1" });
 		args.putInt(SettingsListFragment.LIST_FRAGMENT_LAYOUT, R.layout.fragment_visiblelist);
 		args.putString(SettingsListFragment.LIST_SELECTION_ARGS, TaskContract.TaskLists.SYNC_ENABLED + "=?");
 		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.VISIBLE);
@@ -44,8 +68,13 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 		currentFrag = syncedListFragment;
 	}
-	
-	public void showSyncedListsFragment(){
+
+
+	/**
+	 * This function displays the list of providers which can synced.
+	 */
+	public void showSyncedListsFragment()
+	{
 		SettingsListFragment syncedListFragment = new SettingsListFragment();
 		Bundle args = new Bundle();
 		args.putStringArray(SettingsListFragment.LIST_STRING_PARAMS, null);
@@ -71,57 +100,14 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 	}
 
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		return super.onCreateOptionsMenu(menu);
-		// Inflate the menu; this adds items to the action bar if it is present.
-		//getMenuInflater().inflate(R.menu.settings, menu);
-		//return true;
-	}
-
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-			case android.R.id.home:
-				// This ID represents the Home or Up button. In the case of this
-				// activity, the Up button is shown. Use NavUtils to allow users
-				// to navigate up one level in the application structure. For
-				// more details, see the Navigation pattern on Android Design:
-				//
-				// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-				//
-				NavUtils.navigateUpFromSameTask(this);
-				return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-
-	@Override
-	public void viewSyncedLists()
-	{
-
-	}
-
-
-	@Override
-	public void savedUpdatedSyncedLists()
-	{
-
-	}
-
-
-	@Override
-	public void cancelFromSyncedLists()
-	{
-
-	}
-
-
+	/**
+	 * This function is a handler for the {@link Button} which is present in the layout loaded by {@link SettingsListFragment}. When this button is clicked the
+	 * {@link SyncSettingsActivity} instructs the {@link SettingsListFragment} to save the current modification and then loads a {@link SettingsListFragment}
+	 * which shows the list the syncable task-providers.
+	 * 
+	 * @param v
+	 *            Reference to the {@link Button} which was clicked is passed as a {@link View} object.
+	 */
 	public void showSyncedList(View v)
 	{
 		currentFrag.saveListState();
@@ -129,14 +115,29 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 	}
 
 
+	/**
+	 * This function is a handler for the {@link Button} which is present in the layout loaded by {@link SettingsListFragment}. When this button is clicked the
+	 * {@link SyncSettingsActivity} instructs the {@link SettingsListFragment} to save the current modification and then loads a {@link SettingsListFragment}
+	 * which shows the list the displayable task-providers.
+	 * 
+	 * @param v
+	 *            Reference to the {@link Button} which was clicked is passed as a {@link View} object.
+	 */
 	public void onSaveUpdated(View v)
 	{
 		currentFrag.saveListState();
 		showVisibleListsFragment();
-		
+
 	}
 
 
+	/**
+	 * This function is a handler for the {@link Button} which is present in the layout loaded by {@link SettingsListFragment}. When this button is clicked the
+	 * list showing the syncable task-providers is displayed.
+	 * 
+	 * @param v
+	 *            Reference to the {@link Button} which was clicked is passed as a {@link View} object.
+	 */
 	public void onCancelUpdated(View v)
 	{
 		showVisibleListsFragment();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/TasksExpandableListItem"
+    style="@style/tasks_expandable_list_item"
     android:layout_width="match_parent"
     android:layout_height="0dip"
     android:background="@drawable/task_list_background"
@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/task_due_date"
-        style="@style/TaskListItemDate"
+        style="@style/task_list_item_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

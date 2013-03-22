@@ -1,11 +1,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/EditDetailPane"
+    style="@style/edit_detail_pane"
     android:layout_height="fill_parent" >
 
     <LinearLayout
         android:id="@+id/body"
-        style="@style/EditDetailLL"
+        style="@style/edit_detail_ll"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:orientation="vertical" >
