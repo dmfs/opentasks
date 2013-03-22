@@ -219,7 +219,18 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 		{
 			if (mSpinnerAdapter != null)
 			{
-				int pos = mSpinnerAdapter.getPosition(mAdapter.get(mValues));
+				Object mAdapterValue = mAdapter.get(mValues);
+				Log.d(TAG, "mAdapter : " + mAdapterValue);
+				int pos = mSpinnerAdapter.getPosition(mAdapterValue);
+				if (pos < 0 && mAdapterValue == null)
+				{
+					setVisibility(View.GONE);
+					return;
+				}
+				else
+				{
+					setVisibility(View.VISIBLE);
+				}
 				if (pos != mSelectedItem)
 				{
 					mSelectedItem = pos;
@@ -227,5 +238,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 				}
 			}
 		}
+		Log.d(TAG, "mValues : " + mValues);
+		Log.d(TAG, "mSpinnerAdapter : " + mSpinnerAdapter);
 	}
 }

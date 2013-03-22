@@ -67,6 +67,11 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 	{
 		String timezone = values.getAsString(mTzFieldName);
 
+		if (timezone == null)
+		{
+			timezone = getDefault(null);
+		}
+
 		if (mAllDayFieldName != null)
 		{
 			Integer allday = values.getAsInteger(mAllDayFieldName);
@@ -91,6 +96,10 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 		}
 
 		String timezone = cursor.getString(tzColumnIdx);
+		if (timezone == null)
+		{
+			timezone = getDefault(null);
+		}
 
 		if (mAllDayFieldName != null)
 		{
