@@ -33,7 +33,7 @@ import android.widget.Button;
  * @author Arjun Naik<arjun@arjunnaik.in>
  * 
  */
-public class SyncSettingsActivity extends FragmentActivity implements SettingsListFragment.OnFragmentInteractionListener
+public class SyncSettingsActivity extends FragmentActivity
 {
 	FragmentManager manager;
 	SettingsListFragment currentFrag;
@@ -97,27 +97,6 @@ public class SyncSettingsActivity extends FragmentActivity implements SettingsLi
 		{
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-	}
-
-
-	@Override
-	public void viewSyncedLists()
-	{
-
-	}
-
-
-	@Override
-	public void savedUpdatedSyncedLists()
-	{
-
-	}
-
-
-	@Override
-	public void cancelFromSyncedLists()
-	{
-
 	}
 
 

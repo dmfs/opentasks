@@ -63,15 +63,14 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public static final String LIST_FRAGMENT_LAYOUT = "list_fragment_layout";
 	public static final String COMPARE_COLUMN_NAME = "column_name";
 	private Context mContext;
-	private OnFragmentInteractionListener mListener;
 	private VisibleListAdapter mAdapter;
 	/**
 	 * The fragment's ListView/GridView.
 	 */
 	private AbsListView mListView;
-	private String listSelectionArguments;
-	private String[] listSelectionParam;
-	private String listCompareColumnName;
+	private String mListSelectionArguments;
+	private String[] mListSelectionParam;
+	private String mListCompareColumnName;
 
 	private int fragmentLayout;
 
@@ -97,10 +96,10 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		Bundle args = getArguments();
-		listSelectionArguments = args.getString(LIST_SELECTION_ARGS);
-		listSelectionParam = args.getStringArray(LIST_STRING_PARAMS);
+		mListSelectionArguments = args.getString(LIST_SELECTION_ARGS);
+		mListSelectionParam = args.getStringArray(LIST_STRING_PARAMS);
 		fragmentLayout = args.getInt(LIST_FRAGMENT_LAYOUT);
-		listCompareColumnName = args.getString(COMPARE_COLUMN_NAME);
+		mListCompareColumnName = args.getString(COMPARE_COLUMN_NAME);
 		View view = inflater.inflate(fragmentLayout, container, false);
 		return view;
 	}
@@ -121,24 +120,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		try
-		{
-			mListener = (OnFragmentInteractionListener) activity;
-		}
-		catch (ClassCastException e)
-		{
-			throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
-		}
-
 		mContext = activity.getBaseContext();
-	}
-
-
-	@Override
-	public void onDetach()
-	{
-		super.onDetach();
-		mListener = null;
 	}
 
 
@@ -153,31 +135,13 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		adapter.addToState(rowId, !checked);
 	}
 
-	/**
-	 * This interface must be implemented by activities that contain this fragment to allow an interaction in this fragment to be communicated to the activity
-	 * and potentially other fragments contained in that activity.
-	 * <p>
-	 * See the Android Training lesson <a href= "http://developer.android.com/training/basics/fragments/communicating.html" >Communicating with Other
-	 * Fragments</a> for more information.
-	 */
-	public interface OnFragmentInteractionListener
-	{
-		public void viewSyncedLists();
-
-
-		public void savedUpdatedSyncedLists();
-
-
-		public void cancelFromSyncedLists();
-	}
-
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
 		return new CursorLoader(mContext, TaskContract.TaskLists.CONTENT_URI, new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME,
-			TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE }, listSelectionArguments,
-			listSelectionParam, null);
+			TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE }, mListSelectionArguments,
+			mListSelectionParam, null);
 	}
 
 
@@ -218,7 +182,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 			{
 				listNameColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_NAME);
 				listColorColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_COLOR);
-				compareColumn = c.getColumnIndex(listCompareColumnName);
+				compareColumn = c.getColumnIndex(mListCompareColumnName);
 			}
 			else
 			{
@@ -315,7 +279,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		{
 			boolean val = savedPositions.get(posInt);
 			ContentProviderOperation op = ContentProviderOperation.newUpdate(TaskContract.TaskLists.CONTENT_URI)
-				.withSelection(TaskContract.TaskLists._ID + "=?", new String[] { posInt.toString() }).withValue(listCompareColumnName, val ? "1" : "0").build();
+				.withSelection(TaskContract.TaskLists._ID + "=?", new String[] { posInt.toString() }).withValue(mListCompareColumnName, val ? "1" : "0")
+				.build();
 			ops.add(op);
 		}
 		try
