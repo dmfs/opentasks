@@ -17,12 +17,12 @@
 
 package org.dmfs.tasks.model;
 
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -41,8 +41,8 @@ public class DefaultModel extends Model
 	private final Context mContext;
 	private final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view);
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
-	private final static LayoutDescriptor INTEGER_VIEW = new LayoutDescriptor(R.layout.integer_field_view);
-	private final static LayoutDescriptor INTEGER_EDIT = new LayoutDescriptor(R.layout.integer_field_editor);
+	private final static LayoutDescriptor CHOICES_VIEW = new LayoutDescriptor(R.layout.choices_field_view);
+	private final static LayoutDescriptor CHOICES_EDIT = new LayoutDescriptor(R.layout.choices_field_editor);
 	private final static LayoutDescriptor PROGRESS_VIEW = new LayoutDescriptor(R.layout.percentage_field_view);
 	private final static LayoutDescriptor PROGRESS_EDIT = new LayoutDescriptor(R.layout.percentage_field_editor);
 	private final static LayoutDescriptor TIME_VIEW = new LayoutDescriptor(R.layout.time_field_view);
@@ -81,8 +81,8 @@ public class DefaultModel extends Model
 		aca.addChoice(Tasks.STATUS_COMPLETED, mContext.getString(R.string.status_completed), null);
 		aca.addChoice(Tasks.STATUS_CANCELLED, mContext.getString(R.string.status_cancelled), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_status, new IntegerFieldAdapter(Tasks.STATUS)).setViewLayout(INTEGER_VIEW)
-			.setEditorLayout(INTEGER_EDIT).setChoices(aca));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_status, new IntegerFieldAdapter(Tasks.STATUS)).setViewLayout(CHOICES_VIEW)
+			.setEditorLayout(CHOICES_EDIT).setChoices(aca));
 
 		mFields.add(new FieldDescriptor(mContext, R.string.task_location, new StringFieldAdapter(Tasks.LOCATION)).setViewLayout(TEXT_VIEW).setEditorLayout(
 			TEXT_EDIT));
@@ -111,8 +111,8 @@ public class DefaultModel extends Model
 		aca2.addHiddenChoice(2, mContext.getString(R.string.priority_high), null);
 		aca2.addChoice(1, mContext.getString(R.string.priority_high), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_priority, new IntegerFieldAdapter(Tasks.PRIORITY)).setViewLayout(INTEGER_VIEW)
-			.setEditorLayout(INTEGER_EDIT).setChoices(aca2));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_priority, new IntegerFieldAdapter(Tasks.PRIORITY)).setViewLayout(CHOICES_VIEW)
+			.setEditorLayout(CHOICES_EDIT).setChoices(aca2));
 
 		ArrayChoicesAdapter aca3 = new ArrayChoicesAdapter();
 		aca3.addChoice(null, mContext.getString(R.string.classification_not_specified), null);
@@ -120,9 +120,12 @@ public class DefaultModel extends Model
 		aca3.addChoice(Tasks.CLASSIFICATION_PRIVATE, mContext.getString(R.string.classification_private), null);
 		aca3.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, mContext.getString(R.string.classification_confidential), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_classification, new IntegerFieldAdapter(Tasks.CLASSIFICATION)).setViewLayout(INTEGER_VIEW)
-			.setEditorLayout(INTEGER_EDIT).setChoices(aca3));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_classification, new IntegerFieldAdapter(Tasks.CLASSIFICATION)).setViewLayout(CHOICES_VIEW)
+			.setEditorLayout(CHOICES_EDIT).setChoices(aca3));
 
+		TimeZoneArrayChoicesAdapter tzaca = new TimeZoneArrayChoicesAdapter(mContext);
+		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, new StringFieldAdapter(Tasks.TZ)).setViewLayout(CHOICES_VIEW)
+			.setEditorLayout(CHOICES_EDIT).setChoices(tzaca));
 		setAllowRecurrence(false);
 		setAllowExceptions(false);
 

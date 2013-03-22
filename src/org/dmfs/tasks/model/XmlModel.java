@@ -467,8 +467,8 @@ public class XmlModel extends Model
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.choices_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.choices_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
@@ -499,8 +499,8 @@ public class XmlModel extends Model
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.choices_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.choices_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(null, context.getString(R.string.priority_undefined), null);
@@ -537,8 +537,8 @@ public class XmlModel extends Model
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				descriptor.setViewLayout(new LayoutDescriptor(R.layout.integer_field_view));
-				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.integer_field_editor));
+				descriptor.setViewLayout(new LayoutDescriptor(R.layout.choices_field_view));
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.choices_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(null, context.getString(R.string.classification_not_specified), null);

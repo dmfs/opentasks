@@ -20,11 +20,11 @@ package org.dmfs.tasks.widget;
 import java.util.List;
 
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.ArrayChoicesAdapter;
+import org.dmfs.tasks.model.AbstractArrayChoicesAdapter;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.IChoicesAdapter;
-import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
@@ -52,29 +52,29 @@ import android.widget.TextView;
  * 
  */
 
-public class IntegerFieldEditor extends AbstractFieldEditor
+public class ChoicesFieldEditor extends AbstractFieldEditor
 {
-	private static final String TAG = "IntegerFieldEditor";
-	private IntegerFieldAdapter mAdapter;
+	private static final String TAG = "ChoicesFieldEditor";
+	private FieldAdapter<Object> mAdapter;
 	private Spinner mSpinner;
 
 	private int mSelectedItem = ListView.INVALID_POSITION;
-	private IntegerSpinnerAdapter mSpinnerAdapter;
+	private ChoicesSpinnerAdapter mSpinnerAdapter;
 
 
-	public IntegerFieldEditor(Context context, AttributeSet attrs, int defStyle)
+	public ChoicesFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 	}
 
 
-	public IntegerFieldEditor(Context context, AttributeSet attrs)
+	public ChoicesFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public IntegerFieldEditor(Context context)
+	public ChoicesFieldEditor(Context context)
 	{
 		super(context);
 	}
@@ -98,7 +98,7 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 				if (mSelectedItem != position && mValues != null)
 				{
 					Log.v(TAG, "onItemSelected" + position);
-					mAdapter.set(mValues, (Integer) ((ArrayChoicesAdapter) fieldDescriptor.getChoices()).getChoices().get(position));
+					mAdapter.set(mValues, ((AbstractArrayChoicesAdapter) fieldDescriptor.getChoices()).getChoices().get(position));
 					mSelectedItem = position;
 				}
 			}
@@ -118,27 +118,28 @@ public class IntegerFieldEditor extends AbstractFieldEditor
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
+		mAdapter = (FieldAdapter<Object>) descriptor.getFieldAdapter();
 
 		IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
 
-		if (choicesAdapter instanceof ArrayChoicesAdapter)
+		if (choicesAdapter instanceof AbstractArrayChoicesAdapter)
 		{
-			ArrayChoicesAdapter arrayAdapter = (ArrayChoicesAdapter) choicesAdapter;
+			AbstractArrayChoicesAdapter arrayAdapter = (AbstractArrayChoicesAdapter) choicesAdapter;
 			List<Object> choicesList = arrayAdapter.getChoices();
-			mSpinnerAdapter = new IntegerSpinnerAdapter(getContext(), R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text, choicesList,
+			Log.d(TAG, "Returned Array List : " + choicesList.size() + " " + choicesList.toString());
+			mSpinnerAdapter = new ChoicesSpinnerAdapter(getContext(), R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text, choicesList,
 				arrayAdapter);
 			mSpinner.setAdapter(mSpinnerAdapter);
 		}
 	}
 
-	private class IntegerSpinnerAdapter extends ArrayAdapter<Object> implements SpinnerAdapter
+	private class ChoicesSpinnerAdapter extends ArrayAdapter<Object> implements SpinnerAdapter
 	{
 		LayoutInflater layoutInflater;
-		ArrayChoicesAdapter adapter;
+		AbstractArrayChoicesAdapter adapter;
 
 
-		public IntegerSpinnerAdapter(Context context, int resource, int textViewResourceId, List<Object> objects, ArrayChoicesAdapter a)
+		public ChoicesSpinnerAdapter(Context context, int resource, int textViewResourceId, List<Object> objects, AbstractArrayChoicesAdapter a)
 		{
 			super(context, resource, textViewResourceId, objects);
 			layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

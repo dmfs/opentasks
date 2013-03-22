@@ -21,7 +21,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.IChoicesAdapter;
-import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
@@ -39,30 +39,30 @@ import android.widget.TextView;
  * 
  */
 
-public class IntegerFieldView extends AbstractFieldView
+public class ChoicesFieldView extends AbstractFieldView
 {
 
 	private static final String TAG = "IntegerFieldView";
-	private IntegerFieldAdapter mAdapter;
+	private FieldAdapter<Object> mAdapter;
 	private TextView mText;
 	private ImageView mImage;
 
 
-	public IntegerFieldView(Context context, AttributeSet attrs, int defStyle)
+	public ChoicesFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 
 	}
 
 
-	public IntegerFieldView(Context context, AttributeSet attrs)
+	public ChoicesFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 
 	}
 
 
-	public IntegerFieldView(Context context)
+	public ChoicesFieldView(Context context)
 	{
 		super(context);
 
@@ -82,7 +82,7 @@ public class IntegerFieldView extends AbstractFieldView
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
+		mAdapter = (FieldAdapter<Object>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 	}
 
