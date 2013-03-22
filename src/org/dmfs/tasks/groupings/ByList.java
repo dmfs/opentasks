@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -24,9 +24,8 @@ import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groups.cursorloaders.CursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -35,7 +34,6 @@ import org.dmfs.tasks.utils.ViewDescriptor;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.format.Time;
 import android.view.View;
@@ -105,11 +103,11 @@ public interface ByList
 					// highlight overdue dates & times
 					if (dueDate.before(mNow) && !isClosed)
 					{
-						dueDateField.setTextColor(Color.RED);
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
 					}
 					else
 					{
-						dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
 					}
 				}
 				else
@@ -121,7 +119,8 @@ public interface ByList
 			View colorbar = view.findViewById(R.id.colorbar);
 			if (colorbar != null)
 			{
-				colorbar.setBackgroundColor(cursor.getInt(6));
+				colorbar.setVisibility(View.GONE);
+				// colorbar.setBackgroundColor(cursor.getInt(6));
 			}
 
 			View divider = view.findViewById(R.id.divider);
@@ -211,6 +210,34 @@ public interface ByList
 			if (divider != null)
 			{
 				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
+			}
+
+			View colorbar1 = view.findViewById(R.id.colorbar1);
+			View colorbar2 = view.findViewById(R.id.colorbar2);
+
+			if ((flags & FLAG_IS_EXPANDED) != 0)
+			{
+				if (colorbar1 != null)
+				{
+					colorbar1.setBackgroundColor(cursor.getInt(2));
+					colorbar1.setVisibility(View.VISIBLE);
+				}
+				if (colorbar2 != null)
+				{
+					colorbar2.setVisibility(View.GONE);
+				}
+			}
+			else
+			{
+				if (colorbar1 != null)
+				{
+					colorbar1.setVisibility(View.INVISIBLE);
+				}
+				if (colorbar2 != null)
+				{
+					colorbar2.setBackgroundColor(cursor.getInt(2));
+					colorbar2.setVisibility(View.VISIBLE);
+				}
 			}
 		}
 

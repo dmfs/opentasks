@@ -1,0 +1,6 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/transparent" android:state_activated="true"/>
+    <item android:drawable="@drawable/light_gray" android:state_activated="false"/>
+
+</selector>

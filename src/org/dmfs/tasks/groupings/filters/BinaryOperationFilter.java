@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings.filters;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,23 +23,33 @@ import java.util.List;
 
 
 /**
- * A filter that joins a list of {@link AbstractFilter}s using the "AND" operator.
+ * A filter that joins a list of {@link AbstractFilter}s using the specified operator.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class AndFilter extends AbstractFilter
+public class BinaryOperationFilter extends AbstractFilter
 {
 	private final AbstractFilter[] mFilters;
+	private final String mOperator;
 
 
-	public AndFilter(AbstractFilter... filters)
+	/**
+	 * Create a new filter that joins a list of {@link AbstractFilter}s using the specified operator.
+	 * 
+	 * @param operator
+	 *            The operator to use (must be a valid binary boolean operator like "OR" or "AND").
+	 * @param filters
+	 *            A number of {@link AbstractFilter}s.
+	 */
+	public BinaryOperationFilter(String operator, AbstractFilter... filters)
 	{
 		mFilters = filters;
+		mOperator = operator;
 	}
 
 
 	@Override
-	public String getSelection()
+	public final String getSelection()
 	{
 		AbstractFilter[] filters = mFilters;
 		if (filters.length == 0)
@@ -60,7 +70,9 @@ public final class AndFilter extends AbstractFilter
 			}
 			else
 			{
-				selection.append(") AND (");
+				selection.append(") ");
+				selection.append(mOperator);
+				selection.append(" (");
 			}
 			selection.append(filter.getSelection());
 		}
@@ -71,7 +83,7 @@ public final class AndFilter extends AbstractFilter
 
 
 	@Override
-	public String[] getSelectionArgs()
+	public final String[] getSelectionArgs()
 	{
 		AbstractFilter[] filters = mFilters;
 		if (filters.length == 0)
@@ -88,7 +100,7 @@ public final class AndFilter extends AbstractFilter
 
 
 	@Override
-	public void getSelection(StringBuilder stringBuilder)
+	public final void getSelection(StringBuilder stringBuilder)
 	{
 		AbstractFilter[] filters = mFilters;
 		if (filters.length == 0)
@@ -108,7 +120,9 @@ public final class AndFilter extends AbstractFilter
 			}
 			else
 			{
-				stringBuilder.append(") AND (");
+				stringBuilder.append(" (");
+				stringBuilder.append(mOperator);
+				stringBuilder.append(" (");
 			}
 			stringBuilder.append(filter.getSelection());
 		}
@@ -117,7 +131,7 @@ public final class AndFilter extends AbstractFilter
 
 
 	@Override
-	public void getSelectionArgs(List<String> selectionArgs)
+	public final void getSelectionArgs(List<String> selectionArgs)
 	{
 		for (AbstractFilter filter : mFilters)
 		{

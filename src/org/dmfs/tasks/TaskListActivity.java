@@ -20,7 +20,6 @@ package org.dmfs.tasks;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -28,14 +27,17 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 
 /**
  * An activity representing a list of Tasks. This activity has different presentations for handset and tablet-size devices. On handsets, the activity presents a
- * list of items, which when touched, lead to a {@link ViewTaskActivity} representing item details. On tablets, the activity presents the list of items and
- * item details side-by-side using two vertical panes.
+ * list of items, which when touched, lead to a {@link ViewTaskActivity} representing item details. On tablets, the activity presents the list of items and item
+ * details side-by-side using two vertical panes.
  * <p>
  * The activity makes heavy use of fragments. The list of items is a {@link TaskListFragment} and the item details (if present) is a {@link ViewTaskFragment}.
  * <p>
@@ -55,7 +57,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
 	private boolean mTwoPane;
-	Context appContext;
 	ViewTaskFragment taskDetailFrag;
 	TaskListFragment taskListFrag;
 	SharedPreferences openTaskPrefs;
@@ -67,7 +68,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
-		appContext = getApplicationContext();
 
 		if (findViewById(R.id.task_detail_container) != null)
 		{
@@ -81,10 +81,10 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// 'activated' state when touched.
 
 			taskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
-			
+
 			taskListFrag.setActivateOnItemClick(true);
 			taskListFrag.setListViewScrollbarPositionLeft(true);
-			
+
 			openTaskPrefs = getPreferences(MODE_PRIVATE);
 			int openChildPosition = openTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
 			int openGroupPosition = openTaskPrefs.getInt(OPEN_GROUP_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
@@ -115,8 +115,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			taskDetailFrag = new ViewTaskFragment();
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
 		}
-
-		// TODO: If exposing deep links into your app, handle intents here.
 	}
 
 
@@ -142,7 +140,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 
 	@Override
-	public void displayEditTask(Uri taskUri)
+	public void onEditTask(Uri taskUri)
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
 		editTaskIntent.setData(taskUri);
@@ -235,8 +233,31 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	public void onDelete(Uri taskUri)
 	{
 		// nothing to do here, the loader will take care of reloading the list and the list view will take care of selecting the next element.
-		
+
 		// TODO: there is one exception: when there is no other element to focus!
 	}
 
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.task_list_activity_menu, menu);
+		return true;
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.menu_visible_list:
+				Intent settingsIntent = new Intent(getBaseContext(), SyncSettingsActivity.class);
+				startActivity(settingsIntent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 }

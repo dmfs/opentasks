@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.groups;
+package org.dmfs.tasks.groupings;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;

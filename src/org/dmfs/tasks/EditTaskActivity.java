@@ -52,7 +52,7 @@ public class EditTaskActivity extends FragmentActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		getMenuInflater().inflate(R.menu.activity_edit_task, menu);
+		getMenuInflater().inflate(R.menu.edit_task_activity_menu, menu);
 		return true;
 	}
 
