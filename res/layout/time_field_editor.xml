@@ -15,7 +15,7 @@
             style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_weight="6"
+            android:layout_weight="5"
             android:gravity="center|left" >
         </Button>
 
@@ -24,7 +24,7 @@
             style="@style/TextAppearance.EditTask_SpinnerButton"
             android:layout_width="0px"
             android:layout_height="match_parent"
-            android:layout_weight="3" >
+            android:layout_weight="4" >
         </Button>
 
         <ImageButton
@@ -33,8 +33,8 @@
             android:layout_width="40dp"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="0dip"
             android:gravity="center" >
         </ImageButton>
     </LinearLayout>
