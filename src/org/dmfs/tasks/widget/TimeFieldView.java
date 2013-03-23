@@ -19,11 +19,13 @@ package org.dmfs.tasks.widget;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.TimezoneWrapper;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
@@ -44,7 +46,10 @@ public final class TimeFieldView extends AbstractFieldView
 {
 	private TimeFieldAdapter mAdapter;
 	private TextView mText;
+	private TextView mTimeZoneText;
 	private java.text.DateFormat mDefaultDateFormat, mDefaultTimeFormat;
+	private final static TimeZone UTC = TimeZone.getTimeZone(Time.TIMEZONE_UTC);
+	private TimeZone defaultTimeZone = new TimezoneWrapper();
 
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
@@ -70,6 +75,7 @@ public final class TimeFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
+		mTimeZoneText = (TextView) findViewById(R.id.timezone_text);
 		mDefaultDateFormat = java.text.DateFormat.getDateInstance(SimpleDateFormat.LONG);
 		mDefaultTimeFormat = DateFormat.getTimeFormat(getContext());
 	}
@@ -91,10 +97,30 @@ public final class TimeFieldView extends AbstractFieldView
 		if (mValues != null && newValue != null)
 		{
 			Date fullDate = new Date(newValue.toMillis(false));
-			String formattedTime = mDefaultDateFormat.format(fullDate);
+			String formattedTime;
 			if (!newValue.allDay)
 			{
+				mDefaultDateFormat.setTimeZone(defaultTimeZone);
+				mDefaultTimeFormat.setTimeZone(defaultTimeZone);
+
+				formattedTime = mDefaultDateFormat.format(fullDate);
+				TimezoneWrapper taskTimeZone = new TimezoneWrapper(newValue.timezone);
+
 				formattedTime = formattedTime + " " + mDefaultTimeFormat.format(fullDate);
+
+				if (!taskTimeZone.equals(defaultTimeZone) && mTimeZoneText != null)
+				{
+					mDefaultDateFormat.setTimeZone(taskTimeZone);
+					mDefaultTimeFormat.setTimeZone(taskTimeZone);
+
+					mTimeZoneText.setText(mDefaultDateFormat.format(fullDate) + " " + mDefaultTimeFormat.format(fullDate) + " "
+						+ taskTimeZone.getDisplayName(taskTimeZone.inDaylightTime(new Date(newValue.toMillis(false))), TimeZone.SHORT));
+				}
+			}
+			else
+			{
+				mDefaultDateFormat.setTimeZone(UTC);
+				formattedTime = mDefaultDateFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);
 		}
@@ -103,5 +129,4 @@ public final class TimeFieldView extends AbstractFieldView
 			setVisibility(View.GONE);
 		}
 	}
-
 }

@@ -19,6 +19,7 @@ package org.dmfs.tasks.widget;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
@@ -31,6 +32,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
@@ -53,6 +55,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	private ImageButton mClearDateButton;
 	private DateFormat mDefaultDateFormat, mDefaultTimeFormat;
 	private Time mDateTime;
+	private String mTimezone;
 	private boolean mIs24hour;
 
 
@@ -175,14 +178,33 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		mDateTime = mAdapter.get(mValues);
+
 		if (mDateTime != null)
 		{
+			if (mTimezone != null && !TextUtils.equals(mTimezone, mDateTime.timezone))
+			{
+				/*
+				 * Time zone has changed.
+				 * 
+				 * We don't want to change date and hour, so switch to old time zone first and then replace the time zone with the new value.
+				 */
+				String newTimeZone = mDateTime.timezone;
+				mDateTime.switchTimezone(mTimezone);
+				mDateTime.timezone = newTimeZone;
+				mDateTime.normalize(true);
+				mTimezone = mDateTime.timezone;
+				mAdapter.set(contentSet, mDateTime);
+				return;
+			}
+
 			Date currentDate = new Date(mDateTime.toMillis(false));
+			mDefaultDateFormat.setTimeZone(TimeZone.getTimeZone(mDateTime.timezone));
 			String formattedDate = mDefaultDateFormat.format(currentDate);
 			mDatePickerButton.setText(formattedDate);
 
 			if (!mDateTime.allDay)
 			{
+				mDefaultTimeFormat.setTimeZone(TimeZone.getTimeZone(mDateTime.timezone));
 				String formattedTime = mDefaultTimeFormat.format(currentDate);
 				mTimePickerButton.setText(formattedTime);
 				mTimePickerButton.setVisibility(View.VISIBLE);
@@ -192,13 +214,15 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				mTimePickerButton.setVisibility(View.GONE);
 			}
 			mClearDateButton.setEnabled(true);
+			mTimezone = mDateTime.timezone;
 		}
 		else
 		{
 			mDatePickerButton.setText("");
 			mTimePickerButton.setText("");
-			mTimePickerButton.setVisibility(mAdapter.isAllDay(mValues)? View.GONE : View.VISIBLE);
+			mTimePickerButton.setVisibility(mAdapter.isAllDay(mValues) ? View.GONE : View.VISIBLE);
 			mClearDateButton.setEnabled(false);
+			mTimezone = null;
 		}
 	}
 
