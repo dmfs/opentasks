@@ -255,7 +255,12 @@ public final class FieldDescriptor
 
 	public AbstractFieldView getDetailView(LayoutInflater inflater)
 	{
-		LayoutDescriptor ld = mViewLayout != null ? mViewLayout : DEFAULT_VIEW_LAYOUT;
+		if (mViewLayout == null)
+		{
+			return null;
+		}
+		
+		LayoutDescriptor ld = mViewLayout;// != null ? mViewLayout : DEFAULT_VIEW_LAYOUT;
 		AbstractFieldView view;
 
 		view = (AbstractFieldView) ld.inflate(inflater);

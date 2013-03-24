@@ -401,7 +401,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new TimeFieldAdapter(TaskContract.Tasks.COMPLETED, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
+				return new TimeFieldAdapter(TaskContract.Tasks.COMPLETED, null, null);
 			}
 
 

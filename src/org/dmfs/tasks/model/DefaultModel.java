@@ -97,15 +97,14 @@ public class DefaultModel extends Model
 			.setEditorLayout(TIME_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_due, new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY)).setViewLayout(TIME_VIEW)
 			.setEditorLayout(TIME_EDIT));
-		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, new BooleanFieldAdapter(Tasks.IS_ALLDAY)).setViewLayout(BOOLEAN_VIEW).setEditorLayout(
-			BOOLEAN_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, new BooleanFieldAdapter(Tasks.IS_ALLDAY)).setEditorLayout(BOOLEAN_EDIT));
 
 		TimeZoneArrayChoicesAdapter tzaca = new TimeZoneArrayChoicesAdapter(mContext);
-		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY)).setViewLayout(CHOICES_VIEW)
-			.setEditorLayout(CHOICES_EDIT).setChoices(tzaca));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY)).setEditorLayout(CHOICES_EDIT)
+			.setChoices(tzaca));
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, new TimeFieldAdapter(Tasks.COMPLETED, Tasks.TZ, Tasks.COMPLETED_IS_ALLDAY))
-			.setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, new TimeFieldAdapter(Tasks.COMPLETED, null, null)).setViewLayout(TIME_VIEW)
+			.setEditorLayout(TIME_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_percent_complete, new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE)).setViewLayout(PROGRESS_VIEW)
 			.setEditorLayout(PROGRESS_EDIT));
 

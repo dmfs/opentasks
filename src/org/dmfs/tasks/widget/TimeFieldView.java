@@ -108,13 +108,18 @@ public final class TimeFieldView extends AbstractFieldView
 
 				formattedTime = formattedTime + " " + mDefaultTimeFormat.format(fullDate);
 
-				if (!taskTimeZone.equals(defaultTimeZone) && mTimeZoneText != null)
+				if (!taskTimeZone.equals(defaultTimeZone) && ! Time.TIMEZONE_UTC.equals(taskTimeZone.getID()) && mTimeZoneText != null)
 				{
 					mDefaultDateFormat.setTimeZone(taskTimeZone);
 					mDefaultTimeFormat.setTimeZone(taskTimeZone);
 
 					mTimeZoneText.setText(mDefaultDateFormat.format(fullDate) + " " + mDefaultTimeFormat.format(fullDate) + " "
 						+ taskTimeZone.getDisplayName(taskTimeZone.inDaylightTime(new Date(newValue.toMillis(false))), TimeZone.SHORT));
+					mTimeZoneText.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					mTimeZoneText.setVisibility(View.GONE);
 				}
 			}
 			else
