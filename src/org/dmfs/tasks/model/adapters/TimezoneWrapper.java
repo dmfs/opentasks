@@ -37,11 +37,17 @@ public class TimezoneWrapper extends TimeZone
 	/**
 	 * Time stamp of 2013-01-01 00:00:00 UTC.
 	 */
-	private final static Date CHECK_DATE = new Date(1356998400000L);
+	private final static Date TEST_DATE = new Date(1356998400000L);
 
+	/**
+	 * The {@link TimeZone} this instance wraps.
+	 */
 	private final TimeZone mTimeZone;
 
 
+	/**
+	 * Constructor that wraps the default time zone.
+	 */
 	public TimezoneWrapper()
 	{
 		mTimeZone = TimeZone.getDefault();
@@ -49,6 +55,12 @@ public class TimezoneWrapper extends TimeZone
 	}
 
 
+	/**
+	 * Constructor that wraps the given {@link TimeZone}.
+	 * 
+	 * @param timeZone
+	 *            The {@link TimeZone} to wrap.
+	 */
 	public TimezoneWrapper(TimeZone timeZone)
 	{
 		mTimeZone = timeZone;
@@ -56,6 +68,13 @@ public class TimezoneWrapper extends TimeZone
 	}
 
 
+	/**
+	 * Constructor that wraps the time zone with the given ID.
+	 * 
+	 * 
+	 * @param id
+	 *            The time zone id of the time zone to wrap.
+	 */
 	public TimezoneWrapper(String id)
 	{
 		mTimeZone = TimeZone.getTimeZone(id);
@@ -102,7 +121,7 @@ public class TimezoneWrapper extends TimeZone
 	public int hashCode()
 	{
 		/*
-		 * Return the raw offset as hash. It fulfills the requirements of a hash values: Timezones with that are equal have the same raw offset.
+		 * Return the raw offset as hash code. It satisfies the requirements of a hash values: Time zones that are equal have the same raw offset.
 		 */
 		return getRawOffset();
 	}
@@ -122,9 +141,11 @@ public class TimezoneWrapper extends TimeZone
 		 * This is a very simple check for equality of two time zones. It returns the wrong result if two time zones have the same UTC offset, but use different
 		 * dates to switch to summer time.
 		 * 
-		 * Are there such cases?
+		 * Are there such cases? How can we improve it? Maybe by testing a few more days in March and October?
+		 * 
+		 * TODO: improve the check
 		 */
 		return mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
-			&& mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(CHECK_DATE) == otherTimeZone.inDaylightTime(CHECK_DATE);
+			&& mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(TEST_DATE);
 	}
 }

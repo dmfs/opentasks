@@ -26,12 +26,11 @@ import android.database.Cursor;
 
 
 /**
- * A TimezoneFieldAdapter stores time zones in a certain field of a {@link ContentSet}. A time zone is a String that might be <code>null</code> for floating
- * times (like all-day dates).
+ * A TimezoneFieldAdapter stores time zones in a certain field of a {@link ContentSet}. The {@link TimeZone} is <code>null</code> for all-day dates.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class TimezoneFieldAdapter extends FieldAdapter<String>
+public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 {
 
 	/**
@@ -46,7 +45,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 
 
 	/**
-	 * Constructor for a new IntegerFieldAdapter without default value.
+	 * Constructor for a new TimezoneFieldAdapter without default value.
 	 * 
 	 * @param timezoneFieldName
 	 *            The name of the field to use when loading or storing the value.
@@ -55,7 +54,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 	{
 		if (timezoneFieldName == null)
 		{
-			throw new IllegalArgumentException("fieldName must not be null");
+			throw new IllegalArgumentException("timezoneFieldName must not be null");
 		}
 		mTzFieldName = timezoneFieldName;
 		mAllDayFieldName = alldayFieldName;
@@ -63,30 +62,24 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 
 
 	@Override
-	public String get(ContentSet values)
+	public TimeZone get(ContentSet values)
 	{
-		String timezone = values.getAsString(mTzFieldName);
+		String timezoneId = values.getAsString(mTzFieldName);
 
-		if (timezone == null)
-		{
-			timezone = getDefault(null);
-		}
+		boolean isAllDay = false;
 
 		if (mAllDayFieldName != null)
 		{
 			Integer allday = values.getAsInteger(mAllDayFieldName);
-			if (allday != null && allday > 0)
-			{
-				timezone = null;
-			}
+			isAllDay = allday != null && allday > 0;
 		}
 
-		return timezone;
+		return isAllDay ? null : timezoneId == null ? getDefault(null) : new TimezoneWrapper(timezoneId);
 	}
 
 
 	@Override
-	public String get(Cursor cursor)
+	public TimeZone get(Cursor cursor)
 	{
 		int tzColumnIdx = cursor.getColumnIndex(mTzFieldName);
 
@@ -95,11 +88,9 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 			throw new IllegalArgumentException("The timezone column is missing in cursor.");
 		}
 
-		String timezone = cursor.getString(tzColumnIdx);
-		if (timezone == null)
-		{
-			timezone = getDefault(null);
-		}
+		String timezoneId = cursor.getString(tzColumnIdx);
+
+		boolean isAllDay = false;
 
 		if (mAllDayFieldName != null)
 		{
@@ -108,13 +99,11 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 			{
 				throw new IllegalArgumentException("The allday column is missing in cursor.");
 			}
-			if (!cursor.isNull(allDayColumnIdx) && cursor.getInt(allDayColumnIdx) > 0)
-			{
-				timezone = null;
-			}
+
+			isAllDay = !cursor.isNull(allDayColumnIdx) && cursor.getInt(allDayColumnIdx) > 0;
 		}
 
-		return timezone;
+		return isAllDay ? null : timezoneId == null ? getDefault(null) : new TimezoneWrapper(timezoneId);
 	}
 
 
@@ -163,19 +152,22 @@ public final class TimezoneFieldAdapter extends FieldAdapter<String>
 	/**
 	 * Returns the local time zone.
 	 * 
-	 * @return The id of the current time zone.
+	 * @return The current time zone.
 	 */
 	@Override
-	public String getDefault(ContentSet values)
+	public TimeZone getDefault(ContentSet values)
 	{
-		return TimeZone.getDefault().getID();
+		return new TimezoneWrapper(TimeZone.getDefault());
 	}
 
 
 	@Override
-	public void set(ContentSet values, String value)
+	public void set(ContentSet values, TimeZone value)
 	{
-		values.put(mTzFieldName, value);
+		if (value != null)
+		{
+			values.put(mTzFieldName, value.getID());
+		}
 	}
 
 

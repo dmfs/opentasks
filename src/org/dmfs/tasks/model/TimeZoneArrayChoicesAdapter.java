@@ -18,9 +18,11 @@
  */
 package org.dmfs.tasks.model;
 
+import java.util.ArrayList;
 import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.adapters.TimezoneWrapper;
 
 import android.content.Context;
 
@@ -28,15 +30,29 @@ import android.content.Context;
 /**
  * ArrayAdapter which loads an array of timezones from the resources file.
  * 
- * @author Arjun Naik<arjun@arjunnaik.in>
+ * TODO: This looks more like a hack and it definitely needs some refactoring.
+ * 
+ * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Marten Gajda <marten@dmfs.org>
  * 
  */
 public class TimeZoneArrayChoicesAdapter extends ResourceArrayChoicesAdapter
 {
 
+	private final ArrayList<Object> mTimeZoneIds;
+
+
 	public TimeZoneArrayChoicesAdapter(Context context)
 	{
 		super(R.array.timezone_values, R.array.timezone_labels, context);
+		int count = mChoices.size();
+		mTimeZoneIds = new ArrayList<Object>();
+		mTimeZoneIds.addAll(mChoices);
+		for (int i = 0; i < count; ++i)
+		{
+			Object timezoneId = mChoices.get(i);
+			mChoices.set(i, new TimezoneWrapper(timezoneId.toString()));
+		}
 	}
 
 
@@ -49,13 +65,23 @@ public class TimeZoneArrayChoicesAdapter extends ResourceArrayChoicesAdapter
 	@Override
 	public String getTitle(Object object)
 	{
-		TimeZone selectedTimeZone = TimeZone.getTimeZone(object.toString());
-		String title = super.getTitle(object);
-		if (title == null)
+		if (object != null)
 		{
-			title = selectedTimeZone.getDisplayName();
+			TimeZone selectedTimeZone = (TimeZone) object;
+			String title = null;
+			int index = mTimeZoneIds.indexOf(selectedTimeZone.getID());
+			if (index >= 0)
+			{
+				title = mTitles.get(index);
+			}
+
+			if (title == null)
+			{
+				title = selectedTimeZone.getDisplayName();
+			}
+			return getGMTOffsetString(selectedTimeZone.getRawOffset()) + title;
 		}
-		return getGMTOffsetString(selectedTimeZone.getRawOffset()) + title;
+		return "";
 	}
 
 
