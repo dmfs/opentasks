@@ -17,7 +17,6 @@
 
 package org.dmfs.tasks.model;
 
-import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.widget.AbstractFieldEditor;
@@ -26,26 +25,51 @@ import org.dmfs.tasks.widget.AbstractFieldView;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 
 
 /**
- * A FieldDescriptor holds all information about a certain task property.
+ * A FieldDescriptor holds all information about a certain task property or attribute.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class FieldDescriptor
 {
 
-	private final static LayoutDescriptor DEFAULT_VIEW_LAYOUT = new LayoutDescriptor(R.layout.text_field_view);
-
+	/**
+	 * The title of the field.
+	 */
 	private final String mTitle;
+
+	/**
+	 * A hint. This is not used by all editors.
+	 */
 	private String mHint;
+
+	/**
+	 * The content type of an extended property.
+	 * 
+	 * This is currently unused and is subject to change in upcoming version.
+	 */
 	private final String mContentType;
+
+	/**
+	 * The {@link FieldAdapter} that knows how to load the values of this field form a {@link ContentSet}.
+	 */
 	private final FieldAdapter<?> mFieldAdapter;
-	private boolean mAllowNull = true;
+
+	/**
+	 * A class implementing an {@link IChoicesAdapter} that provides the choices for this field. Can be <code>null</code> if this field doesn't support choices.
+	 */
 	private IChoicesAdapter mChoices = null;
+
+	/**
+	 * A {@link LayoutDescriptor} that provides the layout of an editor for this field.
+	 */
 	private LayoutDescriptor mEditLayout = null;
+
+	/**
+	 * A {@link LayoutDescriptor} that provides the layout of a detail view for this field.
+	 */
 	private LayoutDescriptor mViewLayout = null;
 
 
@@ -160,7 +184,7 @@ public final class FieldDescriptor
 	 *            The hint for this field.
 	 * @return This instance.
 	 */
-	public FieldDescriptor setHind(String hint)
+	public FieldDescriptor setHint(String hint)
 	{
 		mHint = hint;
 		return this;
@@ -179,34 +203,9 @@ public final class FieldDescriptor
 
 
 	/**
-	 * Set whether this field allows {@code null} values.
-	 * 
-	 * @param allow
-	 *            {@code true} if {@code null} values are allowed, {@code false} otherwise (default).
-	 * @return This instance.
-	 */
-	public FieldDescriptor allowNull(boolean allow)
-	{
-		mAllowNull = allow;
-		return this;
-	}
-
-
-	/**
-	 * Return whether {@code null} is an allowed value for this field.
-	 * 
-	 * @return {@code true} if {@code null} values are allowed, {@code false} otherwise (default).
-	 */
-	public boolean nullAllowed()
-	{
-		return mAllowNull;
-	}
-
-
-	/**
 	 * Return a choices adapter for this field.
 	 * 
-	 * @return An {@link Adapter}.
+	 * @return An {@link IChoicesAdapter} or <code>null</code> if this field doesn't support choice.
 	 */
 	public IChoicesAdapter getChoices()
 	{
@@ -218,7 +217,7 @@ public final class FieldDescriptor
 	 * Set an {@link IChoicesAdapter} for this field.
 	 * 
 	 * @param choices
-	 *            An {@link Adapter} or {@code null} to disable choices for this field.
+	 *            An {@link IChoicesAdapter} or <code>null</code> to disable choices for this field.
 	 * @return This instance.
 	 */
 	public FieldDescriptor setChoices(IChoicesAdapter choices)
@@ -228,6 +227,15 @@ public final class FieldDescriptor
 	}
 
 
+	/**
+	 * Returns an inflated view to edit this field. This method takes a parent (that can be <code>null</code>) but it doesn't attach the editor to the parent.
+	 * 
+	 * @param inflater
+	 *            A {@link LayoutInflater}.
+	 * @param parent
+	 *            The parent {@link ViewGroup} of the editor.
+	 * @return An {@link AbstractFieldEditor} that can edit this field or <code>null</code> if this field is not editable.
+	 */
 	public AbstractFieldEditor getEditorView(LayoutInflater inflater, ViewGroup parent)
 	{
 		if (mEditLayout == null)
@@ -235,18 +243,19 @@ public final class FieldDescriptor
 			return null;
 		}
 
-		AbstractFieldEditor view;
-
-		view = (AbstractFieldEditor) mEditLayout.inflate(inflater, parent, false);
+		AbstractFieldEditor view = (AbstractFieldEditor) mEditLayout.inflate(inflater, parent, false);
 		view.setFieldDescription(this, mEditLayout.getOptions());
 		return view;
 	}
 
 
-	/*
-	 * public AbstractFieldEditor getEditorView(LayoutInflater inflater, ViewGroup parent) { return getEditorView(inflater, parent, true); }
+	/**
+	 * Returns an inflated view to edit this field.
+	 * 
+	 * @param inflater
+	 *            A {@link LayoutInflater}.
+	 * @return An {@link AbstractFieldEditor} that can edit this field or <code>null</code> if this field is not editable.
 	 */
-
 	public AbstractFieldEditor getEditorView(LayoutInflater inflater)
 	{
 		return getEditorView(inflater, null);
@@ -259,26 +268,23 @@ public final class FieldDescriptor
 		{
 			return null;
 		}
-		
-		LayoutDescriptor ld = mViewLayout;// != null ? mViewLayout : DEFAULT_VIEW_LAYOUT;
-		AbstractFieldView view;
 
-		view = (AbstractFieldView) ld.inflate(inflater);
-		view.setFieldDescription(this, ld.getOptions());
+		AbstractFieldView view = (AbstractFieldView) mViewLayout.inflate(inflater);
+		view.setFieldDescription(this, mViewLayout.getOptions());
 		return view;
 	}
 
 
-	public FieldDescriptor setEditorLayout(LayoutDescriptor ld)
+	public FieldDescriptor setEditorLayout(LayoutDescriptor layoutDescriptor)
 	{
-		mEditLayout = ld;
+		mEditLayout = layoutDescriptor;
 		return this;
 	}
 
 
-	FieldDescriptor setViewLayout(LayoutDescriptor ld)
+	FieldDescriptor setViewLayout(LayoutDescriptor layoutDescriptor)
 	{
-		mViewLayout = ld;
+		mViewLayout = layoutDescriptor;
 		return this;
 	}
 }

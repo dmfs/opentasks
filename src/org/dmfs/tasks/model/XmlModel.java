@@ -23,10 +23,12 @@ import java.util.Map;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 
@@ -63,7 +65,7 @@ public class XmlModel extends Model
 	public final static String NAMESPACE = "org.dmfs.tasks";
 
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
-//	private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();
+	// private final static Map<String, FieldInflater> PROPERTY_INFLATER_MAP = new HashMap<String, FieldInflater>();
 
 	private final PackageManager mPackageManager;
 	private final String mPackageName;
@@ -251,7 +253,7 @@ public class XmlModel extends Model
 			int hintId = parser.getAttributeResourceValue(null, "hint_id", -1);
 			if (hintId != -1)
 			{
-				descriptor.setHind(modelContext.getString(hintId));
+				descriptor.setHint(modelContext.getString(hintId));
 			}
 		}
 
@@ -575,15 +577,57 @@ public class XmlModel extends Model
 
 		});
 
-		/*
-		 * Same for the properties
-		 */
-		/*
-		 * PROPERTY_INFLATER_MAP.put("attendee", new FieldInflater() {
-		 * 
-		 * @Override public FieldAdapter<?> getFieldAdapter() { return new StringFieldAdapter(TaskContract.Tasks.URL); }
-		 * 
-		 * @Override String getContentType() { return TaskContract.Property.Attendee.CONTENT_ITEM_TYPE; } });
-		 */
+		FIELD_INFLATER_MAP.put("allday", new FieldInflater()
+		{
+			@Override
+			public FieldAdapter<?> getFieldAdapter()
+			{
+				return new BooleanFieldAdapter(TaskContract.Tasks.IS_ALLDAY);
+			}
+
+
+			@Override
+			int getDefaultTitleId()
+			{
+				return R.string.task_all_day;
+			}
+
+
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.boolean_field_editor));
+			}
+
+		});
+
+		FIELD_INFLATER_MAP.put("timezone", new FieldInflater()
+		{
+			@Override
+			public FieldAdapter<?> getFieldAdapter()
+			{
+				return new TimezoneFieldAdapter(TaskContract.Tasks.IS_ALLDAY, TaskContract.Tasks.IS_ALLDAY);
+			}
+
+
+			@Override
+			int getDefaultTitleId()
+			{
+				return R.string.task_timezone;
+			}
+
+
+			@Override
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			{
+				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				TimeZoneArrayChoicesAdapter tzaca = new TimeZoneArrayChoicesAdapter(context);
+				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.choices_field_editor));
+				descriptor.setChoices(tzaca);
+			}
+
+		});
+
 	}
 }
