@@ -57,7 +57,6 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 
@@ -512,7 +511,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	public void setActivatedItem(int groupPosition, int childPosition)
 	{
-		if (groupPosition != ExpandableListView.INVALID_POSITION && childPosition != ExpandableListView.INVALID_POSITION)
+		if (groupPosition != ExpandableListView.INVALID_POSITION && groupPosition < mAdapter.getGroupCount()
+			&& childPosition != ExpandableListView.INVALID_POSITION && childPosition < mAdapter.getChildrenCount(groupPosition))
 		{
 			expandLV.setItemChecked(expandLV.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
 		}
