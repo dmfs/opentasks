@@ -62,6 +62,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public static final String LIST_STRING_PARAMS = "list_string_params";
 	public static final String LIST_FRAGMENT_LAYOUT = "list_fragment_layout";
 	public static final String COMPARE_COLUMN_NAME = "column_name";
+	public static final String LIST_ONDETACH_SAVE = "list_ondetach_save";
 	private Context mContext;
 	private VisibleListAdapter mAdapter;
 	/**
@@ -71,7 +72,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private String mListSelectionArguments;
 	private String[] mListSelectionParam;
 	private String mListCompareColumnName;
-
+	private boolean saveOnDetach;
 	private int fragmentLayout;
 
 
@@ -99,6 +100,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		mListSelectionArguments = args.getString(LIST_SELECTION_ARGS);
 		mListSelectionParam = args.getStringArray(LIST_STRING_PARAMS);
 		fragmentLayout = args.getInt(LIST_FRAGMENT_LAYOUT);
+		saveOnDetach = args.getBoolean(LIST_ONDETACH_SAVE);
 		mListCompareColumnName = args.getString(COMPARE_COLUMN_NAME);
 		View view = inflater.inflate(fragmentLayout, container, false);
 		return view;
@@ -121,6 +123,17 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	{
 		super.onAttach(activity);
 		mContext = activity.getBaseContext();
+	}
+
+
+	@Override
+	public void onDetach()
+	{
+		if (saveOnDetach)
+		{
+			saveListState();
+		}
+		super.onDetach();
 	}
 
 
@@ -255,6 +268,12 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		}
 
 
+		public void clearHashMap()
+		{
+			savedPositions.clear();
+		}
+
+
 		public HashMap<Long, Boolean> getState()
 		{
 			return savedPositions;
@@ -300,6 +319,12 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 			return false;
 		}
 		return true;
+	}
+
+
+	public void doneSaveListState()
+	{
+		((VisibleListAdapter) getListAdapter()).clearHashMap();
 	}
 
 }

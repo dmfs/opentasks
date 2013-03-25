@@ -64,6 +64,7 @@ public class SyncSettingsActivity extends FragmentActivity
 		args.putInt(SettingsListFragment.LIST_FRAGMENT_LAYOUT, R.layout.fragment_visiblelist);
 		args.putString(SettingsListFragment.LIST_SELECTION_ARGS, TaskContract.TaskLists.SYNC_ENABLED + "=?");
 		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.VISIBLE);
+		args.putBoolean(SettingsListFragment.LIST_ONDETACH_SAVE, true);
 		syncedListFragment.setArguments(args);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 		currentFrag = syncedListFragment;
@@ -81,6 +82,7 @@ public class SyncSettingsActivity extends FragmentActivity
 		args.putInt(SettingsListFragment.LIST_FRAGMENT_LAYOUT, R.layout.fragment_synced_task_list);
 		args.putString(SettingsListFragment.LIST_SELECTION_ARGS, null);
 		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.SYNC_ENABLED);
+		args.putBoolean(SettingsListFragment.LIST_ONDETACH_SAVE, false);
 		syncedListFragment.setArguments(args);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 		currentFrag = syncedListFragment;
@@ -111,6 +113,8 @@ public class SyncSettingsActivity extends FragmentActivity
 	public void showSyncedList(View v)
 	{
 		currentFrag.saveListState();
+		// Call a function to indicate to the fragment that the state change to the list have been saved(clear the hashmap).
+		currentFrag.doneSaveListState();
 		showSyncedListsFragment();
 	}
 
