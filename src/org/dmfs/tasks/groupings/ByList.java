@@ -273,7 +273,7 @@ public interface ByList
 	 * A descriptor for the "grouped by list" view.
 	 */
 	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new CursorLoaderFactory(TaskLists.CONTENT_URI, new String[] {
-		TaskLists._ID, TaskLists.LIST_NAME, TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0", null, TaskLists.ACCOUNT_NAME + ", "
-		+ TaskLists.LIST_NAME), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		TaskLists._ID, TaskLists.LIST_NAME, TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0 and " + TaskLists.SYNC_ENABLED + ">0",
+		null, TaskLists.ACCOUNT_NAME + ", " + TaskLists.LIST_NAME), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 
 }
