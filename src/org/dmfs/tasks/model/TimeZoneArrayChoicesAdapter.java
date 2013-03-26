@@ -19,6 +19,8 @@
 package org.dmfs.tasks.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
@@ -53,6 +55,21 @@ public class TimeZoneArrayChoicesAdapter extends ResourceArrayChoicesAdapter
 			Object timezoneId = mChoices.get(i);
 			mChoices.set(i, new TimezoneWrapper(timezoneId.toString()));
 		}
+
+		// sort time zones by raw offset
+		Collections.sort(mChoices, new Comparator<Object>()
+		{
+
+			@Override
+			public int compare(Object lhs, Object rhs)
+			{
+				if (lhs instanceof TimezoneWrapper && rhs instanceof TimezoneWrapper)
+				{
+					return ((TimezoneWrapper) lhs).getRawOffset() - ((TimezoneWrapper) rhs).getRawOffset();
+				}
+				return 0;
+			}
+		});
 	}
 
 
