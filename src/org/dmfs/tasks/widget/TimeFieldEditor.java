@@ -56,6 +56,9 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	private DateFormat mDefaultDateFormat, mDefaultTimeFormat;
 	private Time mDateTime;
 	private String mTimezone;
+	private boolean mOldAllDay = false;
+	private int mOldHour = -1;
+	private int mOldMinutes = -1;
 	private boolean mIs24hour;
 
 
@@ -197,6 +200,27 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				return;
 			}
 
+			if (mOldAllDay != mDateTime.allDay)
+			{
+				/*
+				 * The allday flag has changed. Restore old time if we had any.
+				 */
+				mOldAllDay = mDateTime.allDay;
+				if (mOldHour >= 0 && mOldMinutes >= 0)
+				{
+					if (!mDateTime.allDay)
+					{
+						mDateTime.hour = mOldHour;
+						mDateTime.minute = mOldMinutes;
+					}
+					/*
+					 * Update content set. We do that even if all day is set now, to ensure that content set contains the correct time stamp.
+					 */
+					mAdapter.set(contentSet, mDateTime);
+				}
+				return;
+			}
+
 			Date currentDate = new Date(mDateTime.toMillis(false));
 			mDefaultDateFormat.setTimeZone(TimeZone.getTimeZone(mDateTime.timezone));
 			String formattedDate = mDefaultDateFormat.format(currentDate);
@@ -208,9 +232,12 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				String formattedTime = mDefaultTimeFormat.format(currentDate);
 				mTimePickerButton.setText(formattedTime);
 				mTimePickerButton.setVisibility(View.VISIBLE);
+				mOldHour = mDateTime.hour;
+				mOldMinutes = mDateTime.minute;
 			}
 			else
 			{
+
 				mTimePickerButton.setVisibility(View.GONE);
 			}
 			mClearDateButton.setEnabled(true);

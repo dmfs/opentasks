@@ -253,8 +253,13 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 	public void put(String key, Integer value)
 	{
-		ensureAfter().put(key, value);
-		notifyListeners(key);
+		Integer oldValue = getAsInteger(key);
+		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
+		{
+			// value has change, update
+			ensureAfter().put(key, value);
+			notifyListeners(key);
+		}
 	}
 
 
@@ -271,8 +276,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 	public void put(String key, Long value)
 	{
-		ensureAfter().put(key, value);
-		notifyListeners(key);
+		Long oldValue = getAsLong(key);
+		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
+		{
+			ensureAfter().put(key, value);
+			notifyListeners(key);
+		}
 	}
 
 
@@ -289,8 +298,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 	public void put(String key, String value)
 	{
-		ensureAfter().put(key, value);
-		notifyListeners(key);
+		String oldValue = getAsString(key);
+		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
+		{
+			ensureAfter().put(key, value);
+			notifyListeners(key);
+		}
 	}
 
 

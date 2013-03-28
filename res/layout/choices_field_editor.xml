@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.ChoicesFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/caldav_widget" >
+    style="@style/task_widget" >
 
     <include layout="@layout/editor_header" />
 

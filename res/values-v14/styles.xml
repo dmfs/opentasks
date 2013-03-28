@@ -2,9 +2,9 @@
 
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar"></style>
 
-    <style name="caldav_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
+    <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 
-    <style name="caldav_seekbar" parent="android:Widget.Holo.SeekBar"></style>
+    <style name="task_seekbar" parent="android:Widget.Holo.SeekBar"></style>
 
     <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
         <item name="android:textSize">18sp</item>

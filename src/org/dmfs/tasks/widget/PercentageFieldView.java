@@ -82,7 +82,6 @@ public class PercentageFieldView extends AbstractFieldView
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
 	}
 
 

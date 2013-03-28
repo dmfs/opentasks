@@ -23,15 +23,15 @@
         <item name="android:layout_marginLeft">12dp</item>
     </style>
 
-    <style name="caldav_widget" parent="caldav_widget_parent">
+    <style name="task_widget" parent="task_widget_parent">
         <item name="android:padding">12dp</item>
     </style>
 
-    <style name="caldav_progressbar" parent="android:Widget.ProgressBar.Horizontal">
+    <style name="task_progressbar" parent="android:Widget.ProgressBar.Horizontal">
         <item name="android:layout_marginLeft">0dp</item>
     </style>
 
-    <style name="caldav_seekbar" parent="android:Widget.SeekBar">
+    <style name="task_seekbar" parent="android:Widget.SeekBar">
         <item name="android:layout_marginLeft">0dp</item>
     </style>
 
