@@ -145,7 +145,8 @@ public class TimezoneWrapper extends TimeZone
 		 * 
 		 * TODO: improve the check
 		 */
-		return mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
-			&& mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(TEST_DATE);
+		return (mTimeZone.getID().equals(otherTimeZone.getID()))
+			|| (mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
+				&& mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(TEST_DATE));
 	}
 }
