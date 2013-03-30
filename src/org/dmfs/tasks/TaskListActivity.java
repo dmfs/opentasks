@@ -250,14 +250,15 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		switch (item.getItemId())
+		if (item.getItemId() == R.id.menu_visible_list)
 		{
-			case R.id.menu_visible_list:
-				Intent settingsIntent = new Intent(getBaseContext(), SyncSettingsActivity.class);
-				startActivity(settingsIntent);
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+			Intent settingsIntent = new Intent(getBaseContext(), SyncSettingsActivity.class);
+			startActivity(settingsIntent);
+			return true;
+		}
+		else
+		{
+			return super.onOptionsItemSelected(item);
 		}
 	}
 }

@@ -285,20 +285,24 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		switch (item.getItemId())
+		int itemId = item.getItemId();
+		if (itemId == R.id.edit_task)
 		{
-			case R.id.edit_task:
-				// open editor for this task
-				mCallback.onEditTask(mTaskUri);
-				return true;
-			case R.id.delete_task:
-				Log.v(TAG, "removing task");
-				// TODO: remove the task in a background task
-				mContentSet.delete(mAppContext);
-				mCallback.onDelete(mTaskUri);
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+			// open editor for this task
+			mCallback.onEditTask(mTaskUri);
+			return true;
+		}
+		else if (itemId == R.id.delete_task)
+		{
+			Log.v(TAG, "removing task");
+			// TODO: remove the task in a background task
+			mContentSet.delete(mAppContext);
+			mCallback.onDelete(mTaskUri);
+			return true;
+		}
+		else
+		{
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
