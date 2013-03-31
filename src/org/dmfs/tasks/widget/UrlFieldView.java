@@ -17,7 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;

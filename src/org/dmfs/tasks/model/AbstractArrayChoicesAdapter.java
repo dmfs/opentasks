@@ -18,7 +18,6 @@
  */
 package org.dmfs.tasks.model;
 
-import java.util.Collections;
 import java.util.List;
 
 import android.graphics.drawable.Drawable;

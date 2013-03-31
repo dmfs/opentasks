@@ -26,7 +26,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,8 +40,6 @@ import android.widget.TextView;
 
 public class ChoicesFieldView extends AbstractFieldView
 {
-
-	private static final String TAG = "IntegerFieldView";
 	private FieldAdapter<Object> mAdapter;
 	private TextView mText;
 	private ImageView mImage;
@@ -78,6 +75,7 @@ public class ChoicesFieldView extends AbstractFieldView
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
@@ -93,7 +91,6 @@ public class ChoicesFieldView extends AbstractFieldView
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
 			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
-			Log.d(TAG, "ChoicesAdapter : " + choicesAdapter);
 			if (choicesAdapter == null)
 			{
 				mText.setText(mAdapter.get(mValues).toString());

@@ -17,18 +17,23 @@
 
 package org.dmfs.tasks.model;
 
-public class ModelInflaterException extends Exception {
+public class ModelInflaterException extends Exception
+{
 
-    /**
+	/**
      * 
      */
-    private static final long serialVersionUID = 2498148128490322210L;
+	private static final long serialVersionUID = 2498148128490322210L;
 
-    public ModelInflaterException(String msg) {
-	super(msg);
-    }
 
-    public ModelInflaterException(String msg, Throwable e) {
-	super(msg, e);
-    }
+	public ModelInflaterException(String msg)
+	{
+		super(msg);
+	}
+
+
+	public ModelInflaterException(String msg, Throwable e)
+	{
+		super(msg, e);
+	}
 }
