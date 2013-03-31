@@ -26,7 +26,7 @@ import android.database.Cursor;
 
 
 /**
- * A TimezoneFieldAdapter stores time zones in a certain field of a {@link ContentSet}. The {@link TimeZone} is <code>null</code> for all-day dates.
+ * A TimezoneFieldAdapter stores time zones in a certain field of a {@link ContentSet}. The time zone is <code>null</code> for all-day dates.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -43,6 +43,11 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 	 */
 	private final String mAllDayFieldName;
 
+	/**
+	 * The name of a field that is used to determine if a time zone is in summer time.
+	 */
+	private final String mReferenceTimeFieldName;
+
 
 	/**
 	 * Constructor for a new TimezoneFieldAdapter without default value.
@@ -58,6 +63,25 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 		}
 		mTzFieldName = timezoneFieldName;
 		mAllDayFieldName = alldayFieldName;
+		mReferenceTimeFieldName = null;
+	}
+
+
+	/**
+	 * Constructor for a new TimezoneFieldAdapter without default value.
+	 * 
+	 * @param timezoneFieldName
+	 *            The name of the field to use when loading or storing the value.
+	 */
+	public TimezoneFieldAdapter(String timezoneFieldName, String alldayFieldName, String referenceTimeFieldName)
+	{
+		if (timezoneFieldName == null)
+		{
+			throw new IllegalArgumentException("timezoneFieldName must not be null");
+		}
+		mTzFieldName = timezoneFieldName;
+		mAllDayFieldName = alldayFieldName;
+		mReferenceTimeFieldName = referenceTimeFieldName;
 	}
 
 
@@ -74,7 +98,12 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 			isAllDay = allday != null && allday > 0;
 		}
 
-		return isAllDay ? null : timezoneId == null ? getDefault(null) : new TimezoneWrapper(timezoneId);
+		TimeZoneWrapper timeZone = isAllDay ? null : timezoneId == null ? getDefault(null) : new TimeZoneWrapper(timezoneId);
+		if (timeZone != null && mReferenceTimeFieldName != null)
+		{
+			timeZone.setReferenceTimeStamp(values.getAsLong(mReferenceTimeFieldName));
+		}
+		return timeZone;
 	}
 
 
@@ -103,7 +132,14 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 			isAllDay = !cursor.isNull(allDayColumnIdx) && cursor.getInt(allDayColumnIdx) > 0;
 		}
 
-		return isAllDay ? null : timezoneId == null ? getDefault(null) : new TimezoneWrapper(timezoneId);
+		TimeZoneWrapper timeZone = isAllDay ? null : timezoneId == null ? getDefault(null) : new TimeZoneWrapper(timezoneId);
+		int refTimeCol;
+		if (timeZone != null && mReferenceTimeFieldName != null && (refTimeCol = cursor.getColumnIndex(mReferenceTimeFieldName)) >= 0)
+		{
+			timeZone.setReferenceTimeStamp(cursor.getLong(refTimeCol));
+		}
+		return timeZone;
+
 	}
 
 
@@ -155,9 +191,9 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 	 * @return The current time zone.
 	 */
 	@Override
-	public TimeZone getDefault(ContentSet values)
+	public TimeZoneWrapper getDefault(ContentSet values)
 	{
-		return new TimezoneWrapper(TimeZone.getDefault());
+		return new TimeZoneWrapper();
 	}
 
 
@@ -179,6 +215,10 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 		{
 			values.addOnChangeListener(listener, mAllDayFieldName, initalNotification);
 		}
+		if (mReferenceTimeFieldName != null)
+		{
+			values.addOnChangeListener(listener, mReferenceTimeFieldName, initalNotification);
+		}
 	}
 
 
@@ -189,6 +229,10 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 		if (mAllDayFieldName != null)
 		{
 			values.removeOnChangeListener(listener, mAllDayFieldName);
+		}
+		if (mReferenceTimeFieldName != null)
+		{
+			values.removeOnChangeListener(listener, mReferenceTimeFieldName);
 		}
 	}
 }

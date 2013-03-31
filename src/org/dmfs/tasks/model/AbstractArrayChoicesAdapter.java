@@ -75,15 +75,24 @@ public abstract class AbstractArrayChoicesAdapter implements IChoicesAdapter
 	}
 
 
+	@Override
 	public int getIndex(Object object)
 	{
 		return mVisibleChoices.indexOf(object);
 	}
 
 
-	public List<Object> getChoices()
+	@Override
+	public int getCount()
 	{
-		return Collections.unmodifiableList(mVisibleChoices);
+		return mVisibleChoices.size();
+	}
+
+
+	@Override
+	public Object getItem(int position)
+	{
+		return mVisibleChoices.get(position);
 	}
 
 }

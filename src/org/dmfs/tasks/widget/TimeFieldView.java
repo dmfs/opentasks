@@ -25,7 +25,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.model.adapters.TimezoneWrapper;
+import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
@@ -49,7 +49,7 @@ public final class TimeFieldView extends AbstractFieldView
 	private TextView mTimeZoneText;
 	private java.text.DateFormat mDefaultDateFormat, mDefaultTimeFormat;
 	private final static TimeZone UTC = TimeZone.getTimeZone(Time.TIMEZONE_UTC);
-	private TimeZone defaultTimeZone = new TimezoneWrapper();
+	private TimeZone defaultTimeZone = new TimeZoneWrapper();
 
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
@@ -104,7 +104,7 @@ public final class TimeFieldView extends AbstractFieldView
 				mDefaultTimeFormat.setTimeZone(defaultTimeZone);
 
 				formattedTime = mDefaultDateFormat.format(fullDate);
-				TimezoneWrapper taskTimeZone = new TimezoneWrapper(newValue.timezone);
+				TimeZoneWrapper taskTimeZone = new TimeZoneWrapper(newValue.timezone);
 
 				formattedTime = formattedTime + " " + mDefaultTimeFormat.format(fullDate);
 

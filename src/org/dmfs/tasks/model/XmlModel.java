@@ -622,7 +622,7 @@ public class XmlModel extends Model
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
 			{
 				super.customizeDescriptor(context, modelContext, descriptor, parser);
-				TimeZoneArrayChoicesAdapter tzaca = new TimeZoneArrayChoicesAdapter(context);
+				TimeZoneChoicesAdapter tzaca = new TimeZoneChoicesAdapter(context);
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.choices_field_editor));
 				descriptor.setChoices(tzaca);
 			}

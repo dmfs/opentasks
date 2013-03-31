@@ -26,7 +26,7 @@ import java.util.TimeZone;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class TimezoneWrapper extends TimeZone
+public class TimeZoneWrapper extends TimeZone
 {
 
 	/**
@@ -44,11 +44,13 @@ public class TimezoneWrapper extends TimeZone
 	 */
 	private final TimeZone mTimeZone;
 
+	private Long mReferenceTimeStamp;
+
 
 	/**
 	 * Constructor that wraps the default time zone.
 	 */
-	public TimezoneWrapper()
+	public TimeZoneWrapper()
 	{
 		mTimeZone = TimeZone.getDefault();
 		setID(mTimeZone.getID());
@@ -61,7 +63,7 @@ public class TimezoneWrapper extends TimeZone
 	 * @param timeZone
 	 *            The {@link TimeZone} to wrap.
 	 */
-	public TimezoneWrapper(TimeZone timeZone)
+	public TimeZoneWrapper(TimeZone timeZone)
 	{
 		mTimeZone = timeZone;
 		setID(timeZone.getID());
@@ -75,7 +77,7 @@ public class TimezoneWrapper extends TimeZone
 	 * @param id
 	 *            The time zone id of the time zone to wrap.
 	 */
-	public TimezoneWrapper(String id)
+	public TimeZoneWrapper(String id)
 	{
 		mTimeZone = TimeZone.getTimeZone(id);
 		setID(mTimeZone.getID());
@@ -117,6 +119,44 @@ public class TimezoneWrapper extends TimeZone
 	}
 
 
+	public void setReferenceTimeStamp(Long timeStamp)
+	{
+		mReferenceTimeStamp = timeStamp;
+	}
+
+
+	public Long getReferenceTimeStamp()
+	{
+		return mReferenceTimeStamp;
+	}
+
+
+	public int getReferenceTimeOffset()
+	{
+		if (mReferenceTimeStamp != null)
+		{
+			return mTimeZone.getOffset(mReferenceTimeStamp);
+		}
+		else
+		{
+			return mTimeZone.getRawOffset();
+		}
+	}
+
+
+	public boolean referenceInDaylightTime()
+	{
+		if (mReferenceTimeStamp != null)
+		{
+			return mTimeZone.inDaylightTime(new Date(mReferenceTimeStamp));
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 	@Override
 	public int hashCode()
 	{
@@ -130,7 +170,7 @@ public class TimezoneWrapper extends TimeZone
 	@Override
 	public boolean equals(Object object)
 	{
-		if (!(object instanceof TimezoneWrapper)) // matches null too
+		if (!(object instanceof TimeZoneWrapper)) // matches null too
 		{
 			return false;
 		}
@@ -148,5 +188,12 @@ public class TimezoneWrapper extends TimeZone
 		return (mTimeZone.getID().equals(otherTimeZone.getID()))
 			|| (mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
 				&& mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(TEST_DATE));
+	}
+
+
+	@Override
+	public String toString()
+	{
+		return mTimeZone.toString();
 	}
 }
