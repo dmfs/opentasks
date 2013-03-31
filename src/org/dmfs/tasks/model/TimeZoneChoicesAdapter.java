@@ -48,6 +48,16 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 	private final Map<String, TimeZoneWrapper> mIdMap = new HashMap<String, TimeZoneWrapper>();
 	private final Map<String, String> mNameMap = new HashMap<String, String>();
 
+	/**
+	 * This is a hack to show correct offsets for the currently selected date. This assumes that calls to getIndex are done with a a {@link TimeZoneWrapper}
+	 * instance that has a reference time set.
+	 * 
+	 * TODO: find a better way to get the current offsets
+	 * 
+	 * alternatively: always show rawOffset instead (just like the stock calendar app does)
+	 */
+	private Long mReferenceTime;
+
 
 	public TimeZoneChoicesAdapter(Context context)
 	{
@@ -104,13 +114,21 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 			}
 		}
 
+		mReferenceTime = System.currentTimeMillis();
+
+		sortIds(mReferenceTime);
+	}
+
+
+	private void sortIds(final long referenceTime)
+	{
 		Collections.sort(mIdList, new Comparator<String>()
 		{
 
 			@Override
 			public int compare(String lhs, String rhs)
 			{
-				return mIdMap.get(lhs).getReferenceTimeOffset() - mIdMap.get(rhs).getReferenceTimeOffset();
+				return mIdMap.get(lhs).getOffset(referenceTime) - mIdMap.get(rhs).getOffset(referenceTime);
 			}
 
 		});
@@ -133,11 +151,11 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 			String title = mNameMap.get(id);
 			if (title == null)
 			{
-				title = timezone.getDisplayName(timezone.referenceInDaylightTime(), TimeZone.LONG);
+				title = timezone.getDisplayName(timezone.inDaylightTime(mReferenceTime), TimeZone.LONG);
 			}
-			return getGMTOffsetString(timezone.getReferenceTimeOffset()) + title;
+			return getGMTOffsetString(timezone.getOffset(mReferenceTime)) + title;
 		}
-		return "";
+		return null;
 	}
 
 
@@ -147,6 +165,13 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 		if (!(object instanceof TimeZoneWrapper))
 		{
 			return -1;
+		}
+
+		final Long refTime = ((TimeZoneWrapper) object).getReferenceTimeStamp();
+		if (refTime != null && !refTime.equals(mReferenceTime) || refTime == null && mReferenceTime != null)
+		{
+			mReferenceTime = refTime == null ? System.currentTimeMillis() : refTime;
+			sortIds(mReferenceTime);
 		}
 
 		TimeZoneWrapper timeZone = mIdMap.get(((TimeZoneWrapper) object).getID());

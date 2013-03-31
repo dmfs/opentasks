@@ -78,6 +78,7 @@ public class DefaultModel extends Model
 			.add(new FieldDescriptor(mContext, R.string.task_title, new StringFieldAdapter(Tasks.TITLE)).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
 
 		ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+		aca.addHiddenChoice(null, mContext.getString(R.string.status_needs_action), null);
 		aca.addChoice(Tasks.STATUS_NEEDS_ACTION, mContext.getString(R.string.status_needs_action), null);
 		aca.addChoice(Tasks.STATUS_IN_PROCESS, mContext.getString(R.string.status_in_process), null);
 		aca.addChoice(Tasks.STATUS_COMPLETED, mContext.getString(R.string.status_completed), null);

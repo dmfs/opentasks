@@ -473,6 +473,7 @@ public class XmlModel extends Model
 				descriptor.setEditorLayout(new LayoutDescriptor(R.layout.choices_field_editor));
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+				aca.addHiddenChoice(null, context.getString(R.string.status_needs_action), null);
 				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
 				aca.addChoice(Tasks.STATUS_IN_PROCESS, context.getString(R.string.status_in_process), null);
 				aca.addChoice(Tasks.STATUS_COMPLETED, context.getString(R.string.status_completed), null);

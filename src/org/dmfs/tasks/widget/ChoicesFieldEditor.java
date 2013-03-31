@@ -218,6 +218,12 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 			return position;
 		}
 
+
+		public boolean hasTitle(Object object)
+		{
+			return adapter.getTitle(object) != null;
+		}
+
 		private class SpinnerItemTag
 		{
 			ImageView iv;
@@ -238,24 +244,26 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 
 				int pos = mSpinnerAdapter.getPosition(mAdapterValue);
 
-				if (pos < 0 && mAdapterValue == null)
+				if (pos < 0 || !mSpinnerAdapter.hasTitle(mAdapterValue))
 				{
+					// hide spinner if the current element has no title or there is no current element
 					setVisibility(View.GONE);
 					return;
 				}
-				else
-				{
-					setVisibility(View.VISIBLE);
-				}
+
+				setVisibility(View.VISIBLE);
 
 				if (pos != mSelectedItem)
 				{
 					mSelectedItem = pos;
 					mSpinner.setSelection(mSelectedItem);
 				}
+				else
+				{
+					// something else must have changed, better invalidate the list
+					mSpinnerAdapter.notifyDataSetChanged();
+				}
 			}
 		}
-		Log.d(TAG, "mValues : " + mValues);
-		Log.d(TAG, "mSpinnerAdapter : " + mSpinnerAdapter);
 	}
 }
