@@ -244,7 +244,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 
 				int pos = mSpinnerAdapter.getPosition(mAdapterValue);
 
-				if (pos < 0 || !mSpinnerAdapter.hasTitle(mAdapterValue))
+				if (!mSpinnerAdapter.hasTitle(mAdapterValue))
 				{
 					// hide spinner if the current element has no title or there is no current element
 					setVisibility(View.GONE);
