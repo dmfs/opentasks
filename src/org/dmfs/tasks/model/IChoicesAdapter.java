@@ -18,11 +18,22 @@
 package org.dmfs.tasks.model;
 
 import android.graphics.drawable.Drawable;
-import android.widget.Adapter;
 
-public interface IChoicesAdapter {
 
-    public String getTitle(Object id);
+public interface IChoicesAdapter
+{
 
-    public Drawable getDrawable(Object id);
+	public String getTitle(Object id);
+
+
+	public Drawable getDrawable(Object id);
+
+
+	public int getIndex(Object id);
+
+
+	public int getCount();
+
+
+	public Object getItem(int position);
 }

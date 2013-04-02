@@ -20,68 +20,96 @@ package org.dmfs.tasks.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Model {
 
-    final ArrayList<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
-    boolean inflated = false;
+public abstract class Model
+{
 
-    private boolean mAllowRecurrence = false;
-    private boolean mAllowExceptions = false;
-    private int mIconId = -1;
-    private int mLabelId = -1;
-    private String mAccountType;
-    private String mTaskName;
+	final ArrayList<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
+	boolean inflated = false;
 
-    public abstract void inflate() throws ModelInflaterException;
+	private boolean mAllowRecurrence = false;
+	private boolean mAllowExceptions = false;
+	private int mIconId = -1;
+	private int mLabelId = -1;
+	private String mAccountType;
+	private String mTaskName;
 
-    public List<FieldDescriptor> getFields() {
-	try {
-	    inflate();
-	} catch (ModelInflaterException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+
+	public abstract void inflate() throws ModelInflaterException;
+
+
+	public List<FieldDescriptor> getFields()
+	{
+		try
+		{
+			inflate();
+		}
+		catch (ModelInflaterException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<FieldDescriptor>(mFields);
 	}
-	return new ArrayList<FieldDescriptor>(mFields);
-    }
 
-    public boolean getAllowRecurrence() {
-	return mAllowRecurrence;
-    }
 
-    void setAllowRecurrence(boolean allowRecurrence) {
-	mAllowRecurrence = allowRecurrence;
-    }
+	public boolean getAllowRecurrence()
+	{
+		return mAllowRecurrence;
+	}
 
-    public boolean getAllowExceptions() {
-	return mAllowExceptions;
-    }
 
-    void setAllowExceptions(boolean allowExceptions) {
-	mAllowExceptions = allowExceptions;
-    }
+	void setAllowRecurrence(boolean allowRecurrence)
+	{
+		mAllowRecurrence = allowRecurrence;
+	}
 
-    public int getIconId() {
-	return mIconId;
-    }
 
-    void setIconId(int iconId) {
-	mIconId = iconId;
-    }
+	public boolean getAllowExceptions()
+	{
+		return mAllowExceptions;
+	}
 
-    public int getLabelId() {
-	return mLabelId;
-    }
 
-    void setLabelId(int titleId) {
-	mLabelId = titleId;
-    }
+	void setAllowExceptions(boolean allowExceptions)
+	{
+		mAllowExceptions = allowExceptions;
+	}
 
-    public String getAccountType() {
-	return mAccountType;
-    }
 
-    void setAccountType(String accountType) {
-	mAccountType = accountType;
-    }
+	public int getIconId()
+	{
+		return mIconId;
+	}
+
+
+	void setIconId(int iconId)
+	{
+		mIconId = iconId;
+	}
+
+
+	public int getLabelId()
+	{
+		return mLabelId;
+	}
+
+
+	void setLabelId(int titleId)
+	{
+		mLabelId = titleId;
+	}
+
+
+	public String getAccountType()
+	{
+		return mAccountType;
+	}
+
+
+	void setAccountType(String accountType)
+	{
+		mAccountType = accountType;
+	}
 
 }

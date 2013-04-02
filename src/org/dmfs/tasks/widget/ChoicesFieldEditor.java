@@ -17,10 +17,7 @@
 
 package org.dmfs.tasks.widget;
 
-import java.util.List;
-
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.AbstractArrayChoicesAdapter;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.IChoicesAdapter;
@@ -36,7 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -98,7 +95,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 				if (mSelectedItem != position && mValues != null)
 				{
 					Log.v(TAG, "onItemSelected" + position);
-					mAdapter.set(mValues, ((AbstractArrayChoicesAdapter) fieldDescriptor.getChoices()).getChoices().get(position));
+					mAdapter.set(mValues, mSpinnerAdapter.getItem(position));
 					mSelectedItem = position;
 				}
 			}
@@ -114,6 +111,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
@@ -121,27 +119,18 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 		mAdapter = (FieldAdapter<Object>) descriptor.getFieldAdapter();
 
 		IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
-
-		if (choicesAdapter instanceof AbstractArrayChoicesAdapter)
-		{
-			AbstractArrayChoicesAdapter arrayAdapter = (AbstractArrayChoicesAdapter) choicesAdapter;
-			List<Object> choicesList = arrayAdapter.getChoices();
-			Log.d(TAG, "Returned Array List : " + choicesList.size() + " " + choicesList.toString());
-			mSpinnerAdapter = new ChoicesSpinnerAdapter(getContext(), R.layout.integer_choices_spinner_item, R.id.integer_choice_item_text, choicesList,
-				arrayAdapter);
-			mSpinner.setAdapter(mSpinnerAdapter);
-		}
+		mSpinnerAdapter = new ChoicesSpinnerAdapter(getContext(), choicesAdapter);
+		mSpinner.setAdapter(mSpinnerAdapter);
 	}
 
-	private class ChoicesSpinnerAdapter extends ArrayAdapter<Object> implements SpinnerAdapter
+	private class ChoicesSpinnerAdapter extends BaseAdapter implements SpinnerAdapter
 	{
 		LayoutInflater layoutInflater;
-		AbstractArrayChoicesAdapter adapter;
+		IChoicesAdapter adapter;
 
 
-		public ChoicesSpinnerAdapter(Context context, int resource, int textViewResourceId, List<Object> objects, AbstractArrayChoicesAdapter a)
+		public ChoicesSpinnerAdapter(Context context, IChoicesAdapter a)
 		{
-			super(context, resource, textViewResourceId, objects);
 			layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			adapter = a;
 		}
@@ -152,7 +141,6 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 			SpinnerItemTag tag = (SpinnerItemTag) view.getTag();
 
 			String title = adapter.getTitle(getItem(position));
-			Log.d(TAG, Integer.toString(position) + " Title : " + title);
 
 			Drawable image = adapter.getDrawable(getItem(position));
 
@@ -203,6 +191,39 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 			return convertView;
 		}
 
+
+		public int getPosition(Object object)
+		{
+			return adapter.getIndex(object);
+		}
+
+
+		@Override
+		public int getCount()
+		{
+			return adapter.getCount();
+		}
+
+
+		@Override
+		public Object getItem(int position)
+		{
+			return adapter.getItem(position);
+		}
+
+
+		@Override
+		public long getItemId(int position)
+		{
+			return position;
+		}
+
+
+		public boolean hasTitle(Object object)
+		{
+			return adapter.getTitle(object) != null;
+		}
+
 		private class SpinnerItemTag
 		{
 			ImageView iv;
@@ -220,25 +241,29 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 			if (mSpinnerAdapter != null)
 			{
 				Object mAdapterValue = mAdapter.get(mValues);
-				Log.d(TAG, "mAdapter : " + mAdapterValue);
+
 				int pos = mSpinnerAdapter.getPosition(mAdapterValue);
-				if (pos < 0 && mAdapterValue == null)
+
+				if (!mSpinnerAdapter.hasTitle(mAdapterValue))
 				{
+					// hide spinner if the current element has no title or there is no current element
 					setVisibility(View.GONE);
 					return;
 				}
-				else
-				{
-					setVisibility(View.VISIBLE);
-				}
+
+				setVisibility(View.VISIBLE);
+
 				if (pos != mSelectedItem)
 				{
 					mSelectedItem = pos;
 					mSpinner.setSelection(mSelectedItem);
 				}
+				else
+				{
+					// something else must have changed, better invalidate the list
+					mSpinnerAdapter.notifyDataSetChanged();
+				}
 			}
 		}
-		Log.d(TAG, "mValues : " + mValues);
-		Log.d(TAG, "mSpinnerAdapter : " + mSpinnerAdapter);
 	}
 }

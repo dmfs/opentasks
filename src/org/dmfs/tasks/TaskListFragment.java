@@ -335,26 +335,33 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		switch (item.getItemId())
+		int itemId = item.getItemId();
+		if (itemId == R.id.menu_add_task)
 		{
-			case R.id.menu_add_task:
-				mCallbacks.onAddNewTask();
-				return true;
-			case R.id.menu_show_completed:
-				item.setChecked(!item.isChecked());
-				mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
-				// reload the child cursors only
+			mCallbacks.onAddNewTask();
+			return true;
+		}
+		else if (itemId == R.id.menu_show_completed)
+		{
+			item.setChecked(!item.isChecked());
+			mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
+			// reload the child cursors only
 
-				// TODO: reload only groups that are visible
-				for (int i = 0; i < mAdapter.getGroupCount(); ++i)
-				{
-					mAdapter.reloadGroup(i);
-				}
-				return true;
-			case R.id.menu_sync_now:
-				doSyncNow();
-			default:
-				return super.onOptionsItemSelected(item);
+			// TODO: reload only groups that are visible
+			for (int i = 0; i < mAdapter.getGroupCount(); ++i)
+			{
+				mAdapter.reloadGroup(i);
+			}
+			return true;
+		}
+		else if (itemId == R.id.menu_sync_now)
+		{
+			doSyncNow();
+			return true;
+		}
+		else
+		{
+			return super.onOptionsItemSelected(item);
 		}
 	}
 

@@ -77,4 +77,25 @@ public class CursorChoicesAdapter implements IChoicesAdapter
 		return mCursor;
 	}
 
+
+	@Override
+	public int getIndex(Object id)
+	{
+		return 0;
+	}
+
+
+	@Override
+	public int getCount()
+	{
+		return mCursor.getCount();
+	}
+
+
+	@Override
+	public Object getItem(int position)
+	{
+		return null;
+	}
+
 }

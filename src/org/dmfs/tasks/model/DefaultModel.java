@@ -77,16 +77,15 @@ public class DefaultModel extends Model
 		mFields
 			.add(new FieldDescriptor(mContext, R.string.task_title, new StringFieldAdapter(Tasks.TITLE)).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
 
-		Resources res = mContext.getResources();
-
 		ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
+		aca.addHiddenChoice(null, mContext.getString(R.string.status_needs_action), null);
 		aca.addChoice(Tasks.STATUS_NEEDS_ACTION, mContext.getString(R.string.status_needs_action), null);
 		aca.addChoice(Tasks.STATUS_IN_PROCESS, mContext.getString(R.string.status_in_process), null);
 		aca.addChoice(Tasks.STATUS_COMPLETED, mContext.getString(R.string.status_completed), null);
 		aca.addChoice(Tasks.STATUS_CANCELLED, mContext.getString(R.string.status_cancelled), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_status, new IntegerFieldAdapter(Tasks.STATUS)).setViewLayout(CHOICES_VIEW)
-			.setEditorLayout(CHOICES_EDIT).setChoices(aca));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_status, new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION))
+			.setViewLayout(CHOICES_VIEW).setEditorLayout(CHOICES_EDIT).setChoices(aca));
 
 		mFields.add(new FieldDescriptor(mContext, R.string.task_location, new StringFieldAdapter(Tasks.LOCATION)).setViewLayout(TEXT_VIEW).setEditorLayout(
 			TEXT_EDIT));
@@ -99,9 +98,9 @@ public class DefaultModel extends Model
 			.setEditorLayout(TIME_EDIT));
 		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, new BooleanFieldAdapter(Tasks.IS_ALLDAY)).setEditorLayout(BOOLEAN_EDIT));
 
-		TimeZoneArrayChoicesAdapter tzaca = new TimeZoneArrayChoicesAdapter(mContext);
-		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY)).setEditorLayout(CHOICES_EDIT)
-			.setChoices(tzaca));
+		TimeZoneChoicesAdapter tzaca = new TimeZoneChoicesAdapter(mContext);
+		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY, Tasks.DUE)).setEditorLayout(
+			CHOICES_EDIT).setChoices(tzaca));
 
 		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, new TimeFieldAdapter(Tasks.COMPLETED, null, null)).setViewLayout(TIME_VIEW)
 			.setEditorLayout(TIME_EDIT));
