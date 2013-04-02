@@ -256,7 +256,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		Integer oldValue = getAsInteger(key);
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
-			// value has change, update
+			// value has changed, update
 			ensureAfter().put(key, value);
 			notifyListeners(key);
 		}
