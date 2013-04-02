@@ -234,7 +234,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		if (mValues != null)
 		{

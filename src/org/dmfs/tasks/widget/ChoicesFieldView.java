@@ -86,7 +86,7 @@ public class ChoicesFieldView extends AbstractFieldView
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{

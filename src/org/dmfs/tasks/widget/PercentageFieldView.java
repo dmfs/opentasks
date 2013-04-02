@@ -86,7 +86,7 @@ public class PercentageFieldView extends AbstractFieldView
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		Log.d(TAG, "mValues : " + mValues);
 		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));

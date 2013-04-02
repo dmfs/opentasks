@@ -86,7 +86,7 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		Boolean newValue = mAdapter.get(mValues);
 		if (mValues != null && newValue != null)

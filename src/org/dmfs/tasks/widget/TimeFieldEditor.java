@@ -43,7 +43,7 @@ import android.widget.TimePicker;
 
 
 /**
- * Widget to edit DateTime values
+ * Widget to edit DateTime values.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
@@ -134,6 +134,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			if (mDateTime == null)
 			{
 				mDateTime = mAdapter.getDefault(mValues);
+				applyTimeInTimeZone(mDateTime, TimeZone.getDefault().getID());
 			}
 
 			DatePickerDialog dateDialog = new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
@@ -150,12 +151,56 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			if (mDateTime == null)
 			{
 				mDateTime = mAdapter.getDefault(mValues);
+				applyTimeInTimeZone(mDateTime, TimeZone.getDefault().getID());
 			}
 
 			TimePickerDialog timeDialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, mIs24hour);
 			timeDialog.show();
 		}
 	};
+
+
+	/**
+	 * Updates a {@link Time} instance to date and time of the given time zone, but in the original time zone.
+	 * <p>
+	 * Example:
+	 * </p>
+	 * 
+	 * <pre>
+	 * time: 2013-04-02 16:00 Europe/Berlin (GMT+02:00)
+	 * timeZone: America/New_York (GMT-04:00)
+	 * 
+	 * will result in
+	 * 
+	 * 2013-04-02 10:00 Europe/Berlin (because the original time is equivalent to 2013-04-02 10:00 America/New_York)
+	 * </pre>
+	 * 
+	 * All-day times are not affected.
+	 * 
+	 * @param time
+	 *            The {@link Time} to update.
+	 * @param timeZone
+	 *            A time zone id.
+	 * 
+	 */
+	private void applyTimeInTimeZone(Time time, String timeZone)
+	{
+		if (!time.allDay)
+		{
+			/*
+			 * The default value will be <now> in any time zone. What we want is that the date picker shows the current local time not the time in that time
+			 * zone.
+			 * 
+			 * To fix that we switch to the local time zone and reset the time zone to original time zone. That updates date & time to the local values and
+			 * keeps
+			 * the original time zone.
+			 */
+			String originalTimeZone = mDateTime.timezone;
+			mDateTime.switchTimezone(timeZone);
+			mDateTime.timezone = originalTimeZone;
+			mDateTime.set(mDateTime.second, mDateTime.minute, mDateTime.hour, mDateTime.monthDay, mDateTime.month, mDateTime.year);
+		}
+	}
 
 
 	@Override
@@ -178,7 +223,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		mDateTime = mAdapter.get(mValues);
 		if (mDateTime != null)
@@ -190,19 +235,15 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				/*
 				 * Time zone has changed.
 				 * 
-				 * We don't want to change date and hour in the editor, so switch to old time zone first and then replace the time zone with the new value.
+				 * We don't want to change date and hour in the editor, so change the values.
 				 */
-				String newTimeZone = mDateTime.timezone;
-				mDateTime.switchTimezone(mTimezone);
-				mDateTime.timezone = newTimeZone;
-				mDateTime.normalize(true);
-				mTimezone = mDateTime.timezone;
+				applyTimeInTimeZone(mDateTime, mTimezone);
 			}
 
 			if (mOldAllDay != mDateTime.allDay)
 			{
 				/*
-				 * The allday flag has changed.
+				 * The allday flag has changed, we may have to restore time and time zone for the UI or to store a valid all-day time.
 				 */
 				mOldAllDay = mDateTime.allDay;
 				if (!mDateTime.allDay)
@@ -218,14 +259,28 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 					else
 					{
 						Time defaultDate = mAdapter.getDefault(contentSet);
+						applyTimeInTimeZone(defaultDate, TimeZone.getDefault().getID());
 						mDateTime.hour = defaultDate.hour;
 						mDateTime.minute = defaultDate.minute;
 					}
+					/*
+					 * All-day events are floating and have no time zone (though it might be set to UTC).
+					 * 
+					 * Restore previous time zone if possible, otherwise pick a reasonable default value.
+					 */
+					mDateTime.timezone = mTimezone == null ? TimeZone.getDefault().getID() : mTimezone;
 				}
 				else
 				{
+					// ensure the stored time actually is all day (i.e. timezone == UTC, hours == 0, minutes == 0 and seconds == 0)
 					mAdapter.set(contentSet, mDateTime);
+					return;
 				}
+			}
+			if (!mDateTime.allDay)
+			{
+				// preserve current time zone
+				mTimezone = mDateTime.timezone;
 			}
 
 			if (oldTime != mDateTime.toMillis(false))
@@ -235,6 +290,9 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				return;
 			}
 
+			/*
+			 * Update UI. Ensure we show the time in the correct time zone.
+			 */
 			Date currentDate = new Date(mDateTime.toMillis(false));
 			mDefaultDateFormat.setTimeZone(TimeZone.getTimeZone(mDateTime.timezone));
 			String formattedDate = mDefaultDateFormat.format(currentDate);
@@ -251,11 +309,9 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			}
 			else
 			{
-
 				mTimePickerButton.setVisibility(View.GONE);
 			}
 			mClearDateButton.setEnabled(true);
-			mTimezone = mDateTime.timezone;
 		}
 		else
 		{

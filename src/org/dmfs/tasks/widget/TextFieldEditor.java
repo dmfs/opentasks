@@ -125,7 +125,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		if (mValues != null)
 		{

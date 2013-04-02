@@ -29,6 +29,7 @@ import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.TasksListCursorAdapter;
 import org.dmfs.tasks.widget.TaskEdit;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -92,7 +93,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
-			Tasks.LIST_NAME).addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
+			Tasks.LIST_NAME)
+		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
 	private static final String[] INSTANCE_VALUES = new String[] { Tasks.DTSTART, Tasks.DUE, Tasks.RDATE, Tasks.RRULE };
@@ -136,6 +138,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 
+	@TargetApi(16)
 	@Override
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -323,9 +326,9 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentLoaded(ContentSet contentSet)
 	{
-		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
+		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			setListUri(appForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
@@ -342,5 +345,12 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 			getLoaderManager().restartLoader(0, bundle, this);
 		}
+	}
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet)
+	{
+		// nothing to do
 	}
 }

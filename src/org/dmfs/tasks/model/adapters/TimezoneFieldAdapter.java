@@ -200,9 +200,16 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 	@Override
 	public void set(ContentSet values, TimeZone value)
 	{
-		if (value != null)
+		if (!isAllDay(values))
 		{
-			values.put(mTzFieldName, value.getID());
+			if (value != null)
+			{
+				values.put(mTzFieldName, value.getID());
+			}
+		}
+		else
+		{
+			values.put(mTzFieldName, (String) null);
 		}
 	}
 

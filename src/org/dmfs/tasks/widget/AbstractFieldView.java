@@ -156,4 +156,12 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 			return Color.WHITE;
 		}
 	}
+
+
+	@Override
+	public void onContentLoaded(ContentSet contentSet)
+	{
+		// handle reloaded content sets just like updated content sets
+		onContentChanged(contentSet);
+	}
 }

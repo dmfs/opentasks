@@ -78,7 +78,7 @@ public class BooleanFieldView extends AbstractFieldView
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		Boolean adapterValue = mAdapter.get(mValues);
 

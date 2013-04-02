@@ -81,7 +81,7 @@ public class TextFieldView extends AbstractFieldView
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		Object adapterValue = mAdapter.get(mValues);
 		String adapterStringValue = adapterValue != null ? adapterValue.toString() : null;

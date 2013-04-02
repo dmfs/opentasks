@@ -20,12 +20,19 @@ package org.dmfs.tasks.model;
 public interface OnContentChangeListener
 {
 	/**
-	 * Called whenever a specific key in the {@link ContentSet} {@code contentSet} has changed.
+	 * Called whenever a specific key in a {@link ContentSet} has changed.
 	 * 
 	 * @param contentSet
-	 *            The {@link ContentSet} that contains the chanegd key.
-	 * @param key
-	 *            The key that has changed or <code>null</code> if all keys have changed (for example when the ContentSet has been initialized with values).
+	 *            The {@link ContentSet} that contains the changed key.
 	 */
-	public void onContentChanged(ContentSet contentSet, String key);
+	public void onContentChanged(ContentSet contentSet);
+
+
+	/**
+	 * Called whenever the {@link ContentSet} has been (re-)loaded.
+	 * 
+	 * @param contentSet
+	 *            The {@link ContentSet} that has been reloaded.
+	 */
+	public void onContentLoaded(ContentSet contentSet);
 }

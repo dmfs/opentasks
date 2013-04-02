@@ -19,6 +19,7 @@ package org.dmfs.tasks.model;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -28,6 +29,7 @@ import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
 import org.dmfs.tasks.utils.SetFromMap;
 
+import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -63,6 +65,17 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	 * of full reloads.
 	 */
 	private final Map<String, Set<OnContentChangeListener>> mOnChangeListeners = new HashMap<String, Set<OnContentChangeListener>>();
+
+	/**
+	 * A counter for the number of bulk updates currently running. It is incremented on {@link #startBulkUpdate()} and decremented on
+	 * {@link #finishBulkUpdate()}. If this values becomes <code>null</code> in {@link #finishBulkUpdate()} all listeners get notified.
+	 */
+	private int mBulkUpdates = 0;
+
+	/**
+	 * Holds all {@link OnContentChangeListener}s that need to be notified, because something has changed during a bulk update.
+	 */
+	private final Set<OnContentChangeListener> mPendingNotifications = new HashSet<OnContentChangeListener>();
 
 
 	/**
@@ -117,7 +130,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	public void onContentLoaded(ContentValues values)
 	{
 		mBeforeContentValues = values;
-		notifyListeners(null);
+		notifyLoadedListeners();
 	}
 
 
@@ -258,7 +271,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		{
 			// value has changed, update
 			ensureAfter().put(key, value);
-			notifyListeners(key);
+			notifyUpdateListeners(key);
 		}
 	}
 
@@ -280,7 +293,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
 			ensureAfter().put(key, value);
-			notifyListeners(key);
+			notifyUpdateListeners(key);
 		}
 	}
 
@@ -302,7 +315,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
 			ensureAfter().put(key, value);
-			notifyListeners(key);
+			notifyUpdateListeners(key);
 		}
 	}
 
@@ -315,6 +328,31 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 			return mAfterContentValues.getAsString(key);
 		}
 		return mBeforeContentValues == null ? null : mBeforeContentValues.getAsString(key);
+	}
+
+
+	/**
+	 * Start a new bulk update. You should use this when you update multiple values at once and you don't want to send an update notification every time.
+	 * When you're done call {@link #finishBulkUpdate()} which sned the notifications (unless there is another bulk update in progress).
+	 */
+	public void startBulkUpdate()
+	{
+		++mBulkUpdates;
+	}
+
+
+	/**
+	 * Finish a bulk update and notify all listeners of values that have been changed (unless there is still another bilk update in progress).
+	 */
+	public void finishBulkUpdate()
+	{
+		if (--mBulkUpdates == 0)
+		{
+			for (OnContentChangeListener listener : mPendingNotifications)
+			{
+				listener.onContentChanged(this);
+			}
+		}
 	}
 
 
@@ -337,6 +375,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
+	@TargetApi(9)
 	public void addOnChangeListener(OnContentChangeListener listener, String key, boolean notify)
 	{
 		Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
@@ -359,7 +398,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 		if (notify && (mBeforeContentValues != null || mAfterContentValues != null))
 		{
-			listener.onContentChanged(this, null);
+			listener.onContentLoaded(this);
 		}
 	}
 
@@ -374,14 +413,34 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
-	private void notifyListeners(String key)
+	private void notifyUpdateListeners(String key)
 	{
 		Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
 		if (listenerSet != null)
 		{
 			for (OnContentChangeListener listener : listenerSet)
 			{
-				listener.onContentChanged(this, key);
+				if (mBulkUpdates > 0)
+				{
+					mPendingNotifications.add(listener);
+				}
+				else
+				{
+					listener.onContentChanged(this);
+				}
+			}
+		}
+	}
+
+
+	private void notifyLoadedListeners()
+	{
+		Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(null);
+		if (listenerSet != null)
+		{
+			for (OnContentChangeListener listener : listenerSet)
+			{
+				listener.onContentLoaded(this);
 			}
 		}
 	}

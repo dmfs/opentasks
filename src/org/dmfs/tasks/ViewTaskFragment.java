@@ -308,9 +308,9 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentLoaded(ContentSet contentSet)
 	{
-		if (key == null && contentSet.containsKey(Tasks.ACCOUNT_TYPE))
+		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			// the ContentSet has been (re-)loaded, load the model of this task
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
@@ -332,5 +332,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			}
 		}
 	};
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet)
+	{
+		// nothing to do
+	}
 
 }

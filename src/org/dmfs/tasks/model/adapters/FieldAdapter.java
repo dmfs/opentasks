@@ -20,6 +20,7 @@ package org.dmfs.tasks.model.adapters;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -38,7 +39,7 @@ public abstract class FieldAdapter<Type>
 	 * Get the value from the given {@link ContentSet}
 	 * 
 	 * @param values
-	 *            The {link ContentValues} that contain the value to return.
+	 *            The {@link ContentValues} that contain the value to return.
 	 * @return The value.
 	 */
 	public abstract Type get(ContentSet values);
@@ -48,7 +49,7 @@ public abstract class FieldAdapter<Type>
 	 * Get the value from the given {@link Cursor}
 	 * 
 	 * @param values
-	 *            The {link Cursor} that contain the value to return.
+	 *            The {@link Cursor} that contain the value to return.
 	 * @return The value.
 	 */
 	public abstract Type get(Cursor cursor);
@@ -58,7 +59,7 @@ public abstract class FieldAdapter<Type>
 	 * Get a default value for this Adapter.
 	 * 
 	 * @param values
-	 *            The {link ContentSet}.
+	 *            The {@link ContentSet}.
 	 * 
 	 * @return A default Value
 	 */

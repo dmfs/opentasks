@@ -91,7 +91,7 @@ public final class TimeFieldView extends AbstractFieldView
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet, String key)
+	public void onContentChanged(ContentSet contentSet)
 	{
 		Time newValue = mAdapter.get(mValues);
 		if (mValues != null && newValue != null)
