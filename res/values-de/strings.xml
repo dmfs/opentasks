@@ -6,15 +6,19 @@
     <!-- Task list -->
     <string name="menu_add_task">Neue Aufgabe</string>
     <string name="menu_add_task_condensed">Neu</string>
-    <string name="menu_show_completed">Zeige alle Aufgaben</string>
-    <string name="menu_show_completed_condensed">Zeige alle</string>
-    <string name="menu_sync_now">Jetzt aktualisieren</string>
+    <string name="menu_show_completed">Fertige Aufgaben zeigen</string>
+    <string name="menu_show_completed_condensed">Fertige Aufgaben zeigen</string>
+    <string name="menu_sync_now">Aktualisieren</string>
     <string name="menu_sync_now_condensed">Aktualisieren</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d Aufgabe</item>
         <item quantity="other">%d Aufgaben</item>
     </plurals>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Aufgabe bearbeiten</string>
+    <string name="activity_add_task_title">Aufgabe erstellen</string>
 
     <!-- Names of task attributes -->
 
@@ -34,7 +38,8 @@
     <string name="provider_label">Aufgaben</string>
     <string name="task_detail_activity">Aufgaben Details</string>
     <string name="task_priority">Priorität</string>
-    <string name="title_activity_add_task">Erstelle Aufgabe</string>
+    <string name="task_timezone">Zeitzone</string>
+    <string name="task_all_day">ganztägig</string>
 
     <!-- Task list group titles -->
     <string name="task_group_no_due">Ohne Fälligkeit</string>
@@ -73,5 +78,14 @@
     <string name="priority_medium">mittel</string>
     <string name="priority_high">hoch</string>
     <string name="priority_urgent">dringend</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="visible_task_lists">Sichtbare Listen</string>
+    <string name="synced_list_button">Synchronisierte Listen</string>
+    <string name="save_synced_list">Speichern</string>
+    <string name="cancel_updated_list">Abbrechen</string>
 
 </resources>
