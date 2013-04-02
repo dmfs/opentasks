@@ -46,7 +46,7 @@ import android.widget.TimePicker;
  * Widget to edit DateTime values
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
- * 
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetListener, OnTimeSetListener
 {
@@ -181,43 +181,57 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	public void onContentChanged(ContentSet contentSet, String key)
 	{
 		mDateTime = mAdapter.get(mValues);
-
 		if (mDateTime != null)
 		{
-			if (mTimezone != null && !TextUtils.equals(mTimezone, mDateTime.timezone))
+			long oldTime = mDateTime.toMillis(false);
+
+			if (mTimezone != null && !TextUtils.equals(mTimezone, mDateTime.timezone) && !mDateTime.allDay)
 			{
 				/*
 				 * Time zone has changed.
 				 * 
-				 * We don't want to change date and hour, so switch to old time zone first and then replace the time zone with the new value.
+				 * We don't want to change date and hour in the editor, so switch to old time zone first and then replace the time zone with the new value.
 				 */
 				String newTimeZone = mDateTime.timezone;
 				mDateTime.switchTimezone(mTimezone);
 				mDateTime.timezone = newTimeZone;
 				mDateTime.normalize(true);
 				mTimezone = mDateTime.timezone;
-				mAdapter.set(contentSet, mDateTime);
-				return;
 			}
 
 			if (mOldAllDay != mDateTime.allDay)
 			{
 				/*
-				 * The allday flag has changed. Restore old time if we had any.
+				 * The allday flag has changed.
 				 */
 				mOldAllDay = mDateTime.allDay;
-				if (mOldHour >= 0 && mOldMinutes >= 0)
+				if (!mDateTime.allDay)
 				{
-					if (!mDateTime.allDay)
+					/*
+					 * Try to restore the time or set a reasonable time if we didn't have any before.
+					 */
+					if (mOldHour >= 0 && mOldMinutes >= 0)
 					{
 						mDateTime.hour = mOldHour;
 						mDateTime.minute = mOldMinutes;
 					}
-					/*
-					 * Update content set. We do that even if all day is set now, to ensure that content set contains the correct time stamp.
-					 */
+					else
+					{
+						Time defaultDate = mAdapter.getDefault(contentSet);
+						mDateTime.hour = defaultDate.hour;
+						mDateTime.minute = defaultDate.minute;
+					}
+				}
+				else
+				{
 					mAdapter.set(contentSet, mDateTime);
 				}
+			}
+
+			if (oldTime != mDateTime.toMillis(false))
+			{
+				// we changed the time, so update the content set
+				mAdapter.set(contentSet, mDateTime);
 				return;
 			}
 
