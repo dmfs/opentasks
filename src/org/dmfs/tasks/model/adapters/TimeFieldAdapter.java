@@ -98,6 +98,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		if ((allDayInt != null && allDayInt != 0) || (allDayField == null && mAllDayDefault))
 		{
 			value.set(value.monthDay, value.month, value.year);
+			value.timezone = Time.TIMEZONE_UTC;
 		}
 
 		return value;
