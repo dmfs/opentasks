@@ -16,6 +16,10 @@
  */
 package org.dmfs.tasks;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -64,11 +68,15 @@ import android.widget.Toast;
 
 public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener
 {
+
+	private static final String TAG = "TaskEditDetailFragment";
+
 	public static final String PARAM_TASK_URI = "task_uri";
 
 	public static final String LIST_LOADER_URI = "uri";
 
-	private static final String TAG = "TaskEditDetailFragment";
+	private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY,
+		Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
 
 	/**
 	 * Projection into the task list.
@@ -96,8 +104,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			Tasks.LIST_NAME)
 		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
-
-	private static final String[] INSTANCE_VALUES = new String[] { Tasks.DTSTART, Tasks.DUE, Tasks.RDATE, Tasks.RRULE };
 
 	private boolean appForEdit = true;
 	private TasksListCursorAdapter taskListAdapter;
@@ -303,9 +309,12 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			// TODO: put that in a background task
 			Log.v(TAG, "persisting task");
-			/*
-			 * if (mValues.containsAnyKey(INSTANCE_VALUES)) { mValues.ensureValues(INSTANCE_VALUES); }
-			 */
+
+			if (mValues.updatesAnyKey(RECURRENCE_VALUES))
+			{
+				mValues.ensureUpdates(RECURRENCE_VALUES);
+			}
+
 			mTaskUri = mValues.persist(activity);
 			// return proper result
 			Intent result = new Intent();

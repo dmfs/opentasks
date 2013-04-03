@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -76,6 +77,16 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	 * Holds all {@link OnContentChangeListener}s that need to be notified, because something has changed during a bulk update.
 	 */
 	private final Set<OnContentChangeListener> mPendingNotifications = new HashSet<OnContentChangeListener>();
+
+	/**
+	 * Holds the name of the keys we've updated in {@link #mAfterContentValues}.
+	 * 
+	 * Before Android SDK level 11 there is no {@link ContentValues#keySet()} method. To be able to determine the keys in there we have to maintain the set
+	 * ourselves.
+	 * 
+	 * Don't use this before calling {@link #ensureAfter()} at least once.
+	 */
+	private Set<String> mAfterKeys;
 
 
 	/**
@@ -148,6 +159,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 			context.getContentResolver().delete(mUri, null, null);
 			mBeforeContentValues = null;
 			mAfterContentValues = null;
+			mAfterKeys = null;
 			mUri = null;
 		}
 		else
@@ -204,43 +216,48 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
-	public boolean containsAnyKey(Set<String> keys)
+	public boolean updatesAnyKey(Set<String> keys)
 	{
 		if (mAfterContentValues == null)
 		{
 			return false;
 		}
-		Set<String> keySet = mAfterContentValues.keySet();
 
-		int sizeBefore = keySet.size();
-		keySet.removeAll(keys);
+		Set<String> keySet = new HashSet<String>(mAfterKeys);
 
-		// if the number of keys has changed there was at least one common key in both sets
-		return keySet.size() != sizeBefore;
+		keySet.retainAll(keys);
+
+		// if there is any element left in keySet both sets had at least one element in common
+		return keySet.size() > 0;
 	}
 
 
-	public void ensureValues(Set<String> keys)
+	public void ensureUpdates(Set<String> keys)
 	{
-		if (mBeforeContentValues == null)
+		if (mBeforeContentValues == null || keys == null || keys.size() == 0)
 		{
 			// nothing to do
 			return;
 		}
 
-		// make a copy of mBeforeContentValues
 		ContentValues tempValues = new ContentValues(mBeforeContentValues);
-
-		// remove all keys we don't preserver
-		for (String key : tempValues.keySet())
+		/*
+		 * Remove all values from tempValues that already are in mAfterContentValues or that are not required to be updated.
+		 * 
+		 * This is tricky because we can't rely on ContentValues.keySet(). That's why we have to iterate all keys and remove the ones we don't have to update.
+		 * Since we can't modify tempValues while iterating over its keys we have to create a temporary Set.
+		 * 
+		 * TODO: find a better way to solve this
+		 */
+		for (Entry<String, Object> entry : new HashSet<Entry<String, Object>>(tempValues.valueSet()))
 		{
-			if (!keys.contains(key))
+			String key = entry.getKey();
+			if (!keys.contains(key) || persistsKey(key))
 			{
 				tempValues.remove(key);
 			}
 		}
 
-		// add values to mAfterContentValues
 		if (mAfterContentValues != null)
 		{
 			mAfterContentValues.putAll(tempValues);
@@ -259,6 +276,8 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		{
 			values = new ContentValues();
 			mAfterContentValues = values;
+			// also create mAfterKeys
+			mAfterKeys = new HashSet<String>();
 		}
 		return values;
 	}
@@ -271,6 +290,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		{
 			// value has changed, update
 			ensureAfter().put(key, value);
+			mAfterKeys.add(key);
 			notifyUpdateListeners(key);
 		}
 	}
@@ -293,6 +313,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
 			ensureAfter().put(key, value);
+			mAfterKeys.add(key);
 			notifyUpdateListeners(key);
 		}
 	}
@@ -315,6 +336,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
 			ensureAfter().put(key, value);
+			mAfterKeys.add(key);
 			notifyUpdateListeners(key);
 		}
 	}
@@ -367,10 +389,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		if (mAfterContentValues != null)
 		{
 			mAfterContentValues.putNull(key);
+			mAfterKeys.add(key);
 		}
 		else if (mBeforeContentValues != null && mBeforeContentValues.get(key) != null)
 		{
 			ensureAfter().putNull(key);
+			mAfterKeys.add(key);
 		}
 	}
 
@@ -459,6 +483,16 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		dest.writeParcelable(mUri, flags);
 		dest.writeParcelable(mBeforeContentValues, flags);
 		dest.writeParcelable(mAfterContentValues, flags);
+
+		if (mAfterContentValues != null)
+		{
+			// It's not possible to write a Set to a parcel, so write the number of members and each member individually.
+			dest.writeInt(mAfterKeys.size());
+			for (String key : mAfterKeys)
+			{
+				dest.writeString(key);
+			}
+		}
 	}
 
 
@@ -468,6 +502,17 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		mUri = source.readParcelable(loader);
 		mBeforeContentValues = source.readParcelable(loader);
 		mAfterContentValues = source.readParcelable(loader);
+
+		if (mAfterContentValues != null)
+		{
+			int count = source.readInt();
+			Set<String> keys = new HashSet<String>();
+			while (--count >= 0)
+			{
+				keys.add(source.readString());
+			}
+			mAfterKeys = keys;
+		}
 	}
 
 	public static final Parcelable.Creator<ContentSet> CREATOR = new Parcelable.Creator<ContentSet>()
