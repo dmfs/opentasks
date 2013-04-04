@@ -19,15 +19,9 @@ package org.dmfs.tasks.model;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
-import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
-import org.dmfs.tasks.model.adapters.StringFieldAdapter;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 
 /**
@@ -67,15 +61,14 @@ public class DefaultModel extends Model
 			return;
 		}
 		// add a field for the list
-		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new StringFieldAdapter(Tasks.LIST_NAME)).setViewLayout(new LayoutDescriptor(
+		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, TaskFieldAdapters.LIST_NAME).setViewLayout(new LayoutDescriptor(
 			R.layout.text_field_view_nodivider_large).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
 			LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
-		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, new StringFieldAdapter(Tasks.ACCOUNT_NAME)).setViewLayout(new LayoutDescriptor(
+		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, TaskFieldAdapters.ACCOUNT_NAME).setViewLayout(new LayoutDescriptor(
 			R.layout.text_field_view_nodivider_small).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
 			LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
 
-		mFields
-			.add(new FieldDescriptor(mContext, R.string.task_title, new StringFieldAdapter(Tasks.TITLE)).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_title, TaskFieldAdapters.TITLE).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
 
 		ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 		aca.addHiddenChoice(null, mContext.getString(R.string.status_needs_action), null);
@@ -84,27 +77,22 @@ public class DefaultModel extends Model
 		aca.addChoice(Tasks.STATUS_COMPLETED, mContext.getString(R.string.status_completed), null);
 		aca.addChoice(Tasks.STATUS_CANCELLED, mContext.getString(R.string.status_cancelled), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_status, new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION))
-			.setViewLayout(CHOICES_VIEW).setEditorLayout(CHOICES_EDIT).setChoices(aca));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_status, TaskFieldAdapters.STATUS).setViewLayout(CHOICES_VIEW).setEditorLayout(CHOICES_EDIT)
+			.setChoices(aca));
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_location, new StringFieldAdapter(Tasks.LOCATION)).setViewLayout(TEXT_VIEW).setEditorLayout(
-			TEXT_EDIT));
-		mFields.add(new FieldDescriptor(mContext, R.string.task_description, new StringFieldAdapter(Tasks.DESCRIPTION)).setViewLayout(TEXT_VIEW)
-			.setEditorLayout(TEXT_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_location, TaskFieldAdapters.LOCATION).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
+		mFields
+			.add(new FieldDescriptor(mContext, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_start, new TimeFieldAdapter(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY)).setViewLayout(TIME_VIEW)
-			.setEditorLayout(TIME_EDIT));
-		mFields.add(new FieldDescriptor(mContext, R.string.task_due, new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY)).setViewLayout(TIME_VIEW)
-			.setEditorLayout(TIME_EDIT));
-		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, new BooleanFieldAdapter(Tasks.IS_ALLDAY)).setEditorLayout(BOOLEAN_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, TaskFieldAdapters.ALLDAY).setEditorLayout(BOOLEAN_EDIT));
 
 		TimeZoneChoicesAdapter tzaca = new TimeZoneChoicesAdapter(mContext);
-		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY, Tasks.DUE)).setEditorLayout(
-			CHOICES_EDIT).setChoices(tzaca));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_timezone, TaskFieldAdapters.TIMEZONE).setEditorLayout(CHOICES_EDIT).setChoices(tzaca));
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, new TimeFieldAdapter(Tasks.COMPLETED, null, null)).setViewLayout(TIME_VIEW)
-			.setEditorLayout(TIME_EDIT));
-		mFields.add(new FieldDescriptor(mContext, R.string.task_percent_complete, new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE)).setViewLayout(PROGRESS_VIEW)
+		mFields.add(new FieldDescriptor(mContext, R.string.task_completed, TaskFieldAdapters.COMPLETED).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_percent_complete, TaskFieldAdapters.PERCENT_COMPLETE).setViewLayout(PROGRESS_VIEW)
 			.setEditorLayout(PROGRESS_EDIT));
 
 		ArrayChoicesAdapter aca2 = new ArrayChoicesAdapter();
@@ -120,8 +108,8 @@ public class DefaultModel extends Model
 		aca2.addHiddenChoice(2, mContext.getString(R.string.priority_high), null);
 		aca2.addChoice(1, mContext.getString(R.string.priority_high), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_priority, new IntegerFieldAdapter(Tasks.PRIORITY)).setViewLayout(CHOICES_VIEW)
-			.setEditorLayout(CHOICES_EDIT).setChoices(aca2));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_priority, TaskFieldAdapters.PRIORITY).setViewLayout(CHOICES_VIEW).setEditorLayout(CHOICES_EDIT)
+			.setChoices(aca2));
 
 		ArrayChoicesAdapter aca3 = new ArrayChoicesAdapter();
 		aca3.addChoice(null, mContext.getString(R.string.classification_not_specified), null);
@@ -129,7 +117,7 @@ public class DefaultModel extends Model
 		aca3.addChoice(Tasks.CLASSIFICATION_PRIVATE, mContext.getString(R.string.classification_private), null);
 		aca3.addChoice(Tasks.CLASSIFICATION_CONFIDENTIAL, mContext.getString(R.string.classification_confidential), null);
 
-		mFields.add(new FieldDescriptor(mContext, R.string.task_classification, new IntegerFieldAdapter(Tasks.CLASSIFICATION)).setViewLayout(CHOICES_VIEW)
+		mFields.add(new FieldDescriptor(mContext, R.string.task_classification, TaskFieldAdapters.CLASSIFICATION).setViewLayout(CHOICES_VIEW)
 			.setEditorLayout(CHOICES_EDIT).setChoices(aca3));
 
 		setAllowRecurrence(false);

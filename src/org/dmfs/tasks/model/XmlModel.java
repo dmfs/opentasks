@@ -20,16 +20,10 @@ package org.dmfs.tasks.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
-import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
-import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 
 import android.content.Context;
@@ -278,7 +272,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new StringFieldAdapter(TaskContract.Tasks.TITLE);
+				return TaskFieldAdapters.TITLE;
 			}
 
 
@@ -303,7 +297,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new StringFieldAdapter(TaskContract.Tasks.LOCATION);
+				return TaskFieldAdapters.LOCATION;
 			}
 
 
@@ -328,7 +322,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new StringFieldAdapter(TaskContract.Tasks.DESCRIPTION);
+				return TaskFieldAdapters.DESCRIPTION;
 			}
 
 
@@ -353,7 +347,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new TimeFieldAdapter(TaskContract.Tasks.DTSTART, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
+				return TaskFieldAdapters.DTSTART;
 			}
 
 
@@ -378,7 +372,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new TimeFieldAdapter(TaskContract.Tasks.DUE, TaskContract.Tasks.TZ, TaskContract.Tasks.IS_ALLDAY);
+				return TaskFieldAdapters.DUE;
 			}
 
 
@@ -403,7 +397,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new TimeFieldAdapter(TaskContract.Tasks.COMPLETED, null, null);
+				return TaskFieldAdapters.COMPLETED;
 			}
 
 
@@ -428,7 +422,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new IntegerFieldAdapter(TaskContract.Tasks.PERCENT_COMPLETE);
+				return TaskFieldAdapters.PERCENT_COMPLETE;
 			}
 
 
@@ -454,7 +448,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new IntegerFieldAdapter(TaskContract.Tasks.STATUS);
+				return TaskFieldAdapters.STATUS;
 			}
 
 
@@ -487,7 +481,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new IntegerFieldAdapter(TaskContract.Tasks.PRIORITY);
+				return TaskFieldAdapters.PRIORITY;
 			}
 
 
@@ -525,7 +519,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new IntegerFieldAdapter(TaskContract.Tasks.CLASSIFICATION);
+				return TaskFieldAdapters.CLASSIFICATION;
 			}
 
 
@@ -557,7 +551,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new UrlFieldAdapter(TaskContract.Tasks.URL);
+				return TaskFieldAdapters.URL;
 			}
 
 
@@ -583,7 +577,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new BooleanFieldAdapter(TaskContract.Tasks.IS_ALLDAY);
+				return TaskFieldAdapters.ALLDAY;
 			}
 
 
@@ -608,7 +602,7 @@ public class XmlModel extends Model
 			@Override
 			public FieldAdapter<?> getFieldAdapter()
 			{
-				return new TimezoneFieldAdapter(TaskContract.Tasks.IS_ALLDAY, TaskContract.Tasks.IS_ALLDAY);
+				return TaskFieldAdapters.TIMEZONE;
 			}
 
 
