@@ -198,25 +198,32 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	public void set(ContentSet values, Time value)
 	{
 		values.startBulkUpdate();
-		if (value != null)
+		try
 		{
-			// just store all three parts separately
-			values.put(mTimestampField, value.toMillis(false));
-			if (mTzField != null)
+			checkConstraints(values, get(values), value);
+			if (value != null)
 			{
-				values.put(mTzField, value.allDay ? null : value.timezone);
+				// just store all three parts separately
+				values.put(mTimestampField, value.toMillis(false));
+				if (mTzField != null)
+				{
+					values.put(mTzField, value.allDay ? null : value.timezone);
+				}
+				if (mAllDayField != null)
+				{
+					values.put(mAllDayField, value.allDay ? 1 : 0);
+				}
 			}
-			if (mAllDayField != null)
+			else
 			{
-				values.put(mAllDayField, value.allDay ? 1 : 0);
+				// write timestamp only, other fields may still use allday and timezone
+				values.put(mTimestampField, (Long) null);
 			}
 		}
-		else
+		finally
 		{
-			// write timestamp only, other fields may still use allday and timezone
-			values.put(mTimestampField, (Long) null);
+			values.finishBulkUpdate();
 		}
-		values.finishBulkUpdate();
 	}
 
 

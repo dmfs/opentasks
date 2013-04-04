@@ -17,8 +17,12 @@
 
 package org.dmfs.tasks.model.adapters;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.contraints.AbstractConstraint;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -34,6 +38,12 @@ import android.database.Cursor;
  */
 public abstract class FieldAdapter<Type>
 {
+
+	/**
+	 * A list of constraints that are applied when a new value is set.
+	 */
+	private List<AbstractConstraint<Type>> mConstraints;
+
 
 	/**
 	 * Get the value from the given {@link ContentSet}
@@ -97,4 +107,41 @@ public abstract class FieldAdapter<Type>
 	 *            The {@link OnContentChangeListener} to unregister.
 	 */
 	public abstract void unregisterListener(ContentSet values, OnContentChangeListener listener);
+
+
+	/**
+	 * Add a new constraint to this field adapter. Constraints are evaluated in the order they have been added.
+	 * 
+	 * @param contraint
+	 *            The new constraint.
+	 */
+	public final FieldAdapter<Type> addContraint(AbstractConstraint<Type> contraint)
+	{
+		if (mConstraints == null)
+		{
+			mConstraints = new LinkedList<AbstractConstraint<Type>>();
+		}
+		mConstraints.add(contraint);
+		return this;
+	}
+
+
+	/**
+	 * Check all constraints and enforce them if possible.
+	 * 
+	 * @param currentValues
+	 *            The current {@link ContentSet}.
+	 * @param newValue
+	 *            The new value to check.
+	 */
+	protected final void checkConstraints(ContentSet currentValues, Type oldValue, Type newValue)
+	{
+		if (mConstraints != null)
+		{
+			for (AbstractConstraint<Type> constraint : mConstraints)
+			{
+				constraint.apply(currentValues, oldValue, newValue);
+			}
+		}
+	}
 }

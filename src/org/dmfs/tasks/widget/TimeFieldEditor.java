@@ -209,6 +209,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDateTime.year = year;
 		mDateTime.month = monthOfYear;
 		mDateTime.monthDay = dayOfMonth;
+		mDateTime.normalize(true);
 		mAdapter.set(mValues, mDateTime);
 	}
 

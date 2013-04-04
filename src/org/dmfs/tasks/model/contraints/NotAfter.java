@@ -18,28 +18,38 @@
 package org.dmfs.tasks.model.contraints;
 
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+
+import android.text.format.Time;
 
 
 /**
- * Defines a constraint and provides a method to check that a value complies with that constraint or enforces it if it doesn't.
+ * Ensure a time is not after a specific reference time. The new value will be set to the reference time otherwise.
  * 
  * @author Marten Gajda <marten@dmfs.org>
- * 
- * @param <T>
- *            The type of the value to check.
  */
-public abstract class AbstractConstraint<T>
+public class NotAfter extends AbstractConstraint<Time>
 {
-	/**
-	 * Checks that <code>object</code> does not violate the constraint within the context of <code>values</code>. Enforces the constraint if possible or throws
-	 * an exception if not.
-	 * 
-	 * @param currentValues
-	 *            The {@link ContentSet} to validate.
-	 * @param oldValue
-	 *            The old value, can be <code>null</code>
-	 * @param newValue
-	 *            The new value to validate, can be <code>null</code>
-	 */
-	public abstract void apply(ContentSet currentValues, T oldValue, T newValue);
+	private final TimeFieldAdapter mTimeAdapter;
+
+
+	public NotAfter(TimeFieldAdapter adapter)
+	{
+		mTimeAdapter = adapter;
+	}
+
+
+	@Override
+	public void apply(ContentSet currentValues, Time oldValue, Time newValue)
+	{
+		Time notAfterThisTime = mTimeAdapter.get(currentValues);
+		if (notAfterThisTime != null && newValue != null)
+		{
+			if (newValue.after(notAfterThisTime))
+			{
+				newValue.set(notAfterThisTime);
+			}
+		}
+	}
+
 }
