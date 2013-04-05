@@ -19,7 +19,8 @@
     <!-- Task editor -->
     <string name="activity_edit_task_title">Aufgabe bearbeiten</string>
     <string name="activity_add_task_title">Aufgabe erstellen</string>
-
+    <string name="task_editor_error_invalid_url">Ungültige URL</string>
+    
     <!-- Names of task attributes -->
 
     <string name="task_list">Liste</string>

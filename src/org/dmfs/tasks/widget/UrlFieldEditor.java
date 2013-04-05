@@ -133,6 +133,7 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 			{
 				// TODO: show a notification
 				e.printStackTrace();
+				mText.setError(getContext().getString(R.string.task_editor_error_invalid_url));
 			}
 		}
 	}

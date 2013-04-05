@@ -108,7 +108,7 @@ public final class TimeFieldView extends AbstractFieldView
 
 				formattedTime = formattedTime + " " + mDefaultTimeFormat.format(fullDate);
 
-				if (!taskTimeZone.equals(defaultTimeZone) && !Time.TIMEZONE_UTC.equals(taskTimeZone.getID()) && mTimeZoneText != null)
+				if (!taskTimeZone.equals(defaultTimeZone) && mTimeZoneText != null)
 				{
 					mDefaultDateFormat.setTimeZone(taskTimeZone);
 					mDefaultTimeFormat.setTimeZone(taskTimeZone);
