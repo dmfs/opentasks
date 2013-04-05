@@ -368,13 +368,16 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	 */
 	public void finishBulkUpdate()
 	{
-		if (--mBulkUpdates == 0)
+		if (mBulkUpdates == 1)
 		{
-			for (OnContentChangeListener listener : mPendingNotifications)
+			Set<OnContentChangeListener> listeners = new HashSet<OnContentChangeListener>(mPendingNotifications);
+			mPendingNotifications.clear();
+			for (OnContentChangeListener listener : listeners)
 			{
 				listener.onContentChanged(this);
 			}
 		}
+		--mBulkUpdates;
 	}
 
 

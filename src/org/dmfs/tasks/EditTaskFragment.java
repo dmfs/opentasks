@@ -206,8 +206,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 				if (savedInstanceState == null)
 				{
 					mValues = new ContentSet(mTaskUri);
+					mValues.addOnChangeListener(this, null, false);
 					mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
-					mValues.addOnChangeListener(this, null, true);
 				}
 				else
 				{
@@ -339,7 +339,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
-			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			// new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			setListUri(appForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
 		}
 	}
@@ -352,7 +352,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(LIST_LOADER_URI, uri);
 
-			getLoaderManager().restartLoader(0, bundle, this);
+			getLoaderManager().restartLoader(-2, bundle, this);
 		}
 	}
 
