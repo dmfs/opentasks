@@ -24,6 +24,7 @@ import java.util.TimeZone;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
 import org.dmfs.tasks.model.layout.LayoutOptions;
@@ -40,15 +41,22 @@ import android.widget.TextView;
  * Widget to display DateTime values
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
- * 
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public final class TimeFieldView extends AbstractFieldView
 {
+	/**
+	 * {@link TimeZone} UTC, we use it when showing all-day dates.
+	 */
+	private final static TimeZone UTC = TimeZone.getTimeZone(Time.TIMEZONE_UTC);
+
+	/**
+	 * The {@link FieldAdapter} of the field for this view.
+	 */
 	private TimeFieldAdapter mAdapter;
 	private TextView mText;
 	private TextView mTimeZoneText;
 	private java.text.DateFormat mDefaultDateFormat, mDefaultTimeFormat;
-	private final static TimeZone UTC = TimeZone.getTimeZone(Time.TIMEZONE_UTC);
 	private TimeZone defaultTimeZone = new TimeZoneWrapper();
 
 
@@ -102,19 +110,20 @@ public final class TimeFieldView extends AbstractFieldView
 			{
 				mDefaultDateFormat.setTimeZone(defaultTimeZone);
 				mDefaultTimeFormat.setTimeZone(defaultTimeZone);
-
-				formattedTime = mDefaultDateFormat.format(fullDate);
 				TimeZoneWrapper taskTimeZone = new TimeZoneWrapper(newValue.timezone);
 
-				formattedTime = formattedTime + " " + mDefaultTimeFormat.format(fullDate);
+				formattedTime = mDefaultDateFormat.format(fullDate) + " " + mDefaultTimeFormat.format(fullDate);
 
-				if (!taskTimeZone.equals(defaultTimeZone) && mTimeZoneText != null)
+				if (!taskTimeZone.equals(defaultTimeZone) && mAdapter.hasTimeZoneField() && mTimeZoneText != null)
 				{
+					/*
+					 * The date has a time zone that is not the default time zone, so show the original time too.
+					 */
 					mDefaultDateFormat.setTimeZone(taskTimeZone);
 					mDefaultTimeFormat.setTimeZone(taskTimeZone);
 
 					mTimeZoneText.setText(mDefaultDateFormat.format(fullDate) + " " + mDefaultTimeFormat.format(fullDate) + " "
-						+ taskTimeZone.getDisplayName(taskTimeZone.inDaylightTime(new Date(newValue.toMillis(false))), TimeZone.SHORT));
+						+ taskTimeZone.getDisplayName(taskTimeZone.inDaylightTime(fullDate), TimeZone.SHORT));
 					mTimeZoneText.setVisibility(View.VISIBLE);
 				}
 				else
@@ -124,6 +133,7 @@ public final class TimeFieldView extends AbstractFieldView
 			}
 			else
 			{
+				// all-day times are always in UTC
 				mDefaultDateFormat.setTimeZone(UTC);
 				formattedTime = mDefaultDateFormat.format(fullDate);
 			}

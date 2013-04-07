@@ -1,6 +1,4 @@
 /*
- * OnContentLoadedListener.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +19,19 @@ package org.dmfs.tasks.utils;
 
 import android.content.ContentValues;
 
-public interface OnContentLoadedListener {
-    public void onContentLoaded(ContentValues values);
+
+/**
+ * A listener that is notified when an {@link AsyncContentLoader} has finished loading a set of {@link ContentValues}.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
+public interface OnContentLoadedListener
+{
+	/**
+	 * Called when the {@link AsyncContentLoader} has loaded new {@link ContentValues}.
+	 * 
+	 * @param values
+	 *            The loaded {@link ContentValues}.
+	 */
+	public void onContentLoaded(ContentValues values);
 }

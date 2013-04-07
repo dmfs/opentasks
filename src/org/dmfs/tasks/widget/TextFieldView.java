@@ -26,21 +26,25 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 
 /**
- * A view that shows the string representation of an object.
+ * A widget that shows the string representation of an object.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TextFieldView extends AbstractFieldView
 {
-
-	private static final String TAG = "StringFieldView";
+	/**
+	 * The {@link FieldAdapter} of the field for this view.
+	 */
 	private FieldAdapter<?> mAdapter;
+
+	/**
+	 * The {@link TextView} to show the text in.
+	 */
 	private TextView mText;
 
 
@@ -67,7 +71,6 @@ public class TextFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
-		Log.d(TAG, "mText = " + mText);
 	}
 
 
@@ -83,23 +86,26 @@ public class TextFieldView extends AbstractFieldView
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		Object adapterValue = mAdapter.get(mValues);
-		String adapterStringValue = adapterValue != null ? adapterValue.toString() : null;
+		if (mValues != null)
+		{
+			Object adapterValue = mAdapter.get(mValues);
+			String adapterStringValue = adapterValue != null ? adapterValue.toString() : null;
 
-		if (mValues != null && !TextUtils.isEmpty(adapterStringValue))
-		{
-			mText.setText(adapterStringValue);
-		}
-		else
-		{
-			// don't show empty values
-			setVisibility(View.GONE);
-		}
+			if (!TextUtils.isEmpty(adapterStringValue))
+			{
+				mText.setText(adapterStringValue);
 
-		Integer customBackgroud = getCustomBackgroundColor();
-		if (customBackgroud != null)
-		{
-			mText.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
+				Integer customBackgroud = getCustomBackgroundColor();
+				if (customBackgroud != null)
+				{
+					mText.setTextColor(getTextColorFromBackground(customBackgroud));
+				}
+			}
+			else
+			{
+				// don't show empty values
+				setVisibility(View.GONE);
+			}
 		}
 	}
 }

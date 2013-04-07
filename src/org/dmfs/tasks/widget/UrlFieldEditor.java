@@ -23,6 +23,7 @@ import java.net.URL;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
@@ -43,8 +44,14 @@ import android.widget.EditText;
  */
 public final class UrlFieldEditor extends AbstractFieldEditor implements TextWatcher
 {
-
+	/**
+	 * The {@link FieldAdapter} of the field for this view.
+	 */
 	private UrlFieldAdapter mAdapter;
+
+	/**
+	 * The {@link EditText} to edit the URL.
+	 */
 	private EditText mText;
 
 
@@ -131,9 +138,8 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 			}
 			catch (MalformedURLException e)
 			{
-				// TODO: show a notification
-				e.printStackTrace();
 				mText.setError(getContext().getString(R.string.task_editor_error_invalid_url));
+				e.printStackTrace();
 			}
 		}
 	}

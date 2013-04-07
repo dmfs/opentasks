@@ -24,7 +24,6 @@ import org.dmfs.tasks.model.Sources;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 
 /**
@@ -34,9 +33,16 @@ import android.util.Log;
  */
 public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 {
-
+	/**
+	 * Stores the listener in a {@link WeakReference}. The loader may take longer to load than the lister lives. We don't want to prevent the listener from been
+	 * garbage collected.
+	 */
 	private WeakReference<OnModelLoadedListener> mListener;
-	private Context mContext;
+
+	/**
+	 * The {@link Context} we're running in, stored in a {@link WeakReference}.
+	 */
+	private WeakReference<Context> mContext;
 
 
 	/**
@@ -49,9 +55,8 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 	 */
 	public AsyncModelLoader(Context context, OnModelLoadedListener listener)
 	{
-		mContext = context;
+		mContext = new WeakReference<Context>(context);
 		mListener = new WeakReference<OnModelLoadedListener>(listener);
-		Log.v("äääääääääää", " ~~~~~~~~~~~~~~~~~~~~~~~~~created " + this);
 	}
 
 
@@ -59,40 +64,23 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 	protected final Model doInBackground(String... accountTypes)
 	{
 		final OnModelLoadedListener target = mListener.get();
+		final Context context = mContext.get();
 
 		if (target != null)
 		{
-
-			Sources sources = Sources.getInstance(mContext);
-			Model rModel;
-			rModel = sources.getModel(accountTypes[0]);
-			if (rModel == null)
+			Sources sources = Sources.getInstance(context);
+			Model model = sources.getModel(accountTypes[0]);
+			if (model == null)
 			{
-				rModel = sources.getDefaultModel();
+				model = sources.getDefaultModel();
 			}
-			return rModel;
+			return model;
 		}
 		else
 		{
 			return null;
 		}
 	}
-
-	@Override
-	protected void finalize()
-	{
-		try
-		{
-			super.finalize();
-		}
-		catch (Throwable e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Log.v("äääääääääää", " ~~~~~~~~~~~~~~~~~~~~~~~~~finalzed " + this);
-	}
-
 
 
 	@Override

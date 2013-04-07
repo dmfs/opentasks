@@ -17,6 +17,7 @@
 
 package org.dmfs.tasks;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -24,6 +25,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
+/**
+ * Activity to edit a task.
+ * 
+ * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public class EditTaskActivity extends FragmentActivity
 {
 	@Override
@@ -32,10 +39,13 @@ public class EditTaskActivity extends FragmentActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_editor);
 
-		// Show the Up button in the action bar.
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+			// hide up button in action bar
+			ActionBar actionBar = getActionBar();
+			actionBar.setDisplayShowHomeEnabled(false);
+			actionBar.setDisplayHomeAsUpEnabled(false);
+			// actionBar.setDisplayShowTitleEnabled(false);
 		}
 
 		if (savedInstanceState == null)

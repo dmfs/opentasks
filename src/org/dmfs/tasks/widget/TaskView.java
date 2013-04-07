@@ -17,16 +17,19 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.Model;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 
 
+/**
+ * Detail view of a task.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public class TaskView extends BaseTaskView
 {
 
@@ -48,6 +51,12 @@ public class TaskView extends BaseTaskView
 	}
 
 
+	/**
+	 * Set the {@link Model} to use when showing the detail view.
+	 * 
+	 * @param model
+	 *            The {@link Model}.
+	 */
 	public void setModel(Model model)
 	{
 		Model mModel = model;
@@ -62,20 +71,6 @@ public class TaskView extends BaseTaskView
 			if (detailView != null)
 			{
 				addView(detailView);
-			}
-		}
-	}
-
-
-	public void setValues(ContentSet values)
-	{
-		int children = this.getChildCount();
-		for (int i = 0; i < children; ++i)
-		{
-			View child = getChildAt(i);
-			if (child instanceof AbstractFieldView)
-			{
-				((AbstractFieldView) child).setValue(values);
 			}
 		}
 	}

@@ -27,21 +27,25 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 
 /**
- * A view that shows the URL which is clickable.
+ * A view that shows the a clickable URL.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
 public final class UrlFieldView extends AbstractFieldView
 {
-
-	private static final String TAG = "UrlFieldView";
+	/**
+	 * The {@link FieldAdapter} of the field for this view.
+	 */
 	private FieldAdapter<?> mAdapter;
+
+	/**
+	 * The {@link TextView} to show the URL in.
+	 */
 	private TextView mText;
 
 
@@ -65,22 +69,6 @@ public final class UrlFieldView extends AbstractFieldView
 
 
 	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		if (mValues != null && mAdapter.get(mValues) != null)
-		{
-			String urlString = mAdapter.get(mValues).toString();
-			mText.setText(Html.fromHtml("<a href='" + urlString + "'>" + urlString + "</a>"));
-		}
-		else
-		{
-			setVisibility(View.GONE);
-		}
-
-	}
-
-
-	@Override
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
@@ -88,12 +76,11 @@ public final class UrlFieldView extends AbstractFieldView
 
 		if (mText == null)
 		{
+			// on older Android version onFinishInflate can be called multiple times if the view contains includes
 			return;
 		}
 
 		MovementMethod mMethod = LinkMovementMethod.getInstance();
-		Log.d(TAG, "mMethod = " + mMethod);
-		Log.d(TAG, "mText = " + mText);
 		mText.setMovementMethod(mMethod);
 	}
 
@@ -106,4 +93,21 @@ public final class UrlFieldView extends AbstractFieldView
 		mText.setHint(descriptor.getHint());
 	}
 
+
+	@Override
+	public void onContentChanged(ContentSet contentSet)
+	{
+		Object value;
+		if (mValues != null && (value = mAdapter.get(mValues)) != null)
+		{
+			String urlString = value.toString();
+			mText.setText(Html.fromHtml("<a href='" + urlString + "'>" + urlString + "</a>"));
+			setVisibility(View.VISIBLE);
+		}
+		else
+		{
+			setVisibility(View.GONE);
+		}
+
+	}
 }

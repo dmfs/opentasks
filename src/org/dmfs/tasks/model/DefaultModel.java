@@ -27,8 +27,6 @@ import android.content.Context;
 /**
  * The default model for sync adapters that don't provide a model definition.
  * 
- * TODO: support only a very simple task model
- * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class DefaultModel extends Model

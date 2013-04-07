@@ -26,8 +26,6 @@ import android.text.format.Time;
 /**
  * Shift a reference time by the same amount that value has been shifted.
  * 
- * TODO: this won't work properly until ContentSet supports some kind of transactions.
- * 
  * TODO: use Duration class to get the duration in days and shift without summer/winter time switches
  * 
  * @author Marten Gajda <marten@dmfs.org>
@@ -37,6 +35,12 @@ public class ShiftTime extends AbstractConstraint<Time>
 	private final TimeFieldAdapter mTimeAdapter;
 
 
+	/**
+	 * Creates a new ShiftTime instance.
+	 * 
+	 * @param adapter
+	 *            A {@link TimeFieldAdapter} that knows how to load the value to shift.
+	 */
 	public ShiftTime(TimeFieldAdapter adapter)
 	{
 		mTimeAdapter = adapter;

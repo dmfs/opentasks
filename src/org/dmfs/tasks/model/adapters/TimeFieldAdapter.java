@@ -227,6 +227,17 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	}
 
 
+	/**
+	 * Return whether this adapter reads the time zone field.
+	 * 
+	 * @return <code>true</code> if this adapter evaluates any time zone field, <code>false</code> otherwise.
+	 */
+	public boolean hasTimeZoneField()
+	{
+		return mTzField != null;
+	}
+
+
 	@Override
 	public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
 	{

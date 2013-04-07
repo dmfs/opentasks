@@ -1,6 +1,4 @@
 /*
- * RecurrenceRuleView.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,28 +14,38 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
+
 /**
- * Editor Field for simple text.
+ * Widget to view recurrence rules.
+ * 
+ * TODO: Implement it.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
 
-public class RecurrenceRuleView extends TextFieldView {
+public class RecurrenceRuleView extends TextFieldView
+{
 
-	public RecurrenceRuleView(Context context) {
+	public RecurrenceRuleView(Context context)
+	{
 		super(context);
 	}
 
-	public RecurrenceRuleView(Context context, AttributeSet attrs) {
+
+	public RecurrenceRuleView(Context context, AttributeSet attrs)
+	{
 		super(context, attrs);
 	}
 
-	public RecurrenceRuleView(Context context, AttributeSet attrs, int defStyle) {
+
+	public RecurrenceRuleView(Context context, AttributeSet attrs, int defStyle)
+	{
 		super(context, attrs, defStyle);
 	}
 

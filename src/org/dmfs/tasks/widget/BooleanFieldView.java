@@ -16,6 +16,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.R;

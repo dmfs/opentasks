@@ -1,6 +1,4 @@
 /*
- * OnModelLoadedListener.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +21,7 @@ import org.dmfs.tasks.model.Model;
 
 
 /**
- * Interface for a listener that is notified when a {@link AsyncModelLoader} has loaded a model.
+ * A listener that is notified when a {@link AsyncModelLoader} has loaded a model.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

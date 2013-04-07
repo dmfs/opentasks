@@ -31,15 +31,15 @@ import org.dmfs.tasks.model.ContentSet;
 public abstract class AbstractConstraint<T>
 {
 	/**
-	 * Checks that <code>object</code> does not violate the constraint within the context of <code>values</code>. Enforces the constraint if possible or throws
-	 * an exception if not.
+	 * Checks that <code>newValue</code> does not violate the constraint within the context of <code>currentValues</code>. Enforces the constraint if possible
+	 * or throws an exception if not.
 	 * 
 	 * @param currentValues
 	 *            The {@link ContentSet} to validate.
 	 * @param oldValue
-	 *            The old value, can be <code>null</code>
+	 *            The old value, can be <code>null</code>.
 	 * @param newValue
-	 *            The new value to validate, can be <code>null</code>
+	 *            The new value to validate, can be <code>null</code>.
 	 */
 	public abstract void apply(ContentSet currentValues, T oldValue, T newValue);
 }

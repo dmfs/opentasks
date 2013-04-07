@@ -29,6 +29,7 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
@@ -36,6 +37,7 @@ import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
@@ -48,18 +50,56 @@ import android.widget.TimePicker;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetListener, OnTimeSetListener
+public final class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetListener, OnTimeSetListener, OnClickListener
 {
+	/**
+	 * The adapter to load the values from a {@link ContentSet}.
+	 */
 	private TimeFieldAdapter mAdapter;
+
+	/**
+	 * The buttons to show the current date and time and to launch the date & time pickers.
+	 */
 	private Button mDatePickerButton, mTimePickerButton;
+
+	/**
+	 * The button to clear the current date.
+	 */
 	private ImageButton mClearDateButton;
+
+	/**
+	 * The {@link DateFormat} instances to format date and time in a local representation to present it to the user.
+	 */
 	private DateFormat mDefaultDateFormat, mDefaultTimeFormat;
+
+	/**
+	 * The current time this editor represents.
+	 */
 	private Time mDateTime;
+
+	/**
+	 * The last time zone used. This is used to restore the time zone when the date is switched to all-day and back.
+	 */
 	private String mTimezone;
-	private boolean mOldAllDay = false;
+
+	/**
+	 * Indicates that the date has been changed and we have to update the UI.
+	 */
 	private boolean mUpdated = false;
+
+	/**
+	 * The hour we have shown last. This is used to restore the hour when switching to all-day and back.
+	 */
 	private int mOldHour = -1;
+
+	/**
+	 * The minutes we have shown last. This is used to restore the minutes when switching to all-day and back.
+	 */
 	private int mOldMinutes = -1;
+
+	/**
+	 * Indicates whether to show the time in 24 hour format or not.
+	 */
 	private boolean mIs24hour;
 
 
@@ -88,19 +128,17 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDatePickerButton = (Button) findViewById(R.id.task_date_picker);
 		mTimePickerButton = (Button) findViewById(R.id.task_time_picker);
 		mClearDateButton = (ImageButton) findViewById(R.id.task_time_picker_remove);
-		if (mDatePickerButton != null && mTimePickerButton != null && mClearDateButton != null)
+		if (mDatePickerButton != null)
 		{
-			mDatePickerButton.setOnClickListener(DatePickerHandler);
-			mTimePickerButton.setOnClickListener(TimePickerHandler);
-			mClearDateButton.setOnClickListener(new OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					mUpdated = true;
-					mAdapter.validateAndSet(mValues, null);
-				}
-			});
+			mDatePickerButton.setOnClickListener(this);
+		}
+		if (mTimePickerButton != null)
+		{
+			mTimePickerButton.setOnClickListener(this);
+		}
+		if (mClearDateButton != null)
+		{
+			mClearDateButton.setOnClickListener(this);
 		}
 	}
 
@@ -127,10 +165,12 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		}
 	}
 
-	private OnClickListener DatePickerHandler = new OnClickListener()
+
+	@Override
+	public void onClick(View v)
 	{
-		@Override
-		public void onClick(View v)
+		final int id = v.getId();
+		if (id == R.id.task_date_picker || id == R.id.task_time_picker)
 		{
 			if (mDateTime == null)
 			{
@@ -138,27 +178,24 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				applyTimeInTimeZone(mDateTime, TimeZone.getDefault().getID());
 			}
 
-			DatePickerDialog dateDialog = new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
-
-			dateDialog.show();
-		}
-	};
-
-	private final OnClickListener TimePickerHandler = new OnClickListener()
-	{
-		@Override
-		public void onClick(View v)
-		{
-			if (mDateTime == null)
+			Dialog dialog;
+			if (id == R.id.task_date_picker)
 			{
-				mDateTime = mAdapter.getDefault(mValues);
-				applyTimeInTimeZone(mDateTime, TimeZone.getDefault().getID());
+				dialog = new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
+			}
+			else
+			{
+				dialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, mIs24hour);
 			}
 
-			TimePickerDialog timeDialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, mIs24hour);
-			timeDialog.show();
+			dialog.show();
 		}
-	};
+		else if (id == R.id.task_time_picker_remove)
+		{
+			mUpdated = true;
+			mAdapter.validateAndSet(mValues, null);
+		}
+	}
 
 
 	/**
@@ -168,15 +205,15 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	 * </p>
 	 * 
 	 * <pre>
-	 * time: 2013-04-02 16:00 Europe/Berlin (GMT+02:00)
-	 * timeZone: America/New_York (GMT-04:00)
+	 * input time: 2013-04-02 16:00 Europe/Berlin (GMT+02:00)
+	 * input timeZone: America/New_York (GMT-04:00)
 	 * 
 	 * will result in
 	 * 
 	 * 2013-04-02 10:00 Europe/Berlin (because the original time is equivalent to 2013-04-02 10:00 America/New_York)
 	 * </pre>
 	 * 
-	 * All-day times are not affected.
+	 * All-day times are not modified.
 	 * 
 	 * @param time
 	 *            The {@link Time} to update.
@@ -189,11 +226,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		if (!time.allDay)
 		{
 			/*
-			 * The default value will be <now> in any time zone. What we want is that the date picker shows the current local time not the time in that time
-			 * zone.
-			 * 
-			 * To fix that we switch to the local time zone and reset the time zone to original time zone. That updates date & time to the local values and
-			 * keeps the original time zone.
+			 * Switch to timeZone and reset back to original time zone. That updates date & time to the values in timeZone but keeps the original time zone.
 			 */
 			String originalTimeZone = time.timezone;
 			time.switchTimezone(timeZone);
@@ -244,7 +277,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				/*
 				 * Time zone has been changed.
 				 * 
-				 * We don't want to change date and hour in the editor, so change the values.
+				 * We don't want to change date and hour in the editor, so apply the old time zone.
 				 */
 				applyTimeInTimeZone(newTime, mDateTime.timezone);
 			}
@@ -252,9 +285,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			if (mDateTime != null && mDateTime.allDay != newTime.allDay)
 			{
 				/*
-				 * The allday flag has changed, we may have to restore time and time zone for the UI or to store a valid all-day time.
+				 * The all-day flag has been changed, we may have to restore time and time zone for the UI.
 				 */
-				// mOldAllDay = newTime.allDay;
 				if (!newTime.allDay)
 				{
 					/*
@@ -298,38 +330,66 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			 * Update UI. Ensure we show the time in the correct time zone.
 			 */
 			Date currentDate = new Date(newTime.toMillis(false));
-			mDefaultDateFormat.setTimeZone(TimeZone.getTimeZone(newTime.timezone));
-			String formattedDate = mDefaultDateFormat.format(currentDate);
-			mDatePickerButton.setText(formattedDate);
+			TimeZone timeZone = TimeZone.getTimeZone(newTime.timezone);
+
+			if (mDatePickerButton != null)
+			{
+				mDefaultDateFormat.setTimeZone(timeZone);
+				String formattedDate = mDefaultDateFormat.format(currentDate);
+				mDatePickerButton.setText(formattedDate);
+			}
+
+			if (mTimePickerButton != null)
+			{
+				if (!newTime.allDay)
+				{
+					mDefaultTimeFormat.setTimeZone(timeZone);
+					String formattedTime = mDefaultTimeFormat.format(currentDate);
+					mTimePickerButton.setText(formattedTime);
+					mTimePickerButton.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					mTimePickerButton.setVisibility(View.GONE);
+				}
+			}
 
 			if (!newTime.allDay)
 			{
-				mDefaultTimeFormat.setTimeZone(TimeZone.getTimeZone(newTime.timezone));
-				String formattedTime = mDefaultTimeFormat.format(currentDate);
-				mTimePickerButton.setText(formattedTime);
-				mTimePickerButton.setVisibility(View.VISIBLE);
 				mOldHour = newTime.hour;
 				mOldMinutes = newTime.minute;
 			}
-			else
+
+			if (mClearDateButton != null)
 			{
-				mTimePickerButton.setVisibility(View.GONE);
+				mClearDateButton.setEnabled(true);
 			}
-			mClearDateButton.setEnabled(true);
 
 			if (mDateTime == null || Time.compare(newTime, mDateTime) != 0 || !TextUtils.equals(newTime.timezone, mDateTime.timezone)
-				|| mDateTime.allDay != newTime.allDay)
+				|| newTime.allDay != mDateTime.allDay)
 			{
+				// We have modified the time, so update contentSet.
 				mDateTime = newTime;
 				mAdapter.set(contentSet, newTime);
 			}
 		}
 		else
 		{
-			mDatePickerButton.setText("");
-			mTimePickerButton.setText("");
-			mTimePickerButton.setVisibility(mAdapter.isAllDay(mValues) ? View.GONE : View.VISIBLE);
-			mClearDateButton.setEnabled(false);
+			if (mDatePickerButton != null)
+			{
+				mDatePickerButton.setText("");
+			}
+
+			if (mTimePickerButton != null)
+			{
+				mTimePickerButton.setText("");
+				mTimePickerButton.setVisibility(mAdapter.isAllDay(mValues) ? View.GONE : View.VISIBLE);
+			}
+
+			if (mClearDateButton != null)
+			{
+				mClearDateButton.setEnabled(false);
+			}
 			mTimezone = null;
 		}
 

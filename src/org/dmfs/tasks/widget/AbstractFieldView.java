@@ -29,7 +29,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -43,15 +42,30 @@ import android.widget.TextView;
 public abstract class AbstractFieldView extends LinearLayout implements OnContentChangeListener
 {
 
-	private final static String TAG = "AbstractFieldView";
-
+	/**
+	 * A {@link FieldAdapter} that knows how to load the color of the task list.
+	 */
 	private final static IntegerFieldAdapter LIST_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.LIST_COLOR);
+
+	/**
+	 * A {@link FieldAdapter} that knows how to load the color of a task.
+	 */
 	private final static IntegerFieldAdapter TASK_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.TASK_COLOR);
 
+	/**
+	 * The {@link ContentSet} that contains the value for this widget.
+	 */
 	protected ContentSet mValues;
-	protected FieldDescriptor fieldDescriptor;
 
-	protected LayoutOptions layoutOptions;
+	/**
+	 * The {@link FieldDescriptor} that describes the field we show.
+	 */
+	protected FieldDescriptor mFieldDescriptor;
+
+	/**
+	 * The {@link LayoutOptions} for this widget.
+	 */
+	protected LayoutOptions mLayoutOptions;
 
 
 	public AbstractFieldView(Context context)
@@ -72,21 +86,31 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
+	/**
+	 * Set the {@link ContentSet} that contains the value for this widget.
+	 * 
+	 * @param values
+	 *            A {@link ContentSet} containing the value.
+	 */
 	public void setValue(ContentSet values)
 	{
-		FieldAdapter<?> adapter = fieldDescriptor.getFieldAdapter();
+		FieldAdapter<?> adapter = mFieldDescriptor.getFieldAdapter();
 		if (mValues != null)
 		{
-			// remove us if the ContentSet changes
+			// remove us from the old ContentSet if the ContentSet changes
 			adapter.unregisterListener(mValues, this);
 		}
 
 		mValues = values;
+
+		// set custom background color, if any
 		Integer customBackgroud = getCustomBackgroundColor();
 		if (customBackgroud != null)
 		{
 			setBackgroundColor(customBackgroud);
 		}
+
+		// register listener for updates
 		if (values != null)
 		{
 			adapter.registerListener(values, this, true);
@@ -94,15 +118,20 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
+	/**
+	 * Return a custom background color to set for this widget, can be <code>null</code> if this widget doesn't use a custom background color.
+	 * 
+	 * @return A custom color or <code>null</code>.
+	 */
 	public Integer getCustomBackgroundColor()
 	{
 		if (mValues != null)
 		{
-			if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
+			if (mLayoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
 			{
 				return LIST_COLOR_ADAPTER.get(mValues);
 			}
-			else if (layoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_BACKGROUND_COLOR, false))
+			else if (mLayoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_BACKGROUND_COLOR, false))
 			{
 				Integer taskColor = TASK_COLOR_ADAPTER.get(mValues);
 				return taskColor == null ? LIST_COLOR_ADAPTER.get(mValues) : taskColor;
@@ -112,10 +141,18 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
+	/**
+	 * Sets the {@link FieldDescriptor} for this widget.
+	 * 
+	 * @param descriptor
+	 *            The {@link FieldDescriptor} that describes the field this widget shall show.
+	 * @param options
+	 *            Any {@link LayoutOptions}.
+	 */
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions options)
 	{
-		layoutOptions = options;
-		fieldDescriptor = descriptor;
+		mLayoutOptions = options;
+		mFieldDescriptor = descriptor;
 		TextView titleId = (TextView) findViewById(android.R.id.title);
 		if (titleId != null)
 		{
@@ -136,16 +173,24 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
+	/**
+	 * Make up a text color for a given background color.
+	 * <p>
+	 * This method determines an approximate luminance of the background color and returns white for dark colors and a dark gray for bright colors.
+	 * </p>
+	 * 
+	 * @param color
+	 *            The background color.
+	 * @return An appropriate text color.
+	 */
 	public static int getTextColorFromBackground(int color)
 	{
 		int redComponent = Color.red(color);
 		int greenComponent = Color.green(color);
 		int blueComponent = Color.blue(color);
 		int alphaComponent = Color.alpha(color);
-		Log.d(TAG, "Red Component : " + redComponent);
 		int determinant = ((redComponent + redComponent + redComponent + blueComponent + greenComponent + greenComponent + greenComponent + greenComponent) >> 3)
 			* alphaComponent / 255;
-		Log.d(TAG, "Determinant : " + determinant);
 		// Value 180 has been set by trial and error.
 		if (determinant > 180)
 		{

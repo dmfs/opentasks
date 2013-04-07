@@ -118,7 +118,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (FieldAdapter<Object>) descriptor.getFieldAdapter();
 
-		IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
+		IChoicesAdapter choicesAdapter = mFieldDescriptor.getChoices();
 		mSpinnerAdapter = new ChoicesSpinnerAdapter(getContext(), choicesAdapter);
 		mSpinner.setAdapter(mSpinnerAdapter);
 	}

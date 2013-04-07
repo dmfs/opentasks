@@ -1,6 +1,4 @@
 /*
- * RecurrenceRuleEditor.java
- *
  * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,29 +14,38 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
+
 /**
- * Editor Field for Recurrence Rule.
+ * Editor widget for recurrence rules.
+ * 
+ * TODO: Implement it.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
 
-public class RecurrenceRuleEditor extends TextFieldEditor {
+public class RecurrenceRuleEditor extends TextFieldEditor
+{
 
-	public RecurrenceRuleEditor(Context context) {
+	public RecurrenceRuleEditor(Context context)
+	{
 		super(context);
 	}
 
-	public RecurrenceRuleEditor(Context context, AttributeSet attrs) {
+
+	public RecurrenceRuleEditor(Context context, AttributeSet attrs)
+	{
 		super(context, attrs);
 	}
 
-	public RecurrenceRuleEditor(Context context, AttributeSet attrs,
-			int defStyle) {
+
+	public RecurrenceRuleEditor(Context context, AttributeSet attrs, int defStyle)
+	{
 		super(context, attrs, defStyle);
 	}
 

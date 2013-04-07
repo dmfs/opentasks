@@ -24,7 +24,11 @@ import java.util.List;
 public abstract class Model
 {
 
-	final ArrayList<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
+	/**
+	 * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
+	 */
+	final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
+
 	boolean inflated = false;
 
 	private boolean mAllowRecurrence = false;

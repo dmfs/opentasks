@@ -25,26 +25,35 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 
 
 /**
- * An asynchronous content loader. Loads all values of the given {@link Uri}s asynchronously and notifies a listener when the operation is finished.
+ * An asynchronous content loader. Loads all values of the given {@link Uri}s asynchronously and notifies a listener when the operation has finished.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 {
-
-	private static final String TAG = "AsyncContentLoader";
+	/**
+	 * Stores the listener in a {@link WeakReference}. The loader may take longer to load than the lister lives. We don't want to prevent the listener from been
+	 * garbage collected.
+	 */
 	private WeakReference<OnContentLoadedListener> mListener;
+
+	/**
+	 * The {@link ContentValueMapper} to use when loading the values.
+	 */
 	private ContentValueMapper mMapper;
-	private Context mContext;
+
+	/**
+	 * The {@link Context} we're running in, stored in a {@link WeakReference}.
+	 */
+	private WeakReference<Context> mContext;
 
 
 	public AsyncContentLoader(Context context, OnContentLoadedListener listener, ContentValueMapper mapper)
 	{
-		mContext = context;
+		mContext = new WeakReference<Context>(context);
 		mListener = new WeakReference<OnContentLoadedListener>(listener);
 		mMapper = mapper;
 	}
@@ -54,18 +63,17 @@ public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 	protected final ContentValues[] doInBackground(Uri... params)
 	{
 		final OnContentLoadedListener target = mListener.get();
+		final Context context = mContext.get();
 
-		if (target != null)
+		if (target != null && context != null)
 		{
-
 			ContentValues[] result = new ContentValues[params.length];
 
-			ContentResolver resolver = mContext.getContentResolver();
+			ContentResolver resolver = context.getContentResolver();
 
 			int len = params.length;
 			for (int i = 0; i < len; ++i)
 			{
-				Log.d(TAG, "Loading Content ith Values: " + (i + 1));
 				Cursor c = resolver.query(params[i], mMapper.getColumns(), null, null, null);
 				try
 				{
@@ -94,8 +102,6 @@ public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 	@Override
 	protected final void onPostExecute(ContentValues[] result)
 	{
-		Log.d(TAG, "Executing onPostExecute after loading ContentValues");
-
 		final OnContentLoadedListener target = mListener.get();
 		if (target != null)
 		{

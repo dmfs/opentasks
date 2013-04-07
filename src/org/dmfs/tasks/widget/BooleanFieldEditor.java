@@ -16,6 +16,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.model.ContentSet;
@@ -25,7 +26,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -39,29 +39,25 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  */
 public class BooleanFieldEditor extends AbstractFieldEditor implements OnCheckedChangeListener
 {
-	private static final String TAG = "BooleanFieldEditor";
-	CheckBox mCheckBox;
-	BooleanFieldAdapter mAdapter;
+	private CheckBox mCheckBox;
+	private BooleanFieldAdapter mAdapter;
 
 
 	public BooleanFieldEditor(Context context)
 	{
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 
 
 	public BooleanFieldEditor(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 
 
 	public BooleanFieldEditor(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 	}
 
 
@@ -88,10 +84,13 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		Boolean newValue = mAdapter.get(mValues);
-		if (mValues != null && newValue != null)
+		if (mValues != null)
 		{
-			mCheckBox.setChecked(newValue.booleanValue());
+			Boolean newValue = mAdapter.get(mValues);
+			if (newValue != null)
+			{
+				mCheckBox.setChecked(newValue.booleanValue());
+			}
 		}
 	}
 
@@ -99,7 +98,6 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
-		Log.d(TAG, "Changed : " + isChecked);
 		mAdapter.set(mValues, isChecked);
 	}
 

@@ -21,6 +21,14 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 
 
+/**
+ * An {@link IChoicesAdapter} implementation that loads all values from a cursor.
+ * <p>
+ * TODO: This is merely a stub. It doesn't do anything useful yet.
+ * </p>
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public class CursorChoicesAdapter implements IChoicesAdapter
 {
 
@@ -39,7 +47,7 @@ public class CursorChoicesAdapter implements IChoicesAdapter
 	@Override
 	public String getTitle(Object object)
 	{
-		// return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
+		//	 return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
 		return null;
 	}
 

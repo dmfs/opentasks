@@ -17,11 +17,19 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.model.ContentSet;
+
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 
 
+/**
+ * Base view for task detail and editor views.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public abstract class BaseTaskView extends LinearLayout
 {
 
@@ -42,4 +50,23 @@ public abstract class BaseTaskView extends LinearLayout
 		super(context, attrs, defStyle);
 	}
 
+
+	/**
+	 * Set the {@link ContentSet} containing the values for the widgets in this view.
+	 * 
+	 * @param values
+	 *            The values to insert into the widgets.
+	 */
+	public void setValues(ContentSet values)
+	{
+		int children = this.getChildCount();
+		for (int i = 0; i < children; ++i)
+		{
+			View child = getChildAt(i);
+			if (child instanceof AbstractFieldView)
+			{
+				((AbstractFieldView) child).setValue(values);
+			}
+		}
+	}
 }

@@ -90,7 +90,7 @@ public class ChoicesFieldView extends AbstractFieldView
 	{
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
-			IChoicesAdapter choicesAdapter = fieldDescriptor.getChoices();
+			IChoicesAdapter choicesAdapter = mFieldDescriptor.getChoices();
 			if (choicesAdapter == null)
 			{
 				mText.setText(mAdapter.get(mValues).toString());
