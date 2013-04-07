@@ -79,7 +79,7 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 			 * enable memory leak workaround: disable spell checker
 			 */
 			int inputType = mText.getInputType();
-			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_URI);
 		}
 	}
 

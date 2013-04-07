@@ -68,7 +68,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	private ViewGroup mContent;
 	private Model mModel;
 	private Context mAppContext;
-
+	private TaskView mDetailView;
 	private Callback mCallback;
 
 	public interface Callback
@@ -128,9 +128,21 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public void onDestroyView()
 	{
 		super.onDestroyView();
+		Log.v(TAG, "onDestroyView");
+		if (mContent != null)
+		{
+			mContent.removeAllViews();
+		}
+
 		if (mTaskUri != null)
 		{
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
+		}
+
+		if (mDetailView != null)
+		{
+			// remove values, to ensure all listeners get released
+			mDetailView.setValues(null);
 		}
 	}
 
@@ -233,13 +245,19 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		{
 			final LayoutInflater inflater = (LayoutInflater) mAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+			if (mDetailView != null)
+			{
+				// remove values, to ensure all listeners get released
+				mDetailView.setValues(null);
+			}
+
 			mContent.removeAllViews();
 			if (mContentSet != null)
 			{
-				TaskView detailView = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
-				detailView.setModel(mModel);
-				detailView.setValues(mContentSet);
-				mContent.addView(detailView);
+				mDetailView = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
+				mDetailView.setModel(mModel);
+				mDetailView.setValues(mContentSet);
+				mContent.addView(mDetailView);
 			}
 		}
 	}

@@ -35,14 +35,14 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 {
 	LayoutInflater mInflater;
 
-	private int taskColorColumn;
-	private int taskNameColumn;
-	private int accountNameColumn;
+	private int mTaskColorColumn;
+	private int mTaskNameColumn;
+	private int mAccountNameColumn;
 
 
 	public TasksListCursorAdapter(Context context)
 	{
-		super(context, null, false);
+		super(context, null, 0 /* don't register a content observer to avoid a context leak! */);
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
@@ -53,9 +53,9 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		super.changeCursor(c);
 		if (c != null)
 		{
-			taskColorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
-			taskNameColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME);
-			accountNameColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
+			mTaskColorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
+			mTaskNameColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME);
+			mAccountNameColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
 		}
 	}
 
@@ -63,13 +63,14 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	@Override
 	public void bindView(View v, Context context, Cursor c)
 	{
-
+		/* Since we override getView and get DropDownView we don't need this method. */
 	}
 
 
 	@Override
 	public View newView(Context context, Cursor c, ViewGroup vg)
 	{
+		/* Since we override getView and get DropDownView we don't need this method. */
 		return null;
 	}
 
@@ -80,15 +81,15 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		if (convertView == null)
 		{
 			convertView = mInflater.inflate(R.layout.list_spinner_item_selected, null);
-
 		}
+
 		TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
 		TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
 		Cursor cursor = (Cursor) getItem(position);
 
-		listName.setText(cursor.getString(taskNameColumn));
-		accountName.setText(cursor.getString(accountNameColumn));
-		int taskListColor = cursor.getInt(taskColorColumn);
+		listName.setText(cursor.getString(mTaskNameColumn));
+		accountName.setText(cursor.getString(mAccountNameColumn));
+		int taskListColor = cursor.getInt(mTaskColorColumn);
 		int backgroundBasedColor = AbstractFieldView.getTextColorFromBackground(taskListColor);
 
 		listName.setTextColor(backgroundBasedColor);
@@ -110,9 +111,9 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
 		Cursor cursor = (Cursor) getItem(position);
 
-		listColor.setBackgroundColor(cursor.getInt(taskColorColumn));
-		listName.setText(cursor.getString(taskNameColumn));
-		accountName.setText(cursor.getString(accountNameColumn));
+		listColor.setBackgroundColor(cursor.getInt(mTaskColorColumn));
+		listName.setText(cursor.getString(mTaskNameColumn));
+		accountName.setText(cursor.getString(mAccountNameColumn));
 		return convertView;
 	}
 }

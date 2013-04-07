@@ -58,23 +58,24 @@ import android.widget.Toast;
 
 
 /**
- * 
- * Fragment for editing task details.
+ * Fragment to edit task details.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
- * 
  */
 
-public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener
+public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener,
+	OnItemSelectedListener
 {
-
 	private static final String TAG = "TaskEditDetailFragment";
 
 	public static final String PARAM_TASK_URI = "task_uri";
 
 	public static final String LIST_LOADER_URI = "uri";
 
+	/**
+	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
+	 */
 	private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY,
 		Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
 
@@ -85,14 +86,15 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR };
 
 	/**
-	 * This interface provides a convenient way to get column indices of {@link EditTaskFragment#TASK_LIST_PROJECTION} without any overhead.
+	 * This interface provides a convenient way to get column indices of {@link #TASK_LIST_PROJECTION} without any overhead.
 	 */
-	@SuppressWarnings("unused")
 	private interface TASK_LIST_PROJECTION_VALUES
 	{
 		public final static int id = 0;
+		@SuppressWarnings("unused")
 		public final static int list_name = 1;
 		public final static int account_type = 2;
+		@SuppressWarnings("unused")
 		public final static int account_name = 3;
 		public final static int list_color = 4;
 	}
@@ -105,11 +107,9 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
-	private boolean appForEdit = true;
-	private TasksListCursorAdapter taskListAdapter;
-	/**
-	 * The dummy content this fragment is presenting.
-	 */
+	private boolean mAppForEdit = true;
+	private TasksListCursorAdapter mTaskListAdapter;
+
 	private Uri mTaskUri;
 
 	ContentSet mValues;
@@ -117,6 +117,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	ViewGroup mHeader;
 	Model mModel;
 	Context mAppContext;
+	TaskEdit mEditor;
+	LinearLayout mTaskListBar;
 
 
 	/**
@@ -153,52 +155,27 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 
-		appForEdit = !Tasks.CONTENT_URI.equals(mTaskUri);
+		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri);
 
-		if (!appForEdit)
+		if (!mAppForEdit)
 		{
 			setListUri(WriteableTaskLists.CONTENT_URI);
 		}
 
-		final LinearLayout taskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
-		final Spinner listSpinner = (Spinner) taskListBar.findViewById(R.id.task_list_spinner);
+		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
+		final Spinner listSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
 
-		taskListAdapter = new TasksListCursorAdapter(mAppContext);
-		listSpinner.setAdapter(taskListAdapter);
+		mTaskListAdapter = new TasksListCursorAdapter(mAppContext);
+		listSpinner.setAdapter(mTaskListAdapter);
 
-		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener()
-		{
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-			{
-				Cursor c = (Cursor) arg0.getItemAtPosition(arg2);
-
-				String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
-				int listColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
-				taskListBar.setBackgroundColor(listColor);
-				if (!appForEdit)
-				{
-					mValues.put(Tasks.LIST_ID, c.getLong(TASK_LIST_PROJECTION_VALUES.id));
-				}
-				new AsyncModelLoader(mAppContext, EditTaskFragment.this).execute(accountType);
-			}
-
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0)
-			{
-				// nothing to do here
-			}
-
-		});
+		listSpinner.setOnItemSelectedListener(this);
 
 		if (android.os.Build.VERSION.SDK_INT < 11)
 		{
 			listSpinner.setBackgroundDrawable(null);
-
 		}
 
-		if (appForEdit)
+		if (mAppForEdit)
 		{
 			if (mTaskUri != null)
 			{
@@ -242,16 +219,45 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		Log.v(TAG, "onDestroyView");
+		if (mEditor != null)
+		{
+			// remove values, to ensure all listeners get released
+			mEditor.setValues(null);
+		}
+		if (mContent != null)
+		{
+			mContent.removeAllViews();
+		}
+
+		final Spinner listSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
+		listSpinner.setOnItemSelectedListener(null);
+		if (mValues != null)
+		{
+			mValues.removeOnChangeListener(this, null);
+		}
+	}
+
+
 	private void updateView()
 	{
 		final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+		if (mEditor != null)
+		{
+			// remove values, to ensure all listeners get released
+			mEditor.setValues(null);
+		}
 		mContent.removeAllViews();
 
-		TaskEdit editor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
-		editor.setModel(mModel);
-		editor.setValues(mValues);
-		mContent.addView(editor);
+		mEditor = (TaskEdit) inflater.inflate(R.layout.task_edit, mContent, false);
+		mEditor.setModel(mModel);
+		mEditor.setValues(mValues);
+		mContent.addView(mEditor);
 
 		Log.d(TAG, "At the end of updateView");
 	}
@@ -289,14 +295,14 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		taskListAdapter.changeCursor(cursor);
+		mTaskListAdapter.changeCursor(cursor);
 	}
 
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader)
 	{
-		taskListAdapter.changeCursor(null);
+		mTaskListAdapter.changeCursor(null);
 	}
 
 
@@ -339,8 +345,10 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
-			// new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
-			setListUri(appForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
+			/*
+			 * Don't start the model loader here, let onItemSelected do that.
+			 */
+			setListUri(mAppForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
 		}
 	}
 
@@ -361,5 +369,35 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onContentChanged(ContentSet contentSet)
 	{
 		// nothing to do
+	}
+
+
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+	{
+		Cursor c = (Cursor) arg0.getItemAtPosition(arg2);
+
+		String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
+		int listColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
+		mTaskListBar.setBackgroundColor(listColor);
+
+		if (!mAppForEdit)
+		{
+			mValues.put(Tasks.LIST_ID, c.getLong(TASK_LIST_PROJECTION_VALUES.id));
+		}
+
+		if (mModel == null || !mModel.getAccountType().equals(accountType))
+		{
+			// the model changed, load the new model
+			new AsyncModelLoader(mAppContext, EditTaskFragment.this).execute(accountType);
+		}
+	}
+
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0)
+	{
+		// TODO Automatisch generierter Methodenstub
+
 	}
 }

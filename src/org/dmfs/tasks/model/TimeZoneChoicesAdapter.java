@@ -93,7 +93,7 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 			{
 				TimeZoneWrapper tz = new TimeZoneWrapper(id);
 				boolean hasTz = mIdMap.containsValue(tz);
-				if (!hasTz && !id.contains("/") && !id.startsWith("Etc/"))
+				if (!hasTz && id.contains("/") && !id.startsWith("Etc/"))
 				{
 					// do not add to mNameMap, because we get the name dynamically to reflect summer time
 					mIdMap.put(id, tz);

@@ -200,11 +200,11 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		values.startBulkUpdate();
 		try
 		{
-			checkConstraints(values, get(values), value);
 			if (value != null)
 			{
 				// just store all three parts separately
 				values.put(mTimestampField, value.toMillis(false));
+
 				if (mTzField != null)
 				{
 					values.put(mTzField, value.allDay ? null : value.timezone);

@@ -57,6 +57,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	private Time mDateTime;
 	private String mTimezone;
 	private boolean mOldAllDay = false;
+	private boolean mUpdated = false;
 	private int mOldHour = -1;
 	private int mOldMinutes = -1;
 	private boolean mIs24hour;
@@ -96,8 +97,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 				@Override
 				public void onClick(View v)
 				{
-					mDateTime = null;
-					mAdapter.set(mValues, mDateTime);
+					mUpdated = true;
+					mAdapter.validateAndSet(mValues, null);
 				}
 			});
 		}
@@ -192,13 +193,12 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			 * zone.
 			 * 
 			 * To fix that we switch to the local time zone and reset the time zone to original time zone. That updates date & time to the local values and
-			 * keeps
-			 * the original time zone.
+			 * keeps the original time zone.
 			 */
-			String originalTimeZone = mDateTime.timezone;
-			mDateTime.switchTimezone(timeZone);
-			mDateTime.timezone = originalTimeZone;
-			mDateTime.set(mDateTime.second, mDateTime.minute, mDateTime.hour, mDateTime.monthDay, mDateTime.month, mDateTime.year);
+			String originalTimeZone = time.timezone;
+			time.switchTimezone(timeZone);
+			time.timezone = originalTimeZone;
+			time.set(time.second, time.minute, time.hour, time.monthDay, time.month, time.year);
 		}
 	}
 
@@ -210,7 +210,8 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 		mDateTime.month = monthOfYear;
 		mDateTime.monthDay = dayOfMonth;
 		mDateTime.normalize(true);
-		mAdapter.set(mValues, mDateTime);
+		mUpdated = true;
+		mAdapter.validateAndSet(mValues, mDateTime);
 	}
 
 
@@ -219,100 +220,109 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 	{
 		mDateTime.hour = hourOfDay;
 		mDateTime.minute = minute;
-		mAdapter.set(mValues, mDateTime);
+		mUpdated = true;
+		mAdapter.validateAndSet(mValues, mDateTime);
 	}
 
 
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		mDateTime = mAdapter.get(mValues);
-		if (mDateTime != null)
+		Time newTime = mAdapter.get(mValues);
+		if (!mUpdated && newTime != null && mDateTime != null && Time.compare(newTime, mDateTime) == 0
+			&& TextUtils.equals(newTime.timezone, mDateTime.timezone) && newTime.allDay == mDateTime.allDay)// || newTime == null && mDateTime == null)
 		{
-			long oldTime = mDateTime.toMillis(false);
+			// nothing has changed
+			return;
+		}
+		mUpdated = false;
 
-			if (mTimezone != null && !TextUtils.equals(mTimezone, mDateTime.timezone) && !mDateTime.allDay)
+		if (newTime != null)
+		{
+			if (mDateTime != null && mDateTime.timezone != null && !TextUtils.equals(mDateTime.timezone, newTime.timezone) && !newTime.allDay)
 			{
 				/*
-				 * Time zone has changed.
+				 * Time zone has been changed.
 				 * 
 				 * We don't want to change date and hour in the editor, so change the values.
 				 */
-				applyTimeInTimeZone(mDateTime, mTimezone);
+				applyTimeInTimeZone(newTime, mDateTime.timezone);
 			}
 
-			if (mOldAllDay != mDateTime.allDay)
+			if (mDateTime != null && mDateTime.allDay != newTime.allDay)
 			{
 				/*
 				 * The allday flag has changed, we may have to restore time and time zone for the UI or to store a valid all-day time.
 				 */
-				mOldAllDay = mDateTime.allDay;
-				if (!mDateTime.allDay)
+				// mOldAllDay = newTime.allDay;
+				if (!newTime.allDay)
 				{
 					/*
 					 * Try to restore the time or set a reasonable time if we didn't have any before.
 					 */
 					if (mOldHour >= 0 && mOldMinutes >= 0)
 					{
-						mDateTime.hour = mOldHour;
-						mDateTime.minute = mOldMinutes;
+						newTime.hour = mOldHour;
+						newTime.minute = mOldMinutes;
 					}
 					else
 					{
 						Time defaultDate = mAdapter.getDefault(contentSet);
 						applyTimeInTimeZone(defaultDate, TimeZone.getDefault().getID());
-						mDateTime.hour = defaultDate.hour;
-						mDateTime.minute = defaultDate.minute;
+						newTime.hour = defaultDate.hour;
+						newTime.minute = defaultDate.minute;
 					}
 					/*
 					 * All-day events are floating and have no time zone (though it might be set to UTC).
 					 * 
 					 * Restore previous time zone if possible, otherwise pick a reasonable default value.
 					 */
-					mDateTime.timezone = mTimezone == null ? TimeZone.getDefault().getID() : mTimezone;
+					newTime.timezone = mTimezone == null ? TimeZone.getDefault().getID() : mTimezone;
+					newTime.normalize(true);
 				}
 				else
 				{
-					// ensure the stored time actually is all day (i.e. timezone == UTC, hours == 0, minutes == 0 and seconds == 0)
-					mAdapter.set(contentSet, mDateTime);
-					return;
+					// apply time zone shift to end up with the right day
+					newTime.set(mDateTime.toMillis(false) + TimeZone.getTimeZone(mDateTime.timezone).getOffset(mDateTime.toMillis(false)));
+					newTime.set(newTime.monthDay, newTime.month, newTime.year);
 				}
 			}
-			if (!mDateTime.allDay)
+
+			if (!newTime.allDay)
 			{
 				// preserve current time zone
-				mTimezone = mDateTime.timezone;
-			}
-
-			if (oldTime != mDateTime.toMillis(false))
-			{
-				// we changed the time, so update the content set
-				mAdapter.set(contentSet, mDateTime);
-				return;
+				mTimezone = newTime.timezone;
 			}
 
 			/*
 			 * Update UI. Ensure we show the time in the correct time zone.
 			 */
-			Date currentDate = new Date(mDateTime.toMillis(false));
-			mDefaultDateFormat.setTimeZone(TimeZone.getTimeZone(mDateTime.timezone));
+			Date currentDate = new Date(newTime.toMillis(false));
+			mDefaultDateFormat.setTimeZone(TimeZone.getTimeZone(newTime.timezone));
 			String formattedDate = mDefaultDateFormat.format(currentDate);
 			mDatePickerButton.setText(formattedDate);
 
-			if (!mDateTime.allDay)
+			if (!newTime.allDay)
 			{
-				mDefaultTimeFormat.setTimeZone(TimeZone.getTimeZone(mDateTime.timezone));
+				mDefaultTimeFormat.setTimeZone(TimeZone.getTimeZone(newTime.timezone));
 				String formattedTime = mDefaultTimeFormat.format(currentDate);
 				mTimePickerButton.setText(formattedTime);
 				mTimePickerButton.setVisibility(View.VISIBLE);
-				mOldHour = mDateTime.hour;
-				mOldMinutes = mDateTime.minute;
+				mOldHour = newTime.hour;
+				mOldMinutes = newTime.minute;
 			}
 			else
 			{
 				mTimePickerButton.setVisibility(View.GONE);
 			}
 			mClearDateButton.setEnabled(true);
+
+			if (mDateTime == null || Time.compare(newTime, mDateTime) != 0 || !TextUtils.equals(newTime.timezone, mDateTime.timezone)
+				|| mDateTime.allDay != newTime.allDay)
+			{
+				mDateTime = newTime;
+				mAdapter.set(contentSet, newTime);
+			}
 		}
 		else
 		{
@@ -322,6 +332,7 @@ public class TimeFieldEditor extends AbstractFieldEditor implements OnDateSetLis
 			mClearDateButton.setEnabled(false);
 			mTimezone = null;
 		}
-	}
 
+		mDateTime = newTime;
+	}
 }

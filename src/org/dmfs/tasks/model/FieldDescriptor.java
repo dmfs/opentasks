@@ -262,6 +262,19 @@ public final class FieldDescriptor
 	}
 
 
+	public AbstractFieldView getDetailView(LayoutInflater inflater, ViewGroup parent)
+	{
+		if (mViewLayout == null)
+		{
+			return null;
+		}
+
+		AbstractFieldView view = (AbstractFieldView) mViewLayout.inflate(inflater, parent, false);
+		view.setFieldDescription(this, mViewLayout.getOptions());
+		return view;
+	}
+
+
 	public AbstractFieldView getDetailView(LayoutInflater inflater)
 	{
 		if (mViewLayout == null)

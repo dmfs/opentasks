@@ -45,6 +45,8 @@ public class DefaultModel extends Model
 	private final static LayoutDescriptor TIME_EDIT = new LayoutDescriptor(R.layout.time_field_editor);
 	private final static LayoutDescriptor BOOLEAN_VIEW = new LayoutDescriptor(R.layout.boolean_field_view);
 	private final static LayoutDescriptor BOOLEAN_EDIT = new LayoutDescriptor(R.layout.boolean_field_editor);
+	private final static LayoutDescriptor URL_VIEW = new LayoutDescriptor(R.layout.url_field_view);
+	private final static LayoutDescriptor URL_EDIT = new LayoutDescriptor(R.layout.url_field_editor);
 
 
 	public DefaultModel(Context context)
@@ -119,6 +121,8 @@ public class DefaultModel extends Model
 
 		mFields.add(new FieldDescriptor(mContext, R.string.task_classification, TaskFieldAdapters.CLASSIFICATION).setViewLayout(CHOICES_VIEW)
 			.setEditorLayout(CHOICES_EDIT).setChoices(aca3));
+
+		mFields.add(new FieldDescriptor(mContext, R.string.task_url, TaskFieldAdapters.URL).setViewLayout(URL_VIEW).setEditorLayout(URL_EDIT));
 
 		setAllowRecurrence(false);
 		setAllowExceptions(false);

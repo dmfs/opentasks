@@ -88,6 +88,22 @@ public abstract class FieldAdapter<Type>
 
 
 	/**
+	 * Set a value in the given {@link ContentSet}, but validate against the constraints first.
+	 * 
+	 * @param values
+	 *            The {@link ContentSet} where to store the new value.
+	 * @param value
+	 *            The new value to store.
+	 */
+	public void validateAndSet(ContentSet values, Type value)
+	{
+		Type oldValue = get(values);
+		checkConstraints(values, oldValue, value);
+		set(values, value);
+	}
+
+
+	/**
 	 * Register a listener for the fields that this adapter adapts.
 	 * 
 	 * @param values
@@ -128,6 +144,9 @@ public abstract class FieldAdapter<Type>
 
 	/**
 	 * Check all constraints and enforce them if possible.
+	 * <p>
+	 * TODO: Allow throwing an exception if any of the constraints could not be enforced. That requires some kind of transaction in {@link ContentSet}.
+	 * </p>
 	 * 
 	 * @param currentValues
 	 *            The current {@link ContentSet}.

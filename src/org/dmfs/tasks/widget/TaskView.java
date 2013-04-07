@@ -58,7 +58,7 @@ public class TaskView extends BaseTaskView
 		 */
 		for (FieldDescriptor field : mModel.getFields())
 		{
-			AbstractFieldView detailView = field.getDetailView(inflater);
+			AbstractFieldView detailView = field.getDetailView(inflater, this);
 			if (detailView != null)
 			{
 				addView(detailView);
