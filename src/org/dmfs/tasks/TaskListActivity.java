@@ -57,9 +57,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
 	private boolean mTwoPane;
-	ViewTaskFragment taskDetailFrag;
-	TaskListFragment taskListFrag;
-	SharedPreferences openTaskPrefs;
+	private ViewTaskFragment mTaskDetailFrag;
+	private TaskListFragment mTaskListFrag;
+	private SharedPreferences mOpenTaskPrefs;
 
 
 	@Override
@@ -80,25 +80,25 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
 
-			taskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
+			mTaskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
 
-			taskListFrag.setActivateOnItemClick(true);
-			taskListFrag.setListViewScrollbarPositionLeft(true);
+			mTaskListFrag.setActivateOnItemClick(true);
+			mTaskListFrag.setListViewScrollbarPositionLeft(true);
 
-			openTaskPrefs = getPreferences(MODE_PRIVATE);
-			int openChildPosition = openTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
-			int openGroupPosition = openTaskPrefs.getInt(OPEN_GROUP_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
+			mOpenTaskPrefs = getPreferences(MODE_PRIVATE);
+			int openChildPosition = mOpenTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
+			int openGroupPosition = mOpenTaskPrefs.getInt(OPEN_GROUP_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
 
 			Log.d(TAG, "Open Child Position : " + openChildPosition);
 			Log.d(TAG, "Open Group Position : " + openGroupPosition);
 
 			if (openChildPosition != ExpandableListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
 			{
-				taskListFrag.setOpenChildPosition(openChildPosition);
-				taskListFrag.setOpenGroupPosition(openGroupPosition);
+				mTaskListFrag.setOpenChildPosition(openChildPosition);
+				mTaskListFrag.setOpenGroupPosition(openGroupPosition);
 			}
 
-			String openGroupsString = openTaskPrefs.getString(EXPANDED_GROUPS_PREFERENCE_NAME, "");
+			String openGroupsString = mOpenTaskPrefs.getString(EXPANDED_GROUPS_PREFERENCE_NAME, "");
 
 			String[] openGroupsArray = TextUtils.split(openGroupsString, "-");
 			long[] ids = new long[openGroupsArray.length];
@@ -107,13 +107,13 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				ids[i] = Long.parseLong(openGroupsArray[i]);
 			}
 
-			taskListFrag.setExpandedGroupsIds(ids);
+			mTaskListFrag.setExpandedGroupsIds(ids);
 
 			/*
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
 			 */
-			taskDetailFrag = new ViewTaskFragment();
-			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, taskDetailFrag).commit();
+			mTaskDetailFrag = new ViewTaskFragment();
+			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag).commit();
 		}
 	}
 
@@ -126,7 +126,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	{
 		if (mTwoPane)
 		{
-			taskDetailFrag.loadUri(uri);
+			mTaskDetailFrag.loadUri(uri);
 		}
 		else if (forceReload)
 		{
@@ -181,11 +181,11 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	public void onPause()
 	{
 		super.onPause();
-		if (taskListFrag != null)
+		if (mTaskListFrag != null)
 		{
-			int openChildPosition = taskListFrag.getOpenChildPosition();
-			int openGroupPosition = taskListFrag.getOpenGroupPosition();
-			SharedPreferences.Editor openPositsEditor = openTaskPrefs.edit();
+			int openChildPosition = mTaskListFrag.getOpenChildPosition();
+			int openGroupPosition = mTaskListFrag.getOpenGroupPosition();
+			SharedPreferences.Editor openPositsEditor = mOpenTaskPrefs.edit();
 
 			if (openChildPosition != ListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
 			{
@@ -201,7 +201,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				Log.d(TAG, "Nothing Selected. Nothing Saved");
 			}
 
-			long[] ids = taskListFrag.getExpandedGroups();
+			long[] ids = mTaskListFrag.getExpandedGroups();
 
 			if (ids.length > 0)
 			{

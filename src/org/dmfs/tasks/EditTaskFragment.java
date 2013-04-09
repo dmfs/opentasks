@@ -27,6 +27,7 @@ import org.dmfs.provider.tasks.TaskContract.WriteableTaskLists;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
@@ -45,6 +46,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -313,20 +315,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		Activity activity = getActivity();
 		if (menuId == R.id.editor_action_save)
 		{
-			// TODO: put that in a background task
-			Log.v(TAG, "persisting task");
-
-			if (mValues.updatesAnyKey(RECURRENCE_VALUES))
-			{
-				mValues.ensureUpdates(RECURRENCE_VALUES);
-			}
-
-			mTaskUri = mValues.persist(activity);
-			// return proper result
-			Intent result = new Intent();
-			result.setData(mTaskUri);
-			activity.setResult(Activity.RESULT_OK, result);
-			activity.finish();
+			saveAndExit();
 			return true;
 		}
 		else if (menuId == R.id.editor_action_cancel)
@@ -397,7 +386,64 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0)
 	{
-		// TODO Automatisch generierter Methodenstub
+		// nothing to do here
+	}
 
+
+	/**
+	 * Persist the current task (if anything has been edited) and close the editor.
+	 */
+	public void saveAndExit()
+	{
+		// TODO: put that in a background task
+		Activity activity = getActivity();
+
+		int resultCode = Activity.RESULT_CANCELED;
+		Intent result = null;
+		int toastId = -1;
+
+		if (mValues.isInsert() || mValues.isUpdate())
+		{
+			if (!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || mValues.isUpdate())
+			{
+
+				if (mValues.updatesAnyKey(RECURRENCE_VALUES))
+				{
+					mValues.ensureUpdates(RECURRENCE_VALUES);
+				}
+
+				mTaskUri = mValues.persist(activity);
+
+				// return proper result
+				result = new Intent();
+				result.setData(mTaskUri);
+				resultCode = Activity.RESULT_OK;
+				toastId = R.string.activity_edit_task_task_saved;
+			}
+			else
+			{
+				toastId = R.string.activity_edit_task_empty_task_not_saved;
+			}
+		}
+		else
+		{
+			Log.i(TAG, "nothing to save");
+		}
+
+		if (toastId != -1)
+		{
+			Toast.makeText(activity, toastId, Toast.LENGTH_SHORT).show();
+		}
+
+		if (result != null)
+		{
+			activity.setResult(resultCode, result);
+		}
+		else
+		{
+			activity.setResult(resultCode);
+		}
+
+		activity.finish();
 	}
 }

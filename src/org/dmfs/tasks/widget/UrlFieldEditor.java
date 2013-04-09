@@ -138,7 +138,7 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 			}
 			catch (MalformedURLException e)
 			{
-				mText.setError(getContext().getString(R.string.task_editor_error_invalid_url));
+				mText.setError(getContext().getString(R.string.activity_edit_task_error_invalid_url));
 				e.printStackTrace();
 			}
 		}

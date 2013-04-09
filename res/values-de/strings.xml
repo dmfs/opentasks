@@ -19,8 +19,10 @@
     <!-- Task editor -->
     <string name="activity_edit_task_title">Aufgabe bearbeiten</string>
     <string name="activity_add_task_title">Aufgabe erstellen</string>
-    <string name="task_editor_error_invalid_url">Ungültige URL</string>
-    
+    <string name="activity_edit_task_error_invalid_url">Ungültige URL</string>
+    <string name="activity_edit_task_task_saved">Aufgabe gespeichert.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Leere Aufgabe nicht gespeichert.</string>
+
     <!-- Names of task attributes -->
 
     <string name="task_list">Liste</string>

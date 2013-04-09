@@ -17,8 +17,10 @@
 
 package org.dmfs.tasks;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -33,6 +35,10 @@ import android.view.MenuItem;
  */
 public class EditTaskActivity extends FragmentActivity
 {
+	private EditTaskFragment mEditFragment;
+
+
+	@TargetApi(11)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -56,6 +62,22 @@ public class EditTaskActivity extends FragmentActivity
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.add_task_container, fragment).commit();
 		}
+
+	}
+
+
+	@Override
+	public void onAttachFragment(Fragment fragment)
+	{
+		super.onAttachFragment(fragment);
+		if (fragment instanceof EditTaskFragment)
+		{
+			mEditFragment = (EditTaskFragment) fragment;
+		}
+		else
+		{
+			throw new IllegalArgumentException("Invalid fragment attached: " + fragment.getClass().getCanonicalName());
+		}
 	}
 
 
@@ -64,6 +86,18 @@ public class EditTaskActivity extends FragmentActivity
 	{
 		getMenuInflater().inflate(R.menu.edit_task_activity_menu, menu);
 		return true;
+	}
+
+
+	@Override
+	public void onBackPressed()
+	{
+		super.onBackPressed();
+
+		if (mEditFragment != null)
+		{
+			mEditFragment.saveAndExit();
+		}
 	}
 
 
