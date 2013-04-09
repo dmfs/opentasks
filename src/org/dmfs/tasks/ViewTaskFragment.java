@@ -27,7 +27,10 @@ import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,6 +43,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 /**
@@ -67,7 +71,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	private ContentSet mContentSet;
 	private ViewGroup mContent;
 	private Model mModel;
-	private Context mAppContext;
+	private Context mAppContext, mActivityContext;
 	private TaskView mDetailView;
 	private Callback mCallback;
 
@@ -121,6 +125,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 		mCallback = (Callback) activity;
 		mAppContext = activity.getApplicationContext();
+		mActivityContext = (Context) activity;
+
 	}
 
 
@@ -313,9 +319,24 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		else if (itemId == R.id.delete_task)
 		{
 			Log.v(TAG, "removing task");
-			// TODO: remove the task in a background task
-			mContentSet.delete(mAppContext);
-			mCallback.onDelete(mTaskUri);
+			new AlertDialog.Builder(mActivityContext).setTitle(R.string.confirm_delete_title)
+				.setNegativeButton(R.string.confirm_delete_negative, new OnClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						Toast.makeText(mAppContext, "Nothing deleted", Toast.LENGTH_SHORT).show();
+					}
+				}).setPositiveButton(R.string.confirm_delete_positive, new OnClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						// TODO: remove the task in a background task
+						mContentSet.delete(mAppContext);
+						mCallback.onDelete(mTaskUri);
+					}
+				}).setMessage(R.string.confirm_delete_message).create().show();
 			return true;
 		}
 		else

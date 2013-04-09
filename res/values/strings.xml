@@ -92,4 +92,15 @@
     <string name="save_synced_list">Save</string>
     <string name="cancel_updated_list">Cancel</string>
 
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">By Due Date</string>
+    <string name="gd_by_completed">By Completed</string>
+    <string name="gd_by_list">By List</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Confirm Delete</string>
+    <string name="confirm_delete_message">Delete this Task?</string>
+    <string name="confirm_delete_positive">Delete</string>
+    <string name="confirm_delete_negative">Cancel</string>
+
 </resources>
