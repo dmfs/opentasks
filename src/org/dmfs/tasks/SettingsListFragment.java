@@ -153,8 +153,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
 		return new CursorLoader(mContext, TaskContract.TaskLists.CONTENT_URI, new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME,
-			TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE }, mListSelectionArguments,
-			mListSelectionParam, null);
+			TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE, TaskContract.TaskLists.ACCOUNT_NAME },
+			mListSelectionArguments, mListSelectionParam, TaskContract.TaskLists.ACCOUNT_NAME + " COLLATE NOCASE ASC");
 	}
 
 
@@ -184,7 +184,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private class VisibleListAdapter extends CursorAdapter
 	{
 		LayoutInflater inflater;
-		int listNameColumn, listColorColumn, compareColumn;
+		private int listNameColumn, listColorColumn, compareColumn, accountNameColumn;
 		private HashMap<Long, Boolean> savedPositions = new HashMap<Long, Boolean>();
 
 
@@ -196,12 +196,14 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 				listNameColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_NAME);
 				listColorColumn = c.getColumnIndex(TaskContract.TaskLists.LIST_COLOR);
 				compareColumn = c.getColumnIndex(mListCompareColumnName);
+				accountNameColumn = c.getColumnIndex(TaskContract.TaskLists.ACCOUNT_NAME);
 			}
 			else
 			{
 				listNameColumn = -1;
 				listColorColumn = -1;
 				compareColumn = -1;
+				accountNameColumn = -1;
 			}
 			return super.swapCursor(c);
 
@@ -221,7 +223,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		{
 			String listName = cur.getString(listNameColumn);
 			CheckableItem item = (CheckableItem) v.getTag();
-			item.nameTV.setText(listName);
+			item.text1.setText(listName);
+			item.text2.setText(cur.getString(accountNameColumn));
 			int listColor = cur.getInt(listColorColumn);
 			item.bgColor.setBackgroundColor(listColor);
 
@@ -234,7 +237,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 		public class CheckableItem
 		{
-			TextView nameTV;
+			TextView text1;
+			TextView text2;
 			View bgColor;
 			CheckBox cb;
 		}
@@ -245,7 +249,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		{
 			View newInflatedView = inflater.inflate(R.layout.visible_task_list_item, null);
 			CheckableItem item = new CheckableItem();
-			item.nameTV = (TextView) newInflatedView.findViewById(R.id.visible_account_name);
+			item.text1 = (TextView) newInflatedView.findViewById(android.R.id.text1);
+			item.text2 = (TextView) newInflatedView.findViewById(android.R.id.text2);
 			item.bgColor = newInflatedView.findViewById(R.id.visible_task_list_color);
 			item.cb = (CheckBox) newInflatedView.findViewById(R.id.visible_task_list_checked);
 			newInflatedView.setTag(item);

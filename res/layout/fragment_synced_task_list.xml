@@ -9,26 +9,35 @@
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"
+        android:fillViewport="true" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:onClick="onSaveUpdated"
-            android:text="@string/save_synced_list" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_weight="1"
+            android:hint="@android:string/ok"
             android:onClick="onCancelUpdated"
-            android:text="@string/cancel_updated_list" />
-    </RelativeLayout>
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip"
+            android:text="@android:string/cancel" /> <!-- setting the hint to the opposite ensures both buttons have the same width -->
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@android:string/cancel"
+            android:onClick="onSaveUpdated"
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip"
+            android:text="@android:string/ok" /> <!-- setting the hint to the opposite ensures both buttons have the same width -->
+
+    </LinearLayout>
 
 </LinearLayout>

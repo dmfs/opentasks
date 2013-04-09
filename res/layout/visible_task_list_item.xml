@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:paddingBottom="8dip"
+    android:paddingTop="8dip" >
 
     <View
         android:id="@+id/visible_task_list_color"
@@ -22,13 +24,22 @@
         android:focusableInTouchMode="false" />
 
     <TextView
-        android:id="@+id/visible_account_name"
+        android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/visible_task_list_checked"
         android:layout_toRightOf="@id/visible_task_list_color"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@android:id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@android:id/text1"
+        android:layout_toLeftOf="@id/visible_task_list_checked"
+        android:layout_toRightOf="@id/visible_task_list_color"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false" />
 
 </RelativeLayout>

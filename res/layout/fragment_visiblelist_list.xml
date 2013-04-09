@@ -2,16 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
     tools:context=".SettingsListFragment" >
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:choiceMode="multipleChoice" />
+        android:layout_height="fill_parent"
+        android:choiceMode="multipleChoice"
+        android:fillViewport="true" />
 
     <Button
         android:id="@+id/synced_task_list_button"
@@ -19,6 +19,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="showSyncedList"
+        android:paddingLeft="24dip"
+        android:paddingRight="24dip"
         android:text="@string/synced_list_button" />
 
 </LinearLayout>
