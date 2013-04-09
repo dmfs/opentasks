@@ -26,7 +26,8 @@ import android.database.Cursor;
 
 
 /**
- * A TimezoneFieldAdapter stores time zones in a certain field of a {@link ContentSet}. The time zone is <code>null</code> for all-day dates.
+ * Knows how to load and store {@link TimeZone}s in a certain field of a {@link ContentSet}. The returned time zone is always <code>null</code> for all-day
+ * dates.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

@@ -24,7 +24,7 @@ import android.database.Cursor;
 
 
 /**
- * A BooleanFieldAdapter stores {@link Boolean} values in a certain field of a {@link ContentSet}.
+ * Knows how to load and store a {@link Boolean} value in a certain field of a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

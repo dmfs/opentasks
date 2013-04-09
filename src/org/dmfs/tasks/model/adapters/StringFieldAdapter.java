@@ -24,7 +24,7 @@ import android.database.Cursor;
 
 
 /**
- * A StringFieldAdapter stores {@link String} values in a certain field of a {@link ContentSet}.
+ * Knows how to load and store a {@link String} value in a certain field of a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

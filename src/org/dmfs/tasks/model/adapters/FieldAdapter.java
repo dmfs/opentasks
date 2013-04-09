@@ -29,7 +29,7 @@ import android.database.Cursor;
 
 
 /**
- * A FieldAdapter knows how to store a certain field in a {@link ContentSet}.
+ * Knows how to load and store a certain field in a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  * 

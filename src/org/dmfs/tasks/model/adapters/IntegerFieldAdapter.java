@@ -24,7 +24,7 @@ import android.database.Cursor;
 
 
 /**
- * An IntegerFieldAdapter stores {@link Integer} values in a certain field of a {@link ContentSet}.
+ * Knows how to load and store an {@link Integer} value in a certain field of a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

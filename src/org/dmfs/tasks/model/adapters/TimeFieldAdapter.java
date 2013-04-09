@@ -28,7 +28,7 @@ import android.text.format.Time;
 
 
 /**
- * A TimeFieldAdapter stores {@link Time} values in a {@link ContentSet}.
+ * Knows how to load and store {@link Time} values in a {@link ContentSet}.
  * 
  * Time values are stored as three values:
  * <ul>

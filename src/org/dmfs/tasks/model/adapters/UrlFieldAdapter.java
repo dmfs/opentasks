@@ -27,7 +27,7 @@ import android.database.Cursor;
 
 
 /**
- * A UrlFieldAdapter stores {@link URL} values in a {@link ContentSet}.
+ * Knows how to load and store {@link URL} values in a {@link ContentSet}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
