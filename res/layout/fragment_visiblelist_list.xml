@@ -21,6 +21,6 @@
         android:onClick="showSyncedList"
         android:paddingLeft="24dip"
         android:paddingRight="24dip"
-        android:text="@string/synced_list_button" />
+        android:text="@string/synced_task_lists" />
 
 </LinearLayout>

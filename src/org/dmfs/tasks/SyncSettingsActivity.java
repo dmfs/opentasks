@@ -68,6 +68,7 @@ public class SyncSettingsActivity extends FragmentActivity
 		syncedListFragment.setArguments(args);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 		currentFrag = syncedListFragment;
+		showActionBarTitle(R.string.visible_task_lists);
 	}
 
 
@@ -86,6 +87,7 @@ public class SyncSettingsActivity extends FragmentActivity
 		syncedListFragment.setArguments(args);
 		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
 		currentFrag = syncedListFragment;
+		showActionBarTitle(R.string.synced_task_lists);
 	}
 
 
@@ -98,6 +100,16 @@ public class SyncSettingsActivity extends FragmentActivity
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
 			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+	}
+
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void showActionBarTitle(int titleRes)
+	{
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+		{
+			getActionBar().setTitle(titleRes);
 		}
 	}
 

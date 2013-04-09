@@ -88,7 +88,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
     <string name="visible_task_lists">Displayed Lists</string>
-    <string name="synced_list_button">Synced Lists</string>
+    <string name="synced_task_lists">Synchronized Lists</string>
     <string name="save_synced_list">Save</string>
     <string name="cancel_updated_list">Cancel</string>
 
