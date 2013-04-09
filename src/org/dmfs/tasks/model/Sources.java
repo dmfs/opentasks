@@ -18,7 +18,9 @@
 package org.dmfs.tasks.model;
 
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.dmfs.provider.tasks.TaskContract;
@@ -217,6 +219,26 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	public Model getModel(String accountType)
 	{
 		return mAccountModelMap.get(accountType);
+	}
+
+
+	/**
+	 * Return all accounts that support the task authority.
+	 * 
+	 * @return A {@link List} of {@link Account}s, will never be <code>null</code>.
+	 */
+	public List<Account> getExistingAccounts()
+	{
+		List<Account> result = new ArrayList<Account>();
+		Account[] accounts = mAccountManager.getAccounts();
+		for (Account account : accounts)
+		{
+			if (getModel(account.type) != null && ContentResolver.getIsSyncable(account, TaskContract.AUTHORITY) > 0)
+			{
+				result.add(account);
+			}
+		}
+		return result;
 	}
 
 

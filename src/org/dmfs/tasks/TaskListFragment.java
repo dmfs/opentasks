@@ -27,9 +27,12 @@ import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;
 import org.dmfs.tasks.groupings.filters.ConstantFilter;
+import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
+import org.dmfs.tasks.utils.OnModelLoadedListener;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -68,7 +71,7 @@ import android.widget.ListView;
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
 @SuppressLint("NewApi")
-public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener
+public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
@@ -207,6 +210,9 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		}
 
 		mCallbacks = (Callbacks) activity;
+
+		// load accounts early
+		new AsyncModelLoader(activity, this).execute(TaskContract.LOCAL_ACCOUNT);
 	}
 
 
@@ -397,7 +403,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			setExpandedGroups();
 			mSavedExpandedGroups = null;
 		}
-
 	}
 
 
@@ -540,5 +545,12 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 			ContentResolver.requestSync(account, TaskContract.AUTHORITY, extras);
 		}
+	}
+
+
+	@Override
+	public void onModelLoaded(Model model)
+	{
+		// nothing to do, we've just loaded the default model to speed up loading the detail view and the editor view.
 	}
 }
