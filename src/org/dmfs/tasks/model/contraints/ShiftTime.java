@@ -53,7 +53,14 @@ public class ShiftTime extends AbstractConstraint<Time>
 		Time timeToShift = mTimeAdapter.get(currentValues);
 		if (timeToShift != null && newValue != null && oldValue != null)
 		{
+			boolean isAllDay = timeToShift.allDay;
 			timeToShift.set(timeToShift.toMillis(false) + (newValue.toMillis(false) - oldValue.toMillis(false)));
+
+			// ensure the event is still allday if is was allday before.
+			if (isAllDay)
+			{
+				timeToShift.set(timeToShift.monthDay, timeToShift.month, timeToShift.year);
+			}
 			mTimeAdapter.set(currentValues, timeToShift);
 		}
 	}
