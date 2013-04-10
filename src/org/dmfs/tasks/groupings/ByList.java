@@ -152,6 +152,9 @@ public interface ByList
 				due.switchTimezone(TimeZone.getDefault().getID());
 			}
 
+			// normalize time to ensure yearDay is set properly
+			due.normalize(false);
+
 			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
 			{
 				if (due.allDay)
