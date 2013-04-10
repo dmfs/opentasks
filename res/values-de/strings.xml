@@ -88,7 +88,9 @@
     <string name="action_settings">Einstellungen</string>
     <string name="visible_task_lists">Sichtbare Listen</string>
     <string name="synced_list_button">Synchronisierte Listen</string>
-    <string name="save_synced_list">Speichern</string>
-    <string name="cancel_updated_list">Abbrechen</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Löschen bestätigen</string>
+    <string name="confirm_delete_message">Diese Aufgabe löschen?</string>
 
 </resources>

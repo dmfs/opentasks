@@ -43,7 +43,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 
 /**
@@ -71,7 +70,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	private ContentSet mContentSet;
 	private ViewGroup mContent;
 	private Model mModel;
-	private Context mAppContext, mActivityContext;
+	private Context mAppContext;
 	private TaskView mDetailView;
 	private Callback mCallback;
 
@@ -125,8 +124,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 		mCallback = (Callback) activity;
 		mAppContext = activity.getApplicationContext();
-		mActivityContext = (Context) activity;
-
 	}
 
 
@@ -319,15 +316,15 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		else if (itemId == R.id.delete_task)
 		{
 			Log.v(TAG, "removing task");
-			new AlertDialog.Builder(mActivityContext).setTitle(R.string.confirm_delete_title)
-				.setNegativeButton(R.string.confirm_delete_negative, new OnClickListener()
+			new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
+				.setNegativeButton(android.R.string.cancel, new OnClickListener()
 				{
 					@Override
 					public void onClick(DialogInterface dialog, int which)
 					{
-						Toast.makeText(mAppContext, "Nothing deleted", Toast.LENGTH_SHORT).show();
+						// nothing to do here
 					}
-				}).setPositiveButton(R.string.confirm_delete_positive, new OnClickListener()
+				}).setPositiveButton(android.R.string.ok, new OnClickListener()
 				{
 					@Override
 					public void onClick(DialogInterface dialog, int which)

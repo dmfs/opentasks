@@ -89,8 +89,6 @@
     <string name="action_settings">Settings</string>
     <string name="visible_task_lists">Displayed Lists</string>
     <string name="synced_task_lists">Synchronized Lists</string>
-    <string name="save_synced_list">Save</string>
-    <string name="cancel_updated_list">Cancel</string>
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">By Due Date</string>
@@ -100,7 +98,5 @@
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Delete this Task?</string>
-    <string name="confirm_delete_positive">Delete</string>
-    <string name="confirm_delete_negative">Cancel</string>
 
 </resources>
