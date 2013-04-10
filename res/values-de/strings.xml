@@ -66,6 +66,7 @@
     <string name="status_in_process">in Arbeit</string>
     <string name="status_completed">erledigt</string>
     <string name="status_cancelled">abgebrochen</string>
+    <string name="status_incomplete">unerledigt</string>
 
     <!-- Classification labels -->
 
@@ -87,7 +88,12 @@
     <string name="title_activity_settings">Einstellungen</string>
     <string name="action_settings">Einstellungen</string>
     <string name="visible_task_lists">Sichtbare Listen</string>
-    <string name="synced_list_button">Synchronisierte Listen</string>
+    <string name="synced_task_lists">Synchronisierte Listen</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Fälligkeit</string>
+    <string name="gd_by_completed">Erledigt</string>
+    <string name="gd_by_list">Listen</string>
 
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Löschen bestätigen</string>

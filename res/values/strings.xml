@@ -96,7 +96,7 @@
     <string name="gd_by_list">By List</string>
 
     <!-- String for confirm delete dialog -->
-    <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Delete this Task?</string>
+    <string name="confirm_delete_title">Confirm delete</string>
+    <string name="confirm_delete_message">Delete this task?</string>
 
 </resources>
