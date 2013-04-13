@@ -41,6 +41,7 @@ public class DefaultModel extends Model
 	private final static LayoutDescriptor PROGRESS_EDIT = new LayoutDescriptor(R.layout.percentage_field_editor);
 	private final static LayoutDescriptor TIME_VIEW = new LayoutDescriptor(R.layout.time_field_view);
 	private final static LayoutDescriptor TIME_EDIT = new LayoutDescriptor(R.layout.time_field_editor);
+	@SuppressWarnings("unused")
 	private final static LayoutDescriptor BOOLEAN_VIEW = new LayoutDescriptor(R.layout.boolean_field_view);
 	private final static LayoutDescriptor BOOLEAN_EDIT = new LayoutDescriptor(R.layout.boolean_field_editor);
 	private final static LayoutDescriptor URL_VIEW = new LayoutDescriptor(R.layout.url_field_view);
@@ -60,7 +61,11 @@ public class DefaultModel extends Model
 		{
 			return;
 		}
-		// add a field for the list
+		
+		/*
+		 * Now add a couple of fields to the model.
+		 */
+		
 		mFields.add(new FieldDescriptor(mContext, R.string.task_list, null, TaskFieldAdapters.LIST_NAME).setViewLayout(new LayoutDescriptor(
 			R.layout.text_field_view_nodivider_large).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
 			LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));

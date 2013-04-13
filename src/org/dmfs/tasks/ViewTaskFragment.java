@@ -28,6 +28,7 @@ import org.dmfs.tasks.widget.TaskView;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -46,7 +47,7 @@ import android.view.ViewGroup;
 
 
 /**
- * A fragment representing a single Task detail screen. This fragment is either contained in a {@link TaskListActivity} in two-pane mode (on tablets) or a
+ * A fragment representing a single Task detail screen. This fragment is either contained in a {@link TaskListActivity} in two-pane mode (on tablets) or in a
  * {@link ViewTaskActivity} on handsets.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
@@ -56,22 +57,58 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 {
 	private static final String TAG = "TaskViewDetailFragment";
 
+	/**
+	 * The key we use to store the {@link ContentSet} that holds the values we show.
+	 */
 	private static final String STATE_VALUES = "values";
+
+	/**
+	 * The key we use to store the {@link Uri} of the task we show.
+	 */
 	private static final String STATE_TASK_URI = "task_uri";
 
+	/**
+	 * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.
+	 */
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
 			Tasks.LIST_NAME)
 		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
 		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
+	/**
+	 * The {@link Uri} of the current task in the view.
+	 */
 	private Uri mTaskUri;
 
+	/**
+	 * The values of the current task.
+	 */
 	private ContentSet mContentSet;
+
+	/**
+	 * The view that contains the details.
+	 */
 	private ViewGroup mContent;
+
+	/**
+	 * The {@link Model} of the current task.
+	 */
 	private Model mModel;
+
+	/**
+	 * The application context.
+	 */
 	private Context mAppContext;
+
+	/**
+	 * The actual detail view. We store this direct reference to be able to clear it when the fragment gets detached.
+	 */
 	private TaskView mDetailView;
+
+	/**
+	 * A {@link Callback} to the activity.
+	 */
 	private Callback mCallback;
 
 	public interface Callback
@@ -89,7 +126,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		 * This is called to inform the Activity that a task has been deleted.
 		 * 
 		 * @param taskUri
-		 *            The {@link Uri} of the deleted task. Note that the Uri is likely to have invalid at the time of calling this method.
+		 *            The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
 		 */
 		public void onDelete(Uri taskUri);
 	}
@@ -373,7 +410,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		// nothing to do
+		// nothing to do, the widgets will handle that themselves.
 	}
 
 }

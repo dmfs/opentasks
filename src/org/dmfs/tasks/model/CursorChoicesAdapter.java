@@ -32,8 +32,10 @@ import android.graphics.drawable.Drawable;
 public class CursorChoicesAdapter implements IChoicesAdapter
 {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "CursorChoicesAdapter";
 	private final Cursor mCursor;
+	@SuppressWarnings("unused")
 	private String mTitleColumn;
 	private String mKeyColumn;
 
@@ -47,7 +49,7 @@ public class CursorChoicesAdapter implements IChoicesAdapter
 	@Override
 	public String getTitle(Object object)
 	{
-		//	 return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
+		// return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
 		return null;
 	}
 

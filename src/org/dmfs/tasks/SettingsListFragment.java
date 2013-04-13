@@ -51,12 +51,10 @@ import android.widget.TextView;
  * {@link SyncSettingsActivity}.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
- * 
  */
 
 public class SettingsListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
 {
-
 	private static final String TAG = "SettingsListFragment";
 	public static final String LIST_SELECTION_ARGS = "list_selection_args";
 	public static final String LIST_STRING_PARAMS = "list_string_params";
@@ -65,10 +63,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public static final String LIST_ONDETACH_SAVE = "list_ondetach_save";
 	private Context mContext;
 	private VisibleListAdapter mAdapter;
-	/**
-	 * The fragment's ListView/GridView.
-	 */
-	private AbsListView mListView;
+
 	private String mListSelectionArguments;
 	private String[] mListSelectionParam;
 	private String mListCompareColumnName;

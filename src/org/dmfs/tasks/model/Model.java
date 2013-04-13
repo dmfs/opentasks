@@ -36,7 +36,6 @@ public abstract class Model
 	private int mIconId = -1;
 	private int mLabelId = -1;
 	private String mAccountType;
-	private String mTaskName;
 
 
 	public abstract void inflate() throws ModelInflaterException;

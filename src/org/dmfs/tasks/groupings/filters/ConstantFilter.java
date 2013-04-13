@@ -21,7 +21,7 @@ import java.util.List;
 
 
 /**
- * A filter that filters by a constant value.
+ * A filter that filters by a constant selection.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

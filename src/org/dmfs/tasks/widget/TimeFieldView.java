@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
@@ -54,10 +53,26 @@ public final class TimeFieldView extends AbstractFieldView
 	 * The {@link FieldAdapter} of the field for this view.
 	 */
 	private TimeFieldAdapter mAdapter;
+
+	/**
+	 * The text view that shows the time in the local time zone.
+	 */
 	private TextView mText;
+
+	/**
+	 * The text view that shows the time in the task's original time zone if it's different from the local time zone.
+	 */
 	private TextView mTimeZoneText;
+
+	/**
+	 * Formatters for date and time.
+	 */
 	private java.text.DateFormat mDefaultDateFormat, mDefaultTimeFormat;
-	private TimeZone defaultTimeZone = new TimeZoneWrapper();
+
+	/**
+	 * The default time zone on this device. Usually what the user has configured in the settings or what the provider returns.
+	 */
+	private TimeZone mDefaultTimeZone = new TimeZoneWrapper();
 
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
@@ -82,8 +97,8 @@ public final class TimeFieldView extends AbstractFieldView
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (TextView) findViewById(R.id.text);
-		mTimeZoneText = (TextView) findViewById(R.id.timezone_text);
+		mText = (TextView) findViewById(android.R.id.text1);
+		mTimeZoneText = (TextView) findViewById(android.R.id.text2);
 		mDefaultDateFormat = java.text.DateFormat.getDateInstance(SimpleDateFormat.LONG);
 		mDefaultTimeFormat = DateFormat.getTimeFormat(getContext());
 	}
@@ -108,16 +123,16 @@ public final class TimeFieldView extends AbstractFieldView
 			String formattedTime;
 			if (!newValue.allDay)
 			{
-				mDefaultDateFormat.setTimeZone(defaultTimeZone);
-				mDefaultTimeFormat.setTimeZone(defaultTimeZone);
+				mDefaultDateFormat.setTimeZone(mDefaultTimeZone);
+				mDefaultTimeFormat.setTimeZone(mDefaultTimeZone);
 				TimeZoneWrapper taskTimeZone = new TimeZoneWrapper(newValue.timezone);
 
 				formattedTime = mDefaultDateFormat.format(fullDate) + " " + mDefaultTimeFormat.format(fullDate);
 
-				if (!taskTimeZone.equals(defaultTimeZone) && mAdapter.hasTimeZoneField() && mTimeZoneText != null)
+				if (!taskTimeZone.equals(mDefaultTimeZone) && mAdapter.hasTimeZoneField() && mTimeZoneText != null)
 				{
 					/*
-					 * The date has a time zone that is not the default time zone, so show the original time too.
+					 * The date has a time zone that is different from the default time zone, so show the original time too.
 					 */
 					mDefaultDateFormat.setTimeZone(taskTimeZone);
 					mDefaultTimeFormat.setTimeZone(taskTimeZone);
