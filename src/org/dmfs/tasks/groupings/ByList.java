@@ -31,6 +31,7 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -41,6 +42,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 
+@TargetApi(11)
 public interface ByList
 {
 	/**
@@ -69,6 +71,11 @@ public interface ByList
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
+
+			if (android.os.Build.VERSION.SDK_INT >= 12)
+			{
+				view.setTranslationX(0);
+			}
 
 			if (title != null)
 			{

@@ -36,10 +36,13 @@ import org.dmfs.tasks.utils.OnModelLoadedListener;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -552,5 +555,70 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onModelLoaded(Model model)
 	{
 		// nothing to do, we've just loaded the default model to speed up loading the detail view and the editor view.
+	}
+
+
+	/**
+	 * Mark a task as completed and show a nice animation.
+	 * 
+	 * @param taskUri
+	 *            The {@link Uri} of the task to mark as completed.
+	 * @param v
+	 *            The {@link View} to animate.
+	 */
+	private void animateCompleteTask(final Uri taskUri, final View v)
+	{
+		if (android.os.Build.VERSION.SDK_INT >= 12)
+		{
+			// Use animations for SDK level 12+ only
+			v.animate().translationX(((View) v.getParent()).getWidth()).setListener(new AnimatorListener()
+			{
+
+				@Override
+				public void onAnimationStart(Animator animation)
+				{
+				}
+
+
+				@Override
+				public void onAnimationRepeat(Animator animation)
+				{
+				}
+
+
+				@Override
+				public void onAnimationEnd(Animator animation)
+				{
+					completeTask(taskUri);
+				}
+
+
+				@Override
+				public void onAnimationCancel(Animator animation)
+				{
+					v.setTranslationX(0);
+					completeTask(taskUri);
+				}
+			}).start();
+		}
+		else
+		{
+			completeTask(taskUri);
+		}
+	}
+
+
+	/**
+	 * Mark the give task as completed.
+	 * 
+	 * @param taskUri
+	 *            The {@link Uri} of the task.
+	 */
+	private void completeTask(Uri taskUri)
+	{
+		ContentValues values = new ContentValues();
+		values.put(Tasks.STATUS, Tasks.STATUS_COMPLETED);
+		appContext.getContentResolver().update(taskUri, values, null, null);
+
 	}
 }
