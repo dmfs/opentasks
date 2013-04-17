@@ -33,6 +33,8 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.utils.OnSwipeHandler;
+import org.dmfs.tasks.utils.OnSwipeHandler.OnSwipeListener;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -74,7 +76,7 @@ import android.widget.ListView;
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
 @SuppressLint("NewApi")
-public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener
+public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener, OnSwipeListener
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
@@ -195,6 +197,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			Log.d(TAG, "savedInstancestate is null!!");
 		}
+
+		OnSwipeHandler swiper = new OnSwipeHandler(expandLV);
+		swiper.setOnSwipeListener(this);
+
 		return rootView;
 	}
 
@@ -566,40 +572,42 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * @param v
 	 *            The {@link View} to animate.
 	 */
-	private void animateCompleteTask(final Uri taskUri, final View v)
+	private void animateCompleteTask(final Uri taskUri, final View v, float velocity)
 	{
 		if (android.os.Build.VERSION.SDK_INT >= 12)
 		{
 			// Use animations for SDK level 12+ only
-			v.animate().translationX(((View) v.getParent()).getWidth()).setListener(new AnimatorListener()
-			{
-
-				@Override
-				public void onAnimationStart(Animator animation)
+			v.animate().translationX(((View) v.getParent()).getWidth())
+				.setDuration((long) ((((View) v.getParent()).getWidth() - v.getTranslationX()) / velocity)).setListener(new AnimatorListener()
 				{
-				}
+
+					@Override
+					public void onAnimationStart(Animator animation)
+					{
+					}
 
 
-				@Override
-				public void onAnimationRepeat(Animator animation)
-				{
-				}
+					@Override
+					public void onAnimationRepeat(Animator animation)
+					{
+					}
 
 
-				@Override
-				public void onAnimationEnd(Animator animation)
-				{
-					completeTask(taskUri);
-				}
+					@Override
+					public void onAnimationEnd(Animator animation)
+					{
+						completeTask(taskUri);
+					}
 
 
-				@Override
-				public void onAnimationCancel(Animator animation)
-				{
-					v.setTranslationX(0);
-					completeTask(taskUri);
-				}
-			}).start();
+					@Override
+					public void onAnimationCancel(Animator animation)
+					{
+						v.setTranslationX(0);
+						v.setAlpha(100);
+						completeTask(taskUri);
+					}
+				}).start();
 		}
 		else
 		{
@@ -620,5 +628,51 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		values.put(Tasks.STATUS, Tasks.STATUS_COMPLETED);
 		appContext.getContentResolver().update(taskUri, values, null, null);
 
+	}
+
+
+	@Override
+	public boolean allowSwipe(ListView v, int pos)
+	{
+		long packedPos = expandLV.getExpandableListPosition(pos);
+		if (packedPos != ExpandableListView.PACKED_POSITION_VALUE_NULL
+			&& ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+		{
+			ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
+			Cursor cursor = (Cursor) listAdapter.getChild(ExpandableListView.getPackedPositionGroup(packedPos),
+				ExpandableListView.getPackedPositionChild(packedPos));
+			return cursor.getInt(cursor.getColumnIndex(Tasks.IS_CLOSED)) != 1;
+		}
+		return false;
+	}
+
+
+	@Override
+	public boolean onSwipe(ListView v, int pos, float velocity)
+	{
+		long packedPos = expandLV.getExpandableListPosition(pos);
+		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+		{
+			ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
+			Cursor cursor = (Cursor) listAdapter.getChild(ExpandableListView.getPackedPositionGroup(packedPos),
+				ExpandableListView.getPackedPositionChild(packedPos));
+
+			if (cursor != null)
+			{
+				// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
+				Long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
+
+				if (selectTaskId != null)
+				{
+					// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+
+					// TODO: use the instance URI one we support recurrence
+					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+
+					animateCompleteTask(taskUri, v.getChildAt(pos - v.getFirstVisiblePosition()), velocity);
+				}
+			}
+		}
+		return false;
 	}
 }

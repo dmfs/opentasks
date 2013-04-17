@@ -75,6 +75,7 @@ public interface ByList
 			if (android.os.Build.VERSION.SDK_INT >= 12)
 			{
 				view.setTranslationX(0);
+				view.setAlpha(100);
 			}
 
 			if (title != null)
