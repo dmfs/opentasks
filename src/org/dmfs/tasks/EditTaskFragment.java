@@ -74,6 +74,9 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public static final String PARAM_TASK_URI = "task_uri";
 
 	public static final String LIST_LOADER_URI = "uri";
+	public static final String LIST_LOADER_FILTER = "filter";
+
+	public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.VISIBLE + "=1 and " + TaskLists.SYNC_ENABLED + "=1";
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -160,11 +163,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri);
 
-		if (!mAppForEdit)
-		{
-			setListUri(WriteableTaskLists.CONTENT_URI);
-		}
-
 		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
 		final Spinner listSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
 
@@ -193,7 +191,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 				{
 					mValues = savedInstanceState.getParcelable(KEY_VALUES);
 					new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
-					setListUri(ContentUris.withAppendedId(TaskLists.CONTENT_URI, mValues.getAsLong(Tasks.LIST_ID)));
+					setListUri(ContentUris.withAppendedId(TaskLists.CONTENT_URI, mValues.getAsLong(Tasks.LIST_ID)), null);
 				}
 				// disable spinner
 				listSpinner.setEnabled(false);
@@ -214,8 +212,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			{
 				mValues = savedInstanceState.getParcelable(KEY_VALUES);
 				new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
-				setListUri(WriteableTaskLists.CONTENT_URI);
 			}
+			setListUri(WriteableTaskLists.CONTENT_URI, LIST_LOADER_VISIBLE_LISTS_FILTER);
 		}
 
 		return rootView;
@@ -291,7 +289,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
 	{
-		return new CursorLoader(mAppContext, (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, null, null, null);
+		return new CursorLoader(mAppContext, (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null,
+			null);
 	}
 
 
@@ -338,17 +337,19 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			/*
 			 * Don't start the model loader here, let onItemSelected do that.
 			 */
-			setListUri(mAppForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI);
+			setListUri(mAppForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI,
+				mAppForEdit ? LIST_LOADER_VISIBLE_LISTS_FILTER : null);
 		}
 	}
 
 
-	private void setListUri(Uri uri)
+	private void setListUri(Uri uri, String filter)
 	{
 		if (this.isAdded())
 		{
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(LIST_LOADER_URI, uri);
+			bundle.putString(LIST_LOADER_FILTER, filter);
 
 			getLoaderManager().restartLoader(-2, bundle, this);
 		}

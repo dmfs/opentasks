@@ -72,10 +72,10 @@ public interface ByList
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
 
-			if (android.os.Build.VERSION.SDK_INT >= 12)
+			if (android.os.Build.VERSION.SDK_INT >= 14)
 			{
 				view.setTranslationX(0);
-				view.setAlpha(100);
+				view.setAlpha(1);
 			}
 
 			if (title != null)

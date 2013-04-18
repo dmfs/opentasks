@@ -1,14 +1,17 @@
 package org.dmfs.tasks.utils;
 
+import android.annotation.TargetApi;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
 
-public class OnSwipeHandler implements OnTouchListener
+public class OnSwipeHandler implements OnTouchListener, OnScrollListener
 {
 
 	public final static float MIN_VELOCITY = 1.3f;
@@ -24,6 +27,7 @@ public class OnSwipeHandler implements OnTouchListener
 	private long mLastTime2;
 	private boolean mInSwipe;
 	private boolean mSwipeEnabled;
+	private boolean mScrolling = false;
 	private int mDownPos;
 	private View mDownView;
 
@@ -33,6 +37,7 @@ public class OnSwipeHandler implements OnTouchListener
 	public OnSwipeHandler(ListView v)
 	{
 		v.setOnTouchListener(this);
+		v.setOnScrollListener(this);
 		mSwipeView = v;
 	}
 
@@ -48,8 +53,8 @@ public class OnSwipeHandler implements OnTouchListener
 				mLastTime = event.getDownTime();
 				mDownPos = getDownPos(mDownX, mDownY);
 				mDownView = mSwipeView.getChildAt(mDownPos - mSwipeView.getFirstVisiblePosition());
-				mSwipeEnabled = mListener != null && mListener.allowSwipe(mSwipeView, mDownPos);
-				Log.v("#######################", "down");
+				mSwipeEnabled = mDownView != null && mListener != null && mListener.allowSwipe(mSwipeView, mDownPos) && !mScrolling;
+				Log.v("#######################", "down " + mListener.allowSwipe(mSwipeView, mDownPos));
 				break;
 			case MotionEvent.ACTION_MOVE:
 				if (mSwipeEnabled)
@@ -65,10 +70,7 @@ public class OnSwipeHandler implements OnTouchListener
 						mLastX = event.getX();
 						mLastY = event.getY();
 						mLastTime = event.getEventTime();
-						if (mDownView != null)
-						{
-							mDownView.setTranslationX(mLastX - mDownX);
-						}
+						animateView(mDownView, Math.max(0, (mLastX - mDownX)));
 						mSwipeView.requestDisallowInterceptTouchEvent(true);
 
 						MotionEvent cancelEvent = MotionEvent.obtain(event);
@@ -97,13 +99,12 @@ public class OnSwipeHandler implements OnTouchListener
 							return true;
 						}
 					}
-					mDownView.animate().translationX(0).setDuration(100).start();
-
+					resetView(mDownView);
 					mInSwipe = false;
 				}
 				break;
 			case MotionEvent.ACTION_CANCEL:
-				mDownView.animate().translationX(0).setDuration(100).start();
+				resetView(mDownView);
 				mInSwipe = false;
 				break;
 		}
@@ -139,5 +140,40 @@ public class OnSwipeHandler implements OnTouchListener
 
 
 		public boolean onSwipe(ListView v, int pos, float velocity);
+	}
+
+
+	@Override
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
+	{
+	}
+
+
+	@Override
+	public void onScrollStateChanged(AbsListView view, int scrollState)
+	{
+		mScrolling = scrollState != OnScrollListener.SCROLL_STATE_IDLE;
+		mSwipeEnabled &= !mScrolling;
+	}
+
+
+	@TargetApi(14)
+	private void animateView(View v, float translate)
+	{
+		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
+		{
+			v.setTranslationX(translate);
+			v.setAlpha(1 - translate / v.getWidth());
+		}
+	}
+
+
+	@TargetApi(14)
+	private void resetView(View v)
+	{
+		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
+		{
+			v.animate().translationX(0).alpha(1).setDuration(100).setListener(null).start();
+		}
 	}
 }

@@ -198,9 +198,11 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			Log.d(TAG, "savedInstancestate is null!!");
 		}
 
-		OnSwipeHandler swiper = new OnSwipeHandler(expandLV);
-		swiper.setOnSwipeListener(this);
-
+		if (android.os.Build.VERSION.SDK_INT >= 14)
+		{
+			OnSwipeHandler swiper = new OnSwipeHandler(expandLV);
+			swiper.setOnSwipeListener(this);
+		}
 		return rootView;
 	}
 
@@ -574,10 +576,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 */
 	private void animateCompleteTask(final Uri taskUri, final View v, float velocity)
 	{
-		if (android.os.Build.VERSION.SDK_INT >= 12)
+		if (android.os.Build.VERSION.SDK_INT >= 14)
 		{
-			// Use animations for SDK level 12+ only
-			v.animate().translationX(((View) v.getParent()).getWidth())
+			// Use animations for SDK level 14+ only
+			v.animate().alpha(0).translationX(((View) v.getParent()).getWidth())
 				.setDuration((long) ((((View) v.getParent()).getWidth() - v.getTranslationX()) / velocity)).setListener(new AnimatorListener()
 				{
 
@@ -604,7 +606,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					public void onAnimationCancel(Animator animation)
 					{
 						v.setTranslationX(0);
-						v.setAlpha(100);
+						v.setAlpha(1);
 						completeTask(taskUri);
 					}
 				}).start();
@@ -669,7 +671,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					// TODO: use the instance URI one we support recurrence
 					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
 
-					animateCompleteTask(taskUri, v.getChildAt(pos - v.getFirstVisiblePosition()), velocity);
+					animateCompleteTask(taskUri, v.getChildAt(pos - v.getFirstVisiblePosition()), velocity * 1.333f);
 				}
 			}
 		}
