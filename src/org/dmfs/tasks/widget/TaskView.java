@@ -63,7 +63,7 @@ public class TaskView extends BaseTaskView
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		/*
-		 * Add an detail view for every field that is supported by this model.
+		 * Add a detail view for every field that is supported by this model.
 		 */
 		for (FieldDescriptor field : mModel.getFields())
 		{
