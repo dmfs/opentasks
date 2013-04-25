@@ -49,7 +49,6 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	private float mDownY;
 	private boolean mFlinging;
 	private boolean mFlingEnabled;
-	private boolean mScrolling = false;
 	private int mDownItemPos;
 	private View mDownChildView;
 	private VelocityTracker mVelocityTracker;
@@ -126,7 +125,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				// get the child that was tapped
 				int mDownChildPos = getChildPosByCoords(mDownX, mDownY);
 
-				if (!mScrolling && mDownChildPos >= 0) // FIXME: will mScrolling ever be true here?
+				if (mDownChildPos >= 0)
 				{
 					mDownItemPos = mDownChildPos + mListView.getFirstVisiblePosition();
 					mDownChildView = mListView.getChildAt(mDownChildPos);
@@ -202,6 +201,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 
 					mVelocityTracker.clear();
 					mFlingEnabled = false;
+					mFlinging = false;
 					handled = true;
 				}
 				else if (mFlingEnabled)
@@ -280,9 +280,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState)
 	{
-		mScrolling = scrollState != OnScrollListener.SCROLL_STATE_IDLE;
 		// disable flinging if scrolling starts
-		mFlingEnabled &= !mScrolling;
+		mFlingEnabled &= scrollState == OnScrollListener.SCROLL_STATE_IDLE;
 	}
 
 

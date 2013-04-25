@@ -68,6 +68,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 /**
@@ -572,11 +573,16 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 *            The {@link Uri} of the task.
 	 * @return <code>true</code> if the operation was successful, <code>false</code> otherwise.
 	 */
-	private boolean completeTask(Uri taskUri)
+	private boolean completeTask(Uri taskUri, String taskTitle)
 	{
 		ContentValues values = new ContentValues();
 		values.put(Tasks.STATUS, Tasks.STATUS_COMPLETED);
-		return appContext.getContentResolver().update(taskUri, values, null, null) != 0;
+		boolean completed = appContext.getContentResolver().update(taskUri, values, null, null) != 0;
+		if (completed)
+		{
+			Toast.makeText(appContext, getString(R.string.toast_task_completed, taskTitle), Toast.LENGTH_SHORT).show();
+		}
+		return completed;
 	}
 
 
@@ -589,7 +595,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 *            the title of the task to remove.
 	 * @return
 	 */
-	private void removeTask(final Uri taskUri, String taskTitle)
+	private void removeTask(final Uri taskUri, final String taskTitle)
 	{
 		new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
 			.setNegativeButton(android.R.string.cancel, new OnClickListener()
@@ -606,6 +612,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				{
 					// TODO: remove the task in a background task
 					appContext.getContentResolver().delete(taskUri, null, null);
+					Toast.makeText(appContext, getString(R.string.toast_task_deleted, taskTitle), Toast.LENGTH_SHORT).show();
 				}
 			}).setMessage(getString(R.string.confirm_delete_message_with_title, taskTitle)).create().show();
 	}
@@ -637,19 +644,19 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				if (taskId != null)
 				{
 					boolean closed = cursor.getLong(cursor.getColumnIndex(Instances.IS_CLOSED)) > 0;
-
+					String title = cursor.getString(cursor.getColumnIndex(Instances.TITLE));
 					// TODO: use the instance URI once we support recurrence
 					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, taskId);
 
 					if (closed)
 					{
-						removeTask(taskUri, cursor.getString(cursor.getColumnIndex(Instances.TITLE)));
+						removeTask(taskUri, title);
 						// we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
 						return false;
 					}
 					else
 					{
-						return completeTask(taskUri);
+						return completeTask(taskUri, title);
 					}
 				}
 			}

@@ -10,6 +10,7 @@
     <string name="menu_show_completed_condensed">Fertige Aufgaben zeigen</string>
     <string name="menu_sync_now">Aktualisieren</string>
     <string name="menu_sync_now_condensed">Aktualisieren</string>
+    <string name="toast_task_completed">\"%1s\" fertig gestellt.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d Aufgabe</item>
@@ -99,5 +100,6 @@
     <string name="confirm_delete_title">Löschen bestätigen</string>
     <string name="confirm_delete_message">Diese Aufgabe löschen?</string>
     <string name="confirm_delete_message_with_title">\"%1s\" löschen?</string>
+    <string name="toast_task_deleted">\"%1s\" gelöscht.</string>
 
 </resources>

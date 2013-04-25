@@ -10,6 +10,7 @@
     <string name="menu_show_completed_condensed">Show completed tasks</string>
     <string name="menu_sync_now">Refresh</string>
     <string name="menu_sync_now_condensed">Refresh</string>
+    <string name="toast_task_completed">\"%1s\" completed.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d task</item>
@@ -99,5 +100,6 @@
     <string name="confirm_delete_title">Confirm delete</string>
     <string name="confirm_delete_message">Delete this task?</string>
     <string name="confirm_delete_message_with_title">Delete \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" removed.</string>
 
 </resources>
