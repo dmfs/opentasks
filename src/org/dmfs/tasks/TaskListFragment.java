@@ -481,10 +481,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				Log.d(TAG, "Restoring Child Postion : " + mActivatedPositionChild);
 				Log.d(TAG, "Restoring Group Position : " + mActivatedPositionGroup);
 				mHandler.post(setOpenHandler);
-
 			}
 		}
-
 	}
 
 
