@@ -31,21 +31,22 @@ import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
+import org.dmfs.tasks.utils.FlingDetector;
+import org.dmfs.tasks.utils.FlingDetector.OnFlingListener;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
-import org.dmfs.tasks.utils.OnSwipeHandler;
-import org.dmfs.tasks.utils.OnSwipeHandler.OnSwipeListener;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,7 +77,7 @@ import android.widget.ListView;
  * Activities containing this fragment MUST implement the {@link Callbacks} interface.
  */
 @SuppressLint("NewApi")
-public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener, OnSwipeListener
+public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener, OnFlingListener
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
@@ -200,8 +201,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 		if (android.os.Build.VERSION.SDK_INT >= 14)
 		{
-			OnSwipeHandler swiper = new OnSwipeHandler(expandLV);
-			swiper.setOnSwipeListener(this);
+			FlingDetector swiper = new FlingDetector(expandLV);
+			swiper.setOnFlingListener(this);
 		}
 		return rootView;
 	}
@@ -567,90 +568,61 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 	/**
-	 * Mark a task as completed and show a nice animation.
-	 * 
-	 * @param taskUri
-	 *            The {@link Uri} of the task to mark as completed.
-	 * @param v
-	 *            The {@link View} to animate.
-	 */
-	private void animateCompleteTask(final Uri taskUri, final View v, float velocity)
-	{
-		if (android.os.Build.VERSION.SDK_INT >= 14)
-		{
-			// Use animations for SDK level 14+ only
-			v.animate().alpha(0).translationX(((View) v.getParent()).getWidth())
-				.setDuration((long) ((((View) v.getParent()).getWidth() - v.getTranslationX()) / velocity)).setListener(new AnimatorListener()
-				{
-
-					@Override
-					public void onAnimationStart(Animator animation)
-					{
-					}
-
-
-					@Override
-					public void onAnimationRepeat(Animator animation)
-					{
-					}
-
-
-					@Override
-					public void onAnimationEnd(Animator animation)
-					{
-						completeTask(taskUri);
-					}
-
-
-					@Override
-					public void onAnimationCancel(Animator animation)
-					{
-						v.setTranslationX(0);
-						v.setAlpha(1);
-						completeTask(taskUri);
-					}
-				}).start();
-		}
-		else
-		{
-			completeTask(taskUri);
-		}
-	}
-
-
-	/**
 	 * Mark the give task as completed.
 	 * 
 	 * @param taskUri
 	 *            The {@link Uri} of the task.
+	 * @return <code>true</code> if the operation was successful, <code>false</code> otherwise.
 	 */
-	private void completeTask(Uri taskUri)
+	private boolean completeTask(Uri taskUri)
 	{
 		ContentValues values = new ContentValues();
 		values.put(Tasks.STATUS, Tasks.STATUS_COMPLETED);
-		appContext.getContentResolver().update(taskUri, values, null, null);
+		return appContext.getContentResolver().update(taskUri, values, null, null) != 0;
+	}
 
+
+	/**
+	 * Remove the task with the given {@link Uri} and title, asking for confirmation first.
+	 * 
+	 * @param taskUri
+	 *            The {@link Uri} of the atsk to remove.
+	 * @param taskTitle
+	 *            the title of the task to remove.
+	 * @return
+	 */
+	private void removeTask(final Uri taskUri, String taskTitle)
+	{
+		new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
+			.setNegativeButton(android.R.string.cancel, new OnClickListener()
+			{
+				@Override
+				public void onClick(DialogInterface dialog, int which)
+				{
+					// nothing to do here
+				}
+			}).setPositiveButton(android.R.string.ok, new OnClickListener()
+			{
+				@Override
+				public void onClick(DialogInterface dialog, int which)
+				{
+					// TODO: remove the task in a background task
+					appContext.getContentResolver().delete(taskUri, null, null);
+				}
+			}).setMessage(getString(R.string.confirm_delete_message_with_title, taskTitle)).create().show();
 	}
 
 
 	@Override
-	public boolean allowSwipe(ListView v, int pos)
+	public boolean canFling(ListView v, int pos)
 	{
 		long packedPos = expandLV.getExpandableListPosition(pos);
-		if (packedPos != ExpandableListView.PACKED_POSITION_VALUE_NULL
-			&& ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
-		{
-			ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
-			Cursor cursor = (Cursor) listAdapter.getChild(ExpandableListView.getPackedPositionGroup(packedPos),
-				ExpandableListView.getPackedPositionChild(packedPos));
-			return cursor.getInt(cursor.getColumnIndex(Tasks.IS_CLOSED)) != 1;
-		}
-		return false;
+		return (packedPos != ExpandableListView.PACKED_POSITION_VALUE_NULL && ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD);
 	}
 
 
 	@Override
-	public boolean onSwipe(ListView v, int pos, float velocity)
+	public boolean onFling(ListView v, int pos)
 	{
 		long packedPos = expandLV.getExpandableListPosition(pos);
 		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
@@ -662,16 +634,25 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			if (cursor != null)
 			{
 				// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-				Long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
+				Long taskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
 
-				if (selectTaskId != null)
+				if (taskId != null)
 				{
-					// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+					boolean closed = cursor.getLong(cursor.getColumnIndex(Instances.IS_CLOSED)) > 0;
 
-					// TODO: use the instance URI one we support recurrence
-					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+					// TODO: use the instance URI once we support recurrence
+					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, taskId);
 
-					animateCompleteTask(taskUri, v.getChildAt(pos - v.getFirstVisiblePosition()), velocity * 1.333f);
+					if (closed)
+					{
+						removeTask(taskUri, cursor.getString(cursor.getColumnIndex(Instances.TITLE)));
+						// we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
+						return false;
+					}
+					else
+					{
+						return completeTask(taskUri);
+					}
 				}
 			}
 		}

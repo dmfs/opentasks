@@ -98,5 +98,6 @@
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Confirm delete</string>
     <string name="confirm_delete_message">Delete this task?</string>
+    <string name="confirm_delete_message_with_title">Delete \"%1s\"?</string>
 
 </resources>
