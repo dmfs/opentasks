@@ -277,25 +277,28 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private void selectChildView(ExpandableListView expandLV, int groupPosition, int childPosition, boolean force)
 	{
-		// a task instance element has been clicked, get it's instance id and notify the activity
-		ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
-		Cursor cursor = (Cursor) listAdapter.getChild(groupPosition, childPosition);
-
-		if (cursor == null)
+		if (groupPosition < mAdapter.getGroupCount() && childPosition < mAdapter.getChildrenCount(groupPosition))
 		{
-			return;
-		}
-		// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-		Long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
+			// a task instance element has been clicked, get it's instance id and notify the activity
+			ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
+			Cursor cursor = (Cursor) listAdapter.getChild(groupPosition, childPosition);
 
-		if (selectTaskId != null)
-		{
-			// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+			if (cursor == null)
+			{
+				return;
+			}
+			// TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
+			Long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
 
-			// TODO: use the instance URI one we support recurrence
-			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+			if (selectTaskId != null)
+			{
+				// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
 
-			mCallbacks.onItemSelected(taskUri, force);
+				// TODO: use the instance URI one we support recurrence
+				Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+
+				mCallbacks.onItemSelected(taskUri, force);
+			}
 		}
 	}
 
@@ -364,9 +367,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			item.setChecked(!item.isChecked());
 			mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
-			// reload the child cursors only
 
-			// TODO: reload only groups that are visible
+			// reload the child cursors only
 			for (int i = 0; i < mAdapter.getGroupCount(); ++i)
 			{
 				mAdapter.reloadGroup(i);

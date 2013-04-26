@@ -110,13 +110,16 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	{
 		int pos = loader.getId();
 
-		// the child cursor has been loaded
-		mLoadedGroups.add(pos);
-		setChildrenCursor(pos, cursor);
-
-		if (mOnChildLoadedListener != null)
+		if (pos < getGroupCount())
 		{
-			mOnChildLoadedListener.onChildLoaded(pos);
+			// the child cursor has been loaded
+			mLoadedGroups.add(pos);
+			setChildrenCursor(pos, cursor);
+
+			if (mOnChildLoadedListener != null)
+			{
+				mOnChildLoadedListener.onChildLoaded(pos);
+			}
 		}
 	}
 
