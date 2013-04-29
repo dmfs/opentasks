@@ -281,9 +281,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	 */
 	private void updateView()
 	{
-		if (mContent != null)
+		Activity activity = getActivity();
+		if (mContent != null && activity != null)
 		{
-			final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			final LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 			if (mDetailView != null)
 			{
