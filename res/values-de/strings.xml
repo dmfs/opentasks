@@ -63,7 +63,7 @@
 
     <!-- Status labels -->
 
-    <string name="status_needs_action">benötigt Eingriff</string>
+    <string name="status_needs_action">nicht begonnen</string>
     <string name="status_in_process">in Arbeit</string>
     <string name="status_completed">erledigt</string>
     <string name="status_cancelled">abgebrochen</string>

@@ -35,8 +35,8 @@ import android.os.AsyncTask;
 public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 {
 	/**
-	 * Stores the listener in a {@link WeakReference}. The loader may take longer to load than the lister lives. We don't want to prevent the listener from been
-	 * garbage collected.
+	 * Stores the listener in a {@link WeakReference}. The loader may take longer to load than the lister lives. We don't want to prevent the listener from
+	 * being garbage collected.
 	 */
 	private WeakReference<OnContentLoadedListener> mListener;
 
@@ -75,19 +75,19 @@ public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 			for (int i = 0; i < len; ++i)
 			{
 				Cursor c = resolver.query(params[i], mMapper.getColumns(), null, null, null);
-				try
+				if (c != null)
 				{
-					if (c != null)
+					try
 					{
 						if (c.moveToNext())
 						{
 							result[i] = mMapper.map(c);
 						}
 					}
-				}
-				finally
-				{
-					c.close();
+					finally
+					{
+						c.close();
+					}
 				}
 			}
 			return result;

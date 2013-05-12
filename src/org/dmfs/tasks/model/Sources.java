@@ -102,8 +102,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 		filter.addDataScheme("package");
 		mContext.registerReceiver(this, filter);
 
-		// register to receive locale changes, we do that to reload labels and
-		// titles in that case
+		// register to receive locale changes, we do that to reload labels and titles in that case
 		filter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED);
 		mContext.registerReceiver(this, filter);
 
@@ -257,6 +256,10 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	public void onAccountsUpdated(Account[] accounts)
 	{
 		// the account list has changed, rebuild model map
+
+		/*
+		 * FIXME: Do we have to rebuild the model map? An account was added not a new model. Instead we could cache the existing accounts and update it here.
+		 */
 		getAccounts();
 	}
 

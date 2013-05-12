@@ -27,7 +27,6 @@ import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.contraints.NotAfter;
 import org.dmfs.tasks.model.contraints.NotBefore;
-import org.dmfs.tasks.model.contraints.ShiftTime;
 
 
 /**
@@ -95,8 +94,8 @@ public final class TaskFieldAdapters
 	/**
 	 * Adapter for the due date of a task.
 	 */
-	public final static TimeFieldAdapter DUE = (TimeFieldAdapter) new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY).addContraint(
-		new ShiftTime(_DTSTART)).addContraint(new NotBefore(_DTSTART));
+	public final static TimeFieldAdapter DUE = (TimeFieldAdapter) new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY).addContraint(new NotBefore(
+		_DTSTART));
 
 	/**
 	 * Adapter for the start date of a task.

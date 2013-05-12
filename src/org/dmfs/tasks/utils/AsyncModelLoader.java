@@ -29,13 +29,15 @@ import android.os.AsyncTask;
 /**
  * An asynchronous model loader. Loads a specific model in the background and notifies a listener when the operation is finished.
  * 
+ * If there is no model for a specific account type a default model is returned.
+ * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class AsyncModelLoader extends AsyncTask<String, Void, Model>
 {
 	/**
-	 * Stores the listener in a {@link WeakReference}. The loader may take longer to load than the lister lives. We don't want to prevent the listener from been
-	 * garbage collected.
+	 * Stores the listener in a {@link WeakReference}. The loader may take longer to load than the lister lives. We don't want to prevent the listener from
+	 * being garbage collected.
 	 */
 	private WeakReference<OnModelLoadedListener> mListener;
 

@@ -17,14 +17,17 @@
 
 package org.dmfs.tasks.model;
 
-public class IllegalDataKindException extends Exception {
+public class IllegalDataKindException extends Exception
+{
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 8108680361456157978L;
+	/**
+	 * Generated serial.
+	 */
+	private static final long serialVersionUID = 8108680361456157978L;
 
-    public IllegalDataKindException(String msg) {
-	super(msg);
-    }
+
+	public IllegalDataKindException(String msg)
+	{
+		super(msg);
+	}
 }

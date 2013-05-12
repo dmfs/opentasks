@@ -21,8 +21,8 @@ public class ModelInflaterException extends Exception
 {
 
 	/**
-     * 
-     */
+	 * Generated serial.
+	 */
 	private static final long serialVersionUID = 2498148128490322210L;
 
 
