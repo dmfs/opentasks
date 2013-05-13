@@ -225,8 +225,18 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 			if (!cur.isNull(compareColumn))
 			{
-				int checkValue = cur.getInt(compareColumn);
-				item.cb.setChecked(checkValue == 1);
+				long id = cur.getLong(0);
+				boolean checkValue;
+				if (savedPositions.containsKey(id))
+				{
+					checkValue = savedPositions.get(id);
+				}
+				else
+				{
+					checkValue = cur.getInt(compareColumn) == 1;
+				}
+				item.cb.setChecked(checkValue);
+
 			}
 		}
 
