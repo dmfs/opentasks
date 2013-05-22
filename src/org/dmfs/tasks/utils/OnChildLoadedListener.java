@@ -18,7 +18,7 @@
 package org.dmfs.tasks.utils;
 
 /**
- * A listener that is notifed when an {@link ExpandableGroupDescriptorAdapter} has loaded a child cursor.
+ * A listener that is notified when an {@link ExpandableGroupDescriptorAdapter} has loaded a child cursor.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
