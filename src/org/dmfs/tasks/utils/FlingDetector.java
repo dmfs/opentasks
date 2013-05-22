@@ -322,53 +322,57 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
 		{
 			int parentWidth = ((View) v.getParent()).getWidth();
-			v.animate().alpha(0).translationX(parentWidth).setDuration((long) ((parentWidth - v.getTranslationX()) / velocity))
-				.setListener(new AnimatorListener()
-				{
 
-					@Override
-					public void onAnimationStart(Animator animation)
+			if (parentWidth > v.getTranslationX()) // otherwise there is nothing to animate
+			{
+				v.animate().alpha(0).translationX(parentWidth).setDuration((long) ((parentWidth - v.getTranslationX()) / velocity))
+					.setListener(new AnimatorListener()
 					{
-						// nothing to do
-					}
 
-
-					@Override
-					public void onAnimationRepeat(Animator animation)
-					{
-						// nothing to do
-					}
-
-
-					@Override
-					public void onAnimationEnd(Animator animation)
-					{
-						if (mListener != null)
+						@Override
+						public void onAnimationStart(Animator animation)
 						{
-							// notify listener
-							if (!mListener.onFling(mListView, pos))
+							// nothing to do
+						}
+
+
+						@Override
+						public void onAnimationRepeat(Animator animation)
+						{
+							// nothing to do
+						}
+
+
+						@Override
+						public void onAnimationEnd(Animator animation)
+						{
+							if (mListener != null)
 							{
-								// the event was not handled, so reset the view
-								resetView(v);
+								// notify listener
+								if (!mListener.onFling(mListView, pos))
+								{
+									// the event was not handled, so reset the view
+									resetView(v);
+								}
 							}
 						}
-					}
 
 
-					@Override
-					public void onAnimationCancel(Animator animation)
-					{
-						if (mListener != null)
+						@Override
+						public void onAnimationCancel(Animator animation)
 						{
-							// notify listener
-							if (!mListener.onFling(mListView, pos))
+							if (mListener != null)
 							{
-								// the event was not handled, so reset the view
-								resetView(v);
+								// notify listener
+								if (!mListener.onFling(mListView, pos))
+								{
+									// the event was not handled, so reset the view
+									resetView(v);
+								}
 							}
 						}
-					}
-				}).start();
+					}).start();
+			}
 		}
 		else
 		{
