@@ -53,7 +53,7 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 	 * 
 	 * TODO: find a better way to get the current offsets
 	 * 
-	 * alternatively: always show rawOffset instead (just like the stock calendar app does)
+	 * alternatively: always show rawOffset instead
 	 */
 	private Long mReferenceTime;
 
