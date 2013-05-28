@@ -199,7 +199,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			mContentSet = savedInstanceState.getParcelable(STATE_VALUES);
 			mTaskUri = savedInstanceState.getParcelable(STATE_TASK_URI);
 
-			if (mContent != null)
+			if (mContent != null && mContentSet != null)
 			{
 				// register listener and observer
 				mContentSet.addOnChangeListener(this, null, true);
