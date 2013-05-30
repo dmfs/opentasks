@@ -2,7 +2,11 @@
 <resources>
 
     <string name="app_name">Aufgaben</string>
-
+    <string name="permission_read_tasks">Aufgaben lesen</string>
+    <string name="permission_description_read_tasks">Erlaubt einer App Aufgaben zu lesen.</string>
+    <string name="permission_write_tasks">Aufgaben schreiben</string>
+    <string name="permission_description_write_tasks">Erlaubt einer App Aufgaben zu schreiben.</string>
+    
     <!-- Task list -->
     <string name="menu_add_task">Neue Aufgabe</string>
     <string name="menu_add_task_condensed">Neu</string>

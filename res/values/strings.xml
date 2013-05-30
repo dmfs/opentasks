@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Manifest stuff -->
     <string name="app_name">Tasks</string>
+    <string name="permission_read_tasks">read tasks</string>
+    <string name="permission_description_read_tasks">Allows an app to read the tasks in your tasks lists.</string>
+    <string name="permission_write_tasks">write tasks</string>
+    <string name="permission_description_write_tasks">Allows an app to write tasks into your tasks lists.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Add task</string>
