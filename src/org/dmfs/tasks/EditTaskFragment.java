@@ -38,6 +38,8 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,6 +78,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public static final String LIST_LOADER_FILTER = "filter";
 
 	public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.VISIBLE + "=1 and " + TaskLists.SYNC_ENABLED + "=1";
+
+	public static final String PREFERENCE_LAST_LIST = "pref_last_list_used_for_new_event";
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -123,6 +127,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	private Context mAppContext;
 	private TaskEdit mEditor;
 	private LinearLayout mTaskListBar;
+	private boolean mSetInitialSpinnerSelection;
+	private Spinner mListSpinner;
 
 
 	/**
@@ -138,6 +144,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
+		mSetInitialSpinnerSelection = savedInstanceState == null;
 	}
 
 
@@ -163,16 +170,16 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri);
 
 		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
-		final Spinner listSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
+		mListSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
 
 		mTaskListAdapter = new TasksListCursorAdapter(mAppContext);
-		listSpinner.setAdapter(mTaskListAdapter);
+		mListSpinner.setAdapter(mTaskListAdapter);
 
-		listSpinner.setOnItemSelectedListener(this);
+		mListSpinner.setOnItemSelectedListener(this);
 
 		if (android.os.Build.VERSION.SDK_INT < 11)
 		{
-			listSpinner.setBackgroundDrawable(null);
+			mListSpinner.setBackgroundDrawable(null);
 		}
 
 		if (mAppForEdit)
@@ -193,11 +200,11 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 					setListUri(ContentUris.withAppendedId(TaskLists.CONTENT_URI, mValues.getAsLong(Tasks.LIST_ID)), null);
 				}
 				// disable spinner
-				listSpinner.setEnabled(false);
+				mListSpinner.setEnabled(false);
 				// hide spinner background
 				if (android.os.Build.VERSION.SDK_INT >= 16)
 				{
-					listSpinner.setBackground(null);
+					mListSpinner.setBackground(null);
 				}
 			}
 		}
@@ -295,6 +302,28 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
 		mTaskListAdapter.changeCursor(cursor);
+
+		if (mSetInitialSpinnerSelection && cursor != null)
+		{
+			// set the list that was used the last time the user created an event
+			SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
+			long lastList = prefs.getLong(PREFERENCE_LAST_LIST, -1);
+			if (lastList != -1)
+			{
+				cursor.moveToFirst();
+				while (!cursor.isAfterLast())
+				{
+					Long listId = cursor.getLong(TASK_LIST_PROJECTION_VALUES.id);
+					if (listId != null && listId == lastList)
+					{
+						mListSpinner.setSelection(cursor.getPosition());
+						break;
+					}
+					cursor.moveToNext();
+				}
+			}
+			mSetInitialSpinnerSelection = false;
+		}
 	}
 
 
@@ -370,7 +399,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 		if (!mAppForEdit)
 		{
-			mValues.put(Tasks.LIST_ID, c.getLong(TASK_LIST_PROJECTION_VALUES.id));
+			long listId = c.getLong(TASK_LIST_PROJECTION_VALUES.id);
+			mValues.put(Tasks.LIST_ID, listId);
 		}
 
 		if (mModel == null || !mModel.getAccountType().equals(accountType))
@@ -440,6 +470,15 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		else
 		{
 			activity.setResult(resultCode);
+		}
+
+		if (!mAppForEdit)
+		{
+			// store last list used
+			SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
+			Editor editor = prefs.edit();
+			editor.putLong(PREFERENCE_LAST_LIST, mListSpinner.getSelectedItemId());
+			editor.commit();
 		}
 
 		activity.finish();
