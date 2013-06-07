@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,13 +116,13 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private Uri mTaskUri;
 
-	ContentSet mValues;
-	ViewGroup mContent;
-	ViewGroup mHeader;
-	Model mModel;
-	Context mAppContext;
-	TaskEdit mEditor;
-	LinearLayout mTaskListBar;
+	private ContentSet mValues;
+	private ViewGroup mContent;
+	private ViewGroup mHeader;
+	private Model mModel;
+	private Context mAppContext;
+	private TaskEdit mEditor;
+	private LinearLayout mTaskListBar;
 
 
 	/**
@@ -258,8 +258,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		mEditor.setModel(mModel);
 		mEditor.setValues(mValues);
 		mContent.addView(mEditor);
-
-		Log.d(TAG, "At the end of updateView");
 	}
 
 
@@ -319,7 +317,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		}
 		else if (menuId == R.id.editor_action_cancel)
 		{
-			Log.v(TAG, "cancelled");
 			activity.setResult(Activity.RESULT_CANCELED);
 			activity.finish();
 			return true;

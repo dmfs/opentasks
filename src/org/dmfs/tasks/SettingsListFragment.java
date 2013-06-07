@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,6 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,10 +51,8 @@ import android.widget.TextView;
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
-
 public class SettingsListFragment extends ListFragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor>
 {
-	private static final String TAG = "SettingsListFragment";
 	public static final String LIST_SELECTION_ARGS = "list_selection_args";
 	public static final String LIST_STRING_PARAMS = "list_string_params";
 	public static final String LIST_FRAGMENT_LAYOUT = "list_fragment_layout";
@@ -67,8 +64,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private String mListSelectionArguments;
 	private String[] mListSelectionParam;
 	private String mListCompareColumnName;
-	private boolean saveOnDetach;
-	private int fragmentLayout;
+	private boolean mSaveOnDetach;
+	private int mFragmentLayout;
 
 
 	public SettingsListFragment()
@@ -94,10 +91,10 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		Bundle args = getArguments();
 		mListSelectionArguments = args.getString(LIST_SELECTION_ARGS);
 		mListSelectionParam = args.getStringArray(LIST_STRING_PARAMS);
-		fragmentLayout = args.getInt(LIST_FRAGMENT_LAYOUT);
-		saveOnDetach = args.getBoolean(LIST_ONDETACH_SAVE);
+		mFragmentLayout = args.getInt(LIST_FRAGMENT_LAYOUT);
+		mSaveOnDetach = args.getBoolean(LIST_ONDETACH_SAVE);
 		mListCompareColumnName = args.getString(COMPARE_COLUMN_NAME);
-		View view = inflater.inflate(fragmentLayout, container, false);
+		View view = inflater.inflate(mFragmentLayout, container, false);
 		return view;
 	}
 
@@ -124,7 +121,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	@Override
 	public void onDetach()
 	{
-		if (saveOnDetach)
+		if (mSaveOnDetach)
 		{
 			saveListState();
 		}
@@ -135,7 +132,6 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	@Override
 	public void onItemClick(AdapterView<?> adapterView, View view, int position, long rowId)
 	{
-		Log.d(TAG, "Item Clicked");
 		VisibleListAdapter adapter = (VisibleListAdapter) adapterView.getAdapter();
 		VisibleListAdapter.CheckableItem item = (VisibleListAdapter.CheckableItem) view.getTag();
 		boolean checked = item.cb.isChecked();
@@ -302,8 +298,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	public boolean saveListState()
 	{
 		HashMap<Long, Boolean> savedPositions = ((VisibleListAdapter) getListAdapter()).getState();
-		Log.d(TAG, "Length of Changes: " + savedPositions.size());
 		ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+
 		for (Long posInt : savedPositions.keySet())
 		{
 			boolean val = savedPositions.get(posInt);
@@ -312,19 +308,18 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 				.build();
 			ops.add(op);
 		}
+
 		try
 		{
 			mContext.getContentResolver().applyBatch(TaskContract.AUTHORITY, ops);
 		}
 		catch (RemoteException e)
 		{
-			Log.e(TAG, "Remote Exception :" + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
 		catch (OperationApplicationException e)
 		{
-			Log.e(TAG, "OperationApplicationException : " + e.getMessage());
 			e.printStackTrace();
 			return false;
 		}
@@ -336,5 +331,4 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	{
 		((VisibleListAdapter) getListAdapter()).clearHashMap();
 	}
-
 }

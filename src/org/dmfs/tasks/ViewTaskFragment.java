@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,8 +54,6 @@ import android.view.ViewGroup;
  */
 public class ViewTaskFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
 {
-	private static final String TAG = "TaskViewDetailFragment";
-
 	/**
 	 * The key we use to store the {@link ContentSet} that holds the values we show.
 	 */
@@ -168,7 +165,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		Log.v(TAG, "onDestroyView");
 		if (mContent != null)
 		{
 			mContent.removeAllViews();
@@ -353,7 +349,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		}
 		else if (itemId == R.id.delete_task)
 		{
-			Log.v(TAG, "removing task");
 			new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
 				.setNegativeButton(android.R.string.cancel, new OnClickListener()
 				{

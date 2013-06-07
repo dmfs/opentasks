@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,10 @@ import android.widget.ListView;
  * The activity makes heavy use of fragments. The list of items is a {@link TaskListFragment} and the item details (if present) is a {@link ViewTaskFragment}.
  * <p>
  * This activity also implements the required {@link TaskListFragment.Callbacks} interface to listen for item selections.
+ * 
+ * <p>
+ * TODO: move the code to persist the expanded groups into a the GroupingDescriptor class
+ * </p>
  */
 public class TaskListActivity extends FragmentActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
@@ -169,6 +173,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 					Uri newTaskUri = intent.getData();
 					if (newTaskUri != null)
 					{
+						// select the new task
 						onItemSelected(newTaskUri, false);
 					}
 			}

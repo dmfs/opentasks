@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,8 +61,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -103,14 +101,14 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * The fragment's current callback object, which is notified of list item clicks.
 	 */
 	private Callbacks mCallbacks;
+
 	private int mActivatedPositionGroup = ExpandableListView.INVALID_POSITION;
 	private int mActivatedPositionChild = ExpandableListView.INVALID_POSITION;
-	long[] expandedIds = new long[0];
-	private ExpandableListView expandLV;
-	private Context appContext;
+	private long[] mExpandedIds = new long[0];
+	private ExpandableListView mExpandableListView;
+	private Context mAppContext;
 	private ExpandableGroupDescriptorAdapter mAdapter;
 	private Handler mHandler;
-
 	private long[] mSavedExpandedGroups = null;
 
 	/**
@@ -149,10 +147,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
 		super.onViewCreated(view, savedInstanceState);
-		/*
-		 * // Restore the previously serialized activated item position. if (savedInstanceState != null &&
-		 * savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) { setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION)); }
-		 */
 	}
 
 
@@ -160,30 +154,13 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
-		expandLV = (ExpandableListView) rootView.findViewById(android.R.id.list);
+		mExpandableListView = (ExpandableListView) rootView.findViewById(android.R.id.list);
 		mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
-		expandLV.setAdapter(mAdapter);
-		expandLV.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
-		expandLV.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
+		mExpandableListView.setAdapter(mAdapter);
+		mExpandableListView.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
+		mExpandableListView.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
 		mAdapter.setOnChildLoadedListener(this);
 		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
-		expandLV.setOnScrollListener(new OnScrollListener()
-		{
-
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState)
-			{
-
-			}
-
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount)
-			{
-				// TODO Auto-generated method stub
-
-			}
-		});
 
 		getLoaderManager().restartLoader(-1, null, this);
 
@@ -202,7 +179,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 		if (android.os.Build.VERSION.SDK_INT >= 14)
 		{
-			FlingDetector swiper = new FlingDetector(expandLV);
+			FlingDetector swiper = new FlingDetector(mExpandableListView);
 			swiper.setOnFlingListener(this);
 		}
 		return rootView;
@@ -214,7 +191,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onAttach(activity);
 
-		appContext = activity.getBaseContext();
+		mAppContext = activity.getBaseContext();
 
 		// Activities containing this fragment must implement its callbacks.
 		if (!(activity instanceof Callbacks))
@@ -236,8 +213,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	}
 
-	View selectedView = null;
-
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
 
@@ -245,7 +220,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 		{
 			selectChildView(parent, groupPosition, childPosition, true);
-			if (expandLV.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
+			if (mExpandableListView.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
 			{
 				mActivatedPositionGroup = groupPosition;
 				mActivatedPositionChild = childPosition;
@@ -324,7 +299,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 */
 	public void setActivateOnItemClick(boolean activateOnItemClick)
 	{
-		expandLV.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+		mExpandableListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
 
 	}
 
@@ -335,12 +310,12 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			if (left)
 			{
-				expandLV.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
+				mExpandableListView.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
 				// expandLV.setScrollBarStyle(style);
 			}
 			else
 			{
-				expandLV.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
+				mExpandableListView.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
 			}
 		}
 	}
@@ -390,7 +365,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		return CURRENT_GROUP_DESCRIPTOR.getGroupCursorLoader(appContext);
+		return CURRENT_GROUP_DESCRIPTOR.getGroupCursorLoader(mAppContext);
 	}
 
 
@@ -414,7 +389,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		 */
 		if (mSavedExpandedGroups != null)
 		{
-			expandedIds = mSavedExpandedGroups;
+			mExpandedIds = mSavedExpandedGroups;
 			setExpandedGroups();
 			mSavedExpandedGroups = null;
 		}
@@ -430,7 +405,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	public long[] getExpandedGroups()
 	{
-		ExpandableListAdapter adapter = expandLV.getExpandableListAdapter();
+		ExpandableListAdapter adapter = mExpandableListView.getExpandableListAdapter();
 		int count = adapter.getGroupCount();
 
 		long[] result = new long[count];
@@ -438,7 +413,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		int idx = 0;
 		for (int i = 0; i < count; ++i)
 		{
-			if (expandLV.isGroupExpanded(i))
+			if (mExpandableListView.isGroupExpanded(i))
 			{
 				result[idx] = adapter.getGroupId(i);
 				++idx;
@@ -459,16 +434,16 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 	public void setExpandedGroups()
 	{
-		ExpandableListAdapter adapter = expandLV.getExpandableListAdapter();
-		Arrays.sort(expandedIds);
+		ExpandableListAdapter adapter = mExpandableListView.getExpandableListAdapter();
+		Arrays.sort(mExpandedIds);
 		Log.d(TAG, "NOW EXPANDING : " + adapter.getGroupCount());
 		int count = adapter.getGroupCount();
 		for (int i = 0; i < count; ++i)
 		{
-			if (Arrays.binarySearch(expandedIds, adapter.getGroupId(i)) >= 0)
+			if (Arrays.binarySearch(mExpandedIds, adapter.getGroupId(i)) >= 0)
 			{
 				Log.d(TAG, "NOW EXPANDING GROUPS: " + i);
-				expandLV.expandGroup(i);
+				mExpandableListView.expandGroup(i);
 			}
 		}
 	}
@@ -519,7 +494,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		@Override
 		public void run()
 		{
-			selectChildView(expandLV, mActivatedPositionGroup, mActivatedPositionChild, false);
+			selectChildView(mExpandableListView, mActivatedPositionGroup, mActivatedPositionChild, false);
 			setExpandedGroups();
 			setActivatedItem(mActivatedPositionGroup, mActivatedPositionChild);
 		}
@@ -529,7 +504,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	public void setExpandedGroupsIds(long[] ids)
 	{
 		Log.d(TAG, "SET EXPAND :" + ids);
-		expandedIds = ids;
+		mExpandedIds = ids;
 
 	}
 
@@ -539,7 +514,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		if (groupPosition != ExpandableListView.INVALID_POSITION && groupPosition < mAdapter.getGroupCount()
 			&& childPosition != ExpandableListView.INVALID_POSITION && childPosition < mAdapter.getChildrenCount(groupPosition))
 		{
-			expandLV.setItemChecked(expandLV.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
+			mExpandableListView.setItemChecked(
+				mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
 		}
 	}
 
@@ -549,7 +525,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 */
 	private void doSyncNow()
 	{
-		AccountManager accountManager = AccountManager.get(appContext);
+		AccountManager accountManager = AccountManager.get(mAppContext);
 		Account[] accounts = accountManager.getAccounts();
 		for (Account account : accounts)
 		{
@@ -569,7 +545,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 	/**
-	 * Mark the give task as completed.
+	 * Mark the given task as completed.
 	 * 
 	 * @param taskUri
 	 *            The {@link Uri} of the task.
@@ -579,10 +555,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		ContentValues values = new ContentValues();
 		values.put(Tasks.STATUS, Tasks.STATUS_COMPLETED);
-		boolean completed = appContext.getContentResolver().update(taskUri, values, null, null) != 0;
+		boolean completed = mAppContext.getContentResolver().update(taskUri, values, null, null) != 0;
 		if (completed)
 		{
-			Toast.makeText(appContext, getString(R.string.toast_task_completed, taskTitle), Toast.LENGTH_SHORT).show();
+			Toast.makeText(mAppContext, getString(R.string.toast_task_completed, taskTitle), Toast.LENGTH_SHORT).show();
 		}
 		return completed;
 	}
@@ -613,8 +589,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 				public void onClick(DialogInterface dialog, int which)
 				{
 					// TODO: remove the task in a background task
-					appContext.getContentResolver().delete(taskUri, null, null);
-					Toast.makeText(appContext, getString(R.string.toast_task_deleted, taskTitle), Toast.LENGTH_SHORT).show();
+					mAppContext.getContentResolver().delete(taskUri, null, null);
+					Toast.makeText(mAppContext, getString(R.string.toast_task_deleted, taskTitle), Toast.LENGTH_SHORT).show();
 				}
 			}).setMessage(getString(R.string.confirm_delete_message_with_title, taskTitle)).create().show();
 	}
@@ -623,7 +599,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public boolean canFling(ListView v, int pos)
 	{
-		long packedPos = expandLV.getExpandableListPosition(pos);
+		long packedPos = mExpandableListView.getExpandableListPosition(pos);
 		return (packedPos != ExpandableListView.PACKED_POSITION_VALUE_NULL && ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD);
 	}
 
@@ -631,10 +607,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public boolean onFling(ListView v, int pos)
 	{
-		long packedPos = expandLV.getExpandableListPosition(pos);
+		long packedPos = mExpandableListView.getExpandableListPosition(pos);
 		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
 		{
-			ExpandableListAdapter listAdapter = expandLV.getExpandableListAdapter();
+			ExpandableListAdapter listAdapter = mExpandableListView.getExpandableListAdapter();
 			Cursor cursor = (Cursor) listAdapter.getChild(ExpandableListView.getPackedPositionGroup(packedPos),
 				ExpandableListView.getPackedPositionChild(packedPos));
 

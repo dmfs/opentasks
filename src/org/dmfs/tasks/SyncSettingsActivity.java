@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,12 +31,11 @@ import android.widget.Button;
  * This extends the {@link FragmentActivity} for displaying the list of synced or visible task-providers. It displays the visible providers when it is created.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
- * 
  */
 public class SyncSettingsActivity extends FragmentActivity
 {
-	FragmentManager manager;
-	SettingsListFragment currentFrag;
+	private FragmentManager mManager;
+	private SettingsListFragment mCurrentFrag;
 
 
 	@Override
@@ -47,7 +46,7 @@ public class SyncSettingsActivity extends FragmentActivity
 		// Show the Up button in the action bar.
 		setupActionBar();
 
-		manager = getSupportFragmentManager();
+		mManager = getSupportFragmentManager();
 		showVisibleListsFragment();
 
 	}
@@ -66,14 +65,14 @@ public class SyncSettingsActivity extends FragmentActivity
 		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.VISIBLE);
 		args.putBoolean(SettingsListFragment.LIST_ONDETACH_SAVE, true);
 		syncedListFragment.setArguments(args);
-		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
-		currentFrag = syncedListFragment;
+		mManager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+		mCurrentFrag = syncedListFragment;
 		showActionBarTitle(R.string.visible_task_lists);
 	}
 
 
 	/**
-	 * This function displays the list of providers which can synced.
+	 * This function displays the list of providers which can be synced.
 	 */
 	public void showSyncedListsFragment()
 	{
@@ -85,8 +84,8 @@ public class SyncSettingsActivity extends FragmentActivity
 		args.putString(SettingsListFragment.COMPARE_COLUMN_NAME, TaskContract.TaskLists.SYNC_ENABLED);
 		args.putBoolean(SettingsListFragment.LIST_ONDETACH_SAVE, false);
 		syncedListFragment.setArguments(args);
-		manager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
-		currentFrag = syncedListFragment;
+		mManager.beginTransaction().replace(R.id.visible_task_list_fragment, syncedListFragment).commit();
+		mCurrentFrag = syncedListFragment;
 		showActionBarTitle(R.string.synced_task_lists);
 	}
 
@@ -124,9 +123,9 @@ public class SyncSettingsActivity extends FragmentActivity
 	 */
 	public void showSyncedList(View v)
 	{
-		currentFrag.saveListState();
+		mCurrentFrag.saveListState();
 		// Call a function to indicate to the fragment that the state change to the list have been saved(clear the hashmap).
-		currentFrag.doneSaveListState();
+		mCurrentFrag.doneSaveListState();
 		showSyncedListsFragment();
 	}
 
@@ -141,7 +140,7 @@ public class SyncSettingsActivity extends FragmentActivity
 	 */
 	public void onSaveUpdated(View v)
 	{
-		currentFrag.saveListState();
+		mCurrentFrag.saveListState();
 		showVisibleListsFragment();
 
 	}

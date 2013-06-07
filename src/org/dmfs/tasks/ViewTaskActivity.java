@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,6 @@ public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragme
 	@Override
 	public void onEditTask(Uri taskUri)
 	{
-
 		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
 		editTaskIntent.setData(taskUri);
 		startActivity(editTaskIntent);

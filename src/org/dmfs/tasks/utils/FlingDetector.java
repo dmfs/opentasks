@@ -37,6 +37,9 @@ import android.widget.ListView;
  * Ensure there is no other {@link OnScrollListener} and no other {@link OnTouchListener} set for the {@link ListView}, otherwise things might break.
  * 
  * <p>
+ * TODO: add support for SDK Levels <14.
+ * </p>
+ * <p>
  * TODO: add support for flinging to the left.
  * </p>
  * 
