@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -153,6 +153,7 @@ public final class TimeFieldView extends AbstractFieldView
 				formattedTime = mDefaultDateFormat.format(fullDate);
 			}
 			mText.setText(formattedTime);
+			setVisibility(View.VISIBLE);
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,9 @@ import android.util.AttributeSet;
 
 /**
  * Mother of all editor fields.
+ * <p>
+ * At present it doesn't do anything beside inheriting from {@link AbstractFieldView}, but it might come in handy for future developments, so we till keep it.
+ * </p>
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

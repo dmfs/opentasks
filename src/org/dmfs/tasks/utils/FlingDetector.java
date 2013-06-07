@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,10 @@ import android.widget.ListView;
  * A helper to detect fling gestures on list view items.
  * 
  * Ensure there is no other {@link OnScrollListener} and no other {@link OnTouchListener} set for the {@link ListView}, otherwise things might break.
+ * 
+ * <p>
+ * TODO: add support for flinging to the left.
+ * </p>
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */

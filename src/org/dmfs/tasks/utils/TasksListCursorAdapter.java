@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,16 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 
+/**
+ * An adapter to adapt a cursor containing task lists to a {@link Spinner}.
+ * 
+ * @author Arjun Naik<arjun@arjunnaik.in>
+ */
 public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdapter implements SpinnerAdapter
 {
 	LayoutInflater mInflater;

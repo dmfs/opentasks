@@ -1,13 +1,21 @@
 /*
- * %W% %E%
+ * Copyright (c) 2008-2012, Hazel Bilisim Ltd. All Rights Reserved.
  *
- * Copyright (c) 2006, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.dmfs.tasks.utils;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -15,24 +23,26 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+
 /**
- * Taken from http://javasourcecode.org/html/open-source/jdk/jdk-6u23/java.util/Collections.java.html
- * @author Arjun Naik
- *
- * @param <E>
+ * Found at <a
+ * href="http://grepcode.com/file_/repo1.maven.org/maven2/com.hazelcast/hazelcast/2.1.2/com/hazelcast/util/SetFromMap.java/?v=source">SetFromMap.java</a>
  */
 public class SetFromMap<E> extends AbstractSet<E> implements Set<E>, Serializable
 {
-	private final Map<E, Boolean> m; // The backing map
-	private transient Set<E> s; // Its keySet
+
+	/**
+	 * Generated serial id.
+	 */
+	private static final long serialVersionUID = 9178569914836151896L;
+
+	private final Map<E, Boolean> m;
 
 
-	public SetFromMap(Map<E, Boolean> map)
+	public SetFromMap(final Map<E, Boolean> map)
 	{
-		if (!map.isEmpty())
-			throw new IllegalArgumentException("Map is non-empty");
-		m = map;
-		s = map.keySet();
+		super();
+		this.m = map;
 	}
 
 
@@ -74,65 +84,54 @@ public class SetFromMap<E> extends AbstractSet<E> implements Set<E>, Serializabl
 
 	public Iterator<E> iterator()
 	{
-		return s.iterator();
+		return m.keySet().iterator();
 	}
 
 
 	public Object[] toArray()
 	{
-		return s.toArray();
+		return m.keySet().toArray();
 	}
 
 
 	public <T> T[] toArray(T[] a)
 	{
-		return s.toArray(a);
+		return m.keySet().toArray(a);
 	}
 
 
 	public String toString()
 	{
-		return s.toString();
+		return m.keySet().toString();
 	}
 
 
 	public int hashCode()
 	{
-		return s.hashCode();
+		return m.keySet().hashCode();
 	}
 
 
 	public boolean equals(Object o)
 	{
-		return o == this || s.equals(o);
+		return o == this || m.keySet().equals(o);
 	}
 
 
 	public boolean containsAll(Collection<?> c)
 	{
-		return s.containsAll(c);
+		return m.keySet().containsAll(c);
 	}
 
 
 	public boolean removeAll(Collection<?> c)
 	{
-		return s.removeAll(c);
+		return m.keySet().removeAll(c);
 	}
 
 
 	public boolean retainAll(Collection<?> c)
 	{
-		return s.retainAll(c);
-	}
-
-	// addAll is the only inherited implementation
-
-	private static final long serialVersionUID = 2454657854757543876L;
-
-
-	private void readObject(java.io.ObjectInputStream stream) throws IOException, ClassNotFoundException
-	{
-		stream.defaultReadObject();
-		s = m.keySet();
+		return m.keySet().retainAll(c);
 	}
 }

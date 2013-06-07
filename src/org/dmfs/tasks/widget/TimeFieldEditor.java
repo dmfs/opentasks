@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -167,17 +167,21 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 
 
 	@Override
-	public void onClick(View v)
+	public void onClick(View view)
 	{
-		final int id = v.getId();
+		final int id = view.getId();
 		if (id == R.id.task_date_picker || id == R.id.task_time_picker)
 		{
+			// one of the date or time buttons has been clicked
+
 			if (mDateTime == null)
 			{
+				// initialize date and time
 				mDateTime = mAdapter.getDefault(mValues);
 				applyTimeInTimeZone(mDateTime, TimeZone.getDefault().getID());
 			}
 
+			// show the correct dialog
 			Dialog dialog;
 			if (id == R.id.task_date_picker)
 			{
@@ -187,11 +191,11 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 			{
 				dialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, mIs24hour);
 			}
-
 			dialog.show();
 		}
 		else if (id == R.id.task_time_picker_remove)
 		{
+			// the clear button as been pressed
 			mUpdated = true;
 			mAdapter.validateAndSet(mValues, null);
 		}
@@ -207,9 +211,11 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	 * <pre>
 	 * input time: 2013-04-02 16:00 Europe/Berlin (GMT+02:00)
 	 * input timeZone: America/New_York (GMT-04:00)
+	 * </pre>
 	 * 
 	 * will result in
 	 * 
+	 * <pre>
 	 * 2013-04-02 10:00 Europe/Berlin (because the original time is equivalent to 2013-04-02 10:00 America/New_York)
 	 * </pre>
 	 * 
@@ -263,7 +269,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	{
 		Time newTime = mAdapter.get(mValues);
 		if (!mUpdated && newTime != null && mDateTime != null && Time.compare(newTime, mDateTime) == 0
-			&& TextUtils.equals(newTime.timezone, mDateTime.timezone) && newTime.allDay == mDateTime.allDay)// || newTime == null && mDateTime == null)
+			&& TextUtils.equals(newTime.timezone, mDateTime.timezone) && newTime.allDay == mDateTime.allDay)
 		{
 			// nothing has changed
 			return;

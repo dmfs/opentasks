@@ -81,6 +81,7 @@ public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 					{
 						if (c.moveToNext())
 						{
+							// map each result and store it
 							result[i] = mMapper.map(c);
 						}
 					}

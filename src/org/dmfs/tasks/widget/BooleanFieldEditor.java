@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,11 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
-		mAdapter.set(mValues, isChecked);
+		Boolean oldValue = mAdapter.get(mValues);
+		if (oldValue == null || oldValue != isChecked) // don't trigger unnecessary updates
+		{
+			mAdapter.set(mValues, isChecked);
+		}
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,13 +34,9 @@ import android.widget.TextView;
  * Widget to display Integer values.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
- * 
  */
-
 public class PercentageFieldView extends AbstractFieldView
 {
-
-	private static final String TAG = "PercentageFieldView";
 	private IntegerFieldAdapter mAdapter;
 	private TextView mText;
 	private ProgressBar mProgress;
@@ -50,21 +45,18 @@ public class PercentageFieldView extends AbstractFieldView
 	public PercentageFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-
 	}
 
 
 	public PercentageFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-
 	}
 
 
 	public PercentageFieldView(Context context)
 	{
 		super(context);
-
 	}
 
 
@@ -88,16 +80,12 @@ public class PercentageFieldView extends AbstractFieldView
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		Log.d(TAG, "mValues : " + mValues);
-		Log.d(TAG, "Adapter Value : " + mAdapter.get(mValues));
-		Log.d(TAG, "mText:" + mText);
-
 		if (mValues != null && mAdapter.get(mValues) != null)
 		{
 			int percentage = mAdapter.get(mValues);
-			Log.d(TAG, "Percentage : " + percentage);
 			mProgress.setProgress(percentage);
 			mText.setText(Integer.toString(percentage) + "%");
+			setVisibility(View.VISIBLE);
 		}
 		else
 		{

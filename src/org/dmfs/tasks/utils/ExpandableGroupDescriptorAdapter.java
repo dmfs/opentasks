@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,6 @@ import android.widget.ExpandableListView;
  */
 public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implements LoaderManager.LoaderCallbacks<Cursor>
 {
-
 	private final Context mContext;
 	private final LayoutInflater mLayoutInflater;
 	private final LoaderManager mLoaderManager;
@@ -127,7 +126,6 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader)
 	{
-		// setChildrenCursor(loader.getId(), null);
 		// FIXME: what are we supposed to do here?
 	}
 

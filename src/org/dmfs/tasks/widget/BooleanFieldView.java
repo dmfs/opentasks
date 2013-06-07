@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -37,7 +36,6 @@ import android.widget.CheckBox;
  */
 public class BooleanFieldView extends AbstractFieldView
 {
-	private static final String TAG = "BooleanFieldView";
 	private BooleanFieldAdapter mAdapter;
 	private CheckBox mCheckBox;
 
@@ -64,7 +62,6 @@ public class BooleanFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mCheckBox = (CheckBox) findViewById(R.id.checkbox);
-		Log.d(TAG, "mCheckBox = " + mCheckBox);
 	}
 
 
@@ -84,6 +81,7 @@ public class BooleanFieldView extends AbstractFieldView
 		if (mValues != null && adapterValue != null)
 		{
 			mCheckBox.setChecked(adapterValue.booleanValue());
+			setVisibility(View.VISIBLE);
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,17 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+/**
+ * Describes how to load the children of an expandable group.
+ * <p>
+ * The descriptor takes all arguments you'd give to a {@link CursorLoader}, except for the selection arguments. The selection arguments are determined from the
+ * values of certain columns of a cursor when you call {@link #getCursorLoader(Context, Cursor)} or {@link #getCursorLoader(Context, Cursor, AbstractFilter)}.
+ * </p>
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public class ExpandableChildDescriptor
 {
-
 	private final Uri mUri;
 	private final String[] mProjection;
 	private final String mSelection;
@@ -42,6 +50,15 @@ public class ExpandableChildDescriptor
 	private ViewDescriptor mViewDescriptor;
 
 
+	/**
+	 * Create a new {@link ExpandableChildDescriptor} using the given values.
+	 * 
+	 * @param uri
+	 * @param projection
+	 * @param selection
+	 * @param sortOrder
+	 * @param selectionColumns
+	 */
 	public ExpandableChildDescriptor(Uri uri, String[] projection, String selection, String sortOrder, int... selectionColumns)
 	{
 		mUri = uri;
@@ -155,6 +172,13 @@ public class ExpandableChildDescriptor
 	}
 
 
+	/**
+	 * Set a view descriptor to use to display the children.
+	 * 
+	 * @param descriptor
+	 *            The {@link ViewDescriptor} to use.
+	 * @return This instance.
+	 */
 	public ExpandableChildDescriptor setViewDescriptor(ViewDescriptor descriptor)
 	{
 		mViewDescriptor = descriptor;
@@ -162,6 +186,11 @@ public class ExpandableChildDescriptor
 	}
 
 
+	/**
+	 * Get the {@link ViewDescriptor} to use when preparing the views to display the children.
+	 * 
+	 * @return The {@link ViewDescriptor}.
+	 */
 	public ViewDescriptor getViewDescriptor()
 	{
 		return mViewDescriptor;

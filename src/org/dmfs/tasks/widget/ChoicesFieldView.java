@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,10 @@ import android.widget.TextView;
 
 
 /**
- * Widget to display Integer values.
+ * Widget to show the currently selected value of a field that provides an {@link IChoicesAdapter}.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
- * 
  */
-
 public class ChoicesFieldView extends AbstractFieldView
 {
 	private FieldAdapter<Object> mAdapter;
@@ -48,21 +46,18 @@ public class ChoicesFieldView extends AbstractFieldView
 	public ChoicesFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-
 	}
 
 
 	public ChoicesFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-
 	}
 
 
 	public ChoicesFieldView(Context context)
 	{
 		super(context);
-
 	}
 
 
@@ -93,13 +88,16 @@ public class ChoicesFieldView extends AbstractFieldView
 			IChoicesAdapter choicesAdapter = mFieldDescriptor.getChoices();
 			if (choicesAdapter == null)
 			{
+				// no choices adapter -> nothing to show
 				mText.setText(mAdapter.get(mValues).toString());
 				mImage.setVisibility(View.GONE);
 			}
 			else
 			{
+				// just show title and drawable (if any)
 				mText.setText(choicesAdapter.getTitle(mAdapter.get(mValues)));
 				mImage.setImageDrawable(choicesAdapter.getDrawable(mAdapter.get(mValues)));
+				mImage.setVisibility(View.VISIBLE);
 			}
 		}
 		else
