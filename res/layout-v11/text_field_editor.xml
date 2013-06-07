@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.TextFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget" >
+
+    <!-- <include layout="@layout/editor_header" /> -->
+
+    <EditText
+        android:id="@android:id/text1"
+        style="@style/field_editor_text_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </EditText>
+
+</org.dmfs.tasks.widget.TextFieldEditor>

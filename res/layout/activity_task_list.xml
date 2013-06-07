@@ -1,0 +1,16 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="0dip" >
+
+    <fragment
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/task_list"
+        android:name="org.dmfs.tasks.TaskListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".TaskListActivity" />
+
+</LinearLayout>

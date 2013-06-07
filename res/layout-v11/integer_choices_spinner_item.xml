@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="48dip"
+    android:orientation="horizontal"
+    android:padding="4dip" >
+
+    <ImageView
+        android:id="@+id/integer_choice_item_image"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="center"
+        android:contentDescription="Image Choice" />
+
+    <TextView
+        android:id="@+id/integer_choice_item_text"
+        style="@style/dark_text"
+        android:layout_width="0sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="5sp"
+        android:layout_weight="3" />
+
+</LinearLayout>

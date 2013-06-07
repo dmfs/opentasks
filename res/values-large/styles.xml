@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="edit_detail_pane">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:background">@color/light_gray</item>
+    </style>
+
+    <style name="edit_detail_ll">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:layout_width">fill_parent</item>
+    </style>
+
+    <style name="task_list_container">
+        <item name="android:background">@drawable/list_background_holo</item>
+    </style>
+
+    <style name="task_list_item_date" parent="dark_text">
+        <item name="android:layout_marginRight">25dp</item>
+    </style>
+
+    <style name="task_list_group_count" parent="editor_label_text">
+        <item name="android:layout_marginRight">25dp</item>
+    </style>
+
+</resources>

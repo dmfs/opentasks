@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.dmfs.tasks"
+    android:versionCode="5"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
+
+    <permission
+        android:name="org.dmfs.permission.READ_TASKS"
+        android:description="@string/permission_description_read_tasks"
+        android:label="@string/permission_read_tasks"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="dangerous" >
+    </permission>
+    <permission
+        android:name="org.dmfs.permission.WRITE_TASKS"
+        android:description="@string/permission_description_write_tasks"
+        android:label="@string/permission_write_tasks"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="dangerous" >
+    </permission>
+
+    <uses-permission android:name="org.dmfs.permission.READ_TASKS" />
+    <uses-permission android:name="org.dmfs.permission.WRITE_TASKS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+
+        <!-- TaskListActivity listens for MAIN intents -->
+        <activity
+            android:name="org.dmfs.tasks.TaskListActivity"
+            android:label="@string/title_task_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ViewTaskActivity listens for VIEW intents -->
+        <activity
+            android:name="org.dmfs.tasks.ViewTaskActivity"
+            android:label="@string/title_task_detail"
+            android:parentActivityName=".TaskListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".TaskListActivity" />
+
+            <intent-filter android:label="edit" >
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+        </activity>
+
+        <!-- EditTaskActivity listens for EDIT, INSERT and INDERT_OR_EDIT intents -->
+        <activity
+            android:name="org.dmfs.tasks.EditTaskActivity"
+            android:label="@string/activity_edit_task_title"
+            android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.dmfs.tasks.TaskListActivity" />
+
+            <intent-filter android:label="@string/activity_edit_task_title" >
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+            <intent-filter android:label="@string/activity_add_task_title" >
+                <action android:name="android.intent.action.INSERT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
+            </intent-filter>
+            <intent-filter android:label="@string/activity_add_task_title" >
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="org.dmfs.provider.tasks.TaskProvider"
+            android:authorities="org.dmfs.tasks"
+            android:label="@string/provider_label"
+            android:multiprocess="false"
+            android:readPermission="org.dmfs.permission.READ_TASKS"
+            android:writePermission="org.dmfs.permission.WRITE_TASKS" />
+
+        <activity
+            android:name="org.dmfs.tasks.SyncSettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.dmfs.tasks.TaskListActivity" />
+        </activity>
+    </application>
+
+</manifest>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.TimeFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget" >
+
+    <include layout="@layout/detail_header" />
+
+    <TextView
+        android:id="@android:id/text1"
+        style="@style/field_view_text_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+    </TextView>
+
+    <TextView
+        android:id="@android:id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff808080" >
+    </TextView>
+
+</org.dmfs.tasks.widget.TimeFieldView>

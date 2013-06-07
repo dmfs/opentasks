@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".SettingsListFragment" >
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@android:string/ok"
+            android:onClick="onCancelUpdated"
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip"
+            android:text="@android:string/cancel" /> <!-- setting the hint to the opposite ensures both buttons have the same width -->
+
+        <Button
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@android:string/cancel"
+            android:onClick="onSaveUpdated"
+            android:paddingLeft="24dip"
+            android:paddingRight="24dip"
+            android:text="@android:string/ok" /> <!-- setting the hint to the opposite ensures both buttons have the same width -->
+
+    </LinearLayout>
+
+</LinearLayout>

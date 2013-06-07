@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.ChoicesFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget" >
+
+    <include layout="@layout/editor_header" />
+
+    <Spinner
+        android:id="@+id/integer_choices_spinner"
+        style="@style/TextAppearance.EditTask_SpinnerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+</org.dmfs.tasks.widget.ChoicesFieldEditor>

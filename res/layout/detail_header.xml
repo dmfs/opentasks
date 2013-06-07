@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <TextView
+        android:id="@android:id/title"
+        style="@style/detail_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:singleLine="true" />
+
+    <View
+        style="@style/detail_label_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp" />
+
+</merge>

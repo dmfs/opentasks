@@ -1,0 +1,52 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar"></style>
+
+    <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
+
+    <style name="task_seekbar" parent="android:Widget.Holo.SeekBar"></style>
+
+    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+    </style>
+
+    <style name="dark_text">
+        <item name="android:textColor">#FF333333</item>
+    </style>
+
+    <style name="detail_label_text">
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="detail_label_line">
+        <item name="android:background">@android:color/holo_blue_light</item>
+    </style>
+
+    <style name="editor_label_text">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="editor_label_line">
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="expandable_task_list">
+        <item name="android:scrollbarStyle">outsideInset</item>
+        <item name="android:scrollbarSize">20dp</item>
+        <item name="android:divider">@null</item>
+    </style>
+
+    <style name="task_list_item_divider">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@drawable/task_divider</item>
+    </style>
+
+    <style name="task_list_group_divider">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@android:color/holo_blue_light</item>
+    </style>
+
+</resources>

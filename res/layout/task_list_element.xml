@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/tasks_expandable_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="0dip"
+    android:background="@drawable/task_list_background"
+    android:minHeight="?android:attr/listPreferredItemHeight" >
+
+    <View
+        android:id="@+id/colorbar"
+        android:layout_width="2dip"
+        android:layout_height="25dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="2dp" />
+
+    <TextView
+        android:id="@+id/task_due_date"
+        style="@style/task_list_item_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textIsSelectable="false"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/task_due_date"
+        android:ellipsize="end"
+        android:padding="8dip"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/task_list_title_text"
+        android:textIsSelectable="false" />
+
+    <View
+        android:id="@+id/divider"
+        style="@style/task_list_item_divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@android:id/title" />
+
+</RelativeLayout>

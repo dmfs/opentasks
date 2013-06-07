@@ -1,0 +1,32 @@
+# temporary files
+*~
+
+# local settings
+.settings/
+
+# binaries
+bin/
+
+# exported files
+jars/
+
+#imported libs
+libs/
+
+#class files
+*.class
+
+# built application files
+*.apk
+*.ap_
+
+# # files for the dex VM
+*.dex
+
+# # Java class files
+*.class
+
+# # Local configuration file (sdk path, etc)
+local.properties
+/.settings
+#

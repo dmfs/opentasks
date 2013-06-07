@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_group_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingTop="10dip" >
+
+    <View
+        android:id="@+id/colorbar1"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" />
+
+    <View
+        android:id="@+id/colorbar2"
+        android:layout_width="10dip"
+        android:layout_height="10dip"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="3dip"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@android:id/title"
+        style="@style/task_group_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dip"
+        android:layout_toRightOf="@id/colorbar1"
+        android:ellipsize="end"
+        android:paddingLeft="0dip"
+        android:singleLine="true"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@android:id/text1"
+        style="@style/editor_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@android:id/title"
+        android:layout_marginLeft="8dip"
+        android:layout_toLeftOf="@android:id/text2"
+        android:layout_toRightOf="@id/colorbar1"
+        android:ellipsize="end"
+        android:paddingBottom="10dip"
+        android:paddingLeft="0dip"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+
+    <TextView
+        android:id="@android:id/text2"
+        style="@style/task_list_group_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@android:id/title"
+        android:ellipsize="end"
+        android:paddingLeft="0dip"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+
+    <View
+        android:id="@+id/divider"
+        style="@style/task_list_group_divider"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

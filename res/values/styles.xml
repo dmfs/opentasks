@@ -1,0 +1,146 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppTheme" parent="android:Theme.Holo.Light">
+        <item name="android:textColor">#FF333333</item>
+    </style>
+
+    <style name="ActivityDefault">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="dark_text">
+        <item name="android:textColor">#FF333333</item>
+    </style>
+
+    <style name="dark_edit_text" parent="dark_text">
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+
+    <style name="task_group_text">
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="detail_label_text">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="detail_label_line">
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <!-- Styles for Task Editor -->
+
+    <style name="editor_label_text">
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="editor_label_line">
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="edit_detail_pane">
+        <item name="android:layout_width">fill_parent</item>
+    </style>
+
+    <style name="edit_detail_ll">
+        <item name="android:layout_width">fill_parent</item>
+    </style>
+
+    <!-- Styles for main task list -->
+
+    <style name="tasks_expandable_list_item"></style>
+
+    <style name="expandable_task_list">
+        <item name="android:divider">@null</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbarSize">0dp</item>
+        <item name="android:cacheColorHint">#00000000</item>
+    </style>
+
+    <style name="task_list_container"></style>
+
+    <style name="task_group_list_item"></style>
+
+    <style name="task_list_item_date" parent="dark_text">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+    </style>
+
+    <style name="task_list_group_count" parent="editor_label_text">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+    </style>
+
+    <style name="task_list_item_divider">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="task_list_group_divider">
+        <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="task_list_overdue_text">
+        <item name="android:textColor">@color/overdue_date_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="task_list_due_text">
+        <item name="android:textColor">@color/due_date_text</item>
+    </style>
+
+    <!-- Styles for Widgets -->
+
+    <style name="task_widget_parent"> <!-- Common Style for all widgets -->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="task_widget" parent="task_widget_parent">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+
+    <style name="field_view_text_value" parent="dark_text"> <!-- Common style for all text displays in widgets -->
+        <item name="android:layout_marginTop">2dip</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    </style>
+
+    <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
+    </style>
+
+    <style name="task_progressbar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
+
+    <style name="task_seekbar" parent="android:Widget.SeekBar">
+        <item name="android:layout_marginLeft">15dp</item>
+    </style>
+
+    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+    </style>
+
+    <style name="TextAppearance.EditTask_SpinnerButton" parent="TextAppearance.EditTask_Spinner">
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+    </style>
+
+    <style name="btn_remove">
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:src">@drawable/content_remove_light</item>
+    </style>
+
+</resources>

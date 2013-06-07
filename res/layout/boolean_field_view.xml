@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.BooleanFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget"
+    android:orientation="horizontal" >
+
+    <!-- <include layout="@layout/detail_header" /> -->
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dip"
+        android:clickable="false"
+        android:focusable="false" >
+    </CheckBox>
+
+    <TextView
+        android:id="@android:id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textIsSelectable="false" />
+
+</org.dmfs.tasks.widget.BooleanFieldView>

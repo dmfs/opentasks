@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="edit_detail_ll">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:layout_width">600dp</item>
+    </style>
+
+</resources>

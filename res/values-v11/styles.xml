@@ -1,0 +1,59 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="AppTheme" parent="android:Theme.Holo.Light" />
+
+    <style name="btn_remove">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:src">@drawable/content_remove_light</item>
+    </style>
+
+    <style name="detail_label_line">
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
+    <style name="dark_edit_text" parent="dark_text">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="TextAppearance.EditTask_Spinner" parent="android:style/Widget.Holo.Light.Spinner">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF333333</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginLeft">12dp</item>
+    </style>
+
+    <style name="task_widget" parent="task_widget_parent">
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="task_progressbar" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="task_seekbar" parent="android:Widget.SeekBar">
+        <item name="android:layout_marginLeft">0dp</item>
+    </style>
+
+    <style name="tasks_expandable_list_item">
+        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+    </style>
+
+    <style name="task_group_text">
+        <item name="android:textColor" tools:targetApi="14">@android:color/holo_blue_dark</item>
+    </style>
+
+    <style name="task_list_item_text" parent="android:attr/textAppearanceMedium">
+        <item name="android:textColor" tools:targetApi="14">@style/dark_text</item>
+    </style>
+
+    <style name="field_view_text_value" parent="dark_text">
+        <item name="android:layout_marginTop">2dip</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
+    </style>
+
+</resources>

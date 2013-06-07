@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_add_task"
+        android:icon="@drawable/content_new"
+        android:showAsAction="always"
+        android:title="@string/menu_add_task"
+        android:titleCondensed="@string/menu_add_task_condensed"/>
+    <item
+        android:id="@+id/menu_show_completed"
+        android:checkable="true"
+        android:showAsAction="never"
+        android:title="@string/menu_show_completed"
+        android:titleCondensed="@string/menu_show_completed_condensed"/>
+    <item
+        android:id="@+id/menu_sync_now"
+        android:showAsAction="never"
+        android:title="@string/menu_sync_now"
+        android:titleCondensed="@string/menu_sync_now_condensed"/>
+
+</menu>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.PercentageFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget" >
+
+    <include layout="@layout/detail_header" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal" >
+
+        <ProgressBar
+            android:id="@+id/percentage_progress_bar"
+            style="@style/task_progressbar"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/text"
+            style="@style/field_view_text_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
+            android:layout_marginRight="4dip" >
+        </TextView>
+    </LinearLayout>
+
+</org.dmfs.tasks.widget.PercentageFieldView>
