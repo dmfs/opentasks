@@ -23,7 +23,6 @@ import java.util.Set;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.provider.tasks.TaskContract.WriteableTaskLists;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -213,7 +212,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 				mValues = savedInstanceState.getParcelable(KEY_VALUES);
 				new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
 			}
-			setListUri(WriteableTaskLists.CONTENT_URI, LIST_LOADER_VISIBLE_LISTS_FILTER);
+			setListUri(TaskLists.CONTENT_URI, LIST_LOADER_VISIBLE_LISTS_FILTER);
 		}
 
 		return rootView;
@@ -337,7 +336,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			/*
 			 * Don't start the model loader here, let onItemSelected do that.
 			 */
-			setListUri(mAppForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : WriteableTaskLists.CONTENT_URI,
+			setListUri(mAppForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : TaskLists.CONTENT_URI,
 				mAppForEdit ? LIST_LOADER_VISIBLE_LISTS_FILTER : null);
 		}
 	}
