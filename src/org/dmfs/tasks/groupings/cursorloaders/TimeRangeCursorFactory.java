@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.text.format.Time;
 
+
 /**
  * A factory that builds shiny new {@link Cursor}s with time ranges.
  * 
@@ -34,7 +35,7 @@ import android.text.format.Time;
  */
 public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 {
-	
+
 	public final static String RANGE_ID = "_id";
 	public final static String RANGE_TYPE = "type";
 
@@ -91,7 +92,6 @@ public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 	public static final String[] DEFAULT_PROJECTION = new String[] { RANGE_START, RANGE_END, RANGE_ID, RANGE_YEAR, RANGE_MONTH, RANGE_OPEN_PAST,
 		RANGE_OPEN_FUTURE, RANGE_NULL_ROW, RANGE_TYPE };
 
-	
 	private final static long MAX_TIME = Long.MAX_VALUE / 2;
 	private final static long MIN_TIME = Long.MIN_VALUE / 2;
 
@@ -103,7 +103,7 @@ public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 
 	public TimeRangeCursorFactory(String[] projection)
 	{
-		super (projection);
+		super(projection);
 		mProjectionList = Arrays.asList(projection);
 		mTime = new Time(TimeZone.getDefault().getID());
 		mEndOfToday = new Time(mTime.timezone);
@@ -116,7 +116,7 @@ public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 		mEndOfToday.clear(mTime.timezone);
 		mEndOfToday.setToNow();
 		mEndOfToday.set(mEndOfToday.monthDay + 1, mEndOfToday.month, mEndOfToday.year);
-		
+
 		MatrixCursor result = new MatrixCursor(mProjection);
 
 		// get time of today 00:00:00

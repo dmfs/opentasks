@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import android.graphics.drawable.Drawable;
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
- * 
  */
 public class TimeZoneChoicesAdapter implements IChoicesAdapter
 {
@@ -77,11 +76,11 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 		}
 
 		// add GMT if not in the list
-		TimeZoneWrapper Gmt = new TimeZoneWrapper("GMT");
-		if (!mIdMap.containsValue(Gmt))
+		TimeZoneWrapper gmt = new TimeZoneWrapper("GMT");
+		if (!mIdMap.containsValue(gmt))
 		{
 			mNameMap.put("GMT", "GMT");
-			mIdMap.put("GMT", Gmt);
+			mIdMap.put("GMT", gmt);
 			mIdList.add("GMT");
 		}
 
@@ -179,6 +178,19 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
 	}
 
 
+	/**
+	 * Returns a string in the format
+	 * 
+	 * <pre>
+	 * (GMT±HH:MM)
+	 * </pre>
+	 * 
+	 * For the given offset.
+	 * 
+	 * @param millis
+	 *            The offset in milliseconds.
+	 * @return The formatted string.
+	 */
 	private String getGMTOffsetString(long millis)
 	{
 		long absmillis = (millis < 0) ? -millis : millis;

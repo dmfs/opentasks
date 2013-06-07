@@ -27,6 +27,8 @@ import java.util.Set;
 /**
  * Found at <a
  * href="http://grepcode.com/file_/repo1.maven.org/maven2/com.hazelcast/hazelcast/2.1.2/com/hazelcast/util/SetFromMap.java/?v=source">SetFromMap.java</a>
+ * 
+ * This class is used on SDK Level 8 only.
  */
 public class SetFromMap<E> extends AbstractSet<E> implements Set<E>, Serializable
 {

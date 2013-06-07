@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -262,6 +262,16 @@ public final class FieldDescriptor
 	}
 
 
+	/**
+	 * Returns an inflated view to show this field. This method takes a parent (that can be <code>null</code>) but it doesn't attach the detail view to the
+	 * parent.
+	 * 
+	 * @param inflater
+	 *            A {@link LayoutInflater}.
+	 * @param parent
+	 *            The parent {@link ViewGroup} of the detail view.
+	 * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field can be viewed.
+	 */
 	public AbstractFieldView getDetailView(LayoutInflater inflater, ViewGroup parent)
 	{
 		if (mViewLayout == null)
@@ -275,6 +285,12 @@ public final class FieldDescriptor
 	}
 
 
+	/**
+	 * Returns an inflated view to show this field.
+	 * 
+	 * @param inflater
+	 *            A {@link LayoutInflater}.
+	 */
 	public AbstractFieldView getDetailView(LayoutInflater inflater)
 	{
 		if (mViewLayout == null)
@@ -288,7 +304,7 @@ public final class FieldDescriptor
 	}
 
 
-	public FieldDescriptor setEditorLayout(LayoutDescriptor layoutDescriptor)
+	FieldDescriptor setEditorLayout(LayoutDescriptor layoutDescriptor)
 	{
 		mEditLayout = layoutDescriptor;
 		return this;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,11 @@
 
 package org.dmfs.tasks.model;
 
+/**
+ * Interface for listeners that listen to changes in a {@link ContentSet}.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public interface OnContentChangeListener
 {
 	/**

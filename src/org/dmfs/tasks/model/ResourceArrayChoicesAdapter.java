@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import android.graphics.drawable.Drawable;
  * ArrayAdapter which loads the Array elements from a resource.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
- * 
  */
 public class ResourceArrayChoicesAdapter extends AbstractArrayChoicesAdapter
 {

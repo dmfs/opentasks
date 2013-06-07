@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.dmfs.tasks.groupings.cursorloaders.CompletedFlagCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.CompletedFlagCursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.content.Context;
@@ -40,6 +41,24 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 
+/**
+ * Definition of the by-completed grouping.
+ * 
+ * <p>
+ * TODO: refactor!
+ * </p>
+ * <p>
+ * TODO: refactor!
+ * </p>
+ * <p>
+ * TODO: also, don't forget to refactor!
+ * </p>
+ * 
+ * The plan is to provide some kind of GroupingDescriptior that provides the {@link ExpandableGroupDescriptorAdapter}, a name and a set of filters. Also it
+ * should take care of persisting and restoring the open groups, selected filters ...
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public interface ByCompleted
 {
 	/**

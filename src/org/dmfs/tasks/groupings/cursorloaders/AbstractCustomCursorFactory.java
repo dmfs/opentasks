@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import android.database.Cursor;
 /**
  * A factory that builds shiny new {@link Cursor}s with time ranges.
  * 
- * TODO: fix javadoc
- * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractCustomCursorFactory
@@ -32,11 +30,22 @@ public abstract class AbstractCustomCursorFactory
 	protected String[] mProjection;
 
 
+	/**
+	 * Initialize the factory with the given projection.
+	 * 
+	 * @param projection
+	 *            An array of column names.
+	 */
 	public AbstractCustomCursorFactory(String[] projection)
 	{
 		mProjection = projection;
 	}
 
 
+	/**
+	 * Get a new {@link Cursor} from this factory.
+	 * 
+	 * @return A {@link Cursor}.
+	 */
 	public abstract Cursor getCursor();
 }

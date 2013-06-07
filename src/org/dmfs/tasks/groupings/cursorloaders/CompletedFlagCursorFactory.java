@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,7 @@ import android.database.MatrixCursor;
 
 
 /**
- * A factory that builds shiny new {@link Cursor}s with time ranges.
- * 
- * TODO: fix javadoc
+ * A factory that builds shiny new {@link Cursor}s with completed flags.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -46,12 +44,19 @@ public final class CompletedFlagCursorFactory extends AbstractCustomCursorFactor
 	private static final Integer[] ROW_INCOMPLETE = new Integer[] { 0, Tasks.STATUS_NEEDS_ACTION, Tasks.STATUS_IN_PROCESS, STATUS_TYPE_INCOMPLETE };
 
 
+	/**
+	 * Initialize the factory with the given projection.
+	 * 
+	 * @param projection
+	 *            An array of column names.
+	 */
 	public CompletedFlagCursorFactory(String[] projection)
 	{
 		super(projection);
 	}
 
 
+	@Override
 	public Cursor getCursor()
 	{
 		MatrixCursor result = new MatrixCursor(DEFAULT_PROJECTION);

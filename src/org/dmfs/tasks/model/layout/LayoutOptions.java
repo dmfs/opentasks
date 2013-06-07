@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * A helper to store the layout options used when rendering the task details and the task editor.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public final class LayoutOptions
 {
 	private Map<String, Object> mOptionMap;
@@ -31,6 +36,14 @@ public final class LayoutOptions
 	}
 
 
+	/**
+	 * Put a boolean option.
+	 * 
+	 * @param key
+	 *            The name of the option.
+	 * @param value
+	 *            The value of the option.
+	 */
 	void put(String key, boolean value)
 	{
 		if (mOptionMap == null)
@@ -41,6 +54,15 @@ public final class LayoutOptions
 	}
 
 
+	/**
+	 * Get the value of a boolean option.
+	 * 
+	 * @param key
+	 *            The name of this option.
+	 * @param defaultValue
+	 *            The value to return if the option is not set yet.
+	 * @return The value or defaultValue.
+	 */
 	public boolean getBoolean(String key, boolean defaultValue)
 	{
 		if (mOptionMap == null)

@@ -21,15 +21,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * An abstract model class.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public abstract class Model
 {
-
 	/**
 	 * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
 	 */
 	final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
 
-	boolean inflated = false;
+	boolean mInflated = false;
 
 	private boolean mAllowRecurrence = false;
 	private boolean mAllowExceptions = false;

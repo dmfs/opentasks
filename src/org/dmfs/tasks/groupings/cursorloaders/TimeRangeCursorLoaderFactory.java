@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,13 @@ import android.database.Cursor;
 import android.support.v4.content.Loader;
 
 
+/**
+ * A factory that builds {@link TimeRangeCursorLoader}s.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public class TimeRangeCursorLoaderFactory extends AbstractCursorLoaderFactory
 {
-
 	private final String[] mProjection;
 
 

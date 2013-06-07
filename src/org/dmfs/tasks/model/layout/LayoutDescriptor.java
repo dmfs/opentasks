@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+/**
+ * A descriptor that knows how the widget of a specific field is presented to the user.
+ * 
+ * @author Marten Gajda <marten@dmfs.org>
+ */
 public class LayoutDescriptor
 {
-
 	public final static String OPTION_USE_TASK_LIST_BACKGROUND_COLOR = "use_list_background_color";
 	public final static String OPTION_USE_TASK_BACKGROUND_COLOR = "use_task_background_color";
 	public final static String OPTION_NO_TITLE = "no_title";

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,12 +35,6 @@ public abstract class AbstractArrayChoicesAdapter implements IChoicesAdapter
 	protected List<Object> mVisibleChoices;
 	protected List<String> mTitles;
 	protected List<Drawable> mDrawables;
-
-
-	public AbstractArrayChoicesAdapter()
-	{
-
-	}
 
 
 	@Override
