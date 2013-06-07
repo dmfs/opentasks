@@ -310,6 +310,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			long lastList = prefs.getLong(PREFERENCE_LAST_LIST, -1);
 			if (lastList != -1)
 			{
+				// iterate over all lists and select the one that matches the given id
 				cursor.moveToFirst();
 				while (!cursor.isAfterLast())
 				{
