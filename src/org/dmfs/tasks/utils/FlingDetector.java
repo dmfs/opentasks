@@ -112,7 +112,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		ViewConfiguration vc = ViewConfiguration.get(listview.getContext());
 		mTouchSlop = vc.getScaledTouchSlop();
 
-		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 32; // we want the user to fling harder!
+		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 24; // we want the user to fling harder!
 		mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity();
 
 	}
