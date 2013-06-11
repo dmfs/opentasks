@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">Zadania</string>
+    <string name="permission_read_tasks">Czytaj zadania</string>
+    <string name="permission_description_read_tasks">Pozwala aplikacji na czytanie zadań z Twojej listy zadań.</string>
+    <string name="permission_write_tasks">Zapisuj zadania</string>
+    <string name="permission_description_write_tasks">Pozwala aplikacji na zapisywanie zadań na Twojej liście zadań.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Dodaj zadanie</string>
+    <string name="menu_add_task_condensed">Dodaj</string>
+    <string name="menu_show_completed">Pokazuj zakończone</string>
+    <string name="menu_show_completed_condensed">Pokaż zakończone</string>
+    <string name="menu_sync_now">Odśwież</string>
+    <string name="menu_sync_now_condensed">Odśwież</string>
+    <string name="toast_task_completed">\"%1s\" zrealizowane.</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d zadanie</item>
+        <item quantity="other">%d zadań</item>
+    </plurals>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Edytuj zadanie</string>
+    <string name="activity_add_task_title">Utwórz zadanie</string>
+    <string name="activity_edit_task_error_invalid_url">Błędny adres URL</string>
+    <string name="activity_edit_task_task_saved">Zadanie zapisane.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Puste zadanie - nie zostało zapisane.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Lista</string>
+    <string name="task_title">Tytuł</string>
+    <string name="task_location">Lokalizacja</string>
+    <string name="task_description">Opis</string>
+    <string name="task_start">Początek</string>
+    <string name="task_due">Koniec</string>
+    <string name="task_completed">Zakończenie</string>
+    <string name="task_percent_complete">Procent realizacji</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Prywatność</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Szczegóły zadania</string>
+    <string name="title_task_list">Zadania</string>
+    <string name="provider_label">Zadania</string>
+    <string name="task_detail_activity">Szczegóły zadania</string>
+    <string name="task_priority">Priorytet</string>
+    <string name="task_timezone">Strefa czasowa</string>
+    <string name="task_all_day">Cały dzień</string>
+
+    <!-- Task list group titles -->
+    <string name="task_group_no_due">Brak daty zakończenia</string>
+    <string name="task_group_overdue">Zaległe</string>
+    <string name="task_group_due_today">Na dziś</string>
+    <string name="task_group_due_tomorrow">Na jutro</string>
+    <string name="task_group_due_within_7_days">Wkrótce</string>
+    <string name="task_group_due_in_month">Na miesiąc %s</string>
+    <string name="task_group_due_in_year">W roku %s</string>
+    <string name="task_group_due_in_future">W przyszłości</string>
+    <string name="today">Dziś</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Zapisz</string>
+    <string name="action_cancel">Anuluj</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">wymaga działania</string>
+    <string name="status_in_process">trwa</string>
+    <string name="status_completed">wykonane</string>
+    <string name="status_cancelled">anulowane</string>
+    <string name="status_incomplete">niekompletne</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">nieokreślone</string>
+    <string name="classification_public">publiczne</string>
+    <string name="classification_private">prywatne</string>
+    <string name="classification_confidential">poufne</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">brak</string>
+    <string name="priority_low">niski</string>
+    <string name="priority_medium">średni</string>
+    <string name="priority_high">wysoki</string>
+    <string name="priority_urgent">pilne</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="visible_task_lists">Wyświetlane listy</string>
+    <string name="synced_task_lists">Synchronizowane listy</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Data zakończenia</string>
+    <string name="gd_by_completed">Zakończone</string>
+    <string name="gd_by_list">Listy</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Potwierdź usunięcie</string>
+    <string name="confirm_delete_message">Usunąć to zadanie?</string>
+    <string name="confirm_delete_message_with_title">Usunąć \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" usunięte.</string>
+
+</resources>
