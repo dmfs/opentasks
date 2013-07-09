@@ -117,6 +117,16 @@ public final class TaskFieldAdapters
 	 */
 	public final static UrlFieldAdapter URL = new UrlFieldAdapter(TaskContract.Tasks.URL);
 
+	/**
+	 * Adapter for the Color of the task.
+	 * */
+	public final static IntegerFieldAdapter LIST_COLOR = new IntegerFieldAdapter(TaskContract.Tasks.LIST_COLOR);
+
+	/**
+	 * Adpater for the ID of the task.
+	 * */
+	public static final IntegerFieldAdapter TASK_ID = new IntegerFieldAdapter(TaskContract.Tasks._ID);
+
 
 	/**
 	 * Private constructor to prevent instantiation.

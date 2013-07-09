@@ -5,5 +5,8 @@
     <color name="light_gray">#FFCCCCCC</color>
     <color name="dark_gray">#FF808080</color>
     <color name="darker_gray">#FF333333</color>
+    <color name="translucent_black">#88000000</color>
+    <color name="translucent_white">#22FFFFFF</color>
+    <color name="translucent_grey">#BB222222</color>
 
 </resources>
