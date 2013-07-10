@@ -2,6 +2,11 @@
 
     <style name="AppTheme" parent="android:Theme.Holo.Light">
         <item name="android:textColor">#FF333333</item>
+        <item name="android:windowTitleStyle">@style/window_title_style</item>
+    </style>
+
+    <style name="window_title_style">
+        <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="ActivityDefault">
