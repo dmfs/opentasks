@@ -107,4 +107,9 @@
     <string name="confirm_delete_message_with_title">Delete \"%1s\"?</string>
     <string name="toast_task_deleted">\"%1s\" removed.</string>
 
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Upcoming Tasks</string>
+    <string name="title_activity_test_display">TestDisplayActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>
