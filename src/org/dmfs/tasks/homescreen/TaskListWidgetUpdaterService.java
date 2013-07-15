@@ -16,6 +16,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.homescreen;
 
 import java.util.TimeZone;
@@ -29,6 +30,7 @@ import org.dmfs.tasks.utils.DueDateFormatter;
 import org.dmfs.tasks.utils.TimeChangeListener;
 import org.dmfs.tasks.utils.TimeChangeObserver;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.appwidget.AppWidgetManager;
 import android.content.ContentUris;
@@ -46,15 +48,13 @@ import android.widget.RemoteViewsService;
 
 
 /**
- * The Class TaskListWidgetUpdaterService which is a service used to keep the task list widget updated.
+ * A service to keep the task list widget updated.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
+@SuppressLint("NewApi")
 public class TaskListWidgetUpdaterService extends RemoteViewsService
 {
-
-	/** The TAG for logging. */
-	private static final String TAG = "org.dmfs.tasks.TaskListWidgetUpdaterService";
 
 	/** The context of the {@link Application}. */
 	private Context mContext;
@@ -92,9 +92,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 	{
 		/** The {@link TaskListWidgetItem} array which stores the tasks to be displayed. When the cursor loads it is updated. */
 		private TaskListWidgetItem[] items = null;
-
-		/** The TAG for logging. */
-		private static final String TAG = "TaskListViewsFactory";
 
 		/** The {@link Context} of the {@link Application} to which this widget belongs. */
 		private Context context = null;
@@ -334,6 +331,5 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 			// Not listening for Alarms in this service.
 		}
-
 	}
 }

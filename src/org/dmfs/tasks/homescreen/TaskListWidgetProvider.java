@@ -16,6 +16,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.homescreen;
 
 import org.dmfs.provider.tasks.TaskContract;
@@ -43,15 +44,12 @@ import android.widget.RemoteViews;
 public class TaskListWidgetProvider extends AppWidgetProvider
 {
 
-	/** The TAG for logging. */
-	private static final String TAG = "org.dmfs.tasks.TaskListWidgetProvider";
-
-
 	/*
 	 * This method is called periodically to update the widget.
 	 * 
 	 * @see android.appwidget.AppWidgetProvider#onUpdate(android.content.Context, android.appwidget.AppWidgetManager, int[])
 	 */
+	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
 		if (android.os.Build.VERSION.SDK_INT < 11)
@@ -67,7 +65,6 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			int count = 0;
 			while (!cursor.isAfterLast() && count < 7)
 			{
-
 				RemoteViews taskItem = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
 				int taskColor = TaskFieldAdapters.LIST_COLOR.get(cursor);
 				taskItem.setInt(R.id.task_list_color, "setBackgroundColor", taskColor);
@@ -84,7 +81,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			}
 			cursor.close();
 
-			/**
+			/*
 			 * Create and set a {@link PendingIntent} to launch the application when the list is clicked.
 			 */
 			Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
@@ -94,7 +91,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			appWidgetManager.updateAppWidget(appWidgetIds, widget);
 			return;
 		}
-		/**
+		/*
 		 * Iterate over all the widgets of this type and update them individually.
 		 */
 		for (int i = 0; i < appWidgetIds.length; i++)
@@ -121,11 +118,10 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 
 			widget.setPendingIntentTemplate(R.id.task_list_widget_lv, clickPI);
 
-			/** Finally update the widget */
+			/* Finally update the widget */
 			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
 		}
 
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
-
 	}
 }
