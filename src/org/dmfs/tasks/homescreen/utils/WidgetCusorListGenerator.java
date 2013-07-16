@@ -16,6 +16,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.homescreen.utils;
 
 import java.lang.reflect.Array;
@@ -34,7 +35,7 @@ public class WidgetCusorListGenerator
 {
 
 	/** The tasks cursor. */
-	Cursor mTasksCursor;
+	private Cursor mTasksCursor;
 
 
 	/**
@@ -75,5 +76,4 @@ public class WidgetCusorListGenerator
 		}
 		return null;
 	}
-
 }

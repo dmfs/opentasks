@@ -16,6 +16,7 @@
  * limitations under the License.
  * 
  */
+
 package org.dmfs.tasks.homescreen.utils;
 
 import android.text.format.Time;
@@ -83,12 +84,12 @@ public class TaskListWidgetItem
 	/**
 	 * Sets the task color.
 	 * 
-	 * @param mTaskColor
+	 * @param taskColor
 	 *            the new task color
 	 */
-	public void setTaskColor(int mTaskColor)
+	public void setTaskColor(int taskColor)
 	{
-		this.mTaskColor = mTaskColor;
+		mTaskColor = taskColor;
 	}
 
 
@@ -106,12 +107,12 @@ public class TaskListWidgetItem
 	/**
 	 * Sets the due date.
 	 * 
-	 * @param mDueDate
+	 * @param dueDate
 	 *            the new due date
 	 */
-	public void setDueDate(Time mDueDate)
+	public void setDueDate(Time dueDate)
 	{
-		this.mDueDate = mDueDate;
+		mDueDate = dueDate;
 	}
 
 
@@ -129,12 +130,12 @@ public class TaskListWidgetItem
 	/**
 	 * Sets the task title.
 	 * 
-	 * @param mTaskTitle
+	 * @param taskTitle
 	 *            the new task title
 	 */
-	public void setTaskTitle(String mTaskTitle)
+	public void setTaskTitle(String taskTitle)
 	{
-		this.mTaskTitle = mTaskTitle;
+		mTaskTitle = taskTitle;
 	}
 
 
@@ -163,11 +164,11 @@ public class TaskListWidgetItem
 	/**
 	 * Sets the checks if is closed.
 	 * 
-	 * @param mIsClosed
+	 * @param isClosed
 	 *            the new checks if is closed
 	 */
-	public void setIsClosed(boolean mIsClosed)
+	public void setIsClosed(boolean isClosed)
 	{
-		this.mIsClosed = mIsClosed;
+		mIsClosed = isClosed;
 	}
 }

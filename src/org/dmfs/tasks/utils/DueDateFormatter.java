@@ -16,9 +16,7 @@
  * limitations under the License.
  * 
  */
-/**
- * 
- */
+
 package org.dmfs.tasks.utils;
 
 import java.text.DateFormat;
@@ -33,8 +31,9 @@ import android.text.format.Time;
 
 
 /**
- * @author Arjun Naik
+ * Helper class to format a due date to present it to the user.
  * 
+ * @author Arjun Naik <arjun@arjunnaik.in>
  */
 public class DueDateFormatter
 {
@@ -48,7 +47,14 @@ public class DueDateFormatter
 	 */
 	private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
+	/**
+	 * A context to load resource string.
+	 */
 	private Context mContext;
+
+	/**
+	 * A helper to get the current date & time.
+	 */
 	private Time mNow;
 
 
@@ -59,6 +65,17 @@ public class DueDateFormatter
 	}
 
 
+	/**
+	 * Format the given due date. The result depends on the current date and on the all-day flag of the due date.
+	 * <p>
+	 * If the due date it today the format will contain "today" instead of the date. Allday dates won't contain a time.
+	 * </p>
+	 * 
+	 * 
+	 * @param dueDate
+	 *            The due date to format.
+	 * @return A string with the formatted due date.
+	 */
 	public String format(Time dueDate)
 	{
 		mNow.clear(TimeZone.getDefault().getID());
@@ -87,6 +104,5 @@ public class DueDateFormatter
 		{
 			return mDateFormatter.format(new Date(dueDate.toMillis(false)));
 		}
-
 	}
 }

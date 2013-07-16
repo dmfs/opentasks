@@ -252,7 +252,17 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private void updateView()
 	{
-		final LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		/**
+		 * If the model loads very slowly then this function may be called after onDetach. In this case check if Activity is <code>null</code> and return if
+		 * <code>true</code>.
+		 */
+		Activity activity = getActivity();
+		if (activity == null)
+		{
+			return;
+		}
+
+		final LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		if (mEditor != null)
 		{
