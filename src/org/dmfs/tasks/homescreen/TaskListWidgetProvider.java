@@ -49,6 +49,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	 * 
 	 * @see android.appwidget.AppWidgetProvider#onUpdate(android.content.Context, android.appwidget.AppWidgetManager, int[])
 	 */
+
 	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
@@ -82,6 +83,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			cursor.close();
 
 			/*
+
 			 * Create and set a {@link PendingIntent} to launch the application when the list is clicked.
 			 */
 			Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
@@ -91,6 +93,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			appWidgetManager.updateAppWidget(appWidgetIds, widget);
 			return;
 		}
+
 		/*
 		 * Iterate over all the widgets of this type and update them individually.
 		 */

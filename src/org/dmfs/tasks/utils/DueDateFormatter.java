@@ -104,6 +104,5 @@ public class DueDateFormatter
 		{
 			return mDateFormatter.format(new Date(dueDate.toMillis(false)));
 		}
-
 	}
 }

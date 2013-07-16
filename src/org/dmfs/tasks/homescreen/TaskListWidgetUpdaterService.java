@@ -47,7 +47,7 @@ import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 
-/**
+/*
  * A service to keep the task list widget updated.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
@@ -55,7 +55,6 @@ import android.widget.RemoteViewsService;
 @SuppressLint("NewApi")
 public class TaskListWidgetUpdaterService extends RemoteViewsService
 {
-
 	/** The context of the {@link Application}. */
 	private Context mContext;
 
