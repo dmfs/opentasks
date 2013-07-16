@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="10"
-    android:versionName="1.0.3" >
+    android:versionCode="11"
+    android:versionName="1.0.4-pre1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -49,7 +49,8 @@
         <activity
             android:name="org.dmfs.tasks.ViewTaskActivity"
             android:label="@string/title_task_detail"
-            android:parentActivityName=".TaskListActivity" >
+            android:parentActivityName=".TaskListActivity"
+            android:taskAffinity="org.dmfs.tasks.TaskListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".TaskListActivity" />

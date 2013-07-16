@@ -17,12 +17,14 @@
 
 package org.dmfs.tasks;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 
 
@@ -36,6 +38,7 @@ import android.view.MenuItem;
 public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragment.Callback
 {
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -73,7 +76,15 @@ public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragme
 		switch (item.getItemId())
 		{
 			case android.R.id.home:
-				NavUtils.navigateUpTo(this, new Intent(this, TaskListActivity.class));
+				Intent upIntent = new Intent(this, TaskListActivity.class);
+				if (NavUtils.shouldUpRecreateTask(this, upIntent))
+				{
+					TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities();
+				}
+				else
+				{
+					NavUtils.navigateUpTo(this, upIntent);
+				}
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
