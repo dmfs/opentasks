@@ -23,8 +23,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 
 
@@ -77,15 +75,11 @@ public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragme
 		{
 			case android.R.id.home:
 				Intent upIntent = new Intent(this, TaskListActivity.class);
-				if (NavUtils.shouldUpRecreateTask(this, upIntent))
-				{
-					TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities();
-				}
-				else
-				{
-					NavUtils.navigateUpTo(this, upIntent);
-				}
-				return true;
+				// provision the task uri, so the main activity will be opened with the right task selected
+				upIntent.setData(getIntent().getData());
+				upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(upIntent);
+				finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}
