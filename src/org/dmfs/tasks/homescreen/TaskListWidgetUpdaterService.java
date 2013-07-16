@@ -205,6 +205,10 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					row.setTextColor(android.R.id.text1, mResources.getColor(R.color.lighter_gray));
 				}
 			}
+			else
+			{
+				row.setTextViewText(android.R.id.text1, null);
+			}
 
 			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, items[position].getTaskId());
 			Intent i = new Intent();
