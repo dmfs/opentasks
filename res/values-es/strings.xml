@@ -107,4 +107,7 @@
     <string name="confirm_delete_message_with_title">¿Eliminar \"%1s\"?</string>
     <string name="toast_task_deleted">\"%1s\" eliminada.</string>
 
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Tareas actuales</string>
+    
 </resources>
