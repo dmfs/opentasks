@@ -287,9 +287,9 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 
 			// Search for events from now until some time in the future
-			mLoader = new CursorLoader(context, TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.IS_CLOSED + "=0 AND ("
-				+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)",
-				null, TaskContract.Instances.DEFAULT_SORT_ORDER);
+			mLoader = new CursorLoader(context, TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
+				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
+				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.DEFAULT_SORT_ORDER);
 
 			mLoader.registerListener(mAppWidgetId, this);
 			mLoader.startLoading();

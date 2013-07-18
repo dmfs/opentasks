@@ -58,9 +58,9 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
 			DueDateFormatter dateFormatter = new DueDateFormatter(context);
 			ContentResolver resolver = context.getContentResolver();
-			Cursor cursor = resolver.query(TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.IS_CLOSED + "=0 AND ("
-				+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)",
-				null, TaskContract.Instances.DEFAULT_SORT_ORDER);
+			Cursor cursor = resolver.query(TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
+				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
+				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.DEFAULT_SORT_ORDER);
 
 			cursor.moveToFirst();
 			int count = 0;
@@ -83,7 +83,6 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			cursor.close();
 
 			/*
-
 			 * Create and set a {@link PendingIntent} to launch the application when the list is clicked.
 			 */
 			Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
