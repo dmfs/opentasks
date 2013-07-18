@@ -26,7 +26,7 @@
         android:layout_marginRight="5sp"
         android:textColor="@color/dark_gray"
         android:textIsSelectable="false"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@android:id/title"
@@ -40,6 +40,7 @@
         android:ellipsize="end"
         android:singleLine="true"
         android:textColor="@android:color/white"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"
+        android:textSize="14sp" />
 
 </RelativeLayout>

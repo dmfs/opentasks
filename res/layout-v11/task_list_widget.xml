@@ -11,7 +11,7 @@
         android:padding="5sp"
         android:text="@string/task_list_widget_title"
         android:textColor="@android:color/white"
-        android:textSize="15sp" />
+        android:textSize="16sp" />
 
     <ListView
         android:id="@+id/task_list_widget_lv"
@@ -20,7 +20,7 @@
         android:layout_marginLeft="3sp"
         android:layout_marginRight="3sp"
         android:layout_weight="1"
-        android:background="@color/translucent_white" >
+>
     </ListView>
 
 </LinearLayout>
