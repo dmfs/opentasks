@@ -56,6 +56,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 		if (android.os.Build.VERSION.SDK_INT < 11)
 		{
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
+			widget.removeAllViews(android.R.id.list);
 			DueDateFormatter dateFormatter = new DueDateFormatter(context);
 			ContentResolver resolver = context.getContentResolver();
 			Cursor cursor = resolver.query(TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
