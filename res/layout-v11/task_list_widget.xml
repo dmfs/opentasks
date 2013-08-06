@@ -24,6 +24,7 @@
             android:id="@android:id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/translucent_black"
             android:contentDescription="@string/activity_add_task_title"
             android:src="@drawable/content_new_invert" />
     </LinearLayout>
