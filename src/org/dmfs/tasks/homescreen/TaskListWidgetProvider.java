@@ -27,6 +27,7 @@ import org.dmfs.tasks.utils.DueDateFormatter;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -45,11 +46,43 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 {
 
 	/*
+	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
+	 * 
+	 * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
+	 */
+	@Override
+	public void onReceive(Context context, Intent intent)
+	{
+		String action = intent.getAction();
+		if (WidgetUtils.getUpdateAction(context).equals(action))
+		{
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(getComponentName(context));
+			if (android.os.Build.VERSION.SDK_INT >= 11)
+			{
+				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
+			}
+			else
+			{
+				onUpdate(context, appWidgetManager, appWidgetIds);
+			}
+		}
+
+		super.onReceive(context, intent);
+	}
+
+
+	static ComponentName getComponentName(Context context)
+	{
+		return new ComponentName(context, TaskListWidgetProvider.class);
+	}
+
+
+	/*
 	 * This method is called periodically to update the widget.
 	 * 
 	 * @see android.appwidget.AppWidgetProvider#onUpdate(android.content.Context, android.appwidget.AppWidgetManager, int[])
 	 */
-
 	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
@@ -115,6 +148,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			{
 				widget.setRemoteAdapter(R.id.task_list_widget_lv, remoteServiceIntent);
 			}
+			appWidgetManager.notifyAppWidgetViewDataChanged(i, R.id.task_list_widget_lv);
 
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
 			PendingIntent clickPI = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -27,6 +27,7 @@ import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;
 import org.dmfs.tasks.groupings.filters.ConstantFilter;
+import org.dmfs.tasks.homescreen.WidgetUtils;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
@@ -630,15 +631,27 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					{
 						removeTask(taskUri, title);
 						// we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
+
+						// broadcast an update to update the widget.
+						WidgetUtils.broadcastWidgetUpdate(mAppContext);
 						return false;
+
 					}
 					else
 					{
-						return completeTask(taskUri, title);
+						boolean result = completeTask(taskUri, title);
+
+						// if completed successfully then, broadcast an update to update the widget.
+						if (result)
+						{
+							WidgetUtils.broadcastWidgetUpdate(mAppContext);
+						}
+						return result;
 					}
 				}
 			}
 		}
+
 		return false;
 	}
 }
