@@ -20,6 +20,7 @@
 package org.dmfs.tasks.homescreen;
 
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DueDateFormatter;
@@ -138,6 +139,13 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			remoteServiceIntent.setData(Uri.parse(remoteServiceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
+
+			/** Add a pending Intent to start new Task Activity on the new Task Button */
+			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
+			editTaskIntent.setData(Tasks.CONTENT_URI);
+			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			widget.setOnClickPendingIntent(android.R.id.button1, newTaskPI);
 
 			/** Set the {@link RemoteViewsService } subclass as the adapter for the {@link ListView} in the widget. */
 			if (android.os.Build.VERSION.SDK_INT < 14)

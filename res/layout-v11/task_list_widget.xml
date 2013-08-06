@@ -4,14 +4,29 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/translucent_black"
-        android:padding="5sp"
-        android:text="@string/task_list_widget_title"
-        android:textColor="@android:color/white"
-        android:textSize="16sp" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="5sp"
+            android:text="@string/task_list_widget_title"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@android:id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/activity_add_task_title"
+            android:src="@drawable/content_new_invert" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/task_list_widget_lv"
@@ -19,8 +34,7 @@
         android:layout_height="0sp"
         android:layout_marginLeft="3sp"
         android:layout_marginRight="3sp"
-        android:layout_weight="1"
->
+        android:layout_weight="1" >
     </ListView>
 
 </LinearLayout>
