@@ -122,6 +122,13 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			}
 			cursor.close();
 
+			/** Add a pending Intent to start new Task Activity on the new Task Button */
+			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
+			editTaskIntent.setData(Tasks.CONTENT_URI);
+			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			widget.setOnClickPendingIntent(android.R.id.button1, newTaskPI);
+
 			/*
 			 * Create and set a {@link PendingIntent} to launch the application when the list is clicked.
 			 */

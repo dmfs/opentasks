@@ -5,14 +5,30 @@
     android:orientation="vertical"
     android:padding="2sp" >
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@color/translucent_black"
-        android:padding="3sp"
-        android:text="@string/task_list_widget_title"
-        android:textColor="@android:color/white"
-        android:textSize="12sp" />
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:padding="5sp"
+            android:text="@string/task_list_widget_title"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@android:id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/translucent_black"
+            android:contentDescription="@string/activity_add_task_title"
+            android:src="@drawable/content_new_invert" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@android:id/list"
