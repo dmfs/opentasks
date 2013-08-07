@@ -177,6 +177,21 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public RemoteViews getViewAt(int position)
 		{
+
+			/** Added some checks for null values which cause mysterious crash. Does not solve issue, will only provide clues to solving issue in future. */
+			if (items == null)
+			{
+				throw new NullPointerException("items array is null.");
+			}
+			if (items[position] == null)
+			{
+				throw new NullPointerException("Number of array items: " + items.length + ", Position Accessed : " + position);
+			}
+			if (items[position].getTaskTitle() == null)
+			{
+				throw new NullPointerException("The task title of item at position : " + position + "is null.");
+			}
+
 			RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
 
 			row.setTextViewText(android.R.id.title, items[position].getTaskTitle());
