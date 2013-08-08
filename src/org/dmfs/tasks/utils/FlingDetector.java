@@ -113,8 +113,15 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		mTouchSlop = vc.getScaledTouchSlop();
 
 		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 24; // we want the user to fling harder!
-		mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity();
-
+		// The maximum fling velocity is too low on Froyo.
+		if (android.os.Build.VERSION.SDK_INT == 8)
+		{
+			mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity() * 2;
+		}
+		else
+		{
+			mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity();
+		}
 	}
 
 
@@ -194,9 +201,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					// compute velocity in ms
 					mVelocityTracker.computeCurrentVelocity(1);
 					float deltaX = Math.abs(event.getX() - mDownX);
-
-					if (mMinimumFlingVelocity < mVelocityTracker.getXVelocity() * 1000 && mVelocityTracker.getXVelocity() * 1000 < mMaximumFlingVelocity
-						&& deltaX > mTouchSlop)
+					float xVelocity = mVelocityTracker.getXVelocity() * 1000;
+					if (mMinimumFlingVelocity < xVelocity && xVelocity < mMaximumFlingVelocity && deltaX > mTouchSlop)
 					{
 						animateFling(mDownChildView, mDownItemPos, mVelocityTracker.getXVelocity());
 					}
