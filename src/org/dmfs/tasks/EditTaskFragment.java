@@ -23,7 +23,6 @@ import java.util.Set;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.homescreen.WidgetUtils;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -492,9 +491,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			editor.putLong(PREFERENCE_LAST_LIST, mListSpinner.getSelectedItemId());
 			editor.commit();
 		}
-
-		// broadcast an update to update the widget.
-		WidgetUtils.broadcastWidgetUpdate(mAppContext);
 
 		activity.finish();
 	}

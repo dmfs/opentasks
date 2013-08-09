@@ -35,7 +35,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.format.Time;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 
@@ -47,9 +46,6 @@ import android.widget.RemoteViews;
 public class TaskListWidgetProvider extends AppWidgetProvider
 {
 
-	private static final String TAG = "TaskListWidgetProvider";
-
-
 	/*
 	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
 	 * 
@@ -58,9 +54,8 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		Log.d(TAG, "Intent Action : " + intent.getAction());
 		String action = intent.getAction();
-		if (WidgetUtils.getUpdateAction(context).equals(action) || action.equals(Intent.ACTION_PROVIDER_CHANGED))
+		if (action.equals(Intent.ACTION_PROVIDER_CHANGED))
 		{
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(getComponentName(context));
