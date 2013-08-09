@@ -112,9 +112,16 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		ViewConfiguration vc = ViewConfiguration.get(listview.getContext());
 		mTouchSlop = vc.getScaledTouchSlop();
 
-		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 24; // we want the user to fling harder!
-		mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity();
-
+		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16; // we want the user to fling harder!
+		// The maximum fling velocity is too low on Froyo.
+		if (android.os.Build.VERSION.SDK_INT == 8)
+		{
+			mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity() * 2;
+		}
+		else
+		{
+			mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity();
+		}
 	}
 
 
@@ -194,9 +201,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					// compute velocity in ms
 					mVelocityTracker.computeCurrentVelocity(1);
 					float deltaX = Math.abs(event.getX() - mDownX);
-
-					if (mMinimumFlingVelocity < mVelocityTracker.getXVelocity() * 1000 && mVelocityTracker.getXVelocity() * 1000 < mMaximumFlingVelocity
-						&& deltaX > mTouchSlop)
+					float xVelocity = mVelocityTracker.getXVelocity() * 1000;
+					if (mMinimumFlingVelocity < xVelocity && xVelocity < mMaximumFlingVelocity && deltaX > mTouchSlop)
 					{
 						animateFling(mDownChildView, mDownItemPos, mVelocityTracker.getXVelocity());
 					}
@@ -310,6 +316,13 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 			v.setTranslationX(translation);
 			v.setAlpha(1 - translation / v.getWidth());
 		}
+		else
+		{
+			int paddingTop = v.getPaddingTop();
+			int paddingRight = v.getPaddingRight();
+			int paddingBottom = v.getPaddingBottom();
+			v.setPadding((int) translation, paddingTop, paddingRight, paddingBottom);
+		}
 	}
 
 
@@ -380,6 +393,15 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 						}
 					}).start();
 			}
+			else if (mListener != null)
+			{
+				// notify listener
+				if (!mListener.onFling(mListView, pos))
+				{
+					// the event was not handled, so reset the view
+					resetView(v);
+				}
+			}
 		}
 		else
 		{
@@ -411,6 +433,13 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
 		{
 			v.animate().translationX(0).alpha(1).setDuration(100).setListener(null /* unset any previous listener! */).start();
+		}
+		else
+		{
+			int paddingTop = v.getPaddingTop();
+			int paddingRight = v.getPaddingRight();
+			int paddingBottom = v.getPaddingBottom();
+			v.setPadding(0, paddingTop, paddingRight, paddingBottom);
 		}
 	}
 }

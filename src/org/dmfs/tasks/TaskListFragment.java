@@ -177,11 +177,8 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 			Log.d(TAG, "savedInstancestate is null!!");
 		}
 
-		if (android.os.Build.VERSION.SDK_INT >= 14)
-		{
-			FlingDetector swiper = new FlingDetector(mExpandableListView);
-			swiper.setOnFlingListener(this);
-		}
+		FlingDetector swiper = new FlingDetector(mExpandableListView);
+		swiper.setOnFlingListener(this);
 		return rootView;
 	}
 

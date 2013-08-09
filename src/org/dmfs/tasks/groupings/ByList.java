@@ -95,6 +95,13 @@ public interface ByList
 				view.setTranslationX(0);
 				view.setAlpha(1);
 			}
+			else
+			{
+				int paddingTop = view.getPaddingTop();
+				int paddingRight = view.getPaddingRight();
+				int paddingBottom = view.getPaddingBottom();
+				view.setPadding(0, paddingTop, paddingRight, paddingBottom);
+			}
 
 			if (title != null)
 			{
