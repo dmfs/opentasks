@@ -112,7 +112,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		ViewConfiguration vc = ViewConfiguration.get(listview.getContext());
 		mTouchSlop = vc.getScaledTouchSlop();
 
-		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 24; // we want the user to fling harder!
+		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16; // we want the user to fling harder!
 		// The maximum fling velocity is too low on Froyo.
 		if (android.os.Build.VERSION.SDK_INT == 8)
 		{
@@ -392,6 +392,15 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 							}
 						}
 					}).start();
+			}
+			else if (mListener != null)
+			{
+				// notify listener
+				if (!mListener.onFling(mListView, pos))
+				{
+					// the event was not handled, so reset the view
+					resetView(v);
+				}
 			}
 		}
 		else
