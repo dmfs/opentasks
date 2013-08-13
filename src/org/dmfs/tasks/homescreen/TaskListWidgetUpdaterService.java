@@ -178,18 +178,10 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		public RemoteViews getViewAt(int position)
 		{
 
-			/** Added some checks for null values which cause mysterious crash. Does not solve issue, will only provide clues to solving issue in future. */
-			if (items == null)
+			/** We use this check because there is a small gap between when the database is updated and the widget is notified */
+			if (position < 0 || position > getCount())
 			{
-				throw new NullPointerException("items array is null.");
-			}
-			if (items[position] == null)
-			{
-				throw new NullPointerException("Number of array items: " + items.length + ", Position Accessed : " + position);
-			}
-			if (items[position].getTaskTitle() == null)
-			{
-				throw new NullPointerException("The task title of item at position : " + position + "is null.");
+				return null;
 			}
 
 			RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
