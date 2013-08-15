@@ -179,7 +179,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 
 			/** We use this check because there is a small gap between when the database is updated and the widget is notified */
-			if (position < 0 || position > getCount())
+			if (position < 0 || position >= getCount())
 			{
 				return null;
 			}
