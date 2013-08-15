@@ -25,6 +25,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DueDateFormatter;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -34,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 
@@ -43,6 +45,7 @@ import android.widget.RemoteViews;
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProvider extends AppWidgetProvider
 {
 
@@ -84,6 +87,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	 * 
 	 * @see android.appwidget.AppWidgetProvider#onUpdate(android.content.Context, android.appwidget.AppWidgetManager, int[])
 	 */
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
@@ -95,7 +99,8 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			ContentResolver resolver = context.getContentResolver();
 			Cursor cursor = resolver.query(TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
 				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
-				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.DEFAULT_SORT_ORDER);
+				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.INSTANCE_DUE + " is null, "
+				+ TaskContract.Instances.DEFAULT_SORT_ORDER);
 
 			cursor.moveToFirst();
 			int count = 0;
