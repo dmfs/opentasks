@@ -221,8 +221,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			Intent i = new Intent();
 			i.setData(taskUri);
 
-			row.setOnClickFillInIntent(android.R.id.title, i);
-
+			row.setOnClickFillInIntent(R.id.widget_list_item, i);
 			return (row);
 		}
 

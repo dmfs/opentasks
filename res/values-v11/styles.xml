@@ -55,5 +55,11 @@
 
     <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
     </style>
+    
+    <style name="task_list_widget_list">
+        <item name="android:background">@drawable/widget_list_item_bg</item>
+    </style>
+    
+    
 
 </resources>

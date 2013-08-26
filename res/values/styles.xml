@@ -148,4 +148,8 @@
         <item name="android:src">@drawable/content_remove_light</item>
     </style>
 
+    <style name="widget_header_divider">
+        <item name="android:background">@android:color/darker_gray</item>
+    </style>
+
 </resources>

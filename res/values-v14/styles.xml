@@ -48,5 +48,9 @@
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:background">@android:color/holo_blue_light</item>
     </style>
+    
+    <style name="widget_header_divider">
+        <item name="android:background">@android:color/holo_blue_bright</item>
+    </style>
 
 </resources>

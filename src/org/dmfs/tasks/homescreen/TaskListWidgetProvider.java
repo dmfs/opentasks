@@ -22,6 +22,7 @@ package org.dmfs.tasks.homescreen;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.TaskListActivity;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DueDateFormatter;
 
@@ -122,12 +123,18 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			}
 			cursor.close();
 
+			/** Add pending Intent to start the Tasks app when the title is clicked */
+			Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
+			tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
+
 			/** Add a pending Intent to start new Task Activity on the new Task Button */
 			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
 			editTaskIntent.setData(Tasks.CONTENT_URI);
 			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			widget.setOnClickPendingIntent(android.R.id.button1, newTaskPI);
+			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
 
 			/*
 			 * Create and set a {@link PendingIntent} to launch the application when the list is clicked.
@@ -152,12 +159,18 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
 
+			/** Add pending Intent to start the Tasks app when the title is clicked */
+			Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
+			tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
+
 			/** Add a pending Intent to start new Task Activity on the new Task Button */
 			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
 			editTaskIntent.setData(Tasks.CONTENT_URI);
 			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			widget.setOnClickPendingIntent(android.R.id.button1, newTaskPI);
+			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
 
 			/** Set the {@link RemoteViewsService } subclass as the adapter for the {@link ListView} in the widget. */
 			if (android.os.Build.VERSION.SDK_INT < 14)
