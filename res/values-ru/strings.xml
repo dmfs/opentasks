@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Russian Translation (c) Nikita Tratorov, NiX Pro Soft, 21.08.2013 -->
+	
+    <!-- Manifest stuff -->
+    <string name="app_name">Tasks</string>
+    <string name="permission_read_tasks">чтение задач</string>
+    <string name="permission_description_read_tasks">Разрешить приложению читать задачи из Ваших списков задач.</string>
+    <string name="permission_write_tasks">запись задач</string>
+    <string name="permission_description_write_tasks">Разрешить приложению сохранять задачи в Ваших списках задач.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Добавить задачу</string>
+    <string name="menu_add_task_condensed">Новая</string>
+    <string name="menu_show_completed">Показывать выполненные задачи</string>
+    <string name="menu_show_completed_condensed">Показывать выполненные</string>
+    <string name="menu_sync_now">Обновить</string>
+    <string name="menu_sync_now_condensed">Обновить</string>
+    <string name="toast_task_completed">\"%1s\" выполнена.</string>
+
+    <plurals name="number_of_tasks">
+		<!-- last number 1 -->
+        <item quantity="one">%d задача</item>
+		<!-- last number 2-4 -->
+		<item quantity="two">%d задачи</item>
+		<!-- last number 5-9,0 -->
+        <item quantity="other">%d задач</item>
+    </plurals>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Редактирование задачи</string>
+    <string name="activity_add_task_title">Новая задача</string>
+    <string name="activity_edit_task_error_invalid_url">Неверная ссылка URL</string>
+    <string name="activity_edit_task_task_saved">Задача сохранена.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Пустая задача не сохранена.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Список задач</string>
+    <string name="task_title">Название</string>
+    <string name="task_location">Место</string>
+    <string name="task_description">Описание</string>
+    <string name="task_start">Начало</string>
+    <string name="task_due">Срок</string>
+    <string name="task_completed">Выполнена</string>
+    <string name="task_percent_complete">Завершено</string>
+    <string name="task_status">Состояние</string>
+    <string name="task_classification">Приватность</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Подробности задачи</string>
+    <string name="title_task_list">Tasks</string>
+    <string name="provider_label">Tasks</string>
+    <string name="task_detail_activity">Подробности задачи</string>
+    <string name="task_priority">Приоритет</string>
+    <string name="task_timezone">Часовой пояс</string>
+    <string name="task_all_day">Весь день</string>
+
+    <!-- Task list group titles -->
+    <string name="task_group_no_due">Без срока</string>
+    <string name="task_group_overdue">Просроченные</string>
+    <string name="task_group_due_today">До сегодня</string>
+    <string name="task_group_due_tomorrow">До завтра</string>
+    <string name="task_group_due_within_7_days">На неделе</string>
+    <string name="task_group_due_in_month">На %s</string>
+    <string name="task_group_due_in_year">В %s году</string>
+    <string name="task_group_due_in_future">В ближайшем будущем</string>
+    <string name="today">Сегодня</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Сохранить</string>
+    <string name="action_cancel">Отмена</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">в ожидании</string>
+    <string name="status_in_process">выполняется</string>
+    <string name="status_completed">выполнена</string>
+    <string name="status_cancelled">отменена</string>
+    <string name="status_incomplete">не выполнена</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">не указана</string>
+    <string name="classification_public">публичная</string>
+    <string name="classification_private">личная</string>
+    <string name="classification_confidential">конфиденциальная</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">не определен</string>
+    <string name="priority_low">низкий</string>
+    <string name="priority_medium">средний</string>
+    <string name="priority_high">высокий</string>
+    <string name="priority_urgent">срочный</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Настройки</string>
+    <string name="action_settings">Настройки</string>
+    <string name="visible_task_lists">Используемые списки</string>
+    <string name="synced_task_lists">Все доступные списки</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">По сроку</string>
+    <string name="gd_by_completed">По состоянию</string>
+    <string name="gd_by_list">По спискам</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Подтвердите удаление</string>
+    <string name="confirm_delete_message">Удалить эту задачу?</string>
+    <string name="confirm_delete_message_with_title">Удалить \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" удалена.</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Текущая задача</string>
+
+</resources>
