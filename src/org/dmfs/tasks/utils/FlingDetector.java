@@ -60,6 +60,12 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	private View mDownChildView;
 	private VelocityTracker mVelocityTracker;
 
+	/** Flag to indicate left direction fling gesture. */
+	public static final int LEFT_FLING = 1;
+
+	/** Flag to indicate right direction fling gesture. */
+	public static final int RIGHT_FLING = 2;
+
 	/**
 	 * The {@link OnFlingListener} no notify on fling events.
 	 */
@@ -79,9 +85,9 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		 *            The parent {@link ListView} of the element that is about to be flung.
 		 * @param pos
 		 *            The position of the item that is about to be flung.
-		 * @return <code>true</code> if flinging is allowed for this item, <code>false</code> otherwise.
+		 * @return Bitmask with LEFT_FLING or RIGHT_FLING set to indicate directions of fling which are enabled.
 		 */
-		public boolean canFling(ListView listview, int pos);
+		public int canFling(ListView listview, int pos);
 
 
 		/**
@@ -91,9 +97,11 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		 *            The parent {@link ListView} of the element that was flung.
 		 * @param pos
 		 *            The position of the item that was flung.
+		 * @param direction
+		 *            Flag to indicate in which direction the fling was performed.
 		 * @return <code>true</code> if the event has been handled, <code>false</code> otherwise.
 		 */
-		public boolean onFling(ListView listview, int pos);
+		public boolean onFling(ListView listview, int pos, int direction);
 	}
 
 
@@ -132,6 +140,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		switch (event.getActionMasked())
 		{
 			case MotionEvent.ACTION_DOWN:
+
 				// store down position
 				mDownX = event.getX();
 				mDownY = event.getY();
@@ -144,7 +153,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					mDownItemPos = mDownChildPos + mListView.getFirstVisiblePosition();
 					mDownChildView = mListView.getChildAt(mDownChildPos);
 
-					mFlingEnabled = mDownChildView != null && mListener != null && mListener.canFling(mListView, mDownItemPos);
+					mFlingEnabled = mDownChildView != null && mListener != null && mListener.canFling(mListView, mDownItemPos) > 0;
 
 					if (mFlingEnabled)
 					{
@@ -171,15 +180,20 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				if (mFlingEnabled)
 				{
 					mVelocityTracker.addMovement(event);
-					float deltaX = Math.abs(event.getX() - mDownX);
-					float deltaY = Math.abs(event.getY() - mDownY);
+					float deltaX = event.getX() - mDownX;
+					float deltaY = event.getY() - mDownY;
+					float deltaXabs = Math.abs(deltaX);
+					float deltaYabs = Math.abs(deltaY);
 
 					// start flinging when the finger has moved at least mTouchSlop pixels and has moved mostly along the in x-axis
-					mFlinging |= deltaX > mTouchSlop && deltaX > deltaY * 3;
+					boolean leftFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & LEFT_FLING) == LEFT_FLING;
+					boolean rightFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & RIGHT_FLING) == RIGHT_FLING;
+
+					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs * 3 && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0));
 
 					if (mFlinging)
 					{
-						translateView(mDownChildView, Math.max(0, (event.getX() - mDownX)));
+						translateView(mDownChildView, event.getX() - mDownX);
 						mListView.requestDisallowInterceptTouchEvent(true);
 
 						// cancel the touch event for the listview, otherwise it might detect a "press and hold" event and highlight the view
@@ -201,7 +215,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					// compute velocity in ms
 					mVelocityTracker.computeCurrentVelocity(1);
 					float deltaX = Math.abs(event.getX() - mDownX);
-					float xVelocity = mVelocityTracker.getXVelocity() * 1000;
+					float xVelocity = Math.abs(mVelocityTracker.getXVelocity() * 1000);
 					if (mMinimumFlingVelocity < xVelocity && xVelocity < mMaximumFlingVelocity && deltaX > mTouchSlop)
 					{
 						animateFling(mDownChildView, mDownItemPos, mVelocityTracker.getXVelocity());
@@ -314,7 +328,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
 		{
 			v.setTranslationX(translation);
-			v.setAlpha(1 - translation / v.getWidth());
+			v.setAlpha(1 - Math.abs(translation) / v.getWidth());
 		}
 		else
 		{
@@ -339,13 +353,30 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	@TargetApi(14)
 	private void animateFling(final View v, final int pos, float velocity)
 	{
+
+		final int direction = (velocity < 0) ? LEFT_FLING : RIGHT_FLING;
+
 		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
 		{
-			int parentWidth = ((View) v.getParent()).getWidth();
 
-			if (parentWidth > v.getTranslationX()) // otherwise there is nothing to animate
+			int parentWidth = ((View) v.getParent()).getWidth();
+			final float viewTranslationX = v.getTranslationX();
+
+			if (parentWidth > viewTranslationX) // otherwise there is nothing to animate
 			{
-				v.animate().alpha(0).translationX(parentWidth).setDuration((long) ((parentWidth - v.getTranslationX()) / velocity))
+				int translationWidth;
+				long animationDuration;
+				if (viewTranslationX < 0)
+				{
+					translationWidth = -parentWidth;
+					animationDuration = (long) (parentWidth + viewTranslationX);
+				}
+				else
+				{
+					translationWidth = parentWidth;
+					animationDuration = (long) (parentWidth - viewTranslationX);
+				}
+				v.animate().alpha(0).translationX(translationWidth).setDuration((long) (animationDuration / Math.abs(velocity)))
 					.setListener(new AnimatorListener()
 					{
 
@@ -369,7 +400,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 							if (mListener != null)
 							{
 								// notify listener
-								if (!mListener.onFling(mListView, pos))
+
+								if (!mListener.onFling(mListView, pos, direction))
 								{
 									// the event was not handled, so reset the view
 									resetView(v);
@@ -384,7 +416,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 							if (mListener != null)
 							{
 								// notify listener
-								if (!mListener.onFling(mListView, pos))
+								if (!mListener.onFling(mListView, pos, direction))
 								{
 									// the event was not handled, so reset the view
 									resetView(v);
@@ -396,7 +428,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 			else if (mListener != null)
 			{
 				// notify listener
-				if (!mListener.onFling(mListView, pos))
+				if (!mListener.onFling(mListView, pos, direction))
 				{
 					// the event was not handled, so reset the view
 					resetView(v);
@@ -409,7 +441,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 			// TODO: add animation for older APIs
 			if (mListener != null)
 			{
-				if (!mListener.onFling(mListView, pos))
+				if (!mListener.onFling(mListView, pos, direction))
 				{
 					// the event was not handled, so reset the view
 					resetView(v);

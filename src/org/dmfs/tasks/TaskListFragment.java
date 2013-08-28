@@ -47,6 +47,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -546,16 +547,27 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * 
 	 * @param taskUri
 	 *            The {@link Uri} of the task.
+	 * @param taskTitle
+	 *            The name/title of the task.
+	 * @param completedValue
+	 *            The value to be set for the completed status.
 	 * @return <code>true</code> if the operation was successful, <code>false</code> otherwise.
 	 */
-	private boolean completeTask(Uri taskUri, String taskTitle)
+	private boolean setCompleteTask(Uri taskUri, String taskTitle, boolean completedValue)
 	{
 		ContentValues values = new ContentValues();
-		values.put(Tasks.STATUS, Tasks.STATUS_COMPLETED);
+		values.put(Tasks.STATUS, completedValue ? Tasks.STATUS_COMPLETED : Tasks.STATUS_IN_PROCESS);
 		boolean completed = mAppContext.getContentResolver().update(taskUri, values, null, null) != 0;
 		if (completed)
 		{
-			Toast.makeText(mAppContext, getString(R.string.toast_task_completed, taskTitle), Toast.LENGTH_SHORT).show();
+			if (completedValue)
+			{
+				Toast.makeText(mAppContext, getString(R.string.toast_task_completed, taskTitle), Toast.LENGTH_SHORT).show();
+			}
+			else
+			{
+				Toast.makeText(mAppContext, getString(R.string.toast_task_uncompleted, taskTitle), Toast.LENGTH_SHORT).show();
+			}
 		}
 		return completed;
 	}
@@ -593,16 +605,40 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 
-	@Override
-	public boolean canFling(ListView v, int pos)
+	/**
+	 * Opens the task editor for the selected Task.
+	 * 
+	 * @param taskUri
+	 *            The {@link Uri} of the task.
+	 * @param taskTitle
+	 *            The name/title of the task.
+	 */
+	private void openTaskEditor(final Uri taskUri, final String taskTitle)
 	{
-		long packedPos = mExpandableListView.getExpandableListPosition(pos);
-		return (packedPos != ExpandableListView.PACKED_POSITION_VALUE_NULL && ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD);
+		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
+		editTaskIntent.setData(taskUri);
+		startActivity(editTaskIntent);
 	}
 
 
 	@Override
-	public boolean onFling(ListView v, int pos)
+	public int canFling(ListView v, int pos)
+	{
+		long packedPos = mExpandableListView.getExpandableListPosition(pos);
+		if (packedPos != ExpandableListView.PACKED_POSITION_VALUE_NULL
+			&& ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
+		{
+			return FlingDetector.RIGHT_FLING | FlingDetector.LEFT_FLING;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+
+	@Override
+	public boolean onFling(ListView v, int pos, int direction)
 	{
 		long packedPos = mExpandableListView.getExpandableListPosition(pos);
 		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
@@ -623,17 +659,32 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 					// TODO: use the instance URI once we support recurrence
 					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, taskId);
 
-					if (closed)
+					if (direction == FlingDetector.RIGHT_FLING)
 					{
-						removeTask(taskUri, title);
-						// we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
+						if (closed)
+						{
+							removeTask(taskUri, title);
+							// we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
 
-						return false;
+							return false;
 
+						}
+						else
+						{
+							return setCompleteTask(taskUri, title, true);
+						}
 					}
-					else
+					else if (direction == FlingDetector.LEFT_FLING)
 					{
-						return completeTask(taskUri, title);
+						if (closed)
+						{
+							return setCompleteTask(taskUri, title, false);
+						}
+						else
+						{
+							openTaskEditor(taskUri, title);
+							return false;
+						}
 					}
 				}
 			}
