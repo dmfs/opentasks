@@ -8,5 +8,6 @@
     <color name="translucent_black">#CC000000</color>
     <color name="translucent_white">#22FFFFFF</color>
     <color name="translucent_grey">#BB222222</color>
+    <color name="holo_blue">#CC33B5E5</color>
 
 </resources>
