@@ -512,8 +512,18 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		if (groupPosition != ExpandableListView.INVALID_POSITION && groupPosition < mAdapter.getGroupCount()
 			&& childPosition != ExpandableListView.INVALID_POSITION && childPosition < mAdapter.getChildrenCount(groupPosition))
 		{
-			mExpandableListView.setItemChecked(
-				mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
+			try
+			{
+				mExpandableListView.setItemChecked(
+					mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
+			}
+			catch (NullPointerException e)
+			{
+				// for now we just catch the NPE until we've found the reason
+				// just catching it won't hurt, it's just that the list selection won't be updated properly
+
+				// FIXME: find the actual cause and fix it
+			}
 		}
 	}
 
