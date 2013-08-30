@@ -23,7 +23,7 @@
         <item quantity="one">%d задача</item>
 		<!-- last number 2-4 -->
 		<item quantity="two">%d задачи</item>
-		<!-- last number 5-9,0 -->
+		<!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
         <item quantity="other">%d задач</item>
     </plurals>
 
@@ -113,6 +113,6 @@
     <string name="toast_task_deleted">\"%1s\" удалена.</string>
 
     <!-- Strings for Task List Widget -->
-    <string name="task_list_widget_title">Текущая задача</string>
+    <string name="task_list_widget_title">Текущие задачи</string>
 
 </resources>
