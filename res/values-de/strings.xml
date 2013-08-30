@@ -23,6 +23,12 @@
         <item quantity="other">%d Aufgaben</item>
     </plurals>
 
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Bearbeiten</string>
+    <string name="activity_task_details_edit_task">Aufgabe bearbeiten</string>
+    <string name="activity_task_details_delete">Löschen</string>
+    <string name="activity_task_details_delete_task">Aufgabe löschen</string>
+
     <!-- Task editor -->
     <string name="activity_edit_task_title">Aufgabe bearbeiten</string>
     <string name="activity_add_task_title">Aufgabe erstellen</string>

@@ -5,15 +5,15 @@
         android:id="@+id/edit_task"
         android:icon="@drawable/content_edit"
         android:showAsAction="always"
-        android:title="Edit Task"
-        android:titleCondensed="Edit">
+        android:title="@string/activity_task_details_edit_task"
+        android:titleCondensed="@string/activity_task_details_edit">
     </item>
     <item
         android:id="@+id/delete_task"
         android:icon="@drawable/content_discard"
         android:showAsAction="always"
-        android:title="Delete Task"
-        android:titleCondensed="Delete">
+        android:title="@string/activity_task_details_delete_task"
+        android:titleCondensed="@string/activity_task_details_delete">
     </item>
 
 </menu>
