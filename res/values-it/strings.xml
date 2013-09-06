@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">Tasks</string>
+    <string name="permission_read_tasks">lettura attività</string>
+    <string name="permission_description_read_tasks">Permette ad un\'app di leggere le attività del tuo elenco attività.</string>
+    <string name="permission_write_tasks">scrittura attività</string>
+    <string name="permission_description_write_tasks">Permette ad un\'app di modificare le attività del tuo elenco attività.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Aggiungi attività</string>
+    <string name="menu_add_task_condensed">Aggiungi</string>
+    <string name="menu_show_completed">Mostra le attività completate</string>
+    <string name="menu_show_completed_condensed">Mostra attività completate</string>
+    <string name="menu_sync_now">Aggiorna</string>
+    <string name="menu_sync_now_condensed">Aggiorna</string>
+    <string name="toast_task_completed">\"%1s\" completata.</string>
+    <string name="toast_task_uncompleted">\"%1s\" riaperta.</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d attività</item>
+        <item quantity="other">%d attività</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Modifica</string>
+    <string name="activity_task_details_edit_task">Modifica attività</string>
+    <string name="activity_task_details_delete">Elimina</string>
+    <string name="activity_task_details_delete_task">Elimina attività</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Modifica Attività</string>
+    <string name="activity_add_task_title">Crea Attività</string>
+    <string name="activity_edit_task_error_invalid_url">Collegamento non valido</string>
+    <string name="activity_edit_task_task_saved">Attività salvata.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Attività vuota non salvata.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Elenco</string>
+    <string name="task_title">Titolo</string>
+    <string name="task_location">Luogo</string>
+    <string name="task_description">Descrizione</string>
+    <string name="task_start">Inizio</string>
+    <string name="task_due">Scadenza</string>
+    <string name="task_completed">Completata</string>
+    <string name="task_percent_complete">Percentuale completata</string>
+    <string name="task_status">Stato</string>
+    <string name="task_classification">Privata</string>
+    <string name="task_url">Collegamento</string>
+    <string name="title_task_detail">Dettagli Attività</string>
+    <string name="title_task_list">Attività</string>
+    <string name="provider_label">Attività</string>
+    <string name="task_detail_activity">Dettagli Attività</string>
+    <string name="task_priority">Priorità</string>
+    <string name="task_timezone">Fuso orario</string>
+    <string name="task_all_day">Tutto il giorno</string>
+
+    <!-- Task list group titles -->
+    <string name="task_group_no_due">Senza scadenza</string>
+    <string name="task_group_overdue">Scadute</string>
+    <string name="task_group_due_today">Scadono oggi</string>
+    <string name="task_group_due_tomorrow">Scadono domani</string>
+    <string name="task_group_due_within_7_days">Scadono prossimamente</string>
+    <string name="task_group_due_in_month">Scadono in %s</string>
+    <string name="task_group_due_in_year">Scadono nel %s</string>
+    <string name="task_group_due_in_future">Scadono successivamente</string>
+    <string name="today">Oggi</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Salva</string>
+    <string name="action_cancel">Annulla</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">richiede azione</string>
+    <string name="status_in_process">in corso</string>
+    <string name="status_completed">completata</string>
+    <string name="status_cancelled">annullata</string>
+    <string name="status_incomplete">non completata</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">non specificata</string>
+    <string name="classification_public">pubblica</string>
+    <string name="classification_private">privata</string>
+    <string name="classification_confidential">confidenziale</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">nulla</string>
+    <string name="priority_low">bassa</string>
+    <string name="priority_medium">media</string>
+    <string name="priority_high">alta</string>
+    <string name="priority_urgent">urgente</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Impostazioni</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="visible_task_lists">Elenchi Visualizzati</string>
+    <string name="synced_task_lists">Elenchi Sincronizzati</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Per Data Scadenza</string>
+    <string name="gd_by_completed">Per Stato Completata</string>
+    <string name="gd_by_list">Per Elenco</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Conferma eliminazione</string>
+    <string name="confirm_delete_message">Eliminare quest\'attività?</string>
+    <string name="confirm_delete_message_with_title">Eliminare \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" rimossa.</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Attività correnti</string>
+
+</resources>
