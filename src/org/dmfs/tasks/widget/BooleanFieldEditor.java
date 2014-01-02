@@ -24,6 +24,8 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -35,7 +37,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  * @author Arjun Naik<arjun@arjunnaik.in>
  * 
  */
-public class BooleanFieldEditor extends AbstractFieldEditor implements OnCheckedChangeListener
+public class BooleanFieldEditor extends AbstractFieldEditor implements OnCheckedChangeListener, OnClickListener
 {
 	private CheckBox mCheckBox;
 	private BooleanFieldAdapter mAdapter;
@@ -63,11 +65,19 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
+		this.setOnClickListener(this);
 		mCheckBox = (CheckBox) findViewById(android.R.id.checkbox);
 		if (mCheckBox != null)
 		{
 			mCheckBox.setOnCheckedChangeListener(this);
 		}
+	}
+
+
+	@Override
+	public void onClick(View v)
+	{
+		mCheckBox.toggle();
 	}
 
 
@@ -97,7 +107,8 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
 		Boolean oldValue = mAdapter.get(mValues);
-		if (oldValue == null || oldValue != isChecked) // don't trigger unnecessary updates
+		if (oldValue == null || oldValue != isChecked) // don't trigger
+														// unnecessary updates
 		{
 			mAdapter.set(mValues, isChecked);
 		}
