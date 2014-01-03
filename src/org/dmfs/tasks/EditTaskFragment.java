@@ -65,6 +65,7 @@ import android.widget.Toast;
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 
 public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener,
@@ -73,6 +74,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	private static final String TAG = "TaskEditDetailFragment";
 
 	public static final String PARAM_TASK_URI = "task_uri";
+	public static final String PARAM_CONTENT_SET = "task_content_set";
 
 	public static final String LIST_LOADER_URI = "uri";
 	public static final String LIST_LOADER_FILTER = "filter";
@@ -152,8 +154,19 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		mTaskUri = getArguments().getParcelable(PARAM_TASK_URI);
+		Bundle bundle = getArguments();
+
+		// check for supplied task information from intent
+		if (bundle.containsKey(PARAM_CONTENT_SET))
+		{
+			mValues = bundle.getParcelable(PARAM_CONTENT_SET);
+		}
+		else
+		{
+			mTaskUri = bundle.getParcelable(PARAM_TASK_URI);
+		}
 		mAppContext = activity.getApplicationContext();
+
 	}
 
 
@@ -167,7 +180,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 
-		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri);
+		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri) && mTaskUri != null;
 
 		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
 		mListSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
@@ -212,7 +225,11 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			if (savedInstanceState == null)
 			{
-				mValues = new ContentSet(Tasks.CONTENT_URI);
+				// create empty ContentSet if there was no ContentSet supplied
+				if (mValues == null)
+				{
+					mValues = new ContentSet(Tasks.CONTENT_URI);
+				}
 			}
 			else
 			{

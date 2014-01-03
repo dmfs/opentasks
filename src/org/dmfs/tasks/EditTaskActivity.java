@@ -17,8 +17,12 @@
 
 package org.dmfs.tasks;
 
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.ContentSet;
+
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +36,7 @@ import android.view.MenuItem;
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class EditTaskActivity extends FragmentActivity
 {
@@ -56,11 +61,46 @@ public class EditTaskActivity extends FragmentActivity
 
 		if (savedInstanceState == null)
 		{
+
 			Bundle arguments = new Bundle();
-			arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
+			Intent intent = getIntent();
+
+			if (Intent.ACTION_SEND.equals(intent.getAction()))
+			{
+				// load data from incoming share intent
+				ContentSet sharedContentSet = new ContentSet(Tasks.CONTENT_URI);
+				if (intent.hasExtra(Intent.EXTRA_SUBJECT))
+				{
+					sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_SUBJECT));
+				}
+				if (intent.hasExtra(Intent.EXTRA_TITLE))
+				{
+					sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_TITLE));
+				}
+				if (intent.hasExtra(Intent.EXTRA_TEXT))
+				{
+					String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
+					sharedContentSet.put(Tasks.DESCRIPTION, extraText);
+					// check if supplied text is a URL
+					if (extraText.startsWith("http://") && !extraText.contains(" "))
+					{
+						sharedContentSet.put(Tasks.URL, extraText);
+					}
+
+				}
+				// hand over shared information to EditTaskFragment
+				arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
+			}
+			else
+			{
+				// hand over task URI for editing / creating empty task
+				arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
+			}
+
 			EditTaskFragment fragment = new EditTaskFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction().add(R.id.add_task_container, fragment).commit();
+
 		}
 
 	}

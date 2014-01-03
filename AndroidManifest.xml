@@ -81,6 +81,15 @@
                     android:host="org.dmfs.tasks"
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
+
+            <!-- Intent filter for share intents -->
+            <intent-filter android:label="@string/activity_add_task_title" >
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT" />
 
