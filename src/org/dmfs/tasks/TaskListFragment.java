@@ -74,7 +74,9 @@ import android.widget.Toast;
  * A list fragment representing a list of Tasks. This fragment also supports tablet devices by allowing list items to be given an 'activated' state upon
  * selection. This helps indicate which item is currently being viewed in a {@link ViewTaskFragment}.
  * <p>
- * Activities containing this fragment MUST implement the {@link Callbacks} interface.
+ * Activities containing this fragment MUST implement the {@link Callbacks} interface
+ * 
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 @SuppressLint("NewApi")
 public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener, OnFlingListener
@@ -96,7 +98,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR}, {@link ByCompleted#GROUP_DESCRIPTOR} or
 	 * {@link ByList#GROUP_DESCRIPTOR}.
 	 */
-	private final static ExpandableGroupDescriptor CURRENT_GROUP_DESCRIPTOR = ByList.GROUP_DESCRIPTOR;
+	private ExpandableGroupDescriptor mGroupDescriptor = ByDueDate.GROUP_DESCRIPTOR;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
@@ -156,14 +158,9 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		mExpandableListView = (ExpandableListView) rootView.findViewById(android.R.id.list);
-		mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), CURRENT_GROUP_DESCRIPTOR);
-		mExpandableListView.setAdapter(mAdapter);
-		mExpandableListView.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
-		mExpandableListView.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
-		mAdapter.setOnChildLoadedListener(this);
-		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
 
-		getLoaderManager().restartLoader(-1, null, this);
+		// setup the views
+		this.updateView();
 
 		if (savedInstanceState != null)
 		{
@@ -319,6 +316,29 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 
+	public void setExpandableGroupDescriptor(ExpandableGroupDescriptor groupDescriptor)
+	{
+		mGroupDescriptor = groupDescriptor;
+	}
+
+
+	/**
+	 * Updates the view after the group descriptor was changed.
+	 * 
+	 */
+	public void updateView()
+	{
+		mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), mGroupDescriptor);
+		mExpandableListView.setAdapter(mAdapter);
+		mExpandableListView.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
+		mExpandableListView.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
+		mAdapter.setOnChildLoadedListener(this);
+		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
+
+		getLoaderManager().restartLoader(-1, null, this);
+	}
+
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
@@ -363,7 +383,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		return CURRENT_GROUP_DESCRIPTOR.getGroupCursorLoader(mAppContext);
+		return mGroupDescriptor.getGroupCursorLoader(mAppContext);
 	}
 
 

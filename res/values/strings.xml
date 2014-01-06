@@ -67,6 +67,9 @@
     <string name="task_group_due_in_year">Due in %s</string>
     <string name="task_group_due_in_future">Due later</string>
     <string name="today">Today</string>
+    <string name="task_group_due_title">Due</string>
+    <string name="task_group_all_title">All tasks</string>
+    <string name="task_group_completed_title">Completed</string>
 
     <!-- Task editor labels -->
 

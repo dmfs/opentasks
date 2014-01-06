@@ -177,6 +177,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				break;
 
 			case MotionEvent.ACTION_MOVE:
+
 				if (mFlingEnabled)
 				{
 					mVelocityTracker.addMovement(event);
@@ -189,7 +190,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					boolean leftFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & LEFT_FLING) == LEFT_FLING;
 					boolean rightFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & RIGHT_FLING) == RIGHT_FLING;
 
-					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs * 3 && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0));
+					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs * 3 && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0))
+						&& (event.getEventTime() - event.getDownTime() > ViewConfiguration.getTapTimeout());
 
 					if (mFlinging)
 					{

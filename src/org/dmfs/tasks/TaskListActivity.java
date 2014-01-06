@@ -18,6 +18,10 @@
 package org.dmfs.tasks;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.groupings.ByCompleted;
+import org.dmfs.tasks.groupings.ByDueDate;
+import org.dmfs.tasks.groupings.ByList;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -25,6 +29,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +37,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+
+import com.astuetz.PagerSlidingTabStrip;
 
 
 /**
@@ -46,6 +53,8 @@ import android.widget.ListView;
  * <p>
  * TODO: move the code to persist the expanded groups into a the GroupingDescriptor class
  * </p>
+ * 
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class TaskListActivity extends FragmentActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
@@ -64,6 +73,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private ViewTaskFragment mTaskDetailFrag;
 	private TaskListFragment mTaskListFrag;
 	private SharedPreferences mOpenTaskPrefs;
+	private ViewPager mViewPager;
+	private TaskGroupPagerAdapter mPagerAdapter;
 
 
 	@Override
@@ -84,6 +95,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
 
+			// create list fragment
 			mTaskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
 
 			mTaskListFrag.setActivateOnItemClick(true);
@@ -118,6 +130,34 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			 */
 			mTaskDetailFrag = new ViewTaskFragment();
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag).commit();
+		}
+		else
+		{
+			// load the GroupDescriptors which describe how to display the different groups of tasks
+			ExpandableGroupDescriptor[] groupDescriptors = new ExpandableGroupDescriptor[3];
+
+			ExpandableGroupDescriptor byListDescriptor = ByList.GROUP_DESCRIPTOR;
+			byListDescriptor.setTitle(R.string.task_group_all_title);
+
+			ExpandableGroupDescriptor byDueDateDescriptor = ByDueDate.GROUP_DESCRIPTOR;
+			byDueDateDescriptor.setTitle(R.string.task_group_due_title);
+
+			ExpandableGroupDescriptor byCompletedDescriptor = ByCompleted.GROUP_DESCRIPTOR;
+			byCompletedDescriptor.setTitle(R.string.task_group_completed_title);
+
+			groupDescriptors[0] = byListDescriptor;
+			groupDescriptors[1] = byDueDateDescriptor;
+			groupDescriptors[2] = byCompletedDescriptor;
+
+			// Setup ViewPager
+			mViewPager = (ViewPager) findViewById(R.id.pager);
+			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), groupDescriptors, getApplicationContext());
+			mViewPager.setAdapter(mPagerAdapter);
+
+			// Bind the tabs to the ViewPager
+			PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+			tabs.setViewPager(mViewPager);
+
 		}
 	}
 
