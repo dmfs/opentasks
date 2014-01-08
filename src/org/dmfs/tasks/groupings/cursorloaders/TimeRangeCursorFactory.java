@@ -33,7 +33,7 @@ import android.text.format.Time;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
+public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 {
 
 	public final static String RANGE_ID = "_id";
@@ -92,13 +92,13 @@ public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 	public static final String[] DEFAULT_PROJECTION = new String[] { RANGE_START, RANGE_END, RANGE_ID, RANGE_YEAR, RANGE_MONTH, RANGE_OPEN_PAST,
 		RANGE_OPEN_FUTURE, RANGE_NULL_ROW, RANGE_TYPE };
 
-	private final static long MAX_TIME = Long.MAX_VALUE / 2;
-	private final static long MIN_TIME = Long.MIN_VALUE / 2;
+	protected final static long MAX_TIME = Long.MAX_VALUE / 2;
+	protected final static long MIN_TIME = Long.MIN_VALUE / 2;
 
-	private final List<String> mProjectionList;
+	protected final List<String> mProjectionList;
 
-	private final Time mTime;
-	private final Time mEndOfToday;
+	protected final Time mTime;
+	protected final Time mEndOfToday;
 
 
 	public TimeRangeCursorFactory(String[] projection)
@@ -153,7 +153,7 @@ public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 		time.yearDay += 1;
 		time.normalize(true);
 
-		// today row
+		// tomorrow row
 		long t3 = time.toMillis(false);
 		result.addRow(makeRow(4, TYPE_END_OF_TOMORROW, t2, t3));
 
@@ -187,7 +187,7 @@ public final class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 	}
 
 
-	private Object[] makeRow(int id, int type, Long start, Long end)
+	protected Object[] makeRow(int id, int type, Long start, Long end)
 	{
 		Object[] result = new Object[mProjection.length];
 

@@ -60,12 +60,12 @@
     <!-- Task list group titles -->
     <string name="task_group_no_due">No due date</string>
     <string name="task_group_overdue">Overdue</string>
-    <string name="task_group_due_today">Due today</string>
-    <string name="task_group_due_tomorrow">Due tomorrow</string>
-    <string name="task_group_due_within_7_days">Due soon</string>
+    <string name="task_group_due_today">Today</string>
+    <string name="task_group_due_tomorrow">Tomorrow</string>
+    <string name="task_group_due_within_7_days">Next days</string>
     <string name="task_group_due_in_month">Due in %s</string>
     <string name="task_group_due_in_year">Due in %s</string>
-    <string name="task_group_due_in_future">Due later</string>
+    <string name="task_group_due_in_future">Someday</string>
     <string name="today">Today</string>
     <string name="task_group_due_title">Due</string>
     <string name="task_group_all_title">All tasks</string>

@@ -17,6 +17,8 @@
 
 package org.dmfs.tasks;
 
+import org.dmfs.android.retentionmagic.FragmentActivity;
+import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.ByCompleted;
 import org.dmfs.tasks.groupings.ByDueDate;
@@ -28,7 +30,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,6 +76,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private SharedPreferences mOpenTaskPrefs;
 	private ViewPager mViewPager;
 	private TaskGroupPagerAdapter mPagerAdapter;
+
+	@Retain(permanent = true)
+	private int mCurrentPage;
 
 
 	@Override
@@ -147,12 +151,13 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 			groupDescriptors[0] = byListDescriptor;
 			groupDescriptors[1] = byDueDateDescriptor;
-			groupDescriptors[2] = byCompletedDescriptor;
+			groupDescriptors[2] = byDueDateDescriptor;
 
 			// Setup ViewPager
 			mViewPager = (ViewPager) findViewById(R.id.pager);
 			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), groupDescriptors, getApplicationContext());
 			mViewPager.setAdapter(mPagerAdapter);
+			mViewPager.setCurrentItem(mCurrentPage);
 
 			// Bind the tabs to the ViewPager
 			PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -270,6 +275,12 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		else
 		{
 			Log.d(TAG, "taskListFrag is NULL!!");
+		}
+
+		// save pager state
+		if (mViewPager != null)
+		{
+			mCurrentPage = mViewPager.getCurrentItem();
 		}
 	}
 

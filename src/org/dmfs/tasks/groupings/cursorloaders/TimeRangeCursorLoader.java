@@ -44,7 +44,7 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
 
 	public TimeRangeCursorLoader(Context context, String[] projection)
 	{
-		super(context, new TimeRangeCursorFactory(projection));
+		super(context, new TimeRangeShortCursorFactory(projection));
 
 		// set trigger at midnight
 		new TimeChangeObserver(context, this).setNextAlarm(getMidnightTimestamp());

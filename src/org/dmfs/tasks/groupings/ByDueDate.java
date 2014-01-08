@@ -27,15 +27,18 @@ import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeShortCursorFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -83,11 +86,26 @@ public interface ByDueDate
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 
+		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
+
+			if (android.os.Build.VERSION.SDK_INT >= 14)
+			{
+				view.setTranslationX(0);
+				view.setAlpha(1);
+			}
+			else
+			{
+				int paddingTop = view.getPaddingTop();
+				int paddingRight = view.getPaddingRight();
+				int paddingBottom = view.getPaddingBottom();
+				view.setPadding(0, paddingTop, paddingRight, paddingBottom);
+			}
+
 			if (title != null)
 			{
 				String text = cursor.getString(5);
@@ -118,7 +136,7 @@ public interface ByDueDate
 					dueDateField.setText(makeDueDate(dueDate));
 
 					// highlight overdue dates & times
-					if (dueDate.before(mNow))
+					if (dueDate.before(mNow) && !isClosed)
 					{
 						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
 					}
@@ -204,7 +222,7 @@ public interface ByDueDate
 			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
 			if (text1 != null)
 			{
-				text1.setText(cursor.getString(3));
+				// text1.setText(cursor.getString(3));
 			}
 
 			// set list elements
@@ -214,6 +232,7 @@ public interface ByDueDate
 			{
 				Resources res = view.getContext().getResources();
 				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
+
 			}
 
 			// show/hide divider
@@ -290,13 +309,13 @@ public interface ByDueDate
 	 * A descriptor that knows how to load elements in a due date group.
 	 */
 	public final static ExpandableChildDescriptor DUE_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or " + Instances.INSTANCE_DUE + " is ?)",
-		Instances.DEFAULT_SORT_ORDER, 0, 1, 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or ((" + Instances.INSTANCE_DUE + ">=? or "
+			+ Instances.INSTANCE_DUE + " is ?) and ? is null))", Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * A descriptor for the "grouped by due date" view.
 	 */
 	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
-		TimeRangeCursorFactory.DEFAULT_PROJECTION), DUE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		TimeRangeShortCursorFactory.DEFAULT_PROJECTION), DUE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 
 }

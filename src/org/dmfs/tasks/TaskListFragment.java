@@ -19,6 +19,8 @@ package org.dmfs.tasks;
 
 import java.util.Arrays;
 
+import org.dmfs.android.retentionmagic.SupportFragment;
+import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -52,7 +54,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -79,7 +80,8 @@ import android.widget.Toast;
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 @SuppressLint("NewApi")
-public class TaskListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener, OnFlingListener
+public class TaskListFragment extends SupportFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener,
+	OnFlingListener
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
@@ -105,14 +107,21 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	 */
 	private Callbacks mCallbacks;
 
+	@Retain(permanent = true, instanceNSField = "mInstanceId")
 	private int mActivatedPositionGroup = ExpandableListView.INVALID_POSITION;
+	@Retain(permanent = true, instanceNSField = "mInstanceId")
 	private int mActivatedPositionChild = ExpandableListView.INVALID_POSITION;
 	private long[] mExpandedIds = new long[0];
 	private ExpandableListView mExpandableListView;
 	private Context mAppContext;
 	private ExpandableGroupDescriptorAdapter mAdapter;
 	private Handler mHandler;
+	@Retain(permanent = true, instanceNSField = "mInstanceId")
 	private long[] mSavedExpandedGroups = null;
+	@Retain(permanent = true, instanceNSField = "mInstanceId")
+	private boolean mSavedCompletedFilter;
+	@SuppressWarnings("unused")
+	private String mInstanceId;
 
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
@@ -162,17 +171,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		// setup the views
 		this.updateView();
 
-		if (savedInstanceState != null)
+		// expand lists
+		if (mSavedExpandedGroups != null)
 		{
-			Log.d(TAG, "savedInstance state is not null");
-			// store expanded groups array for later, when the groups have been loaded
-			mSavedExpandedGroups = savedInstanceState.getLongArray(STATE_EXPANDED_GROUPS);
-			mActivatedPositionGroup = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_GROUP);
-			mActivatedPositionChild = savedInstanceState.getInt(STATE_ACTIVATED_POSITION_CHILD);
-		}
-		else
-		{
-			Log.d(TAG, "savedInstancestate is null!!");
+			setExpandedGroups();
 		}
 
 		FlingDetector swiper = new FlingDetector(mExpandableListView);
@@ -206,6 +208,24 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onDetach();
 
+	}
+
+
+	@Override
+	public void onPause()
+	{
+		mSavedExpandedGroups = getExpandedGroups();
+		super.onPause();
+	}
+
+
+	@Override
+	public void onResume()
+	{
+		// restore filters
+		getActivity().invalidateOptionsMenu();
+
+		super.onResume();
 	}
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
@@ -273,16 +293,6 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	}
 
 
-	@Override
-	public void onSaveInstanceState(Bundle outState)
-	{
-		super.onSaveInstanceState(outState);
-		outState.putLongArray(STATE_EXPANDED_GROUPS, getExpandedGroups());
-		outState.putInt(STATE_ACTIVATED_POSITION_GROUP, mActivatedPositionGroup);
-		outState.putInt(STATE_ACTIVATED_POSITION_CHILD, mActivatedPositionChild);
-	}
-
-
 	/**
 	 * Turns on activate-on-click mode. When this mode is on, list items will be given the 'activated' state when touched.
 	 * <p>
@@ -323,7 +333,7 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 	/**
-	 * Updates the view after the group descriptor was changed.
+	 * Updates the view after the group descriptor was changed
 	 * 
 	 */
 	public void updateView()
@@ -342,8 +352,22 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
+		// create menu
 		inflater.inflate(R.menu.task_list_fragment_menu, menu);
-		// TODO: set menu_show_completed
+
+		// restore menu state
+		MenuItem item = menu.findItem(R.id.menu_show_completed);
+		if (item != null)
+		{
+			item.setChecked(mSavedCompletedFilter);
+			mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
+
+			// reload the child cursors only
+			for (int i = 0; i < mAdapter.getGroupCount(); ++i)
+			{
+				mAdapter.reloadGroup(i);
+			}
+		}
 	}
 
 
@@ -358,8 +382,10 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		}
 		else if (itemId == R.id.menu_show_completed)
 		{
-			item.setChecked(!item.isChecked());
-			mAdapter.setChildCursorFilter(item.isChecked() ? null : COMPLETED_FILTER);
+
+			mSavedCompletedFilter = !mSavedCompletedFilter;
+			item.setChecked(mSavedCompletedFilter);
+			mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
 
 			// reload the child cursors only
 			for (int i = 0; i < mAdapter.getGroupCount(); ++i)
@@ -721,5 +747,12 @@ public class TaskListFragment extends Fragment implements LoaderManager.LoaderCa
 		}
 
 		return false;
+	}
+
+
+	public void setInstanceId(String instanceId)
+	{
+		mInstanceId = instanceId;
+
 	}
 }

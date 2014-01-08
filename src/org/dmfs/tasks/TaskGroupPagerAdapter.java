@@ -63,6 +63,7 @@ public class TaskGroupPagerAdapter extends FragmentPagerAdapter
 	{
 		TaskListFragment fragment = new TaskListFragment();
 		fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
+		fragment.setInstanceId("TaskListFragment" + position);
 		return fragment;
 	}
 
