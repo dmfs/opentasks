@@ -41,6 +41,7 @@
 
     <style name="task_group_text">
         <item name="android:textColor" tools:targetApi="14">@android:color/holo_blue_dark</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item> 
     </style>
 
     <style name="task_list_item_text" parent="android:attr/textAppearanceMedium">

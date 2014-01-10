@@ -18,14 +18,16 @@
 package org.dmfs.tasks.groupings;
 
 import java.text.DateFormat;
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeShortCursorFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -36,32 +38,22 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
+import android.os.Build;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
 /**
- * Definition of the by-list grouping.
+ * Definition of the by-start date grouping.
  * 
- * <p>
- * TODO: refactor!
- * </p>
- * <p>
- * TODO: refactor!
- * </p>
- * <p>
- * TODO: also, don't forget to refactor!
- * </p>
  * 
- * The plan is to provide some kind of GroupingDescriptior that provides the {@link ExpandableGroupDescriptorAdapter}, a name and a set of filters. Also it
- * should take care of persisting and restoring the open groups, selected filters ...
  * 
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(11)
-public interface ByList
+public interface ByStartDate
 {
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
@@ -84,6 +76,7 @@ public interface ByList
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 
+		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
@@ -116,13 +109,12 @@ public interface ByList
 					title.setPaintFlags(title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
 				}
 			}
-
-			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
-			if (dueDateField != null)
+			TextView startDateField = (TextView) view.findViewById(R.id.task_start_date);
+			if (startDateField != null)
 			{
-				Time dueDate = Common.DUE_ADAPTER.get(cursor);
+				Time startDate = Common.START_DATE_ADAPTER.get(cursor);
 
-				if (dueDate != null)
+				if (startDate != null)
 				{
 					if (mNow == null)
 					{
@@ -131,10 +123,54 @@ public interface ByList
 					mNow.clear(TimeZone.getDefault().getID());
 					mNow.setToNow();
 
-					dueDateField.setText(makeDueDate(dueDate, view.getContext()));
+					startDateField.setVisibility(View.VISIBLE);
+					startDateField.setText(makeDateString(startDate));
+
+					ImageView icon = (ImageView) view.findViewById(R.id.task_start_image);
+					if (icon != null)
+					{
+						icon.setVisibility(View.VISIBLE);
+					}
 
 					// highlight overdue dates & times
-					if (dueDate.before(mNow) && !isClosed)
+					if (startDate.before(mNow) && !isClosed)
+					{
+						startDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
+					}
+					else
+					{
+						startDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
+					}
+				}
+				else
+				{
+					startDateField.setText("");
+				}
+			}
+
+			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
+			if (dueDateField != null)
+			{
+				Time dueTime = Common.DUE_ADAPTER.get(cursor);
+
+				if (dueTime != null)
+				{
+					if (mNow == null)
+					{
+						mNow = new Time();
+					}
+					mNow.clear(TimeZone.getDefault().getID());
+					mNow.setToNow();
+
+					dueDateField.setText(makeDateString(dueTime));
+					ImageView icon = (ImageView) view.findViewById(R.id.task_due_image);
+					if (icon != null)
+					{
+						icon.setVisibility(View.VISIBLE);
+					}
+
+					// highlight overdue dates & times
+					if (dueTime.before(mNow) && !isClosed)
 					{
 						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
 					}
@@ -152,8 +188,7 @@ public interface ByList
 			View colorbar = view.findViewById(R.id.colorbar);
 			if (colorbar != null)
 			{
-				colorbar.setVisibility(View.GONE);
-				// colorbar.setBackgroundColor(cursor.getInt(6));
+				colorbar.setBackgroundColor(cursor.getInt(6));
 			}
 
 			View divider = view.findViewById(R.id.divider);
@@ -191,45 +226,38 @@ public interface ByList
 
 
 		/**
-		 * Get the due date to show. It returns just a time for tasks that are due today and a date otherwise.
+		 * Get the date to show. It returns just a time for dates that are today and a date otherwise.
 		 * 
-		 * @param due
-		 *            The due date to format.
+		 * @param date
+		 *            The date to format.
 		 * @return A String with the formatted date.
 		 */
-		private String makeDueDate(Time due, Context context)
+		private String makeDateString(Time date)
 		{
-			if (!due.allDay)
+			if (!date.allDay)
 			{
-				due.switchTimezone(TimeZone.getDefault().getID());
+				date.switchTimezone(TimeZone.getDefault().getID());
 			}
 
-			// normalize time to ensure yearDay is set properly
-			due.normalize(false);
-
-			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
+			if (date.year == mNow.year && date.yearDay == mNow.yearDay)
 			{
-				if (due.allDay)
-				{
-					return context.getString(R.string.today);
-				}
-				else
-				{
-					return context.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(due.toMillis(false)));
-				}
+				return mTimeFormatter.format(new Date(date.toMillis(false)));
 			}
 			else
 			{
-				return mDateFormatter.format(new Date(due.toMillis(false)));
+				return mDateFormatter.format(new Date(date.toMillis(false)));
 			}
 		}
 	};
 
 	/**
-	 * A {@link ViewDescriptor} that knows how to present list groups.
+	 * A {@link ViewDescriptor} that knows how to present start date groups.
 	 */
 	public final ViewDescriptor GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
+		// DateFormatSymbols.getInstance() not used because it is not available before API level 9
+		private final String[] mMonthNames = new DateFormatSymbols().getMonths();
+
 
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
@@ -243,21 +271,14 @@ public interface ByList
 				title.setText(getTitle(cursor, view.getContext()));
 			}
 
-			// set list account
-			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-			if (text1 != null)
-			{
-				text1.setText(cursor.getString(3));
-			}
-
 			// set list elements
 			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
 			int childrenCount = adapter.getChildrenCount(position);
 			if (text2 != null && ((ExpandableGroupDescriptorAdapter) adapter).childCursorLoaded(position))
 			{
 				Resources res = view.getContext().getResources();
-
 				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
+
 			}
 
 			// show/hide divider
@@ -267,32 +288,10 @@ public interface ByList
 				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
 			}
 
-			View colorbar1 = view.findViewById(R.id.colorbar1);
-			View colorbar2 = view.findViewById(R.id.colorbar2);
-
-			if ((flags & FLAG_IS_EXPANDED) != 0)
+			View colorbar = view.findViewById(R.id.colorbar1);
+			if (colorbar != null)
 			{
-				if (colorbar1 != null)
-				{
-					colorbar1.setBackgroundColor(cursor.getInt(2));
-					colorbar1.setVisibility(View.VISIBLE);
-				}
-				if (colorbar2 != null)
-				{
-					colorbar2.setVisibility(View.GONE);
-				}
-			}
-			else
-			{
-				if (colorbar1 != null)
-				{
-					colorbar1.setVisibility(View.INVISIBLE);
-				}
-				if (colorbar2 != null)
-				{
-					colorbar2.setBackgroundColor(cursor.getInt(2));
-					colorbar2.setVisibility(View.VISIBLE);
-				}
+				colorbar.setVisibility(View.GONE);
 			}
 		}
 
@@ -300,12 +299,12 @@ public interface ByList
 		@Override
 		public int getView()
 		{
-			return R.layout.task_list_group;
+			return R.layout.task_list_group_single_line;
 		}
 
 
 		/**
-		 * Return the title of a list group.
+		 * Return the title of a date group.
 		 * 
 		 * @param cursor
 		 *            A {@link Cursor} pointing to the current group.
@@ -313,23 +312,57 @@ public interface ByList
 		 */
 		private String getTitle(Cursor cursor, Context context)
 		{
-			return cursor.getString(1);
+			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_TYPE));
+			if (type == 0)
+			{
+				return context.getString(R.string.task_group_no_due);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TODAY) == TimeRangeCursorFactory.TYPE_END_OF_TODAY)
+			{
+				return context.getString(R.string.task_group_due_today);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY) == TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY)
+			{
+				return context.getString(R.string.task_group_overdue);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TOMORROW) == TimeRangeCursorFactory.TYPE_END_OF_TOMORROW)
+			{
+				return context.getString(R.string.task_group_due_tomorrow);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_IN_7_DAYS) == TimeRangeCursorFactory.TYPE_END_IN_7_DAYS)
+			{
+				return context.getString(R.string.task_group_due_within_7_days);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_MONTH) != 0)
+			{
+				return context.getString(R.string.task_group_due_in_month,
+					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_MONTH))]);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_YEAR) != 0)
+			{
+				return context.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_YEAR)));
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_NO_END) != 0)
+			{
+				return context.getString(R.string.task_group_due_in_future);
+			}
+			return "";
 		}
 
 	};
 
 	/**
-	 * A descriptor that knows how to load elements in a list group.
+	 * A descriptor that knows how to load elements in a start date group.
 	 */
-	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 0)
+	public final static ExpandableChildDescriptor START_DATE_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
+		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_START + ">=?) and (" + Instances.INSTANCE_START + "<?)) or ((" + Instances.INSTANCE_START
+			+ ">=? or " + Instances.INSTANCE_START + " is ?) and ? is null))", Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1)
 		.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
-	 * A descriptor for the "grouped by list" view.
+	 * A descriptor for the "grouped by due date" view.
 	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new CursorLoaderFactory(TaskLists.CONTENT_URI, new String[] {
-		TaskLists._ID, TaskLists.LIST_NAME, TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0 and " + TaskLists.SYNC_ENABLED + ">0",
-		null, TaskLists.ACCOUNT_NAME + ", " + TaskLists.LIST_NAME), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
+		TimeRangeShortCursorFactory.DEFAULT_PROJECTION), START_DATE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 
 }

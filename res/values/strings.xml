@@ -12,6 +12,7 @@
     <string name="menu_add_task">Add task</string>
     <string name="menu_add_task_condensed">Add</string>
     <string name="menu_show_completed">Show completed tasks</string>
+    <string name="menu_hide_completed">Hide completed tasks</string>
     <string name="menu_show_completed_condensed">Show completed tasks</string>
     <string name="menu_sync_now">Refresh</string>
     <string name="menu_sync_now_condensed">Refresh</string>
@@ -68,9 +69,26 @@
     <string name="task_group_due_in_future">Someday</string>
     <string name="today">Today</string>
     <string name="task_group_due_title">Due</string>
-    <string name="task_group_all_title">All tasks</string>
+    <string name="task_group_all_title">Lists</string>
     <string name="task_group_completed_title">Completed</string>
+    <string name="task_group_start_title">Start</string>
+	<string name="task_group_priority_title">Priority</string>
+	<string name="task_group_progress_title">Progress</string>
+	
+	 <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Not started</string>
+    <string name="task_group_progress_40">Way to go</string>
+    <string name="task_group_progress_60">Halfway there</string>
+    <string name="task_group_progress_80">Almost done</string>
+    <string name="task_group_progress_100">Done</string>
+    
+     <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">High priority</string>
+    <string name="task_group_priority_medium">Medium priority</string>
+    <string name="task_group_priority_low">Low priority</string>
+    <string name="task_group_priority_none">No priority</string>
 
+    
     <!-- Task editor labels -->
 
     <string name="action_save">Save</string>
@@ -119,5 +137,9 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Current tasks</string>
+    
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">icon for the start date of the task</string>
+    <string name="cd_due_date">icon for the due date of the task</string>
 
 </resources>

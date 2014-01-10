@@ -20,9 +20,11 @@ package org.dmfs.tasks;
 import org.dmfs.android.retentionmagic.FragmentActivity;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.groupings.ByCompleted;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
+import org.dmfs.tasks.groupings.ByPriority;
+import org.dmfs.tasks.groupings.ByProgress;
+import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 
 import android.app.Activity;
@@ -138,7 +140,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		else
 		{
 			// load the GroupDescriptors which describe how to display the different groups of tasks
-			ExpandableGroupDescriptor[] groupDescriptors = new ExpandableGroupDescriptor[3];
+			ExpandableGroupDescriptor[] groupDescriptors = new ExpandableGroupDescriptor[5];
 
 			ExpandableGroupDescriptor byListDescriptor = ByList.GROUP_DESCRIPTOR;
 			byListDescriptor.setTitle(R.string.task_group_all_title);
@@ -146,12 +148,20 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			ExpandableGroupDescriptor byDueDateDescriptor = ByDueDate.GROUP_DESCRIPTOR;
 			byDueDateDescriptor.setTitle(R.string.task_group_due_title);
 
-			ExpandableGroupDescriptor byCompletedDescriptor = ByCompleted.GROUP_DESCRIPTOR;
-			byCompletedDescriptor.setTitle(R.string.task_group_completed_title);
+			ExpandableGroupDescriptor byStartDateDescriptor = ByStartDate.GROUP_DESCRIPTOR;
+			byStartDateDescriptor.setTitle(R.string.task_group_start_title);
+
+			ExpandableGroupDescriptor byPriorityDescriptor = ByPriority.GROUP_DESCRIPTOR;
+			byPriorityDescriptor.setTitle(R.string.task_group_priority_title);
+
+			ExpandableGroupDescriptor byProgressDescriptor = ByProgress.GROUP_DESCRIPTOR;
+			byProgressDescriptor.setTitle(R.string.task_group_progress_title);
 
 			groupDescriptors[0] = byListDescriptor;
 			groupDescriptors[1] = byDueDateDescriptor;
-			groupDescriptors[2] = byDueDateDescriptor;
+			groupDescriptors[2] = byStartDateDescriptor;
+			groupDescriptors[3] = byPriorityDescriptor;
+			groupDescriptors[4] = byProgressDescriptor;
 
 			// Setup ViewPager
 			mViewPager = (ViewPager) findViewById(R.id.pager);

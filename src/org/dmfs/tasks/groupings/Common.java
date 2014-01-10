@@ -41,4 +41,9 @@ public interface Common
 	 */
 	public final static TimeFieldAdapter DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
 
+	/**
+	 * An adapter to load the start date from the instances projection.
+	 */
+	public final static TimeFieldAdapter START_DATE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_START, Instances.TZ, Instances.IS_ALLDAY);
+
 }

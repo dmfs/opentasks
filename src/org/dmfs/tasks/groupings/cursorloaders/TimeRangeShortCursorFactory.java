@@ -7,6 +7,12 @@ import android.database.MatrixCursor;
 import android.text.format.Time;
 
 
+/**
+ * A factory that builds shorter {@link Cursor}s with time ranges.
+ * 
+ * 
+ * @author Tobias Reinsch <tobias@dmfs.org>
+ */
 public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 {
 
@@ -62,7 +68,6 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 
 		time.monthDay += 1;
 		time.normalize(true);
-		long t5 = time.toMillis(false);
 
 		// open past future for future tasks (including tasks without dates)
 		if (mProjectionList.contains(RANGE_OPEN_FUTURE))

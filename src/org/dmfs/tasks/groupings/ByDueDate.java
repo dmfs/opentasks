@@ -62,6 +62,7 @@ import android.widget.TextView;
  * should take care of persisting and restoring the open groups, selected filters ...
  * 
  * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public interface ByDueDate
 {
@@ -162,6 +163,25 @@ public interface ByDueDate
 			{
 				divider.setVisibility((flags & FLAG_IS_LAST_CHILD) != 0 ? View.GONE : View.VISIBLE);
 			}
+
+			// display priority
+			int priority = cursor.getInt(cursor.getColumnIndex(Instances.PRIORITY));
+			View priorityView = view.findViewById(R.id.task_priority_view_medium);
+			priorityView.setBackgroundResource(android.R.color.transparent);
+			priorityView.setVisibility(View.VISIBLE);
+
+			if (priority > 0 && priority < 5)
+			{
+				priorityView.setBackgroundResource(R.color.priority_red);
+			}
+			if (priority == 5)
+			{
+				priorityView.setBackgroundResource(R.color.priority_yellow);
+			}
+			if (priority > 5 && priority <= 9)
+			{
+				priorityView.setBackgroundResource(R.color.priority_green);
+			}
 		}
 
 
@@ -218,13 +238,6 @@ public interface ByDueDate
 				title.setText(getTitle(cursor, view.getContext()));
 			}
 
-			// set list account
-			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-			if (text1 != null)
-			{
-				// text1.setText(cursor.getString(3));
-			}
-
 			// set list elements
 			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
 			int childrenCount = adapter.getChildrenCount(position);
@@ -253,7 +266,7 @@ public interface ByDueDate
 		@Override
 		public int getView()
 		{
-			return R.layout.task_list_group;
+			return R.layout.task_list_group_single_line;
 		}
 
 

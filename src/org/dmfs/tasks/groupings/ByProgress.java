@@ -23,9 +23,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -43,28 +43,15 @@ import android.widget.TextView;
 
 
 /**
- * Definition of the by-list grouping.
+ * Definition of the by-progress grouping.
  * 
- * <p>
- * TODO: refactor!
- * </p>
- * <p>
- * TODO: refactor!
- * </p>
- * <p>
- * TODO: also, don't forget to refactor!
- * </p>
- * 
- * The plan is to provide some kind of GroupingDescriptior that provides the {@link ExpandableGroupDescriptorAdapter}, a name and a set of filters. Also it
- * should take care of persisting and restoring the open groups, selected filters ...
- * 
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 @TargetApi(11)
-public interface ByList
+public interface ByProgress
 {
 	/**
-	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
+	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by progress.
 	 */
 	public final ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
@@ -152,8 +139,7 @@ public interface ByList
 			View colorbar = view.findViewById(R.id.colorbar);
 			if (colorbar != null)
 			{
-				colorbar.setVisibility(View.GONE);
-				// colorbar.setBackgroundColor(cursor.getInt(6));
+				colorbar.setBackgroundColor(cursor.getInt(6));
 			}
 
 			View divider = view.findViewById(R.id.divider);
@@ -243,13 +229,6 @@ public interface ByList
 				title.setText(getTitle(cursor, view.getContext()));
 			}
 
-			// set list account
-			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
-			if (text1 != null)
-			{
-				text1.setText(cursor.getString(3));
-			}
-
 			// set list elements
 			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
 			int childrenCount = adapter.getChildrenCount(position);
@@ -275,7 +254,7 @@ public interface ByList
 				if (colorbar1 != null)
 				{
 					colorbar1.setBackgroundColor(cursor.getInt(2));
-					colorbar1.setVisibility(View.VISIBLE);
+					colorbar1.setVisibility(View.GONE);
 				}
 				if (colorbar2 != null)
 				{
@@ -286,12 +265,12 @@ public interface ByList
 			{
 				if (colorbar1 != null)
 				{
-					colorbar1.setVisibility(View.INVISIBLE);
+					colorbar1.setVisibility(View.GONE);
 				}
 				if (colorbar2 != null)
 				{
 					colorbar2.setBackgroundColor(cursor.getInt(2));
-					colorbar2.setVisibility(View.VISIBLE);
+					colorbar2.setVisibility(View.GONE);
 				}
 			}
 		}
@@ -300,12 +279,12 @@ public interface ByList
 		@Override
 		public int getView()
 		{
-			return R.layout.task_list_group;
+			return R.layout.task_list_group_single_line;
 		}
 
 
 		/**
-		 * Return the title of a list group.
+		 * Return the title of the priority group.
 		 * 
 		 * @param cursor
 		 *            A {@link Cursor} pointing to the current group.
@@ -313,23 +292,23 @@ public interface ByList
 		 */
 		private String getTitle(Cursor cursor, Context context)
 		{
-			return cursor.getString(1);
+			return context.getString(cursor.getInt(cursor.getColumnIndex(ProgressCursorFactory.PROGRESS_TITLE_RES_ID)));
 		}
 
 	};
 
 	/**
-	 * A descriptor that knows how to load elements in a list group.
+	 * A descriptor that knows how to load elements in a list group ordered by due date.
 	 */
 	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 0)
+		Instances.VISIBLE + "=1 and (" + Instances.PERCENT_COMPLETE + ">=? and " + Instances.PERCENT_COMPLETE + " <= ? or " + Instances.PERCENT_COMPLETE
+			+ " is ?)", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 1, 2, 1)
 		.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
-	 * A descriptor for the "grouped by list" view.
+	 * A descriptor for the "grouped by priority" view.
 	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new CursorLoaderFactory(TaskLists.CONTENT_URI, new String[] {
-		TaskLists._ID, TaskLists.LIST_NAME, TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0 and " + TaskLists.SYNC_ENABLED + ">0",
-		null, TaskLists.ACCOUNT_NAME + ", " + TaskLists.LIST_NAME), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new ProgressCursorLoaderFactory(
+		ProgressCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 
 }

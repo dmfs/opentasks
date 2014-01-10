@@ -40,7 +40,7 @@ import org.dmfs.tasks.utils.OnModelLoadedListener;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -52,8 +52,10 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -79,17 +81,11 @@ import android.widget.Toast;
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@SuppressLint("NewApi")
 public class TaskListFragment extends SupportFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener,
 	OnFlingListener
 {
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
-
-	private static final String STATE_EXPANDED_GROUPS = "expanded_groups";
-
-	private static final String STATE_ACTIVATED_POSITION_GROUP = "activated_group_position";
-	private static final String STATE_ACTIVATED_POSITION_CHILD = "activated_child_position";
 
 	/**
 	 * A filter to hide completed tasks.
@@ -222,8 +218,9 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onResume()
 	{
+
 		// restore filters
-		getActivity().invalidateOptionsMenu();
+		ActivityCompat.invalidateOptionsMenu(getActivity());
 
 		super.onResume();
 	}
@@ -309,6 +306,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void setListViewScrollbarPositionLeft(boolean left)
 	{
 		if (android.os.Build.VERSION.SDK_INT >= 11)
@@ -360,6 +358,19 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		if (item != null)
 		{
 			item.setChecked(mSavedCompletedFilter);
+
+			if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+			{
+				if (mSavedCompletedFilter)
+				{
+					item.setTitle(R.string.menu_hide_completed);
+				}
+				else
+				{
+					item.setTitle(R.string.menu_show_completed);
+				}
+			}
+
 			mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
 
 			// reload the child cursors only
