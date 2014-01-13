@@ -98,9 +98,8 @@ public interface ByList
 			else
 			{
 				int paddingTop = view.getPaddingTop();
-				int paddingRight = view.getPaddingRight();
 				int paddingBottom = view.getPaddingBottom();
-				view.setPadding(0, paddingTop, paddingRight, paddingBottom);
+				view.setPadding(0, paddingTop, 0, paddingBottom);
 			}
 
 			if (title != null)

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.text.format.Time;
+import android.util.Log;
 
 
 /**
@@ -33,8 +34,11 @@ import android.text.format.Time;
  */
 public class TimeChangeObserver extends BroadcastReceiver
 {
+	private static final String TAG = "TimeChangeObserver";
+
 	private final TimeChangeListener mListener;
 	private Handler mHandler;
+	private final Context mAppContext;
 
 
 	/**
@@ -49,8 +53,23 @@ public class TimeChangeObserver extends BroadcastReceiver
 	{
 		IntentFilter intentFilter = new IntentFilter(Intent.ACTION_TIME_CHANGED);
 		intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
-		context.registerReceiver(this, intentFilter);
+		mAppContext = context.getApplicationContext();
+		mAppContext.registerReceiver(this, intentFilter);
 		mListener = listener;
+	}
+
+
+	public void releaseReceiver()
+	{
+		try
+		{
+			mAppContext.unregisterReceiver(this);
+		}
+		catch (IllegalArgumentException e)
+		{
+			Log.w(TAG, "Caught IllegalArgumentException no receiver was registered - instance " + this);
+		}
+
 	}
 
 

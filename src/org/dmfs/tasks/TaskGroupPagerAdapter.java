@@ -6,8 +6,9 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.view.ViewGroup;
 
 
 /**
@@ -16,7 +17,7 @@ import android.util.Log;
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 
-public class TaskGroupPagerAdapter extends FragmentPagerAdapter
+public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 {
 
 	private static final String TAG = "TaskGroupPager";
@@ -55,6 +56,20 @@ public class TaskGroupPagerAdapter extends FragmentPagerAdapter
 			Log.e(TAG, "Missing or invalid title resource for ExpandableGroupDescriptor " + descriptor);
 		}
 		return title;
+	}
+
+
+	@Override
+	public Object instantiateItem(ViewGroup container, int position)
+	{
+		TaskListFragment fragment = (TaskListFragment) super.instantiateItem(container, position);
+		if (fragment.isAdded())
+		{
+			fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
+			fragment.setInstanceId("TaskListFragment" + position);
+			fragment.updateView();
+		}
+		return fragment;
 	}
 
 

@@ -21,6 +21,7 @@ import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.annotation.TargetApi;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -59,6 +60,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	private int mDownItemPos;
 	private View mDownChildView;
 	private VelocityTracker mVelocityTracker;
+	private int mContentViewId;
 
 	/** Flag to indicate left direction fling gesture. */
 	public static final int LEFT_FLING = 1;
@@ -113,23 +115,40 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	 */
 	public FlingDetector(ListView listview)
 	{
+		this(listview, -1);
+	}
+
+
+	/**
+	 * Create a new {@link FlingDetector} for the given {@link ListView}.
+	 * 
+	 * @param listview
+	 *            The {@link ListView}.
+	 * 
+	 * @param flingContentViewId
+	 *            The layout id of the inner content view that is supposed to fling
+	 */
+	public FlingDetector(ListView listview, int flingContentViewId)
+	{
 		listview.setOnTouchListener(this);
 		listview.setOnScrollListener(this);
 		mListView = listview;
+		mContentViewId = flingContentViewId;
 
 		ViewConfiguration vc = ViewConfiguration.get(listview.getContext());
-		mTouchSlop = vc.getScaledTouchSlop();
 
-		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16; // we want the user to fling harder!
-		// The maximum fling velocity is too low on Froyo.
-		if (android.os.Build.VERSION.SDK_INT == 8)
+		if (android.os.Build.VERSION.SDK_INT <= 10)
 		{
-			mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity() * 2;
+			mTouchSlop = vc.getScaledTouchSlop() * 2 / 3;
 		}
 		else
 		{
-			mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity();
+			mTouchSlop = vc.getScaledTouchSlop();
 		}
+		Log.d("Fling", "touchSlop:" + mTouchSlop);
+
+		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16; // we want the user to fling harder!
+		mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity() * 4;
 	}
 
 
@@ -151,7 +170,12 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				if (mDownChildPos >= 0)
 				{
 					mDownItemPos = mDownChildPos + mListView.getFirstVisiblePosition();
+
 					mDownChildView = mListView.getChildAt(mDownChildPos);
+					if (mContentViewId != -1)
+					{
+						mDownChildView = mDownChildView.findViewById(mContentViewId);
+					}
 
 					mFlingEnabled = mDownChildView != null && mListener != null && mListener.canFling(mListView, mDownItemPos) > 0;
 
@@ -190,9 +214,11 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					boolean leftFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & LEFT_FLING) == LEFT_FLING;
 					boolean rightFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & RIGHT_FLING) == RIGHT_FLING;
 
-					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs * 3 && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0))
+					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0))
 						&& (event.getEventTime() - event.getDownTime() > ViewConfiguration.getTapTimeout());
 
+					if (deltaX > mTouchSlop)
+						Log.d("Fling", "Touchslope:" + (deltaXabs - mTouchSlop));
 					if (mFlinging)
 					{
 						translateView(mDownChildView, event.getX() - mDownX);
@@ -216,9 +242,10 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 
 					// compute velocity in ms
 					mVelocityTracker.computeCurrentVelocity(1);
-					float deltaX = Math.abs(event.getX() - mDownX);
+					float deltaX = event.getX() - mDownX;
 					float xVelocity = Math.abs(mVelocityTracker.getXVelocity() * 1000);
-					if (mMinimumFlingVelocity < xVelocity && xVelocity < mMaximumFlingVelocity && deltaX > mTouchSlop)
+					if (mMinimumFlingVelocity < xVelocity && xVelocity < mMaximumFlingVelocity && Math.abs(deltaX) > mTouchSlop
+						&& deltaX * mVelocityTracker.getXVelocity() > 0)
 					{
 						animateFling(mDownChildView, mDownItemPos, mVelocityTracker.getXVelocity());
 					}
@@ -335,9 +362,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		else
 		{
 			int paddingTop = v.getPaddingTop();
-			int paddingRight = v.getPaddingRight();
 			int paddingBottom = v.getPaddingBottom();
-			v.setPadding((int) translation, paddingTop, paddingRight, paddingBottom);
+			v.setPadding((int) translation, paddingTop, -((int) translation), paddingBottom);
 		}
 	}
 
@@ -471,9 +497,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		else
 		{
 			int paddingTop = v.getPaddingTop();
-			int paddingRight = v.getPaddingRight();
 			int paddingBottom = v.getPaddingBottom();
-			v.setPadding(0, paddingTop, paddingRight, paddingBottom);
+			v.setPadding(0, paddingTop, 0, paddingBottom);
 		}
 	}
 }

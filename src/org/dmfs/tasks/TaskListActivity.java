@@ -139,6 +139,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		}
 		else
 		{
+
 			// load the GroupDescriptors which describe how to display the different groups of tasks
 			ExpandableGroupDescriptor[] groupDescriptors = new ExpandableGroupDescriptor[5];
 

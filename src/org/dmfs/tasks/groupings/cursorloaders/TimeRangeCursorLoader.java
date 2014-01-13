@@ -40,6 +40,7 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
 	 * A helper to retrieve the timestamp for midnight.
 	 */
 	private final Time mMidnight = new Time();
+	private final TimeChangeObserver mTimeChangeObserver;
 
 
 	public TimeRangeCursorLoader(Context context, String[] projection)
@@ -47,7 +48,8 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
 		super(context, new TimeRangeShortCursorFactory(projection));
 
 		// set trigger at midnight
-		new TimeChangeObserver(context, this).setNextAlarm(getMidnightTimestamp());
+		mTimeChangeObserver = new TimeChangeObserver(context, this);
+		mTimeChangeObserver.setNextAlarm(getMidnightTimestamp());
 	}
 
 
@@ -70,6 +72,14 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
 
 		// notify LoaderManager
 		onContentChanged();
+	}
+
+
+	@Override
+	protected void onReset()
+	{
+		mTimeChangeObserver.releaseReceiver();
+		super.onReset();
 	}
 
 

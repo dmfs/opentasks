@@ -17,7 +17,6 @@
 
 package org.dmfs.tasks.model;
 
-import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,9 +49,9 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	public final static String TAG = "org.dmfs.tasks.model.Sources";
 
 	/**
-	 * Use a {@link SoftReference} for the Singleton instance in order to allow freeing it under memory pressure.
+	 * A Singleton instance in order to allow freeing it under memory pressure.
 	 */
-	private static SoftReference<Sources> sInstance = null;
+	private static Sources sInstance = null;
 
 	/**
 	 * Maps account types to their respective task model.
@@ -76,13 +75,11 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	 */
 	public static synchronized Sources getInstance(Context context)
 	{
-		Sources sources = sInstance == null ? null : sInstance.get();
-		if (sources == null)
+		if (sInstance == null)
 		{
-			sources = new Sources(context);
-			sInstance = new SoftReference<Sources>(sources);
+			sInstance = new Sources(context);
 		}
-		return sources;
+		return sInstance;
 	}
 
 

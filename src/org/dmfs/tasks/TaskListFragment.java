@@ -55,7 +55,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.util.Log;
@@ -96,7 +95,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR}, {@link ByCompleted#GROUP_DESCRIPTOR} or
 	 * {@link ByList#GROUP_DESCRIPTOR}.
 	 */
-	private ExpandableGroupDescriptor mGroupDescriptor = ByDueDate.GROUP_DESCRIPTOR;
+	private ExpandableGroupDescriptor mGroupDescriptor = ByCompleted.GROUP_DESCRIPTOR;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
@@ -118,6 +117,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	private boolean mSavedCompletedFilter;
 	@SuppressWarnings("unused")
 	private String mInstanceId;
+
+	private Loader<Cursor> mCursorLoader;
 
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
@@ -159,6 +160,14 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 
 	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		mSavedExpandedGroups = getExpandedGroups();
+		super.onSaveInstanceState(outState);
+	}
+
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
@@ -173,7 +182,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			setExpandedGroups();
 		}
 
-		FlingDetector swiper = new FlingDetector(mExpandableListView);
+		FlingDetector swiper = new FlingDetector(mExpandableListView, R.id.flingContentView);
 		swiper.setOnFlingListener(this);
 		return rootView;
 	}
@@ -210,19 +219,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onPause()
 	{
-		mSavedExpandedGroups = getExpandedGroups();
 		super.onPause();
-	}
-
-
-	@Override
-	public void onResume()
-	{
-
-		// restore filters
-		ActivityCompat.invalidateOptionsMenu(getActivity());
-
-		super.onResume();
 	}
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
@@ -342,7 +339,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		mExpandableListView.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
 		mAdapter.setOnChildLoadedListener(this);
 		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
-
+		restoreFilterState();
 		getLoaderManager().restartLoader(-1, null, this);
 	}
 
@@ -369,14 +366,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				{
 					item.setTitle(R.string.menu_show_completed);
 				}
-			}
-
-			mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
-
-			// reload the child cursors only
-			for (int i = 0; i < mAdapter.getGroupCount(); ++i)
-			{
-				mAdapter.reloadGroup(i);
 			}
 		}
 	}
@@ -420,7 +409,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		return mGroupDescriptor.getGroupCursorLoader(mAppContext);
+		mCursorLoader = mGroupDescriptor.getGroupCursorLoader(mAppContext);
+		return mCursorLoader;
 	}
 
 
@@ -455,6 +445,21 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void onLoaderReset(Loader<Cursor> loader)
 	{
 		mAdapter.changeCursor(null);
+	}
+
+
+	public void restoreFilterState()
+	{
+		if (mSavedCompletedFilter)
+		{
+			mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
+			// reload the child cursors only
+			for (int i = 0; i < mAdapter.getGroupCount(); ++i)
+			{
+				mAdapter.reloadGroup(i);
+			}
+		}
+
 	}
 
 
