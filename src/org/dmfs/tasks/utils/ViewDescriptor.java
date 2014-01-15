@@ -27,6 +27,7 @@ import android.widget.ExpandableListView;
  * The interface to a class that knows how to populate a view in an {@link ExpandableListView}.
  * 
  * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public interface ViewDescriptor
 {
@@ -62,4 +63,13 @@ public interface ViewDescriptor
 	 * @return The id of a layout resource.
 	 */
 	public int getView();
+
+
+	/**
+	 * 
+	 * Get the id of the inner content view that is supposed to fling
+	 * 
+	 * @return The id of the view (-1) if the view is missing
+	 */
+	public int getFlingContentViewId();
 }

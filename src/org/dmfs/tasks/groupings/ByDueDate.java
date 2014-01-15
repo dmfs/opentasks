@@ -86,6 +86,8 @@ public interface ByDueDate
 		 */
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
+		private int mFlingContentViewId = R.id.flingContentView;
+
 
 		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 		@Override
@@ -94,16 +96,23 @@ public interface ByDueDate
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
 
+			// get the view inside that was flinged if the view has an integrated fling content view
+			View flingContentView = (View) view.findViewById(mFlingContentViewId);
+			if (flingContentView == null)
+			{
+				flingContentView = view;
+			}
+
 			if (android.os.Build.VERSION.SDK_INT >= 14)
 			{
-				view.setTranslationX(0);
-				view.setAlpha(1);
+				flingContentView.setTranslationX(0);
+				flingContentView.setAlpha(1);
 			}
 			else
 			{
 				int paddingTop = view.getPaddingTop();
 				int paddingBottom = view.getPaddingBottom();
-				view.setPadding(0, paddingTop, 0, paddingBottom);
+				flingContentView.setPadding(0, paddingTop, 0, paddingBottom);
 			}
 
 			if (title != null)
@@ -214,6 +223,13 @@ public interface ByDueDate
 				return mDateFormatter.format(new Date(due.toMillis(false)));
 			}
 		}
+
+
+		@Override
+		public int getFlingContentViewId()
+		{
+			return mFlingContentViewId;
+		}
 	};
 
 	/**
@@ -313,6 +329,13 @@ public interface ByDueDate
 				return context.getString(R.string.task_group_due_in_future);
 			}
 			return "";
+		}
+
+
+		@Override
+		public int getFlingContentViewId()
+		{
+			return -1;
 		}
 
 	};

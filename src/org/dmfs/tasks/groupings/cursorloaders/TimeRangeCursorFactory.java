@@ -73,6 +73,8 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 	public final static int TYPE_END_OF_THIS_YEAR = 0x04000000 | TYPE_END_OF_A_YEAR;
 	public final static int TYPE_END_OF_NEXT_YEAR = 0x08000000 | TYPE_END_OF_A_YEAR;
 
+	public final static int TYPE_OVERDUE = 0x20000000;
+
 	public final static int TYPE_NO_END = 0x80000000;
 
 	public final static String RANGE_START = "start";

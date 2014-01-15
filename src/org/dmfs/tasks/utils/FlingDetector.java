@@ -19,9 +19,12 @@ package org.dmfs.tasks.utils;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.graphics.Rect;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -45,6 +48,7 @@ import android.widget.ListView;
  * </p>
  * 
  * @author Marten Gajda <marten@dmfs.org>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class FlingDetector implements OnTouchListener, OnScrollListener
 {
@@ -57,16 +61,33 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	private float mDownY;
 	private boolean mFlinging;
 	private boolean mFlingEnabled;
+
 	private int mDownItemPos;
 	private View mDownChildView;
 	private VelocityTracker mVelocityTracker;
 	private int mContentViewId;
+	private static Context mContext;
+	private static Handler mHandler;
+
+	// A runnable that is used for vibrating to indication a fling start
+	private final Runnable mVibrateRunnable = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+			vibrator.vibrate(VIBRATION_DURATION);
+		}
+	};
 
 	/** Flag to indicate left direction fling gesture. */
 	public static final int LEFT_FLING = 1;
 
 	/** Flag to indicate right direction fling gesture. */
 	public static final int RIGHT_FLING = 2;
+
+	/** The the vibration duration in milliseconds for fling start */
+	public static final int VIBRATION_DURATION = 25;
 
 	/**
 	 * The {@link OnFlingListener} no notify on fling events.
@@ -115,7 +136,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	 */
 	public FlingDetector(ListView listview)
 	{
-		this(listview, -1);
+		this(listview, -1, null);
 	}
 
 
@@ -128,12 +149,13 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	 * @param flingContentViewId
 	 *            The layout id of the inner content view that is supposed to fling
 	 */
-	public FlingDetector(ListView listview, int flingContentViewId)
+	public FlingDetector(ListView listview, int flingContentViewId, Context context)
 	{
 		listview.setOnTouchListener(this);
 		listview.setOnScrollListener(this);
 		mListView = listview;
 		mContentViewId = flingContentViewId;
+		mContext = context;
 
 		ViewConfiguration vc = ViewConfiguration.get(listview.getContext());
 
@@ -145,16 +167,19 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		{
 			mTouchSlop = vc.getScaledTouchSlop();
 		}
-		Log.d("Fling", "touchSlop:" + mTouchSlop);
 
 		mMinimumFlingVelocity = vc.getScaledMinimumFlingVelocity() * 16; // we want the user to fling harder!
 		mMaximumFlingVelocity = vc.getScaledMaximumFlingVelocity() * 4;
+
+		mHandler = new Handler();
 	}
 
 
+	@SuppressLint("Recycle")
 	@Override
 	public boolean onTouch(View v, MotionEvent event)
 	{
+
 		boolean handled = false;
 		switch (event.getActionMasked())
 		{
@@ -178,7 +203,6 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					}
 
 					mFlingEnabled = mDownChildView != null && mListener != null && mListener.canFling(mListView, mDownItemPos) > 0;
-
 					if (mFlingEnabled)
 					{
 						if (mVelocityTracker == null)
@@ -191,7 +215,11 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 						/*
 						 * don't set handled = true, that would stop the touch event making it impossible to select a flingable list element
 						 */
+
+						// start vibration detection
+						mHandler.postDelayed(mVibrateRunnable, ViewConfiguration.getTapTimeout());
 					}
+
 				}
 				else
 				{
@@ -210,15 +238,21 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					float deltaXabs = Math.abs(deltaX);
 					float deltaYabs = Math.abs(deltaY);
 
-					// start flinging when the finger has moved at least mTouchSlop pixels and has moved mostly along the in x-axis
 					boolean leftFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & LEFT_FLING) == LEFT_FLING;
 					boolean rightFlingEnabled = (mListener.canFling(mListView, mDownItemPos) & RIGHT_FLING) == RIGHT_FLING;
 
+					// The user should not move to begin the fling, otherwise the fling is aborted
+					if (event.getEventTime() - event.getDownTime() < ViewConfiguration.getTapTimeout() && (deltaXabs > mTouchSlop || deltaYabs > mTouchSlop))
+					{
+						mFlingEnabled = false;
+						mHandler.removeCallbacks(mVibrateRunnable);
+						break;
+					}
+
+					// start flinging when the finger has moved at least mTouchSlop pixels and has moved mostly along the in x-axis
 					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0))
 						&& (event.getEventTime() - event.getDownTime() > ViewConfiguration.getTapTimeout());
 
-					if (deltaX > mTouchSlop)
-						Log.d("Fling", "Touchslope:" + (deltaXabs - mTouchSlop));
 					if (mFlinging)
 					{
 						translateView(mDownChildView, event.getX() - mDownX);
@@ -236,6 +270,9 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				break;
 
 			case MotionEvent.ACTION_UP:
+				// cancel vibration
+				mHandler.removeCallbacks(mVibrateRunnable);
+
 				if (mFlinging)
 				{
 					mVelocityTracker.addMovement(event);
@@ -269,6 +306,9 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				break;
 
 			case MotionEvent.ACTION_CANCEL:
+				// cancel vibration
+				mHandler.removeCallbacks(mVibrateRunnable);
+
 				if (mFlinging)
 				{
 					resetView(mDownChildView);
@@ -338,6 +378,12 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 	{
 		// disable flinging if scrolling starts
 		mFlingEnabled &= scrollState == OnScrollListener.SCROLL_STATE_IDLE;
+
+		// stop vibration if scrolling starts
+		if (!mFlingEnabled)
+		{
+			mHandler.removeCallbacks(mVibrateRunnable);
+		}
 	}
 
 
@@ -359,7 +405,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 			v.setTranslationX(translation);
 			v.setAlpha(1 - Math.abs(translation) / v.getWidth());
 		}
-		else
+		else if (v != null)
 		{
 			int paddingTop = v.getPaddingTop();
 			int paddingBottom = v.getPaddingBottom();
@@ -494,7 +540,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		{
 			v.animate().translationX(0).alpha(1).setDuration(100).setListener(null /* unset any previous listener! */).start();
 		}
-		else
+		else if (v != null)
 		{
 			int paddingTop = v.getPaddingTop();
 			int paddingBottom = v.getPaddingBottom();

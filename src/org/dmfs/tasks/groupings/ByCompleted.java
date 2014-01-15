@@ -81,6 +81,8 @@ public interface ByCompleted
 		 */
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
+		private int mFlingContentViewId = -1;
+
 
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
@@ -193,6 +195,13 @@ public interface ByCompleted
 				return mDateFormatter.format(new Date(due.toMillis(false)));
 			}
 		}
+
+
+		@Override
+		public int getFlingContentViewId()
+		{
+			return mFlingContentViewId;
+		}
 	};
 
 	/**
@@ -238,6 +247,13 @@ public interface ByCompleted
 				return context.getString(R.string.status_incomplete);
 			}
 			return "";
+		}
+
+
+		@Override
+		public int getFlingContentViewId()
+		{
+			return -1;
 		}
 
 	};

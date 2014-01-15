@@ -20,6 +20,7 @@ package org.dmfs.tasks;
 import java.util.Arrays;
 
 import org.dmfs.android.retentionmagic.SupportFragment;
+import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
@@ -86,6 +87,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
 
+	private final static String ARG_INSTANCE_ID = "instance_id";
+
 	/**
 	 * A filter to hide completed tasks.
 	 */
@@ -95,28 +98,29 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	 * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR}, {@link ByCompleted#GROUP_DESCRIPTOR} or
 	 * {@link ByList#GROUP_DESCRIPTOR}.
 	 */
-	private ExpandableGroupDescriptor mGroupDescriptor = ByCompleted.GROUP_DESCRIPTOR;
+	private ExpandableGroupDescriptor mGroupDescriptor;
 
 	/**
 	 * The fragment's current callback object, which is notified of list item clicks.
 	 */
 	private Callbacks mCallbacks;
 
-	@Retain(permanent = true, instanceNSField = "mInstanceId")
+	@Retain(permanent = true, instanceNSField = "mInstancePosition")
 	private int mActivatedPositionGroup = ExpandableListView.INVALID_POSITION;
-	@Retain(permanent = true, instanceNSField = "mInstanceId")
+	@Retain(permanent = true, instanceNSField = "mInstancePosition")
 	private int mActivatedPositionChild = ExpandableListView.INVALID_POSITION;
 	private long[] mExpandedIds = new long[0];
 	private ExpandableListView mExpandableListView;
 	private Context mAppContext;
 	private ExpandableGroupDescriptorAdapter mAdapter;
 	private Handler mHandler;
-	@Retain(permanent = true, instanceNSField = "mInstanceId")
+	@Retain(permanent = true, instanceNSField = "mInstancePosition")
 	private long[] mSavedExpandedGroups = null;
-	@Retain(permanent = true, instanceNSField = "mInstanceId")
+	@Retain(permanent = true, instanceNSField = "mInstancePosition")
 	private boolean mSavedCompletedFilter;
-	@SuppressWarnings("unused")
-	private String mInstanceId;
+
+	@Parameter(key = ARG_INSTANCE_ID)
+	private int mInstancePosition;
 
 	private Loader<Cursor> mCursorLoader;
 
@@ -131,7 +135,20 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		public void onItemSelected(Uri taskUri, boolean forceReload);
 
 
+		public ExpandableGroupDescriptor getGroupDescriptor(int position);
+
+
 		public void onAddNewTask();
+	}
+
+
+	public static TaskListFragment newInstance(int instancePosition)
+	{
+		TaskListFragment result = new TaskListFragment();
+		Bundle args = new Bundle();
+		args.putInt(ARG_INSTANCE_ID, instancePosition);
+		result.setArguments(args);
+		return result;
 	}
 
 
@@ -173,6 +190,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		mExpandableListView = (ExpandableListView) rootView.findViewById(android.R.id.list);
 
+		if (mGroupDescriptor == null)
+		{
+			loadGroupDescriptor();
+		}
+
 		// setup the views
 		this.updateView();
 
@@ -182,7 +204,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			setExpandedGroups();
 		}
 
-		FlingDetector swiper = new FlingDetector(mExpandableListView, R.id.flingContentView);
+		FlingDetector swiper = new FlingDetector(mExpandableListView, mGroupDescriptor.getElementViewDescriptor().getFlingContentViewId(), getActivity()
+			.getApplicationContext());
 		swiper.setOnFlingListener(this);
 		return rootView;
 	}
@@ -219,6 +242,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onPause()
 	{
+		mSavedExpandedGroups = getExpandedGroups();
 		super.onPause();
 	}
 
@@ -409,8 +433,14 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		mCursorLoader = mGroupDescriptor.getGroupCursorLoader(mAppContext);
+
+		if (mGroupDescriptor != null)
+		{
+			mCursorLoader = mGroupDescriptor.getGroupCursorLoader(mAppContext);
+
+		}
 		return mCursorLoader;
+
 	}
 
 
@@ -766,9 +796,15 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
-	public void setInstanceId(String instanceId)
+	public void loadGroupDescriptor()
 	{
-		mInstanceId = instanceId;
-
+		if (getActivity() != null)
+		{
+			TaskListActivity activity = (TaskListActivity) getActivity();
+			if (activity != null)
+			{
+				mGroupDescriptor = activity.getGroupDescriptor(mInstancePosition);
+			}
+		}
 	}
 }

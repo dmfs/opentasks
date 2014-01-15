@@ -18,7 +18,6 @@
 package org.dmfs.tasks.groupings;
 
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -26,8 +25,8 @@ import java.util.TimeZone;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
-import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorLoaderFactory;
-import org.dmfs.tasks.groupings.cursorloaders.TimeRangeShortCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorLoaderFactory;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -75,6 +74,8 @@ public interface ByStartDate
 		 */
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
+		private int mFlingContentViewId = R.id.flingContentView;
+
 
 		@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 		@Override
@@ -83,18 +84,24 @@ public interface ByStartDate
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
 
+			// get the view inside that was flinged if the view has an integrated fling content view
+			View flingContentView = (View) view.findViewById(mFlingContentViewId);
+			if (flingContentView == null)
+			{
+				flingContentView = view;
+			}
+
 			if (android.os.Build.VERSION.SDK_INT >= 14)
 			{
-				view.setTranslationX(0);
-				view.setAlpha(1);
+				flingContentView.setTranslationX(0);
+				flingContentView.setAlpha(1);
 			}
 			else
 			{
 				int paddingTop = view.getPaddingTop();
 				int paddingBottom = view.getPaddingBottom();
-				view.setPadding(0, paddingTop, 0, paddingBottom);
+				flingContentView.setPadding(0, paddingTop, 0, paddingBottom);
 			}
-
 			if (title != null)
 			{
 				String text = cursor.getString(5);
@@ -125,20 +132,13 @@ public interface ByStartDate
 					startDateField.setVisibility(View.VISIBLE);
 					startDateField.setText(makeDateString(startDate));
 
+					// format time
+					startDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
+
 					ImageView icon = (ImageView) view.findViewById(R.id.task_start_image);
 					if (icon != null)
 					{
 						icon.setVisibility(View.VISIBLE);
-					}
-
-					// highlight overdue dates & times
-					if (startDate.before(mNow) && !isClosed)
-					{
-						startDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
-					}
-					else
-					{
-						startDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
 					}
 				}
 				else
@@ -148,6 +148,7 @@ public interface ByStartDate
 			}
 
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
+			ImageView dueIcon = (ImageView) view.findViewById(R.id.task_due_image);
 			if (dueDateField != null)
 			{
 				Time dueTime = Common.DUE_ADAPTER.get(cursor);
@@ -160,12 +161,11 @@ public interface ByStartDate
 					}
 					mNow.clear(TimeZone.getDefault().getID());
 					mNow.setToNow();
-
+					dueDateField.setVisibility(View.VISIBLE);
 					dueDateField.setText(makeDateString(dueTime));
-					ImageView icon = (ImageView) view.findViewById(R.id.task_due_image);
-					if (icon != null)
+					if (dueIcon != null)
 					{
-						icon.setVisibility(View.VISIBLE);
+						dueIcon.setVisibility(View.VISIBLE);
 					}
 
 					// highlight overdue dates & times
@@ -180,7 +180,9 @@ public interface ByStartDate
 				}
 				else
 				{
-					dueDateField.setText("");
+					dueDateField.setVisibility(View.GONE);
+					dueIcon.setVisibility(View.GONE);
+
 				}
 			}
 
@@ -247,6 +249,13 @@ public interface ByStartDate
 				return mDateFormatter.format(new Date(date.toMillis(false)));
 			}
 		}
+
+
+		@Override
+		public int getFlingContentViewId()
+		{
+			return mFlingContentViewId;
+		}
 	};
 
 	/**
@@ -254,10 +263,6 @@ public interface ByStartDate
 	 */
 	public final ViewDescriptor GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
-		// DateFormatSymbols.getInstance() not used because it is not available before API level 9
-		private final String[] mMonthNames = new DateFormatSymbols().getMonths();
-
-
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
@@ -314,15 +319,15 @@ public interface ByStartDate
 			int type = cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_TYPE));
 			if (type == 0)
 			{
-				return context.getString(R.string.task_group_no_due);
+				return context.getString(R.string.task_group_start_started);
+			}
+			if ((type & TimeRangeCursorFactory.TYPE_OVERDUE) == TimeRangeCursorFactory.TYPE_OVERDUE)
+			{
+				return context.getString(R.string.task_group_start_started);
 			}
 			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TODAY) == TimeRangeCursorFactory.TYPE_END_OF_TODAY)
 			{
-				return context.getString(R.string.task_group_due_today);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY) == TimeRangeCursorFactory.TYPE_END_OF_YESTERDAY)
-			{
-				return context.getString(R.string.task_group_overdue);
+				return context.getString(R.string.task_group_start_today);
 			}
 			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TOMORROW) == TimeRangeCursorFactory.TYPE_END_OF_TOMORROW)
 			{
@@ -330,22 +335,20 @@ public interface ByStartDate
 			}
 			if ((type & TimeRangeCursorFactory.TYPE_END_IN_7_DAYS) == TimeRangeCursorFactory.TYPE_END_IN_7_DAYS)
 			{
-				return context.getString(R.string.task_group_due_within_7_days);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_MONTH) != 0)
-			{
-				return context.getString(R.string.task_group_due_in_month,
-					mMonthNames[cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_MONTH))]);
-			}
-			if ((type & TimeRangeCursorFactory.TYPE_END_OF_A_YEAR) != 0)
-			{
-				return context.getString(R.string.task_group_due_in_year, cursor.getInt(cursor.getColumnIndex(TimeRangeCursorFactory.RANGE_YEAR)));
+				return context.getString(R.string.task_group_start_within_7_days);
 			}
 			if ((type & TimeRangeCursorFactory.TYPE_NO_END) != 0)
 			{
-				return context.getString(R.string.task_group_due_in_future);
+				return context.getString(R.string.task_group_start_in_future);
 			}
 			return "";
+		}
+
+
+		@Override
+		public int getFlingContentViewId()
+		{
+			return -1;
 		}
 
 	};
@@ -361,7 +364,7 @@ public interface ByStartDate
 	/**
 	 * A descriptor for the "grouped by due date" view.
 	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
-		TimeRangeShortCursorFactory.DEFAULT_PROJECTION), START_DATE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeStartCursorLoaderFactory(
+		TimeRangeStartCursorFactory.DEFAULT_PROJECTION), START_DATE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 
 }

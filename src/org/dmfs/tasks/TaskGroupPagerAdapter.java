@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
-import android.view.ViewGroup;
 
 
 /**
@@ -60,25 +59,10 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 
 
 	@Override
-	public Object instantiateItem(ViewGroup container, int position)
-	{
-		TaskListFragment fragment = (TaskListFragment) super.instantiateItem(container, position);
-		if (fragment.isAdded())
-		{
-			fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
-			fragment.setInstanceId("TaskListFragment" + position);
-			fragment.updateView();
-		}
-		return fragment;
-	}
-
-
-	@Override
 	public Fragment getItem(int position)
 	{
-		TaskListFragment fragment = new TaskListFragment();
+		TaskListFragment fragment = TaskListFragment.newInstance(position);
 		fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
-		fragment.setInstanceId("TaskListFragment" + position);
 		return fragment;
 	}
 

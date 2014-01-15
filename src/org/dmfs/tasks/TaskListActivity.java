@@ -78,6 +78,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private SharedPreferences mOpenTaskPrefs;
 	private ViewPager mViewPager;
 	private TaskGroupPagerAdapter mPagerAdapter;
+	private ExpandableGroupDescriptor[] mGroupDescriptors;
 
 	@Retain(permanent = true)
 	private int mCurrentPage;
@@ -141,7 +142,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 
 			// load the GroupDescriptors which describe how to display the different groups of tasks
-			ExpandableGroupDescriptor[] groupDescriptors = new ExpandableGroupDescriptor[5];
+			mGroupDescriptors = new ExpandableGroupDescriptor[5];
 
 			ExpandableGroupDescriptor byListDescriptor = ByList.GROUP_DESCRIPTOR;
 			byListDescriptor.setTitle(R.string.task_group_all_title);
@@ -158,15 +159,15 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			ExpandableGroupDescriptor byProgressDescriptor = ByProgress.GROUP_DESCRIPTOR;
 			byProgressDescriptor.setTitle(R.string.task_group_progress_title);
 
-			groupDescriptors[0] = byListDescriptor;
-			groupDescriptors[1] = byDueDateDescriptor;
-			groupDescriptors[2] = byStartDateDescriptor;
-			groupDescriptors[3] = byPriorityDescriptor;
-			groupDescriptors[4] = byProgressDescriptor;
+			mGroupDescriptors[0] = byListDescriptor;
+			mGroupDescriptors[1] = byDueDateDescriptor;
+			mGroupDescriptors[2] = byStartDateDescriptor;
+			mGroupDescriptors[3] = byPriorityDescriptor;
+			mGroupDescriptors[4] = byProgressDescriptor;
 
 			// Setup ViewPager
 			mViewPager = (ViewPager) findViewById(R.id.pager);
-			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), groupDescriptors, getApplicationContext());
+			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupDescriptors, getApplicationContext());
 			mViewPager.setAdapter(mPagerAdapter);
 			mViewPager.setCurrentItem(mCurrentPage);
 
@@ -327,5 +328,11 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+
+	public ExpandableGroupDescriptor getGroupDescriptor(int position)
+	{
+		return mGroupDescriptors[position];
 	}
 }
