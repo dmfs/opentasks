@@ -406,7 +406,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
 		{
 			v.setTranslationX(translation);
-			v.setAlpha(1 - Math.abs(translation) / v.getWidth());
+		//	v.setAlpha(1 - Math.abs(translation) / v.getWidth());
 		}
 		else if (v != null)
 		{
@@ -488,7 +488,9 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					translationWidth = parentWidth;
 					animationDuration = (long) (parentWidth - viewTranslationX);
 				}
-				v.animate().alpha(0).translationX(translationWidth).setDuration((long) (animationDuration / Math.abs(velocity)))
+				v.animate()
+			//	.alpha(0)
+				.translationX(translationWidth).setDuration((long) (animationDuration / Math.abs(velocity)))
 					.setListener(new AnimatorListener()
 					{
 
