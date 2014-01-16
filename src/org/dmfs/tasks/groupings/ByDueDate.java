@@ -42,6 +42,7 @@ import android.os.Build;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -110,9 +111,9 @@ public interface ByDueDate
 			}
 			else
 			{
-				int paddingTop = view.getPaddingTop();
-				int paddingBottom = view.getPaddingBottom();
-				flingContentView.setPadding(0, paddingTop, 0, paddingBottom);
+				LayoutParams layoutParams = (LayoutParams) flingContentView.getLayoutParams();
+				layoutParams.setMargins(0, layoutParams.topMargin, 0, layoutParams.bottomMargin);
+				flingContentView.setLayoutParams(layoutParams);
 			}
 
 			if (title != null)

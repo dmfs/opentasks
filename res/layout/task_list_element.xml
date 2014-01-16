@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:paddingLeft="@dimen/task_list_right_margin"
+    android:paddingRight="@dimen/task_list_right_margin">
 
     <RelativeLayout
         android:id="@+id/flingContentView"

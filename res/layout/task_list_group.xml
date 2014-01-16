@@ -3,9 +3,10 @@
     style="@style/task_group_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:paddingTop="10dip" 
-    android:minHeight="?android:attr/listPreferredItemHeight">
+    android:paddingLeft="@dimen/task_list_left_margin"
+    android:paddingRight="@dimen/task_list_right_margin"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingTop="10dip" >
 
     <View
         android:id="@+id/colorbar1"
@@ -57,7 +58,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-       	android:layout_below="@android:id/title"
+        android:layout_below="@android:id/title"
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
@@ -69,6 +70,7 @@
         style="@style/task_list_group_divider"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

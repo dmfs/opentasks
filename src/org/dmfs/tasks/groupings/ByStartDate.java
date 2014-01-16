@@ -42,6 +42,7 @@ import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -98,9 +99,9 @@ public interface ByStartDate
 			}
 			else
 			{
-				int paddingTop = view.getPaddingTop();
-				int paddingBottom = view.getPaddingBottom();
-				flingContentView.setPadding(0, paddingTop, 0, paddingBottom);
+				LayoutParams layoutParams = (LayoutParams) flingContentView.getLayoutParams();
+				layoutParams.setMargins(0, layoutParams.topMargin, 0, layoutParams.bottomMargin);
+				flingContentView.setLayoutParams(layoutParams);
 			}
 			if (title != null)
 			{
@@ -331,7 +332,7 @@ public interface ByStartDate
 			}
 			if ((type & TimeRangeCursorFactory.TYPE_END_OF_TOMORROW) == TimeRangeCursorFactory.TYPE_END_OF_TOMORROW)
 			{
-				return context.getString(R.string.task_group_due_tomorrow);
+				return context.getString(R.string.task_group_start_tomorrow);
 			}
 			if ((type & TimeRangeCursorFactory.TYPE_END_IN_7_DAYS) == TimeRangeCursorFactory.TYPE_END_IN_7_DAYS)
 			{

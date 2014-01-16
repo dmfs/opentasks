@@ -3,6 +3,8 @@
     style="@style/task_group_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/task_list_left_margin"
+    android:paddingRight="@dimen/task_list_right_margin"
     android:minHeight="?android:attr/listPreferredItemHeight" >
 
     <TextView

@@ -25,6 +25,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -52,6 +53,8 @@ import android.widget.ListView;
  */
 public class FlingDetector implements OnTouchListener, OnScrollListener
 {
+
+	private static final String TAG = "FlingDetector";
 
 	private final int mMinimumFlingVelocity;
 	private final int mMaximumFlingVelocity;
@@ -407,9 +410,44 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		}
 		else if (v != null)
 		{
-			int paddingTop = v.getPaddingTop();
-			int paddingBottom = v.getPaddingBottom();
-			v.setPadding((int) translation, paddingTop, -((int) translation), paddingBottom);
+
+			android.widget.LinearLayout.LayoutParams linearLayoutParams = null;
+			android.widget.RelativeLayout.LayoutParams relativeLayoutParams = null;
+			try
+			{
+				linearLayoutParams = (android.widget.LinearLayout.LayoutParams) v.getLayoutParams();
+			}
+			catch (ClassCastException e)
+			{
+				try
+				{
+					relativeLayoutParams = (android.widget.RelativeLayout.LayoutParams) v.getLayoutParams();
+				}
+				catch (ClassCastException e2)
+				{
+					Log.w(TAG, "Fling content layout is not in linear or relative layout.");
+				}
+			}
+
+			if (linearLayoutParams != null)
+			{
+				linearLayoutParams.setMargins((int) translation, linearLayoutParams.topMargin, ((int) -translation), linearLayoutParams.bottomMargin);
+				v.setLayoutParams(linearLayoutParams);
+			}
+			else if (relativeLayoutParams != null)
+			{
+				relativeLayoutParams.setMargins((int) translation, relativeLayoutParams.topMargin, ((int) -translation), relativeLayoutParams.bottomMargin);
+				v.setLayoutParams(relativeLayoutParams);
+			}
+			else
+			{
+				// neither a linear or a relative layout was found, use padding as fall back method
+				int paddingTop = v.getPaddingTop();
+				int paddingBottom = v.getPaddingBottom();
+
+				v.setPadding(((int) translation), paddingTop, -((int) translation), paddingBottom);
+			}
+
 		}
 	}
 
@@ -542,9 +580,42 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		}
 		else if (v != null)
 		{
-			int paddingTop = v.getPaddingTop();
-			int paddingBottom = v.getPaddingBottom();
-			v.setPadding(0, paddingTop, 0, paddingBottom);
+			android.widget.LinearLayout.LayoutParams linearLayoutParams = null;
+			android.widget.RelativeLayout.LayoutParams relativeLayoutParams = null;
+			try
+			{
+				linearLayoutParams = (android.widget.LinearLayout.LayoutParams) v.getLayoutParams();
+			}
+			catch (ClassCastException e)
+			{
+				try
+				{
+					relativeLayoutParams = (android.widget.RelativeLayout.LayoutParams) v.getLayoutParams();
+				}
+				catch (ClassCastException e2)
+				{
+					Log.w(TAG, "Fling content layout is not in linear or relative layout.");
+				}
+			}
+
+			if (linearLayoutParams != null)
+			{
+				linearLayoutParams.setMargins(0, linearLayoutParams.topMargin, 0, linearLayoutParams.bottomMargin);
+				v.setLayoutParams(linearLayoutParams);
+			}
+			else if (relativeLayoutParams != null)
+			{
+				relativeLayoutParams.setMargins(0, relativeLayoutParams.topMargin, 0, relativeLayoutParams.bottomMargin);
+				v.setLayoutParams(relativeLayoutParams);
+			}
+			else
+			{
+				// neither a linear or a relative layout was found, use padding as fall back method
+				int paddingTop = v.getPaddingTop();
+				int paddingBottom = v.getPaddingBottom();
+
+				v.setPadding(0, paddingTop, 0, paddingBottom);
+			}
 		}
 	}
 }
