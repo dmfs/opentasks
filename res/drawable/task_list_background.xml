@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@drawable/list_activated_holo" android:state_activated="true"/>
+    <!-- <item android:drawable="@drawable/list_activated_holo" android:state_activated="true"/> -->
+    <item android:drawable="@android:color/white" android:state_window_focused="false"/>
+
+    <!-- Even though these two point to the same resource, have two states so the drawable will invalidate itself when coming out of pressed state. -->
+    <item android:drawable="@drawable/list_activated_holo" android:state_enabled="false" android:state_focused="true" android:state_pressed="true"/>
+    <item android:drawable="@drawable/list_activated_holo" android:state_enabled="false" android:state_focused="true"/>
+    <item android:drawable="@drawable/list_activated_holo" android:state_focused="true" android:state_pressed="true"/>
+    <item android:drawable="@drawable/list_activated_holo" android:state_focused="false" android:state_pressed="true"/>
+    <item android:drawable="@drawable/list_activated_holo" android:state_focused="true"/>
 
 </selector>
