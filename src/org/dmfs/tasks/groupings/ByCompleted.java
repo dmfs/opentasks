@@ -202,6 +202,20 @@ public interface ByCompleted
 		{
 			return mFlingContentViewId;
 		}
+
+
+		@Override
+		public int getFlingRevealLeftViewId()
+		{
+			return -1;
+		}
+
+
+		@Override
+		public int getFlingRevealRightViewId()
+		{
+			return -1;
+		}
 	};
 
 	/**
@@ -252,6 +266,20 @@ public interface ByCompleted
 
 		@Override
 		public int getFlingContentViewId()
+		{
+			return -1;
+		}
+
+
+		@Override
+		public int getFlingRevealLeftViewId()
+		{
+			return -1;
+		}
+
+
+		@Override
+		public int getFlingRevealRightViewId()
 		{
 			return -1;
 		}

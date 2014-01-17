@@ -72,4 +72,22 @@ public interface ViewDescriptor
 	 * @return The id of the view (-1) if the view is missing
 	 */
 	public int getFlingContentViewId();
+
+
+	/**
+	 * 
+	 * Get the id of the view that reveals from the left side
+	 * 
+	 * @return The id of the view (-1) if the view is missing
+	 */
+	public int getFlingRevealLeftViewId();
+
+
+	/**
+	 * 
+	 * Get the id of the view that reveals from the right side
+	 * 
+	 * @return The id of the view (-1) if the view is missing
+	 */
+	public int getFlingRevealRightViewId();
 }

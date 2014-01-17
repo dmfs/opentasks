@@ -143,6 +143,12 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Aktuelle Aufgaben</string>
+    
+     <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Erledigt</string>
+    <string name="fling_task_edit">Bearbeiten</string>
+    <string name="fling_task_delete">Löschen</string>
+    <string name="fling_task_uncomplete">Nicht erledigt</string>
 	
 	<!-- Accessibility content description -->
     <string name="cd_start_date">Symbol für das Startdatum der Aufgabe</string>

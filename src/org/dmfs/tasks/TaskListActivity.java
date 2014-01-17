@@ -103,10 +103,10 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// 'activated' state when touched.
 
 			// create list fragment
-			mTaskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
+			// mTaskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
 
-			mTaskListFrag.setActivateOnItemClick(true);
-			mTaskListFrag.setListViewScrollbarPositionLeft(true);
+			// mTaskListFrag.setActivateOnItemClick(true);
+			// mTaskListFrag.setListViewScrollbarPositionLeft(true);
 
 			mOpenTaskPrefs = getPreferences(MODE_PRIVATE);
 			int openChildPosition = mOpenTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
@@ -114,12 +114,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 			Log.d(TAG, "Open Child Position : " + openChildPosition);
 			Log.d(TAG, "Open Group Position : " + openGroupPosition);
-
-			if (openChildPosition != ExpandableListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
-			{
-				mTaskListFrag.setOpenChildPosition(openChildPosition);
-				mTaskListFrag.setOpenGroupPosition(openGroupPosition);
-			}
 
 			String openGroupsString = mOpenTaskPrefs.getString(EXPANDED_GROUPS_PREFERENCE_NAME, "");
 
@@ -130,52 +124,47 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				ids[i] = Long.parseLong(openGroupsArray[i]);
 			}
 
-			mTaskListFrag.setExpandedGroupsIds(ids);
-
 			/*
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
 			 */
 			mTaskDetailFrag = new ViewTaskFragment();
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag).commit();
 		}
-		else
-		{
 
-			// load the GroupDescriptors which describe how to display the different groups of tasks
-			mGroupDescriptors = new ExpandableGroupDescriptor[5];
+		// load the GroupDescriptors which describe how to display the different groups of tasks
+		mGroupDescriptors = new ExpandableGroupDescriptor[5];
 
-			ExpandableGroupDescriptor byListDescriptor = ByList.GROUP_DESCRIPTOR;
-			byListDescriptor.setTitle(R.string.task_group_all_title);
+		ExpandableGroupDescriptor byListDescriptor = ByList.GROUP_DESCRIPTOR;
+		byListDescriptor.setTitle(R.string.task_group_all_title);
 
-			ExpandableGroupDescriptor byDueDateDescriptor = ByDueDate.GROUP_DESCRIPTOR;
-			byDueDateDescriptor.setTitle(R.string.task_group_due_title);
+		ExpandableGroupDescriptor byDueDateDescriptor = ByDueDate.GROUP_DESCRIPTOR;
+		byDueDateDescriptor.setTitle(R.string.task_group_due_title);
 
-			ExpandableGroupDescriptor byStartDateDescriptor = ByStartDate.GROUP_DESCRIPTOR;
-			byStartDateDescriptor.setTitle(R.string.task_group_start_title);
+		ExpandableGroupDescriptor byStartDateDescriptor = ByStartDate.GROUP_DESCRIPTOR;
+		byStartDateDescriptor.setTitle(R.string.task_group_start_title);
 
-			ExpandableGroupDescriptor byPriorityDescriptor = ByPriority.GROUP_DESCRIPTOR;
-			byPriorityDescriptor.setTitle(R.string.task_group_priority_title);
+		ExpandableGroupDescriptor byPriorityDescriptor = ByPriority.GROUP_DESCRIPTOR;
+		byPriorityDescriptor.setTitle(R.string.task_group_priority_title);
 
-			ExpandableGroupDescriptor byProgressDescriptor = ByProgress.GROUP_DESCRIPTOR;
-			byProgressDescriptor.setTitle(R.string.task_group_progress_title);
+		ExpandableGroupDescriptor byProgressDescriptor = ByProgress.GROUP_DESCRIPTOR;
+		byProgressDescriptor.setTitle(R.string.task_group_progress_title);
 
-			mGroupDescriptors[0] = byListDescriptor;
-			mGroupDescriptors[1] = byDueDateDescriptor;
-			mGroupDescriptors[2] = byStartDateDescriptor;
-			mGroupDescriptors[3] = byPriorityDescriptor;
-			mGroupDescriptors[4] = byProgressDescriptor;
+		mGroupDescriptors[0] = byListDescriptor;
+		mGroupDescriptors[1] = byDueDateDescriptor;
+		mGroupDescriptors[2] = byStartDateDescriptor;
+		mGroupDescriptors[3] = byPriorityDescriptor;
+		mGroupDescriptors[4] = byProgressDescriptor;
 
-			// Setup ViewPager
-			mViewPager = (ViewPager) findViewById(R.id.pager);
-			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupDescriptors, getApplicationContext());
-			mViewPager.setAdapter(mPagerAdapter);
-			mViewPager.setCurrentItem(mCurrentPage);
+		// Setup ViewPager
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupDescriptors, getApplicationContext());
+		mViewPager.setAdapter(mPagerAdapter);
+		mViewPager.setCurrentItem(mCurrentPage);
 
-			// Bind the tabs to the ViewPager
-			PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-			tabs.setViewPager(mViewPager);
+		// Bind the tabs to the ViewPager
+		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		tabs.setViewPager(mViewPager);
 
-		}
 	}
 
 

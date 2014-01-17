@@ -13,41 +13,36 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:minHeight="?android:attr/listPreferredItemHeight"
             android:background="#FF808080" >
 
-            <ImageView
-                android:id="@+id/action_icon_left"
+            <TextView
+                android:id="@+id/fling_reveal_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
+                android:drawableLeft="@drawable/navigation_accept"
                 android:padding="8dp"
-                android:src="@drawable/navigation_accept" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/action_icon_left"
-                android:text="Complete"
+                android:drawablePadding="8dp"
+                android:text="@string/fling_task_complete"
+                android:gravity="center_vertical"
+                android:visibility="gone"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
 
-            <ImageView
-                android:id="@+id/action_icon_right"
+            <TextView
+                android:id="@+id/fling_reveal_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:drawableRight="@drawable/content_edit"
+                android:drawablePadding="8dp"
                 android:padding="8dp"
-                android:src="@drawable/content_edit" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/action_icon_right"
-                android:text="Edit"
+                android:text="@string/fling_task_edit"
+                android:visibility="gone"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#fff" />
         </RelativeLayout>
@@ -63,15 +58,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff"
-            android:paddingLeft="@dimen/task_list_right_margin"
-    		android:paddingRight="@dimen/task_list_right_margin"
-            android:duplicateParentState="true" >
+            android:duplicateParentState="true">
 
             <RelativeLayout
                 style="@style/tasks_expandable_list_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
                 android:duplicateParentState="true"
                 android:paddingLeft="@dimen/task_list_right_margin"
                 android:paddingRight="@dimen/task_list_right_margin" >

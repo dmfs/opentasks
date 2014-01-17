@@ -39,7 +39,7 @@ import android.graphics.Paint;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -85,6 +85,8 @@ public interface ByList
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 		private int mFlingContentViewId = R.id.flingContentView;
+		private int mFlingRevealLeftViewId = R.id.fling_reveal_left;
+		private int mFlingRevealRightViewId = R.id.fling_reveal_right;
 
 
 		@Override
@@ -239,6 +241,20 @@ public interface ByList
 		{
 			return mFlingContentViewId;
 		}
+
+
+		@Override
+		public int getFlingRevealLeftViewId()
+		{
+			return mFlingRevealLeftViewId;
+		}
+
+
+		@Override
+		public int getFlingRevealRightViewId()
+		{
+			return mFlingRevealRightViewId;
+		}
 	};
 
 	/**
@@ -335,6 +351,20 @@ public interface ByList
 
 		@Override
 		public int getFlingContentViewId()
+		{
+			return -1;
+		}
+
+
+		@Override
+		public int getFlingRevealLeftViewId()
+		{
+			return -1;
+		}
+
+
+		@Override
+		public int getFlingRevealRightViewId()
 		{
 			return -1;
 		}

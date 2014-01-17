@@ -39,7 +39,7 @@ import android.graphics.Paint;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.LinearLayout.LayoutParams;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -72,6 +72,8 @@ public interface ByPriority
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 		private int mFlingContentViewId = R.id.flingContentView;
+		private int mFlingRevealLeftViewId = R.id.fling_reveal_left;
+		private int mFlingRevealRightViewId = R.id.fling_reveal_right;
 
 
 		@Override
@@ -225,6 +227,20 @@ public interface ByPriority
 		{
 			return mFlingContentViewId;
 		}
+
+
+		@Override
+		public int getFlingRevealLeftViewId()
+		{
+			return mFlingRevealLeftViewId;
+		}
+
+
+		@Override
+		public int getFlingRevealRightViewId()
+		{
+			return mFlingRevealRightViewId;
+		}
 	};
 
 	/**
@@ -318,13 +334,27 @@ public interface ByPriority
 			return -1;
 		}
 
+
+		@Override
+		public int getFlingRevealLeftViewId()
+		{
+			return -1;
+		}
+
+
+		@Override
+		public int getFlingRevealRightViewId()
+		{
+			return -1;
+		}
+
 	};
 
 	/**
 	 * A descriptor that knows how to load elements in a list group ordered by due date.
 	 */
 	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (" + Instances.PRIORITY + ">=? and " + Instances.PRIORITY + " <= ? or " + Instances.PRIORITY + " is ?)",
+		Instances.VISIBLE + "=1 and (" + Instances.PRIORITY + ">=? and " + Instances.PRIORITY + " <= ? or " + Instances.PRIORITY + " is ? )",
 		Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 1, 2, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**

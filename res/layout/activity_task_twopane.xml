@@ -20,12 +20,34 @@
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
 
-    <fragment
+
+    <!--
+        <fragment
         android:id="@+id/task_list"
         android:name="org.dmfs.tasks.TaskListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2" />
+    -->
+
+    <LinearLayout
+        android:layout_width="0dip" 
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="48dip" />
+
+        <android.support.v4.view.ViewPager
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/task_detail_container"

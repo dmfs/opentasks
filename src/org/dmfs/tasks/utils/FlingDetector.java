@@ -25,7 +25,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -128,6 +128,30 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		 * @return <code>true</code> if the event has been handled, <code>false</code> otherwise.
 		 */
 		public boolean onFling(ListView listview, int pos, int direction);
+
+
+		/**
+		 * Notify the listener of a fling event start.
+		 * 
+		 * @param listview
+		 *            The parent {@link ListView} of the element that was flung.
+		 * @param element
+		 *            The list element that is flinging
+		 * @param pos
+		 *            The position of the item that was flung
+		 * @param direction
+		 *            Flag to indicate in which direction the fling was performed.
+		 */
+		public void onFlingStart(ListView listview, View element, int position, int direction);
+
+
+		/**
+		 * Notify the listener of a fling event end.
+		 * 
+		 * @param direction
+		 *            Flag to indicate in which direction the fling was performed.
+		 */
+		public void onFlingEnd(int direction);
 	}
 
 
@@ -252,12 +276,26 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 						break;
 					}
 
+					boolean wasFlinging = mFlinging;
+
 					// start flinging when the finger has moved at least mTouchSlop pixels and has moved mostly along the in x-axis
 					mFlinging |= deltaXabs > mTouchSlop && deltaXabs > deltaYabs && ((leftFlingEnabled && deltaX < 0) || (rightFlingEnabled && deltaX > 0))
 						&& (event.getEventTime() - event.getDownTime() > ViewConfiguration.getTapTimeout());
 
 					if (mFlinging)
 					{
+
+						// inform the the listener when the flinging starts
+						if (!wasFlinging && mListener != null)
+						{
+							int direction = RIGHT_FLING;
+							if ((event.getX() - mDownX) < 0)
+							{
+								direction = LEFT_FLING;
+							}
+							mListener.onFlingStart(mListView, v, mDownItemPos, direction);
+						}
+
 						translateView(mDownChildView, event.getX() - mDownX);
 						mListView.requestDisallowInterceptTouchEvent(true);
 
@@ -406,38 +444,33 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		if (android.os.Build.VERSION.SDK_INT >= 14 && v != null)
 		{
 			v.setTranslationX(translation);
-		//	v.setAlpha(1 - Math.abs(translation) / v.getWidth());
+			// v.setAlpha(1 - Math.abs(translation) / v.getWidth());
 		}
 		else if (v != null)
 		{
+			android.view.ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
 
-			android.widget.LinearLayout.LayoutParams linearLayoutParams = null;
-			android.widget.RelativeLayout.LayoutParams relativeLayoutParams = null;
-			try
+			if (layoutParams instanceof android.widget.LinearLayout.LayoutParams)
 			{
-				linearLayoutParams = (android.widget.LinearLayout.LayoutParams) v.getLayoutParams();
-			}
-			catch (ClassCastException e)
-			{
-				try
-				{
-					relativeLayoutParams = (android.widget.RelativeLayout.LayoutParams) v.getLayoutParams();
-				}
-				catch (ClassCastException e2)
-				{
-					Log.w(TAG, "Fling content layout is not in linear or relative layout.");
-				}
-			}
-
-			if (linearLayoutParams != null)
-			{
-				linearLayoutParams.setMargins((int) translation, linearLayoutParams.topMargin, ((int) -translation), linearLayoutParams.bottomMargin);
+				android.widget.LinearLayout.LayoutParams linearLayoutParams = (android.widget.LinearLayout.LayoutParams) layoutParams;
+				linearLayoutParams.setMargins((int) translation, linearLayoutParams.topMargin, -((int) translation), linearLayoutParams.bottomMargin);
 				v.setLayoutParams(linearLayoutParams);
 			}
-			else if (relativeLayoutParams != null)
+			else if (layoutParams instanceof android.widget.RelativeLayout.LayoutParams)
 			{
-				relativeLayoutParams.setMargins((int) translation, relativeLayoutParams.topMargin, ((int) -translation), relativeLayoutParams.bottomMargin);
+				android.widget.RelativeLayout.LayoutParams relativeLayoutParams = (android.widget.RelativeLayout.LayoutParams) layoutParams;
+				relativeLayoutParams.setMargins((int) translation, relativeLayoutParams.topMargin, -((int) translation), relativeLayoutParams.bottomMargin);
 				v.setLayoutParams(relativeLayoutParams);
+			}
+			else if (layoutParams instanceof android.widget.FrameLayout.LayoutParams)
+			{
+				android.widget.FrameLayout.LayoutParams frameLayoutParams = (android.widget.FrameLayout.LayoutParams) layoutParams;
+				frameLayoutParams.setMargins((int) translation, frameLayoutParams.topMargin, -((int) translation), frameLayoutParams.bottomMargin);
+
+				// in frame layout we need to set a gravity for the margins
+				frameLayoutParams.gravity = Gravity.LEFT;
+
+				v.setLayoutParams(frameLayoutParams);
 			}
 			else
 			{
@@ -445,7 +478,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 				int paddingTop = v.getPaddingTop();
 				int paddingBottom = v.getPaddingBottom();
 
-				v.setPadding(((int) translation), paddingTop, -((int) translation), paddingBottom);
+				v.setPadding((int) translation, paddingTop, -((int) translation), paddingBottom);
 			}
 
 		}
@@ -489,9 +522,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					animationDuration = (long) (parentWidth - viewTranslationX);
 				}
 				v.animate()
-			//	.alpha(0)
-				.translationX(translationWidth).setDuration((long) (animationDuration / Math.abs(velocity)))
-					.setListener(new AnimatorListener()
+				// .alpha(0)
+					.translationX(translationWidth).setDuration((long) (animationDuration / Math.abs(velocity))).setListener(new AnimatorListener()
 					{
 
 						@Override
@@ -582,33 +614,25 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		}
 		else if (v != null)
 		{
-			android.widget.LinearLayout.LayoutParams linearLayoutParams = null;
-			android.widget.RelativeLayout.LayoutParams relativeLayoutParams = null;
-			try
-			{
-				linearLayoutParams = (android.widget.LinearLayout.LayoutParams) v.getLayoutParams();
-			}
-			catch (ClassCastException e)
-			{
-				try
-				{
-					relativeLayoutParams = (android.widget.RelativeLayout.LayoutParams) v.getLayoutParams();
-				}
-				catch (ClassCastException e2)
-				{
-					Log.w(TAG, "Fling content layout is not in linear or relative layout.");
-				}
-			}
+			android.view.ViewGroup.LayoutParams layoutParams = v.getLayoutParams();
 
-			if (linearLayoutParams != null)
+			if (layoutParams instanceof android.widget.LinearLayout.LayoutParams)
 			{
+				android.widget.LinearLayout.LayoutParams linearLayoutParams = (android.widget.LinearLayout.LayoutParams) layoutParams;
 				linearLayoutParams.setMargins(0, linearLayoutParams.topMargin, 0, linearLayoutParams.bottomMargin);
 				v.setLayoutParams(linearLayoutParams);
 			}
-			else if (relativeLayoutParams != null)
+			else if (layoutParams instanceof android.widget.RelativeLayout.LayoutParams)
 			{
+				android.widget.RelativeLayout.LayoutParams relativeLayoutParams = (android.widget.RelativeLayout.LayoutParams) layoutParams;
 				relativeLayoutParams.setMargins(0, relativeLayoutParams.topMargin, 0, relativeLayoutParams.bottomMargin);
 				v.setLayoutParams(relativeLayoutParams);
+			}
+			else if (layoutParams instanceof android.widget.FrameLayout.LayoutParams)
+			{
+				android.widget.FrameLayout.LayoutParams frameLayoutParams = (android.widget.FrameLayout.LayoutParams) layoutParams;
+				frameLayoutParams.setMargins(0, frameLayoutParams.topMargin, 0, frameLayoutParams.bottomMargin);
+				v.setLayoutParams(frameLayoutParams);
 			}
 			else
 			{

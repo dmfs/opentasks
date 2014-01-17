@@ -36,7 +36,7 @@
     </style>
 
     <style name="tasks_expandable_list_item">
-        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="task_group_text">
