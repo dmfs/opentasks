@@ -83,6 +83,9 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		{
 			Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(VIBRATION_DURATION);
+			
+			// if we don't disallow that, fling doesn't work on some devices
+			mListView.requestDisallowInterceptTouchEvent(true);
 		}
 	};
 
@@ -248,7 +251,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 						/*
 						 * don't set handled = true, that would stop the touch event making it impossible to select a flingable list element
 						 */
-
+						
 						// start vibration detection
 						mHandler.postDelayed(mVibrateRunnable, ViewConfiguration.getTapTimeout());
 					}
@@ -299,14 +302,16 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 						}
 
 						translateView(mFlingChildView, deltaX);
-						mListView.requestDisallowInterceptTouchEvent(true);
+						if (!wasFlinging)
+						{
+							mListView.requestDisallowInterceptTouchEvent(true);
 
-						// cancel the touch event for the listview, otherwise it might detect a "press and hold" event and highlight the view
-						MotionEvent cancelEvent = MotionEvent.obtain(event);
-						cancelEvent.setAction(MotionEvent.ACTION_CANCEL | (event.getActionIndex() << MotionEvent.ACTION_POINTER_INDEX_SHIFT));
-						mListView.onTouchEvent(cancelEvent);
-						cancelEvent.recycle();
-
+							// cancel the touch event for the listview, otherwise it might detect a "press and hold" event and highlight the view
+							MotionEvent cancelEvent = MotionEvent.obtain(event);
+							cancelEvent.setAction(MotionEvent.ACTION_CANCEL | (event.getActionIndex() << MotionEvent.ACTION_POINTER_INDEX_SHIFT));
+							mListView.onTouchEvent(cancelEvent);
+							cancelEvent.recycle();
+						}
 						handled = true;
 
 					}
