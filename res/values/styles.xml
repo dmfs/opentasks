@@ -68,7 +68,9 @@
         <item name="android:cacheColorHint">#00000000</item>
     </style>
 
-    <style name="task_list_container"></style>
+    <style name="task_list_container">
+        <item name="android:background">@android:color/white</item>
+    </style>
 
     <style name="task_group_list_item"></style>
 

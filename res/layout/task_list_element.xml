@@ -13,8 +13,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:minHeight="?android:attr/listPreferredItemHeight"
-            android:background="#FFC0C0C0" >
+            android:background="#FFC0C0C0"
+            android:minHeight="?android:attr/listPreferredItemHeight" >
 
             <TextView
                 android:id="@+id/fling_reveal_left"
@@ -23,13 +23,13 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:drawableLeft="@drawable/navigation_accept"
-                android:padding="8dp"
                 android:drawablePadding="8dp"
-                android:text="@string/fling_task_complete"
                 android:gravity="center_vertical"
-                android:visibility="gone"
+                android:padding="8dp"
+                android:text="@string/fling_task_complete"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/fling_reveal_right"
@@ -37,14 +37,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:gravity="center_vertical"
-                android:drawableRight="@drawable/content_edit"
                 android:drawablePadding="8dp"
+                android:drawableRight="@drawable/content_edit"
+                android:gravity="center_vertical"
                 android:padding="8dp"
                 android:text="@string/fling_task_edit"
-                android:visibility="gone"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <!--
@@ -55,10 +55,10 @@
 
         <FrameLayout
             android:id="@+id/flingContentView"
+            style="@style/task_list_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff"
-            android:duplicateParentState="true">
+            android:duplicateParentState="true" >
 
             <RelativeLayout
                 style="@style/tasks_expandable_list_item"
