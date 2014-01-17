@@ -354,8 +354,9 @@ public interface ByPriority
 	 * A descriptor that knows how to load elements in a list group ordered by due date.
 	 */
 	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (" + Instances.PRIORITY + ">=? and " + Instances.PRIORITY + " <= ? or " + Instances.PRIORITY + " is ? )",
-		Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 1, 2, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		Instances.VISIBLE + "=1 and (" + Instances.PRIORITY + ">=? and " + Instances.PRIORITY + " <= ? or ? is null and " + Instances.PRIORITY + " <= ? or "
+			+ Instances.PRIORITY + " is ?)", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 1, 2, 1, 2, 1)
+		.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * A descriptor for the "grouped by priority" view.
