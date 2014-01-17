@@ -39,13 +39,13 @@
 
     <style name="task_list_item_divider">
         <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
-        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginLeft">@dimen/task_list_left_margin</item>
         <item name="android:background">@drawable/task_divider</item>
     </style>
 
     <style name="task_list_group_divider">
         <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
-        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:layout_marginLeft">@dimen/task_list_left_margin</item>
         <item name="android:background">@android:color/holo_blue_light</item>
     </style>
     
