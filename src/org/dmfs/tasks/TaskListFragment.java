@@ -51,6 +51,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -746,7 +747,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 
 	@Override
-	public boolean onFling(ListView v, int pos, int direction)
+	public boolean onFlingEnd(ListView v, View listElement, int pos, int direction)
 	{
 		long packedPos = mExpandableListView.getExpandableListPosition(pos);
 		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
@@ -803,7 +804,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 
 	@Override
-	public void onFlingStart(ListView listView, View element, int position, int direction)
+	public void onFlingStart(ListView listView, View listElement, int position, int direction)
 	{
 
 		// control the visibility of the views that reveal behind a flinging element regarding the fling direction
@@ -814,17 +815,17 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 		if (rightFlingViewId != -1)
 		{
-			rightFlingView = (TextView) element.findViewById(rightFlingViewId);
+			rightFlingView = (TextView) listElement.findViewById(rightFlingViewId);
 		}
 		if (leftFlingViewId != -1)
 		{
-			leftFlingView = (TextView) element.findViewById(leftFlingViewId);
+			leftFlingView = (TextView) listElement.findViewById(leftFlingViewId);
 		}
+
+		Resources resources = getActivity().getResources();
 
 		// change title and icon regarding the task status
 		long packedPos = mExpandableListView.getExpandableListPosition(position);
-		Log.d(TAG, "################### position: " + position);
-		Log.d(TAG, "################### packedposition: " + packedPos);
 		if (ExpandableListView.getPackedPositionType(packedPos) == ExpandableListView.PACKED_POSITION_TYPE_CHILD)
 		{
 			ExpandableListAdapter listAdapter = mExpandableListView.getExpandableListAdapter();
@@ -839,58 +840,35 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 					if (taskStatus == Instances.STATUS_COMPLETED)
 					{
 						leftFlingView.setText(R.string.fling_task_delete);
-						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(getActivity().getResources().getDrawable(R.drawable.content_discard), null, null,
-							null);
+						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.content_discard), null, null, null);
 						rightFlingView.setText(R.string.fling_task_uncomplete);
-						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, getActivity().getResources().getDrawable(R.drawable.content_remove),
-							null);
+						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, resources.getDrawable(R.drawable.content_remove), null);
 					}
 					else
 					{
 						leftFlingView.setText(R.string.fling_task_complete);
-						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(getActivity().getResources().getDrawable(R.drawable.navigation_accept), null,
-							null, null);
+						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.navigation_accept), null, null, null);
 						rightFlingView.setText(R.string.fling_task_edit);
-						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, getActivity().getResources().getDrawable(R.drawable.content_edit),
-							null);
+						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, resources.getDrawable(R.drawable.content_edit), null);
 					}
 				}
 			}
 		}
 
-		switch (direction)
+		if (rightFlingView != null)
 		{
-			case FlingDetector.RIGHT_FLING:
-				if (rightFlingView != null)
-				{
-					rightFlingView.setVisibility(View.GONE);
-				}
-				if (leftFlingView != null)
-				{
-					leftFlingView.setVisibility(View.VISIBLE);
-				}
-				break;
-
-			case FlingDetector.LEFT_FLING:
-				if (rightFlingView != null)
-				{
-					rightFlingView.setVisibility(View.VISIBLE);
-				}
-				if (leftFlingView != null)
-				{
-					leftFlingView.setVisibility(View.GONE);
-				}
-				break;
-
-			default:
-				break;
+			rightFlingView.setVisibility(direction != FlingDetector.LEFT_FLING ? View.GONE : View.VISIBLE);
+		}
+		if (leftFlingView != null)
+		{
+			leftFlingView.setVisibility(direction != FlingDetector.RIGHT_FLING ? View.GONE : View.VISIBLE);
 		}
 
 	}
 
 
 	@Override
-	public void onFlingEnd(int direction)
+	public void onFlingCancel(int direction)
 	{
 		// TODO Auto-generated method stub
 

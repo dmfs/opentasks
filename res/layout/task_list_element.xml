@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="?android:attr/listPreferredItemHeight"
-            android:background="#FF808080" >
+            android:background="#FFC0C0C0" >
 
             <TextView
                 android:id="@+id/fling_reveal_left"
