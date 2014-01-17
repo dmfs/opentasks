@@ -63,10 +63,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 {
 
 	private static final String TAG = "TaskListActivity";
-	private static final String OPEN_CHILD_PREFERENCE_NAME = "open_child";
-	private static final String OPEN_GROUP_PREFERENCE_NAME = "open_group";
-	private static final String EXPANDED_GROUPS_PREFERENCE_NAME = "expanded_groups";
-
+	
 	private final static int REQUEST_CODE_NEW_TASK = 2924;
 
 	/**
@@ -108,21 +105,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			// mTaskListFrag.setActivateOnItemClick(true);
 			// mTaskListFrag.setListViewScrollbarPositionLeft(true);
 
-			mOpenTaskPrefs = getPreferences(MODE_PRIVATE);
-			int openChildPosition = mOpenTaskPrefs.getInt(OPEN_CHILD_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
-			int openGroupPosition = mOpenTaskPrefs.getInt(OPEN_GROUP_PREFERENCE_NAME, ExpandableListView.INVALID_POSITION);
-
-			Log.d(TAG, "Open Child Position : " + openChildPosition);
-			Log.d(TAG, "Open Group Position : " + openGroupPosition);
-
-			String openGroupsString = mOpenTaskPrefs.getString(EXPANDED_GROUPS_PREFERENCE_NAME, "");
-
-			String[] openGroupsArray = TextUtils.split(openGroupsString, "-");
-			long[] ids = new long[openGroupsArray.length];
-			for (int i = 0; i < openGroupsArray.length; i++)
-			{
-				ids[i] = Long.parseLong(openGroupsArray[i]);
-			}
 
 			/*
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
@@ -232,51 +214,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	public void onPause()
 	{
 		super.onPause();
-		if (mTaskListFrag != null)
-		{
-			int openChildPosition = mTaskListFrag.getOpenChildPosition();
-			int openGroupPosition = mTaskListFrag.getOpenGroupPosition();
-			SharedPreferences.Editor openPositsEditor = mOpenTaskPrefs.edit();
-
-			if (openChildPosition != ListView.INVALID_POSITION && openGroupPosition != ExpandableListView.INVALID_POSITION)
-			{
-
-				openPositsEditor.putInt(OPEN_CHILD_PREFERENCE_NAME, openChildPosition);
-				openPositsEditor.putInt(OPEN_GROUP_PREFERENCE_NAME, openGroupPosition);
-
-				Log.d(TAG, "Saved Child Pos : " + openChildPosition);
-				Log.d(TAG, "Saved Group Pos : " + openGroupPosition);
-			}
-			else
-			{
-				Log.d(TAG, "Nothing Selected. Nothing Saved");
-			}
-
-			long[] ids = mTaskListFrag.getExpandedGroups();
-
-			if (ids.length > 0)
-			{
-				StringBuilder openGroupBuilder = new StringBuilder();
-
-				for (long id : ids)
-				{
-					openGroupBuilder.append(Long.toString(id));
-					openGroupBuilder.append("-");
-				}
-
-				openPositsEditor.putString(EXPANDED_GROUPS_PREFERENCE_NAME, openGroupBuilder.substring(0, openGroupBuilder.length() - 1));
-			}
-			else
-			{
-				openPositsEditor.remove(EXPANDED_GROUPS_PREFERENCE_NAME);
-			}
-			openPositsEditor.commit();
-			Log.d(TAG, "Finished Saving the open positions");
-		}
-		else
-		{
-			Log.d(TAG, "taskListFrag is NULL!!");
-		}
 
 		// save pager state
 		if (mViewPager != null)
