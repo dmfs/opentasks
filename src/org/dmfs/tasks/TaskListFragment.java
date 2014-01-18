@@ -90,6 +90,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
 
 	private final static String ARG_INSTANCE_ID = "instance_id";
+	private final static String ARG_TWO_PANE_LAYOUT = "two_pane_layout";
 
 	/**
 	 * A filter to hide completed tasks.
@@ -124,6 +125,9 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Parameter(key = ARG_INSTANCE_ID)
 	private int mInstancePosition;
 
+	@Parameter(key = ARG_TWO_PANE_LAYOUT)
+	private boolean mTwoPaneLayout;
+
 	private Loader<Cursor> mCursorLoader;
 
 	/**
@@ -144,11 +148,12 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
-	public static TaskListFragment newInstance(int instancePosition)
+	public static TaskListFragment newInstance(int instancePosition, boolean twoPaneLayout)
 	{
 		TaskListFragment result = new TaskListFragment();
 		Bundle args = new Bundle();
 		args.putInt(ARG_INSTANCE_ID, instancePosition);
+		args.putBoolean(ARG_TWO_PANE_LAYOUT, twoPaneLayout);
 		result.setArguments(args);
 		return result;
 	}
@@ -209,6 +214,13 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		FlingDetector swiper = new FlingDetector(mExpandableListView, mGroupDescriptor.getElementViewDescriptor().getFlingContentViewId(), getActivity()
 			.getApplicationContext());
 		swiper.setOnFlingListener(this);
+
+		if (mTwoPaneLayout)
+		{
+			setListViewScrollbarPositionLeft(true);
+			setActivateOnItemClick(true);
+		}
+
 		return rootView;
 	}
 
@@ -325,7 +337,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void setActivateOnItemClick(boolean activateOnItemClick)
 	{
 		mExpandableListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
-
 	}
 
 

@@ -62,14 +62,8 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	@Override
 	public Fragment getItem(int position)
 	{
-		TaskListFragment fragment = TaskListFragment.newInstance(position);
+		TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
 		fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
-
-		if (mTwoPaneLayout)
-		{
-			fragment.setListViewScrollbarPositionLeft(true);
-		}
-
 		return fragment;
 	}
 
