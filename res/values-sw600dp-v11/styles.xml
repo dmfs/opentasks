@@ -1,0 +1,11 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+    On large devices we have to set a custom background since there doesn't seem to exist a way
+    to combine the default background for selectable and for activated items, but we need both.
+    -->
+    <style name="tasks_expandable_list_item">
+        <item name="android:background">@drawable/selectable_list_item</item>
+    </style>
+
+</resources>

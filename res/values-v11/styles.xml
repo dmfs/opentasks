@@ -35,13 +35,14 @@
         <item name="android:layout_marginLeft">0dp</item>
     </style>
 
+    <!-- In phone mode we don't need "activated" state, so use the device default for selectable items -->
     <style name="tasks_expandable_list_item">
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="task_group_text">
         <item name="android:textColor" tools:targetApi="14">@color/holo_blue_dark</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item> 
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
     <style name="task_list_item_text" parent="android:attr/textAppearanceMedium">
@@ -56,11 +57,9 @@
 
     <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
     </style>
-    
+
     <style name="task_list_widget_list">
         <item name="android:background">@drawable/widget_list_item_bg</item>
     </style>
-    
-    
 
 </resources>

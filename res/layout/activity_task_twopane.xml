@@ -20,34 +20,37 @@
     http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
     -->
 
-
-    <!--
-        <fragment
-        android:id="@+id/task_list"
-        android:name="org.dmfs.tasks.TaskListFragment"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:layout_width="0dip"
         android:layout_height="match_parent"
-        android:layout_weight="2" />
-    -->
+        android:layout_weight="2" >
 
-    <LinearLayout
-        android:layout_width="0dip" 
-        android:layout_height="match_parent"
-        android:layout_weight="2"
-        android:orientation="vertical">
-
-        <com.astuetz.PagerSlidingTabStrip
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="48dip" />
-
-        <android.support.v4.view.ViewPager
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/pager"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".MainActivity" />
-    </LinearLayout>
+            android:orientation="vertical" >
+
+            <com.astuetz.PagerSlidingTabStrip
+                android:id="@+id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="48dip" />
+
+            <android.support.v4.view.ViewPager
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context=".TaskListActivity" />
+        </LinearLayout>
+
+        <!-- Add a shade at the right side of the list view -->
+
+        <FrameLayout
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@drawable/vertical_shade_r_to_l" />
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/task_detail_container"
