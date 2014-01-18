@@ -29,17 +29,13 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ExpandableListView;
-import android.widget.ListView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -63,19 +59,22 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 {
 
 	private static final String TAG = "TaskListActivity";
-	
+
 	private final static int REQUEST_CODE_NEW_TASK = 2924;
+
+	/**
+	 * Array of {@link ExpandableGroupDescriptor}s.
+	 */
+	private final static ExpandableGroupDescriptor[] GROUP_DESCRIPTORS = new ExpandableGroupDescriptor[] { ByList.GROUP_DESCRIPTOR, ByDueDate.GROUP_DESCRIPTOR,
+		ByStartDate.GROUP_DESCRIPTOR, ByPriority.GROUP_DESCRIPTOR, ByProgress.GROUP_DESCRIPTOR };
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
 	private boolean mTwoPane;
 	private ViewTaskFragment mTaskDetailFrag;
-	private TaskListFragment mTaskListFrag;
-	private SharedPreferences mOpenTaskPrefs;
 	private ViewPager mViewPager;
 	private TaskGroupPagerAdapter mPagerAdapter;
-	private ExpandableGroupDescriptor[] mGroupDescriptors;
 
 	@Retain(permanent = true)
 	private int mCurrentPage;
@@ -90,21 +89,16 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 		if (findViewById(R.id.task_detail_container) != null)
 		{
-			// The detail container view will be present only in the
-			// large-screen layouts (res/values-large and
-			// res/values-sw600dp). If this view is present, then the
-			// activity should be in two-pane mode.
 			mTwoPane = true;
 
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
 
-			// create list fragment
+			// get list fragment
 			// mTaskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
-
-			// mTaskListFrag.setActivateOnItemClick(true);
 			// mTaskListFrag.setListViewScrollbarPositionLeft(true);
 
+			// mTaskListFrag.setActivateOnItemClick(true);
 
 			/*
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
@@ -113,33 +107,12 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag).commit();
 		}
 
-		// load the GroupDescriptors which describe how to display the different groups of tasks
-		mGroupDescriptors = new ExpandableGroupDescriptor[5];
-
-		ExpandableGroupDescriptor byListDescriptor = ByList.GROUP_DESCRIPTOR;
-		byListDescriptor.setTitle(R.string.task_group_all_title);
-
-		ExpandableGroupDescriptor byDueDateDescriptor = ByDueDate.GROUP_DESCRIPTOR;
-		byDueDateDescriptor.setTitle(R.string.task_group_due_title);
-
-		ExpandableGroupDescriptor byStartDateDescriptor = ByStartDate.GROUP_DESCRIPTOR;
-		byStartDateDescriptor.setTitle(R.string.task_group_start_title);
-
-		ExpandableGroupDescriptor byPriorityDescriptor = ByPriority.GROUP_DESCRIPTOR;
-		byPriorityDescriptor.setTitle(R.string.task_group_priority_title);
-
-		ExpandableGroupDescriptor byProgressDescriptor = ByProgress.GROUP_DESCRIPTOR;
-		byProgressDescriptor.setTitle(R.string.task_group_progress_title);
-
-		mGroupDescriptors[0] = byListDescriptor;
-		mGroupDescriptors[1] = byDueDateDescriptor;
-		mGroupDescriptors[2] = byStartDateDescriptor;
-		mGroupDescriptors[3] = byPriorityDescriptor;
-		mGroupDescriptors[4] = byProgressDescriptor;
+		// set up pager adapter
+		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), GROUP_DESCRIPTORS, getApplicationContext());
+		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 
 		// Setup ViewPager
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupDescriptors, getApplicationContext());
 		mViewPager.setAdapter(mPagerAdapter);
 		mViewPager.setCurrentItem(mCurrentPage);
 
@@ -194,7 +167,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	{
 		if (resultCode == Activity.RESULT_OK)
 		{
-
 			switch (requestCode)
 			{
 				case REQUEST_CODE_NEW_TASK:
@@ -205,7 +177,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 						onItemSelected(newTaskUri, false);
 					}
 			}
-
 		}
 	}
 
@@ -213,13 +184,12 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	@Override
 	public void onPause()
 	{
-		super.onPause();
-
-		// save pager state
+		// save pager state, in Android 2.x the state gets persited in onPause, so save the state before
 		if (mViewPager != null)
 		{
 			mCurrentPage = mViewPager.getCurrentItem();
 		}
+		super.onPause();
 	}
 
 
@@ -257,8 +227,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	}
 
 
+	@Override
 	public ExpandableGroupDescriptor getGroupDescriptor(int position)
 	{
-		return mGroupDescriptors[position];
+		return GROUP_DESCRIPTORS[position];
 	}
 }

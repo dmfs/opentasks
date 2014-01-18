@@ -362,6 +362,6 @@ public interface ByPriority
 	 * A descriptor for the "grouped by priority" view.
 	 */
 	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new PriorityCursorLoaderFactory(
-		PriorityCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		PriorityCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(R.string.task_group_priority_title);
 
 }

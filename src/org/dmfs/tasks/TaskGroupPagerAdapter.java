@@ -22,6 +22,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	private static final String TAG = "TaskGroupPager";
 	private final ExpandableGroupDescriptor[] mGroupDescriptors;
 	private final Context mContext;
+	private boolean mTwoPaneLayout;
 
 
 	/**
@@ -63,6 +64,12 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	{
 		TaskListFragment fragment = TaskListFragment.newInstance(position);
 		fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
+
+		if (mTwoPaneLayout)
+		{
+			fragment.setListViewScrollbarPositionLeft(true);
+		}
+
 		return fragment;
 	}
 
@@ -73,4 +80,9 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 		return mGroupDescriptors.length;
 	}
 
+
+	public void setTwoPaneLayout(boolean twoPane)
+	{
+		mTwoPaneLayout = twoPane;
+	}
 }

@@ -396,6 +396,7 @@ public interface ByStartDate
 	 * A descriptor for the "grouped by due date" view.
 	 */
 	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeStartCursorLoaderFactory(
-		TimeRangeStartCursorFactory.DEFAULT_PROJECTION), START_DATE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		TimeRangeStartCursorFactory.DEFAULT_PROJECTION), START_DATE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(
+		R.string.task_group_start_title);
 
 }

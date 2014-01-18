@@ -362,6 +362,6 @@ public interface ByProgress
 	 * A descriptor for the "grouped by priority" view.
 	 */
 	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new ProgressCursorLoaderFactory(
-		ProgressCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		ProgressCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(R.string.task_group_progress_title);
 
 }

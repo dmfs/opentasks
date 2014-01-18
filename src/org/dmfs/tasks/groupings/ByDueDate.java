@@ -384,6 +384,6 @@ public interface ByDueDate
 	 * A descriptor for the "grouped by due date" view.
 	 */
 	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeCursorLoaderFactory(
-		TimeRangeShortCursorFactory.DEFAULT_PROJECTION), DUE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		TimeRangeShortCursorFactory.DEFAULT_PROJECTION), DUE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(R.string.task_group_due_title);
 
 }
