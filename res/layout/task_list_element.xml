@@ -63,6 +63,7 @@
 
             <RelativeLayout
                 style="@style/tasks_expandable_list_item"
+                android:state_checkable ="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:duplicateParentState="true"
@@ -111,8 +112,8 @@
                             android:layout_marginRight="4dip"
                             android:layout_marginTop="2dip"
                             android:contentDescription="@string/cd_start_date"
-                            android:scaleType="fitEnd"
-                            android:src="@drawable/ic_start"
+                            android:scaleType="fitStart"
+                            android:src="@drawable/task_start"
                             android:visibility="gone" />
                     </LinearLayout>
 
@@ -139,8 +140,8 @@
                             android:layout_marginRight="6dip"
                             android:layout_marginTop="2dip"
                             android:contentDescription="@string/cd_due_date"
-                            android:scaleType="fitEnd"
-                            android:src="@drawable/ic_due"
+                            android:scaleType="fitStart"
+                            android:src="@drawable/task_due"
                             android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
