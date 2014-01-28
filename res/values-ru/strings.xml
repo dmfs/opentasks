@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<!-- Russian Translation (c) Nikita Tratorov, NiX Pro Soft, 21.08.2013 -->
+    <!-- Russian Translation update (c) Nikita Tratorov, NiXProSoft.Ru, 29.01.2014 -->
 	
     <!-- Manifest stuff -->
     <string name="app_name">Tasks</string>
@@ -13,19 +13,33 @@
     <string name="menu_add_task">Добавить задачу</string>
     <string name="menu_add_task_condensed">Новая</string>
     <string name="menu_show_completed">Показывать выполненные задачи</string>
+    <string name="menu_hide_completed">Скрывать выполненные</string>
     <string name="menu_show_completed_condensed">Показывать выполненные</string>
     <string name="menu_sync_now">Обновить</string>
     <string name="menu_sync_now_condensed">Обновить</string>
-    <string name="toast_task_completed">\"%1s\" выполнена.</string>
+    <string name="toast_task_completed">\"%1s\" выполнено.</string>
+    <string name="toast_task_uncompleted">\"%1s\" возобновлено.</string>
+	
+	
 
     <plurals name="number_of_tasks">
-		<!-- last number 1 -->
-        <item quantity="one">%d задача</item>
-		<!-- last number 2-4 -->
-		<item quantity="two">%d задачи</item>
-		<!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
-        <item quantity="other">%d задач</item>
+	<!-- last number 1 -->
+	<item quantity="one">%d задача</item>
+	<!-- last number 2-4 -->
+	<item quantity="two">%d задачи</item>
+	<!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
+	<item quantity="other">%d задач</item>
     </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Изменить</string>
+    <string name="activity_task_details_edit_task">Изменить задачу</string>
+    <string name="activity_task_details_delete">Удалить</string>
+    <string name="activity_task_details_delete_task">Удалить задачу</string>
+	
+	<!-- Task detail view missing strings -->
+	<string name="activity_task_details_button_edit">Изменить</string>
+	<string name="activity_task_details_button_delete">Удалить</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Редактирование задачи</string>
@@ -55,17 +69,46 @@
     <string name="task_timezone">Часовой пояс</string>
     <string name="task_all_day">Весь день</string>
 
-    <!-- Task list group titles -->
+    <!-- Task list due group titles -->
     <string name="task_group_no_due">Без срока</string>
     <string name="task_group_overdue">Просроченные</string>
-    <string name="task_group_due_today">До сегодня</string>
+    <string name="task_group_due_today">В течении дня</string>
     <string name="task_group_due_tomorrow">До завтра</string>
     <string name="task_group_due_within_7_days">На неделе</string>
     <string name="task_group_due_in_month">На %s</string>
     <string name="task_group_due_in_year">В %s году</string>
     <string name="task_group_due_in_future">В ближайшем будущем</string>
-    <string name="today">Сегодня</string>
+    
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Уже начаты</string>
+    <string name="task_group_start_today">Сегодня</string>
+    <string name="task_group_start_tomorrow">Завтра</string>
+    <string name="task_group_start_within_7_days">На неделе</string>
+    <string name="task_group_start_in_future">Когда-нибудь</string>
+    
+    <string name="today">Today</string>    
+    <string name="task_group_all_title">ВСЕ</string>
+    <string name="task_group_due_title">Срок</string>
+    <string name="task_group_completed_title">Выполнены</string>
+    <string name="task_group_start_title">Начало</string>
+    <string name="task_group_priority_title">Приоритет</string>
+    <string name="task_group_progress_title">Процесс</string>
+	
+    <!-- Task list progress group titles -->
+    <!-- With small piece of Russian's humour. -->
+    <string name="task_group_progress_0">Конь не валялся</string>
+    <string name="task_group_progress_40">Лед тронулся</string>
+    <string name="task_group_progress_60">Пересекли экватор</string>
+    <string name="task_group_progress_80">Последний рывок</string>
+    <string name="task_group_progress_100">Доска почета</string>
+    
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Срочные</string>
+    <string name="task_group_priority_medium">Важные</string>
+    <string name="task_group_priority_low">Напоследок</string>
+    <string name="task_group_priority_none">Не приоритетные</string>
 
+    
     <!-- Task editor labels -->
 
     <string name="action_save">Сохранить</string>
@@ -114,5 +157,15 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Текущие задачи</string>
+    
+     <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Завершить</string>
+    <string name="fling_task_edit">Изменить</string>
+    <string name="fling_task_delete">Удалить</string>
+    <string name="fling_task_uncomplete">Сбросить</string>
+    
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">значек для начальной даты задания</string>
+    <string name="cd_due_date">значек для окончания срока выполнения</string>
 
 </resources>
