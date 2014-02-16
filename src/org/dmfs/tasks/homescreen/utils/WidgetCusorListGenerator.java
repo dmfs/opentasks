@@ -62,15 +62,12 @@ public class WidgetCusorListGenerator
 
 			TaskListWidgetItem[] items = new TaskListWidgetItem[mTasksCursor.getCount()];
 			int itemIndex = 0;
-			mTasksCursor.moveToFirst();
 
-			while (!mTasksCursor.isAfterLast())
+			while (mTasksCursor.moveToNext())
 			{
 				items[itemIndex] = new TaskListWidgetItem(TaskFieldAdapters.TASK_ID.get(mTasksCursor), TaskFieldAdapters.TITLE.get(mTasksCursor),
-					TaskFieldAdapters.DUE.get(mTasksCursor), TaskFieldAdapters.LIST_COLOR.get(mTasksCursor), mTasksCursor.getInt(13) > 0);
-				mTasksCursor.moveToNext();
+					TaskFieldAdapters.DUE.get(mTasksCursor), TaskFieldAdapters.LIST_COLOR.get(mTasksCursor), TaskFieldAdapters.IS_CLOSED.get(mTasksCursor));
 				itemIndex++;
-
 			}
 			return items;
 		}

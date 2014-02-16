@@ -43,11 +43,12 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.Loader.OnLoadCompleteListener;
 import android.text.format.Time;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 
-/*
+/**
  * A service to keep the task list widget updated.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
@@ -55,6 +56,8 @@ import android.widget.RemoteViewsService;
 @SuppressLint("NewApi")
 public class TaskListWidgetUpdaterService extends RemoteViewsService
 {
+	private final static String TAG = "TaskListWidgetUpdaterService";
+
 	/** The context of the {@link Application}. */
 	private Context mContext;
 
@@ -90,13 +93,13 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 	public static class TaskListViewsFactory implements RemoteViewsService.RemoteViewsFactory, OnLoadCompleteListener<Cursor>, TimeChangeListener
 	{
 		/** The {@link TaskListWidgetItem} array which stores the tasks to be displayed. When the cursor loads it is updated. */
-		private TaskListWidgetItem[] items = null;
+		private TaskListWidgetItem[] mItems = null;
 
 		/** The {@link Context} of the {@link Application} to which this widget belongs. */
-		private Context context = null;
+		private final Context mContext;
 
 		/** The app widget id. */
-		private int mAppWidgetId;
+		private final int mAppWidgetId;
 
 		/** The loader for loading the due tasks. */
 		private CursorLoader mLoader;
@@ -105,10 +108,10 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		private Time mNow;
 
 		/** The resource from the {@link Application}. */
-		private Resources mResources;
+		private final Resources mResources;
 
 		/** The due date formatter. */
-		private DueDateFormatter mDueDateFormatter;
+		private final DueDateFormatter mDueDateFormatter;
 
 
 		/**
@@ -121,7 +124,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		 */
 		public TaskListViewsFactory(Context context, Intent intent)
 		{
-			this.context = context;
+			mContext = context;
 			mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			mResources = context.getResources();
 			mDueDateFormatter = new DueDateFormatter(context);
@@ -161,11 +164,11 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public int getCount()
 		{
-			if (items == null)
+			if (mItems == null)
 			{
 				return 0;
 			}
-			return (items.length);
+			return (mItems.length);
 		}
 
 
@@ -184,12 +187,12 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				return null;
 			}
 
-			RemoteViews row = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
+			RemoteViews row = new RemoteViews(mContext.getPackageName(), R.layout.task_list_widget_item);
 
-			row.setTextViewText(android.R.id.title, items[position].getTaskTitle());
-			row.setInt(R.id.task_list_color, "setBackgroundColor", items[position].getTaskColor());
+			row.setTextViewText(android.R.id.title, mItems[position].getTaskTitle());
+			row.setInt(R.id.task_list_color, "setBackgroundColor", mItems[position].getTaskColor());
 
-			Time dueDate = items[position].getDueDate();
+			Time dueDate = mItems[position].getDueDate();
 
 			if (dueDate != null)
 			{
@@ -203,7 +206,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				row.setTextViewText(android.R.id.text1, mDueDateFormatter.format(dueDate));
 
 				// highlight overdue dates & times
-				if (dueDate.before(mNow) & !items[position].getIsClosed())
+				if (dueDate.before(mNow) & !mItems[position].getIsClosed())
 				{
 					row.setTextColor(android.R.id.text1, mResources.getColor(android.R.color.holo_red_light));
 				}
@@ -217,7 +220,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				row.setTextViewText(android.R.id.text1, null);
 			}
 
-			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, items[position].getTaskId());
+			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, mItems[position].getTaskId());
 			Intent i = new Intent();
 			i.setData(taskUri);
 
@@ -291,9 +294,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		 */
 		public void initLoader()
 		{
-
 			// Search for events from now until some time in the future
-			mLoader = new CursorLoader(context, TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
+			mLoader = new CursorLoader(mContext, TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
 				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
 				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.INSTANCE_DUE + " is null, "
 				+ TaskContract.Instances.DEFAULT_SORT_ORDER);
@@ -311,10 +313,12 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public void onLoadComplete(Loader<Cursor> loader, Cursor cursor)
 		{
-			WidgetCusorListGenerator generator = new WidgetCusorListGenerator(cursor);
-			items = generator.getWidgetItems();
+			Log.d(TAG, "load complete for widget " + mAppWidgetId);
 
-			AppWidgetManager widgetManager = AppWidgetManager.getInstance(context);
+			WidgetCusorListGenerator generator = new WidgetCusorListGenerator(cursor);
+			mItems = generator.getWidgetItems();
+
+			AppWidgetManager widgetManager = AppWidgetManager.getInstance(mContext);
 			widgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.task_list_widget_lv);
 		}
 
