@@ -17,7 +17,7 @@
  * 
  */
 
-package org.dmfs.tasks.homescreen.utils;
+package org.dmfs.tasks.homescreen;
 
 import android.text.format.Time;
 
