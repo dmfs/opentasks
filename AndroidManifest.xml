@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="25"
-    android:versionName="1.0.8-pre1" >
+    android:versionCode="27"
+    android:versionName="1.0.8-pre3" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -113,6 +113,7 @@
         <provider
             android:name="org.dmfs.provider.tasks.TaskProvider"
             android:authorities="org.dmfs.tasks"
+            android:exported="true"
             android:label="@string/provider_label"
             android:multiprocess="false"
             android:readPermission="org.dmfs.permission.READ_TASKS"
