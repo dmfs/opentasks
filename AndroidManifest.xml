@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="22"
-    android:versionName="1.0.7-pre5" >
+    android:versionCode="27"
+    android:versionName="1.0.8-pre3" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="19" />
 
     <permission
         android:name="org.dmfs.permission.READ_TASKS"
@@ -113,6 +113,7 @@
         <provider
             android:name="org.dmfs.provider.tasks.TaskProvider"
             android:authorities="org.dmfs.tasks"
+            android:exported="true"
             android:label="@string/provider_label"
             android:multiprocess="false"
             android:readPermission="org.dmfs.permission.READ_TASKS"
@@ -130,6 +131,8 @@
         <receiver android:name="org.dmfs.tasks.homescreen.TaskListWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
@@ -148,6 +151,17 @@
             android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService"
             android:permission="android.permission.BIND_REMOTEVIEWS" >
         </service>
+
+        <receiver
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService$TaskListViewsFactory"
+            android:enabled="@bool/enable_widget_provider" >
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data android:scheme="content" />
+                <data android:host="org.dmfs.tasks" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

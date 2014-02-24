@@ -17,7 +17,7 @@
  * 
  */
 
-package org.dmfs.tasks.homescreen.utils;
+package org.dmfs.tasks.homescreen;
 
 import android.text.format.Time;
 
@@ -26,24 +26,25 @@ import android.text.format.Time;
  * This Class is used to for storing data of a single task in the task list widget.
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
+ * @author Marten Gajda<marten@dmfs.org>
  */
 public class TaskListWidgetItem
 {
 
 	/** The task title. */
-	private String mTaskTitle;
+	private final String mTaskTitle;
 
 	/** The due date. */
-	private Time mDueDate;
+	private final Time mDueDate;
 
 	/** The task color. */
-	private int mTaskColor;
+	private final int mTaskColor;
 
 	/** The task ID. */
-	private int mTaskId;
+	private final int mTaskId;
 
 	/** The flag to indicate if task is closed. */
-	private boolean mIsClosed;
+	private final boolean mIsClosed;
 
 
 	/**
@@ -82,18 +83,6 @@ public class TaskListWidgetItem
 
 
 	/**
-	 * Sets the task color.
-	 * 
-	 * @param taskColor
-	 *            the new task color
-	 */
-	public void setTaskColor(int taskColor)
-	{
-		mTaskColor = taskColor;
-	}
-
-
-	/**
 	 * Gets the due date.
 	 * 
 	 * @return the due date
@@ -105,18 +94,6 @@ public class TaskListWidgetItem
 
 
 	/**
-	 * Sets the due date.
-	 * 
-	 * @param dueDate
-	 *            the new due date
-	 */
-	public void setDueDate(Time dueDate)
-	{
-		mDueDate = dueDate;
-	}
-
-
-	/**
 	 * Gets the task title.
 	 * 
 	 * @return the task title
@@ -124,18 +101,6 @@ public class TaskListWidgetItem
 	public String getTaskTitle()
 	{
 		return mTaskTitle;
-	}
-
-
-	/**
-	 * Sets the task title.
-	 * 
-	 * @param taskTitle
-	 *            the new task title
-	 */
-	public void setTaskTitle(String taskTitle)
-	{
-		mTaskTitle = taskTitle;
 	}
 
 
@@ -158,17 +123,5 @@ public class TaskListWidgetItem
 	public boolean getIsClosed()
 	{
 		return mIsClosed;
-	}
-
-
-	/**
-	 * Sets the checks if is closed.
-	 * 
-	 * @param isClosed
-	 *            the new checks if is closed
-	 */
-	public void setIsClosed(boolean isClosed)
-	{
-		mIsClosed = isClosed;
 	}
 }

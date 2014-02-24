@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- disable the org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService$TaskListViewsFactory receiver in Android 2.x -->
+    <bool name="enable_widget_provider">false</bool>
+
+</resources>

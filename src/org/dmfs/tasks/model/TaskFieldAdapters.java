@@ -127,6 +127,11 @@ public final class TaskFieldAdapters
 	 * */
 	public static final IntegerFieldAdapter TASK_ID = new IntegerFieldAdapter(TaskContract.Tasks._ID);
 
+	/**
+	 * Adapter for the IS_CLOSED flag of a task.
+	 * */
+	public static final BooleanFieldAdapter IS_CLOSED = new BooleanFieldAdapter(TaskContract.Tasks.IS_CLOSED);
+
 
 	/**
 	 * Private constructor to prevent instantiation.

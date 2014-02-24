@@ -45,11 +45,11 @@ public final class ProgressCursorFactory extends AbstractCustomCursorFactory
 
 	public static final String[] DEFAULT_PROJECTION = new String[] { PROGRESS_ID, PROGRESS_MIN_STATUS, PROGRESS_MAX_STATUS, PROGRESS_TYPE,
 		PROGRESS_TITLE_RES_ID };
-	private static final Integer[] ROW_PROGRESS_TYPE_0 = new Integer[] { 0, null, 0, PROGRESS_TYPE_0, R.string.task_group_progress_0 };
-	private static final Integer[] ROW_PROGRESS_TYPE_40 = new Integer[] { 1, 1, 40, PROGRESS_TYPE_40, R.string.task_group_progress_40 };
-	private static final Integer[] ROW_PROGRESS_TYPE_60 = new Integer[] { 2, 41, 60, PROGRESS_TYPE_60, R.string.task_group_progress_60 };
-	private static final Integer[] ROW_PROGRESS_TYPE_80 = new Integer[] { 3, 61, 99, PROGRESS_TYPE_80, R.string.task_group_progress_80 };
-	private static final Integer[] ROW_PROGRESS_TYPE_100 = new Integer[] { 3, 100, 100, PROGRESS_TYPE_100, R.string.task_group_progress_100 };
+	private static final Integer[] ROW_PROGRESS_TYPE_0 = new Integer[] { 1, null, 0, PROGRESS_TYPE_0, R.string.task_group_progress_0 };
+	private static final Integer[] ROW_PROGRESS_TYPE_40 = new Integer[] { 2, 1, 40, PROGRESS_TYPE_40, R.string.task_group_progress_40 };
+	private static final Integer[] ROW_PROGRESS_TYPE_60 = new Integer[] { 3, 41, 60, PROGRESS_TYPE_60, R.string.task_group_progress_60 };
+	private static final Integer[] ROW_PROGRESS_TYPE_80 = new Integer[] { 4, 61, 99, PROGRESS_TYPE_80, R.string.task_group_progress_80 };
+	private static final Integer[] ROW_PROGRESS_TYPE_100 = new Integer[] { 5, 100, 100, PROGRESS_TYPE_100, R.string.task_group_progress_100 };
 
 
 	/**

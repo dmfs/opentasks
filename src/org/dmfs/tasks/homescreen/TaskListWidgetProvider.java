@@ -38,6 +38,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.text.format.Time;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 
@@ -49,6 +50,8 @@ import android.widget.RemoteViews;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProvider extends AppWidgetProvider
 {
+	private final static String TAG = "TaskListWidgetProvider";
+
 
 	/*
 	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
@@ -58,6 +61,8 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
+		super.onReceive(context, intent);
+
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_PROVIDER_CHANGED))
 		{
@@ -72,8 +77,6 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 				onUpdate(context, appWidgetManager, appWidgetIds);
 			}
 		}
-
-		super.onReceive(context, intent);
 	}
 
 
@@ -92,6 +95,8 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
+
 		if (android.os.Build.VERSION.SDK_INT < 11)
 		{
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
@@ -152,6 +157,8 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 		 */
 		for (int i = 0; i < appWidgetIds.length; i++)
 		{
+			Log.d(TAG, "updating widget " + i);
+
 			/** Create an Intent with the {@link RemoteViewsService } and pass it the Widget Id */
 			Intent remoteServiceIntent = new Intent(context, TaskListWidgetUpdaterService.class);
 			remoteServiceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
@@ -191,7 +198,5 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			/* Finally update the widget */
 			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
 		}
-
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 }

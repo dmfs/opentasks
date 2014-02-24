@@ -44,10 +44,10 @@ public final class PriorityCursorFactory extends AbstractCustomCursorFactory
 
 	public static final String[] DEFAULT_PROJECTION = new String[] { PRIORITY_ID, PRIORITY_MIN_STATUS, PRIORITY_MAX_STATUS, PRIORITY_TYPE,
 		PRIORITY_TITLE_RES_ID };
-	private static final Integer[] ROW_PRIORITY_NONE = new Integer[] { 0, null, 0, PRIORITY_TYPE_NONE, R.string.task_group_priority_none };
-	private static final Integer[] ROW_PRIORITY_HIGH = new Integer[] { 1, 1, 4, PRIORITY_TYPE_HIGH, R.string.task_group_priority_high };
-	private static final Integer[] ROW_PRIORITY_MEDIUM = new Integer[] { 2, 5, 5, PRIORITY_TYPE_MEDIUM, R.string.task_group_priority_medium };
-	private static final Integer[] ROW_PRIORITY_LOW = new Integer[] { 3, 6, 9, PRIORITY_TYPE_LOW, R.string.task_group_priority_low };
+	private static final Integer[] ROW_PRIORITY_NONE = new Integer[] { 1, null, 0, PRIORITY_TYPE_NONE, R.string.task_group_priority_none };
+	private static final Integer[] ROW_PRIORITY_HIGH = new Integer[] { 2, 1, 4, PRIORITY_TYPE_HIGH, R.string.task_group_priority_high };
+	private static final Integer[] ROW_PRIORITY_MEDIUM = new Integer[] { 3, 5, 5, PRIORITY_TYPE_MEDIUM, R.string.task_group_priority_medium };
+	private static final Integer[] ROW_PRIORITY_LOW = new Integer[] { 4, 6, 9, PRIORITY_TYPE_LOW, R.string.task_group_priority_low };
 
 
 	/**

@@ -48,7 +48,7 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 
 		// today row (including overdue)
 		long t2 = time.toMillis(false);
-		result.addRow(makeRow(3, TYPE_END_OF_TODAY, MIN_TIME, t2));
+		result.addRow(makeRow(1, TYPE_END_OF_TODAY, MIN_TIME, t2));
 
 		time.monthDay += 1;
 		time.yearDay += 1;
@@ -56,7 +56,7 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 
 		// tomorrow row
 		long t3 = time.toMillis(false);
-		result.addRow(makeRow(4, TYPE_END_OF_TOMORROW, t2, t3));
+		result.addRow(makeRow(2, TYPE_END_OF_TOMORROW, t2, t3));
 
 		time.monthDay += 5;
 		time.yearDay += 5;
@@ -64,7 +64,7 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 
 		// next week row
 		long t4 = time.toMillis(false);
-		result.addRow(makeRow(5, TYPE_END_IN_7_DAYS, t3, t4));
+		result.addRow(makeRow(3, TYPE_END_IN_7_DAYS, t3, t4));
 
 		time.monthDay += 1;
 		time.normalize(true);
@@ -72,7 +72,7 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 		// open past future for future tasks (including tasks without dates)
 		if (mProjectionList.contains(RANGE_OPEN_FUTURE))
 		{
-			result.addRow(makeRow(6, TYPE_NO_END, t4, null));
+			result.addRow(makeRow(4, TYPE_NO_END, t4, null));
 		}
 
 		return result;
