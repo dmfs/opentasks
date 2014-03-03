@@ -12,15 +12,23 @@
     <string name="menu_add_task">Dodaj zadanie</string>
     <string name="menu_add_task_condensed">Dodaj</string>
     <string name="menu_show_completed">Pokazuj zakończone</string>
+    <string name="menu_hide_completed">Ukryj zakończone</string>
     <string name="menu_show_completed_condensed">Pokaż zakończone</string>
     <string name="menu_sync_now">Odśwież</string>
     <string name="menu_sync_now_condensed">Odśwież</string>
     <string name="toast_task_completed">\"%1s\" zrealizowane.</string>
+    <string name="toast_task_uncompleted">\"%1s\" ponownie otwarte.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d zadanie</item>
         <item quantity="other">%d zadań</item>
     </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Edytuj</string>
+    <string name="activity_task_details_edit_task">Edytuj zadanie</string>
+    <string name="activity_task_details_delete">Usuń</string>
+    <string name="activity_task_details_delete_task">Usuń zadanie</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edytuj zadanie</string>
@@ -60,6 +68,32 @@
     <string name="task_group_due_in_year">W roku %s</string>
     <string name="task_group_due_in_future">W przyszłości</string>
     <string name="today">Dziś</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Już rozpoczęte</string>
+    <string name="task_group_start_today">Dziś</string>
+    <string name="task_group_start_tomorrow">Jutro</string>
+    <string name="task_group_start_within_7_days">Kiedyś</string>
+    <string name="task_group_start_in_future">Później</string>
+    <string name="task_group_due_title">Konieczne</string>
+    <string name="task_group_all_title">Listy</string>
+    <string name="task_group_completed_title">Zakończone</string>
+    <string name="task_group_start_title">Rozpocznij</string>
+    <string name="task_group_priority_title">Priorytet</string>
+    <string name="task_group_progress_title">Postęp</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Nie zrealizowane</string>
+    <string name="task_group_progress_40">Rozpoczęte</string>
+    <string name="task_group_progress_60">Połowa wykonana</string>
+    <string name="task_group_progress_80">Prawie zakończone</string>
+    <string name="task_group_progress_100">Zakończone</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Wysoki priorytet</string>
+    <string name="task_group_priority_medium">Średni priorytet</string>
+    <string name="task_group_priority_low">Niski priorytet</string>
+    <string name="task_group_priority_none">Bez priorytetu</string>
 
     <!-- Task editor labels -->
 
@@ -109,5 +143,15 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Bieżące zadania</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Zakończone</string>
+    <string name="fling_task_edit">Edytuj</string>
+    <string name="fling_task_delete">Skasuj</string>
+    <string name="fling_task_uncomplete">Nie zakończone</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">ikonka rozpoczęcia daty zadania</string>
+    <string name="cd_due_date">ikonka terminu zakończenia zadania</string>
 
 </resources>
