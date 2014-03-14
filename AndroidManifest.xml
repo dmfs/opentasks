@@ -29,6 +29,7 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -128,6 +129,11 @@
                 android:value="org.dmfs.tasks.TaskListActivity" />
         </activity>
 
+        <service
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" >
+        </service>
+
         <receiver android:name="org.dmfs.tasks.homescreen.TaskListWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -146,12 +152,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/task_widget_info" />
         </receiver>
-
-        <service
-            android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService"
-            android:permission="android.permission.BIND_REMOTEVIEWS" >
-        </service>
-
+        <!-- Start the Service if applicable on boot -->
+        <receiver android:name="org.dmfs.provider.tasks.handler.AlarmNotificationHandler" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService$TaskListViewsFactory"
             android:enabled="@bool/enable_widget_provider" >
@@ -160,6 +166,12 @@
 
                 <data android:scheme="content" />
                 <data android:host="org.dmfs.tasks" />
+            </intent-filter>
+        </receiver>
+        <!-- custom alarm receivers -->
+        <receiver android:name=".AlarmBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="org.dmfs.android.tasks.taskdue" />
             </intent-filter>
         </receiver>
     </application>

@@ -154,5 +154,8 @@
 	<!-- Accessibility content description -->
     <string name="cd_start_date">Symbol für das Startdatum der Aufgabe</string>
     <string name="cd_due_date">Symbol für das Fälligkeitsdatum der Aufgabe</string>
+    
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">Aufgabe fällig</string>
 
 </resources>

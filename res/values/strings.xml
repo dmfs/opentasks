@@ -154,5 +154,8 @@
     <!-- Accessibility content description -->
     <string name="cd_start_date">icon for the start date of the task</string>
     <string name="cd_due_date">icon for the due date of the task</string>
+    
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">Task due</string>
 	
 </resources>
