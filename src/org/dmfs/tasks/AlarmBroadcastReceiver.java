@@ -63,7 +63,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		mBuilder.setContentIntent(resultPendingIntent);
-		notificationManager.notify(0, mBuilder.build());
+		notificationManager.notify((int) taskId, mBuilder.build());
 
 	}
 
