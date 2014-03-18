@@ -20,8 +20,6 @@ package org.dmfs.tasks;
 import org.dmfs.android.retentionmagic.FragmentActivity;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.provider.tasks.Utils;
-import org.dmfs.provider.tasks.handler.AlarmNotificationHandler;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.ByPriority;
@@ -214,7 +212,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		MenuItem item = menu.findItem(R.id.menu_alarms);
 		if (item != null)
 		{
-			item.setChecked(Utils.getAlarmPreference(this));
+			item.setChecked(AlarmBroadcastReceiver.getAlarmPreference(this));
 		}
 
 		return true;
@@ -233,15 +231,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		else if (item.getItemId() == R.id.menu_alarms)
 		{
 			// set and save state
-			boolean syncEnabled = !Utils.getAlarmPreference(this);
-			item.setChecked(syncEnabled);
-			Utils.setAlarmPreference(this, syncEnabled);
-
-			// arm alarms
-			if (syncEnabled)
-			{
-				new AlarmNotificationHandler().checkSetUpcomingDueAlarmNow();
-			}
+			boolean activatedAlarms = !item.isChecked();
+			item.setChecked(activatedAlarms);
+			AlarmBroadcastReceiver.setAlarmPreference(this, activatedAlarms);
 			return true;
 		}
 		else

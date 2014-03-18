@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -24,6 +25,10 @@ import android.support.v4.app.TaskStackBuilder;
 public class AlarmBroadcastReceiver extends BroadcastReceiver
 {
 
+	private static String PREFS_NAME = "alarm_preferences";
+	private static String PREF_AlARM_ACTIVATED = "preference_alarm_activated";
+
+
 	/**
 	 * Is called on an incoming alarm broadcast. Creates a notifications for this alarm.
 	 * 
@@ -31,39 +36,44 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		long taskId = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_ID, 0);
-		// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
-		String title = intent.getStringExtra(AlarmNotificationHandler.EXTRA_TASK_TITLE);
+		// continue if alarms where enabled
+		if (getAlarmPreference(context))
+		{
+			long taskId = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_ID, 0);
+			// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
+			String title = intent.getStringExtra(AlarmNotificationHandler.EXTRA_TASK_TITLE);
 
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		// build notification
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_status_completed)
-			.setContentTitle(context.getString(R.string.notification_task_due_title)).setContentText(title);
+			// build notification
+			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_status_completed)
+				.setContentTitle(context.getString(R.string.notification_task_due_title)).setContentText(title);
 
-		// dismisses the notification on click
-		mBuilder.setAutoCancel(true);
+			// dismisses the notification on click
+			mBuilder.setAutoCancel(true);
 
-		// set status bar test
-		mBuilder.setTicker(title);
+			// set status bar test
+			mBuilder.setTicker(title);
 
-		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(context, ViewTaskActivity.class);
-		resultIntent.setData(getUriForTask(taskId));
+			// Creates an explicit intent for an Activity in your app
+			Intent resultIntent = new Intent(context, ViewTaskActivity.class);
+			resultIntent.setData(getUriForTask(taskId));
 
-		// The stack builder object will contain an artificial back stack for the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder.addParentStack(ViewTaskActivity.class);
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+			// The stack builder object will contain an artificial back stack for the
+			// started Activity.
+			// This ensures that navigating backward from the Activity leads out of
+			// your application to the Home screen.
+			TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+			// Adds the back stack for the Intent (but not the Intent itself)
+			stackBuilder.addParentStack(ViewTaskActivity.class);
+			// Adds the Intent that starts the Activity to the top of the stack
+			stackBuilder.addNextIntent(resultIntent);
+			PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-		mBuilder.setContentIntent(resultPendingIntent);
-		notificationManager.notify((int) taskId, mBuilder.build());
+			mBuilder.setContentIntent(resultPendingIntent);
+			notificationManager.notify((int) taskId, mBuilder.build());
+
+		}
 
 	}
 
@@ -78,5 +88,23 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 	private Uri getUriForTask(long taskId)
 	{
 		return Uri.withAppendedPath(Tasks.CONTENT_URI, "/" + taskId);
+	}
+
+
+	public static void setAlarmPreference(Context context, boolean value)
+	{
+		SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean(PREF_AlARM_ACTIVATED, value);
+		editor.commit();
+
+	}
+
+
+	public static boolean getAlarmPreference(Context context)
+	{
+		SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+		return settings.getBoolean(PREF_AlARM_ACTIVATED, true);
+
 	}
 }
