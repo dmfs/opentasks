@@ -129,6 +129,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
     <string name="visible_task_lists">Displayed Lists</string>
+    <string name="enable_alarms">Notifications</string>
     <string name="synced_task_lists">Synchronized Lists</string>
 
     <!-- Label for Expandable Group Descriptors -->
