@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="29"
-    android:versionName="1.0.8" >
+    android:versionCode="30"
+    android:versionName="1.0.9-pre1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -30,7 +30,8 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>  
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" >
+    </uses-permission>
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -157,7 +158,7 @@
         <receiver android:name="org.dmfs.provider.tasks.handler.AlarmNotificationHandler" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <receiver
