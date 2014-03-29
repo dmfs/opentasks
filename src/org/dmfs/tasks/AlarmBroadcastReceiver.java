@@ -26,7 +26,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 {
 
 	private static String PREFS_NAME = "alarm_preferences";
-	private static String PREF_AlARM_ACTIVATED = "preference_alarm_activated";
+	private static String PREF_ALARM_ACTIVATED = "preference_alarm_activated";
 
 
 	/**
@@ -95,7 +95,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 	{
 		SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putBoolean(PREF_AlARM_ACTIVATED, value);
+		editor.putBoolean(PREF_ALARM_ACTIVATED, value);
 		editor.commit();
 
 	}
@@ -104,7 +104,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 	public static boolean getAlarmPreference(Context context)
 	{
 		SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-		return settings.getBoolean(PREF_AlARM_ACTIVATED, true);
+		return settings.getBoolean(PREF_ALARM_ACTIVATED, true);
 
 	}
 }
