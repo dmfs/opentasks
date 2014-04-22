@@ -5,6 +5,7 @@ import java.net.URI;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.handler.AlarmNotificationHandler;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -46,7 +47,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 			// build notification
-			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_status_completed)
+			NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
 				.setContentTitle(context.getString(R.string.notification_task_due_title)).setContentText(title);
 
 			// dismisses the notification on click
@@ -54,6 +55,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 
 			// set status bar test
 			mBuilder.setTicker(title);
+
+			// enable light, sound and vibration
+			mBuilder.setDefaults(Notification.DEFAULT_ALL);
 
 			// Creates an explicit intent for an Activity in your app
 			Intent resultIntent = new Intent(context, ViewTaskActivity.class);
