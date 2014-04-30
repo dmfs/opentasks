@@ -181,6 +181,11 @@
                 <data android:host="org.dmfs.tasks" />
             </intent-filter>
         </receiver>
+        <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
+            </intent-filter>
+        </receiver>
         <!-- custom alarm receivers -->
         <receiver android:name=".AlarmBroadcastReceiver" >
             <intent-filter>
