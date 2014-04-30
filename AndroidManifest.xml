@@ -155,9 +155,19 @@
                 android:resource="@xml/task_widget_info" />
         </receiver>
         <!-- Start the Service if applicable on boot -->
-        <receiver android:name="org.dmfs.provider.tasks.handler.AlarmNotificationHandler" >
+        <receiver android:name="org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
@@ -175,6 +185,9 @@
         <receiver android:name=".AlarmBroadcastReceiver" >
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.taskdue" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.android.tasks.taskstart" />
             </intent-filter>
         </receiver>
     </application>

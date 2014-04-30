@@ -158,5 +158,6 @@
     
     <!-- Strings for notification -->
     <string name="notification_task_due_title">Task due</string>
+    <string name="notification_task_start_title">Task starts</string>
 	
 </resources>
