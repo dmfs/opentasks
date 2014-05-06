@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="30"
-    android:versionName="1.0.9-pre1" >
+    android:versionCode="36"
+    android:versionName="1.0.9-pre6" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -190,10 +190,14 @@
         <receiver android:name=".AlarmBroadcastReceiver" >
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.taskdue" />
+                <data android:scheme="content" />
+                <data android:host="org.dmfs.tasks" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.taskstart" />
-            </intent-filter>
+                <data android:scheme="content" />
+                <data android:host="org.dmfs.tasks" />
+                </intent-filter>
         </receiver>
     </application>
 
