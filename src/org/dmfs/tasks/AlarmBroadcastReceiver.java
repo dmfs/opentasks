@@ -1,8 +1,5 @@
 package org.dmfs.tasks;
 
-import java.net.URI;
-
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 
@@ -13,7 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -63,16 +59,14 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				mBuilder.setDefaults(Notification.DEFAULT_ALL);
 
 				// Creates an explicit intent for an Activity in your app
-				Intent resultIntent = new Intent(context, ViewTaskActivity.class);
-				resultIntent.setData(getUriForTask(taskId));
+				Intent resultIntent = new Intent(Intent.ACTION_VIEW);
+				resultIntent.setData(intent.getData());
 
 				// The stack builder object will contain an artificial back stack for the
 				// started Activity.
 				// This ensures that navigating backward from the Activity leads out of
 				// your application to the Home screen.
 				TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-				// Adds the back stack for the Intent (but not the Intent itself)
-				stackBuilder.addParentStack(ViewTaskActivity.class);
 				// Adds the Intent that starts the Activity to the top of the stack
 				stackBuilder.addNextIntent(resultIntent);
 				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -106,16 +100,14 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				mBuilder.setDefaults(Notification.DEFAULT_ALL);
 
 				// Creates an explicit intent for an Activity in your app
-				Intent resultIntent = new Intent(context, ViewTaskActivity.class);
-				resultIntent.setData(getUriForTask(taskId));
+				Intent resultIntent = new Intent(Intent.ACTION_VIEW);
+				resultIntent.setData(intent.getData());
 
 				// The stack builder object will contain an artificial back stack for the
 				// started Activity.
 				// This ensures that navigating backward from the Activity leads out of
 				// your application to the Home screen.
 				TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-				// Adds the back stack for the Intent (but not the Intent itself)
-				stackBuilder.addParentStack(ViewTaskActivity.class);
 				// Adds the Intent that starts the Activity to the top of the stack
 				stackBuilder.addNextIntent(resultIntent);
 				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -126,19 +118,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 			}
 		}
 
-	}
-
-
-	/**
-	 * Helper that constructs a task {@link URI} for a given task id.
-	 * 
-	 * @param taskId
-	 *            The task row id.
-	 * @return The task {@link URI}.
-	 */
-	private Uri getUriForTask(long taskId)
-	{
-		return Uri.withAppendedPath(Tasks.CONTENT_URI, "/" + taskId);
 	}
 
 
