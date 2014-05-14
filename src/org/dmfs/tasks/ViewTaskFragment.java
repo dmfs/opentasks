@@ -43,6 +43,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 /**
@@ -187,7 +188,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
-		mContent = (ViewGroup) rootView.findViewById(R.id.content);
+		mContent = (ViewGroup) rootView.findViewById(R.id.checklist);
 
 		if (savedInstanceState != null)
 		{
@@ -216,6 +217,19 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	}
 
 
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		if (mContentSet.isUpdate())
+		{
+			Context activity = getActivity();
+			mContentSet.persist(activity);
+			Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
+		}
+	}
+
+
 	/**
 	 * Load the task with the given {@link Uri} in the detail view.
 	 * <p>
@@ -235,6 +249,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			 */
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
 
+			if (mContentSet.isUpdate())
+			{
+				Context activity = getActivity();
+				mContentSet.persist(activity);
+				Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
+			}
 		}
 
 		Uri oldUri = mTaskUri;

@@ -26,6 +26,7 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
@@ -119,6 +120,15 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 
 
 	/**
+	 * Request the view to update the value {@link ContentSet} with all pending changes if any. This is usually called before a task is about to be saved.
+	 */
+	public void updateValues()
+	{
+		// nothing by default
+	}
+
+
+	/**
 	 * Return a custom background color to set for this widget, can be <code>null</code> if this widget doesn't use a custom background color.
 	 * 
 	 * @return A custom color or <code>null</code>.
@@ -149,6 +159,7 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	 * @param options
 	 *            Any {@link LayoutOptions}.
 	 */
+	@SuppressLint("DefaultLocale")
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions options)
 	{
 		mLayoutOptions = options;

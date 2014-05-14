@@ -34,6 +34,8 @@ public class DefaultModel extends Model
 	private final Context mContext;
 	private final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view);
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
+	private final static LayoutDescriptor CHECKLIST_VIEW = new LayoutDescriptor(R.layout.checklist_field_view);
+	private final static LayoutDescriptor CHECKLIST_EDIT = new LayoutDescriptor(R.layout.checklist_field_editor);
 	private final static LayoutDescriptor CHOICES_VIEW = new LayoutDescriptor(R.layout.choices_field_view);
 	private final static LayoutDescriptor CHOICES_EDIT = new LayoutDescriptor(R.layout.choices_field_editor);
 	private final static LayoutDescriptor PROGRESS_VIEW = new LayoutDescriptor(R.layout.percentage_field_view);
@@ -92,8 +94,8 @@ public class DefaultModel extends Model
 		mFields.add(new FieldDescriptor(mContext, R.string.task_location, TaskFieldAdapters.LOCATION).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
 
 		// description
-		mFields
-			.add(new FieldDescriptor(mContext, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(CHECKLIST_VIEW).setEditorLayout(
+			CHECKLIST_EDIT));
 
 		// start
 		mFields.add(new FieldDescriptor(mContext, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));

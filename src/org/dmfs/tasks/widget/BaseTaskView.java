@@ -69,4 +69,22 @@ public abstract class BaseTaskView extends LinearLayout
 			}
 		}
 	}
+
+
+	/**
+	 * Request the view to update the value ContentSet with all pending changes.
+	 */
+	public void updateValues()
+	{
+		int children = this.getChildCount();
+		for (int i = 0; i < children; ++i)
+		{
+			View child = getChildAt(i);
+			if (child instanceof AbstractFieldView)
+			{
+				((AbstractFieldView) child).updateValues();
+			}
+		}
+
+	}
 }

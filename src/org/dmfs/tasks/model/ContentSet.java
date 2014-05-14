@@ -191,6 +191,8 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		}
 		// else nothing to do
 
+		mAfterContentValues = null;
+
 		return mUri;
 	}
 
@@ -357,8 +359,8 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 
 	/**
-	 * Start a new bulk update. You should use this when you update multiple values at once and you don't want to send an update notification every time.
-	 * When you're done call {@link #finishBulkUpdate()} which sned the notifications (unless there is another bulk update in progress).
+	 * Start a new bulk update. You should use this when you update multiple values at once and you don't want to send an update notification every time. When
+	 * you're done call {@link #finishBulkUpdate()} which sned the notifications (unless there is another bulk update in progress).
 	 */
 	public void startBulkUpdate()
 	{

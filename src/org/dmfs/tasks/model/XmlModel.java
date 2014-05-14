@@ -303,8 +303,8 @@ public class XmlModel extends Model
 		FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.string.task_title, R.layout.text_field_view, R.layout.text_field_editor));
 		FIELD_INFLATER_MAP.put("location", new FieldInflater(TaskFieldAdapters.LOCATION, R.string.task_location, R.layout.text_field_view,
 			R.layout.text_field_editor));
-		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.string.task_description, R.layout.text_field_view,
-			R.layout.text_field_editor));
+		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.string.task_description, R.layout.checklist_field_view,
+			R.layout.checklist_field_editor));
 
 		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater(TaskFieldAdapters.DTSTART, R.string.task_start, R.layout.time_field_view,
 			R.layout.time_field_editor));

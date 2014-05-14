@@ -177,7 +177,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		Log.v(TAG, "On create view");
 		View rootView = inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
-		mContent = (ViewGroup) rootView.findViewById(R.id.content);
+		mContent = (ViewGroup) rootView.findViewById(R.id.checklist);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 
 		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri) && mTaskUri != null;
@@ -457,6 +457,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		int resultCode = Activity.RESULT_CANCELED;
 		Intent result = null;
 		int toastId = -1;
+
+		mEditor.updateValues();
 
 		if (mValues.isInsert() || mValues.isUpdate())
 		{
