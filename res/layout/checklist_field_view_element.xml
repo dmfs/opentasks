@@ -4,3 +4,5 @@
     style="@style/dark_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
+
+<!-- FIXME: for some reason this one uses the dark theme (different checkbox and white text). It should use the default theme which is the light one -->

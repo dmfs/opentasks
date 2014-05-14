@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="36"
-    android:versionName="1.0.9-pre6" >
+    android:versionCode="40"
+    android:versionName="1.0.9" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -136,7 +136,9 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" >
         </service>
 
-        <receiver android:name="org.dmfs.tasks.homescreen.TaskListWidgetProvider" >
+        <receiver
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetProvider"
+            android:label="@string/task_list_widget_title" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -161,6 +163,34 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/task_widget_info" />
+        </receiver>
+        <receiver
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLarge"
+            android:label="@string/task_list_widget_title_4x4" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
+
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:scheme="content" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/task_widget_info_large" />
         </receiver>
         <!-- Start the Service if applicable on boot -->
         <receiver android:name="org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler" >
