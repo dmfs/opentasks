@@ -427,9 +427,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		{
 			// the ContentSet has been (re-)loaded, load the model of this task
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
-			if (VERSION.SDK_INT >= 11)
+			Activity activity = getActivity();
+			if (VERSION.SDK_INT >= 11 && activity != null)
 			{
-				getActivity().invalidateOptionsMenu();
+				activity.invalidateOptionsMenu();
 			}
 		}
 	}
