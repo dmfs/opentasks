@@ -188,7 +188,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
-		mContent = (ViewGroup) rootView.findViewById(R.id.checklist);
+		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
 		if (savedInstanceState != null)
 		{
