@@ -162,4 +162,7 @@
     <string name="notification_task_due_title">Aufgabe fällig</string>
     <string name="notification_task_start_title">Aufgabe startet</string>
 
+    <!-- Checklist checkbox label -->
+    <string name="checklist_label">Als Checkliste</string>
+
 </resources>
