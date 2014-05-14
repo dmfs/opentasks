@@ -109,5 +109,6 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Tareas actuales</string>
-    
+    <string name="task_list_widget_title_4x4">Tareas actuales 4x4</string>
+
 </resources>

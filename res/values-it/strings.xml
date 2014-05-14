@@ -118,5 +118,6 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Attività correnti</string>
+    <string name="task_list_widget_title_4x4">Attività correnti 4x4</string>
 
 </resources>

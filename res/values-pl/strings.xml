@@ -147,7 +147,7 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Bieżące zadania</string>
-
+    <string name="task_list_widget_title_4x4">Bieżące zadania 4x4</string>
     <!-- Strings for fling actions -->
     <string name="fling_task_complete">Zakończone</string>
     <string name="fling_task_edit">Edytuj</string>
