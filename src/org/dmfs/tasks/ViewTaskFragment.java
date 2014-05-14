@@ -21,11 +21,13 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -34,6 +36,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -71,8 +74,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
 			Tasks.LIST_NAME)
-		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
-		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
+		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY,
+			Tasks.IS_CLOSED).addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
 	/**
 	 * The {@link Uri} of the current task in the view.
@@ -221,11 +224,16 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	public void onPause()
 	{
 		super.onPause();
-		if (mContentSet.isUpdate())
+		persistTask();
+	}
+
+
+	private void persistTask()
+	{
+		if (mContentSet != null && mContentSet.isUpdate())
 		{
 			Context activity = getActivity();
 			mContentSet.persist(activity);
-			Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -249,12 +257,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			 */
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
 
-			if (mContentSet.isUpdate())
-			{
-				Context activity = getActivity();
-				mContentSet.persist(activity);
-				Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
-			}
+			persistTask();
 		}
 
 		Uri oldUri = mTaskUri;
@@ -353,6 +356,17 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		if (mTaskUri != null)
 		{
 			inflater.inflate(R.menu.view_task_fragment_menu, menu);
+
+			if (mContentSet != null)
+			{
+				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet))
+				{
+					// can not complete task since it's already closed, disable menu item
+					MenuItem item = menu.findItem(R.id.complete_task);
+					item.setEnabled(false);
+					item.setVisible(false);
+				}
+			}
 		}
 	}
 
@@ -389,6 +403,15 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 				}).setMessage(R.string.confirm_delete_message).create().show();
 			return true;
 		}
+		else if (itemId == R.id.complete_task)
+		{
+			TaskFieldAdapters.STATUS.set(mContentSet, Tasks.STATUS_COMPLETED);
+			persistTask();
+			Toast.makeText(mAppContext, getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)), Toast.LENGTH_SHORT).show();
+			// at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
+			mCallback.onDelete(mTaskUri);
+			return true;
+		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
@@ -396,6 +419,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	}
 
 
+	@SuppressLint("NewApi")
 	@Override
 	public void onContentLoaded(ContentSet contentSet)
 	{
@@ -403,6 +427,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		{
 			// the ContentSet has been (re-)loaded, load the model of this task
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			if (VERSION.SDK_INT >= 11)
+			{
+				getActivity().invalidateOptionsMenu();
+			}
 		}
 	}
 

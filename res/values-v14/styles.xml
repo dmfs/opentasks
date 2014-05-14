@@ -46,7 +46,7 @@
     <style name="task_list_group_divider">
         <item name="android:background">@android:color/holo_blue_light</item>
     </style>
-    
+
     <style name="widget_header_divider">
         <item name="android:background">@android:color/holo_blue_bright</item>
     </style>

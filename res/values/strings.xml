@@ -29,6 +29,8 @@
     <string name="activity_task_details_edit_task">Edit task</string>
     <string name="activity_task_details_delete">Delete</string>
     <string name="activity_task_details_delete_task">Delete task</string>
+    <string name="activity_task_details_complete">Complete</string>
+    <string name="activity_task_details_complete_task">Complete task</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edit Task</string>
@@ -68,29 +70,28 @@
     <string name="task_group_due_in_year">Due in %s</string>
     <string name="task_group_due_in_future">Someday</string>
     <string name="today">Today</string>
-    
+
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Already Started</string>
     <string name="task_group_start_today">Today</string>
     <string name="task_group_start_tomorrow">Tomorrow</string>
     <string name="task_group_start_within_7_days">Someday</string>
     <string name="task_group_start_in_future">Later</string>
-    
     <string name="task_group_due_title">Due</string>
     <string name="task_group_all_title">Lists</string>
     <string name="task_group_completed_title">Completed</string>
     <string name="task_group_start_title">Start</string>
-	<string name="task_group_priority_title">Priority</string>
-	<string name="task_group_progress_title">Progress</string>
-	
-	 <!-- Task list progress group titles -->
+    <string name="task_group_priority_title">Priority</string>
+    <string name="task_group_progress_title">Progress</string>
+
+    <!-- Task list progress group titles -->
     <string name="task_group_progress_0">Nothing accomplished</string>
     <string name="task_group_progress_40">Way to go</string>
     <string name="task_group_progress_60">Halfway there</string>
     <string name="task_group_progress_80">Almost done</string>
     <string name="task_group_progress_100">Done</string>
-    
-     <!-- Task list priority group titles -->
+
+    <!-- Task list priority group titles -->
     <string name="task_group_priority_high">High priority</string>
     <string name="task_group_priority_medium">Medium priority</string>
     <string name="task_group_priority_low">Low priority</string>
@@ -145,8 +146,8 @@
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Current tasks</string>
-    
-     <!-- Strings for fling actions -->
+
+    <!-- Strings for fling actions -->
     <string name="fling_task_complete">Complete</string>
     <string name="fling_task_edit">Edit</string>
     <string name="fling_task_delete">Delete</string>
@@ -155,9 +156,9 @@
     <!-- Accessibility content description -->
     <string name="cd_start_date">icon for the start date of the task</string>
     <string name="cd_due_date">icon for the due date of the task</string>
-    
+
     <!-- Strings for notification -->
     <string name="notification_task_due_title">Task due</string>
     <string name="notification_task_start_title">Task starts</string>
-	
+
 </resources>

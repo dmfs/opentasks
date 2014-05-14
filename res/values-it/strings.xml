@@ -28,6 +28,8 @@
     <string name="activity_task_details_edit_task">Modifica attività</string>
     <string name="activity_task_details_delete">Elimina</string>
     <string name="activity_task_details_delete_task">Elimina attività</string>
+    <string name="activity_task_details_complete">Completata</string>
+    <string name="activity_task_details_complete_task">Completata attività</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Modifica Attività</string>
