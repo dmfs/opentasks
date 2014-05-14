@@ -356,7 +356,7 @@ public interface ByProgress
 	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
 		Instances.VISIBLE + "=1 and (" + Instances.PERCENT_COMPLETE + ">=? and " + Instances.PERCENT_COMPLETE + " <= ? or ? is null and "
 			+ Instances.PERCENT_COMPLETE + " <= ? or " + Instances.PERCENT_COMPLETE + " is ?)", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE
-			+ ", " + Instances.TITLE, 1, 2, 1, 2, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+			+ ", " + Instances.TITLE + " COLLATE NOCASE ASC", 1, 2, 1, 2, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * A descriptor for the "grouped by priority" view.
