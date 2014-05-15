@@ -108,9 +108,17 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 		mDefaultDateFormat = java.text.DateFormat.getDateInstance(SimpleDateFormat.LONG);
 		mDefaultTimeFormat = DateFormat.getTimeFormat(getContext());
 		mAddOneDayButton = (TextView) findViewById(R.id.button_add_one_day);
-		mAddOneDayButton.setOnClickListener(this);
+		if (mAddOneDayButton != null)
+		{
+			// might be called to early in Android 2.x
+			mAddOneDayButton.setOnClickListener(this);
+		}
 		mAddOneHourButton = (TextView) findViewById(R.id.button_add_one_hour);
-		mAddOneHourButton.setOnClickListener(this);
+		if (mAddOneHourButton != null)
+		{
+			// might be called to early in Android 2.x
+			mAddOneHourButton.setOnClickListener(this);
+		}
 	}
 
 
@@ -196,6 +204,6 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 				time.normalize(false);
 				break;
 		}
-		mAdapter.set(mValues, time);
+		mAdapter.validateAndSet(mValues, time);
 	}
 }

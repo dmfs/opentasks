@@ -98,7 +98,7 @@ public abstract class FieldAdapter<Type>
 	public void validateAndSet(ContentSet values, Type value)
 	{
 		Type oldValue = get(values);
-		checkConstraints(values, oldValue, value);
+		value = checkConstraints(values, oldValue, value);
 		set(values, value);
 	}
 
@@ -153,14 +153,15 @@ public abstract class FieldAdapter<Type>
 	 * @param newValue
 	 *            The new value to check.
 	 */
-	protected final void checkConstraints(ContentSet currentValues, Type oldValue, Type newValue)
+	protected final Type checkConstraints(ContentSet currentValues, Type oldValue, Type newValue)
 	{
 		if (mConstraints != null)
 		{
 			for (AbstractConstraint<Type> constraint : mConstraints)
 			{
-				constraint.apply(currentValues, oldValue, newValue);
+				newValue = constraint.apply(currentValues, oldValue, newValue);
 			}
 		}
+		return newValue;
 	}
 }

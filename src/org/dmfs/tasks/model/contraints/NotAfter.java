@@ -40,7 +40,7 @@ public class NotAfter extends AbstractConstraint<Time>
 
 
 	@Override
-	public void apply(ContentSet currentValues, Time oldValue, Time newValue)
+	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
 	{
 		Time notAfterThisTime = mTimeAdapter.get(currentValues);
 		if (notAfterThisTime != null && newValue != null)
@@ -50,6 +50,7 @@ public class NotAfter extends AbstractConstraint<Time>
 				newValue.set(notAfterThisTime);
 			}
 		}
+		return newValue;
 	}
 
 }

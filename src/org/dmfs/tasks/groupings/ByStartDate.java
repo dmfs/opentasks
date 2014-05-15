@@ -27,6 +27,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorLoaderFactory;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -38,6 +39,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -202,7 +204,7 @@ public interface ByStartDate
 			}
 
 			// display priority
-			int priority = cursor.getInt(cursor.getColumnIndex(Instances.PRIORITY));
+			int priority = TaskFieldAdapters.PRIORITY.get(cursor);
 			View priorityView = view.findViewById(R.id.task_priority_view_medium);
 			priorityView.setBackgroundResource(android.R.color.transparent);
 			priorityView.setVisibility(View.VISIBLE);
@@ -218,6 +220,24 @@ public interface ByStartDate
 			if (priority > 5 && priority <= 9)
 			{
 				priorityView.setBackgroundResource(R.color.priority_green);
+			}
+
+			if (VERSION.SDK_INT >= 11)
+			{
+				// update percentage background
+				View background = view.findViewById(R.id.percentage_background_view);
+				background.setPivotX(0);
+				Integer percentComplete = TaskFieldAdapters.PERCENT_COMPLETE.get(cursor);
+				if (percentComplete < 100)
+				{
+					background.setScaleX(percentComplete == null ? 0 : percentComplete / 100f);
+					background.setBackgroundResource(R.drawable.vertical_shade_r_to_l_light);
+				}
+				else
+				{
+					background.setScaleX(1);
+					background.setBackgroundResource(R.drawable.complete_task_background_overlay);
+				}
 			}
 		}
 

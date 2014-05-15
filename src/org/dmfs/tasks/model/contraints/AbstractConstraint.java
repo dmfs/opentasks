@@ -41,5 +41,5 @@ public abstract class AbstractConstraint<T>
 	 * @param newValue
 	 *            The new value to validate, can be <code>null</code>.
 	 */
-	public abstract void apply(ContentSet currentValues, T oldValue, T newValue);
+	public abstract T apply(ContentSet currentValues, T oldValue, T newValue);
 }

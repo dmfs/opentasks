@@ -61,14 +61,20 @@
             android:layout_height="match_parent"
             android:duplicateParentState="true" >
 
+            <FrameLayout
+                android:id="@+id/percentage_background_view"
+                style="@style/task_list_progress_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
             <RelativeLayout
                 style="@style/tasks_expandable_list_item"
-                android:state_checkable ="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:duplicateParentState="true"
                 android:paddingLeft="@dimen/task_list_right_margin"
-                android:paddingRight="@dimen/task_list_right_margin" >
+                android:paddingRight="@dimen/task_list_right_margin"
+                android:state_checkable="true" >
 
                 <View
                     android:id="@+id/colorbar"

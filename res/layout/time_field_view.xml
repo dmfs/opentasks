@@ -26,26 +26,18 @@
 
         <TextView
             android:id="@+id/button_add_one_day"
-            style="@style/detail_label_text"
+            style="@style/time_forward_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
             android:text="@string/button_add_one_day" />
 
         <TextView
             android:id="@+id/button_add_one_hour"
-            style="@style/detail_label_text"
+            style="@style/time_forward_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
             android:text="@string/button_add_one_hour" />
     </LinearLayout>
 

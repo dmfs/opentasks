@@ -48,7 +48,7 @@ public class ShiftTime extends AbstractConstraint<Time>
 
 
 	@Override
-	public void apply(ContentSet currentValues, Time oldValue, Time newValue)
+	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
 	{
 		Time timeToShift = mTimeAdapter.get(currentValues);
 		if (timeToShift != null && newValue != null && oldValue != null)
@@ -63,6 +63,7 @@ public class ShiftTime extends AbstractConstraint<Time>
 			}
 			mTimeAdapter.set(currentValues, timeToShift);
 		}
+		return newValue;
 	}
 
 }

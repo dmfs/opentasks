@@ -839,7 +839,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		values.put(Tasks.STATUS, completedValue ? Tasks.STATUS_COMPLETED : Tasks.STATUS_IN_PROCESS);
 		if (!completedValue)
 		{
-			values.put(Tasks.PERCENT_COMPLETE, 99);
+			values.put(Tasks.PERCENT_COMPLETE, 50);
 		}
 
 		boolean completed = mAppContext.getContentResolver().update(taskUri, values, null, null) != 0;

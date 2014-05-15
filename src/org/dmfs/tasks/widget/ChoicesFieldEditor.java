@@ -93,7 +93,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor implements OnItemSel
 		if (mSelectedItem != position && mValues != null)
 		{
 			// selection was changed, update the values
-			mAdapter.set(mValues, mSpinnerAdapter.getItem(position));
+			mAdapter.validateAndSet(mValues, mSpinnerAdapter.getItem(position));
 			mSelectedItem = position;
 		}
 	}
@@ -104,7 +104,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor implements OnItemSel
 	{
 		// update values, set value to null
 		mSelectedItem = ListView.INVALID_POSITION;
-		mAdapter.set(mValues, null);
+		mAdapter.validateAndSet(mValues, null);
 	}
 
 

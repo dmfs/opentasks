@@ -156,4 +156,15 @@
         <item name="android:background">@android:color/darker_gray</item>
     </style>
 
+    <style name="task_list_progress_background">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="time_forward_button" parent="@style/detail_label_text">
+        <item name="android:background">@drawable/selectable_list_item</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
 </resources>

@@ -25,6 +25,7 @@ import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.model.contraints.AdjustPercentComplete;
 import org.dmfs.tasks.model.contraints.NotAfter;
 import org.dmfs.tasks.model.contraints.NotBefore;
 
@@ -42,14 +43,15 @@ public final class TaskFieldAdapters
 	public final static BooleanFieldAdapter ALLDAY = new BooleanFieldAdapter(Tasks.IS_ALLDAY);
 
 	/**
-	 * Adapter for the status of a task.
-	 */
-	public final static IntegerFieldAdapter STATUS = new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION);
-
-	/**
 	 * Adapter for the percent complete value of a task.
 	 */
 	public final static IntegerFieldAdapter PERCENT_COMPLETE = new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE);
+
+	/**
+	 * Adapter for the status of a task.
+	 */
+	public final static IntegerFieldAdapter STATUS = (IntegerFieldAdapter) new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION)
+		.addContraint(new AdjustPercentComplete(PERCENT_COMPLETE));
 
 	/**
 	 * Adapter for the priority value of a task.

@@ -27,6 +27,7 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.CompletedFlagCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.CompletedFlagCursorLoaderFactory;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -35,6 +36,7 @@ import org.dmfs.tasks.utils.ViewDescriptor;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build.VERSION;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -161,6 +163,24 @@ public interface ByCompleted
 			if (colorbar != null)
 			{
 				colorbar.setBackgroundColor(cursor.getInt(6));
+			}
+
+			if (VERSION.SDK_INT >= 11)
+			{
+				// update percentage background
+				View background = view.findViewById(R.id.percentage_background_view);
+				background.setPivotX(0);
+				Integer percentComplete = TaskFieldAdapters.PERCENT_COMPLETE.get(cursor);
+				if (percentComplete < 100)
+				{
+					background.setScaleX(percentComplete == null ? 0 : percentComplete / 100f);
+					background.setBackgroundResource(R.drawable.vertical_shade_r_to_l_light);
+				}
+				else
+				{
+					background.setScaleX(1);
+					background.setBackgroundResource(R.drawable.complete_task_background_overlay);
+				}
 			}
 		}
 
