@@ -21,8 +21,12 @@
 
         <CheckBox
             android:id="@+id/checklist_mode_switch"
+            style="@style/editor_label_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+            android:text="@string/checklist_label" />
     </LinearLayout>
 
     <EditText

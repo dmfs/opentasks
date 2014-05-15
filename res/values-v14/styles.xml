@@ -25,6 +25,7 @@
 
     <style name="editor_label_text">
         <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="editor_label_line">

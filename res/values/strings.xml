@@ -166,4 +166,7 @@
     <string name="button_add_one_hour">+1 hour</string>
     <string name="button_add_one_day">+1 day</string>
 
+    <!-- Checklist checkbox label -->
+    <string name="checklist_label">As checklist</string>
+
 </resources>

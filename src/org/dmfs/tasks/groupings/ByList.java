@@ -395,8 +395,8 @@ public interface ByList
 	 * A descriptor that knows how to load elements in a list group.
 	 */
 	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE, 0)
-		.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE
+			+ " COLLATE NOCASE ASC", 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	/**
 	 * A descriptor for the "grouped by list" view.
