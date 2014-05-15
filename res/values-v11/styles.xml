@@ -64,7 +64,7 @@
 
     <style name="task_list_progress_background">
         <item name="android:visibility">visible</item>
-        <item name="android:background">@drawable/vertical_shade_r_to_l_light</item>
+        <item name="android:background">@drawable/task_progress_background_shade</item>
     </style>
 
     <style name="time_forward_button" parent="@style/detail_label_text">
