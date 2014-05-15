@@ -231,7 +231,7 @@ public interface ByStartDate
 				if (percentComplete < 100)
 				{
 					background.setScaleX(percentComplete == null ? 0 : percentComplete / 100f);
-					background.setBackgroundResource(R.drawable.vertical_shade_r_to_l_light);
+					background.setBackgroundResource(R.drawable.task_progress_background_shade);
 				}
 				else
 				{
