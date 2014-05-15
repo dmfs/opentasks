@@ -19,6 +19,7 @@ package org.dmfs.tasks.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
@@ -230,6 +231,8 @@ public class XmlModel extends Model
 		private final int mFieldTitle;
 		private final int mDetailsLayout;
 		private final int mEditLayout;
+		private Map<String, Boolean> mDetailsLayoutOptions;
+		private Map<String, Boolean> mEditLayoutOptions;
 
 
 		public FieldInflater(FieldAdapter<?> adapter, int fieldTitle, int detailsLayout, int editLayout)
@@ -273,11 +276,28 @@ public class XmlModel extends Model
 			}
 			if (mDetailsLayout != -1)
 			{
-				descriptor.setViewLayout(new LayoutDescriptor(mDetailsLayout));
+				LayoutDescriptor ld = new LayoutDescriptor(mDetailsLayout);
+				if (mDetailsLayoutOptions != null)
+				{
+					for (Entry<String, Boolean> entry : mDetailsLayoutOptions.entrySet())
+					{
+						ld.setOption(entry.getKey(), entry.getValue());
+					}
+				}
+				descriptor.setViewLayout(ld);
+
 			}
 			if (mEditLayout != -1)
 			{
-				descriptor.setEditorLayout(new LayoutDescriptor(mEditLayout));
+				LayoutDescriptor ld = new LayoutDescriptor(mEditLayout);
+				if (mEditLayoutOptions != null)
+				{
+					for (Entry<String, Boolean> entry : mEditLayoutOptions.entrySet())
+					{
+						ld.setOption(entry.getKey(), entry.getValue());
+					}
+				}
+				descriptor.setEditorLayout(ld);
 			}
 		}
 
@@ -291,6 +311,29 @@ public class XmlModel extends Model
 		int getDefaultTitleId()
 		{
 			return mFieldTitle;
+		}
+
+
+		public FieldInflater addDetailsLayoutOption(String key, boolean value)
+		{
+			if (mDetailsLayoutOptions == null)
+			{
+				mDetailsLayoutOptions = new HashMap<String, Boolean>(4);
+			}
+			mDetailsLayoutOptions.put(key, value);
+			return this;
+		}
+
+
+		@SuppressWarnings("unused")
+		public FieldInflater addEditLayoutOption(String key, boolean value)
+		{
+			if (mEditLayoutOptions == null)
+			{
+				mEditLayoutOptions = new HashMap<String, Boolean>(4);
+			}
+			mEditLayoutOptions.put(key, value);
+			return this;
 		}
 	}
 
@@ -308,7 +351,8 @@ public class XmlModel extends Model
 
 		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater(TaskFieldAdapters.DTSTART, R.string.task_start, R.layout.time_field_view,
 			R.layout.time_field_editor));
-		FIELD_INFLATER_MAP.put("due", new FieldInflater(TaskFieldAdapters.DUE, R.string.task_due, R.layout.time_field_view, R.layout.time_field_editor));
+		FIELD_INFLATER_MAP.put("due", new FieldInflater(TaskFieldAdapters.DUE, R.string.task_due, R.layout.time_field_view, R.layout.time_field_editor)
+			.addDetailsLayoutOption(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true));
 		FIELD_INFLATER_MAP.put("completed", new FieldInflater(TaskFieldAdapters.COMPLETED, R.string.task_completed, R.layout.time_field_view,
 			R.layout.time_field_editor));
 
