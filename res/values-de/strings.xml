@@ -30,7 +30,7 @@
     <string name="activity_task_details_delete">Löschen</string>
     <string name="activity_task_details_delete_task">Aufgabe löschen</string>
     <string name="activity_task_details_complete">Erledigt</string>
-    <string name="activity_task_details_complete_task">Aufgabe Erledigt</string>
+    <string name="activity_task_details_complete_task">Aufgabe erledigt</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Aufgabe bearbeiten</string>
