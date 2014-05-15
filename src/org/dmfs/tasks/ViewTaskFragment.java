@@ -17,6 +17,10 @@
 
 package org.dmfs.tasks;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -67,6 +71,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	 * The key we use to store the {@link Uri} of the task we show.
 	 */
 	private static final String STATE_TASK_URI = "task_uri";
+
+	/**
+	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
+	 */
+	private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY,
+		Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
 
 	/**
 	 * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.
@@ -230,9 +240,13 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 	private void persistTask()
 	{
-		if (mContentSet != null && mContentSet.isUpdate())
+		Context activity = getActivity();
+		if (mContentSet != null && mContentSet.isUpdate() && activity != null)
 		{
-			Context activity = getActivity();
+			if (mContentSet.updatesAnyKey(RECURRENCE_VALUES))
+			{
+				mContentSet.ensureUpdates(RECURRENCE_VALUES);
+			}
 			mContentSet.persist(activity);
 		}
 	}

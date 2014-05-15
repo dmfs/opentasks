@@ -41,6 +41,8 @@ public class DefaultModel extends Model
 	private final static LayoutDescriptor PROGRESS_VIEW = new LayoutDescriptor(R.layout.percentage_field_view);
 	private final static LayoutDescriptor PROGRESS_EDIT = new LayoutDescriptor(R.layout.percentage_field_editor);
 	private final static LayoutDescriptor TIME_VIEW = new LayoutDescriptor(R.layout.time_field_view);
+	private final static LayoutDescriptor TIME_VIEW_ADD_BUTTON = new LayoutDescriptor(R.layout.time_field_view).setOption(
+		LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true);
 	private final static LayoutDescriptor TIME_EDIT = new LayoutDescriptor(R.layout.time_field_editor);
 	@SuppressWarnings("unused")
 	private final static LayoutDescriptor BOOLEAN_VIEW = new LayoutDescriptor(R.layout.boolean_field_view);
@@ -101,7 +103,7 @@ public class DefaultModel extends Model
 		mFields.add(new FieldDescriptor(mContext, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
 
 		// due
-		mFields.add(new FieldDescriptor(mContext, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW_ADD_BUTTON).setEditorLayout(TIME_EDIT));
 
 		// all day flag
 		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, TaskFieldAdapters.ALLDAY).setEditorLayout(BOOLEAN_EDIT));

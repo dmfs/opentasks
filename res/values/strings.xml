@@ -162,4 +162,8 @@
     <string name="notification_task_due_title">Task due</string>
     <string name="notification_task_start_title">Task starts</string>
 
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 hour</string>
+    <string name="button_add_one_day">+1 day</string>
+
 </resources>

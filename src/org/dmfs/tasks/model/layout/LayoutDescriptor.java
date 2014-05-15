@@ -35,6 +35,7 @@ public class LayoutDescriptor
 	public final static String OPTION_USE_TASK_BACKGROUND_COLOR = "use_task_background_color";
 	public final static String OPTION_NO_TITLE = "no_title";
 	public final static String OPTION_MULTILINE = "multiline";
+	public final static String OPTION_TIME_FIELD_SHOW_ADD_BUTTONS = "time_field_show_add_buttons";
 
 	/**
 	 * Empty layout options. We return it if there are no layout options. It adds the overhead of one object and a few virtual method calls, but it improves

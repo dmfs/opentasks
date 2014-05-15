@@ -162,4 +162,8 @@
     <string name="notification_task_due_title">Aufgabe fällig</string>
     <string name="notification_task_start_title">Aufgabe startet</string>
 
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 Stunde</string>
+    <string name="button_add_one_day">+1 Tag</string>
+
 </resources>
