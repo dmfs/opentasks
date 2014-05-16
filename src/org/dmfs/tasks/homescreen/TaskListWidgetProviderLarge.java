@@ -19,7 +19,13 @@
 
 package org.dmfs.tasks.homescreen;
 
+import org.dmfs.tasks.R;
+
 import android.annotation.TargetApi;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 
@@ -30,5 +36,36 @@ import android.os.Build;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProviderLarge extends TaskListWidgetProvider
 {
-	/* exactly the same as TaskListWidgetProvider */
+
+	/*
+	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
+	 * 
+	 * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
+	 */
+	@Override
+	public void onReceive(Context context, Intent intent)
+	{
+		super.onReceive(context, intent);
+
+		String action = intent.getAction();
+		if (action.equals(Intent.ACTION_PROVIDER_CHANGED))
+		{
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(getComponentName(context));
+			if (android.os.Build.VERSION.SDK_INT >= 11)
+			{
+				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
+			}
+			else
+			{
+				onUpdate(context, appWidgetManager, appWidgetIds);
+			}
+		}
+	}
+
+
+	static ComponentName getComponentName(Context context)
+	{
+		return new ComponentName(context, TaskListWidgetProviderLarge.class);
+	}
 }
