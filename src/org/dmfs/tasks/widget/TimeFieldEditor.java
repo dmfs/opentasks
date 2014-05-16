@@ -376,7 +376,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 			{
 				// We have modified the time, so update contentSet.
 				mDateTime = newTime;
-				mAdapter.set(contentSet, newTime);
+				mAdapter.validateAndSet(contentSet, newTime);
 			}
 		}
 		else
