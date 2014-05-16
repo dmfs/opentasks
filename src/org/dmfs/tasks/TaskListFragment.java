@@ -657,7 +657,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 					else
 					{
 						leftFlingView.setText(R.string.fling_task_complete);
-						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.navigation_accept), null, null, null);
+						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_action_complete), null, null, null);
 						rightFlingView.setText(R.string.fling_task_edit);
 						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, resources.getDrawable(R.drawable.content_edit), null);
 					}

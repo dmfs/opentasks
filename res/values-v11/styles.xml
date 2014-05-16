@@ -64,11 +64,14 @@
 
     <style name="task_list_progress_background">
         <item name="android:visibility">visible</item>
-        <item name="android:background">@drawable/vertical_shade_r_to_l_light</item>
+        <item name="android:background">@drawable/task_progress_background_shade</item>
     </style>
 
     <style name="time_forward_button" parent="@style/detail_label_text">
         <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
 </resources>

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/complete_task"
-        android:icon="@drawable/navigation_accept"
+        android:icon="@drawable/ic_action_complete"
         android:showAsAction="always"
         android:title="@string/activity_task_details_complete_task"
         android:titleCondensed="@string/activity_task_details_complete"> <!-- TODO: add dedicated string! -->
