@@ -75,10 +75,10 @@ public class ChecklistConstraint extends AbstractConstraint<String>
 
 			if (mStatusAdapter != null)
 			{
-				int newStatus = newPercentComplete == 100 ? Tasks.STATUS_COMPLETED : newPercentComplete == 0 ? Tasks.STATUS_NEEDS_ACTION
-					: Tasks.STATUS_IN_PROCESS;
 				Integer oldStatus = mStatusAdapter.get(currentValues);
-				if (oldStatus == null || oldStatus != newStatus && oldStatus != Tasks.STATUS_CANCELLED)
+				Integer newStatus = newPercentComplete == 100 ? Tasks.STATUS_COMPLETED : newPercentComplete > 0 || oldStatus != null
+					&& oldStatus == Tasks.STATUS_COMPLETED ? Tasks.STATUS_IN_PROCESS : oldStatus;
+				if (oldStatus == null && newStatus != null || oldStatus != null && !oldStatus.equals(newStatus) && oldStatus != Tasks.STATUS_CANCELLED)
 				{
 					mStatusAdapter.set(currentValues, newStatus);
 				}
@@ -95,5 +95,4 @@ public class ChecklistConstraint extends AbstractConstraint<String>
 		}
 		return newValue;
 	}
-
 }
