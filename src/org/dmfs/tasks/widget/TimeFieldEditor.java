@@ -245,10 +245,18 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
-		mDateTime.year = year;
-		mDateTime.month = monthOfYear;
-		mDateTime.monthDay = dayOfMonth;
-		mDateTime.normalize(true);
+		if (mAdapter.isAllDay(mValues))
+		{
+			mDateTime.timezone = Time.TIMEZONE_UTC;
+			mDateTime.set(dayOfMonth, monthOfYear, year);
+		}
+		else
+		{
+			mDateTime.year = year;
+			mDateTime.month = monthOfYear;
+			mDateTime.monthDay = dayOfMonth;
+			mDateTime.normalize(true);
+		}
 		mUpdated = true;
 		mAdapter.validateAndSet(mValues, mDateTime);
 	}
