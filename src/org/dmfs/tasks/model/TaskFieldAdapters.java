@@ -26,6 +26,7 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.contraints.AdjustPercentComplete;
+import org.dmfs.tasks.model.contraints.ChecklistConstraint;
 import org.dmfs.tasks.model.contraints.NotAfter;
 import org.dmfs.tasks.model.contraints.NotBefore;
 
@@ -86,7 +87,8 @@ public final class TaskFieldAdapters
 	/**
 	 * Adapter for the description of a task.
 	 */
-	public final static StringFieldAdapter DESCRIPTION = new StringFieldAdapter(Tasks.DESCRIPTION);
+	public final static StringFieldAdapter DESCRIPTION = (StringFieldAdapter) new StringFieldAdapter(Tasks.DESCRIPTION).addContraint(new ChecklistConstraint(
+		STATUS, PERCENT_COMPLETE));
 
 	/**
 	 * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.

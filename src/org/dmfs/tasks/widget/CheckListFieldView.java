@@ -100,7 +100,7 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 			final String oldText = mAdapter.get(mValues);
 			if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
 			{
-				mAdapter.set(mValues, newText);
+				mAdapter.validateAndSet(mValues, newText);
 			}
 		}
 	}

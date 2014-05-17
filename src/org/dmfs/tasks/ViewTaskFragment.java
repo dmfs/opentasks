@@ -270,8 +270,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			 * Unregister the observer for any previously shown task first.
 			 */
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
-
 			persistTask();
+
+			if (mContentSet != null)
+			{
+				TaskFieldAdapters.STATUS.unregisterListener(mContentSet, this);
+			}
 		}
 
 		Uri oldUri = mTaskUri;
@@ -373,7 +377,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 			if (mContentSet != null)
 			{
-				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet))
+				Integer status = TaskFieldAdapters.STATUS.get(mContentSet);
+				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet) || status != null && status == Tasks.STATUS_COMPLETED)
 				{
 					// can not complete task since it's already closed, disable menu item
 					MenuItem item = menu.findItem(R.id.complete_task);
@@ -441,6 +446,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		{
 			// the ContentSet has been (re-)loaded, load the model of this task
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			TaskFieldAdapters.STATUS.registerListener(contentSet, this, false);
 			Activity activity = getActivity();
 			if (VERSION.SDK_INT >= 11 && activity != null)
 			{
@@ -469,7 +475,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		// nothing to do, the widgets will handle that themselves.
+		/* we registered for status updates to update the menu */
+		Activity activity = getActivity();
+		if (VERSION.SDK_INT >= 11 && activity != null)
+		{
+			activity.invalidateOptionsMenu();
+		}
 	}
 
 }
