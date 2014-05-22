@@ -464,4 +464,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			}
 		}
 	};
+
+
+	@Override
+	public void onContentChanged(ContentSet contentSet)
+	{
+	}
 }
