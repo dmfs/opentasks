@@ -27,7 +27,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -87,7 +86,6 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (StringFieldAdapter) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
 	}
 
 
@@ -107,30 +105,27 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 
 
 	@Override
+	public void onContentLoaded(ContentSet contentSet)
+	{
+		super.onContentLoaded(contentSet);
+
+		Integer customBackgroud = getCustomBackgroundColor();
+		if (customBackgroud != null)
+		{
+			mText.setTextColor(getTextColorFromBackground(customBackgroud));
+		}
+	}
+
+
+	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
 		if (mValues != null)
 		{
-			String value = mAdapter.get(contentSet);
-
-			// check for checklist mode
-			boolean checkListmode = value != null
-				&& (value.startsWith("[x]") || value.startsWith("[ ]") || value.startsWith("[X]") || value.contains("\n[x]") || value.contains("\n[ ]") || value
-					.contains("\n[X]"));
-
 			String newValue = mAdapter.get(mValues);
 			if (!TextUtils.equals(mCurrentValue, newValue)) // don't trigger unnecessary updates
 			{
-				if (checkListmode)
-				{
-					updateCheckList(newValue);
-					updateText(null);
-				}
-				else
-				{
-					updateCheckList(null);
-					updateText(newValue);
-				}
+				updateCheckList(newValue);
 				mCurrentValue = newValue;
 				setVisibility(TextUtils.isEmpty(newValue) ? GONE : VISIBLE);
 			}
@@ -141,18 +136,29 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 	private String buildDescription()
 	{
 		StringBuilder builder = new StringBuilder(4 * 1024);
+		String descriptionText = mText.getText().toString();
+		builder.append(descriptionText);
 
 		int count = mContainer.getChildCount();
 
+		boolean first = descriptionText.length() == 0;
 		for (int i = 0; i < count; ++i)
 		{
 			CheckBox checkbox = (CheckBox) mContainer.getChildAt(i);
 			String text = checkbox.getText().toString();
 			if (text.length() > 0)
 			{
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					builder.append("\n");
+				}
+
 				builder.append(checkbox.isChecked() ? "[x] " : "[ ] ");
 				builder.append(text);
-				builder.append("\n");
 			}
 		}
 		return builder.toString();
@@ -161,6 +167,12 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 
 	private void updateCheckList(String text)
 	{
+		Integer customBackgroud = getCustomBackgroundColor();
+		if (customBackgroud != null)
+		{
+			mText.setTextColor(getTextColorFromBackground(customBackgroud));
+		}
+
 		if (text == null)
 		{
 			mContainer.setVisibility(GONE);
@@ -173,7 +185,7 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 		String[] items;
 		if (text != null && text.length() > 0)
 		{
-			items = text.split("\r?\n");
+			items = text.split("\n");
 		}
 		else
 		{
@@ -181,6 +193,8 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 		}
 
 		int count = 0;
+		boolean inCheckListMode = false;
+		int checkListStart = 0;
 
 		for (int i = 0; i < items.length; ++i)
 		{
@@ -190,10 +204,21 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 			{
 				checked = true;
 				item = item.substring(3).trim();
+				inCheckListMode = true;
 			}
 			else if (item.startsWith("[ ]"))
 			{
 				item = item.substring(3).trim();
+				inCheckListMode = true;
+			}
+			else if (!inCheckListMode)
+			{
+				checkListStart += item.length();
+				if (i < items.length - 1)
+				{
+					++checkListStart;
+				}
+				continue;
 			}
 
 			if (item.length() == 0)
@@ -219,28 +244,9 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 			mContainer.removeViewAt(count);
 		}
 
+		mText.setText(text != null ? text.substring(0, checkListStart).trim() : null);
+		mText.setVisibility(TextUtils.isEmpty(text) ? GONE : VISIBLE);
+
 		mBuilding = false;
 	}
-
-
-	private void updateText(String text)
-	{
-		if (!TextUtils.isEmpty(text))
-		{
-			mText.setText(text);
-
-			Integer customBackgroud = getCustomBackgroundColor();
-			if (customBackgroud != null)
-			{
-				mText.setTextColor(getTextColorFromBackground(customBackgroud));
-			}
-			mText.setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			// don't show empty values
-			mText.setVisibility(View.GONE);
-		}
-	}
-
 }

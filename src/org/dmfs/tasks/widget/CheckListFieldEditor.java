@@ -48,14 +48,12 @@ import android.widget.EditText;
 public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheckedChangeListener, OnFocusChangeListener
 {
 	private StringFieldAdapter mAdapter;
-	private CheckBox mModeSwitch;
 	private ViewGroup mContainer;
 	private EditText mText;
 
 	private String mCurrentValue;
 	private LayoutInflater mInflater;
 
-	private boolean mChecklist = false;
 	private boolean mBuilding = false;
 
 
@@ -96,8 +94,6 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 		}
 
 		mContainer = (ViewGroup) findViewById(R.id.checklist);
-		mModeSwitch = (CheckBox) findViewById(R.id.checklist_mode_switch);
-		mModeSwitch.setOnCheckedChangeListener(this);
 	}
 
 
@@ -112,23 +108,9 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
-		int id = buttonView.getId();
-		switch (id)
+		if (!mBuilding && mValues != null)
 		{
-			case R.id.checklist_mode_switch:
-			{
-				mChecklist = isChecked;
-				if (!mBuilding)
-				{
-					switchMode(isChecked);
-				}
-				break;
-			}
-			default:
-				if (!mBuilding && mValues != null)
-				{
-					updateValues();
-				}
+			updateValues();
 		}
 	}
 
@@ -147,17 +129,9 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 	@Override
 	public void onContentLoaded(ContentSet contentSet)
 	{
-		if (mValues != null)
-		{
-			// initialize the checklist mode switch
-			String value = mAdapter.get(contentSet);
-			mBuilding = true;
-			mModeSwitch.setChecked(value != null
-				&& (value.startsWith("[x]") || value.startsWith("[X]") || value.startsWith("[ ]") || value.contains("\n[x]") || value.contains("[X]") || value
-					.contains("\n[ ]")));
-			mBuilding = false;
-		}
 		super.onContentLoaded(contentSet);
+		String newValue = mAdapter.get(contentSet);
+		buildCheckList(newValue);
 	}
 
 
@@ -169,18 +143,7 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 			String newValue = mAdapter.get(mValues);
 			if (!TextUtils.equals(mCurrentValue, newValue)) // don't trigger unnecessary updates
 			{
-				if (mChecklist)
-				{
-					buildCheckList(newValue);
-					mText.setVisibility(GONE);
-					mContainer.setVisibility(VISIBLE);
-				}
-				else
-				{
-					mText.setText(newValue);
-					mContainer.setVisibility(GONE);
-					mText.setVisibility(VISIBLE);
-				}
+				buildCheckList(newValue);
 				mCurrentValue = newValue;
 			}
 		}
@@ -190,51 +153,25 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 	@Override
 	public void updateValues()
 	{
-		final String newText = mChecklist ? getCheckListDescription(true) : mText.getText().toString();
+		final String newText = getCheckListDescription();
 		final String oldText = mAdapter.get(mValues);
 
 		if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
 		{
-			mCurrentValue = newText;
 			mAdapter.set(mValues, newText);
 		}
 	}
 
 
-	private void switchMode(boolean toCheckList)
-	{
-		String newText;
-		if (toCheckList)
-		{
-			newText = mText.getText().toString();
-			buildCheckList(newText);
-			newText = getCheckListDescription(true);
-			mText.setVisibility(GONE);
-			mContainer.setVisibility(VISIBLE);
-		}
-		else
-		{
-			newText = getCheckListDescription(false);
-			mText.setText(newText);
-			mContainer.setVisibility(GONE);
-			mText.setVisibility(VISIBLE);
-		}
-		final String oldText = mAdapter.get(mValues);
-		if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
-		{
-			mCurrentValue = newText;
-			mAdapter.set(mValues, newText);
-		}
-	}
-
-
-	private String getCheckListDescription(boolean asCheckList)
+	private String getCheckListDescription()
 	{
 		StringBuilder builder = new StringBuilder(4 * 1024);
+		String descriptionText = mText.getText().toString();
+		builder.append(descriptionText);
 
 		int count = mContainer.getChildCount();
 
-		boolean first = true;
+		boolean first = descriptionText.length() == 0;
 		for (int i = 0; i < count; ++i)
 		{
 			CheckItemTag tag = (CheckItemTag) mContainer.getChildAt(i).getTag();
@@ -250,10 +187,7 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 					builder.append("\n");
 				}
 
-				if (asCheckList)
-				{
-					builder.append(tag.checkbox.isChecked() ? "[x] " : "[ ] ");
-				}
+				builder.append(tag.checkbox.isChecked() ? "[x] " : "[ ] ");
 				builder.append(text);
 			}
 		}
@@ -268,7 +202,7 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 		String[] items;
 		if (text != null && text.length() > 0)
 		{
-			items = text.split("\r?\n");
+			items = text.split("\n");
 		}
 		else
 		{
@@ -276,6 +210,8 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 		}
 
 		int count = 0;
+		boolean inCheckListMode = false;
+		int checkListStart = 0;
 
 		for (int i = 0; i < items.length; ++i)
 		{
@@ -285,10 +221,22 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 			{
 				checked = true;
 				item = item.substring(3).trim();
+				inCheckListMode = true;
 			}
 			else if (item.startsWith("[ ]"))
 			{
 				item = item.substring(3).trim();
+				inCheckListMode = true;
+			}
+			else if (!inCheckListMode)
+			{
+				checkListStart += item.length();
+				if (i < items.length - 1)
+				{
+					// account for the removed new line character
+					++checkListStart;
+				}
+				continue;
 			}
 
 			if (item.length() == 0)
@@ -347,6 +295,7 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 			mContainer.removeViewAt(count);
 		}
 
+		mText.setText(text != null ? text.substring(0, checkListStart).trim() : null);
 		mBuilding = false;
 	}
 
