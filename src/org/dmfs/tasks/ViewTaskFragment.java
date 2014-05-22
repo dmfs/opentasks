@@ -270,7 +270,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			 * Unregister the observer for any previously shown task first.
 			 */
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
-
 			persistTask();
 		}
 
@@ -373,7 +372,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 			if (mContentSet != null)
 			{
-				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet))
+				Integer status = TaskFieldAdapters.STATUS.get(mContentSet);
+				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet) || status != null && status == Tasks.STATUS_COMPLETED)
 				{
 					// can not complete task since it's already closed, disable menu item
 					MenuItem item = menu.findItem(R.id.complete_task);
@@ -464,12 +464,4 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			}
 		}
 	};
-
-
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		// nothing to do, the widgets will handle that themselves.
-	}
-
 }

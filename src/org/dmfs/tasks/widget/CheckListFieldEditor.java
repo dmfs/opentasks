@@ -158,7 +158,7 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 
 		if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
 		{
-			mAdapter.set(mValues, newText);
+			mAdapter.validateAndSet(mValues, newText);
 		}
 	}
 

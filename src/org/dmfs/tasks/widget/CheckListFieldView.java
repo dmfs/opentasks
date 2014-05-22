@@ -54,21 +54,21 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 	public CheckListFieldView(Context context)
 	{
 		super(context);
-		mInflater = (LayoutInflater) context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 
 	public CheckListFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		mInflater = (LayoutInflater) context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 
 	public CheckListFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
-		mInflater = (LayoutInflater) context.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
 
@@ -98,7 +98,7 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 			final String oldText = mAdapter.get(mValues);
 			if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
 			{
-				mAdapter.set(mValues, newText);
+				mAdapter.validateAndSet(mValues, newText);
 			}
 		}
 	}
@@ -244,8 +244,9 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 			mContainer.removeViewAt(count);
 		}
 
-		mText.setText(text != null ? text.substring(0, checkListStart).trim() : null);
-		mText.setVisibility(TextUtils.isEmpty(text) ? GONE : VISIBLE);
+		String descriptionText = text != null ? text.substring(0, checkListStart).trim() : null;
+		mText.setText(descriptionText);
+		mText.setVisibility(TextUtils.isEmpty(descriptionText) ? GONE : VISIBLE);
 
 		mBuilding = false;
 	}
