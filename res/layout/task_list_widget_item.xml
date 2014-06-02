@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/widget_list_item_bg"
-    android:minHeight="40sp" >
+    android:minHeight="32sp" >
 
     <Button
         android:id="@+id/task_list_color"
