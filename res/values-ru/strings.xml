@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Russian Translation update (c) Nikita Tratorov, NiXProSoft.Ru, 29.01.2014 -->
+    <!-- Russian Translation (c) Nikita Tratorov, NiXProSoft.Ru, 18.05.2014 -->
 
 
     <!-- Manifest stuff -->
@@ -144,6 +144,7 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="action_settings">Настройки</string>
     <string name="visible_task_lists">Используемые списки</string>
+    <string name="enable_alarms">Напоминания</string>
     <string name="synced_task_lists">Все доступные списки</string>
 
     <!-- Label for Expandable Group Descriptors -->
@@ -170,5 +171,16 @@
     <!-- Accessibility content description -->
     <string name="cd_start_date">значек для начальной даты задания</string>
     <string name="cd_due_date">значек для окончания срока выполнения</string>
+    
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">Срок выполнения</string>
+    <string name="notification_task_start_title">Начало выполнения</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 час</string>
+    <string name="button_add_one_day">+1 день</string>
+
+    <!-- Checklist checkbox label -->
+    <string name="checklist_label">в виде списка</string>    
 
 </resources>
