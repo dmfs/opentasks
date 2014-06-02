@@ -167,4 +167,8 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
+    <style name="checklist_checked_item_text">
+        <item name="android:textColor">#ff808080</item>
+    </style>
+
 </resources>

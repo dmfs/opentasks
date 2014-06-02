@@ -167,6 +167,7 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 
 	private void updateCheckList(String text)
 	{
+		Context context = getContext();
 		Integer customBackgroud = getCustomBackgroundColor();
 		if (customBackgroud != null)
 		{
@@ -234,6 +235,7 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 				mContainer.addView(checkbox);
 			}
 			checkbox.setChecked(checked);
+			checkbox.setTextAppearance(context, checked ? R.style.checklist_checked_item_text : R.style.dark_text);
 			checkbox.setText(item);
 
 			++count;
