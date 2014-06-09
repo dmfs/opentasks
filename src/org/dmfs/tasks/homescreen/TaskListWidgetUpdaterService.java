@@ -102,6 +102,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		 */
 		private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
+		private String mAuthority;
+
 
 		/**
 		 * Instantiates a new task list views factory.
@@ -118,6 +120,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			mResources = context.getResources();
 			mDueDateFormatter = new DueDateFormatter(context);
 			new TimeChangeObserver(context, this);
+			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
 		}
 
 
@@ -218,7 +221,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				row.setTextViewText(android.R.id.text1, null);
 			}
 
-			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, items[position].getTaskId());
+			Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), items[position].getTaskId());
 			Intent i = new Intent();
 			i.setData(taskUri);
 
@@ -354,7 +357,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			{
 				// load all upcoming non-completed tasks
 				Cursor c = mContext.getContentResolver().query(
-					TaskContract.Instances.CONTENT_URI,
+					TaskContract.Instances.getContentUri(mAuthority),
 					null,
 					TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<="
 						+ System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)",

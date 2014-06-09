@@ -131,6 +131,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	private LinearLayout mTaskListBar;
 	private boolean mSetInitialSpinnerSelection;
 	private Spinner mListSpinner;
+	private String mAuthority;
 
 
 	/**
@@ -154,6 +155,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
+		mAuthority = getString(R.string.org_dmfs_tasks_authority);
 		Bundle bundle = getArguments();
 
 		// check for supplied task information from intent
@@ -180,7 +182,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 
-		mAppForEdit = !Tasks.CONTENT_URI.equals(mTaskUri) && mTaskUri != null;
+		mAppForEdit = !Tasks.getContentUri(mAuthority).equals(mTaskUri) && mTaskUri != null;
 
 		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
 		mListSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
@@ -210,7 +212,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 				{
 					mValues = savedInstanceState.getParcelable(KEY_VALUES);
 					new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
-					setListUri(ContentUris.withAppendedId(TaskLists.CONTENT_URI, mValues.getAsLong(Tasks.LIST_ID)), null);
+					setListUri(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), mValues.getAsLong(Tasks.LIST_ID)), null);
 				}
 				// disable spinner
 				mListSpinner.setEnabled(false);
@@ -228,7 +230,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 				// create empty ContentSet if there was no ContentSet supplied
 				if (mValues == null)
 				{
-					mValues = new ContentSet(Tasks.CONTENT_URI);
+					mValues = new ContentSet(Tasks.getContentUri(mAuthority));
 				}
 			}
 			else
@@ -236,7 +238,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 				mValues = savedInstanceState.getParcelable(KEY_VALUES);
 				new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
 			}
-			setListUri(TaskLists.CONTENT_URI, LIST_LOADER_VISIBLE_LISTS_FILTER);
+			setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
 		}
 
 		return rootView;
@@ -390,8 +392,9 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			/*
 			 * Don't start the model loader here, let onItemSelected do that.
 			 */
-			setListUri(mAppForEdit ? ContentUris.withAppendedId(TaskLists.CONTENT_URI, contentSet.getAsLong(Tasks.LIST_ID)) : TaskLists.CONTENT_URI,
-				mAppForEdit ? LIST_LOADER_VISIBLE_LISTS_FILTER : null);
+			setListUri(
+				mAppForEdit ? ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), contentSet.getAsLong(Tasks.LIST_ID))
+					: TaskLists.getContentUri(mAuthority), mAppForEdit ? LIST_LOADER_VISIBLE_LISTS_FILTER : null);
 		}
 	}
 

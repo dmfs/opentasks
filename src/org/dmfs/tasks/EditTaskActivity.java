@@ -42,6 +42,8 @@ public class EditTaskActivity extends FragmentActivity
 {
 	private EditTaskFragment mEditFragment;
 
+	private String mAuthority;
+
 
 	@TargetApi(11)
 	@Override
@@ -49,6 +51,8 @@ public class EditTaskActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_editor);
+
+		mAuthority = getString(R.string.org_dmfs_tasks_authority);
 
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
@@ -68,7 +72,7 @@ public class EditTaskActivity extends FragmentActivity
 			if (Intent.ACTION_SEND.equals(intent.getAction()))
 			{
 				// load data from incoming share intent
-				ContentSet sharedContentSet = new ContentSet(Tasks.CONTENT_URI);
+				ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
 				if (intent.hasExtra(Intent.EXTRA_SUBJECT))
 				{
 					sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_SUBJECT));

@@ -79,6 +79,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	@Retain(permanent = true)
 	private int mCurrentPage;
 
+	private String mAuthority;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -86,6 +88,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_list);
+
+		mAuthority = getString(R.string.org_dmfs_tasks_authority);
 
 		if (findViewById(R.id.task_detail_container) != null)
 		{
@@ -157,7 +161,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	public void onAddNewTask()
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
-		editTaskIntent.setData(Tasks.CONTENT_URI);
+		editTaskIntent.setData(Tasks.getContentUri(mAuthority));
 		startActivityForResult(editTaskIntent, REQUEST_CODE_NEW_TASK);
 	}
 
