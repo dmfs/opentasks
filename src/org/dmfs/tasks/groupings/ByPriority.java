@@ -51,8 +51,9 @@ import android.widget.TextView;
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 @TargetApi(11)
-public interface ByPriority
+public class ByPriority extends AbstractGroupingFactory
 {
+
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by priority.
 	 */
@@ -120,7 +121,7 @@ public interface ByPriority
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
 			{
-				Time dueDate = Common.DUE_ADAPTER.get(cursor);
+				Time dueDate = INSTANCE_DUE_ADAPTER.get(cursor);
 
 				if (dueDate != null)
 				{
@@ -370,18 +371,35 @@ public interface ByPriority
 
 	};
 
-	/**
-	 * A descriptor that knows how to load elements in a list group ordered by due date.
-	 */
-	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (" + Instances.PRIORITY + ">=? and " + Instances.PRIORITY + " <= ? or ? is null and " + Instances.PRIORITY + " <= ? or "
-			+ Instances.PRIORITY + " is ?)", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE + " COLLATE NOCASE ASC",
-		1, 2, 1, 2, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
-	/**
-	 * A descriptor for the "grouped by priority" view.
-	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new PriorityCursorLoaderFactory(
-		PriorityCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(R.string.task_group_priority_title);
+	public ByPriority(String authority)
+	{
+		super(authority);
+	}
+
+
+	@Override
+	ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
+	{
+		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and (" + Instances.PRIORITY
+			+ ">=? and " + Instances.PRIORITY + " <= ? or ? is null and " + Instances.PRIORITY + " <= ? or " + Instances.PRIORITY + " is ?)",
+			Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE + " COLLATE NOCASE ASC", 1, 2, 1, 2, 1)
+			.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
+	{
+		return new ExpandableGroupDescriptor(new PriorityCursorLoaderFactory(PriorityCursorFactory.DEFAULT_PROJECTION),
+			makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	public int getTitle()
+	{
+		return R.string.task_group_priority_title;
+	}
 
 }

@@ -20,6 +20,7 @@ package org.dmfs.tasks;
 import org.dmfs.android.retentionmagic.FragmentActivity;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.groupings.AbstractGroupingFactory;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.ByPriority;
@@ -65,8 +66,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	/**
 	 * Array of {@link ExpandableGroupDescriptor}s.
 	 */
-	private final static ExpandableGroupDescriptor[] GROUP_DESCRIPTORS = new ExpandableGroupDescriptor[] { ByList.GROUP_DESCRIPTOR, ByDueDate.GROUP_DESCRIPTOR,
-		ByStartDate.GROUP_DESCRIPTOR, ByPriority.GROUP_DESCRIPTOR, ByProgress.GROUP_DESCRIPTOR };
+	private AbstractGroupingFactory[] mGroupingFactories;
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
@@ -111,8 +111,11 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag).commit();
 		}
 
+		mGroupingFactories = new AbstractGroupingFactory[] { new ByList(mAuthority), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
+			new ByPriority(mAuthority), new ByProgress(mAuthority) };
+
 		// set up pager adapter
-		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), GROUP_DESCRIPTORS, getApplicationContext());
+		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, getApplicationContext());
 		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 
 		// Setup ViewPager
@@ -250,6 +253,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	@Override
 	public ExpandableGroupDescriptor getGroupDescriptor(int position)
 	{
-		return GROUP_DESCRIPTORS[position];
+		return mGroupingFactories[position].getExpandableGroupDescriptor();
 	}
 }

@@ -1,6 +1,6 @@
 package org.dmfs.tasks;
 
-import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.groupings.AbstractGroupingFactory;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -20,7 +20,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 {
 
 	private static final String TAG = "TaskGroupPager";
-	private final ExpandableGroupDescriptor[] mGroupDescriptors;
+	private final AbstractGroupingFactory[] mGroupingFactories;
 	private final Context mContext;
 	private boolean mTwoPaneLayout;
 
@@ -29,15 +29,15 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	 * 
 	 * @param fm
 	 *            A {@link FragmentManager}
-	 * @param groupDescriptors
-	 *            An array of ExpandableGroupDescriptors that describes the groupings and how to display them
+	 * @param groupingFactories
+	 *            An array of {@link AbstractGroupingFactory}.
 	 * @param context
 	 *            A context to access resources
 	 */
-	public TaskGroupPagerAdapter(FragmentManager fm, ExpandableGroupDescriptor[] groupDescriptors, Context context)
+	public TaskGroupPagerAdapter(FragmentManager fm, AbstractGroupingFactory[] groupingFactories, Context context)
 	{
 		super(fm);
-		mGroupDescriptors = groupDescriptors;
+		mGroupingFactories = groupingFactories;
 		mContext = context;
 	}
 
@@ -45,15 +45,15 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	@Override
 	public CharSequence getPageTitle(int position)
 	{
-		ExpandableGroupDescriptor descriptor = mGroupDescriptors[position];
+		AbstractGroupingFactory factory = mGroupingFactories[position];
 		CharSequence title = "";
 		try
 		{
-			title = mContext.getString(descriptor.getTitle());
+			title = mContext.getString(factory.getTitle());
 		}
 		catch (Resources.NotFoundException e)
 		{
-			Log.e(TAG, "Missing or invalid title resource for ExpandableGroupDescriptor " + descriptor);
+			Log.e(TAG, "Missing or invalid title resource for ExpandableGroupDescriptor " + factory);
 		}
 		return title;
 	}
@@ -63,7 +63,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	public Fragment getItem(int position)
 	{
 		TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
-		fragment.setExpandableGroupDescriptor(mGroupDescriptors[position]);
+		fragment.setExpandableGroupDescriptor(mGroupingFactories[position].getExpandableGroupDescriptor());
 		return fragment;
 	}
 
@@ -71,7 +71,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	@Override
 	public int getCount()
 	{
-		return mGroupDescriptors.length;
+		return mGroupingFactories.length;
 	}
 
 

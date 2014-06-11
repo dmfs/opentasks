@@ -55,8 +55,9 @@ import android.widget.TextView;
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public interface ByStartDate
+public class ByStartDate extends AbstractGroupingFactory
 {
+
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
 	 */
@@ -123,7 +124,7 @@ public interface ByStartDate
 			TextView startDateField = (TextView) view.findViewById(R.id.task_start_date);
 			if (startDateField != null)
 			{
-				Time startDate = Common.START_DATE_ADAPTER.get(cursor);
+				Time startDate = INSTANCE_START_ADAPTER.get(cursor);
 
 				if (startDate != null)
 				{
@@ -156,7 +157,7 @@ public interface ByStartDate
 			ImageView dueIcon = (ImageView) view.findViewById(R.id.task_due_image);
 			if (dueDateField != null)
 			{
-				Time dueTime = Common.DUE_ADAPTER.get(cursor);
+				Time dueTime = INSTANCE_DUE_ADAPTER.get(cursor);
 
 				if (dueTime != null)
 				{
@@ -404,19 +405,33 @@ public interface ByStartDate
 
 	};
 
-	/**
-	 * A descriptor that knows how to load elements in a start date group.
-	 */
-	public final static ExpandableChildDescriptor START_DATE_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and (((" + Instances.INSTANCE_START + ">=?) and (" + Instances.INSTANCE_START + "<?)) or ((" + Instances.INSTANCE_START
-			+ ">=? or " + Instances.INSTANCE_START + " is ?) and ? is null))", Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1)
-		.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
-	/**
-	 * A descriptor for the "grouped by due date" view.
-	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new TimeRangeStartCursorLoaderFactory(
-		TimeRangeStartCursorFactory.DEFAULT_PROJECTION), START_DATE_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(
-		R.string.task_group_start_title);
+	public ByStartDate(String authority)
+	{
+		super(authority);
+	}
 
+
+	@Override
+	ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
+	{
+		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and ((("
+			+ Instances.INSTANCE_START + ">=?) and (" + Instances.INSTANCE_START + "<?)) or ((" + Instances.INSTANCE_START + ">=? or "
+			+ Instances.INSTANCE_START + " is ?) and ? is null))", Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
+	{
+		return new ExpandableGroupDescriptor(new TimeRangeStartCursorLoaderFactory(TimeRangeStartCursorFactory.DEFAULT_PROJECTION),
+			makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	public int getTitle()
+	{
+		return R.string.task_group_start_title;
+	}
 }

@@ -36,8 +36,6 @@ public class ExpandableGroupDescriptor
 	private final AbstractCursorLoaderFactory mLoaderFactory;
 	private final ExpandableChildDescriptor mChildDescriptor;
 	private ViewDescriptor mGroupViewDescriptor;
-	private int mTitle = -1;
-	private int mDrawable = -1;
 
 
 	/**
@@ -133,58 +131,6 @@ public class ExpandableGroupDescriptor
 	public ViewDescriptor getElementViewDescriptor()
 	{
 		return mChildDescriptor.getViewDescriptor();
-	}
-
-
-	/**
-	 * Set the resource id of a resource that contains a title for this grouping.
-	 * 
-	 * @param res
-	 *            A string resource id.
-	 * 
-	 * @return This instance.
-	 */
-	public ExpandableGroupDescriptor setTitle(int res)
-	{
-		mTitle = res;
-		return this;
-	}
-
-
-	/**
-	 * Get the resource id of a resource that contains a name for this grouping.
-	 * 
-	 * @return A resource id.
-	 */
-	public int getTitle()
-	{
-		return mTitle;
-	}
-
-
-	/**
-	 * Set the resource id of a resource that contains a drawable for this grouping.
-	 * 
-	 * @param res
-	 *            A drawable resource id.
-	 * 
-	 * @return This instance.
-	 */
-	public ExpandableGroupDescriptor setDrawabe(int res)
-	{
-		mDrawable = res;
-		return this;
-	}
-
-
-	/**
-	 * Get the resource id of a resource that contains a drawable for this grouping.
-	 * 
-	 * @return A resource id.
-	 */
-	public int getDrawable()
-	{
-		return mDrawable;
 	}
 
 }
