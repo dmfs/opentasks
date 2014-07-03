@@ -193,16 +193,15 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 	{
 		int id = v.getId();
 		Time time = mAdapter.get(mValues);
-		switch (id)
+		if (id == R.id.button_add_one_day)
 		{
-			case R.id.button_add_one_day:
-				time.monthDay++;
-				time.normalize(true);
-				break;
-			case R.id.button_add_one_hour:
-				time.hour++;
-				time.normalize(false);
-				break;
+			time.monthDay++;
+			time.normalize(true);
+		}
+		else if (id == R.id.button_add_one_hour)
+		{
+			time.hour++;
+			time.normalize(false);
 		}
 		mAdapter.validateAndSet(mValues, time);
 	}
