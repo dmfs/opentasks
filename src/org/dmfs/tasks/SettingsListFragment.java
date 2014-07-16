@@ -66,6 +66,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private String mListCompareColumnName;
 	private boolean mSaveOnDetach;
 	private int mFragmentLayout;
+	private String mAutority;
 
 
 	public SettingsListFragment()
@@ -115,6 +116,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	{
 		super.onAttach(activity);
 		mContext = activity.getBaseContext();
+		mAutority = getActivity().getString(R.string.org_dmfs_tasks_authority);
 	}
 
 
@@ -143,9 +145,9 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1)
 	{
-		return new CursorLoader(mContext, TaskContract.TaskLists.CONTENT_URI, new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME,
-			TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE, TaskContract.TaskLists.ACCOUNT_NAME },
-			mListSelectionArguments, mListSelectionParam, TaskContract.TaskLists.ACCOUNT_NAME + " COLLATE NOCASE ASC");
+		return new CursorLoader(mContext, TaskContract.TaskLists.getContentUri(mAutority), new String[] { TaskContract.TaskLists._ID,
+			TaskContract.TaskLists.LIST_NAME, TaskContract.TaskLists.LIST_COLOR, TaskContract.TaskLists.SYNC_ENABLED, TaskContract.TaskLists.VISIBLE,
+			TaskContract.TaskLists.ACCOUNT_NAME }, mListSelectionArguments, mListSelectionParam, TaskContract.TaskLists.ACCOUNT_NAME + " COLLATE NOCASE ASC");
 	}
 
 
@@ -303,7 +305,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		for (Long posInt : savedPositions.keySet())
 		{
 			boolean val = savedPositions.get(posInt);
-			ContentProviderOperation op = ContentProviderOperation.newUpdate(TaskContract.TaskLists.CONTENT_URI)
+			ContentProviderOperation op = ContentProviderOperation.newUpdate(TaskContract.TaskLists.getContentUri(mAutority))
 				.withSelection(TaskContract.TaskLists._ID + "=?", new String[] { posInt.toString() }).withValue(mListCompareColumnName, val ? "1" : "0")
 				.build();
 			ops.add(op);
@@ -311,7 +313,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 		try
 		{
-			mContext.getContentResolver().applyBatch(TaskContract.AUTHORITY, ops);
+			mContext.getContentResolver().applyBatch(mAutority, ops);
 		}
 		catch (RemoteException e)
 		{

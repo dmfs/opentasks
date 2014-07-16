@@ -96,6 +96,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
 		super.onUpdate(context, appWidgetManager, appWidgetIds);
+		String authority = context.getString(R.string.org_dmfs_tasks_authority);
 
 		if (android.os.Build.VERSION.SDK_INT < 11)
 		{
@@ -103,7 +104,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			widget.removeAllViews(android.R.id.list);
 			DueDateFormatter dateFormatter = new DueDateFormatter(context);
 			ContentResolver resolver = context.getContentResolver();
-			Cursor cursor = resolver.query(TaskContract.Instances.CONTENT_URI, null, TaskContract.Instances.VISIBLE + ">0 and "
+			Cursor cursor = resolver.query(TaskContract.Instances.getContentUri(authority), null, TaskContract.Instances.VISIBLE + ">0 and "
 				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
 				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.INSTANCE_DUE + " is null, "
 				+ TaskContract.Instances.DEFAULT_SORT_ORDER);
@@ -136,7 +137,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 
 			/** Add a pending Intent to start new Task Activity on the new Task Button */
 			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
-			editTaskIntent.setData(Tasks.CONTENT_URI);
+			editTaskIntent.setData(Tasks.getContentUri(authority));
 			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
@@ -174,7 +175,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 
 			/** Add a pending Intent to start new Task Activity on the new Task Button */
 			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
-			editTaskIntent.setData(Tasks.CONTENT_URI);
+			editTaskIntent.setData(Tasks.getContentUri(authority));
 			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);

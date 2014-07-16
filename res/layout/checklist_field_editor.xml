@@ -12,21 +12,11 @@
             style="@style/editor_label_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-8dip"
             android:layout_weight="1"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:paddingLeft="12dip"
             android:singleLine="true" />
-
-        <CheckBox
-            android:id="@+id/checklist_mode_switch"
-            style="@style/editor_label_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@null"
-            android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
-            android:text="@string/checklist_label" />
     </LinearLayout>
 
     <EditText
@@ -43,8 +33,7 @@
         android:id="@+id/checklist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone" >
+        android:orientation="vertical" >
 
         <!-- Add empty element -->
 

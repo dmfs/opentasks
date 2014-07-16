@@ -64,7 +64,7 @@ import android.widget.TextView;
  * @author Marten Gajda <marten@dmfs.org>
  */
 @TargetApi(11)
-public interface ByList
+public class ByList extends AbstractGroupingFactory
 {
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
@@ -133,7 +133,7 @@ public interface ByList
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
 			{
-				Time dueDate = Common.DUE_ADAPTER.get(cursor);
+				Time dueDate = INSTANCE_DUE_ADAPTER.get(cursor);
 
 				if (dueDate != null)
 				{
@@ -391,19 +391,35 @@ public interface ByList
 
 	};
 
-	/**
-	 * A descriptor that knows how to load elements in a list group.
-	 */
-	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE
-			+ " COLLATE NOCASE ASC", 0).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
-	/**
-	 * A descriptor for the "grouped by list" view.
-	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new CursorLoaderFactory(TaskLists.CONTENT_URI, new String[] {
-		TaskLists._ID, TaskLists.LIST_NAME, TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0 and " + TaskLists.SYNC_ENABLED + ">0",
-		null, TaskLists.ACCOUNT_NAME + ", " + TaskLists.LIST_NAME), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR).setTitle(
-		R.string.task_group_all_title);
+	public ByList(String authority)
+	{
+		super(authority);
+	}
+
+
+	@Override
+	public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
+	{
+		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?",
+			Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE + " COLLATE NOCASE ASC", 0)
+			.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	public ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
+	{
+		return new ExpandableGroupDescriptor(new CursorLoaderFactory(TaskLists.getContentUri(authority), new String[] { TaskLists._ID, TaskLists.LIST_NAME,
+			TaskLists.LIST_COLOR, TaskLists.ACCOUNT_NAME }, TaskLists.VISIBLE + ">0 and " + TaskLists.SYNC_ENABLED + ">0", null, TaskLists.ACCOUNT_NAME + ", "
+			+ TaskLists.LIST_NAME), makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	public int getTitle()
+	{
+		return R.string.task_group_all_title;
+	}
 
 }

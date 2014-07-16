@@ -102,6 +102,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		 */
 		private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
+		private String mAuthority;
+
 
 		/**
 		 * Instantiates a new task list views factory.
@@ -118,6 +120,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			mResources = context.getResources();
 			mDueDateFormatter = new DueDateFormatter(context);
 			new TimeChangeObserver(context, this);
+			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
 		}
 
 
@@ -137,7 +140,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public void onCreate()
 		{
-			mExecutor.execute(reloadTasks);
+			mExecutor.execute(mReloadTasks);
 		}
 
 
@@ -218,7 +221,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				row.setTextViewText(android.R.id.text1, null);
 			}
 
-			Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, items[position].getTaskId());
+			Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), items[position].getTaskId());
 			Intent i = new Intent();
 			i.setData(taskUri);
 
@@ -293,7 +296,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		public void onTimeUpdate(TimeChangeObserver timeChangeObserver)
 		{
 			// reload the tasks
-			mExecutor.execute(reloadTasks);
+			mExecutor.execute(mReloadTasks);
 		}
 
 
@@ -340,13 +343,13 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			// this runs in the context of the Broadcast receiver, store it for later
 			mContext = context;
 			// load the tasks in a background thread
-			mExecutor.execute(reloadTasks);
+			mExecutor.execute(mReloadTasks);
 		}
 
 		/**
 		 * A {@link Runnable} that loads the tasks to show in the widget.
 		 */
-		Runnable reloadTasks = new Runnable()
+		private Runnable mReloadTasks = new Runnable()
 		{
 
 			@Override
@@ -354,12 +357,13 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			{
 				// load all upcoming non-completed tasks
 				Cursor c = mContext.getContentResolver().query(
-					TaskContract.Instances.CONTENT_URI,
+					TaskContract.Instances.getContentUri(mAuthority),
 					null,
 					TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<="
-						+ System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)", null,
-						TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " +
-						TaskContract.Instances.CREATED + " DESC");
+						+ System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)",
+					null,
+					TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.CREATED
+						+ " DESC");
 
 				if (c != null)
 				{
@@ -382,6 +386,9 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				if (mAppWidgetId == -1)
 				{
 					int[] ids = widgetManager.getAppWidgetIds(TaskListWidgetProvider.getComponentName(mContext));
+					widgetManager.notifyAppWidgetViewDataChanged(ids, R.id.task_list_widget_lv);
+
+					ids = widgetManager.getAppWidgetIds(TaskListWidgetProviderLarge.getComponentName(mContext));
 					widgetManager.notifyAppWidgetViewDataChanged(ids, R.id.task_list_widget_lv);
 				}
 				else

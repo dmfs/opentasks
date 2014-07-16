@@ -26,8 +26,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
-import android.text.TextUtils;
-import android.util.Log;
 
 
 /**
@@ -151,7 +149,6 @@ public class ExpandableChildDescriptor
 			selection = selectionBuilder.toString();
 		}
 
-		Log.v("", selection.toString() + " " + TextUtils.join(",", selectionArgs));
 		return new CursorLoader(context, mUri, mProjection, selection.toString(), selectionArgs, mSortOrder);
 	}
 

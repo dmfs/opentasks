@@ -33,6 +33,7 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -61,7 +62,7 @@ import android.widget.TextView;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public interface ByCompleted
+public class ByCompleted extends AbstractGroupingFactory
 {
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
@@ -86,6 +87,7 @@ public interface ByCompleted
 		private int mFlingContentViewId = -1;
 
 
+		@SuppressLint("NewApi")
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
@@ -101,7 +103,7 @@ public interface ByCompleted
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
 			{
-				Time dueDate = Common.DUE_ADAPTER.get(cursor);
+				Time dueDate = INSTANCE_DUE_ADAPTER.get(cursor);
 
 				if (dueDate != null)
 				{
@@ -306,17 +308,32 @@ public interface ByCompleted
 
 	};
 
-	/**
-	 * A descriptor that knows how to load elements in a due date group.
-	 */
-	public final static ExpandableChildDescriptor CHILD_DESCRIPTOR = new ExpandableChildDescriptor(Instances.CONTENT_URI, Common.INSTANCE_PROJECTION,
-		Instances.VISIBLE + "=1 and " + Instances.STATUS + ">=? and " + Instances.STATUS + "<=?", Instances.DEFAULT_SORT_ORDER, 1, 2)
-		.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
-	/**
-	 * A descriptor for the "grouped by due date" view.
-	 */
-	public final static ExpandableGroupDescriptor GROUP_DESCRIPTOR = new ExpandableGroupDescriptor(new CompletedFlagCursorLoaderFactory(
-		CompletedFlagCursorFactory.DEFAULT_PROJECTION), CHILD_DESCRIPTOR).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	public ByCompleted(String authority)
+	{
+		super(authority);
+	}
 
+
+	@Override
+	public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
+	{
+		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and " + Instances.STATUS
+			+ ">=? and " + Instances.STATUS + "<=?", Instances.DEFAULT_SORT_ORDER, 1, 2).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	public ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
+	{
+		return new ExpandableGroupDescriptor(new CompletedFlagCursorLoaderFactory(CompletedFlagCursorFactory.DEFAULT_PROJECTION),
+			makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+	}
+
+
+	@Override
+	public int getTitle()
+	{
+		return R.string.task_group_completed_title;
+	}
 }

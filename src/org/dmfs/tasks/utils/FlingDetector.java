@@ -41,21 +41,11 @@ import android.widget.ListView;
  * 
  * Ensure there is no other {@link OnScrollListener} and no other {@link OnTouchListener} set for the {@link ListView}, otherwise things might break.
  * 
- * <p>
- * TODO: add support for SDK Levels <14.
- * </p>
- * <p>
- * TODO: add support for flinging to the left.
- * </p>
- * 
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class FlingDetector implements OnTouchListener, OnScrollListener
 {
-
-	private static final String TAG = "FlingDetector";
-
 	private final int mMinimumFlingVelocity;
 	private final int mMaximumFlingVelocity;
 	private final int mTouchSlop;
@@ -83,7 +73,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 		{
 			Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 			vibrator.vibrate(VIBRATION_DURATION);
-			
+
 			// if we don't disallow that, fling doesn't work on some devices
 			mListView.requestDisallowInterceptTouchEvent(true);
 		}
@@ -251,7 +241,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 						/*
 						 * don't set handled = true, that would stop the touch event making it impossible to select a flingable list element
 						 */
-						
+
 						// start vibration detection
 						mHandler.postDelayed(mVibrateRunnable, ViewConfiguration.getTapTimeout());
 					}

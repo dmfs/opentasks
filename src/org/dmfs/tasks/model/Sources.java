@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.tasks.R;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -68,6 +69,8 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	 */
 	private final AccountManager mAccountManager;
 
+	private final String mAuthority;
+
 
 	/**
 	 * Get the Sources singleton instance. Don't call this from the UI thread since it may take a long time to gather all the information from the account
@@ -91,6 +94,8 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	private Sources(Context context)
 	{
 		mContext = context.getApplicationContext();
+
+		mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
 
 		// register to receive package changes
 		IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
@@ -125,7 +130,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 
 		for (SyncAdapterType syncAdapter : syncAdapters)
 		{
-			if (!TaskContract.AUTHORITY.equals(syncAdapter.authority))
+			if (!mAuthority.equals(syncAdapter.authority))
 			{
 				// this sync-adapter is not for Tasks, skip it
 				continue;
@@ -229,7 +234,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 		Account[] accounts = mAccountManager.getAccounts();
 		for (Account account : accounts)
 		{
-			if (getModel(account.type) != null && ContentResolver.getIsSyncable(account, TaskContract.AUTHORITY) > 0)
+			if (getModel(account.type) != null && ContentResolver.getIsSyncable(account, mAuthority) > 0)
 			{
 				result.add(account);
 			}

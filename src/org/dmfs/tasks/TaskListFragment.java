@@ -130,6 +130,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	private boolean mTwoPaneLayout;
 
 	private Loader<Cursor> mCursorLoader;
+	private String mAuthority;
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
@@ -208,6 +209,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
+		mAuthority = getString(R.string.org_dmfs_tasks_authority);
 
 		mAppContext = activity.getBaseContext();
 
@@ -449,7 +451,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				// Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
 
 				// TODO: use the instance URI one we support recurrence
-				Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, selectTaskId);
+				Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), selectTaskId);
 
 				mCallbacks.onItemSelected(taskUri, force);
 			}
@@ -544,7 +546,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			// TODO: do we need a new bundle for each account or can we reuse it?
 			Bundle extras = new Bundle();
 			extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-			ContentResolver.requestSync(account, TaskContract.AUTHORITY, extras);
+			ContentResolver.requestSync(account, mAuthority, extras);
 		}
 	}
 
@@ -657,7 +659,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 					else
 					{
 						leftFlingView.setText(R.string.fling_task_complete);
-						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.navigation_accept), null, null, null);
+						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.ic_action_complete), null, null, null);
 						rightFlingView.setText(R.string.fling_task_edit);
 						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, resources.getDrawable(R.drawable.content_edit), null);
 					}
@@ -697,7 +699,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 					boolean closed = cursor.getLong(cursor.getColumnIndex(Instances.IS_CLOSED)) > 0;
 					String title = cursor.getString(cursor.getColumnIndex(Instances.TITLE));
 					// TODO: use the instance URI once we support recurrence
-					Uri taskUri = ContentUris.withAppendedId(Tasks.CONTENT_URI, taskId);
+					Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), taskId);
 
 					if (direction == FlingDetector.RIGHT_FLING)
 					{
