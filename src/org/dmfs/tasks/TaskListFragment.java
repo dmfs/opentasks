@@ -300,6 +300,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
@@ -494,7 +495,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	private void expandGroups()
 	{
 		// this.expandedIds = expandedIds;
-		if (mSavedExpandedGroups != null)
+		if (mSavedExpandedGroups != null && mSavedExpandedGroups.length > 0)
 		{
 			ExpandableListView list = mExpandableListView;
 			ExpandableListAdapter adapter = mExpandableListView.getExpandableListAdapter();
@@ -871,6 +872,21 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	{
 		mActivatedPositionGroup = openGroupPosition;
 
+	}
+
+
+	public void notifyDataSetChanged(boolean expandFirst)
+	{
+		updateView();
+		if (expandFirst)
+		{
+			// long firstId = mExpandableListView.getExpandableListAdapter().getGroupId(0);
+			// if (!mExpandableListView.isGroupExpanded(0))
+			// {
+			// mSavedExpandedGroups = new long[] { firstId };
+			// }
+
+		}
 	}
 
 	Runnable setOpenHandler = new Runnable()

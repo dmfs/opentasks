@@ -39,13 +39,19 @@ import android.support.v4.content.CursorLoader;
  */
 public class ExpandableChildDescriptor
 {
-	private final Uri mUri;
-	private final String[] mProjection;
-	private final String mSelection;
-	private final int[] mSelectionColumns;
-	private final String mSortOrder;
+	protected Uri mUri;
+	protected String[] mProjection;
+	protected String mSelection;
+	protected int[] mSelectionColumns;
+	protected String mSortOrder;
 
 	private ViewDescriptor mViewDescriptor;
+
+
+	protected ExpandableChildDescriptor()
+	{
+
+	};
 
 
 	/**
@@ -84,7 +90,7 @@ public class ExpandableChildDescriptor
 		String[] selectionArgs = null;
 		String selection = mSelection;
 
-		if (mSelectionColumns.length > 0)
+		if (mSelectionColumns != null && mSelectionColumns.length > 0)
 		{
 			/*
 			 * The columns in cursor may be null, but the selection arguments for the CursorLoader must be non-null.
@@ -148,8 +154,12 @@ public class ExpandableChildDescriptor
 			}
 			selection = selectionBuilder.toString();
 		}
-
-		return new CursorLoader(context, mUri, mProjection, selection.toString(), selectionArgs, mSortOrder);
+		String selectionString = null;
+		if (selection != null)
+		{
+			selectionString = selection.toString();
+		}
+		return new CursorLoader(context, mUri, mProjection, selectionString, selectionArgs, mSortOrder);
 	}
 
 

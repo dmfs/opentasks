@@ -18,5 +18,6 @@
         android:showAsAction="never"
         android:title="@string/menu_sync_now"
         android:titleCondensed="@string/menu_sync_now_condensed"/>
-
+    
+    
 </menu>
