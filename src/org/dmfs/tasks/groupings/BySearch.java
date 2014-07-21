@@ -22,17 +22,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-import org.dmfs.provider.tasks.TaskContract.Instances;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorFactory;
-import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorLoaderFactory;
+import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorFactory;
+import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
+import org.dmfs.tasks.utils.SearchChildDescriptor;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
-import android.annotation.TargetApi;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -46,16 +48,26 @@ import android.widget.TextView;
 
 
 /**
- * Definition of the by-progress grouping.
+ * Definition of the search history grouping.
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(11)
-public class ByProgress extends AbstractGroupingFactory
+public class BySearch extends AbstractGroupingFactory
 {
 
 	/**
-	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by progress.
+	 * The projection we use when we load instances. We don't need every detail of a task here. This is used by all groupings.
+	 */
+	public final static String[] TASK_PROJECTION = new String[] { Tasks.DTSTART, Tasks.DURATION, Tasks.DUE, Tasks.IS_ALLDAY, Tasks.TZ, Tasks.TITLE,
+		Tasks.LIST_COLOR, Tasks.PRIORITY, Tasks.LIST_ID, Tasks._ID, Tasks.STATUS, Tasks.COMPLETED, Tasks.IS_CLOSED, Tasks.PERCENT_COMPLETE };
+
+	/**
+	 * An adapter to load the due date from the tasks projection.
+	 */
+	public final static TimeFieldAdapter TASK_DUE_ADAPTER = new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
+
+	/**
+	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by priority.
 	 */
 	public final ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
@@ -79,11 +91,12 @@ public class ByProgress extends AbstractGroupingFactory
 		private int mFlingRevealRightViewId = R.id.fling_reveal_right;
 
 
+		@SuppressLint("NewApi")
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
-			boolean isClosed = cursor.getInt(13) > 0;
+			boolean isClosed = TaskFieldAdapters.IS_CLOSED.get(cursor);
 
 			// get the view inside that was flinged if the view has an integrated fling content view
 			View flingContentView = (View) view.findViewById(mFlingContentViewId);
@@ -106,7 +119,7 @@ public class ByProgress extends AbstractGroupingFactory
 
 			if (title != null)
 			{
-				String text = cursor.getString(5);
+				String text = TaskFieldAdapters.TITLE.get(cursor);
 				title.setText(text);
 				if (isClosed)
 				{
@@ -121,7 +134,7 @@ public class ByProgress extends AbstractGroupingFactory
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
 			{
-				Time dueDate = INSTANCE_DUE_ADAPTER.get(cursor);
+				Time dueDate = TASK_DUE_ADAPTER.get(cursor);
 
 				if (dueDate != null)
 				{
@@ -153,7 +166,7 @@ public class ByProgress extends AbstractGroupingFactory
 			View colorbar = view.findViewById(R.id.colorbar);
 			if (colorbar != null)
 			{
-				colorbar.setBackgroundColor(cursor.getInt(6));
+				colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
 			}
 
 			View divider = view.findViewById(R.id.divider);
@@ -307,7 +320,7 @@ public class ByProgress extends AbstractGroupingFactory
 				if (colorbar1 != null)
 				{
 					colorbar1.setBackgroundColor(cursor.getInt(2));
-					colorbar1.setVisibility(View.GONE);
+					colorbar1.setVisibility(View.VISIBLE);
 				}
 				if (colorbar2 != null)
 				{
@@ -318,12 +331,12 @@ public class ByProgress extends AbstractGroupingFactory
 			{
 				if (colorbar1 != null)
 				{
-					colorbar1.setVisibility(View.GONE);
+					colorbar1.setVisibility(View.INVISIBLE);
 				}
 				if (colorbar2 != null)
 				{
 					colorbar2.setBackgroundColor(cursor.getInt(2));
-					colorbar2.setVisibility(View.GONE);
+					colorbar2.setVisibility(View.VISIBLE);
 				}
 			}
 		}
@@ -345,7 +358,7 @@ public class ByProgress extends AbstractGroupingFactory
 		 */
 		private String getTitle(Cursor cursor, Context context)
 		{
-			return context.getString(cursor.getInt(cursor.getColumnIndex(ProgressCursorFactory.PROGRESS_TITLE_RES_ID)));
+			return "\"" + cursor.getString(cursor.getColumnIndex(SearchHistoryCursorFactory.SEARCH_TEXT)) + "\"";
 		}
 
 
@@ -372,26 +385,25 @@ public class ByProgress extends AbstractGroupingFactory
 	};
 
 
-	public ByProgress(String authority)
+	public BySearch(String authority)
 	{
 		super(authority);
 	}
 
 
 	@Override
-	ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
+	public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
 	{
-		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and ("
-			+ Instances.PERCENT_COMPLETE + ">=? and " + Instances.PERCENT_COMPLETE + " <= ? or ? is null and " + Instances.PERCENT_COMPLETE + " <= ? or "
-			+ Instances.PERCENT_COMPLETE + " is ?)", Instances.INSTANCE_DUE + " is null, " + Instances.INSTANCE_DUE + ", " + Instances.TITLE
-			+ " COLLATE NOCASE ASC", 1, 2, 1, 2, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		return new SearchChildDescriptor(authority, SearchHistoryCursorFactory.SEARCH_TEXT, TASK_PROJECTION, null, Tasks.DEFAULT_SORT_ORDER, null)
+			.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+
 	}
 
 
 	@Override
-	ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
+	public ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
 	{
-		return new ExpandableGroupDescriptor(new ProgressCursorLoaderFactory(ProgressCursorFactory.DEFAULT_PROJECTION),
+		return new ExpandableGroupDescriptor(new SearchHistoryCursorLoaderFactory(SearchHistoryCursorFactory.DEFAULT_PROJECTION),
 			makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 	}
 
@@ -399,7 +411,6 @@ public class ByProgress extends AbstractGroupingFactory
 	@Override
 	public int getId()
 	{
-		return R.id.task_group_by_progress;
+		return R.id.task_group_search;
 	}
-
 }

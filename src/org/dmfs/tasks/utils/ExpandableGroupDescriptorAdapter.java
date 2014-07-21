@@ -25,6 +25,7 @@ import org.dmfs.tasks.groupings.filters.AbstractFilter;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -105,6 +106,13 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 
 
 	@Override
+	public boolean hasStableIds()
+	{
+		return true;
+	}
+
+
+	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
 		int pos = loader.getId();
@@ -151,20 +159,26 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	@Override
 	protected Cursor getChildrenCursor(Cursor groupCursor)
 	{
-		// the child cursor is no longer valid
-		mLoadedGroups.remove(groupCursor.getPosition());
-		mLoaderManager.restartLoader(groupCursor.getPosition(), null, this);
+		reloadGroup(groupCursor.getPosition());
 		return null;
 	}
 
 
-	public void reloadGroup(int position)
+	public void reloadGroup(final int position)
 	{
 		// the child cursor is no longer valid
 		mLoadedGroups.remove(position);
 		if (position < getGroupCount())
 		{
-			mLoaderManager.restartLoader(position, null, this);
+			new Handler().post(new Runnable()
+			{
+
+				@Override
+				public void run()
+				{
+					mLoaderManager.restartLoader(position, null, ExpandableGroupDescriptorAdapter.this);
+				}
+			});
 		}
 	}
 

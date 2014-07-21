@@ -2,9 +2,8 @@ package org.dmfs.tasks;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -14,7 +13,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
-
 import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 
 
@@ -44,11 +42,13 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	 * @param context
 	 *            A context to access resources
 	 */
+	@SuppressLint("NewApi")
 	public TaskGroupPagerAdapter(FragmentManager fm, AbstractGroupingFactory[] groupingFactories, Context context, int menuRes)
 	{
 		super(fm);
 		mContext = context;
 
+		// TODO: add support for Android<SDK 11
 		// this is a hack to get a Menu
 		mMenu = new PopupMenu(context, null).getMenu();
 		((Activity) context).getMenuInflater().inflate(menuRes, mMenu);
@@ -125,6 +125,5 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	public Drawable getPageIconDrawable(int position)
 	{
 		return mMenu.getItem(position).getIcon();
-
 	}
 }

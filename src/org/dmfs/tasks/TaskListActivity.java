@@ -25,18 +25,30 @@ import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.ByPriority;
 import org.dmfs.tasks.groupings.ByProgress;
+import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.SearchHistoryHelper;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -81,6 +93,14 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 	private String mAuthority;
 
+	private MenuItem mSearchItem;
+
+	private SearchView mSearchView;
+
+	private PagerSlidingTabStrip mTabs;
+
+	private final Handler mHandler = new Handler();
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -112,7 +132,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		}
 
 		mGroupingFactories = new AbstractGroupingFactory[] { new ByList(mAuthority), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
-			new ByPriority(mAuthority), new ByProgress(mAuthority) };
+			new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority) };
 
 		// set up pager adapter
 		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.menu.listview_tabs);
@@ -124,8 +144,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		mViewPager.setCurrentItem(mCurrentPage);
 
 		// Bind the tabs to the ViewPager
-		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-		tabs.setViewPager(mViewPager);
+		mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		mTabs.setViewPager(mViewPager);
 
 	}
 
@@ -222,6 +242,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			item.setChecked(AlarmBroadcastReceiver.getAlarmPreference(this));
 		}
 
+		// search
+		setupSearch(menu);
+
 		return true;
 	}
 
@@ -250,9 +273,117 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	}
 
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private void hideSearchActionView()
+	{
+		mSearchItem.collapseActionView();
+		mSearchView.setQuery("", false);
+	}
+
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public void setupSearch(Menu menu)
+	{
+
+		mSearchItem = menu.findItem(R.id.search);
+		mSearchView = (SearchView) mSearchItem.getActionView();
+
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		if (null != searchManager)
+		{
+			mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		}
+		mSearchView.setIconifiedByDefault(false);
+		mSearchView.setOnQueryTextFocusChangeListener(new OnFocusChangeListener()
+		{
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus)
+			{
+				// switch to search fragment
+				mViewPager.setCurrentItem(mGroupingFactories.length - 1);
+
+				// insert new search
+				if (hasFocus)
+				{
+					SearchHistoryHelper.newSearch(TaskListActivity.this, "");
+				}
+				else
+				{
+					SearchHistoryHelper.endSearch(TaskListActivity.this);
+				}
+
+			}
+		});
+
+		mSearchView.setOnQueryTextListener(new OnQueryTextListener()
+		{
+
+			@Override
+			public boolean onQueryTextSubmit(String query)
+			{
+				hideSearchActionView();
+				return true;
+			}
+
+
+			@Override
+			public boolean onQueryTextChange(String query)
+			{
+				mHandler.removeCallbacks(mSearchUpdater);
+				if (query.length() > 0)
+				{
+					SearchHistoryHelper.updateSearch(TaskListActivity.this, query);
+					mHandler.postDelayed(mSearchUpdater, 250 /* TODO */);
+				}
+				return true;
+			}
+		});
+
+		mTabs.setOnPageChangeListener(new OnPageChangeListener()
+		{
+
+			@Override
+			public void onPageSelected(int position)
+			{
+				if (position != mGroupingFactories.length - 1)
+				{
+					hideSearchActionView();
+				}
+
+			}
+
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+			{
+
+			}
+
+
+			@Override
+			public void onPageScrollStateChanged(int position)
+			{
+
+			}
+		});
+	}
+
+
 	@Override
 	public ExpandableGroupDescriptor getGroupDescriptor(int position)
 	{
 		return mGroupingFactories[position].getExpandableGroupDescriptor();
 	}
+
+	private final Runnable mSearchUpdater = new Runnable()
+	{
+
+		@Override
+		public void run()
+		{
+			TaskListFragment fragment = (TaskListFragment) mPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
+			fragment.notifyDataSetChanged(true);
+		}
+	};
 }

@@ -16,6 +16,7 @@
     <string name="menu_show_completed_condensed">Show completed tasks</string>
     <string name="menu_sync_now">Refresh</string>
     <string name="menu_sync_now_condensed">Refresh</string>
+    <string name="menu_search_hint">Search</string>
     <string name="toast_task_completed">\"%1s\" completed.</string>
     <string name="toast_task_uncompleted">\"%1s\" reopened.</string>
 
@@ -81,6 +82,7 @@
     <string name="task_group_all_title">Lists</string>
     <string name="task_group_completed_title">Completed</string>
     <string name="task_group_start_title">Start</string>
+    <string name="task_group_search_title">Search</string>
     <string name="task_group_priority_title">Priority</string>
     <string name="task_group_progress_title">Progress</string>
 

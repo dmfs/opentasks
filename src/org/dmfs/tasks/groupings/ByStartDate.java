@@ -434,4 +434,5 @@ public class ByStartDate extends AbstractGroupingFactory
 	{
 		return R.id.task_group_by_start;
 	}
+
 }

@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/search"
+        android:title="@string/task_group_search_title"
+        android:showAsAction="collapseActionView"
+        android:actionViewClass="android.widget.SearchView" />
+    
+    <item
         android:id="@+id/menu_visible_list"
         android:title="@string/visible_task_lists">
     </item>

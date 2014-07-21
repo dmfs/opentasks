@@ -104,5 +104,4 @@ public abstract class AbstractGroupingFactory
 
 
 	public abstract int getId();
-
 }

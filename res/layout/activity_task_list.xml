@@ -6,9 +6,12 @@
     android:padding="0dip" >
 
     <com.astuetz.PagerSlidingTabStrip
+        xmlns:app="http://schemas.android.com/apk/res/org.dmfs.tasks"
         android:id="@+id/tabs"
         android:layout_width="match_parent"
-        android:layout_height="48dip" />
+        android:layout_height="48dip"
+        app:pstsShouldExpand="true"
+        app:pstsTabPaddingLeftRight="0dp" />
 
     <android.support.v4.view.ViewPager
         xmlns:tools="http://schemas.android.com/tools"

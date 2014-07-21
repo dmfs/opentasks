@@ -2,18 +2,27 @@
 
     <item
         android:id="@+id/task_group_by_list"
+        android:icon="@drawable/ic_tab_list"
         android:title="@string/task_group_all_title"/>
     <item
         android:id="@+id/task_group_by_start"
+        android:icon="@drawable/ic_tab_start"
         android:title="@string/task_group_start_title"/>
     <item
         android:id="@+id/task_group_by_due"
+        android:icon="@drawable/ic_tab_due"
         android:title="@string/task_group_due_title"/>
     <item
         android:id="@+id/task_group_by_priority"
+        android:icon="@drawable/ic_tab_priority"
         android:title="@string/task_group_priority_title"/>
     <item
         android:id="@+id/task_group_by_progress"
+        android:icon="@drawable/ic_tab_progress"
         android:title="@string/task_group_progress_title"/>
+    <item
+        android:id="@+id/task_group_search"
+        android:icon="@drawable/ic_tab_search"
+        android:title="@string/task_group_search_title"/>
 
 </menu>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <ExpandableListView
+    <org.dmfs.tasks.utils.RetainExpandableListView
         android:id="@android:id/list"
         style="@style/expandable_task_list"
         android:layout_width="match_parent"
