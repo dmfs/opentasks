@@ -430,8 +430,8 @@ public class ByStartDate extends AbstractGroupingFactory
 
 
 	@Override
-	public int getTitle()
+	public int getId()
 	{
-		return R.string.task_group_start_title;
+		return R.id.task_group_by_start;
 	}
 }

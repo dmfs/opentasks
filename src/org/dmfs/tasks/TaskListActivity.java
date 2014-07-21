@@ -115,7 +115,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			new ByPriority(mAuthority), new ByProgress(mAuthority) };
 
 		// set up pager adapter
-		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, getApplicationContext());
+		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.menu.listview_tabs);
 		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 
 		// Setup ViewPager

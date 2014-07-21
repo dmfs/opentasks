@@ -397,9 +397,9 @@ public class ByPriority extends AbstractGroupingFactory
 
 
 	@Override
-	public int getTitle()
+	public int getId()
 	{
-		return R.string.task_group_priority_title;
+		return R.id.task_group_by_priority;
 	}
 
 }

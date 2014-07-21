@@ -397,8 +397,8 @@ public class ByProgress extends AbstractGroupingFactory
 
 
 	@Override
-	public int getTitle()
+	public int getId()
 	{
-		return R.string.task_group_progress_title;
+		return R.id.task_group_by_progress;
 	}
 }

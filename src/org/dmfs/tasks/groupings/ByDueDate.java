@@ -418,9 +418,9 @@ public class ByDueDate extends AbstractGroupingFactory
 
 
 	@Override
-	public int getTitle()
+	public int getId()
 	{
-		return R.string.task_group_due_title;
+		return R.id.task_group_by_due;
 	}
 
 }

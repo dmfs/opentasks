@@ -417,9 +417,9 @@ public class ByList extends AbstractGroupingFactory
 
 
 	@Override
-	public int getTitle()
+	public int getId()
 	{
-		return R.string.task_group_all_title;
+		return R.id.task_group_by_list;
 	}
 
 }

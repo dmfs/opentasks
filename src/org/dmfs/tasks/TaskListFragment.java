@@ -26,7 +26,6 @@ import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.groupings.ByCompleted;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;

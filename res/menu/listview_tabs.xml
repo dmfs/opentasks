@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/task_group_by_list"
+        android:title="@string/task_group_all_title"/>
+    <item
+        android:id="@+id/task_group_by_start"
+        android:title="@string/task_group_start_title"/>
+    <item
+        android:id="@+id/task_group_by_due"
+        android:title="@string/task_group_due_title"/>
+    <item
+        android:id="@+id/task_group_by_priority"
+        android:title="@string/task_group_priority_title"/>
+    <item
+        android:id="@+id/task_group_by_progress"
+        android:title="@string/task_group_progress_title"/>
+
+</menu>
