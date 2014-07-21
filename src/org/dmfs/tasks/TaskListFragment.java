@@ -398,15 +398,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			mSavedExpandedGroups = null;
 		}
 
-		ExpandableListAdapter adapter = mExpandableListView.getExpandableListAdapter();
-		int count = adapter.getGroupCount();
-		for (int i = 0; i < count; i++)
-		{
-			if (mExpandableListView.isGroupExpanded(i))
-			{
-				mAdapter.reloadGroup(i);
-			}
-		}
+		mAdapter.reloadLoadedGroups();
 	}
 
 

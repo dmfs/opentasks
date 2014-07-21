@@ -183,6 +183,21 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	}
 
 
+	public void reloadLoadedGroups()
+	{
+		// we operate on a copy of the set to avoid conurrent modification when a group is loaded before we're done here
+		for (Integer i : new HashSet<Integer>(mLoadedGroups))
+		{
+			int getGroupCount = getGroupCount();
+			if (i < getGroupCount)
+			{
+				mLoadedGroups.remove(i);
+				mLoaderManager.restartLoader(i, null, ExpandableGroupDescriptorAdapter.this);
+			}
+		}
+	}
+
+
 	@Override
 	protected View newChildView(Context context, Cursor cursor, boolean isLastChild, ViewGroup parent)
 	{
