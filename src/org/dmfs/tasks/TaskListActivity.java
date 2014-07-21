@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
@@ -96,6 +97,10 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 	private SearchView mSearchView;
 
+	private PagerSlidingTabStrip mTabs;
+
+	private final Handler mHandler = new Handler();
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -139,8 +144,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		mViewPager.setCurrentItem(mCurrentPage);
 
 		// Bind the tabs to the ViewPager
-		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-		tabs.setViewPager(mViewPager);
+		mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		mTabs.setViewPager(mViewPager);
 
 	}
 
@@ -325,17 +330,17 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			@Override
 			public boolean onQueryTextChange(String query)
 			{
-				if (!query.equals(""))
+				mHandler.removeCallbacks(mSearchUpdater);
+				if (query.length() > 0)
 				{
 					SearchHistoryHelper.updateSearch(TaskListActivity.this, query);
-					TaskListFragment fragment = (TaskListFragment) mPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
-					fragment.notifyDataSetChanged(true);
+					mHandler.postDelayed(mSearchUpdater, 250 /* TODO */);
 				}
 				return true;
 			}
 		});
 
-		mViewPager.setOnPageChangeListener(new OnPageChangeListener()
+		mTabs.setOnPageChangeListener(new OnPageChangeListener()
 		{
 
 			@Override
@@ -370,4 +375,15 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	{
 		return mGroupingFactories[position].getExpandableGroupDescriptor();
 	}
+
+	private final Runnable mSearchUpdater = new Runnable()
+	{
+
+		@Override
+		public void run()
+		{
+			TaskListFragment fragment = (TaskListFragment) mPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
+			fragment.notifyDataSetChanged(true);
+		}
+	};
 }

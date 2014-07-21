@@ -336,4 +336,11 @@ public class ByCompleted extends AbstractGroupingFactory
 	{
 		return R.string.task_group_completed_title;
 	}
+
+
+	@Override
+	public int getIconRessource()
+	{
+		return R.drawable.ic_tab_list;
+	}
 }

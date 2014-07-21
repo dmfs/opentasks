@@ -434,4 +434,11 @@ public class ByStartDate extends AbstractGroupingFactory
 	{
 		return R.string.task_group_start_title;
 	}
+
+
+	@Override
+	public int getIconRessource()
+	{
+		return R.drawable.ic_tab_start;
+	}
 }

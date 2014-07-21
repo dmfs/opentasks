@@ -105,4 +105,7 @@ public abstract class AbstractGroupingFactory
 
 	public abstract int getTitle();
 
+
+	public abstract int getIconRessource();
+
 }

@@ -4,10 +4,13 @@ import org.dmfs.tasks.groupings.AbstractGroupingFactory;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+
+import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 
 
 /**
@@ -16,7 +19,7 @@ import android.util.Log;
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 
-public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
+public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider
 {
 
 	private static final String TAG = "TaskGroupPager";
@@ -78,5 +81,29 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 	public void setTwoPaneLayout(boolean twoPane)
 	{
 		mTwoPaneLayout = twoPane;
+	}
+
+
+	@Override
+	public int getPageIconResId(int position)
+	{
+		AbstractGroupingFactory factory = mGroupingFactories[position];
+
+		try
+		{
+			return factory.getIconRessource();
+		}
+		catch (Resources.NotFoundException e)
+		{
+			Log.e(TAG, "Missing or invalid icon resource for ExpandableGroupDescriptor " + factory);
+		}
+		return 0;
+	}
+
+
+	@Override
+	public Drawable getPageIconDrawable(int position)
+	{
+		return null;
 	}
 }

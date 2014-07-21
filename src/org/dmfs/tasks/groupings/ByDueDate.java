@@ -423,4 +423,11 @@ public class ByDueDate extends AbstractGroupingFactory
 		return R.string.task_group_due_title;
 	}
 
+
+	@Override
+	public int getIconRessource()
+	{
+		return R.drawable.ic_tab_due;
+	}
+
 }

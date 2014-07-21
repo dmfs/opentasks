@@ -402,4 +402,11 @@ public class ByPriority extends AbstractGroupingFactory
 		return R.string.task_group_priority_title;
 	}
 
+
+	@Override
+	public int getIconRessource()
+	{
+		return R.drawable.ic_tab_priority;
+	}
+
 }

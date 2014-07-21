@@ -30,16 +30,20 @@ import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.SearchChildDescriptor;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build.VERSION;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -63,7 +67,7 @@ public class BySearch extends AbstractGroupingFactory
 	public final static TimeFieldAdapter TASK_DUE_ADAPTER = new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
 
 	/**
-	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list.
+	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by priority.
 	 */
 	public final ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
@@ -82,7 +86,9 @@ public class BySearch extends AbstractGroupingFactory
 		 */
 		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
-		private int mFlingContentViewId = -1;
+		private int mFlingContentViewId = R.id.flingContentView;
+		private int mFlingRevealLeftViewId = R.id.fling_reveal_left;
+		private int mFlingRevealRightViewId = R.id.fling_reveal_right;
 
 
 		@SuppressLint("NewApi")
@@ -90,13 +96,40 @@ public class BySearch extends AbstractGroupingFactory
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
 			TextView title = (TextView) view.findViewById(android.R.id.title);
-			if (title != null)
+			boolean isClosed = TaskFieldAdapters.IS_CLOSED.get(cursor);
+
+			// get the view inside that was flinged if the view has an integrated fling content view
+			View flingContentView = (View) view.findViewById(mFlingContentViewId);
+			if (flingContentView == null)
 			{
-				String text = cursor.getString(cursor.getColumnIndex(Tasks.TITLE));
-				title.setText(text);
+				flingContentView = view;
 			}
 
-			Integer status = cursor.getInt(cursor.getColumnIndex(Tasks.STATUS));
+			if (android.os.Build.VERSION.SDK_INT >= 14)
+			{
+				flingContentView.setTranslationX(0);
+				flingContentView.setAlpha(1);
+			}
+			else
+			{
+				LayoutParams layoutParams = (LayoutParams) flingContentView.getLayoutParams();
+				layoutParams.setMargins(0, layoutParams.topMargin, 0, layoutParams.bottomMargin);
+				flingContentView.setLayoutParams(layoutParams);
+			}
+
+			if (title != null)
+			{
+				String text = TaskFieldAdapters.TITLE.get(cursor);
+				title.setText(text);
+				if (isClosed)
+				{
+					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+				}
+				else
+				{
+					title.setPaintFlags(title.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+				}
+			}
 
 			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
 			if (dueDateField != null)
@@ -112,45 +145,16 @@ public class BySearch extends AbstractGroupingFactory
 					mNow.clear(TimeZone.getDefault().getID());
 					mNow.setToNow();
 
-					if (status == null || status < Tasks.STATUS_COMPLETED)
+					dueDateField.setText(makeDueDate(dueDate, view.getContext()));
+
+					// highlight overdue dates & times
+					if (dueDate.before(mNow) && !isClosed)
 					{
-
-						dueDateField.setText(makeDueDate(dueDate));
-
-						// highlight overdue dates & times
-						if (dueDate.before(mNow))
-						{
-							dueDateField.setTextColor(Color.RED);
-						}
-						else
-						{
-							dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
-						}
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
 					}
 					else
 					{
-						Long completed = cursor.getLong(cursor.getColumnIndex(Tasks.COMPLETED));
-						if (completed != null)
-						{
-							Time complTime = new Time(Time.TIMEZONE_UTC);
-							complTime.set(completed);
-
-							dueDateField.setText(makeDueDate(complTime));
-
-							// highlight if the task has been completed after the due date
-							if (dueDate.after(complTime))
-							{
-								dueDateField.setTextColor(Color.RED);
-							}
-							else
-							{
-								dueDateField.setTextColor(Color.argb(255, 0x80, 0x80, 0x80));
-							}
-						}
-						else
-						{
-							// TODO: what do we show then there is no completed date?
-						}
+						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
 					}
 				}
 				else
@@ -162,7 +166,32 @@ public class BySearch extends AbstractGroupingFactory
 			View colorbar = view.findViewById(R.id.colorbar);
 			if (colorbar != null)
 			{
-				colorbar.setBackgroundColor(cursor.getColumnIndex(Tasks.LIST_COLOR));
+				colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+			}
+
+			View divider = view.findViewById(R.id.divider);
+			if (divider != null)
+			{
+				divider.setVisibility((flags & FLAG_IS_LAST_CHILD) != 0 ? View.GONE : View.VISIBLE);
+			}
+
+			// display priority
+			int priority = TaskFieldAdapters.PRIORITY.get(cursor);
+			View priorityView = view.findViewById(R.id.task_priority_view_medium);
+			priorityView.setBackgroundResource(android.R.color.transparent);
+			priorityView.setVisibility(View.VISIBLE);
+
+			if (priority > 0 && priority < 5)
+			{
+				priorityView.setBackgroundResource(R.color.priority_red);
+			}
+			if (priority == 5)
+			{
+				priorityView.setBackgroundResource(R.color.priority_yellow);
+			}
+			if (priority > 5 && priority <= 9)
+			{
+				priorityView.setBackgroundResource(R.color.priority_green);
 			}
 
 			if (VERSION.SDK_INT >= 11)
@@ -199,16 +228,26 @@ public class BySearch extends AbstractGroupingFactory
 		 *            The due date to format.
 		 * @return A String with the formatted date.
 		 */
-		private String makeDueDate(Time due)
+		private String makeDueDate(Time due, Context context)
 		{
 			if (!due.allDay)
 			{
 				due.switchTimezone(TimeZone.getDefault().getID());
 			}
 
+			// normalize time to ensure yearDay is set properly
+			due.normalize(false);
+
 			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
 			{
-				return mTimeFormatter.format(new Date(due.toMillis(false)));
+				if (due.allDay)
+				{
+					return context.getString(R.string.today);
+				}
+				else
+				{
+					return context.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(due.toMillis(false)));
+				}
 			}
 			else
 			{
@@ -227,19 +266,19 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public int getFlingRevealLeftViewId()
 		{
-			return -1;
+			return mFlingRevealLeftViewId;
 		}
 
 
 		@Override
 		public int getFlingRevealRightViewId()
 		{
-			return -1;
+			return mFlingRevealRightViewId;
 		}
 	};
 
 	/**
-	 * A {@link ViewDescriptor} that knows how to present due date groups.
+	 * A {@link ViewDescriptor} that knows how to present list groups.
 	 */
 	public final ViewDescriptor GROUP_VIEW_DESCRIPTOR = new ViewDescriptor()
 	{
@@ -247,10 +286,58 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
+			int position = cursor.getPosition();
+
+			// set list title
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
 			{
-				title.setText(cursor.getString(cursor.getColumnIndex(SearchHistoryCursorFactory.SEARCH_TEXT)));
+				title.setText(getTitle(cursor, view.getContext()));
+			}
+
+			// set list elements
+			TextView text2 = (TextView) view.findViewById(android.R.id.text2);
+			int childrenCount = adapter.getChildrenCount(position);
+			if (text2 != null && ((ExpandableGroupDescriptorAdapter) adapter).childCursorLoaded(position))
+			{
+				Resources res = view.getContext().getResources();
+
+				text2.setText(res.getQuantityString(R.plurals.number_of_tasks, childrenCount, childrenCount));
+			}
+
+			// show/hide divider
+			View divider = view.findViewById(R.id.divider);
+			if (divider != null)
+			{
+				divider.setVisibility((flags & FLAG_IS_EXPANDED) != 0 && childrenCount > 0 ? View.VISIBLE : View.GONE);
+			}
+
+			View colorbar1 = view.findViewById(R.id.colorbar1);
+			View colorbar2 = view.findViewById(R.id.colorbar2);
+
+			if ((flags & FLAG_IS_EXPANDED) != 0)
+			{
+				if (colorbar1 != null)
+				{
+					colorbar1.setBackgroundColor(cursor.getInt(2));
+					colorbar1.setVisibility(View.VISIBLE);
+				}
+				if (colorbar2 != null)
+				{
+					colorbar2.setVisibility(View.GONE);
+				}
+			}
+			else
+			{
+				if (colorbar1 != null)
+				{
+					colorbar1.setVisibility(View.INVISIBLE);
+				}
+				if (colorbar2 != null)
+				{
+					colorbar2.setBackgroundColor(cursor.getInt(2));
+					colorbar2.setVisibility(View.VISIBLE);
+				}
 			}
 		}
 
@@ -258,7 +345,20 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public int getView()
 		{
-			return R.layout.task_list_group;
+			return R.layout.task_list_group_single_line;
+		}
+
+
+		/**
+		 * Return the title of the priority group.
+		 * 
+		 * @param cursor
+		 *            A {@link Cursor} pointing to the current group.
+		 * @return A {@link String} with the group name.
+		 */
+		private String getTitle(Cursor cursor, Context context)
+		{
+			return "\"" + cursor.getString(cursor.getColumnIndex(SearchHistoryCursorFactory.SEARCH_TEXT)) + "\"";
 		}
 
 
@@ -312,5 +412,12 @@ public class BySearch extends AbstractGroupingFactory
 	public int getTitle()
 	{
 		return R.string.task_group_search_title;
+	}
+
+
+	@Override
+	public int getIconRessource()
+	{
+		return R.drawable.ic_tab_search;
 	}
 }
