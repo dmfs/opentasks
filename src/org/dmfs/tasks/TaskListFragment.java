@@ -398,7 +398,14 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			mSavedExpandedGroups = null;
 		}
 
-		mAdapter.reloadLoadedGroups();
+		mHandler.post(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				mAdapter.reloadLoadedGroups();
+			}
+		});
 	}
 
 
