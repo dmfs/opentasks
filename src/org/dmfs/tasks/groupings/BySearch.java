@@ -24,7 +24,6 @@ import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -32,6 +31,9 @@ import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.SearchChildDescriptor;
+import org.dmfs.tasks.utils.SearchHistoryDatabaseHelper;
+import org.dmfs.tasks.utils.SearchHistoryDatabaseHelper.SearchHistoryColumns;
+import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.annotation.SuppressLint;
@@ -39,6 +41,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Build.VERSION;
 import android.text.format.Time;
 import android.view.View;
@@ -339,6 +342,9 @@ public class BySearch extends AbstractGroupingFactory
 					colorbar2.setVisibility(View.VISIBLE);
 				}
 			}
+
+			boolean isHistoric = cursor.getInt(cursor.getColumnIndex(SearchHistoryColumns.HISTORIC)) > 0;
+			title.setTypeface(null, isHistoric ? Typeface.NORMAL : Typeface.ITALIC);
 		}
 
 
@@ -358,7 +364,7 @@ public class BySearch extends AbstractGroupingFactory
 		 */
 		private String getTitle(Cursor cursor, Context context)
 		{
-			return "\"" + cursor.getString(cursor.getColumnIndex(SearchHistoryCursorFactory.SEARCH_TEXT)) + "\"";
+			return "\"" + cursor.getString(cursor.getColumnIndex(SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY)) + "\"";
 		}
 
 
@@ -384,18 +390,21 @@ public class BySearch extends AbstractGroupingFactory
 
 	};
 
+	private final SearchHistoryHelper mHelper;
 
-	public BySearch(String authority)
+
+	public BySearch(String authority, SearchHistoryHelper helper)
 	{
 		super(authority);
+		mHelper = helper;
 	}
 
 
 	@Override
 	public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
 	{
-		return new SearchChildDescriptor(authority, SearchHistoryCursorFactory.SEARCH_TEXT, TASK_PROJECTION, null, Tasks.DEFAULT_SORT_ORDER, null)
-			.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		return new SearchChildDescriptor(authority, SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, TASK_PROJECTION, null,
+			Tasks.DEFAULT_SORT_ORDER, null).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	}
 
@@ -403,8 +412,8 @@ public class BySearch extends AbstractGroupingFactory
 	@Override
 	public ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
 	{
-		return new ExpandableGroupDescriptor(new SearchHistoryCursorLoaderFactory(SearchHistoryCursorFactory.DEFAULT_PROJECTION),
-			makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		return new ExpandableGroupDescriptor(new SearchHistoryCursorLoaderFactory(mHelper), makeExpandableChildDescriptor(authority))
+			.setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 	}
 
 

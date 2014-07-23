@@ -21,7 +21,6 @@ import org.dmfs.tasks.utils.SearchHistoryHelper;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 
 
 /**
@@ -32,12 +31,7 @@ import android.database.MatrixCursor;
 public final class SearchHistoryCursorFactory extends AbstractCustomCursorFactory
 {
 
-	public final static String SEARCH_ID = "_id";
-	public final static String SEARCH_TEXT = "text";
-
-	public static final String[] DEFAULT_PROJECTION = new String[] { SEARCH_ID, SEARCH_TEXT };
-
-	private Context mContext;
+	private final SearchHistoryHelper mHelper;
 
 
 	/**
@@ -46,24 +40,16 @@ public final class SearchHistoryCursorFactory extends AbstractCustomCursorFactor
 	 * @param projection
 	 *            An array of column names.
 	 */
-	public SearchHistoryCursorFactory(Context context, String[] projection)
+	public SearchHistoryCursorFactory(Context context, String[] projection, SearchHistoryHelper helper)
 	{
 		super(projection);
-		mContext = context;
+		mHelper = helper;
 	}
 
 
 	@Override
 	public Cursor getCursor()
 	{
-		MatrixCursor result = new MatrixCursor(DEFAULT_PROJECTION);
-		String[] history = SearchHistoryHelper.loadSearchHistory(mContext);
-		for (int i = 0; i < history.length; i++)
-		{
-			String string = history[i];
-			result.addRow(new Object[] { i, string });
-
-		}
-		return result;
+		return mHelper.getSearchHistory();
 	}
 }

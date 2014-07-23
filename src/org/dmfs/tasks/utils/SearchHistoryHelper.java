@@ -1,146 +1,109 @@
+/*
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
 package org.dmfs.tasks.utils;
 
+import org.dmfs.tasks.utils.SearchHistoryDatabaseHelper.SearchHistoryColumns;
+
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 
 /**
- * Wraps functionality to store and restore the search history as {@link SharedPreferences}.
+ * Helper to access the search history.
  * 
- * @author Tobias Reinsch <tobias@dmfs.org>
- * 
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public class SearchHistoryHelper
 {
-	public static final String SEARCH_PREFERENCES = "search_preferences";
-	public static final String KEY_SEARCH_HISTORY = "search_history";
-
-	public static final int HISTORY_SIZE = 5;
-
-	private static final String SERIALIZER_SEPARATOR = ":;:";
+	/**
+	 * The search history database.
+	 */
+	private final SQLiteDatabase mDb;
 
 
-	public static void newSearch(Context context, String searchString)
+	/**
+	 * Creates a new {@link SearchHistoryHelper}.
+	 * 
+	 * @param context
+	 *            A {@link Context}.
+	 */
+	public SearchHistoryHelper(Context context)
 	{
-		SharedPreferences searchPrefs = context.getSharedPreferences(SEARCH_PREFERENCES, 0);
-		SharedPreferences.Editor editor = searchPrefs.edit();
-
-		String historyString = searchPrefs.getString(KEY_SEARCH_HISTORY, null);
-		String[] historyArray = deserialize(historyString);
-		if (historyArray.length >= HISTORY_SIZE)
-		{
-			String[] persistArray = new String[HISTORY_SIZE];
-			persistArray[0] = searchString;
-			for (int i = 0; i < HISTORY_SIZE - 1; i++)
-			{
-				String string = historyArray[i];
-				persistArray[i + 1] = string;
-			}
-			String persistString = serialize(persistArray);
-			editor.putString(KEY_SEARCH_HISTORY, persistString);
-
-		}
-		else
-		{
-			String[] persistArray = new String[historyArray.length + 1];
-			persistArray[0] = searchString;
-			for (int i = 0; i < historyArray.length; i++)
-			{
-				String string = historyArray[i];
-				persistArray[i + 1] = string;
-			}
-			String persistString = serialize(persistArray);
-			editor.putString(KEY_SEARCH_HISTORY, persistString);
-		}
-
-		editor.commit();
+		SearchHistoryDatabaseHelper databaseHelper = new SearchHistoryDatabaseHelper(context);
+		mDb = databaseHelper.getWritableDatabase();
 	}
 
 
-	public static void updateSearch(Context context, String searchString)
+	/**
+	 * Returns a {@link Cursor} that contains the search history with the most recent search first.
+	 * 
+	 * @return A {@link Cursor}.
+	 */
+	public Cursor getSearchHistory()
 	{
-		SharedPreferences searchPrefs = context.getSharedPreferences(SEARCH_PREFERENCES, 0);
-		SharedPreferences.Editor editor = searchPrefs.edit();
-
-		String historyString = searchPrefs.getString(KEY_SEARCH_HISTORY, null);
-		String[] historyArray = deserialize(historyString);
-
-		if (historyArray.length > 0)
-		{
-			historyArray[0] = searchString;
-			String persistString = serialize(historyArray);
-			editor.putString(KEY_SEARCH_HISTORY, persistString);
-			editor.commit();
-		}
-
+		return mDb.query(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, null, null, null, null, null, SearchHistoryColumns._ID + " desc");
 	}
 
 
-	public static void endSearch(Context context)
+	/**
+	 * Update the current search entry, creating one if only historic search entries exist.
+	 * 
+	 * @param query
+	 *            The search query.
+	 */
+	public void updateSearch(String query)
 	{
-		SharedPreferences searchPrefs = context.getSharedPreferences(SEARCH_PREFERENCES, 0);
-		SharedPreferences.Editor editor = searchPrefs.edit();
-
-		String historyString = searchPrefs.getString(KEY_SEARCH_HISTORY, null);
-		String[] historyArray = deserialize(historyString);
-
-		if (historyArray.length > 0 && historyArray[0].equals(""))
+		ContentValues values = new ContentValues(1);
+		values.put(SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, query);
+		if (mDb.update(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, values, SearchHistoryColumns.HISTORIC + "=0", null) == 0)
 		{
-			String[] persistArray = new String[historyArray.length - 1];
-			for (int i = 1; i < historyArray.length; i++)
-			{
-				String string = historyArray[i];
-				persistArray[i - 1] = string;
-
-			}
-			String persistString = serialize(persistArray);
-			editor.putString(KEY_SEARCH_HISTORY, persistString);
-			editor.commit();
+			mDb.insert(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, "", values);
 		}
-
 	}
 
 
-	public static String[] loadSearchHistory(Context context)
+	/**
+	 * Commit the current search, if any, making it a historic search entry.
+	 */
+	public void commitSearch()
 	{
-		SharedPreferences searchPrefs = context.getSharedPreferences(SEARCH_PREFERENCES, 0);
-		String historyString = searchPrefs.getString(KEY_SEARCH_HISTORY, null);
-
-		if (historyString == null)
-		{
-			return new String[0];
-		}
-		else
-		{
-			return deserialize(historyString);
-		}
-
+		ContentValues values = new ContentValues(1);
+		values.put(SearchHistoryDatabaseHelper.SearchHistoryColumns.HISTORIC, 1);
+		mDb.update(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, values, SearchHistoryColumns.HISTORIC + "=0", null);
 	}
 
 
-	private static String serialize(String[] history)
+	/**
+	 * Remove the current search entry, if any.
+	 */
+	public void removeCurrentSearch()
 	{
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < history.length; i++)
-		{
-			builder.append(history[i]);
-			if (i < history.length - 1)
-			{
-				builder.append(SERIALIZER_SEPARATOR);
-			}
-
-		}
-		return builder.toString();
+		mDb.delete(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, SearchHistoryColumns.HISTORIC + "=0", null);
 	}
 
 
-	private static String[] deserialize(String historyString)
+	/**
+	 * Close the database connection.
+	 */
+	public void close()
 	{
-		if (historyString == null)
-		{
-			return new String[0];
-		}
-		return historyString.split(SERIALIZER_SEPARATOR);
+		mDb.close();
 	}
-
 }

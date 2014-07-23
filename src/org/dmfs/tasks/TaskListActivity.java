@@ -45,8 +45,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnFocusChangeListener;
+import android.view.MenuItem.OnActionExpandListener;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
@@ -76,6 +75,11 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private final static int REQUEST_CODE_NEW_TASK = 2924;
 
 	/**
+	 * The time to wait for a new key before updating the search view.
+	 */
+	private final static int SEARCH_UPDATE_DELAY = 400; // ms
+
+	/**
 	 * Array of {@link ExpandableGroupDescriptor}s.
 	 */
 	private AbstractGroupingFactory[] mGroupingFactories;
@@ -89,7 +93,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private TaskGroupPagerAdapter mPagerAdapter;
 
 	@Retain(permanent = true)
-	private int mCurrentPage;
+	private int mCurrentPageId;
+
+	private int mPreviousPagePosition = -1;
 
 	private String mAuthority;
 
@@ -101,6 +107,10 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 	private final Handler mHandler = new Handler();
 
+	private SearchHistoryHelper mSearchHistoryHelper;
+
+	private boolean mAutoExpandSearchView = false;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -110,6 +120,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		setContentView(R.layout.activity_task_list);
 
 		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mSearchHistoryHelper = new SearchHistoryHelper(this);
 
 		if (findViewById(R.id.task_detail_container) != null)
 		{
@@ -132,7 +143,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		}
 
 		mGroupingFactories = new AbstractGroupingFactory[] { new ByList(mAuthority), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
-			new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority) };
+			new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
 
 		// set up pager adapter
 		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.menu.listview_tabs);
@@ -141,12 +152,81 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		// Setup ViewPager
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mPagerAdapter);
-		mViewPager.setCurrentItem(mCurrentPage);
+
+		int currentPageIndex = mPagerAdapter.getPagePosition(mCurrentPageId);
+
+		if (currentPageIndex >= 0)
+		{
+			mViewPager.setCurrentItem(currentPageIndex);
+			if (mCurrentPageId == R.id.task_group_search)
+			{
+				if (mSearchItem != null)
+				{
+					// that's actually quite unlikely to happen
+					mSearchItem.expandActionView();
+				}
+				else
+				{
+					mAutoExpandSearchView = true;
+				}
+			}
+		}
 
 		// Bind the tabs to the ViewPager
 		mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		mTabs.setViewPager(mViewPager);
 
+		mTabs.setOnPageChangeListener(new OnPageChangeListener()
+		{
+
+			@Override
+			public void onPageSelected(int position)
+			{
+				int newPageId = mPagerAdapter.getPageId(position);
+
+				if (newPageId == R.id.task_group_search)
+				{
+					int oldPageId = mCurrentPageId;
+					mCurrentPageId = newPageId;
+					// the search page is selected now, expand the search view
+					mSearchItem.expandActionView();
+
+					// store the page position we're comming from
+					mPreviousPagePosition = mPagerAdapter.getPagePosition(oldPageId);
+				}
+				else if (mCurrentPageId == R.id.task_group_search)
+				{
+					// we've been on the search page before, so commit the search and close the search view
+					mSearchHistoryHelper.commitSearch();
+					mHandler.post(mSearchUpdater);
+					mCurrentPageId = newPageId;
+					hideSearchActionView();
+				}
+				mCurrentPageId = newPageId;
+			}
+
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+			{
+
+			}
+
+
+			@Override
+			public void onPageScrollStateChanged(int position)
+			{
+
+			}
+		});
+	}
+
+
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		mSearchHistoryHelper.close();
 	}
 
 
@@ -209,18 +289,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 
 	@Override
-	public void onPause()
-	{
-		// save pager state, in Android 2.x the state gets persited in onPause, so save the state before
-		if (mViewPager != null)
-		{
-			mCurrentPage = mViewPager.getCurrentItem();
-		}
-		super.onPause();
-	}
-
-
-	@Override
 	public void onDelete(Uri taskUri)
 	{
 		// nothing to do here, the loader will take care of reloading the list and the list view will take care of selecting the next element.
@@ -277,15 +345,36 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private void hideSearchActionView()
 	{
 		mSearchItem.collapseActionView();
-		mSearchView.setQuery("", false);
 	}
 
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void setupSearch(Menu menu)
 	{
-
 		mSearchItem = menu.findItem(R.id.search);
+		mSearchItem.setOnActionExpandListener(new OnActionExpandListener()
+		{
+
+			@Override
+			public boolean onMenuItemActionExpand(MenuItem item)
+			{
+				// always allow expansion of the search action view
+				return mCurrentPageId == R.id.task_group_search;
+			}
+
+
+			@Override
+			public boolean onMenuItemActionCollapse(MenuItem item)
+			{
+				// return to previous view
+				if (mPreviousPagePosition >= 0 && mCurrentPageId == R.id.task_group_search)
+				{
+					mViewPager.setCurrentItem(mPreviousPagePosition);
+					mCurrentPageId = mPagerAdapter.getPageId(mPreviousPagePosition);
+				}
+				return mPreviousPagePosition >= 0 || mCurrentPageId != R.id.task_group_search;
+			}
+		});
 		mSearchView = (SearchView) mSearchItem.getActionView();
 
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -294,27 +383,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		}
 		mSearchView.setIconifiedByDefault(false);
-		mSearchView.setOnQueryTextFocusChangeListener(new OnFocusChangeListener()
-		{
-
-			@Override
-			public void onFocusChange(View v, boolean hasFocus)
-			{
-				// switch to search fragment
-				mViewPager.setCurrentItem(mGroupingFactories.length - 1);
-
-				// insert new search
-				if (hasFocus)
-				{
-					SearchHistoryHelper.newSearch(TaskListActivity.this, "");
-				}
-				else
-				{
-					SearchHistoryHelper.endSearch(TaskListActivity.this);
-				}
-
-			}
-		});
 
 		mSearchView.setOnQueryTextListener(new OnQueryTextListener()
 		{
@@ -322,7 +390,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			@Override
 			public boolean onQueryTextSubmit(String query)
 			{
-				hideSearchActionView();
+				// persist current search
+				mSearchHistoryHelper.commitSearch();
+				mHandler.post(mSearchUpdater);
 				return true;
 			}
 
@@ -333,40 +403,23 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				mHandler.removeCallbacks(mSearchUpdater);
 				if (query.length() > 0)
 				{
-					SearchHistoryHelper.updateSearch(TaskListActivity.this, query);
-					mHandler.postDelayed(mSearchUpdater, 250 /* TODO */);
+					mSearchHistoryHelper.updateSearch(query);
+					mHandler.postDelayed(mSearchUpdater, SEARCH_UPDATE_DELAY);
+				}
+				else
+				{
+					mSearchHistoryHelper.removeCurrentSearch();
+					mHandler.post(mSearchUpdater);
 				}
 				return true;
 			}
 		});
 
-		mTabs.setOnPageChangeListener(new OnPageChangeListener()
+		if (mAutoExpandSearchView)
 		{
+			mSearchItem.expandActionView();
+		}
 
-			@Override
-			public void onPageSelected(int position)
-			{
-				if (position != mGroupingFactories.length - 1)
-				{
-					hideSearchActionView();
-				}
-
-			}
-
-
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-			{
-
-			}
-
-
-			@Override
-			public void onPageScrollStateChanged(int position)
-			{
-
-			}
-		});
 	}
 
 
@@ -376,6 +429,9 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		return mGroupingFactories[position].getExpandableGroupDescriptor();
 	}
 
+	/**
+	 * Notifies the search fragment of an update.
+	 */
 	private final Runnable mSearchUpdater = new Runnable()
 	{
 

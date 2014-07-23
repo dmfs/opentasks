@@ -17,6 +17,8 @@
 
 package org.dmfs.tasks.groupings.cursorloaders;
 
+import org.dmfs.tasks.utils.SearchHistoryHelper;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.Loader;
@@ -30,18 +32,18 @@ import android.support.v4.content.Loader;
 public class SearchHistoryCursorLoaderFactory extends AbstractCursorLoaderFactory
 {
 
-	private final String[] mProjection;
+	private final SearchHistoryHelper mSeachHistory;
 
 
-	public SearchHistoryCursorLoaderFactory(String[] projection)
+	public SearchHistoryCursorLoaderFactory(SearchHistoryHelper history)
 	{
-		mProjection = projection;
+		mSeachHistory = history;
 	}
 
 
 	@Override
 	public Loader<Cursor> getLoader(Context context)
 	{
-		return new CustomCursorLoader(context, new SearchHistoryCursorFactory(context, mProjection));
+		return new CustomCursorLoader(context, new SearchHistoryCursorFactory(context, null, mSeachHistory));
 	}
 }
