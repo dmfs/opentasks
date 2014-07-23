@@ -37,6 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
@@ -112,6 +113,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private boolean mAutoExpandSearchView = false;
 
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -158,11 +160,11 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		if (currentPageIndex >= 0)
 		{
 			mViewPager.setCurrentItem(currentPageIndex);
-			if (mCurrentPageId == R.id.task_group_search)
+			if (VERSION.SDK_INT >= 14 && mCurrentPageId == R.id.task_group_search)
 			{
 				if (mSearchItem != null)
 				{
-					// that's actually quite unlikely to happen
+					// that's actually quite impossible to happen
 					mSearchItem.expandActionView();
 				}
 				else
@@ -348,9 +350,15 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	}
 
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	public void setupSearch(Menu menu)
 	{
+		if (VERSION.SDK_INT < 14)
+		{
+			// this won't work on pre ICS devices, so we just give up
+			return;
+		}
+
 		mSearchItem = menu.findItem(R.id.search);
 		mSearchItem.setOnActionExpandListener(new OnActionExpandListener()
 		{
