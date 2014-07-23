@@ -344,6 +344,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			mContext = context;
 			// load the tasks in a background thread
 			mExecutor.execute(mReloadTasks);
+			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
 		}
 
 		/**
@@ -362,8 +363,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<="
 						+ System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)",
 					null,
-					TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.CREATED
-						+ " DESC");
+					TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.PRIORITY
+						+ " is null, " + TaskContract.Instances.PRIORITY + ", " + TaskContract.Instances.CREATED + " DESC");
 
 				if (c != null)
 				{
