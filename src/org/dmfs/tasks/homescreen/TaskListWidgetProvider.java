@@ -107,7 +107,8 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			Cursor cursor = resolver.query(TaskContract.Instances.getContentUri(authority), null, TaskContract.Instances.VISIBLE + ">0 and "
 				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
 				+ TaskContract.Instances.INSTANCE_START + " is null)", null, TaskContract.Instances.INSTANCE_DUE + " is null, "
-				+ TaskContract.Instances.DEFAULT_SORT_ORDER);
+				+ TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.PRIORITY + " is null, " + TaskContract.Instances.PRIORITY + ", "
+				+ TaskContract.Instances.CREATED + " DESC");
 
 			cursor.moveToFirst();
 			int count = 0;
