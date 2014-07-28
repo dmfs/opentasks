@@ -52,15 +52,19 @@ public class UpdateAllDay extends AbstractConstraint<Boolean>
 			{
 				// all-day has been enabled, ensure the given time is all-day
 
-				// shift time to UTC
-				time.set(time.toMillis(false) + TimeZone.getTimeZone(time.timezone).getOffset(time.toMillis(false)));
-				time.set(time.monthDay, time.month, time.year);
+				if (time.toMillis(false) % (24L * 60 * 60 * 1000L) != 0)
+				{
+					// not at 00:00:00 UTC yet
+					time.timezone = "UTC";
+					time.set(time.monthDay, time.month, time.year);
+					mTimeAdapter.set(currentValues, time);
+				}
 
 			}
 			else if ((newValue == null || !newValue) && oldValue != null && oldValue)
 			{
-				// all-day has been disabled, switch to midnight in the correct time zone
-				time.set(0, 0, 0, time.monthDay, time.month, time.year);
+				// ideally we move the time to 00:00:00 in the new time zone. Unfortunately we don't know the time zone at this point
+				// TODO: move the time to 00:00:00 in the new time zone, somehow
 			}
 		}
 		return newValue;
