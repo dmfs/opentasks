@@ -125,4 +125,10 @@ public final class BooleanFieldAdapter extends FieldAdapter<Boolean>
 	{
 		values.removeOnChangeListener(listener, mFieldName);
 	}
+
+
+	public String getFieldName()
+	{
+		return mFieldName;
+	}
 }
