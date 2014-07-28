@@ -107,10 +107,9 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 	{
 		Boolean oldValue = mAdapter.get(mValues);
-		if (oldValue == null || oldValue != isChecked) // don't trigger
-														// unnecessary updates
+		if (oldValue == null || oldValue != isChecked) // don't trigger unnecessary updates
 		{
-			mAdapter.set(mValues, isChecked);
+			mAdapter.validateAndSet(mValues, isChecked);
 		}
 	}
 
