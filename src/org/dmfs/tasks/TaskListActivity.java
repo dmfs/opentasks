@@ -390,7 +390,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		}
-		mSearchView.setIconifiedByDefault(false);
+		mSearchView.setQueryHint(getString(R.string.menu_search_hint));
+		mSearchView.setIconifiedByDefault(true);
 
 		mSearchView.setOnQueryTextListener(new OnQueryTextListener()
 		{

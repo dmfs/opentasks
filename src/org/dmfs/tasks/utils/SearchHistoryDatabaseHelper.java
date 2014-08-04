@@ -65,6 +65,10 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
 		 */
 		public static final String HISTORIC = "historic";
 
+		/**
+		 * Time since the epoch in milliseconds of when the item was updated the last time.
+		 */
+		public static final String TIMESTAMP = "timestamp";
 	}
 
 	/**
@@ -77,7 +81,8 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
 		"CREATE TABLE " + SEARCH_HISTORY_TABLE + " ( "
 			+ SearchHistoryColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 			+ SearchHistoryColumns.SEARCH_QUERY + " TEXT, "
-			+ SearchHistoryColumns.HISTORIC + " INTEGER DEFAULT 0"
+			+ SearchHistoryColumns.HISTORIC + " INTEGER DEFAULT 0,"
+			+ SearchHistoryColumns.TIMESTAMP + " INTEGER DEFAULT 0"
 			+ " )";
 	// @formatter:on
 
@@ -85,7 +90,10 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
 	private final static String SQL_CREATE_SEARCH_HISTORY_ADD_TRIGGER =
 		"CREATE TRIGGER search_history_add_trigger AFTER INSERT ON " + SEARCH_HISTORY_TABLE + " BEGIN "
 			// remove old entries
-			+ " DELETE FROM " + SEARCH_HISTORY_TABLE + " WHERE " + SearchHistoryColumns._ID + " <  new." + SearchHistoryColumns._ID + " - "	+ SEARCH_HISTORY_SIZE + ";"
+			+ " DELETE FROM " + SEARCH_HISTORY_TABLE + " WHERE " + SearchHistoryColumns._ID + " not in"
+				+ "("
+					+ " select " + SearchHistoryColumns._ID + " from " + SEARCH_HISTORY_TABLE + " order by " + SearchHistoryColumns._ID + " desc limit " + SEARCH_HISTORY_SIZE
+				+ ");"
 			// mark all existing entries as historic
 			+ " UPDATE " + SEARCH_HISTORY_TABLE + " SET " + SearchHistoryColumns.HISTORIC + "=1 " +  " WHERE "
 				+ SearchHistoryColumns._ID + " <  new." + SearchHistoryColumns._ID + " AND " + SearchHistoryColumns.HISTORIC + "=0 ;"

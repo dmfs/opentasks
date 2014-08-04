@@ -3,9 +3,9 @@
     style="@style/task_group_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingLeft="@dimen/task_list_left_margin"
     android:paddingRight="@dimen/task_list_right_margin"
-    android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingTop="10dip" >
 
     <View
@@ -29,6 +29,7 @@
         style="@style/task_group_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_marginLeft="8dip"
         android:layout_toRightOf="@id/colorbar1"
         android:ellipsize="end"
@@ -41,6 +42,7 @@
         style="@style/editor_label_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_below="@android:id/title"
         android:layout_marginLeft="8dip"
         android:layout_toLeftOf="@android:id/text2"
