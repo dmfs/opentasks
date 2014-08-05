@@ -73,7 +73,7 @@ public class SearchChildDescriptor extends ExpandableChildDescriptor
 	public CursorLoader getCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
 	{
 		CursorLoader cursorLoader = super.getCursorLoader(context, cursor, filter);
-		cursorLoader.setUri(Tasks.getSearchUri(mAuthority, cursor.getString(cursor.getColumnIndex(mQueryColumn))));
+		//cursorLoader.setUri(Tasks.getSearchUri(mAuthority, cursor.getString(cursor.getColumnIndex(mQueryColumn))));
 
 		return cursorLoader;
 	}
