@@ -17,6 +17,7 @@
 
 package org.dmfs.tasks;
 
+import java.io.IOException;
 import org.dmfs.android.retentionmagic.FragmentActivity;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -29,7 +30,9 @@ import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
-
+import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
+import org.xmlpull.v1.XmlPullParserException;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -48,7 +51,6 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnActionExpandListener;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
-
 import com.astuetz.PagerSlidingTabStrip;
 
 
@@ -112,6 +114,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	private boolean mAutoExpandSearchView = false;
 
 
+	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -146,7 +149,25 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
 
 		// set up pager adapter
-		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.menu.listview_tabs);
+		try
+		{
+			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.xml.listview_tabs);
+		}
+		catch (XmlPullParserException e)
+		{
+			// TODO Automatisch generierter Erfassungsblock
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Automatisch generierter Erfassungsblock
+			e.printStackTrace();
+		}
+		catch (XmlObjectPullParserException e)
+		{
+			// TODO Automatisch generierter Erfassungsblock
+			e.printStackTrace();
+		}
 		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 
 		// Setup ViewPager
@@ -348,6 +369,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	}
 
 
+	@SuppressLint("NewApi")
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void setupSearch(Menu menu)
 	{

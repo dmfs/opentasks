@@ -17,21 +17,21 @@
 
 package org.dmfs.tasks;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
+import org.dmfs.tasks.groupings.TabConfig;
+import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.PopupMenu;
 
 import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 
@@ -50,7 +50,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
 	private final Context mContext;
 	private boolean mTwoPaneLayout;
-	private final Menu mMenu;
+	private final TabConfig mTabConfig;
 
 
 	/**
@@ -62,36 +62,21 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	 *            An array of {@link AbstractGroupingFactory}.
 	 * @param context
 	 *            A context to access resources
-	 * @param menuRes
-	 *            The resource id of a menu resource that describes the items of the pager
+	 * @param tabRes
+	 *            The resource id of an XML resource that describes the items of the pager
+	 * @throws XmlObjectPullParserException
+	 * @throws IOException
+	 * @throws XmlPullParserException
 	 */
 	@SuppressLint("NewApi")
-	public TaskGroupPagerAdapter(FragmentManager fm, AbstractGroupingFactory[] groupingFactories, Context context, int menuRes)
+	public TaskGroupPagerAdapter(FragmentManager fm, AbstractGroupingFactory[] groupingFactories, Context context, int tabRes) throws XmlPullParserException,
+		IOException, XmlObjectPullParserException
 	{
 		super(fm);
 		mContext = context;
 
-		// TODO: add support for Android<SDK 11
-		// this is a hack to get a Menu
-		mMenu = new PopupMenu(context, null).getMenu();
-		((Activity) context).getMenuInflater().inflate(menuRes, mMenu);
+		mTabConfig = TabConfig.load(context, tabRes);
 
-		// remove invisible menu items
-		int itemCount = mMenu.size();
-		int i = 0;
-		while (i < itemCount)
-		{
-			MenuItem item = mMenu.getItem(i);
-			if (!item.isVisible())
-			{
-				mMenu.removeItem(item.getItemId());
-				--itemCount;
-			}
-			else
-			{
-				++i;
-			}
-		}
 		for (AbstractGroupingFactory factory : groupingFactories)
 		{
 			mGroupingFactories.put(factory.getId(), factory);
@@ -102,14 +87,14 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	@Override
 	public CharSequence getPageTitle(int position)
 	{
-		return mMenu.getItem(position).getTitle();
+		return mContext.getString(mTabConfig.getVisibleItem(position).getTitleId());
 	}
 
 
 	@Override
 	public Fragment getItem(int position)
 	{
-		AbstractGroupingFactory factory = getGroupingFactoryForId(mMenu.getItem(position).getItemId());
+		AbstractGroupingFactory factory = getGroupingFactoryForId(mTabConfig.getVisibleItem(position).getId());
 
 		TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
 		fragment.setExpandableGroupDescriptor(factory.getExpandableGroupDescriptor());
@@ -127,7 +112,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	 */
 	public int getPageId(int position)
 	{
-		return mMenu.getItem(position).getItemId();
+		return mTabConfig.getVisibleItem(position).getId();
 	}
 
 
@@ -140,10 +125,10 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	 */
 	public int getPagePosition(int id)
 	{
-		Menu menu = mMenu;
-		for (int i = 0, count = menu.size(); i < count; ++i)
+		TabConfig groupings = mTabConfig;
+		for (int i = 0, count = groupings.visibleSize(); i < count; ++i)
 		{
-			if (menu.getItem(i).getItemId() == id)
+			if (groupings.getVisibleItem(i).getId() == id)
 			{
 				return i;
 			}
@@ -168,7 +153,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	@Override
 	public int getCount()
 	{
-		return mMenu.size();
+		return mTabConfig.visibleSize();
 	}
 
 
@@ -181,13 +166,13 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	@Override
 	public int getPageIconResId(int position)
 	{
-		return -1;
+		return mTabConfig.getVisibleItem(position).getIcon();
 	}
 
 
 	@Override
 	public Drawable getPageIconDrawable(int position)
 	{
-		return mMenu.getItem(position).getIcon();
+		return null;
 	}
 }
