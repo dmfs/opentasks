@@ -23,8 +23,10 @@ import java.util.Map.Entry;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.model.contraints.UpdateAllDay;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 
 import android.content.Context;
@@ -89,6 +91,7 @@ public class XmlModel extends Model
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void inflate() throws ModelInflaterException
 	{
@@ -141,6 +144,11 @@ public class XmlModel extends Model
 
 			int depth = 1;
 
+			boolean hasDue = false;
+			boolean hasStart = false;
+
+			FieldDescriptor alldayDescriptor = null;
+
 			eventType = parser.next();
 			while (eventType != XmlResourceParser.END_DOCUMENT)
 			{
@@ -153,6 +161,20 @@ public class XmlModel extends Model
 						// TODO: let inflateField step forward till the end tag
 						FieldDescriptor descriptor = inflateField(parser);
 						mFields.add(descriptor);
+
+						FieldAdapter<?> fa = descriptor.getFieldAdapter();
+						if (fa instanceof BooleanFieldAdapter && Tasks.IS_ALLDAY.equals(((BooleanFieldAdapter) fa).getFieldName()))
+						{
+							alldayDescriptor = descriptor;
+						}
+						else if (fa == TaskFieldAdapters.DUE)
+						{
+							hasDue = true;
+						}
+						else if (fa == TaskFieldAdapters.DTSTART)
+						{
+							hasStart = true;
+						}
 					}
 				}
 				else if (eventType == XmlResourceParser.END_TAG)
@@ -166,6 +188,22 @@ public class XmlModel extends Model
 
 				eventType = parser.next();
 			}
+
+			if (alldayDescriptor != null)
+			{
+				if (!hasDue)
+				{
+					// no due date descriptor present, ensure we update keep the all-day flag in sync
+					((FieldAdapter<Boolean>) alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DUE));
+				}
+
+				if (!hasStart)
+				{
+					// no start date descriptor present, ensure we update keep the all-day flag in sync
+					((FieldAdapter<Boolean>) alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DTSTART));
+				}
+			}
+
 		}
 		catch (Exception e)
 		{
@@ -416,7 +454,15 @@ public class XmlModel extends Model
 
 		FIELD_INFLATER_MAP.put("url", new FieldInflater(TaskFieldAdapters.URL, R.string.task_url, R.layout.url_field_view, R.layout.url_field_editor));
 
-		FIELD_INFLATER_MAP.put("allday", new FieldInflater(TaskFieldAdapters.ALLDAY, R.string.task_all_day, -1, R.layout.boolean_field_editor));
+		FIELD_INFLATER_MAP.put("allday", new FieldInflater(null, R.string.task_all_day, -1, R.layout.boolean_field_editor)
+		{
+			@Override
+			public FieldAdapter<?> getFieldAdapter()
+			{
+				// return a non-static field adapter because we modify it
+				return new BooleanFieldAdapter(Tasks.IS_ALLDAY);
+			}
+		});
 
 		FIELD_INFLATER_MAP.put("timezone", new FieldInflater(TaskFieldAdapters.TIMEZONE, R.string.task_timezone, -1, R.layout.choices_field_editor)
 		{
