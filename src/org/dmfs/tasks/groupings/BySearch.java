@@ -43,6 +43,7 @@ import android.database.Cursor;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build.VERSION;
+import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -289,6 +290,7 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
+			long now = System.currentTimeMillis();
 			int position = cursor.getPosition();
 
 			// set list title
@@ -296,6 +298,14 @@ public class BySearch extends AbstractGroupingFactory
 			if (title != null)
 			{
 				title.setText(getTitle(cursor, view.getContext()));
+			}
+
+			// set search time
+			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+			if (text1 != null)
+			{
+				text1.setText(DateUtils.formatSameDayTime(cursor.getLong(cursor.getColumnIndex(SearchHistoryDatabaseHelper.SearchHistoryColumns.TIMESTAMP)),
+					now, DateFormat.SHORT, DateFormat.SHORT));
 			}
 
 			// set list elements
@@ -318,29 +328,13 @@ public class BySearch extends AbstractGroupingFactory
 			View colorbar1 = view.findViewById(R.id.colorbar1);
 			View colorbar2 = view.findViewById(R.id.colorbar2);
 
-			if ((flags & FLAG_IS_EXPANDED) != 0)
+			if (colorbar1 != null)
 			{
-				if (colorbar1 != null)
-				{
-					colorbar1.setBackgroundColor(cursor.getInt(2));
-					colorbar1.setVisibility(View.VISIBLE);
-				}
-				if (colorbar2 != null)
-				{
-					colorbar2.setVisibility(View.GONE);
-				}
+				colorbar1.setVisibility(View.GONE);
 			}
-			else
+			if (colorbar2 != null)
 			{
-				if (colorbar1 != null)
-				{
-					colorbar1.setVisibility(View.INVISIBLE);
-				}
-				if (colorbar2 != null)
-				{
-					colorbar2.setBackgroundColor(cursor.getInt(2));
-					colorbar2.setVisibility(View.VISIBLE);
-				}
+				colorbar2.setVisibility(View.GONE);
 			}
 
 			boolean isHistoric = cursor.getInt(cursor.getColumnIndex(SearchHistoryColumns.HISTORIC)) > 0;
@@ -351,7 +345,7 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public int getView()
 		{
-			return R.layout.task_list_group_single_line;
+			return R.layout.task_list_group;
 		}
 
 

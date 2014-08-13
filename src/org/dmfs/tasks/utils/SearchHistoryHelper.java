@@ -72,6 +72,7 @@ public class SearchHistoryHelper
 	{
 		ContentValues values = new ContentValues(1);
 		values.put(SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, query);
+		values.put(SearchHistoryDatabaseHelper.SearchHistoryColumns.TIMESTAMP, System.currentTimeMillis());
 		if (mDb.update(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, values, SearchHistoryColumns.HISTORIC + "=0", null) == 0)
 		{
 			mDb.insert(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, "", values);

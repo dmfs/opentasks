@@ -17,6 +17,8 @@
 
 package org.dmfs.tasks;
 
+import java.io.IOException;
+
 import org.dmfs.android.retentionmagic.FragmentActivity;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -29,6 +31,8 @@ import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
+import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -148,7 +152,25 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
 
 		// set up pager adapter
-		mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.menu.listview_tabs);
+		try
+		{
+			mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.xml.listview_tabs);
+		}
+		catch (XmlPullParserException e)
+		{
+			// TODO Automatisch generierter Erfassungsblock
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Automatisch generierter Erfassungsblock
+			e.printStackTrace();
+		}
+		catch (XmlObjectPullParserException e)
+		{
+			// TODO Automatisch generierter Erfassungsblock
+			e.printStackTrace();
+		}
 		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 
 		// Setup ViewPager
@@ -390,7 +412,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		}
-		mSearchView.setIconifiedByDefault(false);
+		mSearchView.setQueryHint(getString(R.string.menu_search_hint));
+		mSearchView.setIconifiedByDefault(true);
 
 		mSearchView.setOnQueryTextListener(new OnQueryTextListener()
 		{
