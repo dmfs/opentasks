@@ -24,6 +24,6 @@
         id="@+id/task_group_search"
         icon="@drawable/ic_tab_search"
         title="@string/task_group_search_title"
-        visible="false" />
+        visible="true" />
 
 </tabconfig>

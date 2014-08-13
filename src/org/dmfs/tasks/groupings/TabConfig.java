@@ -21,17 +21,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dmfs.xmlobjects.ElementDescriptor;
 import org.dmfs.xmlobjects.QualifiedName;
-import org.dmfs.xmlobjects.XmlElementDescriptor;
-import org.dmfs.xmlobjects.pull.IXmlObjectBuilder;
+import org.dmfs.xmlobjects.android.builder.ReflectionObjectBuilder;
+import org.dmfs.xmlobjects.android.pull.AndroidParserContext;
+import org.dmfs.xmlobjects.android.pull.ResolveInt;
+import org.dmfs.xmlobjects.builder.IObjectBuilder;
+import org.dmfs.xmlobjects.builder.reflection.Attribute;
+import org.dmfs.xmlobjects.builder.reflection.Element;
 import org.dmfs.xmlobjects.pull.XmlObjectPull;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.dmfs.xmlobjects.pull.XmlPath;
-import org.dmfs.xmlobjects.pull.android.AndroidParserContext;
-import org.dmfs.xmlobjects.pull.android.ResolveInt;
-import org.dmfs.xmlobjects.pull.android.builder.ReflectionResourceAttributeObjectBuilder;
-import org.dmfs.xmlobjects.pull.builder.reflection.Attribute;
-import org.dmfs.xmlobjects.pull.builder.reflection.Element;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
@@ -60,22 +60,22 @@ public class TabConfig
 	/**
 	 * A Builder that builds a {@link TabConfig} object.
 	 */
-	public final static IXmlObjectBuilder<TabConfig> BUILDER = new ReflectionResourceAttributeObjectBuilder<TabConfig>(TabConfig.class);
+	public final static IObjectBuilder<TabConfig> BUILDER = new ReflectionObjectBuilder<TabConfig>(TabConfig.class);
 
 	/**
 	 * The {@link XmlElementDescriptor} of the tabconfig element.
 	 */
-	public final static XmlElementDescriptor<TabConfig> DESCRIPTOR = XmlElementDescriptor.register(QualifiedName.get(NAMESPACE, TAG), BUILDER);
+	public final static ElementDescriptor<TabConfig> DESCRIPTOR = ElementDescriptor.register(QualifiedName.get(NAMESPACE, TAG), BUILDER);
 
 	/**
 	 * A Builder for {@link Tab} objects.
 	 */
-	public final static IXmlObjectBuilder<Tab> TAB_BUILDER = new ReflectionResourceAttributeObjectBuilder<Tab>(Tab.class);
+	public final static IObjectBuilder<Tab> TAB_BUILDER = new ReflectionObjectBuilder<Tab>(Tab.class);
 
 	/**
 	 * The {@link XmlElementDescriptor} for tab elements.
 	 */
-	public final static XmlElementDescriptor<Tab> TAB_DESCRIPTOR = XmlElementDescriptor.register(QualifiedName.get(NAMESPACE, Tab.TAG), TAB_BUILDER);
+	public final static ElementDescriptor<Tab> TAB_DESCRIPTOR = ElementDescriptor.register(QualifiedName.get(NAMESPACE, Tab.TAG), TAB_BUILDER);
 
 	/**
 	 * Represents a single tab with all its attributes.
@@ -179,7 +179,7 @@ public class TabConfig
 	 * 
 	 * @param context
 	 *            A {@link Context}.
-	 * @param groupingsResource
+	 * @param tabsResource
 	 *            The resource id of an XML resource that contains the tabconfig.
 	 * @return A {@link TabConfig} instance.
 	 * 
@@ -187,11 +187,11 @@ public class TabConfig
 	 * @throws IOException
 	 * @throws XmlObjectPullParserException
 	 */
-	public static TabConfig load(Context context, int groupingsResource) throws XmlPullParserException, IOException, XmlObjectPullParserException
+	public static TabConfig load(Context context, int tabsResource) throws XmlPullParserException, IOException, XmlObjectPullParserException
 	{
 		Resources res = context.getResources();
 
-		XmlResourceParser parser = res.getXml(groupingsResource);
+		XmlResourceParser parser = res.getXml(tabsResource);
 
 		XmlObjectPull objectParser = new XmlObjectPull(parser, new AndroidParserContext(res));
 
