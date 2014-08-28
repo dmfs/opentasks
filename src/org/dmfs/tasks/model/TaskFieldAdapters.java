@@ -20,6 +20,7 @@ package org.dmfs.tasks.model;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
+import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -135,6 +136,11 @@ public final class TaskFieldAdapters
 	 * Adapter for the IS_CLOSED flag of a task.
 	 * */
 	public static final BooleanFieldAdapter IS_CLOSED = new BooleanFieldAdapter(TaskContract.Tasks.IS_CLOSED);
+
+	/**
+	 * Adpater for the score (i.e. the relevance) of the task in a search.
+	 * */
+	public static final FloatFieldAdapter SCORE = new FloatFieldAdapter(TaskContract.Tasks.SCORE, 0f);
 
 
 	/**

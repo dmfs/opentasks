@@ -63,7 +63,7 @@ public class BySearch extends AbstractGroupingFactory
 	 * The projection we use when we load instances. We don't need every detail of a task here. This is used by all groupings.
 	 */
 	public final static String[] TASK_PROJECTION = new String[] { Tasks.DTSTART, Tasks.DURATION, Tasks.DUE, Tasks.IS_ALLDAY, Tasks.TZ, Tasks.TITLE,
-		Tasks.LIST_COLOR, Tasks.PRIORITY, Tasks.LIST_ID, Tasks._ID, Tasks.STATUS, Tasks.COMPLETED, Tasks.IS_CLOSED, Tasks.PERCENT_COMPLETE };
+		Tasks.LIST_COLOR, Tasks.PRIORITY, Tasks.LIST_ID, Tasks._ID, Tasks.STATUS, Tasks.COMPLETED, Tasks.IS_CLOSED, Tasks.PERCENT_COMPLETE, Tasks.SCORE };
 
 	/**
 	 * An adapter to load the due date from the tasks projection.
@@ -124,7 +124,7 @@ public class BySearch extends AbstractGroupingFactory
 			if (title != null)
 			{
 				String text = TaskFieldAdapters.TITLE.get(cursor);
-				title.setText(text);
+				title.setText(text + " (" + TaskFieldAdapters.SCORE.get(cursor) * 100 + "%)"); // FIXME: this is for testing only
 				if (isClosed)
 				{
 					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);

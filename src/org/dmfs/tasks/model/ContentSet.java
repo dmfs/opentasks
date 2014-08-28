@@ -358,6 +358,29 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	}
 
 
+	public void put(String key, Float value)
+	{
+		Float oldValue = getAsFloat(key);
+		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
+		{
+			ensureAfter().put(key, value);
+			mAfterKeys.add(key);
+			notifyUpdateListeners(key);
+		}
+	}
+
+
+	public Float getAsFloat(String key)
+	{
+		final ContentValues after = mAfterContentValues;
+		if (after != null && after.containsKey(key))
+		{
+			return mAfterContentValues.getAsFloat(key);
+		}
+		return mBeforeContentValues == null ? null : mBeforeContentValues.getAsFloat(key);
+	}
+
+
 	/**
 	 * Start a new bulk update. You should use this when you update multiple values at once and you don't want to send an update notification every time. When
 	 * you're done call {@link #finishBulkUpdate()} which sned the notifications (unless there is another bulk update in progress).
