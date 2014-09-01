@@ -70,6 +70,7 @@ public class SearchChildDescriptor extends ExpandableChildDescriptor
 	 *            An additional {@link AbstractFilter} to apply to the selection of the cursor.
 	 * @return A new {@link CursorLoader} instance.
 	 */
+	@Override
 	public CursorLoader getCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
 	{
 		CursorLoader cursorLoader = super.getCursorLoader(context, cursor, filter);

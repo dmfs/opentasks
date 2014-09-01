@@ -154,6 +154,29 @@ public class ExpandableChildDescriptor
 			}
 			selection = selectionBuilder.toString();
 		}
+		else
+		{
+			if (filter != null)
+			{
+				// temporary array list for the selection arguments
+				List<String> selectionArgList = new ArrayList<String>();
+				if (filter != null)
+				{
+					filter.getSelectionArgs(selectionArgList);
+				}
+				selectionArgs = selectionArgList.toArray(new String[selectionArgList.size()]);
+
+				StringBuilder selectionBuilder = new StringBuilder(120);
+
+				{
+					selectionBuilder.append("(");
+					filter.getSelection(selectionBuilder);
+					selectionBuilder.append(")");
+				}
+				selection = selectionBuilder.toString();
+			}
+		}
+
 		String selectionString = null;
 		if (selection != null)
 		{
