@@ -2,6 +2,18 @@
 
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar"></style>
 
+    <style name="DetailsTheme" parent="AppTheme">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/DetailsActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="DetailsActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#00000000</item>
+        <item name="android:displayOptions">showTitle</item>
+        <item name="android:icon">@android:color/transparent</item>
+    </style>
+
     <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 
     <style name="task_seekbar" parent="android:Widget.Holo.SeekBar"></style>

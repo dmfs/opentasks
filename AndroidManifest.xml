@@ -55,7 +55,8 @@
         <activity
             android:name="org.dmfs.tasks.ViewTaskActivity"
             android:label="@string/title_task_detail"
-            android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
+            android:parentActivityName="org.dmfs.tasks.TaskListActivity"
+            android:theme="@style/DetailsTheme" >
             <intent-filter android:label="edit" >
                 <action android:name="android.intent.action.VIEW" />
 
@@ -71,7 +72,8 @@
         <activity
             android:name="org.dmfs.tasks.EditTaskActivity"
             android:label="@string/activity_edit_task_title"
-            android:parentActivityName="org.dmfs.tasks.TaskListActivity" >
+            android:parentActivityName="org.dmfs.tasks.TaskListActivity"
+            android:theme="@style/DetailsTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity" />

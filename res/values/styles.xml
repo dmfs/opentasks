@@ -1,9 +1,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="android:Theme">
         <item name="android:textColor">#FF333333</item>
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
+
+    <style name="DetailsTheme" parent="AppTheme"></style>
 
     <style name="window_title_style">
         <item name="android:textColor">#FFFFFF</item>
@@ -169,6 +171,10 @@
 
     <style name="checklist_checked_item_text">
         <item name="android:textColor">#ff808080</item>
+    </style>
+
+    <style name="actionColorBar">
+        <item name="android:layout_height">0dp</item>
     </style>
 
 </resources>
