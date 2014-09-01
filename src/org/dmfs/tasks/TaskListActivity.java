@@ -106,8 +106,6 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 	private MenuItem mSearchItem;
 
-	private SearchView mSearchView;
-
 	private PagerSlidingTabStrip mTabs;
 
 	private final Handler mHandler = new Handler();
@@ -405,17 +403,17 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				return mPreviousPagePosition >= 0 || mCurrentPageId != R.id.task_group_search;
 			}
 		});
-		mSearchView = (SearchView) mSearchItem.getActionView();
+		SearchView searchView = (SearchView) mSearchItem.getActionView();
 
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		if (null != searchManager)
 		{
-			mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		}
-		mSearchView.setQueryHint(getString(R.string.menu_search_hint));
-		mSearchView.setIconifiedByDefault(true);
+		searchView.setQueryHint(getString(R.string.menu_search_hint));
+		searchView.setIconifiedByDefault(true);
 
-		mSearchView.setOnQueryTextListener(new OnQueryTextListener()
+		searchView.setOnQueryTextListener(new OnQueryTextListener()
 		{
 
 			@Override
