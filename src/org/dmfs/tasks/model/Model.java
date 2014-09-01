@@ -20,6 +20,8 @@ package org.dmfs.tasks.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.text.TextUtils;
+
 
 /**
  * An abstract model class.
@@ -117,6 +119,20 @@ public abstract class Model
 	void setAccountType(String accountType)
 	{
 		mAccountType = accountType;
+	}
+
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (!(o instanceof Model))
+		{
+			return false;
+		}
+		Class<?> otherClass = o.getClass();
+		Class<?> myClass = getClass();
+
+		return myClass.equals(otherClass) && TextUtils.equals(mAccountType, ((Model) o).mAccountType);
 	}
 
 }

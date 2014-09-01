@@ -85,11 +85,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	/**
 	 * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.
 	 */
-	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
-		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
-			Tasks.LIST_NAME)
-		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY,
-			Tasks.IS_CLOSED).addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
+	private static final ContentValueMapper CONTENT_VALUE_MAPPER = EditTaskFragment.CONTENT_VALUE_MAPPER;
 
 	/**
 	 * The {@link Uri} of the current task in the view.
@@ -137,8 +133,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		 * 
 		 * @param taskUri
 		 *            The {@link Uri} of the task to edit.
+		 * @param data
+		 *            The task data that belongs to the {@link Uri}. This is purely an optimization and may be <code>null</code>.
 		 */
-		public void onEditTask(Uri taskUri);
+		public void onEditTask(Uri taskUri, ContentSet data);
 
 
 		/**
@@ -210,6 +208,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	{
 		ListenableScrollView rootView = mRootView = (ListenableScrollView) inflater.inflate(R.layout.fragment_task_view_detail, container, false);
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
+		mColorBar = rootView.findViewById(R.id.headercolorbar);
 
 		if (savedInstanceState != null)
 		{
@@ -251,7 +250,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 				}
 			});
 		}
-		mColorBar = rootView.findViewById(R.id.headercolorbar);
 
 		return rootView;
 	}
@@ -419,7 +417,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		if (itemId == R.id.edit_task)
 		{
 			// open editor for this task
-			mCallback.onEditTask(mTaskUri);
+			mCallback.onEditTask(mTaskUri, mContentSet);
 			return true;
 		}
 		else if (itemId == R.id.delete_task)

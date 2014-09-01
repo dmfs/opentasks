@@ -20,6 +20,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.dmfs.android.retentionmagic.SupportFragment;
+import org.dmfs.android.retentionmagic.annotations.Parameter;
+import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -41,15 +44,12 @@ import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -74,13 +74,14 @@ import android.widget.Toast;
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 
-public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener,
+public class EditTaskFragment extends SupportFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnModelLoadedListener, OnContentChangeListener,
 	OnItemSelectedListener
 {
 	private static final String TAG = "TaskEditDetailFragment";
 
 	public static final String PARAM_TASK_URI = "task_uri";
 	public static final String PARAM_CONTENT_SET = "task_content_set";
+	public static final String PARAM_ACCOUNT_TYPE = "task_account_type";
 
 	public static final String LIST_LOADER_URI = "uri";
 	public static final String LIST_LOADER_FILTER = "filter";
@@ -88,6 +89,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.VISIBLE + "=1 and " + TaskLists.SYNC_ENABLED + "=1";
 
 	public static final String PREFERENCE_LAST_LIST = "pref_last_list_used_for_new_event";
+	public static final String PREFERENCE_LAST_COLOR = "pref_last_list_color_used_for_new_event";
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -117,11 +119,11 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 	private static final String KEY_VALUES = "key_values";
 
-	private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
+	static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
 		.addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
 			Tasks.LIST_NAME)
-		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY)
-		.addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
+		.addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY,
+			Tasks.IS_CLOSED).addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
 	private boolean mAppForEdit = true;
 	private TasksListCursorAdapter mTaskListAdapter;
@@ -135,12 +137,18 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	private Context mAppContext;
 	private TaskEdit mEditor;
 	private LinearLayout mTaskListBar;
-	private boolean mSetInitialSpinnerSelection;
 	private Spinner mListSpinner;
 	private String mAuthority;
 	private View mColorBar;
-	private int mListColor;
+
+	private int mListColor = -1;
 	private ListenableScrollView mRootView;
+
+	@Parameter(key = PARAM_ACCOUNT_TYPE)
+	private String mAccountType;
+
+	@Retain(key = PREFERENCE_LAST_LIST, classNS = "", permanent = true)
+	private long mSelectedList = -1;
 
 
 	/**
@@ -156,7 +164,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	{
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		mSetInitialSpinnerSelection = savedInstanceState == null;
 	}
 
 
@@ -171,6 +178,10 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		if (bundle.containsKey(PARAM_CONTENT_SET))
 		{
 			mValues = bundle.getParcelable(PARAM_CONTENT_SET);
+			if (!mValues.isInsert())
+			{
+				mTaskUri = mValues.getUri();
+			}
 		}
 		else
 		{
@@ -225,16 +236,30 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			if (mTaskUri != null)
 			{
 
-				if (savedInstanceState == null)
+				if (savedInstanceState == null && mValues == null)
 				{
+					if (mAccountType != null)
+					{
+						new AsyncModelLoader(mAppContext, this).execute(mAccountType);
+					}
+
 					mValues = new ContentSet(mTaskUri);
 					mValues.addOnChangeListener(this, null, false);
 					mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
 				}
 				else
 				{
-					mValues = savedInstanceState.getParcelable(KEY_VALUES);
-					new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+					if (savedInstanceState != null)
+					{
+						mValues = savedInstanceState.getParcelable(KEY_VALUES);
+						new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+					}
+					else
+					{
+						new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+						// ensure we're using the latest values
+						mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
+					}
 					setListUri(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), mValues.getAsLong(Tasks.LIST_ID)), null);
 				}
 				// disable spinner
@@ -272,7 +297,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		Log.v(TAG, "onDestroyView");
 		if (mEditor != null)
 		{
 			// remove values, to ensure all listeners get released
@@ -328,9 +352,11 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			Toast.makeText(getActivity(), "Could not load Model", Toast.LENGTH_LONG).show();
 			return;
 		}
-		mModel = model;
-
-		updateView();
+		if (mModel == null || !mModel.equals(model))
+		{
+			mModel = model;
+			updateView();
+		}
 	}
 
 
@@ -354,20 +380,19 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
 		mTaskListAdapter.changeCursor(cursor);
-
-		if (mSetInitialSpinnerSelection && cursor != null)
+		if (cursor != null)
 		{
 			// set the list that was used the last time the user created an event
-			SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
-			long lastList = prefs.getLong(PREFERENCE_LAST_LIST, -1);
-			if (lastList != -1)
+			// SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
+			// long lastList = prefs.getLong(PREFERENCE_LAST_LIST, -1);
+			if (mSelectedList != -1)
 			{
 				// iterate over all lists and select the one that matches the given id
 				cursor.moveToFirst();
 				while (!cursor.isAfterLast())
 				{
 					Long listId = cursor.getLong(TASK_LIST_PROJECTION_VALUES.id);
-					if (listId != null && listId == lastList)
+					if (listId != null && listId == mSelectedList)
 					{
 						mListSpinner.setSelection(cursor.getPosition());
 						break;
@@ -375,7 +400,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 					cursor.moveToNext();
 				}
 			}
-			mSetInitialSpinnerSelection = false;
 		}
 	}
 
@@ -443,9 +467,9 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 
 
 	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long itemId)
 	{
-		Cursor c = (Cursor) arg0.getItemAtPosition(arg2);
+		Cursor c = (Cursor) arg0.getItemAtPosition(pos);
 
 		String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
 		mListColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
@@ -455,6 +479,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		{
 			long listId = c.getLong(TASK_LIST_PROJECTION_VALUES.id);
 			mValues.put(Tasks.LIST_ID, listId);
+			mSelectedList = itemId;
 		}
 
 		if (mModel == null || !mModel.getAccountType().equals(accountType))
@@ -485,6 +510,7 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		}
 		mTaskListBar.setBackgroundColor(mListColor);
 		mColorBar.setBackgroundColor(mListColor);
+
 	}
 
 
@@ -549,15 +575,6 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		else
 		{
 			activity.setResult(resultCode);
-		}
-
-		if (!mAppForEdit)
-		{
-			// store last list used
-			SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
-			Editor editor = prefs.edit();
-			editor.putLong(PREFERENCE_LAST_LIST, mListSpinner.getSelectedItemId());
-			editor.commit();
 		}
 
 		activity.finish();

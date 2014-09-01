@@ -17,6 +17,8 @@
 
 package org.dmfs.tasks;
 
+import org.dmfs.tasks.model.ContentSet;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
@@ -86,10 +88,14 @@ public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragme
 
 
 	@Override
-	public void onEditTask(Uri taskUri)
+	public void onEditTask(Uri taskUri, ContentSet data)
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
 		editTaskIntent.setData(taskUri);
+		if (data != null)
+		{
+			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+		}
 		startActivity(editTaskIntent);
 	}
 

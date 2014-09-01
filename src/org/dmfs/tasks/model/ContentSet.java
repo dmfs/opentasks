@@ -359,6 +359,18 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 
 	/**
+	 * Returns the Uri this {@link ContentSet} is read from (or has been written to). This may be a directory {@link Uri} if the ContentSet has not been stored
+	 * yet.
+	 * 
+	 * @return The {@link Uri}.
+	 */
+	public Uri getUri()
+	{
+		return mUri;
+	}
+
+
+	/**
 	 * Start a new bulk update. You should use this when you update multiple values at once and you don't want to send an update notification every time. When
 	 * you're done call {@link #finishBulkUpdate()} which sned the notifications (unless there is another bulk update in progress).
 	 */
