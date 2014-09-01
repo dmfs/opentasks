@@ -1,6 +1,18 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light" />
+    <style name="AppTheme" parent="android:Theme.Holo.Light"></style>
+
+    <style name="DetailsTheme" parent="AppTheme">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/DetailsActionBar</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="DetailsActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">#00000000</item>
+        <item name="android:displayOptions">showTitle</item>
+        <item name="android:icon">@android:color/transparent</item>
+    </style>
 
     <style name="btn_remove">
         <item name="android:background">?android:attr/selectableItemBackground</item>
@@ -72,6 +84,10 @@
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="actionColorBar">
+        <item name="android:layout_height">?android:attr/actionBarSize</item>
     </style>
 
 </resources>

@@ -31,8 +31,11 @@ import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.TasksListCursorAdapter;
+import org.dmfs.tasks.widget.ListenableScrollView;
+import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskEdit;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentUris;
@@ -41,7 +44,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -132,6 +138,9 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	private boolean mSetInitialSpinnerSelection;
 	private Spinner mListSpinner;
 	private String mAuthority;
+	private View mColorBar;
+	private int mListColor;
+	private ListenableScrollView mRootView;
 
 
 	/**
@@ -178,9 +187,23 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 	public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		Log.v(TAG, "On create view");
-		View rootView = inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
+		ListenableScrollView rootView = mRootView = (ListenableScrollView) inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
+		mRootView.setOnScrollListener(new OnScrollListener()
+		{
+
+			@Override
+			public void onScroll(int oldScrollY, int newScrollY)
+			{
+				int headerHeight = mTaskListBar.getMeasuredHeight();
+				if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
+				{
+					updateColor((float) newScrollY / headerHeight);
+				}
+			}
+		});
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
+		mColorBar = rootView.findViewById(R.id.headercolorbar);
 
 		mAppForEdit = !Tasks.getContentUri(mAuthority).equals(mTaskUri) && mTaskUri != null;
 
@@ -425,8 +448,8 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 		Cursor c = (Cursor) arg0.getItemAtPosition(arg2);
 
 		String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
-		int listColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
-		mTaskListBar.setBackgroundColor(listColor);
+		mListColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
+		updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 
 		if (!mAppForEdit)
 		{
@@ -439,6 +462,29 @@ public class EditTaskFragment extends Fragment implements LoaderManager.LoaderCa
 			// the model changed, load the new model
 			new AsyncModelLoader(mAppContext, EditTaskFragment.this).execute(accountType);
 		}
+	}
+
+
+	@SuppressLint("NewApi")
+	private void updateColor(float percentage)
+	{
+		if (VERSION.SDK_INT >= 11)
+		{
+			percentage = Math.min(percentage, 1);
+
+			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
+			// because the user might notice a small change in lightness when scrolling
+			// TODO: find a better way to achieve the same effect
+
+			float[] hsv = new float[3];
+			Color.colorToHSV(mListColor, hsv);
+			hsv[2] *= (0.5 + 0.25 * percentage);
+
+			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
+			getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(newColor));
+		}
+		mTaskListBar.setBackgroundColor(mListColor);
+		mColorBar.setBackgroundColor(mListColor);
 	}
 
 

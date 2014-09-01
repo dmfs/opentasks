@@ -29,6 +29,8 @@ import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.widget.ListenableScrollView;
+import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import android.annotation.SuppressLint;
@@ -39,6 +41,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.database.ContentObserver;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -116,6 +120,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	 * The actual detail view. We store this direct reference to be able to clear it when the fragment gets detached.
 	 */
 	private TaskView mDetailView;
+
+	private View mColorBar;
+	private int mListColor;
+	private ListenableScrollView mRootView;
 
 	/**
 	 * A {@link Callback} to the activity.
@@ -200,7 +208,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
+		ListenableScrollView rootView = mRootView = (ListenableScrollView) inflater.inflate(R.layout.fragment_task_view_detail, container, false);
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 
 		if (savedInstanceState != null)
@@ -225,6 +233,25 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 				}
 			}
 		}
+
+		if (VERSION.SDK_INT >= 11)
+		{
+			mRootView.setOnScrollListener(new OnScrollListener()
+			{
+
+				@SuppressLint("NewApi")
+				@Override
+				public void onScroll(int oldScrollY, int newScrollY)
+				{
+					int headerHeight = getActivity().getActionBar().getHeight();
+					if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
+					{
+						updateColor((float) newScrollY / headerHeight);
+					}
+				}
+			});
+		}
+		mColorBar = rootView.findViewById(R.id.headercolorbar);
 
 		return rootView;
 	}
@@ -434,11 +461,38 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 
 	@SuppressLint("NewApi")
+	private void updateColor(float percentage)
+	{
+		if (VERSION.SDK_INT >= 11)
+		{
+			percentage = Math.min(percentage, 1);
+
+			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
+			// because the user might notice a small change in lightness when scrolling
+			// TODO: find a better way to achieve the same effect
+
+			float[] hsv = new float[3];
+			Color.colorToHSV(mListColor, hsv);
+			hsv[2] *= (0.5 + 0.25 * percentage);
+
+			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
+			getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(newColor));
+		}
+		mColorBar.setBackgroundColor(mListColor);
+	}
+
+
+	@SuppressLint("NewApi")
 	@Override
 	public void onContentLoaded(ContentSet contentSet)
 	{
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
+			mListColor = contentSet.getAsInteger(Tasks.LIST_COLOR);
+			if (VERSION.SDK_INT >= 11)
+			{
+				updateColor((float) mRootView.getScrollY() / getActivity().getActionBar().getHeight());
+			}
 			// the ContentSet has been (re-)loaded, load the model of this task
 			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			Activity activity = getActivity();
