@@ -557,10 +557,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	 * @param taskTitle
 	 *            The name/title of the task.
 	 */
-	private void openTaskEditor(final Uri taskUri, final String taskTitle)
+	private void openTaskEditor(final Uri taskUri, final String accountType)
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
 		editTaskIntent.setData(taskUri);
+		editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
 		startActivity(editTaskIntent);
 	}
 
@@ -690,7 +691,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 						}
 						else
 						{
-							openTaskEditor(taskUri, title);
+							openTaskEditor(taskUri, cursor.getString(cursor.getColumnIndex(Instances.ACCOUNT_TYPE)));
 							return false;
 						}
 					}

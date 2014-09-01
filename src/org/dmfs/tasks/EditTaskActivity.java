@@ -40,6 +40,10 @@ import android.view.MenuItem;
  */
 public class EditTaskActivity extends FragmentActivity
 {
+	final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
+
+	final static String EXTRA_DATA_ACCOUNT_TYPE = "org.dmfs.ACCOUNT_TYPE";
+
 	private EditTaskFragment mEditFragment;
 
 	private String mAuthority;
@@ -99,6 +103,16 @@ public class EditTaskActivity extends FragmentActivity
 			{
 				// hand over task URI for editing / creating empty task
 				arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
+				ContentSet data = getIntent().getParcelableExtra(EXTRA_DATA_CONTENT_SET);
+				if (data != null)
+				{
+					arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, data);
+				}
+				String accountType = getIntent().getStringExtra(EXTRA_DATA_ACCOUNT_TYPE);
+				if (accountType != null)
+				{
+					arguments.putString(EditTaskFragment.PARAM_ACCOUNT_TYPE, accountType);
+				}
 			}
 
 			EditTaskFragment fragment = new EditTaskFragment();

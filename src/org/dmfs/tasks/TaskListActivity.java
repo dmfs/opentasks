@@ -29,6 +29,7 @@ import org.dmfs.tasks.groupings.ByPriority;
 import org.dmfs.tasks.groupings.ByProgress;
 import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
@@ -274,10 +275,14 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 
 
 	@Override
-	public void onEditTask(Uri taskUri)
+	public void onEditTask(Uri taskUri, ContentSet data)
 	{
 		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
 		editTaskIntent.setData(taskUri);
+		if (data != null)
+		{
+			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+		}
 		startActivity(editTaskIntent);
 	}
 
