@@ -122,6 +122,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	private View mColorBar;
 	private int mListColor;
 	private ListenableScrollView mRootView;
+	private int mOldStatus = -1;
 
 	/**
 	 * A {@link Callback} to the activity.
@@ -402,6 +403,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			if (mContentSet != null)
 			{
 				Integer status = TaskFieldAdapters.STATUS.get(mContentSet);
+				if (status != null)
+				{
+					mOldStatus = status;
+				}
 				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet) || status != null && status == Tasks.STATUS_COMPLETED)
 				{
 					// can not complete task since it's already closed, disable menu item
@@ -513,10 +518,14 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			}
 
 			Activity activity = getActivity();
-			if (VERSION.SDK_INT >= 11 && activity != null)
+			int newStatus = TaskFieldAdapters.STATUS.get(contentSet);
+			if (VERSION.SDK_INT >= 11 && activity != null
+				&& (mOldStatus != -1 && mOldStatus != newStatus || mOldStatus == -1 && TaskFieldAdapters.IS_CLOSED.get(mContentSet)))
 			{
+				// new need to update the options menu, because the status of the task has changed
 				activity.invalidateOptionsMenu();
 			}
+			mOldStatus = newStatus;
 		}
 	}
 

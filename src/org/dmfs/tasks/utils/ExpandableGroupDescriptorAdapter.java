@@ -185,7 +185,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 
 	public void reloadLoadedGroups()
 	{
-		// we operate on a copy of the set to avoid conurrent modification when a group is loaded before we're done here
+		// we operate on a copy of the set to avoid concurrent modification when a group is loaded before we're done here
 		for (Integer i : new HashSet<Integer>(mLoadedGroups))
 		{
 			int getGroupCount = getGroupCount();

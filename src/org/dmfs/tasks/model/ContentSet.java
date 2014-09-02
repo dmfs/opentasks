@@ -293,6 +293,17 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		Integer oldValue = getAsInteger(key);
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
+			if (mBeforeContentValues != null && mBeforeContentValues.containsKey(key))
+			{
+				Integer beforeValue = mBeforeContentValues.getAsInteger(key);
+				if (beforeValue != null && beforeValue.equals(value) || beforeValue == null && value == null)
+				{
+					// value equals before value, so remove it from after values
+					mAfterContentValues.remove(key);
+					mAfterKeys.remove(key);
+					return;
+				}
+			}
 			// value has changed, update
 			ensureAfter().put(key, value);
 			mAfterKeys.add(key);
@@ -317,6 +328,17 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		Long oldValue = getAsLong(key);
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
+			if (mBeforeContentValues != null && mBeforeContentValues.containsKey(key))
+			{
+				Long beforeValue = mBeforeContentValues.getAsLong(key);
+				if (beforeValue != null && beforeValue.equals(value) || beforeValue == null && value == null)
+				{
+					// value equals before value, so remove it from after values
+					mAfterContentValues.remove(key);
+					mAfterKeys.remove(key);
+					return;
+				}
+			}
 			ensureAfter().put(key, value);
 			mAfterKeys.add(key);
 			notifyUpdateListeners(key);
@@ -340,6 +362,17 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		String oldValue = getAsString(key);
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
+			if (mBeforeContentValues != null && mBeforeContentValues.containsKey(key))
+			{
+				String beforeValue = mBeforeContentValues.getAsString(key);
+				if (beforeValue != null && beforeValue.equals(value) || beforeValue == null && value == null)
+				{
+					// value equals before value, so remove it from after values
+					mAfterContentValues.remove(key);
+					mAfterKeys.remove(key);
+					return;
+				}
+			}
 			ensureAfter().put(key, value);
 			mAfterKeys.add(key);
 			notifyUpdateListeners(key);
@@ -363,6 +396,17 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		Float oldValue = getAsFloat(key);
 		if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
 		{
+			if (mBeforeContentValues != null && mBeforeContentValues.containsKey(key))
+			{
+				Float beforeValue = mBeforeContentValues.getAsFloat(key);
+				if (beforeValue != null && beforeValue.equals(value) || beforeValue == null && value == null)
+				{
+					// value equals before value, so remove it from after values
+					mAfterContentValues.remove(key);
+					mAfterKeys.remove(key);
+					return;
+				}
+			}
 			ensureAfter().put(key, value);
 			mAfterKeys.add(key);
 			notifyUpdateListeners(key);

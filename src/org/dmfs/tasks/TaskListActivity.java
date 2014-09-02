@@ -35,6 +35,7 @@ import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -417,37 +418,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		}
 		searchView.setQueryHint(getString(R.string.menu_search_hint));
 		searchView.setIconifiedByDefault(true);
-
-		searchView.setOnQueryTextListener(new OnQueryTextListener()
-		{
-
-			@Override
-			public boolean onQueryTextSubmit(String query)
-			{
-				// persist current search
-				mSearchHistoryHelper.commitSearch();
-				mHandler.post(mSearchUpdater);
-				return true;
-			}
-
-
-			@Override
-			public boolean onQueryTextChange(String query)
-			{
-				mHandler.removeCallbacks(mSearchUpdater);
-				if (query.length() > 0)
-				{
-					mSearchHistoryHelper.updateSearch(query);
-					mHandler.postDelayed(mSearchUpdater, SEARCH_UPDATE_DELAY);
-				}
-				else
-				{
-					mSearchHistoryHelper.removeCurrentSearch();
-					mHandler.post(mSearchUpdater);
-				}
-				return true;
-			}
-		});
+		searchView.setOnQueryTextListener(mOnQueryTextListener);
 
 		if (mAutoExpandSearchView)
 		{
@@ -474,6 +445,38 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			TaskListFragment fragment = (TaskListFragment) mPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
 			fragment.notifyDataSetChanged(true);
+		}
+	};
+
+	@SuppressLint("NewApi")
+	private final OnQueryTextListener mOnQueryTextListener = new OnQueryTextListener()
+	{
+
+		@Override
+		public boolean onQueryTextSubmit(String query)
+		{
+			// persist current search
+			mSearchHistoryHelper.commitSearch();
+			mHandler.post(mSearchUpdater);
+			return true;
+		}
+
+
+		@Override
+		public boolean onQueryTextChange(String query)
+		{
+			mHandler.removeCallbacks(mSearchUpdater);
+			if (query.length() > 0)
+			{
+				mSearchHistoryHelper.updateSearch(query);
+				mHandler.postDelayed(mSearchUpdater, SEARCH_UPDATE_DELAY);
+			}
+			else
+			{
+				mSearchHistoryHelper.removeCurrentSearch();
+				mHandler.post(mSearchUpdater);
+			}
+			return true;
 		}
 	};
 }

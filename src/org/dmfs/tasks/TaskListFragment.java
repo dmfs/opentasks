@@ -377,10 +377,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		/*
-		 * int scrollx = expandLV.getFirstVisiblePosition(); View itemView = expandLV.getChildAt(0); int scrolly = itemView == null ? 0 : itemView.getTop();
-		 * Log.v(TAG, "scrollY " + scrollx + "  " + scrolly);
-		 */
 		Log.v(TAG, "change cursor");
 		if (mSavedExpandedGroups == null)
 		{
@@ -388,10 +384,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		}
 
 		mAdapter.setGroupCursor(cursor);
-		/*
-		 * expandLV.setSelectionFromTop(scrollx, 0); int scrollx2 = expandLV.getFirstVisiblePosition(); View itemView2 = expandLV.getChildAt(0); int scrolly2 =
-		 * itemView == null ? 0 : itemView2.getTop(); Log.v(TAG, "scrollY " + scrollx2 + "  " + scrolly2);
-		 */
+
 		if (mSavedExpandedGroups != null)
 		{
 			mExpandableListView.expandGroups(mSavedExpandedGroups);
@@ -827,30 +820,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 	public void notifyDataSetChanged(boolean expandFirst)
 	{
-		// mExpandableListView.retainExpadedGroups(true, expandFirst, false);
-		// LoaderManager loaderManager = getLoaderManager();
-		// if (loaderManager.getLoader(-1) != null)
-		// {
-		// if (!loaderManager.hasRunningLoaders())
-		// {
 		getLoaderManager().restartLoader(-1, null, this);
-		// }
-		// }
-		// else
-		// {
-		// loaderManager.initLoader(-1, null, this);
-		// }
-
-		// if (expandFirst)
-		// {
-		// long firstId = mExpandableListView.getExpandableListAdapter().getGroupId(0);
-		// if (!mExpandableListView.isGroupExpanded(0))
-		// {
-		// mSavedExpandedGroups = new long[] { firstId };
-		// }
-
-		// }
-
 	}
 
 	Runnable setOpenHandler = new Runnable()
