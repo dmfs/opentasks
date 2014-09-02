@@ -17,9 +17,6 @@
 
 package org.dmfs.tasks.groupings;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
@@ -27,6 +24,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.PriorityCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.PriorityCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.utils.DueDateFormatter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -63,16 +61,6 @@ public class ByPriority extends AbstractGroupingFactory
 		 * We use this to get the current time.
 		 */
 		private Time mNow;
-
-		/**
-		 * The formatter we use for due dates other than today.
-		 */
-		private final DateFormat mDateFormatter = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
-
-		/**
-		 * The formatter we use for tasks that are due today.
-		 */
-		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 		private int mFlingContentViewId = R.id.flingContentView;
 		private int mFlingRevealLeftViewId = R.id.fling_reveal_left;
@@ -132,7 +120,7 @@ public class ByPriority extends AbstractGroupingFactory
 					mNow.clear(TimeZone.getDefault().getID());
 					mNow.setToNow();
 
-					dueDateField.setText(makeDueDate(dueDate, view.getContext()));
+					dueDateField.setText(new DueDateFormatter(view.getContext()).format(dueDate));
 
 					// highlight overdue dates & times
 					if (dueDate.before(mNow) && !isClosed)
@@ -205,41 +193,6 @@ public class ByPriority extends AbstractGroupingFactory
 		public int getView()
 		{
 			return R.layout.task_list_element;
-		}
-
-
-		/**
-		 * Get the due date to show. It returns just a time for tasks that are due today and a date otherwise.
-		 * 
-		 * @param due
-		 *            The due date to format.
-		 * @return A String with the formatted date.
-		 */
-		private String makeDueDate(Time due, Context context)
-		{
-			if (!due.allDay)
-			{
-				due.switchTimezone(TimeZone.getDefault().getID());
-			}
-
-			// normalize time to ensure yearDay is set properly
-			due.normalize(false);
-
-			if (due.year == mNow.year && due.yearDay == mNow.yearDay)
-			{
-				if (due.allDay)
-				{
-					return context.getString(R.string.today);
-				}
-				else
-				{
-					return context.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(due.toMillis(false)));
-				}
-			}
-			else
-			{
-				return mDateFormatter.format(new Date(due.toMillis(false)));
-			}
 		}
 
 

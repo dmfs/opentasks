@@ -22,11 +22,16 @@ package org.dmfs.tasks.utils;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Formatter;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
+import android.text.format.DateUtils;
 import android.text.format.Time;
 
 
@@ -34,18 +39,18 @@ import android.text.format.Time;
  * Helper class to format a due date to present it to the user.
  * 
  * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class DueDateFormatter
 {
+	private final static int DEFAULT_DATEUTILS_FLAGS = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NUMERIC_DATE
+		| DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
+	private final static int TIME_DATEUTILS_FLAGS = DateUtils.FORMAT_SHOW_TIME;
+
 	/**
 	 * The formatter we use for due dates other than today.
 	 */
 	private final DateFormat mDateFormatter = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
-
-	/**
-	 * The formatter we use for tasks that are due today.
-	 */
-	private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 	/**
 	 * A context to load resource string.
@@ -76,15 +81,11 @@ public class DueDateFormatter
 	 *            The due date to format.
 	 * @return A string with the formatted due date.
 	 */
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public String format(Time dueDate)
 	{
 		mNow.clear(TimeZone.getDefault().getID());
 		mNow.setToNow();
-
-		if (!dueDate.allDay)
-		{
-			dueDate.switchTimezone(TimeZone.getDefault().getID());
-		}
 
 		// normalize time to ensure yearDay is set properly
 		dueDate.normalize(false);
@@ -97,12 +98,29 @@ public class DueDateFormatter
 			}
 			else
 			{
-				return mContext.getString(R.string.today) + ", " + mTimeFormatter.format(new Date(dueDate.toMillis(false)));
+				return mContext.getString(R.string.today) + ", " + DateUtils.formatDateTime(mContext, dueDate.toMillis(false), TIME_DATEUTILS_FLAGS).toString();
 			}
 		}
 		else
 		{
-			return mDateFormatter.format(new Date(dueDate.toMillis(false)));
+
+			if (dueDate.allDay)
+			{
+				// use DataRange in order to set the correct timezone
+				if (Build.VERSION.SDK_INT > 8)
+				{
+					return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), dueDate.toMillis(false), dueDate.toMillis(false),
+						DEFAULT_DATEUTILS_FLAGS, "UTC").toString();
+				}
+				else
+				{
+					mDateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+					return mDateFormatter.format(new Date(dueDate.toMillis(false)));
+				}
+
+			}
+			return DateUtils.formatDateTime(mContext, dueDate.toMillis(false), DEFAULT_DATEUTILS_FLAGS).toString();
+
 		}
 	}
 }

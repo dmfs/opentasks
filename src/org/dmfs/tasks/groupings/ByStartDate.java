@@ -17,9 +17,6 @@
 
 package org.dmfs.tasks.groupings;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
@@ -28,6 +25,7 @@ import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.utils.DueDateFormatter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -67,16 +65,6 @@ public class ByStartDate extends AbstractGroupingFactory
 		 * We use this to get the current time.
 		 */
 		private Time mNow;
-
-		/**
-		 * The formatter we use for due dates other than today.
-		 */
-		private final DateFormat mDateFormatter = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
-
-		/**
-		 * The formatter we use for tasks that are due today.
-		 */
-		private final DateFormat mTimeFormatter = SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT);
 
 		private int mFlingContentViewId = R.id.flingContentView;
 		private int mFlingRevealLeftViewId = R.id.fling_reveal_left;
@@ -128,15 +116,9 @@ public class ByStartDate extends AbstractGroupingFactory
 
 				if (startDate != null)
 				{
-					if (mNow == null)
-					{
-						mNow = new Time();
-					}
-					mNow.clear(TimeZone.getDefault().getID());
-					mNow.setToNow();
 
 					startDateField.setVisibility(View.VISIBLE);
-					startDateField.setText(makeDateString(startDate));
+					startDateField.setText(new DueDateFormatter(view.getContext()).format(startDate));
 
 					// format time
 					startDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
@@ -167,8 +149,8 @@ public class ByStartDate extends AbstractGroupingFactory
 					}
 					mNow.clear(TimeZone.getDefault().getID());
 					mNow.setToNow();
-					dueDateField.setVisibility(View.VISIBLE);
-					dueDateField.setText(makeDateString(dueTime));
+
+					dueDateField.setText(new DueDateFormatter(view.getContext()).format(dueTime));
 					if (dueIcon != null)
 					{
 						dueIcon.setVisibility(View.VISIBLE);
@@ -247,31 +229,6 @@ public class ByStartDate extends AbstractGroupingFactory
 		public int getView()
 		{
 			return R.layout.task_list_element;
-		}
-
-
-		/**
-		 * Get the date to show. It returns just a time for dates that are today and a date otherwise.
-		 * 
-		 * @param date
-		 *            The date to format.
-		 * @return A String with the formatted date.
-		 */
-		private String makeDateString(Time date)
-		{
-			if (!date.allDay)
-			{
-				date.switchTimezone(TimeZone.getDefault().getID());
-			}
-
-			if (date.year == mNow.year && date.yearDay == mNow.yearDay)
-			{
-				return mTimeFormatter.format(new Date(date.toMillis(false)));
-			}
-			else
-			{
-				return mDateFormatter.format(new Date(date.toMillis(false)));
-			}
 		}
 
 
