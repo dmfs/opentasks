@@ -373,11 +373,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		}
 
 		// the model has been loaded, now update the view
-		mModel = model;
 		if (mModel == null || !mModel.equals(model))
 		{
+			mModel = model;
 			updateView();
 		}
+
 	}
 
 
@@ -524,7 +525,9 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			{
 				// new need to update the options menu, because the status of the task has changed
 				activity.invalidateOptionsMenu();
+
 			}
+
 			mOldStatus = newStatus;
 		}
 	}
