@@ -40,6 +40,7 @@ import org.dmfs.tasks.widget.TaskEdit;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -199,23 +200,26 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	{
 		Log.v(TAG, "On create view");
 		ListenableScrollView rootView = mRootView = (ListenableScrollView) inflater.inflate(R.layout.fragment_task_edit_detail, container, false);
-		mRootView.setOnScrollListener(new OnScrollListener()
-		{
-
-			@Override
-			public void onScroll(int oldScrollY, int newScrollY)
-			{
-				int headerHeight = mTaskListBar.getMeasuredHeight();
-				if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
-				{
-					updateColor((float) newScrollY / headerHeight);
-				}
-			}
-		});
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 		mColorBar = rootView.findViewById(R.id.headercolorbar);
 
+		if (mColorBar != null)
+		{
+			mRootView.setOnScrollListener(new OnScrollListener()
+			{
+
+				@Override
+				public void onScroll(int oldScrollY, int newScrollY)
+				{
+					int headerHeight = mTaskListBar.getMeasuredHeight();
+					if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
+					{
+						updateColor((float) newScrollY / headerHeight);
+					}
+				}
+			});
+		}
 		mAppForEdit = !Tasks.getContentUri(mAuthority).equals(mTaskUri) && mTaskUri != null;
 
 		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
@@ -495,8 +499,14 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	{
 		if (VERSION.SDK_INT >= 11)
 		{
-			percentage = Math.min(percentage, 1);
-
+			if (mColorBar == null)
+			{
+				percentage = 1;
+			}
+			else
+			{
+				percentage = Math.min(Float.isNaN(percentage) ? 0 : percentage, 1);
+			}
 			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
 			// because the user might notice a small change in lightness when scrolling
 			// TODO: find a better way to achieve the same effect
@@ -506,10 +516,18 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
 			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
-			getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(newColor));
+			ActionBar actionBar = getActivity().getActionBar();
+			actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
+
+			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
+			actionBar.setDisplayShowTitleEnabled(false);
+			actionBar.setDisplayShowTitleEnabled(true);
 		}
 		mTaskListBar.setBackgroundColor(mListColor);
-		mColorBar.setBackgroundColor(mListColor);
+		if (mColorBar != null)
+		{
+			mColorBar.setBackgroundColor(mListColor);
+		}
 
 	}
 
