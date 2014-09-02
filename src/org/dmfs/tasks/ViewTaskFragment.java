@@ -49,6 +49,7 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -372,8 +373,10 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 		// the model has been loaded, now update the view
 		mModel = model;
-		updateView();
-
+		if (mModel == null || !mModel.equals(model))
+		{
+			updateView();
+		}
 	}
 
 
@@ -498,8 +501,17 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			{
 				updateColor((float) mRootView.getScrollY() / getActivity().getActionBar().getHeight());
 			}
-			// the ContentSet has been (re-)loaded, load the model of this task
-			new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
+			{
+				// the ContentSet has been (re-)loaded, load the model of this task
+				new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+			}
+			else
+			{
+				// the model didn't change, just update the view
+				updateView();
+			}
+
 			Activity activity = getActivity();
 			if (VERSION.SDK_INT >= 11 && activity != null)
 			{
