@@ -34,6 +34,7 @@ import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -233,7 +234,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			}
 		}
 
-		if (VERSION.SDK_INT >= 11)
+		if (VERSION.SDK_INT >= 11 && mColorBar != null)
 		{
 			mRootView.setOnScrollListener(new OnScrollListener()
 			{
@@ -461,9 +462,9 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
-		if (VERSION.SDK_INT >= 11)
+		if (VERSION.SDK_INT >= 11 && mColorBar != null)
 		{
-			percentage = Math.min(Float.isNaN(percentage) ? 0 : percentage, 1);
+			percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
 
 			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
 			// because the user might notice a small change in lightness when scrolling
@@ -474,9 +475,15 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
 			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
-			getActivity().getActionBar().setBackgroundDrawable(new ColorDrawable(newColor));
+			ActionBar actionBar = getActivity().getActionBar();
+			actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
+
+			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
+			actionBar.setDisplayShowTitleEnabled(false);
+			actionBar.setDisplayShowTitleEnabled(true);
+
+			mColorBar.setBackgroundColor(mListColor);
 		}
-		mColorBar.setBackgroundColor(mListColor);
 	}
 
 
