@@ -47,6 +47,7 @@ import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -113,7 +114,8 @@ public class BySearch extends AbstractGroupingFactory
 			if (title != null)
 			{
 				String text = TaskFieldAdapters.TITLE.get(cursor);
-				title.setText(text + " (" + TaskFieldAdapters.SCORE.get(cursor) * 100 + "%)"); // FIXME: this is for testing only
+				// float score = TaskFieldAdapters.SCORE.get(cursor);
+				title.setText(text);
 				if (isClosed)
 				{
 					title.setPaintFlags(title.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -244,6 +246,7 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
+			Context context = view.getContext();
 			long now = System.currentTimeMillis();
 			int position = cursor.getPosition();
 
@@ -252,8 +255,8 @@ public class BySearch extends AbstractGroupingFactory
 			if (title != null)
 			{
 				title.setText(getTitle(cursor, view.getContext()));
-			}
 
+			}
 			// set search time
 			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
 			if (text1 != null)
@@ -293,6 +296,18 @@ public class BySearch extends AbstractGroupingFactory
 
 			boolean isHistoric = cursor.getInt(cursor.getColumnIndex(SearchHistoryColumns.HISTORIC)) > 0;
 			title.setTypeface(null, isHistoric ? Typeface.NORMAL : Typeface.ITALIC);
+
+			// set history icon
+			ImageView icon = (ImageView) view.findViewById(android.R.id.icon);
+			if (isHistoric)
+			{
+				icon.setImageResource(R.drawable.ic_history);
+				icon.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				icon.setVisibility(View.GONE);
+			}
 		}
 
 

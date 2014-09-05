@@ -24,6 +24,16 @@
         android:layout_margin="3dip"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@android:id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="-8dip"
+        android:layout_toRightOf="@id/colorbar1"
+        android:visibility="gone" />
+
     <TextView
         android:id="@android:id/title"
         style="@style/task_group_text"
@@ -31,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:layout_marginLeft="8dip"
-        android:layout_toRightOf="@id/colorbar1"
+        android:layout_toRightOf="@android:id/icon"
         android:ellipsize="end"
         android:paddingLeft="0dip"
         android:singleLine="true"
@@ -46,7 +56,7 @@
         android:layout_below="@android:id/title"
         android:layout_marginLeft="8dip"
         android:layout_toLeftOf="@android:id/text2"
-        android:layout_toRightOf="@id/colorbar1"
+        android:layout_toRightOf="@android:id/icon"
         android:ellipsize="end"
         android:paddingBottom="10dip"
         android:paddingLeft="0dip"
