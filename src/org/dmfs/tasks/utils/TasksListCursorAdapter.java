@@ -53,15 +53,16 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 
 
 	@Override
-	public void changeCursor(Cursor c)
+	public Cursor swapCursor(Cursor c)
 	{
-		super.changeCursor(c);
+		Cursor result = super.swapCursor(c);
 		if (c != null)
 		{
 			mTaskColorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
 			mTaskNameColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME);
 			mAccountNameColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
 		}
+		return result;
 	}
 
 

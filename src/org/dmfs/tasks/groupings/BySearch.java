@@ -54,16 +54,10 @@ import android.widget.TextView;
  * Definition of the search history grouping.
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public class BySearch extends AbstractGroupingFactory
 {
-
-	/**
-	 * The projection we use when we load instances. We don't need every detail of a task here. This is used by all groupings.
-	 */
-	public final static String[] TASK_PROJECTION = new String[] { Tasks.DTSTART, Tasks.DURATION, Tasks.DUE, Tasks.IS_ALLDAY, Tasks.TZ, Tasks.TITLE,
-		Tasks.LIST_COLOR, Tasks.PRIORITY, Tasks.LIST_ID, Tasks._ID, Tasks.STATUS, Tasks.COMPLETED, Tasks.IS_CLOSED, Tasks.PERCENT_COMPLETE, Tasks.SCORE };
-
 	/**
 	 * An adapter to load the due date from the tasks projection.
 	 */
@@ -211,7 +205,6 @@ public class BySearch extends AbstractGroupingFactory
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
-			Context context = view.getContext();
 			long now = System.currentTimeMillis();
 			int position = cursor.getPosition();
 
@@ -324,8 +317,8 @@ public class BySearch extends AbstractGroupingFactory
 	@Override
 	public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
 	{
-		return new SearchChildDescriptor(authority, SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, TASK_PROJECTION, null, Tasks.SCORE + ", "
-			+ Instances.INSTANCE_DUE_SORTING + " is null, " + Instances.INSTANCE_DUE_SORTING + ", " + Instances.PRIORITY + ", " + Instances.TITLE
+		return new SearchChildDescriptor(authority, SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, INSTANCE_PROJECTION, null, Tasks.SCORE
+			+ ", " + Instances.INSTANCE_DUE_SORTING + " is null, " + Instances.INSTANCE_DUE_SORTING + ", " + Instances.PRIORITY + ", " + Instances.TITLE
 			+ " COLLATE NOCASE ASC", null).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	}

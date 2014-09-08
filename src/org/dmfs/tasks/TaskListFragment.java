@@ -381,7 +381,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		Log.v(TAG, "change cursor");
 		if (mSavedExpandedGroups == null)
 		{
 			mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
@@ -420,10 +419,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		{
 			if (pos == mActivatedPositionGroup && mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
 			{
-				Log.d(TAG, "Restoring Child Postion : " + mActivatedPositionChild);
-				Log.d(TAG, "Restoring Group Position : " + mActivatedPositionGroup);
 				mHandler.post(setOpenHandler);
-
 			}
 		}
 
