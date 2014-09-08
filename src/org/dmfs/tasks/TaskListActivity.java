@@ -445,6 +445,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 		{
 			TaskListFragment fragment = (TaskListFragment) mPagerAdapter.instantiateItem(mViewPager, mViewPager.getCurrentItem());
 			fragment.notifyDataSetChanged(true);
+			fragment.expandCurrentSearchGroup();
 		}
 	};
 

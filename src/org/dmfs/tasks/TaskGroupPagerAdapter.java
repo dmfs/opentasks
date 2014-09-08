@@ -94,10 +94,12 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	@Override
 	public Fragment getItem(int position)
 	{
-		AbstractGroupingFactory factory = getGroupingFactoryForId(mTabConfig.getVisibleItem(position).getId());
+		int pageId = mTabConfig.getVisibleItem(position).getId();
+		AbstractGroupingFactory factory = getGroupingFactoryForId(pageId);
 
 		TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
 		fragment.setExpandableGroupDescriptor(factory.getExpandableGroupDescriptor());
+		fragment.setPageId(pageId);
 		return fragment;
 
 	}

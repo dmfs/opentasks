@@ -36,6 +36,7 @@ import org.dmfs.tasks.utils.FlingDetector.OnFlingListener;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.RetainExpandableListView;
+import org.dmfs.tasks.utils.SearchHistoryDatabaseHelper.SearchHistoryColumns;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -128,6 +129,9 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 	private Loader<Cursor> mCursorLoader;
 	private String mAuthority;
+
+	@Retain
+	private int mPageId = -1;
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
 	{
@@ -855,4 +859,22 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		}
 	}
 
+
+	public void expandCurrentSearchGroup()
+	{
+		if (mPageId == R.id.task_group_search && mAdapter.getGroupCount() > 0)
+		{
+			Cursor c = mAdapter.getGroup(0);
+			if (c != null && c.getInt(c.getColumnIndex(SearchHistoryColumns.HISTORIC)) < 1)
+			{
+				mExpandableListView.expandGroup(0);
+			}
+		}
+	}
+
+
+	public void setPageId(int pageId)
+	{
+		mPageId = pageId;
+	}
 }
