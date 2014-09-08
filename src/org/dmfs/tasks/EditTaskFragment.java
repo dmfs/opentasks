@@ -511,6 +511,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			// because the user might notice a small change in lightness when scrolling
 			// TODO: find a better way to achieve the same effect
 
+			percentage = (float) Math.pow(percentage, 1.5);
 			float[] hsv = new float[3];
 			Color.colorToHSV(mListColor, hsv);
 			hsv[2] *= (0.5 + 0.25 * percentage);

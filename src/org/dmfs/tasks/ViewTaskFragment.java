@@ -474,6 +474,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		if (VERSION.SDK_INT >= 11 && mColorBar != null)
 		{
 			percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
+			percentage = (float) Math.pow(percentage, 1.5);
 
 			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
 			// because the user might notice a small change in lightness when scrolling
