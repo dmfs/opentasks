@@ -79,7 +79,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor implements OnItemSel
 		mSpinner = (Spinner) findViewById(R.id.integer_choices_spinner);
 		if (mSpinner == null)
 		{
-			// on older android version this may happen if includes are used
+			// on older android versions this may happen if includes are used
 			return;
 		}
 
@@ -210,7 +210,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor implements OnItemSel
 			if (convertView == null)
 			{
 				// inflate a new view and add a tag
-				convertView = mLayoutInflater.inflate(R.layout.integer_choices_spinner_selected_item, null);
+				convertView = mLayoutInflater.inflate(R.layout.integer_choices_spinner_selected_item, parent, false);
 				SpinnerItemTag tag = new SpinnerItemTag();
 				tag.image = (ImageView) convertView.findViewById(R.id.integer_choice_item_image);
 				tag.text = (TextView) convertView.findViewById(R.id.integer_choice_item_text);
@@ -229,7 +229,7 @@ public class ChoicesFieldEditor extends AbstractFieldEditor implements OnItemSel
 			if (convertView == null)
 			{
 				// inflate a new view and add a tag
-				convertView = mLayoutInflater.inflate(R.layout.integer_choices_spinner_item, null);
+				convertView = mLayoutInflater.inflate(R.layout.integer_choices_spinner_item, parent, false);
 				SpinnerItemTag tag = new SpinnerItemTag();
 				tag.image = (ImageView) convertView.findViewById(R.id.integer_choice_item_image);
 				tag.text = (TextView) convertView.findViewById(R.id.integer_choice_item_text);

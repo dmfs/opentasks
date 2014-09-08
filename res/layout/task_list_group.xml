@@ -43,7 +43,8 @@
         android:layout_marginLeft="8dip"
         android:layout_toRightOf="@android:id/icon"
         android:ellipsize="end"
-        android:paddingLeft="0dip"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:singleLine="true"
         android:textIsSelectable="false" />
 
@@ -60,6 +61,7 @@
         android:ellipsize="end"
         android:paddingBottom="10dip"
         android:paddingLeft="0dip"
+        android:paddingRight="0dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false" />
@@ -73,6 +75,7 @@
         android:layout_below="@android:id/title"
         android:ellipsize="end"
         android:paddingLeft="0dip"
+        android:paddingRight="0dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false" />

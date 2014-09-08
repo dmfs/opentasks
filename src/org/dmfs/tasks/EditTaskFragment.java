@@ -19,6 +19,7 @@ package org.dmfs.tasks;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
@@ -293,6 +294,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 				if (mValues == null)
 				{
 					mValues = new ContentSet(Tasks.getContentUri(mAuthority));
+					// ensure we start with the current time zone
+					TaskFieldAdapters.TIMEZONE.set(mValues, TimeZone.getDefault());
 				}
 
 				if (mLastAccountType != null)
