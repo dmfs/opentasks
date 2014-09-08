@@ -334,7 +334,8 @@ public class ByStartDate extends AbstractGroupingFactory
 		// Note that we're using INSTANCE_START_SORTING to get correct grouping of all-day tasks
 		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and ((("
 			+ Instances.INSTANCE_START_SORTING + ">=?) and (" + Instances.INSTANCE_START_SORTING + "<?)) or ((" + Instances.INSTANCE_START_SORTING + ">=? or "
-			+ Instances.INSTANCE_START_SORTING + " is ?) and ? is null))", Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+			+ Instances.INSTANCE_START_SORTING + " is ?) and ? is null))", Instances.INSTANCE_START_SORTING, 0, 1, 0, 1, 1)
+			.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 	}
 
 

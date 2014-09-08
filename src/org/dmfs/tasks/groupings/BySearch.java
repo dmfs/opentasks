@@ -19,6 +19,7 @@ package org.dmfs.tasks.groupings;
 
 import java.text.DateFormat;
 
+import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorLoaderFactory;
@@ -323,8 +324,9 @@ public class BySearch extends AbstractGroupingFactory
 	@Override
 	public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
 	{
-		return new SearchChildDescriptor(authority, SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, TASK_PROJECTION, null,
-			Tasks.DEFAULT_SORT_ORDER, null).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		return new SearchChildDescriptor(authority, SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY, TASK_PROJECTION, null, Tasks.SCORE + ", "
+			+ Instances.INSTANCE_DUE_SORTING + " is null, " + Instances.INSTANCE_DUE_SORTING + ", " + Instances.PRIORITY + ", " + Instances.TITLE
+			+ " COLLATE NOCASE ASC", null).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 
 	}
 
