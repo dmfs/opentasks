@@ -29,6 +29,8 @@ import android.text.format.Time;
 /**
  * A factory that builds shiny new {@link Cursor}s with time ranges.
  * 
+ * Note that all times are all-day and normalized to UTC. That means 2014-09-08 will be returned as 2014-09-08 00:00 UTC, no matter which time zone you're in.
+ * 
  * TODO: fix javadoc
  * 
  * @author Marten Gajda <marten@dmfs.org>
@@ -100,34 +102,27 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 	protected final List<String> mProjectionList;
 
 	protected final Time mTime;
-	protected final Time mEndOfToday;
+	protected final TimeZone mTimezone;
 
 
 	public TimeRangeCursorFactory(String[] projection)
 	{
 		super(projection);
 		mProjectionList = Arrays.asList(projection);
-		mTime = new Time(TimeZone.getDefault().getID());
-		mEndOfToday = new Time(mTime.timezone);
+		mTimezone = TimeZone.getDefault();
+		mTime = new Time(mTimezone.getID());
 	}
 
 
 	public Cursor getCursor()
 	{
-		mTime.clear(TimeZone.getDefault().getID());
-		mEndOfToday.clear(mTime.timezone);
-		mEndOfToday.setToNow();
-		mEndOfToday.set(mEndOfToday.monthDay + 1, mEndOfToday.month, mEndOfToday.year);
+		mTime.setToNow();
 
 		MatrixCursor result = new MatrixCursor(mProjection);
 
 		// get time of today 00:00:00
-		Time time = new Time(mTime.timezone);
-		time.setToNow();
-		time.hour = 0;
-		time.minute = 0;
-		time.second = 0;
-		time.normalize(true);
+		Time time = new Time("UTC");
+		time.set(mTime.monthDay, mTime.month, mTime.year);
 
 		// null row, for tasks without due date
 		if (mProjectionList.contains(RANGE_NULL_ROW))
@@ -179,7 +174,7 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 		long t6 = time.toMillis(false);
 		result.addRow(makeRow(7, TYPE_END_OF_A_YEAR, t5, t6));
 
-		// open past future for future tasks
+		// open future for future tasks
 		if (mProjectionList.contains(RANGE_OPEN_FUTURE))
 		{
 			result.addRow(makeRow(8, TYPE_NO_END, t6, MAX_TIME));

@@ -17,8 +17,6 @@
 
 package org.dmfs.tasks.groupings.cursorloaders;
 
-import java.util.TimeZone;
-
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.text.format.Time;
@@ -44,18 +42,14 @@ public class TimeRangeStartCursorFactory extends TimeRangeCursorFactory
 	public Cursor getCursor()
 	{
 
-		mTime.clear(TimeZone.getDefault().getID());
-		mEndOfToday.clear(mTime.timezone);
-		mEndOfToday.setToNow();
-		mEndOfToday.set(mEndOfToday.monthDay + 1, mEndOfToday.month, mEndOfToday.year);
+		mTime.setToNow();
+		;
 
 		MatrixCursor result = new MatrixCursor(mProjection);
 
 		// get time of today 00:00:00
 		Time time = new Time(mTime.timezone);
-		time.setToNow();
-
-		time.normalize(true);
+		time.set(mTime.monthDay, mTime.month, mTime.year);
 
 		// already started row
 		long t1 = time.toMillis(false);

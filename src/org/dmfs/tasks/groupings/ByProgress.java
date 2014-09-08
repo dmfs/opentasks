@@ -17,14 +17,12 @@
 
 package org.dmfs.tasks.groupings;
 
-import java.util.TimeZone;
-
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.BaseTaskViewDescriptor;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -36,7 +34,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build.VERSION;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.FrameLayout.LayoutParams;
@@ -55,13 +52,8 @@ public class ByProgress extends AbstractGroupingFactory
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by progress.
 	 */
-	public final ViewDescriptor TASK_VIEW_DESCRIPTOR = new ViewDescriptor()
+	public final ViewDescriptor TASK_VIEW_DESCRIPTOR = new BaseTaskViewDescriptor()
 	{
-		/**
-		 * We use this to get the current time.
-		 */
-		private Time mNow;
-
 		private int mFlingContentViewId = R.id.flingContentView;
 		private int mFlingRevealLeftViewId = R.id.fling_reveal_left;
 		private int mFlingRevealRightViewId = R.id.fling_reveal_right;
@@ -106,37 +98,7 @@ public class ByProgress extends AbstractGroupingFactory
 				}
 			}
 
-			TextView dueDateField = (TextView) view.findViewById(R.id.task_due_date);
-			if (dueDateField != null)
-			{
-				Time dueDate = INSTANCE_DUE_ADAPTER.get(cursor);
-
-				if (dueDate != null)
-				{
-					if (mNow == null)
-					{
-						mNow = new Time();
-					}
-					mNow.clear(TimeZone.getDefault().getID());
-					mNow.setToNow();
-
-					dueDateField.setText(new DueDateFormatter(view.getContext()).format(dueDate));
-
-					// highlight overdue dates & times
-					if (dueDate.before(mNow) && !isClosed)
-					{
-						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
-					}
-					else
-					{
-						dueDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
-					}
-				}
-				else
-				{
-					dueDateField.setText("");
-				}
-			}
+			setDueDate((TextView) view.findViewById(R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
 			View colorbar = view.findViewById(R.id.colorbar);
 			if (colorbar != null)
