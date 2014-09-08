@@ -263,15 +263,8 @@ public class BySearch extends AbstractGroupingFactory
 
 			// set history icon
 			ImageView icon = (ImageView) view.findViewById(android.R.id.icon);
-			if (isHistoric)
-			{
-				icon.setImageResource(R.drawable.ic_history);
-				icon.setVisibility(View.VISIBLE);
-			}
-			else
-			{
-				icon.setVisibility(View.GONE);
-			}
+			icon.setImageResource(R.drawable.ic_history);
+			icon.setVisibility(isHistoric ? View.VISIBLE : View.INVISIBLE);
 		}
 
 
@@ -291,7 +284,7 @@ public class BySearch extends AbstractGroupingFactory
 		 */
 		private String getTitle(Cursor cursor, Context context)
 		{
-			return "\"" + cursor.getString(cursor.getColumnIndex(SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY)) + "\"";
+			return cursor.getString(cursor.getColumnIndex(SearchHistoryDatabaseHelper.SearchHistoryColumns.SEARCH_QUERY));
 		}
 
 
