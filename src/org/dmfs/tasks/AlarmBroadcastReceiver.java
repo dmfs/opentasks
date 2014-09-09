@@ -52,7 +52,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				long startDate = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, Long.MIN_VALUE);
 				boolean startAllDay = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_ALLDAY, false);
 
-				String startString = new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(startDate, startAllDay), false);
+				String startString = context.getString(R.string.notification_task_start_date,
+					new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(startDate, startAllDay), false));
 
 				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -97,7 +98,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				long dueDate = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, Long.MIN_VALUE);
 				boolean dueAllDay = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_ALLDAY, false);
 
-				String dueString = new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(dueDate, dueAllDay), false);
+				String dueString = context.getString(R.string.notification_task_due_date,
+					new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(dueDate, dueAllDay), false));
 
 				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

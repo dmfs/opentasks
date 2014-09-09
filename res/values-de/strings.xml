@@ -159,8 +159,10 @@
     <string name="cd_due_date">Symbol für das Fälligkeitsdatum der Aufgabe</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s ist fällig</string>
-    <string name="notification_task_start_title">%1s startet</string>
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Aufgabe fällig am %1s</string>
+    <string name="notification_task_start_date">Aufgabe beginnt am %1s</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 Stunde</string>

@@ -173,8 +173,10 @@
     <string name="cd_due_date">значек для окончания срока выполнения</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s is due</string> <!-- TODO -->
-    <string name="notification_task_start_title">%1s starts</string> <!-- TODO -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Task due %1s</string> <!-- TODO -->
+    <string name="notification_task_start_date">Task starts %1s</string> <!-- TODO -->
 
 
     <!-- Strings for time UI widgets -->
