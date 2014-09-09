@@ -20,6 +20,7 @@ package org.dmfs.tasks.utils;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.dmfs.tasks.groupings.cursorloaders.EmptyCursorLoaderFactory;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;
 
 import android.content.Context;
@@ -54,6 +55,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 	private ExpandableGroupDescriptor mDescriptor;
 	private OnChildLoadedListener mOnChildLoadedListener;
 	private AbstractFilter mChildCursorFilter;
+	private Handler mHandler = new Handler();
 
 
 	public ExpandableGroupDescriptorAdapter(Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
@@ -101,7 +103,9 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 		{
 			return mDescriptor.getChildCursorLoader(mContext, cursor, mChildCursorFilter);
 		}
-		return null;
+
+		// we can't return a valid loader for the child cursor if cursor is null, so return an empty cursor without any rows.
+		return new EmptyCursorLoaderFactory(mContext, new String[] { "_id" });
 	}
 
 
@@ -170,13 +174,16 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 		mLoadedGroups.remove(position);
 		if (position < getGroupCount())
 		{
-			new Handler().post(new Runnable()
+			mHandler.post(new Runnable()
 			{
 
 				@Override
 				public void run()
 				{
-					mLoaderManager.restartLoader(position, null, ExpandableGroupDescriptorAdapter.this);
+					if (position < getGroupCount()) // ensure this is still true
+					{
+						mLoaderManager.restartLoader(position, null, ExpandableGroupDescriptorAdapter.this);
+					}
 				}
 			});
 		}
