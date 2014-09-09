@@ -161,8 +161,8 @@
     <string name="cd_due_date">icon for the due date of the task</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">Task due</string>
-    <string name="notification_task_start_title">Task starts</string>
+    <string name="notification_task_due_title">%1s is due</string>
+    <string name="notification_task_start_title">%1s starts</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 hour</string>

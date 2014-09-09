@@ -1,7 +1,10 @@
 package org.dmfs.tasks;
 
+import java.util.TimeZone;
+
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
+import org.dmfs.tasks.utils.DueDateFormatter;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -12,6 +15,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.format.DateUtils;
+import android.text.format.Time;
 
 
 /**
@@ -25,6 +30,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 
 	private static String PREFS_NAME = "alarm_preferences";
 	private static String PREF_ALARM_ACTIVATED = "preference_alarm_activated";
+
+	private final int NOTIFICATION_DATE_FORMAT = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
 
 
 	/**
@@ -42,12 +49,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				long taskId = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_ID, 0);
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
 				String title = intent.getStringExtra(StartAlarmBroadcastHandler.EXTRA_TASK_TITLE);
+				long startDate = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, Long.MIN_VALUE);
+				boolean startAllDay = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_ALLDAY, false);
+
+				String startString = new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(startDate, startAllDay), false);
 
 				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 				// build notification
 				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
-					.setContentTitle(context.getString(R.string.notification_task_start_title)).setContentText(title);
+					.setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
 
 				// dismisses the notification on click
 				mBuilder.setAutoCancel(true);
@@ -83,12 +94,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				long taskId = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_ID, 0);
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
 				String title = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TITLE);
+				long dueDate = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, Long.MIN_VALUE);
+				boolean dueAllDay = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_ALLDAY, false);
+
+				String dueString = new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(dueDate, dueAllDay), false);
 
 				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 				// build notification
 				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
-					.setContentTitle(context.getString(R.string.notification_task_due_title)).setContentText(title);
+					.setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
 
 				// dismisses the notification on click
 				mBuilder.setAutoCancel(true);
@@ -136,5 +151,14 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 		SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 		return settings.getBoolean(PREF_ALARM_ACTIVATED, true);
 
+	}
+
+
+	private static Time makeTime(long timestamp, boolean allday)
+	{
+		Time result = new Time(allday ? Time.TIMEZONE_UTC : TimeZone.getDefault().getID());
+		result.set(timestamp);
+		result.allDay = allday;
+		return result;
 	}
 }

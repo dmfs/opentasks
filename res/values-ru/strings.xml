@@ -171,16 +171,17 @@
     <!-- Accessibility content description -->
     <string name="cd_start_date">значек для начальной даты задания</string>
     <string name="cd_due_date">значек для окончания срока выполнения</string>
-    
+
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">Срок выполнения</string>
-    <string name="notification_task_start_title">Начало выполнения</string>
+    <string name="notification_task_due_title">%1s is due</string> <!-- TODO -->
+    <string name="notification_task_start_title">%1s starts</string> <!-- TODO -->
+
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 час</string>
     <string name="button_add_one_day">+1 день</string>
 
     <!-- Checklist checkbox label -->
-    <string name="checklist_label">в виде списка</string>    
+    <string name="checklist_label">в виде списка</string>
 
 </resources>

@@ -62,11 +62,20 @@ public class DueDateFormatter
 	 */
 	private Time mNow;
 
+	private final int mFullFormat;
+
 
 	public DueDateFormatter(Context context)
 	{
+		this(context, DEFAULT_DATEUTILS_FLAGS);
+	}
+
+
+	public DueDateFormatter(Context context, int fullFormat)
+	{
 		mContext = context;
 		mNow = new Time();
+		mFullFormat = fullFormat;
 	}
 
 
@@ -81,8 +90,24 @@ public class DueDateFormatter
 	 *            The due date to format.
 	 * @return A string with the formatted due date.
 	 */
-	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	public String format(Time dueDate)
+	{
+		return format(dueDate, true);
+	}
+
+
+	/**
+	 * Format the given due date. The result depends on the current date and on the all-day flag of the due date.
+	 * 
+	 * 
+	 * @param dueDate
+	 *            The due date to format.
+	 * @param useToday
+	 *            <code>true</code> to write "today" instead of the date when the date is on the present day
+	 * @return A string with the formatted due date.
+	 */
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	public String format(Time dueDate, boolean useToday)
 	{
 		mNow.clear(TimeZone.getDefault().getID());
 		mNow.setToNow();
@@ -90,7 +115,7 @@ public class DueDateFormatter
 		// normalize time to ensure yearDay is set properly
 		dueDate.normalize(false);
 
-		if (dueDate.year == mNow.year && dueDate.yearDay == mNow.yearDay)
+		if (useToday && dueDate.year == mNow.year && dueDate.yearDay == mNow.yearDay)
 		{
 			if (dueDate.allDay)
 			{
@@ -119,7 +144,7 @@ public class DueDateFormatter
 				}
 
 			}
-			return DateUtils.formatDateTime(mContext, dueDate.toMillis(false), DEFAULT_DATEUTILS_FLAGS).toString();
+			return DateUtils.formatDateTime(mContext, dueDate.toMillis(false), mFullFormat).toString();
 
 		}
 	}
