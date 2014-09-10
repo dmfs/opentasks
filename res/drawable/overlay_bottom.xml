@@ -5,8 +5,9 @@
         <shape android:shape="rectangle" >
             <gradient
                 android:angle="270"
+                android:centerColor="#ffe0e0e0"
                 android:endColor="#fff0f0f0"
-                android:startColor="#ffd0d0d0" />
+                android:startColor="#ffd8d8d8" />
         </shape>
     </item>
     <item
@@ -19,7 +20,7 @@
 
             <stroke
                 android:width="1px"
-                android:color="#08000000" />
+                android:color="#10000000" />
         </shape>
     </item>
 

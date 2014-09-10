@@ -11,8 +11,7 @@
     <View
         android:id="@+id/overlay_top"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_alignParentTop="true"
+        android:layout_height="4dp"
         android:background="@drawable/overlay_top" />
 
     <FrameLayout
@@ -243,8 +242,7 @@
     <View
         android:id="@+id/overlay_bottom"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="4dp"
         android:background="@drawable/overlay_bottom" />
 
 </LinearLayout>
