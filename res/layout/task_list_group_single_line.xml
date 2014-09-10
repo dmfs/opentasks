@@ -18,7 +18,6 @@
         android:layout_marginLeft="8dip"
         android:ellipsize="end"
         android:singleLine="true"
-        android:textColor="#000"
         android:textIsSelectable="false" />
 
     <TextView
