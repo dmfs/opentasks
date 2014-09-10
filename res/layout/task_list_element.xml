@@ -3,8 +3,17 @@
     style="@style/task_list_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical" >
+
+    <View
+        android:id="@+id/overlay_top"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/overlay_top" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -79,11 +88,8 @@
                 <View
                     android:id="@+id/colorbar"
                     android:layout_width="4dip"
-                    android:layout_height="48dip"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:paddingBottom="4dip"
-                    android:paddingTop="4dip" />
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true" />
 
                 <LinearLayout
                     android:id="@+id/task_dates"
@@ -93,6 +99,7 @@
                     android:layout_centerVertical="true"
                     android:gravity="right"
                     android:orientation="vertical"
+                    android:paddingLeft="0dip"
                     android:paddingRight="2dip" >
 
                     <LinearLayout
@@ -106,6 +113,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="4dip"
                             android:gravity="right"
+                            android:paddingLeft="0dip"
                             android:paddingRight="2dip"
                             android:textIsSelectable="false"
                             android:textSize="12sp"
@@ -135,6 +143,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="2dip"
                             android:gravity="right"
+                            android:paddingLeft="0dip"
                             android:paddingRight="2dip"
                             android:textIsSelectable="false"
                             android:textSize="12sp" />
@@ -152,20 +161,37 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@android:id/title"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@id/task_dates"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:padding="8dip"
-                    android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/task_list_title_text"
-                    android:textIsSelectable="false" />
+                    android:orientation="vertical"
+                    android:paddingLeft="8dip"
+                    android:paddingRight="8dp" >
+
+                    <TextView
+                        android:id="@android:id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/task_list_title_text"
+                        android:textIsSelectable="false" />
+
+                    <TextView
+                        android:id="@android:id/text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="4dip"
@@ -212,5 +238,12 @@
         android:layout_height="1px"
         android:layout_marginLeft="@dimen/task_list_right_margin"
         android:layout_marginRight="@dimen/task_list_right_margin" />
+
+    <View
+        android:id="@+id/overlay_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/overlay_bottom" />
 
 </LinearLayout>

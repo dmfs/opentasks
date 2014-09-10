@@ -25,7 +25,6 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.utils.BaseTaskViewDescriptor;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -117,12 +116,6 @@ public class BySearch extends AbstractGroupingFactory
 
 			setDueDate((TextView) view.findViewById(R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
-			View colorbar = view.findViewById(R.id.colorbar);
-			if (colorbar != null)
-			{
-				colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
-			}
-
 			View divider = view.findViewById(R.id.divider);
 			if (divider != null)
 			{
@@ -165,6 +158,9 @@ public class BySearch extends AbstractGroupingFactory
 					background.setBackgroundResource(R.drawable.complete_task_background_overlay);
 				}
 			}
+			setColorBar(view, cursor);
+			setDescription(view, cursor);
+			setOverlay(view, cursor.getPosition(), cursor.getCount());
 		}
 
 

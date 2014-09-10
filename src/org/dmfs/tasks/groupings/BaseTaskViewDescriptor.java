@@ -15,12 +15,17 @@
  * 
  */
 
-package org.dmfs.tasks.utils;
+package org.dmfs.tasks.groupings;
 
 import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.ViewDescriptor;
 
+import android.database.Cursor;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.ImageView;
@@ -81,6 +86,50 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 			{
 				dueIcon.setVisibility(View.GONE);
 			}
+		}
+	}
+
+
+	protected void setOverlay(View view, int position, int count)
+	{
+		View overlayTop = view.findViewById(R.id.overlay_top);
+		View overlayBottom = view.findViewById(R.id.overlay_bottom);
+
+		if (overlayTop != null)
+		{
+			overlayTop.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
+		}
+
+		if (overlayBottom != null)
+		{
+			overlayBottom.setVisibility(position == count - 1 ? View.VISIBLE : View.GONE);
+		}
+	}
+
+
+	protected void setDescription(View view, Cursor cursor)
+	{
+		String description = TaskFieldAdapters.DESCRIPTION.get(cursor);
+		TextView descriptionView = (TextView) view.findViewById(android.R.id.text1);
+		if (TextUtils.isEmpty(description))
+		{
+			descriptionView.setVisibility(View.GONE);
+		}
+		else
+		{
+			description = description.replaceAll("\\[\\s?\\]", " ").replaceAll("\\[[xX]\\]", "✓");
+			descriptionView.setVisibility(View.VISIBLE);
+			descriptionView.setText(description);
+		}
+	}
+
+
+	protected void setColorBar(View view, Cursor cursor)
+	{
+		View colorbar = view.findViewById(R.id.colorbar);
+		if (colorbar != null)
+		{
+			colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
 		}
 	}
 }

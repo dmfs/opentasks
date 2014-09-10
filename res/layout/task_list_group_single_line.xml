@@ -3,9 +3,10 @@
     style="@style/task_group_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#fff0f0f0"
+    android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingLeft="@dimen/task_list_left_margin"
-    android:paddingRight="@dimen/task_list_right_margin"
-    android:minHeight="?android:attr/listPreferredItemHeight" >
+    android:paddingRight="@dimen/task_list_right_margin" >
 
     <TextView
         android:id="@android:id/title"
@@ -16,8 +17,8 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dip"
         android:ellipsize="end"
-        android:paddingLeft="0dip"
         android:singleLine="true"
+        android:textColor="#000"
         android:textIsSelectable="false" />
 
     <TextView
@@ -28,7 +29,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:ellipsize="end"
-        android:paddingLeft="0dip"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false" />
@@ -37,7 +39,7 @@
         android:id="@+id/divider"
         style="@style/task_list_group_divider"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />
 

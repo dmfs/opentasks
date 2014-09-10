@@ -36,7 +36,8 @@ public abstract class AbstractGroupingFactory
 	 */
 	public final static String[] INSTANCE_PROJECTION = new String[] { Instances.INSTANCE_START, Instances.INSTANCE_DURATION, Instances.INSTANCE_DUE,
 		Instances.IS_ALLDAY, Instances.TZ, Instances.TITLE, Instances.LIST_COLOR, Instances.PRIORITY, Instances.LIST_ID, Instances.TASK_ID, Instances._ID,
-		Instances.STATUS, Instances.COMPLETED, Instances.IS_CLOSED, Instances.PERCENT_COMPLETE, Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE };
+		Instances.STATUS, Instances.COMPLETED, Instances.IS_CLOSED, Instances.PERCENT_COMPLETE, Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE,
+		Instances.DESCRIPTION };
 
 	/**
 	 * An adapter to load the due date from the instances projection. This is used by most groupings

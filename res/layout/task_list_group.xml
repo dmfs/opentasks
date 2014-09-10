@@ -3,10 +3,10 @@
     style="@style/task_group_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#fff0f0f0"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:paddingLeft="@dimen/task_list_left_margin"
-    android:paddingRight="@dimen/task_list_right_margin"
-    android:paddingTop="10dip" >
+    android:paddingRight="@dimen/task_list_right_margin" >
 
     <View
         android:id="@+id/colorbar1"
@@ -34,57 +34,64 @@
         android:layout_toRightOf="@id/colorbar1"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@android:id/title"
-        style="@style/task_group_text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="8dip"
+        android:layout_marginStart="8dip"
+        android:layout_toEndOf="@android:id/icon"
         android:layout_toRightOf="@android:id/icon"
-        android:ellipsize="end"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
-        android:singleLine="true"
-        android:textIsSelectable="false" />
+        android:orientation="vertical" >
 
-    <TextView
-        android:id="@android:id/text1"
-        style="@style/editor_label_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_below="@android:id/title"
-        android:layout_marginLeft="8dip"
-        android:layout_toLeftOf="@android:id/text2"
-        android:layout_toRightOf="@android:id/icon"
-        android:ellipsize="end"
-        android:paddingBottom="10dip"
-        android:paddingLeft="0dip"
-        android:paddingRight="0dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textIsSelectable="false" />
+        <TextView
+            android:id="@android:id/title"
+            style="@style/task_group_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:ellipsize="end"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:singleLine="true"
+            android:textIsSelectable="false" />
 
-    <TextView
-        android:id="@android:id/text2"
-        style="@style/task_list_group_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@android:id/title"
-        android:ellipsize="end"
-        android:paddingLeft="0dip"
-        android:paddingRight="0dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textIsSelectable="false" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@android:id/text1"
+                style="@style/editor_label_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false" />
+
+            <TextView
+                android:id="@android:id/text2"
+                style="@style/task_list_group_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textIsSelectable="false" />
+        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:id="@+id/divider"
         style="@style/task_list_group_divider"
         android:layout_width="fill_parent"
-        android:layout_height="1dp"
+        android:layout_height="0dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" />
 

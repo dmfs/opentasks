@@ -22,7 +22,6 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.BaseTaskViewDescriptor;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -100,12 +99,6 @@ public class ByProgress extends AbstractGroupingFactory
 
 			setDueDate((TextView) view.findViewById(R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
-			View colorbar = view.findViewById(R.id.colorbar);
-			if (colorbar != null)
-			{
-				colorbar.setBackgroundColor(cursor.getInt(6));
-			}
-
 			View divider = view.findViewById(R.id.divider);
 			if (divider != null)
 			{
@@ -148,6 +141,9 @@ public class ByProgress extends AbstractGroupingFactory
 					background.setBackgroundResource(R.drawable.complete_task_background_overlay);
 				}
 			}
+			setColorBar(view, cursor);
+			setDescription(view, cursor);
+			setOverlay(view, cursor.getPosition(), cursor.getCount());
 		}
 
 

@@ -22,7 +22,6 @@ import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.BaseTaskViewDescriptor;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -112,13 +111,6 @@ public class ByList extends AbstractGroupingFactory
 
 			setDueDate((TextView) view.findViewById(R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
-			View colorbar = view.findViewById(R.id.colorbar);
-			if (colorbar != null)
-			{
-				colorbar.setVisibility(View.GONE);
-				// colorbar.setBackgroundColor(cursor.getInt(6));
-			}
-
 			View divider = view.findViewById(R.id.divider);
 			if (divider != null)
 			{
@@ -161,6 +153,9 @@ public class ByList extends AbstractGroupingFactory
 					background.setBackgroundResource(R.drawable.complete_task_background_overlay);
 				}
 			}
+			setColorBar(view, cursor);
+			setDescription(view, cursor);
+			setOverlay(view, cursor.getPosition(), cursor.getCount());
 		}
 
 

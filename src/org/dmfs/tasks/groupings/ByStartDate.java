@@ -23,7 +23,6 @@ import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.BaseTaskViewDescriptor;
 import org.dmfs.tasks.utils.DueDateFormatter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
@@ -133,12 +132,6 @@ public class ByStartDate extends AbstractGroupingFactory
 				}
 			}
 
-			View colorbar = view.findViewById(R.id.colorbar);
-			if (colorbar != null)
-			{
-				colorbar.setBackgroundColor(cursor.getInt(6));
-			}
-
 			View divider = view.findViewById(R.id.divider);
 			if (divider != null)
 			{
@@ -181,6 +174,9 @@ public class ByStartDate extends AbstractGroupingFactory
 					background.setBackgroundResource(R.drawable.complete_task_background_overlay);
 				}
 			}
+			setColorBar(view, cursor);
+			setDescription(view, cursor);
+			setOverlay(view, cursor.getPosition(), cursor.getCount());
 		}
 
 
