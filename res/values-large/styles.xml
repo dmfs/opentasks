@@ -13,7 +13,7 @@
     </style>
 
     <style name="task_list_container">
-        <item name="android:background">#ffeeeeee</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="task_list_item_date" parent="dark_text">
