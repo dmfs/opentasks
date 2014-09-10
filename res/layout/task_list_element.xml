@@ -238,9 +238,7 @@
         android:id="@+id/divider"
         style="@style/task_list_item_divider"
         android:layout_width="fill_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="@dimen/task_list_right_margin"
-        android:layout_marginRight="@dimen/task_list_right_margin" />
+        android:layout_height="1px" />
 
     <View
         android:id="@+id/overlay_bottom"
