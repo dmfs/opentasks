@@ -331,10 +331,11 @@ public class ByDueDate extends AbstractGroupingFactory
 	@Override
 	ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
 	{
-		// Note that we're using INSTANCE_DUE_SORTING to get correct grouping of all-day tasks
-		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and ((("
-			+ Instances.INSTANCE_DUE_SORTING + ">=?) and (" + Instances.INSTANCE_DUE_SORTING + "<?)) or ((" + Instances.INSTANCE_DUE_SORTING + ">=? or "
-			+ Instances.INSTANCE_DUE_SORTING + " is ?) and ? is null))", Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and (" + Instances.IS_ALLDAY
+			+ "=0 and (((" + Instances.INSTANCE_DUE + ">=?) and (" + Instances.INSTANCE_DUE + "<?)) or ((" + Instances.INSTANCE_DUE + ">=? or "
+			+ Instances.INSTANCE_DUE + " is ?) and ? is null))" + "or " + Instances.IS_ALLDAY + "=1 and (((" + Instances.INSTANCE_DUE + ">=?+?) and ("
+			+ Instances.INSTANCE_DUE + "<?+?)) or ((" + Instances.INSTANCE_DUE + ">=?+? or " + Instances.INSTANCE_DUE + " is ?) and ? is null)))",
+			Instances.DEFAULT_SORT_ORDER, 0, 1, 0, 1, 1, 0, 9, 1, 10, 0, 9, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 	}
 
 

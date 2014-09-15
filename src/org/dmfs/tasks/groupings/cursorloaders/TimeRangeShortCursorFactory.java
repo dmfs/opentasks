@@ -46,7 +46,7 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
 
 		MatrixCursor result = new MatrixCursor(mProjection);
 
-		Time time = new Time("UTC");
+		Time time = new Time(mTimezone.getID());
 		time.set(mTime.monthDay + 1, mTime.month, mTime.year);
 
 		// today row (including overdue)
