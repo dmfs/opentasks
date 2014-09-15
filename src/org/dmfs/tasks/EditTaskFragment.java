@@ -316,6 +316,19 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
 
 	@Override
+	public void onPause()
+	{
+		// save values on rotation
+		if (mEditor != null)
+		{
+			mEditor.updateValues();
+		}
+
+		super.onPause();
+	};
+
+
+	@Override
 	public void onDestroyView()
 	{
 		super.onDestroyView();
