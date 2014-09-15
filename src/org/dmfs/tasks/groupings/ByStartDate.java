@@ -328,10 +328,11 @@ public class ByStartDate extends AbstractGroupingFactory
 	ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
 	{
 		// Note that we're using INSTANCE_START_SORTING to get correct grouping of all-day tasks
-		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and ((("
-			+ Instances.INSTANCE_START_SORTING + ">=?) and (" + Instances.INSTANCE_START_SORTING + "<?)) or ((" + Instances.INSTANCE_START_SORTING + ">=? or "
-			+ Instances.INSTANCE_START_SORTING + " is ?) and ? is null))", Instances.INSTANCE_START_SORTING, 0, 1, 0, 1, 1)
-			.setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and (" + Instances.IS_ALLDAY
+			+ "=0 and (((" + Instances.INSTANCE_START + ">=?) and (" + Instances.INSTANCE_START + "<?)) or ((" + Instances.INSTANCE_START + ">=? or "
+			+ Instances.INSTANCE_START + " is ?) and ? is null)) or " + Instances.IS_ALLDAY + "=1 and (((" + Instances.INSTANCE_START + ">=?+?) and ("
+			+ Instances.INSTANCE_START + "<?+?)) or ((" + Instances.INSTANCE_START + ">=?+? or " + Instances.INSTANCE_START
+			+ " is ?) and ? is null)))", Instances.INSTANCE_START, 0, 1, 0, 1, 1, 0, 9, 1, 10, 0, 9, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 	}
 
 
