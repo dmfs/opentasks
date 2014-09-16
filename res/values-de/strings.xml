@@ -171,4 +171,9 @@
     <!-- Checklist checkbox label -->
     <string name="checklist_label">Als Checkliste</string>
 
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Aufgaben</string>
+    <string name="dashclock_extension_description">Zeigt Informationen zur nächsten Aufgabe die heute fällig ist.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s ist fällig - %2$s</string>
+
 </resources>

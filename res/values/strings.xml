@@ -173,4 +173,9 @@
     <!-- Checklist checkbox label -->
     <string name="checklist_label">As checklist</string>
 
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Tasks</string>
+    <string name="dashclock_extension_description">Displays the recent task which is due today.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s is due - %2$s</string>
+
 </resources>
