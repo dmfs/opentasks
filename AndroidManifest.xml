@@ -271,7 +271,17 @@
             <meta-data
                 android:name="description"
                 android:value="@string/dashclock_extension_description" />
+            <!-- A settings activity is optional -->
+            <meta-data
+                android:name="settingsActivity"
+                android:value="org.dmfs.tasks.dashclock.DashClockPreferenceActivity" />
         </service>
+
+        <activity
+            android:name="org.dmfs.tasks.dashclock.DashClockPreferenceActivity"
+            android:exported="true"
+            android:label="@string/title_task_list" >
+        </activity>
     </application>
 
 </manifest>

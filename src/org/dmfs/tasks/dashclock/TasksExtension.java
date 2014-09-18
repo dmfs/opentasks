@@ -21,10 +21,13 @@ import java.util.Calendar;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.DueDateFormatter;
 
+import android.content.ContentUris;
+import android.content.Intent;
 import android.database.Cursor;
 import android.text.format.Time;
 
@@ -40,8 +43,8 @@ import com.google.android.apps.dashclock.api.ExtensionData;
  */
 public class TasksExtension extends DashClockExtension
 {
-	private static final String[] INSTANCE_PROJECTION = new String[] { Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE, Instances.TITLE, Instances.DESCRIPTION,
-		Instances.STATUS, Instances.DUE, Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY };
+	private static final String[] INSTANCE_PROJECTION = new String[] { Instances._ID, Instances.TASK_ID, Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE,
+		Instances.TITLE, Instances.DESCRIPTION, Instances.STATUS, Instances.DUE, Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY };
 
 	private static final String INSTANCE_DUE_SELECTION = Instances.IS_ALLDAY + " = 0 AND (" + Instances.DUE + " > ? AND " + Instances.DUE + " < ? )";
 
@@ -58,7 +61,7 @@ public class TasksExtension extends DashClockExtension
 
 	protected void publishDueTasksUpdate()
 	{
-		DueDateFormatter formatter = new DueDateFormatter(this);
+		DueDateFormatter formatter = new DueDateFormatter(this, DueDateFormatter.TIME_DATEUTILS_FLAGS);
 		Calendar calendar = Calendar.getInstance();
 		long now = calendar.getTimeInMillis();
 
@@ -78,15 +81,35 @@ public class TasksExtension extends DashClockExtension
 
 			TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DUE, Instances.TZ, Instances.IS_ALLDAY);
 			Time dueTime = timeFieldAdapter.get(c);
-			String dueTimeString = formatter.format(dueTime);
+			String dueTimeString = formatter.format(dueTime, false);
 			String title = getString(R.string.dashclock_widget_title_due_expanded, c.getString(c.getColumnIndex(Tasks.TITLE)), dueTimeString);
 			String description = c.getString(c.getColumnIndex(Tasks.DESCRIPTION));
 			description = description.replaceAll("\\[\\s?\\]", " ").replaceAll("\\[[xX]\\]", "✓");
 
+			// intent
+			String accountType = c.getString(c.getColumnIndex(Instances.ACCOUNT_TYPE));
+			Long taskId = c.getLong(c.getColumnIndex(Instances.TASK_ID));
+			Intent clickIntent = buildClickIntent(taskId, accountType);
+
 			// Publish the extension data update.
 			publishUpdate(new ExtensionData().visible(true).icon(R.drawable.ic_notification_completed).status(String.valueOf(numberOfTasks))
-				.expandedTitle(title).expandedBody(description));
+				.expandedTitle(title).expandedBody(description).clickIntent(clickIntent));
+		}
+		else
+		{
+			// no upcoming task -> empty update
+			publishUpdate(null);
 		}
 
+	}
+
+
+	protected Intent buildClickIntent(long taskId, String accountType)
+	{
+		Intent clickIntent = new Intent(Intent.ACTION_VIEW);
+		clickIntent.setData(ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), taskId));
+		clickIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
+
+		return clickIntent;
 	}
 }

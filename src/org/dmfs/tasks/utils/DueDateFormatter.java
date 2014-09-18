@@ -43,9 +43,9 @@ import android.text.format.Time;
  */
 public class DueDateFormatter
 {
-	private final static int DEFAULT_DATEUTILS_FLAGS = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NUMERIC_DATE
+	public final static int DEFAULT_DATEUTILS_FLAGS = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NUMERIC_DATE
 		| DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
-	private final static int TIME_DATEUTILS_FLAGS = DateUtils.FORMAT_SHOW_TIME;
+	public final static int TIME_DATEUTILS_FLAGS = DateUtils.FORMAT_SHOW_TIME;
 
 	/**
 	 * The formatter we use for due dates other than today.

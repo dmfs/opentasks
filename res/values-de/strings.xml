@@ -175,5 +175,12 @@
     <string name="dashclock_extension_title">Aufgaben</string>
     <string name="dashclock_extension_description">Zeigt Informationen zur nächsten Aufgabe die heute fällig ist.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s ist fällig - %2$s</string>
+      <string name="dashclock_pref_displayed_task_title">Angezeigte Ereignisse</string>
+    <string name="dashclock_pref_displayed_task_summary">Wähle aus welche Aufgabenereignisse im Widget angezeigt werden</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Anzuzeigende Ereignisse</string>
+    <string name="dashclock_display_type_due">Fällige Aufgaben</string>
+    <string name="dashclock_display_type_start">Startende Aufgaben</string>
+    <string name="dashclock_display_type_start_and_due">Startende und fällige Aufgaben</string>
+    <string name="dashclock_preference_title">DashClock Aufgaben Einstellungen</string>
 
 </resources>

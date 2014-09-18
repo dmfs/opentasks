@@ -42,7 +42,7 @@ public class EditTaskActivity extends FragmentActivity
 {
 	final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
 
-	final static String EXTRA_DATA_ACCOUNT_TYPE = "org.dmfs.ACCOUNT_TYPE";
+	public final static String EXTRA_DATA_ACCOUNT_TYPE = "org.dmfs.ACCOUNT_TYPE";
 
 	private EditTaskFragment mEditFragment;
 
