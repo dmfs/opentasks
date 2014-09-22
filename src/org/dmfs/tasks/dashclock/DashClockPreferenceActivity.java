@@ -25,6 +25,12 @@ import android.preference.PreferenceActivity;
 
 public class DashClockPreferenceActivity extends PreferenceActivity
 {
+	public static final String KEY_PREF_DISPLAY_MODE = "pref_db_displayed_tasks";
+	public static final int DISPLAY_MODE_DUE = 1;
+	public static final int DISPLAY_MODE_START = 2;
+	public static final int DISPLAY_MODE_START_DUE = 3;
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{

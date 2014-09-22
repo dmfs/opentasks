@@ -177,6 +177,9 @@
     <string name="dashclock_extension_title">Tasks</string>
     <string name="dashclock_extension_description">Displays the recent task which is due today.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s is due - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s is due</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s starts - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s starts today</string>
     <string name="dashclock_pref_displayed_task_title">Displayed events</string>
     <string name="dashclock_pref_displayed_task_summary">Select which events of tasks are displayed in the dashclock widget</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Events to display</string>
