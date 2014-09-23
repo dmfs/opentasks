@@ -20,6 +20,7 @@ package org.dmfs.tasks.dashclock;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.EditTaskActivity;
@@ -73,6 +74,15 @@ public class TasksExtension extends DashClockExtension
 	private String mAuthority;
 	private int mDisplayMode;
 	private long mNow;
+
+
+	@Override
+	protected void onInitialize(boolean isReconnect)
+	{
+		// enable automatic dashclock updates on task changes
+		addWatchContentUris(new String[] { TaskContract.getContentUri(getString(R.string.org_dmfs_tasks_authority)).toString() });
+		super.onInitialize(isReconnect);
+	}
 
 
 	@Override
@@ -131,8 +141,8 @@ public class TasksExtension extends DashClockExtension
 			Intent clickIntent = buildClickIntent(taskId, accountType);
 
 			// Publish the extension data update.
-			publishUpdate(new ExtensionData().visible(true).icon(R.drawable.ic_notification_completed)
-				.status(String.valueOf(allDayTaskCount + recentTaskCount)).expandedTitle(title).expandedBody(description).clickIntent(clickIntent));
+			publishUpdate(new ExtensionData().visible(true).icon(R.drawable.ic_dashboard).status(String.valueOf(allDayTaskCount + recentTaskCount))
+				.expandedTitle(title).expandedBody(description).clickIntent(clickIntent));
 		}
 		else
 		{
