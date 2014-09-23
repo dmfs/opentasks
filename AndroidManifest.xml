@@ -87,6 +87,14 @@
                     android:host="@string/org_dmfs_tasks_authority"
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
+            
+            <!-- Voice command "note to self" in google search -->
+            <intent-filter>
+                <action android:name="com.google.android.gm.action.AUTO_SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+            
 
             <!-- Intent filter for share intents -->
             <intent-filter android:label="@string/activity_add_task_title" >
