@@ -175,7 +175,7 @@
 
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Tasks</string>
-    <string name="dashclock_extension_description">Displays the recent task which is due today.</string>
+    <string name="dashclock_extension_description">Displays information for recent tasks.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s is due - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s is due</string>
     <string name="dashclock_widget_title_start_expanded">%1$s starts - %2$s</string>

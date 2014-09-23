@@ -173,7 +173,7 @@
 
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Aufgaben</string>
-    <string name="dashclock_extension_description">Zeigt Informationen zur nächsten Aufgabe die heute fällig ist.</string>
+    <string name="dashclock_extension_description">Zeigt Informationen zu aktuellen Aufgaben an.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s ist fällig - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s ist fällig</string>
     <string name="dashclock_widget_title_start_expanded">%1$s startet - %2$s</string>

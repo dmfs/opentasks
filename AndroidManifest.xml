@@ -255,7 +255,7 @@
         <!-- Dashclock extension -->
         <service
             android:name="org.dmfs.tasks.dashclock.TasksExtension"
-            android:icon="@drawable/ic_notification_completed"
+            android:icon="@drawable/ic_dashboard"
             android:label="@string/dashclock_extension_title"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
             <intent-filter>
