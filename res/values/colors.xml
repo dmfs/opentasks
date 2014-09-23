@@ -9,9 +9,9 @@
     <color name="translucent_white">#22FFFFFF</color>
     <color name="translucent_grey">#BB222222</color>
     <color name="holo_blue">#CC33B5E5</color>
-    <color name="priority_green">#77FF59</color>
-    <color name="priority_red">#FF412B</color>
-    <color name="priority_yellow">#FFFD16</color>
+    <color name="priority_green">#009900</color>
+    <color name="priority_red">#FF0000</color>
+    <color name="priority_orange">#FF9900</color>
     
     
     <!-- A light Holo shade of blue -->

@@ -215,7 +215,7 @@ public interface ByStartDate
 			}
 			if (priority == 5)
 			{
-				priorityView.setBackgroundResource(R.color.priority_yellow);
+				priorityView.setBackgroundResource(R.color.priority_orange);
 			}
 			if (priority > 5 && priority <= 9)
 			{
