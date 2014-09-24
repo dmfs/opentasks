@@ -88,7 +88,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	public static final String LIST_LOADER_URI = "uri";
 	public static final String LIST_LOADER_FILTER = "filter";
 
-	public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.VISIBLE + "=1 and " + TaskLists.SYNC_ENABLED + "=1";
+	public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.SYNC_ENABLED + "=1";
 
 	public static final String PREFERENCE_LAST_LIST = "pref_last_list_used_for_new_event";
 	public static final String PREFERENCE_LAST_ACCOUNT_TYPE = "pref_last_account_type_used_for_new_event";
@@ -313,6 +313,19 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
 		return rootView;
 	}
+
+
+	@Override
+	public void onPause()
+	{
+		// save values on rotation
+		if (mEditor != null)
+		{
+			mEditor.updateValues();
+		}
+
+		super.onPause();
+	};
 
 
 	@Override

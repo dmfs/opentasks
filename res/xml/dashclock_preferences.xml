@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:defaultValue="1"
+        android:dialogTitle="@string/dashclock_pref_displayed_task_dialog_title"
+        android:entries="@array/dashclock_displayed_task_types"
+        android:entryValues="@array/dashclock_displayed_task_types_values"
+        android:key="pref_db_displayed_tasks"
+        android:summary="@string/dashclock_pref_displayed_task_summary"
+        android:title="@string/dashclock_pref_displayed_task_title" />
+
+</PreferenceScreen>

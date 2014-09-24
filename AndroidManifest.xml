@@ -87,6 +87,14 @@
                     android:host="@string/org_dmfs_tasks_authority"
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
+            
+            <!-- Voice command "note to self" in google search -->
+            <intent-filter>
+                <action android:name="com.google.android.gm.action.AUTO_SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+            
 
             <!-- Intent filter for share intents -->
             <intent-filter android:label="@string/activity_add_task_title" >
@@ -251,6 +259,37 @@
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </receiver>
+
+        <!-- Dashclock extension -->
+        <service
+            android:name="org.dmfs.tasks.dashclock.TasksExtension"
+            android:icon="@drawable/ic_dashboard"
+            android:label="@string/dashclock_extension_title"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
+            <intent-filter>
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+
+            <meta-data
+                android:name="protocolVersion"
+                android:value="2" />
+            <meta-data
+                android:name="worldReadable"
+                android:value="true" />
+            <meta-data
+                android:name="description"
+                android:value="@string/dashclock_extension_description" />
+            <!-- A settings activity is optional -->
+            <meta-data
+                android:name="settingsActivity"
+                android:value="org.dmfs.tasks.dashclock.DashClockPreferenceActivity" />
+        </service>
+
+        <activity
+            android:name="org.dmfs.tasks.dashclock.DashClockPreferenceActivity"
+            android:exported="true"
+            android:label="@string/title_task_list" >
+        </activity>
     </application>
 
 </manifest>

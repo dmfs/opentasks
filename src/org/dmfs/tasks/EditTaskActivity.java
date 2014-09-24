@@ -17,6 +17,8 @@
 
 package org.dmfs.tasks;
 
+import java.util.TimeZone;
+
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 
@@ -40,9 +42,11 @@ import android.view.MenuItem;
  */
 public class EditTaskActivity extends FragmentActivity
 {
+	private static final String ACTION_NOTE_TO_SELF = "com.google.android.gm.action.AUTO_SEND";
+
 	final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
 
-	final static String EXTRA_DATA_ACCOUNT_TYPE = "org.dmfs.ACCOUNT_TYPE";
+	public final static String EXTRA_DATA_ACCOUNT_TYPE = "org.dmfs.ACCOUNT_TYPE";
 
 	private EditTaskFragment mEditFragment;
 
@@ -72,9 +76,11 @@ public class EditTaskActivity extends FragmentActivity
 
 			Bundle arguments = new Bundle();
 			Intent intent = getIntent();
+			String action = intent.getAction();
 
-			if (Intent.ACTION_SEND.equals(intent.getAction()))
+			if (Intent.ACTION_SEND.equals(action))
 			{
+
 				// load data from incoming share intent
 				ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
 				if (intent.hasExtra(Intent.EXTRA_SUBJECT))
@@ -98,6 +104,32 @@ public class EditTaskActivity extends FragmentActivity
 				}
 				// hand over shared information to EditTaskFragment
 				arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
+
+			}
+			else if (ACTION_NOTE_TO_SELF.equals(action))
+			{
+				// process the note to self intent
+				ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
+
+				if (intent.hasExtra(Intent.EXTRA_SUBJECT))
+				{
+					sharedContentSet.put(Tasks.DESCRIPTION, intent.getStringExtra(Intent.EXTRA_SUBJECT));
+				}
+
+				if (intent.hasExtra(Intent.EXTRA_TEXT))
+				{
+					String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
+					sharedContentSet.put(Tasks.TITLE, extraText);
+
+				}
+
+				// add start time stamp
+				sharedContentSet.put(Tasks.DTSTART, System.currentTimeMillis());
+				sharedContentSet.put(Tasks.TZ, TimeZone.getDefault().getID());
+
+				// hand over shared information to EditTaskFragment
+				arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
+
 			}
 			else
 			{
