@@ -132,7 +132,10 @@ public class TasksExtension extends DashClockExtension
 			boolean isAllDay = recentTaskCount == 0;
 
 			String description = c.getString(c.getColumnIndex(Tasks.DESCRIPTION));
-			description = description.replaceAll("\\[\\s?\\]", " ").replaceAll("\\[[xX]\\]", "✓");
+			if (description != null)
+			{
+				description = description.replaceAll("\\[\\s?\\]", " ").replaceAll("\\[[xX]\\]", "✓");
+			}
 			String title = getTaskTitleDisplayString(c, isAllDay);
 
 			// intent
