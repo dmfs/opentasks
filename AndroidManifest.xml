@@ -243,7 +243,7 @@
             </intent-filter>
         </receiver>
         <!-- custom alarm receivers -->
-        <receiver android:name="org.dmfs.tasks.AlarmBroadcastReceiver" >
+        <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver" >
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_DUE" />
 
@@ -259,6 +259,20 @@
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </receiver>
+        
+        <!-- notification -->
+         <service
+            android:name="org.dmfs.tasks.notification.NotificationActionIntentService">
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.COMPLETE"/>
+            </intent-filter>
+             <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H"/>
+            </intent-filter>
+             <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D"/>
+            </intent-filter>
+        </service>
 
         <!-- Dashclock extension -->
         <service

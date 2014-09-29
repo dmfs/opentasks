@@ -165,6 +165,10 @@
     <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Task due %1s</string>
     <string name="notification_task_start_date">Task starts %1s</string>
+    <string name="notification_action_complete">complete</string>
+    <string name="notification_action_delay_1h">+1h</string>
+    <string name="notification_action_delay_1d">+1d</string>
+    
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 hour</string>

@@ -1,9 +1,27 @@
-package org.dmfs.tasks;
+/*
+ * Copyright (C) 2014 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+package org.dmfs.tasks.notification;
 
 import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
+import org.dmfs.tasks.R;
 import org.dmfs.tasks.utils.DueDateFormatter;
 
 import android.app.Notification;
@@ -97,6 +115,8 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				String title = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TITLE);
 				long dueDate = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, Long.MIN_VALUE);
 				boolean dueAllDay = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_ALLDAY, false);
+				String timezone = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TIMEZONE);
+				int notificationId = (int) taskId;
 
 				String dueString = context.getString(R.string.notification_task_due_date,
 					new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(dueDate, dueAllDay), false));
@@ -129,8 +149,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				stackBuilder.addNextIntent(resultIntent);
 				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
+				// add actions
+				mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
+				if (!dueAllDay)
+				{
+					mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
+				}
+				mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
+
 				mBuilder.setContentIntent(resultPendingIntent);
-				notificationManager.notify((int) taskId, mBuilder.build());
+				notificationManager.notify(notificationId, mBuilder.build());
 
 			}
 		}

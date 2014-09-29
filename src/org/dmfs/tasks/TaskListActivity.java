@@ -30,6 +30,7 @@ import org.dmfs.tasks.groupings.ByProgress;
 import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
