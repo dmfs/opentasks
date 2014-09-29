@@ -93,8 +93,12 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 
 	public final static String RANGE_NULL_ROW = "null_row";
 
+	public final static String RANGE_START_TZ_OFFSET = "start_tz_offset";
+
+	public final static String RANGE_END_TZ_OFFSET = "end_tz_offset";
+
 	public static final String[] DEFAULT_PROJECTION = new String[] { RANGE_START, RANGE_END, RANGE_ID, RANGE_YEAR, RANGE_MONTH, RANGE_OPEN_PAST,
-		RANGE_OPEN_FUTURE, RANGE_NULL_ROW, RANGE_TYPE };
+		RANGE_OPEN_FUTURE, RANGE_NULL_ROW, RANGE_TYPE, RANGE_START_TZ_OFFSET, RANGE_END_TZ_OFFSET };
 
 	protected final static long MAX_TIME = Long.MAX_VALUE / 2;
 	protected final static long MIN_TIME = Long.MIN_VALUE / 2;
@@ -121,7 +125,7 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 		MatrixCursor result = new MatrixCursor(mProjection);
 
 		// get time of today 00:00:00
-		Time time = new Time("UTC");
+		Time time = new Time(mTimezone.getID());
 		time.set(mTime.monthDay, mTime.month, mTime.year);
 
 		// null row, for tasks without due date
@@ -203,11 +207,21 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 		if (start == null || start <= MIN_TIME)
 		{
 			insertValue(result, RANGE_OPEN_PAST, 1);
+			insertValue(result, RANGE_START_TZ_OFFSET, 0);
+		}
+		else
+		{
+			insertValue(result, RANGE_START_TZ_OFFSET, mTimezone.getOffset(start));
 		}
 
 		if (end == null || end >= MAX_TIME)
 		{
 			insertValue(result, RANGE_OPEN_FUTURE, 1);
+			insertValue(result, RANGE_END_TZ_OFFSET, 0);
+		}
+		else
+		{
+			insertValue(result, RANGE_END_TZ_OFFSET, mTimezone.getOffset(end));
 		}
 
 		if (start == null && end == null)
