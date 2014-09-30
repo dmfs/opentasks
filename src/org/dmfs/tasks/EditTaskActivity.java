@@ -78,6 +78,8 @@ public class EditTaskActivity extends FragmentActivity
 			Intent intent = getIntent();
 			String action = intent.getAction();
 
+			setActivityTitle(action);
+
 			if (Intent.ACTION_SEND.equals(action))
 			{
 
@@ -201,6 +203,19 @@ public class EditTaskActivity extends FragmentActivity
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+
+	private void setActivityTitle(String action)
+	{
+		if (Intent.ACTION_EDIT.equals(action))
+		{
+			setTitle(R.string.activity_edit_task_title);
+		}
+		else
+		{
+			setTitle(R.string.activity_add_task_title);
+		}
 	}
 
 }

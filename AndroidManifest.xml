@@ -71,7 +71,7 @@
         <!-- EditTaskActivity listens for EDIT, INSERT and INDERT_OR_EDIT intents -->
         <activity
             android:name="org.dmfs.tasks.EditTaskActivity"
-            android:label="@string/activity_edit_task_title"
+            android:label="@string/activity_add_task_title"
             android:parentActivityName="org.dmfs.tasks.TaskListActivity"
             android:theme="@style/DetailsTheme" >
             <meta-data
@@ -89,7 +89,7 @@
             </intent-filter>
             
             <!-- Voice command "note to self" in google search -->
-            <intent-filter>
+            <intent-filter android:label="@string/activity_add_task_title">
                 <action android:name="com.google.android.gm.action.AUTO_SEND" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/*" />
@@ -106,16 +106,12 @@
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT_OR_EDIT" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
                 <data
                     android:host="@string/org_dmfs_tasks_authority"

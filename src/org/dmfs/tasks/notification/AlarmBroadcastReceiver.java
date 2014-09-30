@@ -69,6 +69,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				String title = intent.getStringExtra(StartAlarmBroadcastHandler.EXTRA_TASK_TITLE);
 				long startDate = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, Long.MIN_VALUE);
 				boolean startAllDay = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_ALLDAY, false);
+				int notificationId = (int) taskId;
 
 				String startString = context.getString(R.string.notification_task_start_date,
 					new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(startDate, startAllDay), false));
@@ -88,6 +89,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				// enable light, sound and vibration
 				mBuilder.setDefaults(Notification.DEFAULT_ALL);
 
+				// add actions
+				mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
+
 				// Creates an explicit intent for an Activity in your app
 				Intent resultIntent = new Intent(Intent.ACTION_VIEW);
 				resultIntent.setData(intent.getData());
@@ -102,7 +106,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
 				mBuilder.setContentIntent(resultPendingIntent);
-				notificationManager.notify((int) taskId, mBuilder.build());
+				notificationManager.notify(notificationId, mBuilder.build());
 
 			}
 		}
@@ -150,12 +154,12 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
 				// add actions
-				mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
 				if (!dueAllDay)
 				{
 					mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
 				}
 				mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
+				mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
 
 				mBuilder.setContentIntent(resultPendingIntent);
 				notificationManager.notify(notificationId, mBuilder.build());
