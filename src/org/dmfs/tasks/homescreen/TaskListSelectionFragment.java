@@ -24,6 +24,7 @@ import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskList;
 import org.dmfs.tasks.utils.TasksListCursorAdapter;
+import org.dmfs.tasks.utils.TasksListCursorAdapter.SelectionEnabledListener;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -130,6 +131,25 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 		mTaskList = getListView();
 		mTaskListAdapter = new TasksListCursorAdapter(mActivity);
 		mTaskList.setAdapter(mTaskListAdapter);
+
+		mTaskListAdapter.setSelectionEnabledListener(new SelectionEnabledListener()
+		{
+
+			@Override
+			public void onSelectionEnabled()
+			{
+				mButtonOk.setEnabled(true);
+
+			}
+
+
+			@Override
+			public void onSelectionDisabled()
+			{
+				mButtonOk.setEnabled(false);
+
+			}
+		});
 
 		Bundle bundle = new Bundle();
 		bundle.putParcelable(LIST_LOADER_URI, TaskLists.getContentUri(mAuthority));

@@ -53,11 +53,19 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	private int mIdColumn;
 	private Map<Long, TaskList> mSelectedLists = new HashMap<Long, TaskList>();
 
+	private SelectionEnabledListener mListener;
+
 
 	public TasksListCursorAdapter(Context context)
 	{
 		super(context, null, 0 /* don't register a content observer to avoid a context leak! */);
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+
+	public void setSelectionEnabledListener(SelectionEnabledListener listener)
+	{
+		mListener = listener;
 	}
 
 
@@ -123,6 +131,8 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 
+				int oldSize = mSelectedLists.size();
+
 				if (isChecked)
 				{
 					TaskList taskList = mSelectedLists.get(id);
@@ -139,6 +149,20 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 				{
 					mSelectedLists.remove(id);
 				}
+
+				if (mListener != null)
+				{
+					if (oldSize == 0 && mSelectedLists.size() > 0)
+					{
+						mListener.onSelectionEnabled();
+					}
+					if (oldSize > 0 && mSelectedLists.size() == 0)
+					{
+						mListener.onSelectionDisabled();
+
+					}
+				}
+
 			}
 		});
 		return convertView;
@@ -148,5 +172,19 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	public Collection<TaskList> getSelectedLists()
 	{
 		return mSelectedLists.values();
+	}
+
+	/**
+	 * Listener that is used to notify if the select item count is > 0 or equal 0.
+	 * 
+	 * @author Tobias Reinsch <tobias@dmfs.org>
+	 * 
+	 */
+	public interface SelectionEnabledListener
+	{
+		public void onSelectionEnabled();
+
+
+		public void onSelectionDisabled();
 	}
 }

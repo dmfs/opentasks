@@ -63,6 +63,7 @@
             android:text="@string/task_list_selection_ok"
             android:textAllCaps="true"
             android:textSize="14sp"
+            android:enabled="false"
             android:textStyle="bold" />
     </LinearLayout>
 

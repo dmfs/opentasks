@@ -374,28 +374,29 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)");
 				String[] selectionArgs = new String[lists.size() * 2];
 
-				if (lists.size() > 0)
+				if (lists != null && lists.size() > 0)
 				{
 					selection.append(" AND ( ");
-				}
-				for (int i = 0; i < lists.size(); i++)
-				{
-					TaskList list = lists.get(i);
 
-					if (i < lists.size() - 1)
+					for (int i = 0; i < lists.size(); i++)
 					{
-						selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
-						selection.append(Instances.LIST_NAME).append(" = ? ) OR ");
-					}
-					else
-					{
-						selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
-						selection.append(Instances.LIST_NAME).append(" = ? ) ) ");
-					}
+						TaskList list = lists.get(i);
 
-					selectionArgs[i * 2] = list.accountName;
-					selectionArgs[i * 2 + 1] = list.listName;
+						if (i < lists.size() - 1)
+						{
+							selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
+							selection.append(Instances.LIST_NAME).append(" = ? ) OR ");
+						}
+						else
+						{
+							selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
+							selection.append(Instances.LIST_NAME).append(" = ? ) ) ");
+						}
 
+						selectionArgs[i * 2] = list.accountName;
+						selectionArgs[i * 2 + 1] = list.listName;
+
+					}
 				}
 
 				// load all upcoming non-completed tasks
