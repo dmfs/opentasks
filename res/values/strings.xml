@@ -145,6 +145,12 @@
     <string name="confirm_delete_message">Delete this task?</string>
     <string name="confirm_delete_message_with_title">Delete \"%1s\"?</string>
     <string name="toast_task_deleted">\"%1s\" removed.</string>
+    
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">No task list available</string>
+    <string name="task_list_selection_title">Select lists to display</string>
+    <string name="task_list_selection_ok">OK</string>
+     <string name="task_list_selection_cancel">CANCEL</string>
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Current tasks</string>

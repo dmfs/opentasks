@@ -19,17 +19,21 @@
 
 package org.dmfs.tasks.homescreen;
 
+import java.util.ArrayList;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.model.TaskList;
 import org.dmfs.tasks.utils.DueDateFormatter;
 import org.dmfs.tasks.utils.TimeChangeListener;
 import org.dmfs.tasks.utils.TimeChangeObserver;
+import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -40,6 +44,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.text.format.Time;
@@ -356,13 +361,49 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			@Override
 			public void run()
 			{
+
+				// load TaskLists for this widget
+				WidgetConfigurationDatabaseHelper configHelper = new WidgetConfigurationDatabaseHelper(mContext);
+				SQLiteDatabase db = configHelper.getWritableDatabase();
+
+				ArrayList<TaskList> lists = WidgetConfigurationDatabaseHelper.loadTaskLists(db, mAppWidgetId);
+				db.close();
+
+				// build selection string
+				StringBuilder selection = new StringBuilder(TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND ("
+					+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)");
+				String[] selectionArgs = new String[lists.size() * 2];
+
+				if (lists.size() > 0)
+				{
+					selection.append(" AND ( ");
+				}
+				for (int i = 0; i < lists.size(); i++)
+				{
+					TaskList list = lists.get(i);
+
+					if (i < lists.size() - 1)
+					{
+						selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
+						selection.append(Instances.LIST_NAME).append(" = ? ) OR ");
+					}
+					else
+					{
+						selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
+						selection.append(Instances.LIST_NAME).append(" = ? ) ) ");
+					}
+
+					selectionArgs[i * 2] = list.accountName;
+					selectionArgs[i * 2 + 1] = list.listName;
+
+				}
+
 				// load all upcoming non-completed tasks
 				Cursor c = mContext.getContentResolver().query(
 					TaskContract.Instances.getContentUri(mAuthority),
 					null,
-					TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<="
-						+ System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)",
-					null,
+					selection.toString(),
+					selectionArgs,
 					TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.PRIORITY
 						+ " is null, " + TaskContract.Instances.PRIORITY + ", " + TaskContract.Instances.CREATED + " DESC");
 

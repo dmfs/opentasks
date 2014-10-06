@@ -87,14 +87,15 @@
                     android:host="@string/org_dmfs_tasks_authority"
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
-            
+
             <!-- Voice command "note to self" in google search -->
-            <intent-filter android:label="@string/activity_add_task_title">
+            <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="com.google.android.gm.action.AUTO_SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/*" />
             </intent-filter>
-            
 
             <!-- Intent filter for share intents -->
             <intent-filter android:label="@string/activity_add_task_title" >
@@ -106,12 +107,16 @@
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT_OR_EDIT" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
                 <data
                     android:host="@string/org_dmfs_tasks_authority"
@@ -135,6 +140,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity" />
+        </activity>
+        
+        <activity android:name="org.dmfs.tasks.homescreen.TaskListWidgetSettingsActivity"
+             android:theme="@style/Theme.Dialog"
+             android:label="@string/task_list_selection_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
         </activity>
 
         <service
@@ -255,18 +268,17 @@
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </receiver>
-        
+
         <!-- notification -->
-         <service
-            android:name="org.dmfs.tasks.notification.NotificationActionIntentService">
+        <service android:name="org.dmfs.tasks.notification.NotificationActionIntentService" >
             <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.COMPLETE"/>
+                <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
             </intent-filter>
-             <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H"/>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
             </intent-filter>
-             <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D"/>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
             </intent-filter>
         </service>
 

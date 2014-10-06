@@ -34,7 +34,7 @@ import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
-import org.dmfs.tasks.utils.TasksListCursorAdapter;
+import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
 import org.dmfs.tasks.widget.ListenableScrollView;
 import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskEdit;
@@ -128,7 +128,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			Tasks.IS_CLOSED).addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
 
 	private boolean mAppForEdit = true;
-	private TasksListCursorAdapter mTaskListAdapter;
+	private TasksListCursorSpinnerAdapter mTaskListAdapter;
 
 	private Uri mTaskUri;
 
@@ -234,7 +234,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
 		mListSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
 
-		mTaskListAdapter = new TasksListCursorAdapter(mAppContext);
+		mTaskListAdapter = new TasksListCursorSpinnerAdapter(mAppContext);
 		mListSpinner.setAdapter(mTaskListAdapter);
 
 		mListSpinner.setOnItemSelectedListener(this);

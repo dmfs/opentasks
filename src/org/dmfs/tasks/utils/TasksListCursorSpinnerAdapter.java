@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Marten Gajda <marten@dmfs.org>
+ * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,44 +17,35 @@
 
 package org.dmfs.tasks.utils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.TaskList;
+import org.dmfs.tasks.widget.AbstractFieldView;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 
 /**
  * An adapter to adapt a cursor containing task lists to a {@link Spinner}.
  * 
- * @author Tobias Reinsch <tobias@dmfs.org>
+ * @author Arjun Naik<arjun@arjunnaik.in>
  */
-public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdapter
+public class TasksListCursorSpinnerAdapter extends android.support.v4.widget.CursorAdapter implements SpinnerAdapter
 {
 	LayoutInflater mInflater;
 
 	private int mTaskColorColumn;
 	private int mTaskNameColumn;
 	private int mAccountNameColumn;
-	private int mIdColumn;
-	private Map<Long, TaskList> mSelectedLists = new HashMap<Long, TaskList>();
 
 
-	public TasksListCursorAdapter(Context context)
+	public TasksListCursorSpinnerAdapter(Context context)
 	{
 		super(context, null, 0 /* don't register a content observer to avoid a context leak! */);
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,7 +58,6 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		Cursor result = super.swapCursor(c);
 		if (c != null)
 		{
-			mIdColumn = c.getColumnIndex(TaskContract.TaskListColumns._ID);
 			mTaskColorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
 			mTaskNameColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME);
 			mAccountNameColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
@@ -96,57 +86,40 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	{
 		if (convertView == null)
 		{
-			convertView = mInflater.inflate(R.layout.list_item_selection, null);
+			convertView = mInflater.inflate(R.layout.list_spinner_item_selected, null);
 		}
 
-		TextView tvListName = (TextView) convertView.findViewById(android.R.id.text1);
-		TextView tvAccountName = (TextView) convertView.findViewById(android.R.id.text2);
-		CheckBox cBox = (CheckBox) convertView.findViewById(android.R.id.checkbox);
-		View colorView = convertView.findViewById(R.id.color_view);
+		TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
+		TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
 		Cursor cursor = (Cursor) getItem(position);
 
-		final String listName = cursor.getString(mTaskNameColumn);
-		final String accountName = cursor.getString(mAccountNameColumn);
-		final Long id = cursor.getLong(mIdColumn);
-
-		tvListName.setText(listName);
-		tvAccountName.setText(accountName);
+		listName.setText(cursor.getString(mTaskNameColumn));
+		accountName.setText(cursor.getString(mAccountNameColumn));
 		int taskListColor = cursor.getInt(mTaskColorColumn);
+		int backgroundBasedColor = AbstractFieldView.getTextColorFromBackground(taskListColor);
 
-		((GradientDrawable) colorView.getBackground()).setColor(taskListColor);
-
-		// listen for checkbox
-		cBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		{
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-			{
-
-				if (isChecked)
-				{
-					TaskList taskList = mSelectedLists.get(id);
-					if (taskList == null)
-					{
-						taskList = new TaskList();
-						taskList.accountName = accountName;
-						taskList.listName = listName;
-						mSelectedLists.put(id, taskList);
-					}
-
-				}
-				else
-				{
-					mSelectedLists.remove(id);
-				}
-			}
-		});
+		listName.setTextColor(backgroundBasedColor);
+		accountName.setTextColor(backgroundBasedColor);
 		return convertView;
 	}
 
 
-	public Collection<TaskList> getSelectedLists()
+	public View getDropDownView(int position, View convertView, ViewGroup parent)
 	{
-		return mSelectedLists.values();
+		if (convertView == null)
+		{
+			convertView = mInflater.inflate(R.layout.list_spinner_item_dropdown, null);
+
+		}
+
+		View listColor = convertView.findViewById(R.id.task_list_color);
+		TextView listName = (TextView) convertView.findViewById(R.id.task_list_name);
+		TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
+		Cursor cursor = (Cursor) getItem(position);
+
+		listColor.setBackgroundColor(cursor.getInt(mTaskColorColumn));
+		listName.setText(cursor.getString(mTaskNameColumn));
+		accountName.setText(cursor.getString(mAccountNameColumn));
+		return convertView;
 	}
 }
