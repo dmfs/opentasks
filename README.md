@@ -8,7 +8,7 @@ This is a task app for Android.
 
 * Android SDK Level 8 and https://github.com/dmfs/task-provider
 * [PagerSlidingTabStrip](https://github.com/astuetz/PagerSlidingTabStrip)
-
+* Dashclock 2.0 (http://code.google.com/p/dashclock/)
 
 ## TODO:
 
