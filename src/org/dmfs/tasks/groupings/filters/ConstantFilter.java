@@ -25,7 +25,7 @@ import java.util.List;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class ConstantFilter extends AbstractFilter
+public final class ConstantFilter implements AbstractFilter
 {
 	private final String mSelection;
 	private final String[] mSelectionArgs;
@@ -43,20 +43,6 @@ public final class ConstantFilter extends AbstractFilter
 	{
 		mSelection = selection;
 		mSelectionArgs = selectionArgs;
-	}
-
-
-	@Override
-	public String getSelection()
-	{
-		return mSelection;
-	}
-
-
-	@Override
-	public String[] getSelectionArgs()
-	{
-		return mSelectionArgs;
 	}
 
 

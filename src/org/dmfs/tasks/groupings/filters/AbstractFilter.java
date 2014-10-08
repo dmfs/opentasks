@@ -25,15 +25,8 @@ import java.util.List;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public abstract class AbstractFilter
+public interface AbstractFilter
 {
-	/**
-	 * The the selection part of this filter.
-	 * 
-	 * @return A selection string.
-	 */
-	public abstract String getSelection();
-
 
 	/**
 	 * Append the selection part of this filter to a {@link StringBuilder}. This is much more efficiently when you're using a StringBuilder anyway.
@@ -42,14 +35,6 @@ public abstract class AbstractFilter
 	 *            The {@link StringBuilder} where to append the selection string.
 	 */
 	public abstract void getSelection(StringBuilder stringBuilder);
-
-
-	/**
-	 * Get the selection arguments of this filter.
-	 * 
-	 * @return An array of Strings that contains the actual positional arguments.
-	 */
-	public abstract String[] getSelectionArgs();
 
 
 	/**
