@@ -1,15 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    android:windowMinWidthMajor="@android:dimen/dialog_min_width_major" >
+    android:padding="8dp" >
 
+    <TextView
+        android:id="@android:id/title"
+        style="@style/dialog_text_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|center_vertical"
+        android:padding="16dp"
+        android:text="@string/task_list_selection_title" />
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp" >
+       android:layout_margin="16dp">
 
         <ListView
             android:id="@id/android:list"
@@ -28,43 +39,25 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/buttonArea"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:gravity="center|right"
-        android:orientation="horizontal"
-        android:paddingBottom="8dip"
-        android:paddingRight="8dip" >
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:orientation="horizontal" >
 
-        <Button
-            android:id="@android:id/button1"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:minHeight="36dp"
-            android:minWidth="88dp"
-            android:padding="16dip"
-            android:text="@string/task_list_selection_cancel"
-            android:textAllCaps="true"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <Button
+        <TextView
             android:id="@android:id/button2"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/dialog_button_secondary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackground"
-            android:gravity="center"
-            android:minHeight="36dp"
-            android:minWidth="88dp"
-            android:padding="16dip"
-            android:text="@string/task_list_selection_ok"
-            android:textAllCaps="true"
-            android:textSize="14sp"
-            android:enabled="false"
-            android:textStyle="bold" />
+            android:text="@android:string/cancel" />
+
+        <TextView
+            android:id="@android:id/button1"
+            style="@style/dialog_button_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/ok" />
     </LinearLayout>
 
 </LinearLayout>

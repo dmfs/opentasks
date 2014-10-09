@@ -18,7 +18,6 @@
 package org.dmfs.tasks.notification;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
@@ -35,6 +34,7 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.app.NotificationManagerCompat;
+import android.text.format.Time;
 import android.util.Log;
 
 
@@ -99,19 +99,19 @@ public class NotificationActionIntentService extends IntentService
 				String tz = intent.getStringExtra(EXTRA_TIMEZONE);
 				if (ACTION_DELAY_1H.equals(action))
 				{
-
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(due);
-					calendar.add(Calendar.HOUR, 1);
-					delayTask(taskId, calendar.getTimeInMillis(), tz);
-
+					Time time = new Time(tz);
+					time.set(due);
+					time.hour++;
+					time.normalize(true);
+					delayTask(taskId, time.toMillis(true), tz);
 				}
 				else if (ACTION_DELAY_1D.equals(action))
 				{
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTimeInMillis(due);
-					calendar.add(Calendar.DAY_OF_MONTH, 1);
-					delayTask(taskId, calendar.getTimeInMillis(), tz);
+					Time time = new Time(tz);
+					time.set(due);
+					time.monthDay++;
+					time.normalize(true);
+					delayTask(taskId, time.toMillis(true), tz);
 				}
 			}
 

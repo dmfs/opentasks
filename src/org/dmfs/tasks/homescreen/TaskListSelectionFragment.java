@@ -38,8 +38,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 /**
@@ -67,8 +67,8 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 	private ListView mTaskList;
 	private String mAuthority;
 	private onSelectionListener mListener;
-	private Button mButtonOk;
-	private Button mButtonCancel;
+	private TextView mButtonOk;
+	private TextView mButtonCancel;
 
 
 	public TaskListSelectionFragment(onSelectionListener listener)
@@ -90,8 +90,8 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View rootView = inflater.inflate(R.layout.fragment_task_list_selection, container, false);
-		mButtonOk = (Button) rootView.findViewById(android.R.id.button2);
-		mButtonCancel = (Button) rootView.findViewById(android.R.id.button1);
+		mButtonOk = (TextView) rootView.findViewById(android.R.id.button1);
+		mButtonCancel = (TextView) rootView.findViewById(android.R.id.button2);
 
 		mButtonOk.setOnClickListener(new OnClickListener()
 		{

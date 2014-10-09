@@ -176,7 +176,7 @@
     <style name="actionColorBar">
         <item name="android:layout_height">0dp</item>
     </style>
-    
+
     <style name="Theme.Dialog" parent="@android:style/Theme.Dialog"></style>
 
 </resources>
