@@ -17,8 +17,6 @@
 
 package org.dmfs.tasks.groupings.filters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -27,7 +25,7 @@ import java.util.List;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class BinaryOperationFilter extends AbstractFilter
+public class BinaryOperationFilter implements AbstractFilter
 {
 	private final AbstractFilter[] mFilters;
 	private final String mOperator;
@@ -45,57 +43,6 @@ public class BinaryOperationFilter extends AbstractFilter
 	{
 		mFilters = filters;
 		mOperator = operator;
-	}
-
-
-	@Override
-	public final String getSelection()
-	{
-		AbstractFilter[] filters = mFilters;
-		if (filters.length == 0)
-		{
-			// return a valid filter that always matches
-			return "1=1";
-		}
-
-		StringBuilder selection = new StringBuilder(filters.length * 24); // assuming an average of 24 characters per filter
-
-		boolean first = true;
-		for (AbstractFilter filter : filters)
-		{
-			if (first)
-			{
-				first = false;
-				selection.append("(");
-			}
-			else
-			{
-				selection.append(") ");
-				selection.append(mOperator);
-				selection.append(" (");
-			}
-			selection.append(filter.getSelection());
-		}
-		selection.append(")");
-
-		return selection.toString();
-	}
-
-
-	@Override
-	public final String[] getSelectionArgs()
-	{
-		AbstractFilter[] filters = mFilters;
-		if (filters.length == 0)
-		{
-			return new String[] {};
-		}
-		ArrayList<String> result = new ArrayList<String>(filters.length + 8);
-		for (AbstractFilter filter : filters)
-		{
-			result.addAll(Arrays.asList(filter.getSelectionArgs()));
-		}
-		return result.toArray(new String[result.size()]);
 	}
 
 
@@ -124,7 +71,7 @@ public class BinaryOperationFilter extends AbstractFilter
 				stringBuilder.append(mOperator);
 				stringBuilder.append(" (");
 			}
-			stringBuilder.append(filter.getSelection());
+			filter.getSelection(stringBuilder);
 		}
 		stringBuilder.append(")");
 	}
@@ -135,7 +82,7 @@ public class BinaryOperationFilter extends AbstractFilter
 	{
 		for (AbstractFilter filter : mFilters)
 		{
-			selectionArgs.addAll(Arrays.asList(filter.getSelectionArgs()));
+			filter.getSelectionArgs(selectionArgs);
 		}
 	}
 }
