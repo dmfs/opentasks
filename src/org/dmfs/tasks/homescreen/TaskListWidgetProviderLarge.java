@@ -20,6 +20,7 @@
 package org.dmfs.tasks.homescreen;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import android.annotation.TargetApi;
 import android.appwidget.AppWidgetManager;
@@ -61,6 +62,17 @@ public class TaskListWidgetProviderLarge extends TaskListWidgetProvider
 				onUpdate(context, appWidgetManager, appWidgetIds);
 			}
 		}
+	}
+
+
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds)
+	{
+		// Delete configuration
+		WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(context);
+		dbHelper.deleteWidgetConfiguration(appWidgetIds);
+
+		super.onDeleted(context, appWidgetIds);
 	}
 
 

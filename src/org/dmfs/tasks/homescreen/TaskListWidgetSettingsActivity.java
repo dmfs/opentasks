@@ -17,11 +17,10 @@
 
 package org.dmfs.tasks.homescreen;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.homescreen.TaskListSelectionFragment.onSelectionListener;
-import org.dmfs.tasks.model.TaskList;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import android.appwidget.AppWidgetManager;
@@ -56,12 +55,11 @@ public class TaskListWidgetSettingsActivity extends FragmentActivity implements 
 
 		TaskListSelectionFragment fragment = new TaskListSelectionFragment(this);
 		getSupportFragmentManager().beginTransaction().add(R.id.task_list_selection_container, fragment).commit();
-
 	}
 
 
 	@Override
-	public void onSelection(Collection<TaskList> selectedLists)
+	public void onSelection(ArrayList<Long> selectedLists)
 	{
 		persistSelectedTaskLists(selectedLists);
 		finishWithResult(true);
@@ -77,7 +75,7 @@ public class TaskListWidgetSettingsActivity extends FragmentActivity implements 
 	}
 
 
-	private void persistSelectedTaskLists(Collection<TaskList> lists)
+	private void persistSelectedTaskLists(ArrayList<Long> lists)
 	{
 		WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(this);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -86,9 +84,9 @@ public class TaskListWidgetSettingsActivity extends FragmentActivity implements 
 		WidgetConfigurationDatabaseHelper.deleteConfiguration(db, mAppWidgetId);
 
 		// add new configuration
-		for (TaskList taskList : lists)
+		for (Long taskId : lists)
 		{
-			WidgetConfigurationDatabaseHelper.insertTaskList(db, mAppWidgetId, taskList.accountName, taskList.listName);
+			WidgetConfigurationDatabaseHelper.insertTaskList(db, mAppWidgetId, taskId);
 		}
 		db.close();
 	}
@@ -111,6 +109,5 @@ public class TaskListWidgetSettingsActivity extends FragmentActivity implements 
 		}
 
 		finish();
-
 	}
 }

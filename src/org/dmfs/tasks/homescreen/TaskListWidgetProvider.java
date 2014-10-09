@@ -25,6 +25,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.TaskListActivity;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
@@ -200,5 +201,16 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			/* Finally update the widget */
 			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
 		}
+	}
+
+
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds)
+	{
+		// Delete configuration
+		WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(context);
+		dbHelper.deleteWidgetConfiguration(appWidgetIds);
+
+		super.onDeleted(context, appWidgetIds);
 	}
 }

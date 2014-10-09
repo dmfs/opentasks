@@ -17,13 +17,10 @@
 
 package org.dmfs.tasks.utils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.TaskList;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -51,7 +48,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	private int mTaskNameColumn;
 	private int mAccountNameColumn;
 	private int mIdColumn;
-	private Map<Long, TaskList> mSelectedLists = new HashMap<Long, TaskList>();
+	private ArrayList<Long> mSelectedLists = new ArrayList<Long>(20);
 
 	private SelectionEnabledListener mListener;
 
@@ -126,24 +123,14 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		// listen for checkbox
 		cBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
 		{
-
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
-
 				int oldSize = mSelectedLists.size();
 
 				if (isChecked)
 				{
-					TaskList taskList = mSelectedLists.get(id);
-					if (taskList == null)
-					{
-						taskList = new TaskList();
-						taskList.accountName = accountName;
-						taskList.listName = listName;
-						mSelectedLists.put(id, taskList);
-					}
-
+					mSelectedLists.add(id);
 				}
 				else
 				{
@@ -159,19 +146,17 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 					if (oldSize > 0 && mSelectedLists.size() == 0)
 					{
 						mListener.onSelectionDisabled();
-
 					}
 				}
-
 			}
 		});
 		return convertView;
 	}
 
 
-	public Collection<TaskList> getSelectedLists()
+	public ArrayList<Long> getSelectedLists()
 	{
-		return mSelectedLists.values();
+		return mSelectedLists;
 	}
 
 	/**

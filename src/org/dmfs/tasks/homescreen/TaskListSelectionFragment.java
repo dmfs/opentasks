@@ -17,12 +17,11 @@
 
 package org.dmfs.tasks.homescreen;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.TaskList;
 import org.dmfs.tasks.utils.TasksListCursorAdapter;
 import org.dmfs.tasks.utils.TasksListCursorAdapter.SelectionEnabledListener;
 
@@ -84,7 +83,6 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 		super.onAttach(activity);
 		mActivity = activity;
 		mAuthority = getString(R.string.org_dmfs_tasks_authority);
-
 	}
 
 
@@ -134,12 +132,10 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 
 		mTaskListAdapter.setSelectionEnabledListener(new SelectionEnabledListener()
 		{
-
 			@Override
 			public void onSelectionEnabled()
 			{
 				mButtonOk.setEnabled(true);
-
 			}
 
 
@@ -169,7 +165,6 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
 		mTaskListAdapter.changeCursor(cursor);
-
 	}
 
 
@@ -181,7 +176,7 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 
 	public interface onSelectionListener
 	{
-		public void onSelection(Collection<TaskList> selectedLists);
+		public void onSelection(ArrayList<Long> selectedLists);
 
 
 		public void onSelectionCancel();

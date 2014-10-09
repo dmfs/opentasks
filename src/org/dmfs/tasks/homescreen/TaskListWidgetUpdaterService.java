@@ -20,6 +20,8 @@
 package org.dmfs.tasks.homescreen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,7 +31,6 @@ import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.model.TaskList;
 import org.dmfs.tasks.utils.DueDateFormatter;
 import org.dmfs.tasks.utils.TimeChangeListener;
 import org.dmfs.tasks.utils.TimeChangeObserver;
@@ -38,7 +39,6 @@ import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -66,6 +66,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 {
 	private final static String TAG = "TaskListWidgetUpdaterService";
 
+	Map<Integer, TaskListViewsFactory> mViewFactoryMap = new HashMap<Integer, TaskListWidgetUpdaterService.TaskListViewsFactory>();
+
 
 	/*
 	 * Return an instance of {@link TaskListViewsFactory}
@@ -75,14 +77,46 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent)
 	{
-		return new TaskListViewsFactory(getApplicationContext(), intent);
+		int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+
+		TaskListViewsFactory viewFactory = mViewFactoryMap.get(widgetId);
+		if (viewFactory == null)
+		{
+			viewFactory = new TaskListViewsFactory(this, intent);
+			mViewFactoryMap.put(widgetId, viewFactory);
+		}
+		else
+		{
+			viewFactory.reload();
+		}
+		return viewFactory;
+
+	}
+
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId)
+	{
+		int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+
+		TaskListViewsFactory viewFactory = mViewFactoryMap.get(widgetId);
+		if (viewFactory == null)
+		{
+			viewFactory = new TaskListViewsFactory(this, intent);
+			mViewFactoryMap.put(widgetId, viewFactory);
+		}
+		else
+		{
+			viewFactory.reload();
+		}
+		return START_NOT_STICKY;
 	}
 
 	/**
 	 * This class implements the {@link RemoteViewsFactory} interface. It provides the data for the {@link TaskListWidgetProvider}. It loads the due tasks
 	 * asynchronously using a {@link CursorLoader}. It also provides methods to the remote views to retrieve the data.
 	 */
-	public static class TaskListViewsFactory extends BroadcastReceiver implements RemoteViewsService.RemoteViewsFactory, TimeChangeListener
+	public static class TaskListViewsFactory implements RemoteViewsService.RemoteViewsFactory, TimeChangeListener
 	{
 		/** The {@link TaskListWidgetItem} array which stores the tasks to be displayed. When the cursor loads it is updated. */
 		private static TaskListWidgetItem[] mItems = null;
@@ -126,6 +160,13 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			mDueDateFormatter = new DueDateFormatter(context);
 			new TimeChangeObserver(context, this);
 			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
+		}
+
+
+		public void reload()
+		{
+			mExecutor.execute(mReloadTasks);
+
 		}
 
 
@@ -341,17 +382,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			return null;
 		}
 
-
-		@Override
-		public void onReceive(Context context, Intent intent)
-		{
-			// this runs in the context of the Broadcast receiver, store it for later
-			mContext = context;
-			// load the tasks in a background thread
-			mExecutor.execute(mReloadTasks);
-			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
-		}
-
 		/**
 		 * A {@link Runnable} that loads the tasks to show in the widget.
 		 */
@@ -366,13 +396,12 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				WidgetConfigurationDatabaseHelper configHelper = new WidgetConfigurationDatabaseHelper(mContext);
 				SQLiteDatabase db = configHelper.getWritableDatabase();
 
-				ArrayList<TaskList> lists = WidgetConfigurationDatabaseHelper.loadTaskLists(db, mAppWidgetId);
+				ArrayList<Long> lists = WidgetConfigurationDatabaseHelper.loadTaskLists(db, mAppWidgetId);
 				db.close();
 
 				// build selection string
 				StringBuilder selection = new StringBuilder(TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND ("
 					+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null)");
-				String[] selectionArgs = new String[lists.size() * 2];
 
 				if (lists != null && lists.size() > 0)
 				{
@@ -380,22 +409,16 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 
 					for (int i = 0; i < lists.size(); i++)
 					{
-						TaskList list = lists.get(i);
+						Long listId = lists.get(i);
 
 						if (i < lists.size() - 1)
 						{
-							selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
-							selection.append(Instances.LIST_NAME).append(" = ? ) OR ");
+							selection.append(Instances.LIST_ID).append(" = ").append(listId).append(" OR ");
 						}
 						else
 						{
-							selection.append("( ").append(Instances.ACCOUNT_NAME).append(" = ? AND ");
-							selection.append(Instances.LIST_NAME).append(" = ? ) ) ");
+							selection.append(Instances.LIST_ID).append(" = ").append(listId).append(" ) ");
 						}
-
-						selectionArgs[i * 2] = list.accountName;
-						selectionArgs[i * 2 + 1] = list.listName;
-
 					}
 				}
 
@@ -404,7 +427,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					TaskContract.Instances.getContentUri(mAuthority),
 					null,
 					selection.toString(),
-					selectionArgs,
+					null,
 					TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.PRIORITY
 						+ " is null, " + TaskContract.Instances.PRIORITY + ", " + TaskContract.Instances.CREATED + " DESC");
 
@@ -426,17 +449,10 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 
 				// notify the widget manager about the update
 				AppWidgetManager widgetManager = AppWidgetManager.getInstance(mContext);
-				if (mAppWidgetId == -1)
-				{
-					int[] ids = widgetManager.getAppWidgetIds(TaskListWidgetProvider.getComponentName(mContext));
-					widgetManager.notifyAppWidgetViewDataChanged(ids, R.id.task_list_widget_lv);
-
-					ids = widgetManager.getAppWidgetIds(TaskListWidgetProviderLarge.getComponentName(mContext));
-					widgetManager.notifyAppWidgetViewDataChanged(ids, R.id.task_list_widget_lv);
-				}
-				else
+				if (mAppWidgetId != -1)
 				{
 					widgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.task_list_widget_lv);
+
 				}
 			}
 		};
