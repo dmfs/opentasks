@@ -217,10 +217,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
             <intent-filter>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <receiver android:name="org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler" >
+             <intent-filter>
+                <action android:name="org.dmfs.android.tasks.TASK_DUE" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -280,6 +286,15 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.UNDO" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
             </intent-filter>
         </service>
 

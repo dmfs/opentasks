@@ -17,24 +17,13 @@
 
 package org.dmfs.tasks.notification;
 
-import java.util.TimeZone;
-
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.utils.DueDateFormatter;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.text.format.DateUtils;
-import android.text.format.Time;
 
 
 /**
@@ -48,8 +37,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 
 	private static String PREFS_NAME = "alarm_preferences";
 	private static String PREF_ALARM_ACTIVATED = "preference_alarm_activated";
-
-	private final int NOTIFICATION_DATE_FORMAT = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
 
 
 	/**
@@ -71,42 +58,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				boolean startAllDay = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_ALLDAY, false);
 				int notificationId = (int) taskId;
 
-				String startString = context.getString(R.string.notification_task_start_date,
-					new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(startDate, startAllDay), false));
-
-				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-				// build notification
-				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
-					.setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
-
-				// dismisses the notification on click
-				mBuilder.setAutoCancel(true);
-
-				// set status bar test
-				mBuilder.setTicker(title);
-
-				// enable light, sound and vibration
-				mBuilder.setDefaults(Notification.DEFAULT_ALL);
-
-				// add actions
-				mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
-
-				// Creates an explicit intent for an Activity in your app
-				Intent resultIntent = new Intent(Intent.ACTION_VIEW);
-				resultIntent.setData(intent.getData());
-
-				// The stack builder object will contain an artificial back stack for the
-				// started Activity.
-				// This ensures that navigating backward from the Activity leads out of
-				// your application to the Home screen.
-				TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-				// Adds the Intent that starts the Activity to the top of the stack
-				stackBuilder.addNextIntent(resultIntent);
-				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-				mBuilder.setContentIntent(resultPendingIntent);
-				notificationManager.notify(notificationId, mBuilder.build());
+				NotificationActionUtils.sendStartNotification(context, title, intent.getData(), notificationId, taskId, startDate, startAllDay);
 
 			}
 		}
@@ -122,48 +74,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				String timezone = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TIMEZONE);
 				int notificationId = (int) taskId;
 
-				String dueString = context.getString(R.string.notification_task_due_date,
-					new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(dueDate, dueAllDay), false));
-
-				NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-				// build notification
-				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
-					.setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
-
-				// dismisses the notification on click
-				mBuilder.setAutoCancel(true);
-
-				// set status bar test
-				mBuilder.setTicker(title);
-
-				// enable light, sound and vibration
-				mBuilder.setDefaults(Notification.DEFAULT_ALL);
-
-				// Creates an explicit intent for an Activity in your app
-				Intent resultIntent = new Intent(Intent.ACTION_VIEW);
-				resultIntent.setData(intent.getData());
-
-				// The stack builder object will contain an artificial back stack for the
-				// started Activity.
-				// This ensures that navigating backward from the Activity leads out of
-				// your application to the Home screen.
-				TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-				// Adds the Intent that starts the Activity to the top of the stack
-				stackBuilder.addNextIntent(resultIntent);
-				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-				// add actions
-				if (!dueAllDay)
-				{
-					mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
-				}
-				mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
-				mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
-
-				mBuilder.setContentIntent(resultPendingIntent);
-				notificationManager.notify(notificationId, mBuilder.build());
-
+				NotificationActionUtils.sendDueAlarmNotification(context, title, intent.getData(), notificationId, taskId, dueDate, dueAllDay, timezone);
 			}
 		}
 
@@ -185,14 +96,5 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 		SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
 		return settings.getBoolean(PREF_ALARM_ACTIVATED, true);
 
-	}
-
-
-	private static Time makeTime(long timestamp, boolean allday)
-	{
-		Time result = new Time(allday ? Time.TIMEZONE_UTC : TimeZone.getDefault().getID());
-		result.set(timestamp);
-		result.allDay = allday;
-		return result;
 	}
 }
