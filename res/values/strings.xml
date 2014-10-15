@@ -175,6 +175,7 @@
     <string name="notification_action_completed">Completed</string>
     <string name="notification_action_delay_1h">+1 hour</string>
     <string name="notification_action_delay_1d">+1 day</string>
+    <string name="notification_action_delay_toast">Due date updated</string>
     <string name="notification_undo">Undo</string>
     
     

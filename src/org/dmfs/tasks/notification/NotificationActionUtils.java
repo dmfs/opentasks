@@ -125,6 +125,7 @@ public class NotificationActionUtils
 			NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		mBuilder.setWhen(dueDate);
 		mBuilder.setContentIntent(resultPendingIntent);
+
 		notificationManager.notify(notificationId, mBuilder.build());
 	}
 
@@ -153,7 +154,10 @@ public class NotificationActionUtils
 		mBuilder.setWhen(startDate);
 
 		// add actions
-		mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
+		NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE,
+			context.getString(R.string.notification_action_completed), R.string.notification_action_completed, notificationId, taskId, startDate);
+		mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
+			NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(Intent.ACTION_VIEW);

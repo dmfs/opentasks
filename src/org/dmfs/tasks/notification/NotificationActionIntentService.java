@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
+import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
 
@@ -120,6 +121,7 @@ public class NotificationActionIntentService extends IntentService
 					time.normalize(true);
 					delayTask(taskId, time.toMillis(true), tz);
 				}
+
 			}
 
 		}
@@ -185,10 +187,17 @@ public class NotificationActionIntentService extends IntentService
 	{
 		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
 		{
-			Intent intent = new Intent(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM);
-			// intent.setPackage(getApplicationContext().getPackageName());
-			intent.putExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, notificationAction.getWhen());
-			sendBroadcast(intent);
+			// Due broadcast
+			Intent dueIntent = new Intent(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM);
+			dueIntent.setPackage(getApplicationContext().getPackageName());
+			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, notificationAction.getWhen());
+			sendBroadcast(dueIntent);
+
+			// Start broadcast
+			Intent startIntent = new Intent(StartAlarmBroadcastHandler.BROADCAST_START_ALARM);
+			startIntent.setPackage(getApplicationContext().getPackageName());
+			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, notificationAction.getWhen());
+			sendBroadcast(startIntent);
 		}
 	}
 
