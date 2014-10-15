@@ -123,7 +123,7 @@ public class NotificationActionUtils
 			context.getString(R.string.notification_action_completed), R.string.notification_action_completed, notificationId, taskId, dueDate);
 		mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
 			NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
-
+		mBuilder.setWhen(dueDate);
 		mBuilder.setContentIntent(resultPendingIntent);
 		notificationManager.notify(notificationId, mBuilder.build());
 	}
@@ -148,6 +148,9 @@ public class NotificationActionUtils
 
 		// enable light, sound and vibration
 		mBuilder.setDefaults(Notification.DEFAULT_ALL);
+
+		// set notification time
+		mBuilder.setWhen(startDate);
 
 		// add actions
 		mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context, notificationId, taskId));
