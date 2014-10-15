@@ -17,7 +17,10 @@
 
 package org.dmfs.tasks.model.contraints;
 
+import java.util.List;
+
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
@@ -27,7 +30,7 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class ChecklistConstraint extends AbstractConstraint<String>
+public class ChecklistConstraint extends AbstractConstraint<List<CheckListItem>>
 {
 	private final IntegerFieldAdapter mPercentCompleteAdapter;
 	private final IntegerFieldAdapter mStatusAdapter;
@@ -41,63 +44,38 @@ public class ChecklistConstraint extends AbstractConstraint<String>
 
 
 	@Override
-	public String apply(ContentSet currentValues, String oldValue, String newValue)
+	public List<CheckListItem> apply(ContentSet currentValues, List<CheckListItem> oldValue, List<CheckListItem> newValue)
 	{
-		if (newValue != null && (newValue.contains("[x]") || newValue.contains("[X]") || newValue.contains("[ ]")))
+		if (oldValue != null && newValue != null && oldValue.size() > 0 && newValue.size() > 0)
 		{
-			/*
-			 * Looks like a checklist!
-			 * 
-			 * Now we do the following:
-			 * 
-			 * 1) Count the number of lines and the number of checked lines
-			 * 
-			 * 2) Update status accordingly
-			 * 
-			 * 3) Update percent complete accordingly
-			 */
-
-			String[] items = newValue.split("\n");
-
-			int count = 0;
 			int checked = 0;
-
-			for (int i = 0, lineCount = items.length; i < lineCount; ++i)
+			for (CheckListItem item : newValue)
 			{
-				String item = items[i];
-				if (item.startsWith("[x]") || item.startsWith("[X]"))
+				if (item.checked)
 				{
-					checked++;
-					count++;
-				}
-				else if (item.startsWith("[ ]"))
-				{
-					count++;
+					++checked;
 				}
 			}
 
-			if (count > 0)
+			int newPercentComplete = (checked * 100) / newValue.size();
+
+			if (mStatusAdapter != null)
 			{
-				int newPercentComplete = (checked * 100) / count;
-
-				if (mStatusAdapter != null)
+				Integer oldStatus = mStatusAdapter.get(currentValues);
+				Integer newStatus = newPercentComplete == 100 ? Tasks.STATUS_COMPLETED : newPercentComplete > 0 || oldStatus != null
+					&& oldStatus == Tasks.STATUS_COMPLETED ? Tasks.STATUS_IN_PROCESS : oldStatus;
+				if (oldStatus == null && newStatus != null || oldStatus != null && !oldStatus.equals(newStatus) && oldStatus != Tasks.STATUS_CANCELLED)
 				{
-					Integer oldStatus = mStatusAdapter.get(currentValues);
-					Integer newStatus = newPercentComplete == 100 ? Tasks.STATUS_COMPLETED : newPercentComplete > 0 || oldStatus != null
-						&& oldStatus == Tasks.STATUS_COMPLETED ? Tasks.STATUS_IN_PROCESS : oldStatus;
-					if (oldStatus == null && newStatus != null || oldStatus != null && !oldStatus.equals(newStatus) && oldStatus != Tasks.STATUS_CANCELLED)
-					{
-						mStatusAdapter.set(currentValues, newStatus);
-					}
+					mStatusAdapter.set(currentValues, newStatus);
 				}
+			}
 
-				if (mPercentCompleteAdapter != null)
+			if (mPercentCompleteAdapter != null)
+			{
+				Integer oldPercentComplete = mPercentCompleteAdapter.get(currentValues);
+				if (oldPercentComplete == null || oldPercentComplete != newPercentComplete)
 				{
-					Integer oldPercentComplete = mPercentCompleteAdapter.get(currentValues);
-					if (oldPercentComplete == null || oldPercentComplete != newPercentComplete)
-					{
-						mPercentCompleteAdapter.set(currentValues, newPercentComplete);
-					}
+					mPercentCompleteAdapter.set(currentValues, newPercentComplete);
 				}
 			}
 		}

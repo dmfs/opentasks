@@ -96,8 +96,12 @@ public class DefaultModel extends Model
 		mFields.add(new FieldDescriptor(mContext, R.string.task_location, TaskFieldAdapters.LOCATION).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
 
 		// description
-		mFields.add(new FieldDescriptor(mContext, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(TEXT_VIEW).setEditorLayout(
-			TEXT_EDIT));
+		mFields
+			.add(new FieldDescriptor(mContext, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(TEXT_VIEW).setEditorLayout(TEXT_EDIT));
+
+		// description
+		mFields.add(new FieldDescriptor(mContext, R.string.task_checklist, TaskFieldAdapters.CHECKLIST).setViewLayout(CHECKLIST_VIEW).setEditorLayout(
+			CHECKLIST_EDIT));
 
 		// start
 		mFields.add(new FieldDescriptor(mContext, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));

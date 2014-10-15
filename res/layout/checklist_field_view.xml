@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.CheckListFieldView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/task_widget"
-    android:visibility="gone" >
+    android:visibility="visible" >
 
     <include layout="@layout/detail_header" />
-
-    <TextView
-        android:id="@+id/text"
-        style="@style/field_view_text_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autoLink="all" >
-    </TextView>
 
     <LinearLayout
         android:id="@+id/checklist"
