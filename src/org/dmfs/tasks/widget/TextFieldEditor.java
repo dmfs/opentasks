@@ -23,10 +23,8 @@ import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
-import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -44,7 +42,7 @@ import android.widget.EditText;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
+public class TextFieldEditor extends AbstractFieldEditor
 {
 	private StringFieldAdapter mAdapter;
 	private EditText mText;
@@ -75,8 +73,6 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 		mText = (EditText) findViewById(android.R.id.text1);
 		if (mText != null)
 		{
-			mText.addTextChangedListener(this);
-
 			/*
 			 * enable memory leak workaround: disable spell checker
 			 */
@@ -96,31 +92,17 @@ public class TextFieldEditor extends AbstractFieldEditor implements TextWatcher
 
 
 	@Override
-	public void afterTextChanged(Editable s)
+	public void updateValues()
 	{
 		if (mValues != null)
 		{
-			final String newText = s.toString();
+			final String newText = mText.getText().toString();
 			final String oldText = mAdapter.get(mValues);
 			if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
 			{
 				mAdapter.set(mValues, newText);
 			}
 		}
-	}
-
-
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count, int after)
-	{
-		// nothing to do here
-	}
-
-
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count)
-	{
-		// nothing to do here
 	}
 
 
