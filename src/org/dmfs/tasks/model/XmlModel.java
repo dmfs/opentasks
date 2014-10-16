@@ -28,6 +28,14 @@ import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.contraints.UpdateAllDay;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
+import org.dmfs.xmlobjects.ElementDescriptor;
+import org.dmfs.xmlobjects.QualifiedName;
+import org.dmfs.xmlobjects.builder.AbstractObjectBuilder;
+import org.dmfs.xmlobjects.pull.ParserContext;
+import org.dmfs.xmlobjects.pull.Recyclable;
+import org.dmfs.xmlobjects.pull.XmlObjectPull;
+import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
+import org.dmfs.xmlobjects.pull.XmlPath;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -59,13 +67,175 @@ import android.util.Log;
  */
 public class XmlModel extends Model
 {
-
 	private final static String TAG = "org.dmfs.tasks.model.XmlModel";
 
 	public final static String METADATA_TASKS = "org.dmfs.tasks.TASKS";
+
 	public final static String NAMESPACE = "org.dmfs.tasks";
 
+	public final static QualifiedName ATTR_KIND = QualifiedName.get("kind");
+
+	/**
+	 * This is a workaround for the transition from a combined description/checklist field to two separate fields.
+	 * 
+	 * TODO: remove once the new versions of CalDAV-Sync and SmoothSync are in use
+	 */
+	public final static QualifiedName ATTR_HIDECHECKLIST = QualifiedName.get("hideCheckList");
+
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
+
+	/**
+	 * POJO that stores the attributes of a &lt;datakind> element.
+	 */
+	private static class DataKind implements Recyclable
+	{
+		public String datakind;
+		public int titleId = -1;
+		public int hintId = -1;
+
+		/**
+		 * This is a workaround for the transition from a combined description/checklist field to two separate fields.
+		 * 
+		 * TODO: remove once the new versions of CalDAV-Sync and SmoothSync are in use
+		 */
+		public boolean hideCheckList = false;
+
+
+		@Override
+		public void recycle()
+		{
+			datakind = null;
+			titleId = -1;
+			hintId = -1;
+			hideCheckList = false;
+		}
+	}
+
+	/**
+	 * POJO to store the state of the model parser.
+	 */
+	private static class ModelParserState
+	{
+		public boolean hasDue = false;
+		public boolean hasStart = false;
+		public FieldDescriptor alldayDescriptor = null;
+	}
+
+	private static final ElementDescriptor<XmlModel> XML_MODEL_DESCRIPTOR = ElementDescriptor.register(QualifiedName.get(NAMESPACE, "TaskSource"),
+		new AbstractObjectBuilder<XmlModel>()
+		{
+			public XmlModel get(ElementDescriptor<XmlModel> descriptor, XmlModel recycle, ParserContext context) throws XmlObjectPullParserException
+			{
+				// ensure we have a state object
+				context.setState(new ModelParserState());
+
+				if (recycle == null)
+				{
+					throw new IllegalArgumentException("you must provide the XML model to populate as the object to recycle");
+				}
+				return recycle;
+			};
+
+
+			public XmlModel update(ElementDescriptor<XmlModel> descriptor, XmlModel object, QualifiedName attribute, String value, ParserContext context)
+				throws XmlObjectPullParserException
+			{
+				// for now we ignore all attributes
+				return object;
+			};
+
+
+			@SuppressWarnings("unchecked")
+			public <V extends Object> XmlModel update(ElementDescriptor<XmlModel> descriptor, XmlModel object, ElementDescriptor<V> childDescriptor, V child,
+				ParserContext context) throws XmlObjectPullParserException
+			{
+				if (childDescriptor == XML_DATAKIND)
+				{
+					DataKind datakind = (DataKind) child;
+					FieldInflater inflater = FIELD_INFLATER_MAP.get(datakind.datakind);
+
+					if (inflater != null)
+					{
+						FieldDescriptor fieldDescriptor = inflater.inflate(object.mContext, object.mModelContext, datakind);
+						object.mFields.add(fieldDescriptor);
+
+						ModelParserState state = (ModelParserState) context.getState();
+
+						if ("allday".equals(datakind.datakind))
+						{
+							state.alldayDescriptor = fieldDescriptor;
+						}
+						else if ("due".equals(datakind.datakind))
+						{
+							state.hasDue = true;
+						}
+						else if ("dtstart".equals(datakind.datakind))
+						{
+							state.hasStart = true;
+						}
+						else if ("description".equals(datakind.datakind) && !datakind.hideCheckList)
+						{
+							Log.i(TAG, "found old description data kind, adding checklist");
+							object.mFields.add(FIELD_INFLATER_MAP.get("checklist").inflate(object.mContext, object.mModelContext, datakind));
+						}
+					}
+					// we don't need the datakind object anymore, so recycle it
+					context.recycle((ElementDescriptor<DataKind>) childDescriptor, datakind);
+
+				}
+				return object;
+			};
+
+
+			@SuppressWarnings("unchecked")
+			public XmlModel finish(ElementDescriptor<XmlModel> descriptor, XmlModel object, ParserContext context) throws XmlObjectPullParserException
+			{
+				ModelParserState state = (ModelParserState) context.getState();
+				if (state.alldayDescriptor != null)
+				{
+					// add UpdateAllDay constraint of due or start fields are missing to keep the values in sync with the allday flag
+					if (!state.hasDue)
+					{
+						((FieldAdapter<Boolean>) state.alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DUE));
+					}
+					if (!state.hasStart)
+					{
+						((FieldAdapter<Boolean>) state.alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DTSTART));
+					}
+				}
+				return object;
+			};
+		});
+
+	private final static ElementDescriptor<DataKind> XML_DATAKIND = ElementDescriptor.register(QualifiedName.get(NAMESPACE, "datakind"),
+		new AbstractObjectBuilder<DataKind>()
+		{
+			public DataKind get(ElementDescriptor<DataKind> descriptor, DataKind recycle, ParserContext context) throws XmlObjectPullParserException
+			{
+				if (recycle != null)
+				{
+					recycle.recycle();
+					return recycle;
+				}
+
+				return new DataKind();
+			};
+
+
+			public DataKind update(ElementDescriptor<DataKind> descriptor, DataKind object, QualifiedName attribute, String value, ParserContext context)
+				throws XmlObjectPullParserException
+			{
+				if (attribute == ATTR_KIND)
+				{
+					object.datakind = value;
+				}
+				else if (attribute == ATTR_HIDECHECKLIST)
+				{
+					object.hideCheckList = Boolean.parseBoolean(value);
+				}
+				return object;
+			};
+		});
 
 	private final PackageManager mPackageManager;
 	private final String mPackageName;
@@ -117,91 +287,10 @@ public class XmlModel extends Model
 				R.layout.text_field_view_nodivider_small).setOption(LayoutDescriptor.OPTION_NO_TITLE, true).setOption(
 				LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, true)));
 
-			int eventType;
-
-			// find first tag
-			do
-			{
-				eventType = parser.next();
-			} while (eventType != XmlResourceParser.END_DOCUMENT && eventType != XmlResourceParser.START_TAG);
-
-			if (!"TaskSource".equals(parser.getName()) || !NAMESPACE.equals(parser.getNamespace()))
+			XmlObjectPull pullParser = new XmlObjectPull(parser);
+			if (pullParser.pull(XML_MODEL_DESCRIPTOR, this, new XmlPath()) == null)
 			{
 				throw new ModelInflaterException("Invalid model definition in " + mPackageName + ": root node must be 'TaskSource'");
-			}
-
-			setAllowRecurrence(parser.getAttributeBooleanValue(null, "allowRecurrence", false));
-			setAllowExceptions(parser.getAttributeBooleanValue(null, "allowExceptions", false));
-
-			if (parser.getAttributeIntValue(null, "iconId", -1) != -1)
-			{
-				setIconId(parser.getAttributeIntValue(null, "iconId", -1));
-			}
-			if (parser.getAttributeIntValue(null, "labelId", -1) != -1)
-			{
-				setLabelId(parser.getAttributeIntValue(null, "labelId", -1));
-			}
-
-			int depth = 1;
-
-			boolean hasDue = false;
-			boolean hasStart = false;
-
-			FieldDescriptor alldayDescriptor = null;
-
-			eventType = parser.next();
-			while (eventType != XmlResourceParser.END_DOCUMENT)
-			{
-				if (eventType == XmlResourceParser.START_TAG)
-				{
-					depth++;
-					Log.v(TAG, "'" + parser.getName() + "'   " + depth);
-					if (depth == 2 && "datakind".equals(parser.getName()) && NAMESPACE.equals(parser.getNamespace()))
-					{
-						// TODO: let inflateField step forward till the end tag
-						FieldDescriptor descriptor = inflateField(parser);
-						mFields.add(descriptor);
-
-						FieldAdapter<?> fa = descriptor.getFieldAdapter();
-						if (fa instanceof BooleanFieldAdapter && Tasks.IS_ALLDAY.equals(((BooleanFieldAdapter) fa).getFieldName()))
-						{
-							alldayDescriptor = descriptor;
-						}
-						else if (fa == TaskFieldAdapters.DUE)
-						{
-							hasDue = true;
-						}
-						else if (fa == TaskFieldAdapters.DTSTART)
-						{
-							hasStart = true;
-						}
-					}
-				}
-				else if (eventType == XmlResourceParser.END_TAG)
-				{
-					depth--;
-				}
-				else
-				{
-					throw new ModelInflaterException("Invalid tag " + parser.getName() + " " + mPackageName);
-				}
-
-				eventType = parser.next();
-			}
-
-			if (alldayDescriptor != null)
-			{
-				if (!hasDue)
-				{
-					// no due date descriptor present, ensure we update keep the all-day flag in sync
-					((FieldAdapter<Boolean>) alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DUE));
-				}
-
-				if (!hasStart)
-				{
-					// no start date descriptor present, ensure we update keep the all-day flag in sync
-					((FieldAdapter<Boolean>) alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DTSTART));
-				}
 			}
 
 		}
@@ -237,29 +326,8 @@ public class XmlModel extends Model
 		return null;
 	}
 
-
 	/**
-	 * Inflate the current field.
-	 * 
-	 * @param parser
-	 *            A parser that points to a datakind.
-	 * @return A {@link FieldDescriptor} for the field.
-	 * @throws IllegalDataKindException
-	 */
-	private FieldDescriptor inflateField(XmlResourceParser parser) throws IllegalDataKindException
-	{
-		String kind = parser.getAttributeValue(null, "kind");
-		Log.v(TAG, "inflating kind " + kind);
-		FieldInflater inflater = FIELD_INFLATER_MAP.get(kind);
-		if (inflater == null)
-		{
-			throw new IllegalDataKindException("invalid data kind " + kind);
-		}
-		return inflater.inflate(mContext, mModelContext, parser);
-	}
-
-	/**
-	 * Basic field inflater. It does some default inflating.
+	 * Basic field inflater. It does some default inflating, but also allows customization.
 	 * 
 	 * @author Marten Gajda <marten@dmfs.org>
 	 */
@@ -282,32 +350,32 @@ public class XmlModel extends Model
 		}
 
 
-		public FieldDescriptor inflate(Context context, Context modelContext, XmlResourceParser parser)
+		public FieldDescriptor inflate(Context context, Context modelContext, DataKind kind)
 		{
-			int titleId = parser.getAttributeResourceValue(null, "title_id", -1);
+			int titleId = kind.titleId;
 			FieldDescriptor descriptor;
 			if (titleId != -1)
 			{
-				descriptor = new FieldDescriptor(modelContext, titleId, getContentType(), getFieldAdapter());
+				descriptor = new FieldDescriptor(modelContext, titleId, getContentType(), getFieldAdapter(kind));
 			}
 			else
 			{
-				descriptor = new FieldDescriptor(context, getDefaultTitleId(), getContentType(), getFieldAdapter());
+				descriptor = new FieldDescriptor(context, getDefaultTitleId(), getContentType(), getFieldAdapter(kind));
 			}
-			customizeDescriptor(context, modelContext, descriptor, parser);
+			customizeDescriptor(context, modelContext, descriptor, kind);
 			return descriptor;
 		}
 
 
-		public FieldAdapter<?> getFieldAdapter()
+		public FieldAdapter<?> getFieldAdapter(DataKind kind)
 		{
 			return mAdapter;
 		}
 
 
-		void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+		void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
 		{
-			int hintId = parser.getAttributeResourceValue(null, "hint_id", -1);
+			int hintId = kind.hintId;
 			if (hintId != -1)
 			{
 				descriptor.setHint(modelContext.getString(hintId));
@@ -386,6 +454,8 @@ public class XmlModel extends Model
 			R.layout.text_field_editor));
 		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.string.task_description, R.layout.text_field_view,
 			R.layout.text_field_editor));
+		FIELD_INFLATER_MAP.put("checklist", new FieldInflater(TaskFieldAdapters.CHECKLIST, R.string.task_checklist, R.layout.checklist_field_view,
+			R.layout.checklist_field_editor));
 
 		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater(TaskFieldAdapters.DTSTART, R.string.task_start, R.layout.time_field_view,
 			R.layout.time_field_editor));
@@ -400,9 +470,9 @@ public class XmlModel extends Model
 			R.layout.choices_field_editor)
 		{
 			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
 			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, kind);
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addHiddenChoice(null, context.getString(R.string.status_needs_action), null);
 				aca.addChoice(Tasks.STATUS_NEEDS_ACTION, context.getString(R.string.status_needs_action), null);
@@ -416,9 +486,9 @@ public class XmlModel extends Model
 			R.layout.choices_field_editor)
 		{
 			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
 			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, kind);
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(null, context.getString(R.string.priority_undefined), null);
@@ -439,9 +509,9 @@ public class XmlModel extends Model
 			R.layout.choices_field_editor)
 		{
 			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
 			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, kind);
 
 				ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 				aca.addChoice(null, context.getString(R.string.classification_not_specified), null);
@@ -457,7 +527,7 @@ public class XmlModel extends Model
 		FIELD_INFLATER_MAP.put("allday", new FieldInflater(null, R.string.task_all_day, -1, R.layout.boolean_field_editor)
 		{
 			@Override
-			public FieldAdapter<?> getFieldAdapter()
+			public FieldAdapter<?> getFieldAdapter(DataKind kind)
 			{
 				// return a non-static field adapter because we modify it
 				return new BooleanFieldAdapter(Tasks.IS_ALLDAY);
@@ -467,9 +537,9 @@ public class XmlModel extends Model
 		FIELD_INFLATER_MAP.put("timezone", new FieldInflater(TaskFieldAdapters.TIMEZONE, R.string.task_timezone, -1, R.layout.choices_field_editor)
 		{
 			@Override
-			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, XmlResourceParser parser)
+			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
 			{
-				super.customizeDescriptor(context, modelContext, descriptor, parser);
+				super.customizeDescriptor(context, modelContext, descriptor, kind);
 				TimeZoneChoicesAdapter tzaca = new TimeZoneChoicesAdapter(context);
 				descriptor.setChoices(tzaca);
 			}

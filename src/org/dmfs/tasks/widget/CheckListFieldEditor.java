@@ -43,8 +43,7 @@ import android.widget.EditText;
 
 
 /**
- * Editor widget for checklists. It allows to switch between regular plain text and checklist mode. In checklist mode every line will be prepended by a check
- * box.
+ * Editor widget for check lists.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -192,13 +191,6 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 		{
 			mText.setTextColor(getTextColorFromBackground(customBackgroud));
 		}
-
-		if (list == null || list.size() == 0)
-		{
-			setVisibility(GONE);
-			return;
-		}
-		setVisibility(VISIBLE);
 
 		mBuilding = true;
 
