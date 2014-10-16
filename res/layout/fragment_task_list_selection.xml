@@ -1,23 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/edit_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:padding="8dp" >
+    android:padding="16dp" >
+
+    <LinearLayout
+        android:id="@+id/buttonArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:paddingTop="8dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@android:id/button2"
+            style="@style/dialog_button_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dip"
+            android:text="@android:string/cancel" />
+
+        <TextView
+            android:id="@android:id/button1"
+            style="@style/dialog_button_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accept" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:orientation="vertical" >
+        android:layout_above="@id/buttonArea"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:paddingTop="8dp" >
 
         <ListView
             android:id="@id/android:list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:overScrollFooter="@null"
             android:divider="@null"
             android:dividerHeight="0px"
             android:drawSelectorOnTop="false" />
@@ -29,35 +58,4 @@
             android:text="@string/task_list_selection_empty" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/buttonArea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@android:id/button2"
-            style="@style/dialog_button_secondary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:drawable/btn_default"
-            android:gravity="center"
-            android:text="@android:string/cancel"
-            android:textAppearance="?android:attr/textAppearanceMediumInverse" />
-
-        <TextView
-            android:id="@android:id/button1"
-            style="@style/dialog_button_primary"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:drawable/btn_default"
-            android:enabled="false"
-            android:gravity="center"
-            android:text="@android:string/ok"
-            android:textAppearance="?android:attr/textAppearanceMediumInverse" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

@@ -197,5 +197,8 @@
     <string name="dashclock_display_type_start">Startende Aufgaben</string>
     <string name="dashclock_display_type_start_and_due">Startende und fällige Aufgaben</string>
     <string name="dashclock_preference_title">DashClock Aufgaben Einstellungen</string>
+    
+      <!-- General -->
+   <string name="accept">Übernehmen</string>
 
 </resources>

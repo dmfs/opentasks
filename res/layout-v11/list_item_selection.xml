@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.dmfs.tasks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="8dip"
-    android:paddingBottom="8dip">
+    android:paddingBottom="8dip"
+    android:paddingTop="8dip" >
 
     <RelativeLayout
         android:id="@+id/list_color_layout"
@@ -13,18 +14,15 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dip" >
 
-        <View
-            android:id="@+id/color_view"
-            android:layout_width="48dip"
-            android:layout_height="48dip"
-            android:layout_centerInParent="true"
-            android:background="@drawable/shape_color_circle" />
-
-        <CheckBox
+        <org.dmfs.android.widgets.ColoredShapeCheckBox
             android:id="@android:id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:checked="true"
+            android:clickable="false"
+            android:focusable="false"
+            app:backgroundShape="@drawable/rect_shape" />
     </RelativeLayout>
 
     <LinearLayout
@@ -40,14 +38,16 @@
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="text1"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textAppearance="@android:style/TextAppearance.Medium" />
 
         <TextView
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="text2"
+            android:maxLines="1"
+            android:singleLine="true"
             android:textAppearance="@android:style/TextAppearance.Small" />
     </LinearLayout>
 

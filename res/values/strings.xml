@@ -201,5 +201,8 @@
     <string name="dashclock_display_type_start">starting tasks</string>
     <string name="dashclock_display_type_start_and_due">starting and due tasks</string>
     <string name="dashclock_preference_title">Task DashClock Preferences</string>
+    
+    <!-- General -->
+   <string name="accept">Accept</string>
 
 </resources>
