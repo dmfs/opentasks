@@ -1,21 +1,52 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    android:windowMinWidthMajor="@android:dimen/dialog_min_width_major" >
+    android:padding="16dp" >
+
+    <LinearLayout
+        android:id="@+id/buttonArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:paddingTop="8dip"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@android:id/button2"
+            style="@style/dialog_button_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dip"
+            android:text="@android:string/cancel" />
+
+        <TextView
+            android:id="@android:id/button1"
+            style="@style/dialog_button_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/accept" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/buttonArea"
+        android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:padding="24dp" >
+        android:paddingTop="8dp" >
 
         <ListView
             android:id="@id/android:list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:overScrollFooter="@null"
             android:divider="@null"
             android:dividerHeight="0px"
             android:drawSelectorOnTop="false" />
@@ -23,43 +54,8 @@
         <TextView
             android:id="@id/android:empty"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="@string/task_list_selection_empty" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:gravity="center|right"
-        android:orientation="horizontal"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp" >
-
-        <Button
-            android:id="@android:id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:minHeight="36dp"
-            android:minWidth="88dp"
-            android:text="@string/task_list_selection_cancel"
-            android:textAllCaps="true"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@android:id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:minHeight="36dp"
-            android:minWidth="88dp"
-            android:textAllCaps="true"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

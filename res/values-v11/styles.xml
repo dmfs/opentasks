@@ -101,10 +101,12 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:textColor">@color/holo_blue_light</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:padding">16dp</item>
+        <item name="android:padding">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">false</item>
+        <item name="android:minWidth">88dp</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="dialog_button_secondary" parent="dialog_button_primary">
@@ -113,7 +115,7 @@
 
     <style name="dialog_button_stacked_primary" parent="dialog_button_primary">
         <item name="android:gravity">right</item>
-        <item name="android:padding">12dp</item>
+        <item name="android:padding">8dp</item>
     </style>
 
     <style name="dialog_button_stacked_secondary" parent="dialog_button_stacked_primary">

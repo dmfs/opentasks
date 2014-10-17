@@ -19,18 +19,16 @@ package org.dmfs.tasks.utils;
 
 import java.util.ArrayList;
 
+import org.dmfs.android.widgets.ColoredShapeCheckBox;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -76,6 +74,13 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 			mTaskColorColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_COLOR);
 			mTaskNameColumn = c.getColumnIndex(TaskContract.TaskListColumns.LIST_NAME);
 			mAccountNameColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
+
+			c.moveToPosition(-1);
+			mSelectedLists = new ArrayList<Long>(c.getCount());
+			while (c.moveToNext())
+			{
+				mSelectedLists.add(c.getLong(mIdColumn));
+			}
 		}
 		return result;
 	}
@@ -99,6 +104,8 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
+
+		Cursor cursor = (Cursor) getItem(position);
 		if (convertView == null)
 		{
 			convertView = mInflater.inflate(R.layout.list_item_selection, null);
@@ -106,9 +113,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 
 		TextView tvListName = (TextView) convertView.findViewById(android.R.id.text1);
 		TextView tvAccountName = (TextView) convertView.findViewById(android.R.id.text2);
-		CheckBox cBox = (CheckBox) convertView.findViewById(android.R.id.checkbox);
-		View colorView = convertView.findViewById(R.id.color_view);
-		Cursor cursor = (Cursor) getItem(position);
+		final ColoredShapeCheckBox cBox = (ColoredShapeCheckBox) convertView.findViewById(android.R.id.checkbox);
 
 		final String listName = cursor.getString(mTaskNameColumn);
 		final String accountName = cursor.getString(mAccountNameColumn);
@@ -117,20 +122,27 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 		tvListName.setText(listName);
 		tvAccountName.setText(accountName);
 		int taskListColor = cursor.getInt(mTaskColorColumn);
-
-		((GradientDrawable) colorView.getBackground()).setColor(taskListColor);
+		cBox.setColor(taskListColor);
+		cBox.setChecked(mSelectedLists.contains(id));
 
 		// listen for checkbox
-		cBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
+		convertView.setOnClickListener(new OnClickListener()
 		{
+
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			public void onClick(View view)
 			{
+				boolean isChecked = !cBox.isChecked();
+				cBox.setChecked(isChecked);
 				int oldSize = mSelectedLists.size();
 
 				if (isChecked)
 				{
-					mSelectedLists.add(id);
+					if (!mSelectedLists.contains(id))
+					{
+						mSelectedLists.add(id);
+					}
+
 				}
 				else
 				{
@@ -150,6 +162,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 				}
 			}
 		});
+
 		return convertView;
 	}
 

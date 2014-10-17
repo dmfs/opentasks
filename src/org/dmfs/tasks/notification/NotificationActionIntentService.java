@@ -20,8 +20,12 @@ package org.dmfs.tasks.notification;
 import java.util.ArrayList;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
+import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
 
+import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
@@ -31,6 +35,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Parcel;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.app.NotificationManagerCompat;
@@ -72,6 +78,7 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	@Override
 	protected void onHandleIntent(Intent intent)
 	{
@@ -79,6 +86,7 @@ public class NotificationActionIntentService extends IntentService
 		mTasksUri = Tasks.getContentUri(mAuthority);
 
 		final String action = intent.getAction();
+		final Context context = this;
 
 		if (intent.hasExtra(EXTRA_TASK_ID) && intent.hasExtra(EXTRA_NOTIFICATION_ID))
 		{
@@ -113,10 +121,84 @@ public class NotificationActionIntentService extends IntentService
 					time.normalize(true);
 					delayTask(taskId, time.toMillis(true), tz);
 				}
+
 			}
 
 		}
+		else if (intent.hasExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION))
+		{
 
+			/*
+			 * Grab the alarm from the intent. Since the remote AlarmManagerService fills in the Intent to add some extra data, it must unparcel the
+			 * NotificationAction object. It throws a ClassNotFoundException when unparcelling. To avoid this, do the marshalling ourselves.
+			 */
+			final NotificationAction notificationAction;
+			final byte[] data = intent.getByteArrayExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION);
+			if (data != null)
+			{
+				final Parcel in = Parcel.obtain();
+				in.unmarshall(data, 0, data.length);
+				in.setDataPosition(0);
+				notificationAction = NotificationAction.CREATOR.createFromParcel(in, NotificationAction.class.getClassLoader());
+			}
+			else
+			{
+				return;
+			}
+
+			if (NotificationActionUtils.ACTION_UNDO.equals(action))
+			{
+				NotificationActionUtils.cancelUndoTimeout(context, notificationAction);
+				NotificationActionUtils.cancelUndoNotification(context, notificationAction);
+				resendNotification(notificationAction);
+			}
+			else if (ACTION_COMPLETE.equals(action))
+			{
+				// All we need to do is switch to an Undo notification
+				NotificationActionUtils.createUndoNotification(context, notificationAction);
+				NotificationActionUtils.registerUndoTimeout(this, notificationAction);
+			}
+			else
+			{
+				if (NotificationActionUtils.ACTION_UNDO_TIMEOUT.equals(action) || NotificationActionUtils.ACTION_DESTRUCT.equals(action))
+				{
+					// Process the action
+					NotificationActionUtils.cancelUndoTimeout(this, notificationAction);
+					NotificationActionUtils.processUndoNotification(this, notificationAction);
+					processDesctructiveNotification(notificationAction);
+				}
+			}
+		}
+
+	}
+
+
+	private void processDesctructiveNotification(NotificationAction notificationAction)
+	{
+		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
+		{
+			markCompleted(notificationAction.getTaskId());
+		}
+
+	}
+
+
+	private void resendNotification(NotificationAction notificationAction)
+	{
+		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
+		{
+			// Due broadcast
+			Intent dueIntent = new Intent(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM);
+			dueIntent.setPackage(getApplicationContext().getPackageName());
+			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, notificationAction.getWhen());
+			sendBroadcast(dueIntent);
+
+			// Start broadcast
+			Intent startIntent = new Intent(StartAlarmBroadcastHandler.BROADCAST_START_ALARM);
+			startIntent.setPackage(getApplicationContext().getPackageName());
+			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, notificationAction.getWhen());
+			sendBroadcast(startIntent);
+		}
 	}
 
 
@@ -166,6 +248,12 @@ public class NotificationActionIntentService extends IntentService
 			Log.e(TAG, "Unable to delay task: " + taskId);
 			e.printStackTrace();
 		}
+	}
+
+
+	public static Action getCompleteAction(Context context, PendingIntent intent)
+	{
+		return new Action(R.drawable.no_image, context.getString(R.string.notification_action_complete), intent);
 	}
 
 

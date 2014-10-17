@@ -170,8 +170,11 @@
     <string name="notification_task_due_date">Aufgabe fällig am %1s</string>
     <string name="notification_task_start_date">Aufgabe beginnt am %1s</string>
     <string name="notification_action_complete">erledigt</string>
+    <string name="notification_action_completed">erledigt</string>
     <string name="notification_action_delay_1h">+1 Stunde</string>
     <string name="notification_action_delay_1d">+1 Tag</string>
+    <string name="notification_action_delay_toast">Fälligkeitsdatum aktualisiert</string>
+    <string name="notification_undo">Rückgänging</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 Stunde</string>
@@ -194,5 +197,8 @@
     <string name="dashclock_display_type_start">Startende Aufgaben</string>
     <string name="dashclock_display_type_start_and_due">Startende und fällige Aufgaben</string>
     <string name="dashclock_preference_title">DashClock Aufgaben Einstellungen</string>
+    
+      <!-- General -->
+   <string name="accept">Übernehmen</string>
 
 </resources>
