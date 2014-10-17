@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/edit_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,13 +8,34 @@
     android:padding="16dp" >
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ListView
+            android:id="@id/android:list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="0px"
+            android:drawSelectorOnTop="false"
+            android:overScrollFooter="@null" />
+
+        <TextView
+            android:id="@id/android:empty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/task_list_selection_empty" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/buttonArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="right"
-        android:paddingTop="8dip"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingTop="8dip" >
 
         <TextView
             android:id="@android:id/button2"
@@ -32,30 +53,4 @@
             android:text="@string/accept" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonArea"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:paddingTop="8dp" >
-
-        <ListView
-            android:id="@id/android:list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:overScrollFooter="@null"
-            android:divider="@null"
-            android:dividerHeight="0px"
-            android:drawSelectorOnTop="false" />
-
-        <TextView
-            android:id="@id/android:empty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/task_list_selection_empty" />
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

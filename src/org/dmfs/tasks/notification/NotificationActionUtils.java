@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -61,7 +62,7 @@ public class NotificationActionUtils
 
 	private final static int NOTIFICATION_DATE_FORMAT = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
 
-	private static long TIMEOUT_MILLIS = 5000;
+	private static long TIMEOUT_MILLIS = 10000;
 	private static long sUndoTimeoutMillis = -1;
 
 	/**
@@ -112,17 +113,20 @@ public class NotificationActionUtils
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// add actions
-		if (!dueAllDay)
+		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
-		}
-		mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
+			if (!dueAllDay)
+			{
+				mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
+			}
+			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
 
-		// complete action
-		NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE,
-			context.getString(R.string.notification_action_completed), R.string.notification_action_completed, notificationId, taskId, dueDate);
-		mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
-			NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			// complete action
+			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+				notificationId, taskId, dueDate);
+			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
+				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+		}
 		mBuilder.setWhen(dueDate);
 		mBuilder.setContentIntent(resultPendingIntent);
 
@@ -154,10 +158,14 @@ public class NotificationActionUtils
 		mBuilder.setWhen(startDate);
 
 		// add actions
-		NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE,
-			context.getString(R.string.notification_action_completed), R.string.notification_action_completed, notificationId, taskId, startDate);
-		mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
-			NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
+		{
+			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+				notificationId, taskId, startDate);
+			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
+				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+
+		}
 
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(Intent.ACTION_VIEW);
@@ -196,7 +204,9 @@ public class NotificationActionUtils
 	public static void createUndoNotification(final Context context, NotificationAction action)
 	{
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-		builder.setContentTitle(action.getActionTitle());
+		builder.setContentTitle(context.getString(action.getActionTextResId()
+
+		));
 		builder.setSmallIcon(R.drawable.ic_notification_completed);
 		builder.setWhen(action.getWhen());
 
@@ -348,18 +358,16 @@ public class NotificationActionUtils
 	public static class NotificationAction implements Parcelable
 	{
 		private String mActionType;
-		private final String mActionTitle;
 		private final int mActionTextResId;
 		private final int mNotificationId;
 		private final long mTaskId;
 		private final long mWhen;
 
 
-		public NotificationAction(String actionType, String actionTitle, int actionTextResId, int notificationId, long taskId, long when)
+		public NotificationAction(String actionType, int actionTextResId, int notificationId, long taskId, long when)
 		{
 			mActionType = actionType;
 			mActionTextResId = actionTextResId;
-			mActionTitle = actionTitle;
 			mNotificationId = notificationId;
 			mTaskId = taskId;
 			mWhen = when;
@@ -377,7 +385,6 @@ public class NotificationActionUtils
 		public void writeToParcel(final Parcel out, final int flags)
 		{
 			out.writeString(mActionType);
-			out.writeString(mActionTitle);
 			out.writeInt(mActionTextResId);
 			out.writeInt(mNotificationId);
 			out.writeLong(mTaskId);
@@ -411,7 +418,6 @@ public class NotificationActionUtils
 		private NotificationAction(final Parcel in, final ClassLoader loader)
 		{
 			mActionType = in.readString();
-			mActionTitle = in.readString();
 			mActionTextResId = in.readInt();
 			mNotificationId = in.readInt();
 			mTaskId = in.readLong();
@@ -422,12 +428,6 @@ public class NotificationActionUtils
 		public String getActionType()
 		{
 			return mActionType;
-		}
-
-
-		public String getActionTitle()
-		{
-			return mActionTitle;
 		}
 
 

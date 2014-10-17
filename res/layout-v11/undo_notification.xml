@@ -67,7 +67,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="4dip"
-            android:src="@drawable/ic_history" />
+            android:src="@drawable/ic_menu_revert_holo_dark" />
 
         <TextView
       		android:textColor="@android:color/white"
