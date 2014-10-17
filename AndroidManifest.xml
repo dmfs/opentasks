@@ -143,7 +143,7 @@
         </activity>
         
         <activity android:name="org.dmfs.tasks.homescreen.TaskListWidgetSettingsActivity"
-             android:theme="@style/Theme.Dialog"
+             android:theme="@style/Theme.MaterialDialog"
              android:label="@string/task_list_selection_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
