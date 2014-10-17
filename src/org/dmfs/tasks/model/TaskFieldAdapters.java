@@ -20,6 +20,8 @@ package org.dmfs.tasks.model;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
+import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
+import org.dmfs.tasks.model.adapters.DescriptionStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
@@ -88,8 +90,13 @@ public final class TaskFieldAdapters
 	/**
 	 * Adapter for the description of a task.
 	 */
-	public final static StringFieldAdapter DESCRIPTION = (StringFieldAdapter) new StringFieldAdapter(Tasks.DESCRIPTION).addContraint(new ChecklistConstraint(
-		STATUS, PERCENT_COMPLETE));
+	public final static DescriptionStringFieldAdapter DESCRIPTION = new DescriptionStringFieldAdapter(Tasks.DESCRIPTION);
+
+	/**
+	 * Adapter for the checklist of a task.
+	 */
+	public final static ChecklistFieldAdapter CHECKLIST = (ChecklistFieldAdapter) new ChecklistFieldAdapter(Tasks.DESCRIPTION)
+		.addContraint(new ChecklistConstraint(STATUS, PERCENT_COMPLETE));
 
 	/**
 	 * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.

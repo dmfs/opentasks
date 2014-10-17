@@ -28,7 +28,7 @@ import android.database.Cursor;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class StringFieldAdapter extends FieldAdapter<String>
+public class StringFieldAdapter extends FieldAdapter<String>
 {
 
 	/**

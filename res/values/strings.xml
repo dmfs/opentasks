@@ -46,6 +46,7 @@
     <string name="task_title">Title</string>
     <string name="task_location">Location</string>
     <string name="task_description">Description</string>
+    <string name="task_checklist">Check list</string>
     <string name="task_start">Start</string>
     <string name="task_due">Due</string>
     <string name="task_completed">Completed</string>

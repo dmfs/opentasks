@@ -19,16 +19,6 @@
             android:singleLine="true" />
     </LinearLayout>
 
-    <EditText
-        android:id="@android:id/text1"
-        style="@style/field_editor_text_value"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:singleLine="false"
-        android:textAllCaps="false" >
-    </EditText>
-
     <LinearLayout
         android:id="@+id/checklist"
         android:layout_width="match_parent"
