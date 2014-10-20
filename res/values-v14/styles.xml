@@ -20,9 +20,10 @@
         <item name="android:icon">@android:color/transparent</item>
     </style>
 
-    <style name="actionBarWidgetTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+    <style name="actionBarWidgetTheme" parent="@android:style/Theme.Holo">
         <item name="android:textColorHint">#80ffffff</item>
-    </style>
+        <item name="android:textColor">#ffffffff</item>
+        </style>
 
     <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 
