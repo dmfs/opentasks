@@ -301,6 +301,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 					// value equals before value, so remove it from after values
 					mAfterContentValues.remove(key);
 					mAfterKeys.remove(key);
+					notifyUpdateListeners(key);
 					return;
 				}
 			}
@@ -336,6 +337,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 					// value equals before value, so remove it from after values
 					mAfterContentValues.remove(key);
 					mAfterKeys.remove(key);
+					notifyUpdateListeners(key);
 					return;
 				}
 			}
@@ -370,6 +372,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 					// value equals before value, so remove it from after values
 					mAfterContentValues.remove(key);
 					mAfterKeys.remove(key);
+					notifyUpdateListeners(key);
 					return;
 				}
 			}
@@ -404,6 +407,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 					// value equals before value, so remove it from after values
 					mAfterContentValues.remove(key);
 					mAfterKeys.remove(key);
+					notifyUpdateListeners(key);
 					return;
 				}
 			}
