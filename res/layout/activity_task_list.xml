@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.dmfs.tasks"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -10,14 +11,27 @@
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="48dip"
+        android:background="?attr/primaryColor"
+        app:pstsIndicatorColor="@android:color/white"
         app:pstsShouldExpand="true"
-        app:pstsTabPaddingLeftRight="0dp" />
+        app:pstsTabPaddingLeftRight="0dp"
+        app:pstsUnderlineColor="@android:color/transparent" />
 
-    <android.support.v4.view.ViewPager
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/pager"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity" />
+        android:layout_height="match_parent" >
+
+        <android.support.v4.view.ViewPager
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".MainActivity" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/window_overlay" />
+    </FrameLayout>
 
 </LinearLayout>

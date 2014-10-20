@@ -1,7 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
-        <item name="primaryColor">#333</item>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="DetailsTheme" parent="AppTheme">
@@ -56,8 +56,8 @@
     </style>
 
     <style name="task_group_text">
-        <item name="android:textColor" tools:targetApi="14">@color/holo_blue_dark</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor" tools:targetApi="14">@color/darker_gray</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
 
     <style name="task_list_item_text" parent="android:attr/textAppearanceMedium">

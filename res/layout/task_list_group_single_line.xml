@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff0f0f0"
-    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingBottom="16dp"
     android:paddingLeft="@dimen/task_list_left_margin"
-    android:paddingRight="@dimen/task_list_right_margin" >
+    android:paddingRight="@dimen/task_list_right_margin"
+    android:paddingTop="16dp" >
 
     <TextView
         android:id="@android:id/title"

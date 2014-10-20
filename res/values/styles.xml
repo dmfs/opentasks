@@ -1,7 +1,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme">
+    <style name="AppBaseTheme" parent="android:Theme"></style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:textColor">#FF333333</item>
+        <item name="primaryColor">#ff9800</item>
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
 
@@ -168,7 +171,7 @@
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
     </style>
-    
+
     <style name="dialog_button_primary" parent="android:Widget.Button">
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:textSize">16sp</item>

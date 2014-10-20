@@ -1,11 +1,16 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar"></style>
-
-    <style name="DetailsTheme" parent="AppTheme">
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:actionBarStyle">@style/DetailsActionBar</item>
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="android:actionBarWidgetTheme">@style/actionBarWidgetTheme</item>
+    </style>
+
+    <!-- ActionBar styles -->
+    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">?attr/primaryColor</item>
+        <item name="android:displayOptions">showTitle</item>
+        <item name="android:icon">@android:color/transparent</item>
     </style>
 
     <!-- ActionBar styles -->
@@ -13,6 +18,10 @@
         <item name="android:background">#00000000</item>
         <item name="android:displayOptions">showTitle</item>
         <item name="android:icon">@android:color/transparent</item>
+    </style>
+
+    <style name="actionBarWidgetTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:textColorHint">#80ffffff</item>
     </style>
 
     <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
@@ -65,8 +74,8 @@
     <style name="widget_header_divider">
         <item name="android:background">@android:color/holo_blue_bright</item>
     </style>
-    
-     <style name="dialog_button_primary" parent="android:Widget.Holo.Light.TextView">
+
+    <style name="dialog_button_primary" parent="android:Widget.Holo.Light.TextView">
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:textColor">@color/holo_blue_light</item>
