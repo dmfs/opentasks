@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dip"
         android:background="?attr/primaryColor"
+        app:pstsDividerColor="#a0ffffff"
         app:pstsIndicatorColor="@android:color/white"
         app:pstsShouldExpand="true"
         app:pstsTabPaddingLeftRight="0dp"
