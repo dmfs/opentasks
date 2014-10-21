@@ -34,10 +34,8 @@
     <!-- date & time string -->
     <string name="today">Today</string>
     <string name="today_with_time">Today, %1$s</string>
-    <string name="today_with_full_date">%1$s (Today)</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="tomorrow_with_time">Tomorrow, %1$s</string>
-    <string name="tomorrow_with_full_date">%1$s (Tomorrow)</string>
 
     <!-- Task detail view -->
     <string name="activity_task_details_edit">Edit</string>

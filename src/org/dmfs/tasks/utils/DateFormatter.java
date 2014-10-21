@@ -47,6 +47,18 @@ public class DateFormatter
 
 	public enum DateFormatContext
 	{
+
+		/**
+		 * Always uses a relative date. Use this when the date is with the past or next 6 days, otherwise you might get an absolute date.
+		 */
+		RELATIVE {
+			@Override
+			public boolean useRelative(Time now, Time date)
+			{
+				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+			}
+		},
+
 		/**
 		 * The date format in the details view.
 		 */
@@ -54,7 +66,7 @@ public class DateFormatter
 			@Override
 			public int getTodayStringId(Time date)
 			{
-				return R.string.today_with_full_date;
+				return 0;
 
 			}
 
@@ -62,7 +74,7 @@ public class DateFormatter
 			@Override
 			public int getTomorrowStringId(Time date)
 			{
-				return R.string.tomorrow_with_full_date;
+				return 0;
 			}
 
 
@@ -86,14 +98,26 @@ public class DateFormatter
 		 * 
 		 * Currently this inherits the default short format.
 		 */
-		LIST_VIEW,
+		LIST_VIEW {
+			@Override
+			public boolean useRelative(Time now, Time date)
+			{
+				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+			}
+		},
 
 		/**
 		 * The date format in the widget.
 		 * 
 		 * Currently this inherits the default short format.
 		 */
-		WIDGET_VIEW,
+		WIDGET_VIEW {
+			@Override
+			public boolean useRelative(Time now, Time date)
+			{
+				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+			}
+		},
 
 		/**
 		 * The date format in the dash clock. This shows a time only.
@@ -189,6 +213,12 @@ public class DateFormatter
 					| DateUtils.FORMAT_ABBREV_WEEKDAY;
 			}
 		}
+
+
+		public boolean useRelative(Time now, Time date)
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -234,6 +264,20 @@ public class DateFormatter
 		date.normalize(false);
 
 		boolean isToday = date.year == mNow.year && date.yearDay == mNow.yearDay;
+
+		if (dateContext.useRelative(mNow, date))
+		{
+			if (date.allDay)
+			{
+				Time allDayNow = new Time("UTC");
+				allDayNow.set(mNow.monthDay, mNow.month, mNow.year);
+				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), allDayNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
+			}
+			else
+			{
+				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
+			}
+		}
 
 		if (isToday)
 		{
