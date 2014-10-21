@@ -31,7 +31,8 @@ import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.TimeChangeListener;
 import org.dmfs.tasks.utils.TimeChangeObserver;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
@@ -134,7 +135,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		private Resources mResources;
 
 		/** The due date formatter. */
-		private DueDateFormatter mDueDateFormatter;
+		private DateFormatter mDueDateFormatter;
 
 		/**
 		 * The executor to reload the tasks.
@@ -157,7 +158,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			mContext = context;
 			mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 			mResources = context.getResources();
-			mDueDateFormatter = new DueDateFormatter(context);
+			mDueDateFormatter = new DateFormatter(context);
 			new TimeChangeObserver(context, this);
 			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
 		}
@@ -249,13 +250,17 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				}
 				mNow.clear(TimeZone.getDefault().getID());
 				mNow.setToNow();
+				dueDate.normalize(true);
+				mNow.normalize(true);
 
-				row.setTextViewText(android.R.id.text1, mDueDateFormatter.format(dueDate));
+				row.setTextViewText(android.R.id.text1, mDueDateFormatter.format(dueDate, DateFormatContext.WIDGET_VIEW));
 
 				// highlight overdue dates & times
-				if (dueDate.before(mNow) & !items[position].getIsClosed())
+				if ((!dueDate.allDay && dueDate.before(mNow) || dueDate.allDay
+					&& (dueDate.year < mNow.year || dueDate.yearDay <= mNow.yearDay && dueDate.year == mNow.year))
+					&& !items[position].getIsClosed())
 				{
-					row.setTextColor(android.R.id.text1, mResources.getColor(android.R.color.holo_red_light));
+					row.setTextColor(android.R.id.text1, mResources.getColor(R.color.holo_red_light));
 				}
 				else
 				{

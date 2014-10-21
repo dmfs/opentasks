@@ -21,7 +21,8 @@ import java.util.HashMap;
 import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.ObservableSparseArrayCompat;
 
 import android.annotation.TargetApi;
@@ -39,7 +40,6 @@ import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 
@@ -59,8 +59,6 @@ public class NotificationActionUtils
 	public final static String ACTION_UNDO_TIMEOUT = "org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT";
 
 	public final static String EXTRA_NOTIFICATION_ACTION = "org.dmfs.tasks.extra.notification.EXTRA_NOTIFICATION_ACTION";
-
-	private final static int NOTIFICATION_DATE_FORMAT = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
 
 	private static long TIMEOUT_MILLIS = 10000;
 	private static long sUndoTimeoutMillis = -1;
@@ -84,7 +82,7 @@ public class NotificationActionUtils
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		String dueString = context.getString(R.string.notification_task_due_date,
-			new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(dueDate, dueAllDay), false));
+			new DateFormatter(context).format(makeTime(dueDate, dueAllDay), DateFormatContext.NOTIFICATION_VIEW));
 
 		// build notification
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
@@ -137,7 +135,7 @@ public class NotificationActionUtils
 	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long startDate, boolean startAllDay)
 	{
 		String startString = context.getString(R.string.notification_task_start_date,
-			new DueDateFormatter(context, NOTIFICATION_DATE_FORMAT).format(makeTime(startDate, startAllDay), false));
+			new DateFormatter(context).format(makeTime(startDate, startAllDay), DateFormatContext.NOTIFICATION_VIEW));
 
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 

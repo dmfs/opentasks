@@ -29,6 +29,8 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -80,22 +82,27 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 	private TextView mAddOneHourButton;
 	private TextView mAddOneDayButton;
 
+	private final DateFormatter mDateFormatter;
+
 
 	public TimeFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
+		mDateFormatter = new DateFormatter(context);
 	}
 
 
 	public TimeFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		mDateFormatter = new DateFormatter(context);
 	}
 
 
 	public TimeFieldView(Context context)
 	{
 		super(context);
+		mDateFormatter = new DateFormatter(context);
 	}
 
 
@@ -146,7 +153,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 				mDefaultTimeFormat.setTimeZone(mDefaultTimeZone);
 				TimeZoneWrapper taskTimeZone = new TimeZoneWrapper(newValue.timezone);
 
-				formattedTime = mDefaultDateFormat.format(fullDate) + " " + mDefaultTimeFormat.format(fullDate);
+				formattedTime = mDateFormatter.format(newValue, DateFormatContext.DETAILS_VIEW);
 
 				if (!taskTimeZone.equals(mDefaultTimeZone) && mAdapter.hasTimeZoneField() && mTimeZoneText != null)
 				{
@@ -174,8 +181,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 				{
 					mTimeZoneText.setVisibility(View.GONE);
 				}
-				mDefaultDateFormat.setTimeZone(UTC);
-				formattedTime = mDefaultDateFormat.format(fullDate);
+				formattedTime = mDateFormatter.format(newValue, DateFormatContext.DETAILS_VIEW);
 				mAddOneHourButton.setVisibility(INVISIBLE);
 			}
 			mText.setText(formattedTime);

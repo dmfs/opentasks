@@ -1,0 +1,294 @@
+/*
+ * 
+ *
+ * Copyright (C) 2012 Marten Gajda <marten@dmfs.org>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ */
+
+package org.dmfs.tasks.utils;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Formatter;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import org.dmfs.tasks.R;
+
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.os.Build;
+import android.text.format.DateUtils;
+import android.text.format.Time;
+
+
+/**
+ * Helper class to format a date to present it to the user.
+ * 
+ * @author Tobias Reinsch <tobias@dmfs.org>
+ * @author Marten Gajda <marten@dmfs.org>
+ */
+public class DateFormatter
+{
+
+	public enum DateFormatContext
+	{
+		/**
+		 * The date format in the details view.
+		 */
+		DETAILS_VIEW {
+			@Override
+			public int getTodayStringId(Time date)
+			{
+				return R.string.today_with_full_date;
+
+			}
+
+
+			@Override
+			public int getTomorrowStringId(Time date)
+			{
+				return R.string.tomorrow_with_full_date;
+			}
+
+
+			@Override
+			public int getDateUtilsFlags(Time now, Time date)
+			{
+				if (date.allDay)
+				{
+					return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
+				}
+				else
+				{
+					return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY
+						| DateUtils.FORMAT_SHOW_TIME;
+				}
+			}
+		},
+
+		/**
+		 * The date format in the list view.
+		 * 
+		 * Currently this inherits the default short format.
+		 */
+		LIST_VIEW,
+
+		/**
+		 * The date format in the widget.
+		 * 
+		 * Currently this inherits the default short format.
+		 */
+		WIDGET_VIEW,
+
+		/**
+		 * The date format in the dash clock. This shows a time only.
+		 */
+		DASHCLOCK_VIEW {
+			@Override
+			public int getTodayStringId(Time date)
+			{
+				return 0;
+			}
+
+
+			@Override
+			public int getTomorrowStringId(Time date)
+			{
+				return 0;
+			}
+
+
+			@Override
+			public int getDateUtilsFlags(Time now, Time date)
+			{
+				return DateUtils.FORMAT_SHOW_TIME;
+			}
+		},
+
+		/**
+		 * The date format in notifications.
+		 */
+		NOTIFICATION_VIEW {
+			@Override
+			public int getTodayStringId(Time date)
+			{
+				return 0;
+			}
+
+
+			@Override
+			public int getTomorrowStringId(Time date)
+			{
+				return 0;
+			}
+
+
+			@Override
+			public int getDateUtilsFlags(Time now, Time date)
+			{
+				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
+			}
+		};
+
+		public int getTodayStringId(Time date)
+		{
+			if (date.allDay)
+			{
+				return R.string.today;
+			}
+			else
+			{
+				return R.string.today_with_time;
+			}
+		}
+
+
+		public int getTomorrowStringId(Time date)
+		{
+			if (date.allDay)
+			{
+				return R.string.tomorrow;
+			}
+			else
+			{
+				return R.string.tomorrow_with_time;
+			}
+		}
+
+
+		public int getDateUtilsFlags(Time now, Time date)
+		{
+			if (now.year == date.year && now.yearDay == date.yearDay)
+			{
+				// today, show time only
+				return DateUtils.FORMAT_SHOW_TIME;
+			}
+			else if (now.year == date.year)
+			{
+				// this year, don't include the year
+				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
+			}
+			else
+			{
+				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_WEEKDAY
+					| DateUtils.FORMAT_ABBREV_WEEKDAY;
+			}
+		}
+	}
+
+	/**
+	 * The formatter we use for due dates other than today.
+	 */
+	private final DateFormat mDateFormatter = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
+
+	/**
+	 * A context to load resource string.
+	 */
+	private Context mContext;
+
+	/**
+	 * A helper to get the current date & time.
+	 */
+	private Time mNow;
+
+
+	public DateFormatter(Context context)
+	{
+		mContext = context;
+		mNow = new Time();
+	}
+
+
+	/**
+	 * Format the given due date. The result depends on the current date and on the all-day flag of the due date.
+	 * 
+	 * 
+	 * @param date
+	 *            The due date to format.
+	 * @param useToday
+	 *            <code>true</code> to write "today" instead of the date when the date is on the present day
+	 * @return A string with the formatted due date.
+	 */
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	public String format(Time date, DateFormatContext dateContext)
+	{
+		mNow.clear(TimeZone.getDefault().getID());
+		mNow.setToNow();
+
+		// normalize time to ensure yearDay is set properly
+		date.normalize(false);
+
+		boolean isToday = date.year == mNow.year && date.yearDay == mNow.yearDay;
+
+		if (isToday)
+		{
+			int stringId = dateContext.getTodayStringId(date);
+			if (stringId != 0)
+			{
+				return mContext.getString(stringId, date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext));
+			}
+			else
+			{
+				return date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext);
+
+			}
+		}
+
+		mNow.monthDay += 1;
+		mNow.normalize(true);
+		boolean isTomorrow = date.year == mNow.year && date.yearDay == mNow.yearDay;
+		if (isTomorrow)
+		{
+			int stringId = dateContext.getTomorrowStringId(date);
+			if (stringId != 0)
+			{
+				return mContext.getString(stringId, date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext));
+			}
+			else
+			{
+				return date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext);
+
+			}
+		}
+
+		return date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext);
+	}
+
+
+	@SuppressLint("NewApi")
+	private String formatAllDay(Time date, DateFormatContext dateContext)
+	{
+		// use DataRange in order to set the correct timezone
+		if (Build.VERSION.SDK_INT > 8)
+		{
+			return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), date.toMillis(false), date.toMillis(false),
+				dateContext.getDateUtilsFlags(mNow, date), "UTC").toString();
+		}
+		else
+		{
+			mDateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+			return mDateFormatter.format(new Date(date.toMillis(false)));
+		}
+	}
+
+
+	private String formatNonAllDay(Time date, DateFormatContext dateContext)
+	{
+		return DateUtils.formatDateTime(mContext, date.toMillis(false), dateContext.getDateUtilsFlags(mNow, date));
+	}
+}

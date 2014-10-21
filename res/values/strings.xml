@@ -25,12 +25,19 @@
     <string name="task_group_title_priority">Task priority</string>
     <string name="task_group_title_progress">Task progress</string>
     <string name="task_group_title_default">Tasks</string>
-    
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d task</item>
         <item quantity="other">%d tasks</item>
     </plurals>
+
+    <!-- date & time string -->
+    <string name="today">Today</string>
+    <string name="today_with_time">Today, %1$s</string>
+    <string name="today_with_full_date">%1$s (Today)</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="tomorrow_with_time">Tomorrow, %1$s</string>
+    <string name="tomorrow_with_full_date">%1$s (Tomorrow)</string>
 
     <!-- Task detail view -->
     <string name="activity_task_details_edit">Edit</string>
@@ -78,7 +85,6 @@
     <string name="task_group_due_in_month">Due in %s</string>
     <string name="task_group_due_in_year">Due in %s</string>
     <string name="task_group_due_in_future">Someday</string>
-    <string name="today">Today</string>
 
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Already Started</string>
@@ -153,12 +159,12 @@
     <string name="confirm_delete_message">Delete this task?</string>
     <string name="confirm_delete_message_with_title">Delete \"%1s\"?</string>
     <string name="toast_task_deleted">\"%1s\" removed.</string>
-    
+
     <!-- Strings in the Task List Selection Fragment -->
     <string name="task_list_selection_empty">No task list available</string>
     <string name="task_list_selection_title">Select lists to display</string>
     <string name="task_list_selection_ok">OK</string>
-     <string name="task_list_selection_cancel">CANCEL</string>
+    <string name="task_list_selection_cancel">CANCEL</string>
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Current tasks</string>
@@ -185,8 +191,6 @@
     <string name="notification_action_delay_1d">+1 day</string>
     <string name="notification_action_delay_toast">Due date updated</string>
     <string name="notification_undo">Undo</string>
-    
-    
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 hour</string>
@@ -209,8 +213,8 @@
     <string name="dashclock_display_type_start">starting tasks</string>
     <string name="dashclock_display_type_start_and_due">starting and due tasks</string>
     <string name="dashclock_preference_title">Task DashClock Preferences</string>
-    
+
     <!-- General -->
-   <string name="accept">Accept</string>
+    <string name="accept">Accept</string>
 
 </resources>

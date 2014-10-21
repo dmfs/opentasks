@@ -26,7 +26,8 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import android.content.ContentUris;
 import android.content.Intent;
@@ -74,6 +75,7 @@ public class TasksExtension extends DashClockExtension
 	private String mAuthority;
 	private int mDisplayMode;
 	private long mNow;
+	private DateFormatter mDateFormatter;
 
 
 	@Override
@@ -82,6 +84,8 @@ public class TasksExtension extends DashClockExtension
 		// enable automatic dashclock updates on task changes
 		addWatchContentUris(new String[] { TaskContract.getContentUri(getString(R.string.org_dmfs_tasks_authority)).toString() });
 		super.onInitialize(isReconnect);
+		
+		mDateFormatter = new DateFormatter(this);
 	}
 
 
@@ -178,7 +182,6 @@ public class TasksExtension extends DashClockExtension
 
 	private String getTaskTitleDueString(Cursor c, boolean isAllDay)
 	{
-		DueDateFormatter formatter = new DueDateFormatter(this, DueDateFormatter.TIME_DATEUTILS_FLAGS);
 		if (isAllDay)
 		{
 			return getString(R.string.dashclock_widget_title_due_expanded_allday, c.getString(c.getColumnIndex(Tasks.TITLE)));
@@ -187,7 +190,7 @@ public class TasksExtension extends DashClockExtension
 		{
 			TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DUE, Instances.TZ, Instances.IS_ALLDAY);
 			Time dueTime = timeFieldAdapter.get(c);
-			String dueTimeString = formatter.format(dueTime, false);
+			String dueTimeString = mDateFormatter.format(dueTime, DateFormatContext.DASHCLOCK_VIEW);
 			return getString(R.string.dashclock_widget_title_due_expanded, c.getString(c.getColumnIndex(Tasks.TITLE)), dueTimeString);
 		}
 	}
@@ -195,7 +198,6 @@ public class TasksExtension extends DashClockExtension
 
 	private String getTaskTitleStartString(Cursor c, boolean isAllDay)
 	{
-		DueDateFormatter formatter = new DueDateFormatter(this, DueDateFormatter.TIME_DATEUTILS_FLAGS);
 		if (isAllDay)
 		{
 			return getString(R.string.dashclock_widget_title_start_expanded_allday, c.getString(c.getColumnIndex(Tasks.TITLE)));
@@ -204,7 +206,7 @@ public class TasksExtension extends DashClockExtension
 		{
 			TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY);
 			Time startTime = timeFieldAdapter.get(c);
-			String startTimeString = formatter.format(startTime, false);
+			String startTimeString = mDateFormatter.format(startTime, DateFormatContext.DASHCLOCK_VIEW);
 			return getString(R.string.dashclock_widget_title_start_expanded, c.getString(c.getColumnIndex(Tasks.TITLE)), startTimeString);
 		}
 	}
