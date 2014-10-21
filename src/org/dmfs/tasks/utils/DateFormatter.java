@@ -26,8 +26,6 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.dmfs.tasks.R;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -63,20 +61,6 @@ public class DateFormatter
 		 * The date format in the details view.
 		 */
 		DETAILS_VIEW {
-			@Override
-			public int getTodayStringId(Time date)
-			{
-				return 0;
-
-			}
-
-
-			@Override
-			public int getTomorrowStringId(Time date)
-			{
-				return 0;
-			}
-
 
 			@Override
 			public int getDateUtilsFlags(Time now, Time date)
@@ -123,19 +107,6 @@ public class DateFormatter
 		 * The date format in the dash clock. This shows a time only.
 		 */
 		DASHCLOCK_VIEW {
-			@Override
-			public int getTodayStringId(Time date)
-			{
-				return 0;
-			}
-
-
-			@Override
-			public int getTomorrowStringId(Time date)
-			{
-				return 0;
-			}
-
 
 			@Override
 			public int getDateUtilsFlags(Time now, Time date)
@@ -148,19 +119,6 @@ public class DateFormatter
 		 * The date format in notifications.
 		 */
 		NOTIFICATION_VIEW {
-			@Override
-			public int getTodayStringId(Time date)
-			{
-				return 0;
-			}
-
-
-			@Override
-			public int getTomorrowStringId(Time date)
-			{
-				return 0;
-			}
-
 
 			@Override
 			public int getDateUtilsFlags(Time now, Time date)
@@ -168,32 +126,6 @@ public class DateFormatter
 				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
 			}
 		};
-
-		public int getTodayStringId(Time date)
-		{
-			if (date.allDay)
-			{
-				return R.string.today;
-			}
-			else
-			{
-				return R.string.today_with_time;
-			}
-		}
-
-
-		public int getTomorrowStringId(Time date)
-		{
-			if (date.allDay)
-			{
-				return R.string.tomorrow;
-			}
-			else
-			{
-				return R.string.tomorrow_with_time;
-			}
-		}
-
 
 		public int getDateUtilsFlags(Time now, Time date)
 		{
@@ -263,8 +195,6 @@ public class DateFormatter
 		// normalize time to ensure yearDay is set properly
 		date.normalize(false);
 
-		boolean isToday = date.year == mNow.year && date.yearDay == mNow.yearDay;
-
 		if (dateContext.useRelative(mNow, date))
 		{
 			if (date.allDay)
@@ -276,37 +206,6 @@ public class DateFormatter
 			else
 			{
 				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
-			}
-		}
-
-		if (isToday)
-		{
-			int stringId = dateContext.getTodayStringId(date);
-			if (stringId != 0)
-			{
-				return mContext.getString(stringId, date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext));
-			}
-			else
-			{
-				return date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext);
-
-			}
-		}
-
-		mNow.monthDay += 1;
-		mNow.normalize(true);
-		boolean isTomorrow = date.year == mNow.year && date.yearDay == mNow.yearDay;
-		if (isTomorrow)
-		{
-			int stringId = dateContext.getTomorrowStringId(date);
-			if (stringId != 0)
-			{
-				return mContext.getString(stringId, date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext));
-			}
-			else
-			{
-				return date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext);
-
 			}
 		}
 

@@ -71,7 +71,6 @@
     <string name="task_group_due_in_month">Na miesiąc %s</string>
     <string name="task_group_due_in_year">W roku %s</string>
     <string name="task_group_due_in_future">W przyszłości</string>
-    <string name="today">Dziś</string>
 
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Już rozpoczęte</string>

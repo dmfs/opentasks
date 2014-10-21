@@ -29,11 +29,6 @@
         <item quantity="one">%d Aufgabe</item>
         <item quantity="other">%d Aufgaben</item>
     </plurals>
-    <!-- date & time string -->
-    <string name="today">Heute</string>
-    <string name="today_with_time">Heute, %1$s</string>
-    <string name="tomorrow">Morgen</string>
-    <string name="tomorrow_with_time">Morgen, %1$s</string>
 
     <!-- Task detail view -->
     <string name="activity_task_details_edit">Bearbeiten</string>
