@@ -196,6 +196,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			}
 		}
 
+		updateTitle(currentPageIndex);
+
 		// Bind the tabs to the ViewPager
 		mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		mTabs.setViewPager(mViewPager);
@@ -227,6 +229,8 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 					hideSearchActionView();
 				}
 				mCurrentPageId = newPageId;
+
+				updateTitle(mCurrentPageId);
 			}
 
 
@@ -271,6 +275,33 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
 			detailIntent.setData(uri);
 			startActivity(detailIntent);
+		}
+	}
+
+
+	private void updateTitle(int pageId)
+	{
+		switch (pageId)
+		{
+			case R.id.task_group_by_list:
+				setTitle(R.string.task_group_title_list);
+				break;
+			case R.id.task_group_by_start:
+				setTitle(R.string.task_group_title_start);
+				break;
+			case R.id.task_group_by_due:
+				setTitle(R.string.task_group_title_due);
+				break;
+			case R.id.task_group_by_priority:
+				setTitle(R.string.task_group_title_priority);
+				break;
+			case R.id.task_group_by_progress:
+				setTitle(R.string.task_group_title_progress);
+				break;
+
+			default:
+				setTitle(R.string.task_group_title_default);
+				break;
 		}
 	}
 

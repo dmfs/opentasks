@@ -18,6 +18,12 @@
     <string name="menu_sync_now_condensed">Aktualisieren</string>
     <string name="toast_task_completed">\"%1s\" fertig gestellt.</string>
     <string name="toast_task_uncompleted">\"%1s\" wiedereröffnet.</string>
+     <string name="task_group_title_list">Aufgaben</string>
+    <string name="task_group_title_start">Aufgaben Start</string>
+    <string name="task_group_title_due">Aufgaben fällig</string>
+    <string name="task_group_title_priority">Aufgaben Priorität</string>
+    <string name="task_group_title_progress">Aufgaben Fortschritt</string>
+    <string name="task_group_title_default">Aufgaben</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d Aufgabe</item>

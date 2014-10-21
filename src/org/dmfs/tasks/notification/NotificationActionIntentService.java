@@ -253,28 +253,28 @@ public class NotificationActionIntentService extends IntentService
 
 	public static Action getCompleteAction(Context context, PendingIntent intent)
 	{
-		return new Action(R.drawable.no_image, context.getString(R.string.notification_action_complete), intent);
+		return new Action(R.drawable.ic_notification_action_complete, context.getString(R.string.notification_action_complete), intent);
 	}
 
 
 	public static Action getCompleteAction(Context context, int notificationId, long taskId)
 	{
-		return new Action(R.drawable.no_image, context.getString(R.string.notification_action_complete), getCompleteActionIntent(context, notificationId,
-			taskId));
+		return new Action(R.drawable.ic_notification_action_complete, context.getString(R.string.notification_action_complete), getCompleteActionIntent(
+			context, notificationId, taskId));
 	}
 
 
 	public static Action getDelay1hAction(Context context, int notificationId, long taskId, long due, String timezone)
 	{
-		return new Action(R.drawable.no_image, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context, notificationId, taskId,
-			due, true, timezone));
+		return new Action(R.drawable.ic_notification_action_delay, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context,
+			notificationId, taskId, due, true, timezone));
 	}
 
 
 	public static Action getDelay1dAction(Context context, int notificationId, long taskId, long due, String timezone)
 	{
-		return new Action(R.drawable.no_image, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context, notificationId, taskId,
-			due, false, timezone));
+		return new Action(R.drawable.ic_notification_action_delay, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
+			notificationId, taskId, due, false, timezone));
 	}
 
 
