@@ -186,9 +186,6 @@
     <string name="button_add_one_hour">+1 Stunde</string>
     <string name="button_add_one_day">+1 Tag</string>
 
-    <!-- Checklist checkbox label -->
-    <string name="checklist_label">Als Checkliste</string>
-
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Aufgaben</string>
     <string name="dashclock_extension_description">Zeigt Informationen zu aktuellen Aufgaben an.</string>
@@ -206,5 +203,6 @@
     
       <!-- General -->
    <string name="accept">Übernehmen</string>
-
+   <string name="now">Jetzt</string>
+   
 </resources>

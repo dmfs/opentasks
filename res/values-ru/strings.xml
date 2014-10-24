@@ -183,7 +183,4 @@
     <string name="button_add_one_hour">+1 час</string>
     <string name="button_add_one_day">+1 день</string>
 
-    <!-- Checklist checkbox label -->
-    <string name="checklist_label">в виде списка</string>
-
 </resources>
