@@ -82,7 +82,6 @@
     <string name="task_group_due_in_month">На %s</string>
     <string name="task_group_due_in_year">В %s году</string>
     <string name="task_group_due_in_future">В ближайшем будущем</string>
-    <string name="today">сегодня</string>
 
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Уже начаты</string>

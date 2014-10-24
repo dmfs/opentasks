@@ -19,12 +19,15 @@
 
 package org.dmfs.tasks.homescreen;
 
+import java.util.TimeZone;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.TaskListActivity;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import android.annotation.TargetApi;
@@ -35,6 +38,7 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -103,7 +107,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 		{
 			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
 			widget.removeAllViews(android.R.id.list);
-			DueDateFormatter dateFormatter = new DueDateFormatter(context);
+			DateFormatter dateFormatter = new DateFormatter(context);
 			ContentResolver resolver = context.getContentResolver();
 			Cursor cursor = resolver.query(TaskContract.Instances.getContentUri(authority), null, TaskContract.Instances.VISIBLE + ">0 and "
 				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
@@ -113,6 +117,11 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 
 			cursor.moveToFirst();
 			int count = 0;
+			Time now = new Time();
+			now.clear(TimeZone.getDefault().getID());
+			now.setToNow();
+			now.normalize(true);
+			Resources resources = context.getResources();
 			while (!cursor.isAfterLast() && count < 7)
 			{
 				RemoteViews taskItem = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
@@ -123,8 +132,23 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 				Time dueDate = TaskFieldAdapters.DUE.get(cursor);
 				if (dueDate != null)
 				{
-					taskItem.setTextViewText(android.R.id.text1, dateFormatter.format(dueDate));
+					dueDate.normalize(true);
+
+					taskItem.setTextViewText(android.R.id.text1, dateFormatter.format(dueDate, DateFormatContext.WIDGET_VIEW));
+
+					// highlight overdue dates & times
+					if ((!dueDate.allDay && dueDate.before(now) || dueDate.allDay
+						&& (dueDate.year < now.year || dueDate.yearDay <= now.yearDay && dueDate.year == now.year))
+						&& !TaskFieldAdapters.IS_CLOSED.get(cursor))
+					{
+						taskItem.setTextColor(android.R.id.text1, resources.getColor(R.color.holo_red_light));
+					}
+					else
+					{
+						taskItem.setTextColor(android.R.id.text1, resources.getColor(R.color.lighter_gray));
+					}
 				}
+
 				widget.addView(android.R.id.list, taskItem);
 				cursor.moveToNext();
 				count++;

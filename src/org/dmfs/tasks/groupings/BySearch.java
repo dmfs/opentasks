@@ -17,8 +17,6 @@
 
 package org.dmfs.tasks.groupings;
 
-import java.text.DateFormat;
-
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
@@ -215,8 +213,8 @@ public class BySearch extends AbstractGroupingFactory
 			TextView text1 = (TextView) view.findViewById(android.R.id.text1);
 			if (text1 != null)
 			{
-				text1.setText(DateUtils.formatSameDayTime(cursor.getLong(cursor.getColumnIndex(SearchHistoryDatabaseHelper.SearchHistoryColumns.TIMESTAMP)),
-					now, DateFormat.SHORT, DateFormat.SHORT));
+				text1.setText(DateUtils.getRelativeTimeSpanString(
+					cursor.getLong(cursor.getColumnIndex(SearchHistoryDatabaseHelper.SearchHistoryColumns.TIMESTAMP)), now, DateUtils.MINUTE_IN_MILLIS));
 			}
 
 			// set list elements

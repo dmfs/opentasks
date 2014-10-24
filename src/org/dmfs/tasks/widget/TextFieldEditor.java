@@ -26,6 +26,8 @@ import android.content.Context;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
 
 
@@ -42,7 +44,7 @@ import android.widget.EditText;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class TextFieldEditor extends AbstractFieldEditor
+public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChangeListener
 {
 	private StringFieldAdapter mAdapter;
 	private EditText mText;
@@ -78,6 +80,7 @@ public class TextFieldEditor extends AbstractFieldEditor
 			 */
 			int inputType = mText.getInputType();
 			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+			mText.setOnFocusChangeListener(this);
 		}
 	}
 
@@ -117,6 +120,17 @@ public class TextFieldEditor extends AbstractFieldEditor
 			{
 				mText.setText(newValue);
 			}
+		}
+	}
+
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus)
+	{
+		if (!hasFocus)
+		{
+			// we've just lost the focus, ensure we update the values
+			updateValues();
 		}
 	}
 }

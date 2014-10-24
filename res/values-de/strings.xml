@@ -18,7 +18,7 @@
     <string name="menu_sync_now_condensed">Aktualisieren</string>
     <string name="toast_task_completed">\"%1s\" fertig gestellt.</string>
     <string name="toast_task_uncompleted">\"%1s\" wiedereröffnet.</string>
-     <string name="task_group_title_list">Aufgaben</string>
+    <string name="task_group_title_list">Aufgaben</string>
     <string name="task_group_title_start">Aufgaben Start</string>
     <string name="task_group_title_due">Aufgaben fällig</string>
     <string name="task_group_title_priority">Aufgaben Priorität</string>
@@ -75,7 +75,6 @@
     <string name="task_group_due_in_month">Fällig im %s</string>
     <string name="task_group_due_in_year">Fällig %s</string>
     <string name="task_group_due_in_future">Irgendwann</string>
-    <string name="today">Heute</string>
 
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Schon gestartet</string>
@@ -149,12 +148,12 @@
     <string name="confirm_delete_message">Diese Aufgabe löschen?</string>
     <string name="confirm_delete_message_with_title">\"%1s\" löschen?</string>
     <string name="toast_task_deleted">\"%1s\" gelöscht.</string>
-    
+
     <!-- Strings in the Task List Selection Fragment -->
     <string name="task_list_selection_empty">Keine Aufgabenliste vorhanden</string>
     <string name="task_list_selection_title">Anzuzeigende Listen</string>
     <string name="task_list_selection_ok">OK</string>
-     <string name="task_list_selection_cancel">ABBRECHEN</string>
+    <string name="task_list_selection_cancel">ABBRECHEN</string>
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Aktuelle Aufgaben</string>
@@ -200,9 +199,9 @@
     <string name="dashclock_display_type_start">Startende Aufgaben</string>
     <string name="dashclock_display_type_start_and_due">Startende und fällige Aufgaben</string>
     <string name="dashclock_preference_title">DashClock Aufgaben Einstellungen</string>
-    
-      <!-- General -->
-   <string name="accept">Übernehmen</string>
-   <string name="now">Jetzt</string>
-   
+
+    <!-- General -->
+    <string name="accept">Übernehmen</string>
+    <string name="now">Jetzt</string>
+
 </resources>

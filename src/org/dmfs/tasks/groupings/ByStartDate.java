@@ -23,11 +23,12 @@ import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -115,7 +116,7 @@ public class ByStartDate extends AbstractGroupingFactory
 				{
 
 					startDateField.setVisibility(View.VISIBLE);
-					startDateField.setText(new DueDateFormatter(view.getContext()).format(startDate));
+					startDateField.setText(new DateFormatter(view.getContext()).format(startDate, DateFormatContext.LIST_VIEW));
 
 					// format time
 					startDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);

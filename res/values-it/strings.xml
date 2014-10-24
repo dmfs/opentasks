@@ -68,7 +68,6 @@
     <string name="task_group_due_in_month">Scadono in %s</string>
     <string name="task_group_due_in_year">Scadono nel %s</string>
     <string name="task_group_due_in_future">Scadono successivamente</string>
-    <string name="today">Oggi</string>
 
     <!-- Task editor labels -->
 

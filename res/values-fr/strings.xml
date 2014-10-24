@@ -59,7 +59,6 @@
     <string name="task_group_due_in_month">Due dans %s</string>
     <string name="task_group_due_in_year">Due dans %s</string>
     <string name="task_group_due_in_future">Due plus tard</string>
-    <string name="today">Aujourd\'hui</string>
 
     <!-- Task editor labels -->
 

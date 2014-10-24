@@ -21,7 +21,8 @@ import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DueDateFormatter;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import android.database.Cursor;
@@ -61,7 +62,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 		{
 			dueDate.normalize(true);
 
-			view.setText(new DueDateFormatter(view.getContext()).format(dueDate));
+			view.setText(new DateFormatter(view.getContext()).format(dueDate, DateFormatContext.LIST_VIEW));
 			if (dueIcon != null)
 			{
 				dueIcon.setVisibility(View.VISIBLE);
