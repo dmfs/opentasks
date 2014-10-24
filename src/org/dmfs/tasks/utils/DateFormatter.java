@@ -26,6 +26,8 @@ import java.util.Formatter;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.dmfs.tasks.R;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -202,6 +204,11 @@ public class DateFormatter
 				Time allDayNow = new Time("UTC");
 				allDayNow.set(mNow.monthDay, mNow.month, mNow.year);
 				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), allDayNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
+			}
+			else if (Math.abs(mNow.toMillis(false) - date.toMillis(false)) < 60 * 1000)
+			{
+				// the date is within this minute
+				return mContext.getString(R.string.now);
 			}
 			else
 			{
