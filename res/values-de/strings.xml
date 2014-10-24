@@ -51,6 +51,7 @@
     <string name="task_title">Titel</string>
     <string name="task_location">Ort</string>
     <string name="task_description">Beschreibung</string>
+    <string name="task_checklist">Checkliste</string>
     <string name="task_start">Beginn</string>
     <string name="task_due">Fällig</string>
     <string name="task_completed">Fertiggestellt</string>
