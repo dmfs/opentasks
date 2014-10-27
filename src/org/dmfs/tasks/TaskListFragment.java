@@ -58,7 +58,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -90,6 +90,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 	private final static String ARG_INSTANCE_ID = "instance_id";
 	private final static String ARG_TWO_PANE_LAYOUT = "two_pane_layout";
+
+	private static final long INTERVAL_LISTVIEW_REDRAW = 60000;
 
 	/**
 	 * A filter to hide completed tasks.
@@ -168,6 +170,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 		}
 	};
+
+	private Handler mListViewRedrawHandler;
 
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
@@ -278,9 +282,18 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 
 	@Override
+	public void onResume()
+	{
+		super.onResume();
+		startAutomaticRedraw(INTERVAL_LISTVIEW_REDRAW);
+	}
+
+
+	@Override
 	public void onPause()
 	{
 		mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
+		stopAutomaticRedraw();
 		super.onPause();
 	}
 
@@ -714,6 +727,46 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				mGroupDescriptor = activity.getGroupDescriptor(mInstancePosition);
 			}
 		}
+	}
+
+
+	/**
+	 * Starts the automatic list view redraw (e.g. to display changing time values) on the next minute.
+	 * 
+	 * @param interval
+	 *            The interval for the redraw in milliseconds.
+	 */
+	public void startAutomaticRedraw(final long interval)
+	{
+		mListViewRedrawHandler = new Handler();
+
+		// calculate delay to next minute
+		Time nextMinute = new Time();
+		nextMinute.setToNow();
+		nextMinute.second = 0;
+		nextMinute.minute += 1;
+
+		mListViewRedrawHandler.postDelayed(new Runnable()
+		{
+
+			@Override
+			public void run()
+			{
+
+				mExpandableListView.invalidateViews();
+				mListViewRedrawHandler.postDelayed(this, interval);
+			}
+		}, nextMinute.toMillis(true) - System.currentTimeMillis());
+	}
+
+
+	/**
+	 * Stops the automatic list view redraw.
+	 * 
+	 */
+	public void stopAutomaticRedraw()
+	{
+		mListViewRedrawHandler.removeCallbacksAndMessages(null);
 	}
 
 
