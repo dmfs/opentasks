@@ -6,6 +6,6 @@
     android:minWidth="110dp"
     android:previewImage="@drawable/task_list_widget_screenshot"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="60000" >
+    android:updatePeriodMillis="3600000" >
 
 </appwidget-provider>

@@ -1,4 +1,5 @@
 /*
+
  * Copyright (C) 2014 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -115,6 +116,10 @@ public class NotificationActionIntentService extends IntentService
 				}
 				else if (ACTION_DELAY_1D.equals(action))
 				{
+					if (tz == null)
+					{
+						tz = "UTC";
+					}
 					Time time = new Time(tz);
 					time.set(due);
 					time.monthDay++;
@@ -273,7 +278,7 @@ public class NotificationActionIntentService extends IntentService
 
 	public static Action getDelay1dAction(Context context, int notificationId, long taskId, long due, String timezone)
 	{
-		return new Action(R.drawable.ic_notification_action_delay, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
+		return new Action(R.drawable.ic_notification_action_delay_day, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
 			notificationId, taskId, due, false, timezone));
 	}
 

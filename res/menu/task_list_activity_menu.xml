@@ -6,6 +6,7 @@
         android:actionViewClass="android.widget.SearchView"
         android:showAsAction="collapseActionView"
         android:title="@string/task_group_search_title"
+        
         android:visible="false"/>
     <item
         android:id="@+id/menu_visible_list"

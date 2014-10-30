@@ -285,6 +285,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void onResume()
 	{
 		super.onResume();
+		mExpandableListView.invalidateViews();
 		startAutomaticRedraw(INTERVAL_LISTVIEW_REDRAW);
 	}
 

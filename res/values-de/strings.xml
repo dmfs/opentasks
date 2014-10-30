@@ -175,6 +175,8 @@
     <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Aufgabe fällig am %1s</string>
     <string name="notification_task_start_date">Aufgabe beginnt am %1s</string>
+    <string name="notification_task_due_today">Aufgabe heute fällig</string>
+    <string name="notification_task_start_today">Aufgabe beginnt heute</string>
     <string name="notification_action_complete">erledigt</string>
     <string name="notification_action_completed">erledigt</string>
     <string name="notification_action_delay_1h">+1 Stunde</string>

@@ -4,6 +4,7 @@
         <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarWidgetTheme">@style/actionBarWidgetTheme</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_white</item>
     </style>
 
     <!-- ActionBar styles -->
@@ -11,6 +12,7 @@
         <item name="android:background">?attr/primaryColor</item>
         <item name="android:displayOptions">showTitle</item>
         <item name="android:icon">@android:color/transparent</item>
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_white</item>
     </style>
 
     <!-- ActionBar styles -->

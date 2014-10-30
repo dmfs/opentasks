@@ -81,8 +81,16 @@ public class NotificationActionUtils
 	{
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		String dueString = context.getString(R.string.notification_task_due_date,
-			new DateFormatter(context).format(makeTime(dueDate, dueAllDay), DateFormatContext.NOTIFICATION_VIEW));
+		String dueString = "";
+		if (dueAllDay)
+		{
+			dueString = context.getString(R.string.notification_task_due_today);
+		}
+		else
+		{
+			dueString = context.getString(R.string.notification_task_due_date,
+				new DateFormatter(context).format(makeTime(dueDate, dueAllDay), DateFormatContext.NOTIFICATION_VIEW));
+		}
 
 		// build notification
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
@@ -117,7 +125,10 @@ public class NotificationActionUtils
 			{
 				mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
 			}
-			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
+			else
+			{
+				mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
+			}
 
 			// complete action
 			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
@@ -125,17 +136,37 @@ public class NotificationActionUtils
 			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
-		mBuilder.setWhen(dueDate);
-		mBuilder.setContentIntent(resultPendingIntent);
 
+		// set displayed time
+		if (dueAllDay)
+		{
+			Time now = new Time();
+			now.setToNow();
+			now.set(0, 0, 0, now.monthDay, now.month, now.year);
+			mBuilder.setWhen(now.toMillis(true));
+		}
+		else
+		{
+			mBuilder.setWhen(dueDate);
+		}
+
+		mBuilder.setContentIntent(resultPendingIntent);
 		notificationManager.notify(notificationId, mBuilder.build());
 	}
 
 
 	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long startDate, boolean startAllDay)
 	{
-		String startString = context.getString(R.string.notification_task_start_date,
-			new DateFormatter(context).format(makeTime(startDate, startAllDay), DateFormatContext.NOTIFICATION_VIEW));
+		String startString = "";
+		if (startAllDay)
+		{
+			startString = context.getString(R.string.notification_task_start_today);
+		}
+		else
+		{
+			startString = context.getString(R.string.notification_task_start_date,
+				new DateFormatter(context).format(makeTime(startDate, startAllDay), DateFormatContext.NOTIFICATION_VIEW));
+		}
 
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -153,7 +184,18 @@ public class NotificationActionUtils
 		mBuilder.setDefaults(Notification.DEFAULT_ALL);
 
 		// set notification time
-		mBuilder.setWhen(startDate);
+		// set displayed time
+		if (startAllDay)
+		{
+			Time now = new Time();
+			now.setToNow();
+			now.set(0, 0, 0, now.monthDay, now.month, now.year);
+			mBuilder.setWhen(now.toMillis(true));
+		}
+		else
+		{
+			mBuilder.setWhen(startDate);
+		}
 
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)

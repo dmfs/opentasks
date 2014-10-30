@@ -141,10 +141,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity" />
         </activity>
-        
-        <activity android:name="org.dmfs.tasks.homescreen.TaskListWidgetSettingsActivity"
-             android:theme="@style/Theme.MaterialDialog"
-             android:label="@string/task_list_selection_title">
+        <activity
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetSettingsActivity"
+            android:label="@string/task_list_selection_title"
+            android:theme="@style/Theme.MaterialDialog" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -224,7 +224,7 @@
             </intent-filter>
         </receiver>
         <receiver android:name="org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler" >
-             <intent-filter>
+            <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_DUE" />
             </intent-filter>
             <intent-filter>
@@ -232,6 +232,13 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="org.dmfs.provider.tasks.broadcast.TimeChangeBroadcastReceiver"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
         <receiver
@@ -252,7 +259,6 @@
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </receiver>
-        
         <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />

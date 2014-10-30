@@ -16,6 +16,7 @@
         app:pstsIndicatorColor="@android:color/white"
         app:pstsShouldExpand="true"
         app:pstsTabPaddingLeftRight="0dp"
+        app:pstsTabBackground="@drawable/selectable_background_white"
         app:pstsUnderlineColor="@android:color/transparent" />
 
     <FrameLayout

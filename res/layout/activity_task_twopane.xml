@@ -35,7 +35,11 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="48dip"
+                android:background="?attr/primaryColor"
+                app:pstsDividerColor="#a0ffffff"
+                app:pstsIndicatorColor="@android:color/white"
                 app:pstsShouldExpand="true"
+                app:pstsTabBackground="@drawable/selectable_background_white"
                 app:pstsTabPaddingLeftRight="0dp" />
 
             <android.support.v4.view.ViewPager
