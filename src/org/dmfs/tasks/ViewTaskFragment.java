@@ -245,11 +245,11 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 				@Override
 				public void onScroll(int oldScrollY, int newScrollY)
 				{
-					int headerHeight = getActivity().getActionBar().getHeight();
-					if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
-					{
-						updateColor((float) newScrollY / headerHeight);
-					}
+					// int headerHeight = getActivity().getActionBar().getHeight();
+					// if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
+					// {
+					// updateColor((float) newScrollY / headerHeight);
+					// }
 				}
 			});
 		}
@@ -506,7 +506,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			mListColor = contentSet.getAsInteger(Tasks.LIST_COLOR);
 			if (VERSION.SDK_INT >= 11)
 			{
-				updateColor((float) mRootView.getScrollY() / getActivity().getActionBar().getHeight());
+				// updateColor((float) mRootView.getScrollY() / getActivity().getActionBar().getHeight());
 			}
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
 			{

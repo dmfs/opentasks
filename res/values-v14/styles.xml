@@ -1,31 +1,37 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:actionBarStyle">@style/ActionBar</item>
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:actionBarWidgetTheme">@style/actionBarWidgetTheme</item>
         <item name="android:actionBarItemBackground">@drawable/selectable_background_white</item>
+        <item name="searchViewStyle">@style/WhiteSearchViewStyle</item>
+        
     </style>
 
     <!-- ActionBar styles -->
-    <style name="ActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">?attr/primaryColor</item>
-        <item name="android:displayOptions">showTitle</item>
-        <item name="android:icon">@android:color/transparent</item>
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_white</item>
+    <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">?attr/primaryColor</item>
+        <item name="displayOptions">showTitle</item>
+        <item name="icon">@android:color/transparent</item>
+        <item name="actionBarItemBackground">@drawable/selectable_background_white</item>
     </style>
 
     <!-- ActionBar styles -->
-    <style name="DetailsActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <style name="DetailsActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#00000000</item>
-        <item name="android:displayOptions">showTitle</item>
-        <item name="android:icon">@android:color/transparent</item>
+        <item name="displayOptions">showTitle</item>
+        <item name="icon">@android:color/transparent</item>
     </style>
 
-    <style name="actionBarWidgetTheme" parent="@android:style/Theme.Holo">
+    <style name="WhiteSearchViewStyle" parent="@style/Widget.AppCompat.SearchView">
+        <item name="queryBackground">@drawable/bg_searchview</item>
+    </style>
+
+    <style name="actionBarWidgetTheme" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="android:textColorHint">#80ffffff</item>
         <item name="android:textColor">#ffffffff</item>
-        </style>
+    </style>
 
     <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 

@@ -19,7 +19,6 @@ package org.dmfs.tasks;
 
 import java.io.IOException;
 
-import org.dmfs.android.retentionmagic.FragmentActivity;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
@@ -46,15 +45,17 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnActionExpandListener;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -74,7 +75,7 @@ import com.astuetz.PagerSlidingTabStrip;
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class TaskListActivity extends FragmentActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
+public class TaskListActivity extends ActionBarActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
 
 	private static final String TAG = "TaskListActivity";
@@ -187,7 +188,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				if (mSearchItem != null)
 				{
 					// that's actually quite impossible to happen
-					mSearchItem.expandActionView();
+					MenuItemCompat.expandActionView(mSearchItem);
 				}
 				else
 				{
@@ -215,7 +216,7 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 					int oldPageId = mCurrentPageId;
 					mCurrentPageId = newPageId;
 					// the search page is selected now, expand the search view
-					mSearchItem.expandActionView();
+					MenuItemCompat.expandActionView(mSearchItem);
 
 					// store the page position we're comming from
 					mPreviousPagePosition = mPagerAdapter.getPagePosition(oldPageId);
@@ -403,21 +404,21 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	private void hideSearchActionView()
 	{
-		mSearchItem.collapseActionView();
+		MenuItemCompat.collapseActionView(mSearchItem);
 	}
 
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	public void setupSearch(Menu menu)
 	{
-		if (VERSION.SDK_INT < 14)
+		// bail early on unsupported devices
+		if (Build.VERSION.SDK_INT < 11)
 		{
-			// this won't work on pre ICS devices, so we just give up
 			return;
 		}
 
 		mSearchItem = menu.findItem(R.id.search);
-		mSearchItem.setOnActionExpandListener(new OnActionExpandListener()
+		MenuItemCompat.setOnActionExpandListener(mSearchItem, new OnActionExpandListener()
 		{
 
 			@Override
@@ -440,15 +441,16 @@ public class TaskListActivity extends FragmentActivity implements TaskListFragme
 				return mPreviousPagePosition >= 0 || mCurrentPageId != R.id.task_group_search;
 			}
 		});
-		SearchView searchView = (SearchView) mSearchItem.getActionView();
+		SearchView searchView = (SearchView) MenuItemCompat.getActionView(mSearchItem);
 
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 		if (null != searchManager)
 		{
 			searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		}
+
 		searchView.setQueryHint(getString(R.string.menu_search_hint));
-		searchView.setIconifiedByDefault(true);
+		searchView.setIconified(true);
 		searchView.setOnQueryTextListener(new OnQueryTextListener()
 		{
 

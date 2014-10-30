@@ -2,7 +2,11 @@
 <org.dmfs.tasks.widget.TextFieldView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/task_widget" >
 
-    <include layout="@layout/detail_header" />
+    
+    
+    <LinearLayout ></LinearLayout>
+    
+    <include layout="@layout/detail_label" />
 
     <TextView
         android:id="@+id/text"

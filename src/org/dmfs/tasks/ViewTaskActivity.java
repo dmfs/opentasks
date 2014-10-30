@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 
@@ -35,7 +35,7 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing more than a {@link ViewTaskFragment}.
  * </p>
  */
-public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragment.Callback
+public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragment.Callback
 {
 
 	@SuppressLint("NewApi")
@@ -45,7 +45,6 @@ public class ViewTaskActivity extends FragmentActivity implements ViewTaskFragme
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_detail);
 
-		// Show the Up button in the action bar.
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
 			getActionBar().setDisplayHomeAsUpEnabled(true);

@@ -3,7 +3,7 @@
     style="@style/task_widget"
     android:visibility="visible" >
 
-    <include layout="@layout/detail_header" />
+    <include layout="@layout/detail_label" />
 
     <LinearLayout
         android:id="@+id/checklist"
