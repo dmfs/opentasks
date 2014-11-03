@@ -5,7 +5,7 @@
     </style>
 
     <style name="DetailsTheme" parent="AppTheme">
-        <item name="android:windowActionBarOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
         <item name="android:actionBarStyle">@style/DetailsActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
