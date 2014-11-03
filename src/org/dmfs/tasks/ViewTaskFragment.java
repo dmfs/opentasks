@@ -21,6 +21,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.dmfs.android.retentionmagic.SupportFragment;
+import org.dmfs.android.retentionmagic.annotations.Parameter;
+import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -47,7 +50,6 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
@@ -67,17 +69,9 @@ import android.widget.Toast;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class ViewTaskFragment extends Fragment implements OnModelLoadedListener, OnContentChangeListener
+public class ViewTaskFragment extends SupportFragment implements OnModelLoadedListener, OnContentChangeListener
 {
-	/**
-	 * The key we use to store the {@link ContentSet} that holds the values we show.
-	 */
-	private static final String STATE_VALUES = "values";
-
-	/**
-	 * The key we use to store the {@link Uri} of the task we show.
-	 */
-	private static final String STATE_TASK_URI = "task_uri";
+	private final static String ARG_URI = "uri";
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -93,11 +87,14 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	/**
 	 * The {@link Uri} of the current task in the view.
 	 */
+	@Parameter(key = ARG_URI)
+	@Retain
 	private Uri mTaskUri;
 
 	/**
 	 * The values of the current task.
 	 */
+	@Retain
 	private ContentSet mContentSet;
 
 	/**
@@ -150,6 +147,19 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		 *            The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
 		 */
 		public void onDelete(Uri taskUri);
+	}
+
+
+	public static ViewTaskFragment newInstance(Uri uri)
+	{
+		ViewTaskFragment result = new ViewTaskFragment();
+		if (uri != null)
+		{
+			Bundle args = new Bundle();
+			args.putParcelable(ARG_URI, uri);
+			result.setArguments(args);
+		}
+		return result;
 	}
 
 
@@ -216,10 +226,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 		if (savedInstanceState != null)
 		{
-			// We have an incoming state, so load the ContentSet and the task Uri from the saved state.
-			mContentSet = savedInstanceState.getParcelable(STATE_VALUES);
-			mTaskUri = savedInstanceState.getParcelable(STATE_TASK_URI);
-
 			if (mContent != null && mContentSet != null)
 			{
 				// register listener and observer
@@ -235,11 +241,18 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 					new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
 				}
 			}
-
+		}
+		else if (mTaskUri != null)
+		{
+			Uri uri = mTaskUri;
+			// pretend we didn't load anything yet
+			mTaskUri = null;
+			loadUri(uri);
 		}
 
 		if (VERSION.SDK_INT >= 11 && mColorBar != null)
 		{
+			updateColor(0);
 			mRootView.setOnScrollListener(new OnScrollListener()
 			{
 
@@ -296,6 +309,12 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 	{
 		if (mTaskUri != null)
 		{
+			if (mTaskUri.equals(uri))
+			{
+				// same URI, no need to do anything. We don't need to reload, since we automatically reload when the content changes.
+				return;
+			}
+
 			/*
 			 * Unregister the observer for any previously shown task first.
 			 */
@@ -382,15 +401,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			mModel = model;
 			updateView();
 		}
-	}
-
-
-	@Override
-	public void onSaveInstanceState(Bundle outState)
-	{
-		super.onSaveInstanceState(outState);
-		outState.putParcelable(STATE_VALUES, mContentSet);
-		outState.putParcelable(STATE_TASK_URI, mTaskUri);
 	}
 
 
@@ -510,7 +520,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 
 			if (VERSION.SDK_INT >= 11)
 			{
-				// updateColor((float) mRootView.getScrollY() / getActivity().getActionBar().getHeight());
+				updateColor((float) mRootView.getScrollY() / ((ActionBarActivity) getActivity()).getSupportActionBar().getHeight());
 			}
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
 			{

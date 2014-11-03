@@ -52,7 +52,7 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 
 		if (savedInstanceState == null)
 		{
-			ViewTaskFragment fragment = new ViewTaskFragment();
+			ViewTaskFragment fragment = ViewTaskFragment.newInstance(getIntent().getData());
 			getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
 		}
 	}
