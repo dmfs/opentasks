@@ -354,12 +354,12 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
 	private void updateView()
 	{
-		/**
+		/*
 		 * If the model loads very slowly then this function may be called after onDetach. In this case check if Activity is <code>null</code> and return if
-		 * <code>true</code>.
+		 * <code>true</code>. Also return if we don't have values or the values are still loading.
 		 */
 		Activity activity = getActivity();
-		if (activity == null)
+		if (activity == null || mValues == null || mValues.isLoading())
 		{
 			return;
 		}

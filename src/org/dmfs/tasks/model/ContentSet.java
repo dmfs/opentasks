@@ -91,6 +91,11 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	 */
 	private Set<String> mAfterKeys;
 
+	/**
+	 * Indicates that loading is in process.
+	 */
+	private boolean mLoading = false;
+
 
 	/**
 	 * Private constructor that is used when creating a ContentSet form a parcel.
@@ -131,6 +136,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		String itemType = context.getContentResolver().getType(mUri);
 		if (itemType != null && !itemType.startsWith(ContentResolver.CURSOR_DIR_BASE_TYPE))
 		{
+			mLoading = true;
 			new AsyncContentLoader(context, this, mapper).execute(mUri);
 		}
 		else
@@ -144,7 +150,19 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	public void onContentLoaded(ContentValues values)
 	{
 		mBeforeContentValues = values;
+		mLoading = false;
 		notifyLoadedListeners();
+	}
+
+
+	/**
+	 * Returns whether this {@link ContentSet} is currently loading values.
+	 * 
+	 * @return <code>true</code> is an asynchronous loading operation is in progress, <code>false</code> otherwise.
+	 */
+	public boolean isLoading()
+	{
+		return mLoading;
 	}
 
 
