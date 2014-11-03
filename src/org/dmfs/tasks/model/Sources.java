@@ -24,6 +24,8 @@ import java.util.Map;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.utils.AsyncModelLoader;
+import org.dmfs.tasks.utils.OnModelLoadedListener;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -83,6 +85,33 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 			sInstance = new Sources(context);
 		}
 		return sInstance;
+	}
+
+
+	/**
+	 * Load a model asynchronously. This might be executed as a synchronous operation if the models have been loaded already.
+	 * 
+	 * @param context
+	 *            A {@link Context}.
+	 * @param accountType
+	 *            The account type of the model to load.
+	 * @param listener
+	 *            The listener to call when the model has been loaded.
+	 * @return <code>true</code> if the models were loaded already and the operation was executed synchronously, <code>false</code> otherwise.
+	 */
+	public static boolean loadModelAsync(Context context, String accountType, OnModelLoadedListener listener)
+	{
+		if (sInstance == null)
+		{
+			new AsyncModelLoader(context, listener).execute(accountType);
+			return false;
+		}
+		else
+		{
+			Sources sources = getInstance(context);
+			listener.onModelLoaded(sources.getModel(accountType));
+			return true;
+		}
 	}
 
 

@@ -30,8 +30,8 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
@@ -251,11 +251,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			{
 				if (savedInstanceState == null && mValues == null)
 				{
-					if (mAccountType != null)
-					{
-						new AsyncModelLoader(mAppContext, this).execute(mAccountType);
-					}
-
 					mValues = new ContentSet(mTaskUri);
 					mValues.addOnChangeListener(this, null, false);
 
@@ -266,11 +261,11 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 					if (savedInstanceState != null)
 					{
 						mValues = savedInstanceState.getParcelable(KEY_VALUES);
-						new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+						Sources.loadModelAsync(mAppContext, mValues.getAsString(Tasks.ACCOUNT_TYPE), this);
 					}
 					else
 					{
-						new AsyncModelLoader(mAppContext, this).execute(mValues.getAsString(Tasks.ACCOUNT_TYPE));
+						Sources.loadModelAsync(mAppContext, mValues.getAsString(Tasks.ACCOUNT_TYPE), this);
 						// ensure we're using the latest values
 						mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
 					}
@@ -302,13 +297,13 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
 				if (mLastAccountType != null)
 				{
-					new AsyncModelLoader(mAppContext, this).execute(mLastAccountType);
+					Sources.loadModelAsync(mAppContext, mLastAccountType, this);
 				}
 			}
 			else
 			{
 				mValues = savedInstanceState.getParcelable(KEY_VALUES);
-				new AsyncModelLoader(mAppContext, this).execute(mLastAccountType);
+				Sources.loadModelAsync(mAppContext, mLastAccountType, this);
 			}
 			setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
 		}
@@ -473,10 +468,12 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	{
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
-			if (mModel != null && mModel.getAccountType().equals(contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
+			mListColor = contentSet.getAsInteger(Tasks.LIST_COLOR);
+			updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
+
+			if (mAppForEdit)
 			{
-				mListColor = contentSet.getAsInteger(Tasks.LIST_COLOR);
-				updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
+				Sources.loadModelAsync(mAppContext, contentSet.getAsString(Tasks.ACCOUNT_TYPE), EditTaskFragment.this);
 			}
 
 			/*
@@ -530,7 +527,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		if (mModel == null || !mModel.getAccountType().equals(accountType))
 		{
 			// the model changed, load the new model
-			new AsyncModelLoader(mAppContext, EditTaskFragment.this).execute(accountType);
+			Sources.loadModelAsync(mAppContext, accountType, EditTaskFragment.this);
 		}
 		else
 		{

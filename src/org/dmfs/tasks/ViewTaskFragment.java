@@ -28,8 +28,8 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.ListenableScrollView;
@@ -238,7 +238,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				if (mContentSet.getAsString(Tasks.ACCOUNT_TYPE) != null)
 				{
 					// the content set contains a valid task, so load the model
-					new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
+					Sources.loadModelAsync(mAppContext, mContentSet.getAsString(Tasks.ACCOUNT_TYPE), this);
 				}
 			}
 		}
@@ -522,11 +522,10 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			{
 				updateColor((float) mRootView.getScrollY() / ((ActionBarActivity) getActivity()).getSupportActionBar().getHeight());
 			}
+
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
 			{
-
-				// the ContentSet has been (re-)loaded, load the model of this task
-				new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
+				Sources.loadModelAsync(mAppContext, contentSet.getAsString(Tasks.ACCOUNT_TYPE), this);
 			}
 			else
 			{

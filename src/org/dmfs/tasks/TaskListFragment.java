@@ -28,7 +28,7 @@ import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;
 import org.dmfs.tasks.groupings.filters.ConstantFilter;
 import org.dmfs.tasks.model.Model;
-import org.dmfs.tasks.utils.AsyncModelLoader;
+import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.FlingDetector;
@@ -239,7 +239,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		mCallbacks = (Callbacks) activity;
 
 		// load accounts early
-		new AsyncModelLoader(activity, this).execute(TaskContract.LOCAL_ACCOUNT);
+		Sources.loadModelAsync(activity, TaskContract.LOCAL_ACCOUNT, this);
 	}
 
 
