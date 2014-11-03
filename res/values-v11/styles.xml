@@ -23,7 +23,7 @@
     </style>
 
     <style name="detail_label_line">
-        <item name="android:background">@android:color/darker_gray</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="dark_edit_text" parent="dark_text">
