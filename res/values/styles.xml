@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppBaseTheme" parent="android:Theme"></style>
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat"></style>
 
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:textColor">#FF333333</item>
@@ -8,7 +8,9 @@
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
 
-    <style name="DetailsTheme" parent="AppTheme"></style>
+    <style name="DetailsTheme" parent="AppTheme">
+        <item name="android:editTextStyle">@style/legacyEditText</item>
+    </style>
 
     <style name="window_title_style">
         <item name="android:textColor">#FFFFFF</item>
@@ -17,6 +19,9 @@
     <style name="ActivityDefault">
         <item name="android:background">@android:color/white</item>
         <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
+    
+    <style name="legacyEditText" parent="@android:style/Widget.EditText">
     </style>
 
     <style name="dark_text">
