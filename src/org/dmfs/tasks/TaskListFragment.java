@@ -745,16 +745,13 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 	/**
 	 * Starts the automatic list view redraw (e.g. to display changing time values) on the next minute.
-	 * 
-	 * @param interval
-	 *            The interval for the redraw in milliseconds.
 	 */
 	public void startAutomaticRedraw()
 	{
 		long now = System.currentTimeMillis();
-		long millisToMinute = 60000 - (now % 60000);
+		long millisToInterval = INTERVAL_LISTVIEW_REDRAW - (now % INTERVAL_LISTVIEW_REDRAW);
 
-		mHandler.postDelayed(mListRedrawRunnable, millisToMinute);
+		mHandler.postDelayed(mListRedrawRunnable, millisToInterval);
 	}
 
 
