@@ -249,7 +249,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		{
 			if (mTaskUri != null)
 			{
-
 				if (savedInstanceState == null && mValues == null)
 				{
 					if (mAccountType != null)
@@ -276,6 +275,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 						mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
 					}
 					mListColor = mValues.getAsInteger(Tasks.LIST_COLOR);
+					// update the color of the action bar as soon as possible
+					updateColor(0);
 					setListUri(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), mValues.getAsLong(Tasks.LIST_ID)), null);
 				}
 				// disable spinner
