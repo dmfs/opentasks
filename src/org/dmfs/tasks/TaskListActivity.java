@@ -215,10 +215,8 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				{
 					int oldPageId = mCurrentPageId;
 					mCurrentPageId = newPageId;
-					// the search page is selected now, expand the search view
-					MenuItemCompat.expandActionView(mSearchItem);
 
-					// store the page position we're comming from
+					// store the page position we're coming from
 					mPreviousPagePosition = mPagerAdapter.getPagePosition(oldPageId);
 				}
 				else if (mCurrentPageId == R.id.task_group_search)
@@ -243,9 +241,20 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 
 			@Override
-			public void onPageScrollStateChanged(int position)
+			public void onPageScrollStateChanged(int state)
 			{
-
+				if (state == ViewPager.SCROLL_STATE_IDLE && mCurrentPageId == R.id.task_group_search)
+				{
+					// the search page is selected now, expand the search view
+					mHandler.post(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							MenuItemCompat.expandActionView(mSearchItem);
+						}
+					});
+				}
 			}
 		});
 	}
@@ -467,6 +476,11 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			@Override
 			public boolean onQueryTextChange(String query)
 			{
+				if (mCurrentPageId != R.id.task_group_search)
+				{
+					return true;
+				}
+
 				mHandler.removeCallbacks(mSearchUpdater);
 				if (query.length() > 0)
 				{
