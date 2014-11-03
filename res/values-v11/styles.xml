@@ -123,7 +123,7 @@
     </style>
 
     <style name="actionColorBar">
-        <item name="android:layout_height">?android:attr/actionBarSize</item>
+        <item name="android:layout_height">@dimen/abc_action_bar_default_height_material</item>
     </style>
 
     <style name="Theme.MaterialDialog" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar"></style>

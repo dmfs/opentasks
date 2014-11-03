@@ -34,7 +34,6 @@ import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -49,6 +48,8 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -234,6 +235,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 					new AsyncModelLoader(mAppContext, this).execute(mContentSet.getAsString(Tasks.ACCOUNT_TYPE));
 				}
 			}
+
 		}
 
 		if (VERSION.SDK_INT >= 11 && mColorBar != null)
@@ -245,11 +247,11 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 				@Override
 				public void onScroll(int oldScrollY, int newScrollY)
 				{
-					// int headerHeight = getActivity().getActionBar().getHeight();
-					// if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
-					// {
-					// updateColor((float) newScrollY / headerHeight);
-					// }
+					int headerHeight = ((ActionBarActivity) getActivity()).getSupportActionBar().getHeight();
+					if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
+					{
+						updateColor((float) newScrollY / headerHeight);
+					}
 				}
 			});
 		}
@@ -360,6 +362,8 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 				mDetailView.setValues(mContentSet);
 				mContent.addView(mDetailView);
 			}
+
+			updateColor((float) mRootView.getScrollY() / mColorBar.getMeasuredHeight());
 		}
 	}
 
@@ -378,7 +382,6 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			mModel = model;
 			updateView();
 		}
-
 	}
 
 
@@ -485,7 +488,7 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
 			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
-			ActionBar actionBar = getActivity().getActionBar();
+			ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 			actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
 
 			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
@@ -504,12 +507,14 @@ public class ViewTaskFragment extends Fragment implements OnModelLoadedListener,
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			mListColor = contentSet.getAsInteger(Tasks.LIST_COLOR);
+
 			if (VERSION.SDK_INT >= 11)
 			{
 				// updateColor((float) mRootView.getScrollY() / getActivity().getActionBar().getHeight());
 			}
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
 			{
+
 				// the ContentSet has been (re-)loaded, load the model of this task
 				new AsyncModelLoader(mAppContext, this).execute(contentSet.getAsString(Tasks.ACCOUNT_TYPE));
 			}
