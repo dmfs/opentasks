@@ -41,7 +41,6 @@ import org.dmfs.tasks.widget.TaskEdit;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -55,6 +54,8 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -560,7 +561,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
 			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
-			ActionBar actionBar = getActivity().getActionBar();
+			ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 			actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
 
 			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.

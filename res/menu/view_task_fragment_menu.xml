@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
         android:id="@+id/complete_task"
         android:icon="@drawable/ic_action_complete"
-        android:showAsAction="always"
         android:title="@string/activity_task_details_complete_task"
-        android:titleCondensed="@string/activity_task_details_complete"> <!-- TODO: add dedicated string! -->
+        android:titleCondensed="@string/activity_task_details_complete"
+        app:showAsAction="always"> <!-- TODO: add dedicated string! -->
     </item>
     <item
         android:id="@+id/edit_task"
         android:icon="@drawable/content_edit"
-        android:showAsAction="always"
         android:title="@string/activity_task_details_edit_task"
-        android:titleCondensed="@string/activity_task_details_edit">
+        android:titleCondensed="@string/activity_task_details_edit"
+        app:showAsAction="always">
     </item>
     <item
         android:id="@+id/delete_task"
         android:icon="@drawable/content_discard"
-        android:showAsAction="always"
         android:title="@string/activity_task_details_delete_task"
-        android:titleCondensed="@string/activity_task_details_delete">
+        android:titleCondensed="@string/activity_task_details_delete"
+        app:showAsAction="always">
     </item>
 
 </menu>

@@ -47,7 +47,7 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 
 		if (savedInstanceState == null)

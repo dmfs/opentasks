@@ -23,12 +23,12 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,7 +40,7 @@ import android.view.MenuItem;
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class EditTaskActivity extends FragmentActivity
+public class EditTaskActivity extends ActionBarActivity
 {
 	private static final String ACTION_NOTE_TO_SELF = "com.google.android.gm.action.AUTO_SEND";
 
@@ -65,7 +65,7 @@ public class EditTaskActivity extends FragmentActivity
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
 			// hide up button in action bar
-			ActionBar actionBar = getActionBar();
+			ActionBar actionBar = getSupportActionBar();
 			actionBar.setDisplayShowHomeEnabled(false);
 			actionBar.setDisplayHomeAsUpEnabled(false);
 			// actionBar.setDisplayShowTitleEnabled(false);

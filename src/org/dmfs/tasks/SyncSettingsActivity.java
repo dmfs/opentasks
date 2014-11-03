@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -32,7 +33,7 @@ import android.widget.Button;
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
-public class SyncSettingsActivity extends FragmentActivity
+public class SyncSettingsActivity extends ActionBarActivity
 {
 	private FragmentManager mManager;
 	private SettingsListFragment mCurrentFrag;
@@ -98,7 +99,7 @@ public class SyncSettingsActivity extends FragmentActivity
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
 
@@ -108,7 +109,7 @@ public class SyncSettingsActivity extends FragmentActivity
 	{
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
 		{
-			getActionBar().setTitle(titleRes);
+			getSupportActionBar().setTitle(titleRes);
 		}
 	}
 
