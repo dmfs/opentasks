@@ -97,13 +97,7 @@ public class DateFormatter
 		 * 
 		 * Currently this inherits the default short format.
 		 */
-		WIDGET_VIEW {
-			@Override
-			public boolean useRelative(Time now, Time date)
-			{
-				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
-			}
-		},
+		WIDGET_VIEW,
 
 		/**
 		 * The date format in the dash clock. This shows a time only.
@@ -199,20 +193,34 @@ public class DateFormatter
 
 		if (dateContext.useRelative(mNow, date))
 		{
+			long delta = Math.abs(mNow.toMillis(false) - date.toMillis(false));
+
 			if (date.allDay)
 			{
 				Time allDayNow = new Time("UTC");
 				allDayNow.set(mNow.monthDay, mNow.month, mNow.year);
 				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), allDayNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
 			}
-			else if (Math.abs(mNow.toMillis(false) - date.toMillis(false)) < 60 * 1000)
+			else if (delta < 60 * 1000)
 			{
-				// the date is within this minute
+				// the time is within this minute, show "now"
 				return mContext.getString(R.string.now);
+			}
+			else if (delta < 60 * 60 * 1000)
+			{
+				// time is within this hour, show number of minutes left
+				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
+			}
+			else if (delta < 24 * 60 * 60 * 1000)
+			{
+				// time is within 24 hours, show relative string with time
+				// FIXME: instead of using a fixed 24 hour interval this should be aligned to midnight tomorrow and yesterday
+				return DateUtils.getRelativeDateTimeString(mContext, date.toMillis(false), DateUtils.DAY_IN_MILLIS, DateUtils.WEEK_IN_MILLIS,
+					dateContext.getDateUtilsFlags(mNow, date)).toString();
 			}
 			else
 			{
-				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
+				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
 			}
 		}
 

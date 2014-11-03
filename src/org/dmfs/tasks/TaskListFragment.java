@@ -58,7 +58,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -171,8 +170,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		}
 	};
 
-	private Handler mListViewRedrawHandler;
-
 	/**
 	 * A callback interface that all activities containing this fragment must implement. This mechanism allows activities to be notified of item selections.
 	 */
@@ -189,6 +186,21 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 		public void onAddNewTask();
 	}
+
+	/**
+	 * A runnable that periodically updates the list. We need that to update relative dates & times. TODO: we probably should move that to the adapter to update
+	 * only the date & times fields, not the entire list.
+	 */
+	private Runnable mListRedrawRunnable = new Runnable()
+	{
+
+		@Override
+		public void run()
+		{
+			mExpandableListView.invalidateViews();
+			mHandler.postDelayed(this, INTERVAL_LISTVIEW_REDRAW);
+		}
+	};
 
 
 	public static TaskListFragment newInstance(int instancePosition, boolean twoPaneLayout)
@@ -286,7 +298,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	{
 		super.onResume();
 		mExpandableListView.invalidateViews();
-		startAutomaticRedraw(INTERVAL_LISTVIEW_REDRAW);
+		startAutomaticRedraw();
 	}
 
 
@@ -737,27 +749,12 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	 * @param interval
 	 *            The interval for the redraw in milliseconds.
 	 */
-	public void startAutomaticRedraw(final long interval)
+	public void startAutomaticRedraw()
 	{
-		mListViewRedrawHandler = new Handler();
+		long now = System.currentTimeMillis();
+		long millisToMinute = 60000 - (now % 60000);
 
-		// calculate delay to next minute
-		Time nextMinute = new Time();
-		nextMinute.setToNow();
-		nextMinute.second = 0;
-		nextMinute.minute += 1;
-
-		mListViewRedrawHandler.postDelayed(new Runnable()
-		{
-
-			@Override
-			public void run()
-			{
-
-				mExpandableListView.invalidateViews();
-				mListViewRedrawHandler.postDelayed(this, interval);
-			}
-		}, nextMinute.toMillis(true) - System.currentTimeMillis());
+		mHandler.postDelayed(mListRedrawRunnable, millisToMinute);
 	}
 
 
@@ -767,7 +764,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	 */
 	public void stopAutomaticRedraw()
 	{
-		mListViewRedrawHandler.removeCallbacksAndMessages(null);
+		mHandler.removeCallbacks(mListRedrawRunnable);
 	}
 
 
