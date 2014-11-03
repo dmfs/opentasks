@@ -72,6 +72,11 @@ public final class FieldDescriptor
 	 */
 	private LayoutDescriptor mViewLayout = null;
 
+	/**
+	 * Icon resource id of the field, if any.
+	 */
+	private int mIconId = 0;
+
 
 	/**
 	 * Constructor for a new field description.
@@ -152,6 +157,31 @@ public final class FieldDescriptor
 	public String getTitle()
 	{
 		return mTitle;
+	}
+
+
+	/**
+	 * Sets an icon id for this {@link FieldDescriptor}.
+	 * 
+	 * @param iconId
+	 *            The id of the icon resource.
+	 * @return This instance.
+	 */
+	public FieldDescriptor setIcon(int iconId)
+	{
+		mIconId = iconId;
+		return this;
+	}
+
+
+	/**
+	 * Get the icon id of this {@link FieldDescriptor}.
+	 * 
+	 * @return The icon resource id or <code>0</code> if there is no icon for this field.
+	 */
+	public int getIcon()
+	{
+		return mIconId;
 	}
 
 

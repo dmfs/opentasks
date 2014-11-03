@@ -2,39 +2,49 @@
 <org.dmfs.tasks.widget.TimeFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/task_widget" >
 
-    <include layout="@layout/editor_header" />
+    <ImageView
+        android:id="@android:id/icon"
+        style="@style/details_label_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/task_date_picker"
-            style="@style/TextAppearance.EditTask_SpinnerButton"
-            android:layout_width="0px"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:gravity="center|left" >
-        </Button>
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/task_time_picker"
-            style="@style/TextAppearance.EditTask_SpinnerButton"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_weight="4" >
-        </Button>
+            <Button
+                android:id="@+id/task_date_picker"
+                style="@style/TextAppearance.EditTask_SpinnerButton"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:gravity="center|left" >
+            </Button>
 
-        <ImageButton
-            android:id="@+id/task_time_picker_remove"
-            style="@style/btn_remove"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center" >
-        </ImageButton>
+            <Button
+                android:id="@+id/task_time_picker"
+                style="@style/TextAppearance.EditTask_SpinnerButton"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="4" >
+            </Button>
+
+            <ImageButton
+                android:id="@+id/task_time_picker_remove"
+                style="@style/btn_remove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center" >
+            </ImageButton>
+        </LinearLayout>
     </LinearLayout>
 
 </org.dmfs.tasks.widget.TimeFieldEditor>

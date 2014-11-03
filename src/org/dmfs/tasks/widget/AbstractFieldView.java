@@ -31,6 +31,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -81,6 +82,7 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	}
 
 
+	@SuppressLint("NewApi")
 	public AbstractFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
@@ -181,6 +183,22 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 				}
 			}
 		}
+
+		// set icon if we have any
+		ImageView icon = (ImageView) findViewById(android.R.id.icon);
+		if (icon != null)
+		{
+			if (descriptor.getIcon() != 0)
+			{
+				icon.setImageResource(descriptor.getIcon());
+				icon.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				icon.setVisibility(View.GONE);
+			}
+		}
+
 	}
 
 

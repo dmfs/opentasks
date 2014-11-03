@@ -2,7 +2,11 @@
 <org.dmfs.tasks.widget.PercentageFieldView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/task_widget" >
 
-    <include layout="@layout/detail_label" />
+    <ImageView
+        android:id="@android:id/icon"
+        style="@style/details_label_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:layout_width="fill_parent"

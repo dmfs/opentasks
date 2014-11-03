@@ -104,10 +104,12 @@ public class DefaultModel extends Model
 			CHECKLIST_EDIT));
 
 		// start
-		mFields.add(new FieldDescriptor(mContext, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW).setEditorLayout(TIME_EDIT)
+			.setIcon(R.drawable.ic_label_start));
 
 		// due
-		mFields.add(new FieldDescriptor(mContext, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW_ADD_BUTTON).setEditorLayout(TIME_EDIT));
+		mFields.add(new FieldDescriptor(mContext, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW_ADD_BUTTON).setEditorLayout(TIME_EDIT)
+			.setIcon(R.drawable.ic_label_due));
 
 		// all day flag
 		mFields.add(new FieldDescriptor(mContext, R.string.task_all_day, TaskFieldAdapters.ALLDAY).setEditorLayout(BOOLEAN_EDIT));

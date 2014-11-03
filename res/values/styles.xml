@@ -20,9 +20,8 @@
         <item name="android:background">@android:color/white</item>
         <item name="android:textColor">@android:color/darker_gray</item>
     </style>
-    
-    <style name="legacyEditText" parent="@android:style/Widget.EditText">
-    </style>
+
+    <style name="legacyEditText" parent="@android:style/Widget.EditText"></style>
 
     <style name="dark_text">
         <item name="android:textColor">#FF333333</item>
@@ -118,7 +117,7 @@
     <style name="task_widget_parent"> <!-- Common Style for all widgets -->
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">vertical</item>
+        <item name="android:orientation">horizontal</item>
     </style>
 
     <style name="task_widget" parent="task_widget_parent">
@@ -201,5 +200,9 @@
     </style>
 
     <style name="Theme.MaterialDialog" parent="@android:style/Theme.Dialog"></style>
+
+    <style name="details_label_icon">
+        <item name="android:paddingRight">12dp</item>
+    </style>
 
 </resources>

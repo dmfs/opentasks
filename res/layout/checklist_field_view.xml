@@ -3,7 +3,11 @@
     style="@style/task_widget"
     android:visibility="visible" >
 
-    <include layout="@layout/detail_label" />
+    <ImageView
+        android:id="@android:id/icon"
+        style="@style/details_label_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/checklist"
