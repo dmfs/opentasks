@@ -1,0 +1,13 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ActionBar styles -->
+    <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="background">?attr/primaryColor</item>
+        <item name="displayOptions">showTitle</item>
+        <item name="icon">@android:color/transparent</item>
+        <item name="android:elevation">0dp</item>
+        <item name="elevation">0dp</item>
+        <item name="actionBarItemBackground">@drawable/selectable_background_white</item>
+    </style>
+
+</resources>

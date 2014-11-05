@@ -4,7 +4,7 @@
 
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:textColor">#FF333333</item>
-        <item name="primaryColor">#ff9800</item>
+        <item name="primaryColor">#009688</item>
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
 

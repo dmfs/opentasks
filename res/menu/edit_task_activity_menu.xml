@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/editor_action_cancel"
-        android:icon="@drawable/content_remove"
+        android:icon="@drawable/content_remove_light"
         android:orderInCategory="99"
         app:showAsAction="always|withText"
         android:title="@string/action_cancel"/>
