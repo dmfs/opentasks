@@ -14,7 +14,8 @@
         android:layout_width="16dip"
         android:layout_height="16dip"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp" />
 
     <View
         android:id="@+id/colorbar2"
@@ -22,7 +23,7 @@
         android:layout_height="10dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_margin="3dip"
+        android:layout_margin="11dp"
         android:visibility="gone" />
 
     <ImageView
@@ -31,7 +32,8 @@
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="-8dip"
+        android:layout_marginRight="0dip"
+        android:layout_marginLeft="8dip"
         android:layout_toRightOf="@id/colorbar1"
         android:visibility="gone" />
 

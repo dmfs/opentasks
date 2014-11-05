@@ -246,8 +246,10 @@ public class BySearch extends AbstractGroupingFactory
 				colorbar2.setVisibility(View.GONE);
 			}
 
+			// TODO: swap styles instead of modifying the font style
 			boolean isHistoric = cursor.getInt(cursor.getColumnIndex(SearchHistoryColumns.HISTORIC)) > 0;
-			title.setTypeface(null, isHistoric ? Typeface.NORMAL : Typeface.ITALIC);
+			Typeface oldtypeface = title.getTypeface();
+			title.setTypeface(oldtypeface, isHistoric ? oldtypeface.getStyle() & ~Typeface.ITALIC : oldtypeface.getStyle() | Typeface.ITALIC);
 
 			// set history icon
 			ImageView icon = (ImageView) view.findViewById(android.R.id.icon);
