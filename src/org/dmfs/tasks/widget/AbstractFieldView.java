@@ -18,6 +18,7 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -28,6 +29,7 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
@@ -68,6 +70,8 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	 */
 	protected LayoutOptions mLayoutOptions;
 
+	private int mFieldId = 0;
+
 
 	public AbstractFieldView(Context context)
 	{
@@ -78,12 +82,36 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	public AbstractFieldView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		loadAttrs(attrs);
 	}
 
 
+	@SuppressLint("NewApi")
 	public AbstractFieldView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
+		loadAttrs(attrs);
+	}
+
+
+	private void loadAttrs(AttributeSet attrs)
+	{
+		TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.AbstractFieldView);
+
+		mFieldId = typedArray.getResourceId(R.styleable.AbstractFieldView_fieldDescriptor, 0);
+
+		typedArray.recycle();
+	}
+
+
+	/**
+	 * Returns the field id of this field or <code>0</code> if non was defined.
+	 * 
+	 * @return The field id of this field.
+	 */
+	public int getFieldId()
+	{
+		return mFieldId;
 	}
 
 
@@ -95,6 +123,12 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 	 */
 	public void setValue(ContentSet values)
 	{
+		if (values == mValues)
+		{
+			// same values, nothing to do
+			return;
+		}
+
 		FieldAdapter<?> adapter = mFieldDescriptor.getFieldAdapter();
 		if (mValues != null)
 		{

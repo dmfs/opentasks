@@ -20,6 +20,7 @@ package org.dmfs.tasks.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
 
@@ -33,7 +34,8 @@ public abstract class Model
 	/**
 	 * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
 	 */
-	final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
+	private final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
+	private final SparseArrayCompat<FieldDescriptor> mFieldIndex = new SparseArrayCompat<FieldDescriptor>(16);
 
 	boolean mInflated = false;
 
@@ -45,6 +47,25 @@ public abstract class Model
 
 
 	public abstract void inflate() throws ModelInflaterException;
+
+
+	/**
+	 * Adds another field (identified by its field descriptor) to this model.
+	 * 
+	 * @param descriptor
+	 *            The {@link FieldDescriptor} of the field to add.
+	 */
+	protected void addField(FieldDescriptor descriptor)
+	{
+		mFields.add(descriptor);
+		mFieldIndex.put(descriptor.getFieldId(), descriptor);
+	}
+
+
+	public FieldDescriptor getField(int fieldId)
+	{
+		return mFieldIndex.get(fieldId, null);
+	}
 
 
 	public List<FieldDescriptor> getFields()

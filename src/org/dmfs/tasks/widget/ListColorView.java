@@ -17,64 +17,61 @@
 
 package org.dmfs.tasks.widget;
 
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 
 
 /**
- * Editor view for a task.
+ * A widget that shows the string representation of an object.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class TaskEdit extends BaseTaskView
+public class ListColorView extends AbstractFieldView
 {
+	/**
+	 * The {@link FieldAdapter} of the field for this view.
+	 */
+	private FieldAdapter<Integer> mAdapter;
 
-	public TaskEdit(Context context)
+
+	public ListColorView(Context context)
 	{
 		super(context);
 	}
 
 
-	public TaskEdit(Context context, AttributeSet attrs)
+	public ListColorView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 	}
 
 
-	public TaskEdit(Context context, AttributeSet attrs, int defStyle)
+	public ListColorView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
 	}
 
 
-	/**
-	 * Set the {@link Model} to use when showing the detail view.
-	 * 
-	 * @param model
-	 *            The {@link Model}.
-	 */
-	public void setModel(Model model)
+	@SuppressWarnings("unchecked")
+	@Override
+	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
-		Model mModel = model;
-		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		super.setFieldDescription(descriptor, layoutOptions);
+		mAdapter = (FieldAdapter<Integer>) descriptor.getFieldAdapter();
+	}
 
-		/*
-		 * Add an editor for every field that is supported by this model.
-		 */
-		for (FieldDescriptor field : mModel.getFields())
+
+	@Override
+	public void onContentChanged(ContentSet contentSet)
+	{
+		if (mValues != null)
 		{
-			if (field.autoAdd())
-			{
-				AbstractFieldView detailView = field.getEditorView(inflater, this);
-				if (detailView != null)
-				{
-					addView(detailView);
-				}
-			}
+			this.setBackgroundColor(mAdapter.get(contentSet));
 		}
 	}
 }

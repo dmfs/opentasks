@@ -18,10 +18,13 @@
 package org.dmfs.tasks.widget;
 
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 
@@ -32,6 +35,9 @@ import android.widget.LinearLayout;
  */
 public abstract class BaseTaskView extends LinearLayout
 {
+
+	protected LayoutOptions mLayoutOptions;
+
 
 	public BaseTaskView(Context context)
 	{
@@ -45,6 +51,7 @@ public abstract class BaseTaskView extends LinearLayout
 	}
 
 
+	@SuppressLint("NewApi")
 	public BaseTaskView(Context context, AttributeSet attrs, int defStyle)
 	{
 		super(context, attrs, defStyle);
@@ -62,10 +69,25 @@ public abstract class BaseTaskView extends LinearLayout
 		int children = this.getChildCount();
 		for (int i = 0; i < children; ++i)
 		{
-			View child = getChildAt(i);
-			if (child instanceof AbstractFieldView)
+			setValues(getChildAt(i), values);
+		}
+	}
+
+
+	private void setValues(View child, ContentSet values)
+	{
+		if (child instanceof AbstractFieldView)
+		{
+			((AbstractFieldView) child).setValue(values);
+
+		}
+
+		if (child instanceof ViewGroup)
+		{
+			int childCount = ((ViewGroup) child).getChildCount();
+			for (int i = 0; i < childCount; ++i)
 			{
-				((AbstractFieldView) child).setValue(values);
+				setValues(((ViewGroup) child).getChildAt(i), values);
 			}
 		}
 	}
@@ -79,12 +101,26 @@ public abstract class BaseTaskView extends LinearLayout
 		int children = this.getChildCount();
 		for (int i = 0; i < children; ++i)
 		{
-			View child = getChildAt(i);
-			if (child instanceof AbstractFieldView)
-			{
-				((AbstractFieldView) child).updateValues();
-			}
+			updateValues(getChildAt(i));
+		}
+	}
+
+
+	private void updateValues(View child)
+	{
+		if (child instanceof AbstractFieldView)
+		{
+			((AbstractFieldView) child).updateValues();
 		}
 
+		if (child instanceof ViewGroup)
+		{
+			int childCount = ((ViewGroup) child).getChildCount();
+			for (int i = 0; i < childCount; ++i)
+			{
+				updateValues(((ViewGroup) child).getChildAt(i));
+			}
+		}
 	}
+
 }

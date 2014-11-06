@@ -58,16 +58,16 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 	}
 
 
-	@Override
-	public void onAttachFragment(Fragment fragment)
-	{
-		if (fragment instanceof ViewTaskFragment)
-		{
-			ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
-			detailFragment.loadUri(getIntent().getData());
-		}
-	}
-
+//	@Override
+//	public void onAttachFragment(Fragment fragment)
+//	{
+//		if (fragment instanceof ViewTaskFragment)
+//		{
+//			ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
+//		//	detailFragment.loadUri(getIntent().getData());
+//		}
+//	}
+//
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
