@@ -391,7 +391,10 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				mContent.addView(mDetailView);
 			}
 
-			updateColor((float) mRootView.getScrollY() / mColorBar.getMeasuredHeight());
+			if (mColorBar != null)
+			{
+				updateColor((float) mRootView.getScrollY() / mColorBar.getMeasuredHeight());
+			}
 		}
 	}
 

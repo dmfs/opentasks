@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_action_complete"
         android:title="@string/activity_task_details_complete_task"
         android:titleCondensed="@string/activity_task_details_complete"
-        app:showAsAction="always"> <!-- TODO: add dedicated string! -->
+        app:showAsAction="always">
     </item>
     <item
         android:id="@+id/edit_task"
