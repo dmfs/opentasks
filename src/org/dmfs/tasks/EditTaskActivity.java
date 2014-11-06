@@ -67,7 +67,8 @@ public class EditTaskActivity extends ActionBarActivity
 			// hide up button in action bar
 			ActionBar actionBar = getSupportActionBar();
 			actionBar.setDisplayShowHomeEnabled(false);
-			actionBar.setDisplayHomeAsUpEnabled(false);
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setHomeAsUpIndicator(R.drawable.content_remove_light);
 			// actionBar.setDisplayShowTitleEnabled(false);
 		}
 

@@ -540,6 +540,11 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		mListColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
 		updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 
+		if (mEditor != null)
+		{
+			mEditor.updateValues();
+		}
+
 		if (!mAppForEdit)
 		{
 			long listId = c.getLong(TASK_LIST_PROJECTION_VALUES.id);
@@ -551,7 +556,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		if (mModel == null || !mModel.getAccountType().equals(accountType))
 		{
 			// the model changed, load the new model
-			Sources.loadModelAsync(mAppContext, accountType, EditTaskFragment.this);
+			Sources.loadModelAsync(mAppContext, accountType, this);
 		}
 		else
 		{
