@@ -22,7 +22,10 @@ import org.dmfs.tasks.model.Model;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 
 /**
@@ -32,6 +35,9 @@ import android.view.LayoutInflater;
  */
 public class TaskView extends BaseTaskView
 {
+
+	private final SparseIntArray mAddedFields = new SparseIntArray(20);
+
 
 	public TaskView(Context context)
 	{
@@ -59,18 +65,57 @@ public class TaskView extends BaseTaskView
 	 */
 	public void setModel(Model model)
 	{
-		Model mModel = model;
+		mAddedFields.clear();
+		// first populate all views that are hardcoded in XML
+		int childCount = getChildCount();
+		for (int i = 0; i < childCount; ++i)
+		{
+			initChild(getChildAt(i), model);
+		}
+
 		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		/*
 		 * Add a detail view for every field that is supported by this model.
 		 */
-		for (FieldDescriptor field : mModel.getFields())
+		for (FieldDescriptor field : model.getFields())
 		{
-			AbstractFieldView detailView = field.getDetailView(inflater, this);
-			if (detailView != null)
+			if (mAddedFields.get(field.getFieldId(), -1) == -1 && field.autoAdd())
 			{
-				addView(detailView);
+				AbstractFieldView detailView = field.getDetailView(inflater, this);
+				if (detailView != null)
+				{
+					addView(detailView);
+				}
+				mAddedFields.put(field.getFieldId(), 1);
+			}
+		}
+	}
+
+
+	private void initChild(View child, Model model)
+	{
+		if (child instanceof AbstractFieldView)
+		{
+			int fieldId = ((AbstractFieldView) child).getFieldId();
+			if (fieldId != 0)
+			{
+				FieldDescriptor fieldDescriptor = model.getField(fieldId);
+				if (fieldDescriptor != null)
+				{
+					((AbstractFieldView) child).setFieldDescription(fieldDescriptor, fieldDescriptor.getViewLayoutOptions());
+				}
+				// remember that we added this field
+				mAddedFields.put(fieldId, 1);
+			}
+		}
+
+		if (child instanceof ViewGroup)
+		{
+			int childCount = ((ViewGroup) child).getChildCount();
+			for (int i = 0; i < childCount; ++i)
+			{
+				initChild(((ViewGroup) child).getChildAt(i), model);
 			}
 		}
 	}

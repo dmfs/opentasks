@@ -73,11 +73,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 		{
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(getComponentName(context));
-			if (android.os.Build.VERSION.SDK_INT >= 11)
-			{
-				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
-			}
-			else
+			if (android.os.Build.VERSION.SDK_INT < 11)
 			{
 				onUpdate(context, appWidgetManager, appWidgetIds);
 			}
@@ -100,7 +96,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
+
 		String authority = context.getString(R.string.org_dmfs_tasks_authority);
 
 		if (android.os.Build.VERSION.SDK_INT < 11)
@@ -215,7 +211,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			{
 				widget.setRemoteAdapter(R.id.task_list_widget_lv, remoteServiceIntent);
 			}
-			appWidgetManager.notifyAppWidgetViewDataChanged(i, R.id.task_list_widget_lv);
+			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds[i], R.id.task_list_widget_lv);
 
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
 			PendingIntent clickPI = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);

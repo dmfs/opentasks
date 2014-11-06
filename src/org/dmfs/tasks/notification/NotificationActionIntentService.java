@@ -24,6 +24,8 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
 
 import android.annotation.TargetApi;
@@ -110,9 +112,10 @@ public class NotificationActionIntentService extends IntentService
 				{
 					Time time = new Time(tz);
 					time.set(due);
+					time.allDay = false;
 					time.hour++;
 					time.normalize(true);
-					delayTask(taskId, time.toMillis(true), tz);
+					delayTask(taskId, time);
 				}
 				else if (ACTION_DELAY_1D.equals(action))
 				{
@@ -122,9 +125,10 @@ public class NotificationActionIntentService extends IntentService
 					}
 					Time time = new Time(tz);
 					time.set(due);
+					time.allDay = true;
 					time.monthDay++;
 					time.normalize(true);
-					delayTask(taskId, time.toMillis(true), tz);
+					delayTask(taskId, time);
 				}
 
 			}
@@ -231,28 +235,11 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
-	private void delayTask(long taskId, long due, String timezone)
+	private void delayTask(long taskId, Time dueTime)
 	{
-		ContentResolver contentResolver = getContentResolver();
-		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>(1);
-		ContentProviderOperation.Builder operation = ContentProviderOperation.newUpdate(ContentUris.withAppendedId(mTasksUri, taskId));
-		operation.withValue(Tasks.DUE, due);
-		operation.withValue(Tasks.TZ, timezone);
-		operations.add(operation.build());
-		try
-		{
-			contentResolver.applyBatch(mAuthority, operations);
-		}
-		catch (RemoteException e)
-		{
-			Log.e(TAG, "Remote exception during delay task action");
-			e.printStackTrace();
-		}
-		catch (OperationApplicationException e)
-		{
-			Log.e(TAG, "Unable to delay task: " + taskId);
-			e.printStackTrace();
-		}
+		ContentSet values = new ContentSet(ContentUris.withAppendedId(mTasksUri, taskId));
+		TaskFieldAdapters.DUE.set(values, dueTime);
+		values.persist(this);
 	}
 
 

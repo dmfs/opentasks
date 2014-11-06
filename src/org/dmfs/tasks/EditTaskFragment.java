@@ -162,6 +162,18 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	@Retain(key = PREFERENCE_LAST_ACCOUNT_TYPE, classNS = "", permanent = true)
 	private String mLastAccountType = null;
 
+	/**
+	 * A Runnable that updates the view.
+	 */
+	private Runnable mUpdateViewRunnable = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			updateView();
+		}
+	};
+
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
@@ -378,6 +390,18 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
+	/**
+	 * Update the view. This doesn't call {@link #updateView()} right away, instead it posts it.
+	 */
+	private void postUpdateView()
+	{
+		if (mContent != null)
+		{
+			mContent.post(mUpdateViewRunnable);
+		}
+	}
+
+
 	@Override
 	public void onModelLoaded(Model model)
 	{
@@ -389,7 +413,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		if (mModel == null || !mModel.equals(model))
 		{
 			mModel = model;
-			updateView();
+			postUpdateView();
 		}
 	}
 
@@ -531,7 +555,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		}
 		else
 		{
-			updateView();
+			postUpdateView();
 		}
 	}
 

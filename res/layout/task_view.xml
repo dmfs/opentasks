@@ -1,8 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.TaskView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
+
+    <org.dmfs.tasks.widget.ListColorView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        app:fieldDescriptor="@id/task_field_list_color" >
+
+        <org.dmfs.tasks.widget.TextFieldView
+            android:id="@+id/task_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:paddingEnd="48dp"
+            android:paddingLeft="48dp"
+            android:paddingRight="48dp"
+            android:paddingStart="48dp"
+            app:fieldDescriptor="@id/task_field_title" >
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/field_view_text_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="none"
+                android:fontFamily="sans-serif-light"
+                android:textColor="#ffffffff"
+                android:textSize="28sp" >
+            </TextView>
+        </org.dmfs.tasks.widget.TextFieldView>
+
+        <org.dmfs.tasks.widget.TimeFieldView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            style="@style/task_widget"
+            android:orientation="vertical"
+            android:paddingEnd="56dp"
+            android:paddingLeft="56dp"
+            android:paddingStart="56dp"
+            app:fieldDescriptor="@id/task_field_due" >
+
+            <TextView
+                android:id="@android:id/text1"
+                style="@style/field_view_text_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_tab_due"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/ic_tab_due"
+                android:textColor="#ffffffff"
+                android:textSize="18sp" >
+            </TextView>
+
+            <TextView
+                android:id="@android:id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="44dp"
+                android:textColor="#ffffffff" >
+            </TextView>
+
+            <LinearLayout
+                android:id="@+id/buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <TextView
+                    android:id="@+id/button_add_one_day"
+                    style="@style/time_forward_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/button_add_one_day"
+                    android:textColor="#a0ffffff" />
+
+                <TextView
+                    android:id="@+id/button_add_one_hour"
+                    style="@style/time_forward_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/button_add_one_hour"
+                    android:textColor="#a0ffffff" />
+            </LinearLayout>
+        </org.dmfs.tasks.widget.TimeFieldView>
+    </org.dmfs.tasks.widget.ListColorView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:orientation="horizontal"
+        android:paddingEnd="48dp"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        android:paddingStart="48dp" >
+
+        <TextView
+            style="@style/field_view_text_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="none"
+            android:text=" in "
+            android:textColor="#80000000"
+            android:textSize="14sp" >
+        </TextView>
+
+        <org.dmfs.tasks.widget.TextFieldView
+            android:id="@+id/list_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fieldDescriptor="@id/task_field_list_name" >
+
+            <TextView
+                android:id="@id/text"
+                style="@style/field_view_text_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="none"
+                android:textColor="#80000000"
+                android:textSize="14sp" >
+            </TextView>
+        </org.dmfs.tasks.widget.TextFieldView>
+
+        <org.dmfs.tasks.widget.TextFieldView
+            android:id="@+id/account_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fieldDescriptor="@id/task_field_account_name" >
+
+            <TextView
+                android:id="@id/text"
+                style="@style/field_view_text_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="none"
+                android:textColor="#80000000"
+                android:textSize="14sp"
+                android:visibility="gone" >
+            </TextView>
+        </org.dmfs.tasks.widget.TextFieldView>
+    </LinearLayout>
 
 </org.dmfs.tasks.widget.TaskView>

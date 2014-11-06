@@ -4,4 +4,8 @@
     <attr name="primaryColor" format="color" />
     <attr name="primaryColorShaded" format="color" />
 
+    <declare-styleable name="AbstractFieldView">
+        <attr name="fieldDescriptor" format="integer" />
+    </declare-styleable>
+
 </resources>

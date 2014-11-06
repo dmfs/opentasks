@@ -127,6 +127,18 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	 */
 	private Callback mCallback;
 
+	/**
+	 * A Runnable that updates the view.
+	 */
+	private Runnable mUpdateViewRunnable = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			updateView();
+		}
+	};
+
 	public interface Callback
 	{
 		/**
@@ -199,9 +211,10 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		if (mContent != null)
+		// remove listener
+		if (mContentSet != null)
 		{
-			mContent.removeAllViews();
+			mContentSet.removeOnChangeListener(this, null);
 		}
 
 		if (mTaskUri != null)
@@ -209,11 +222,17 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			mAppContext.getContentResolver().unregisterContentObserver(mObserver);
 		}
 
+		if (mContent != null)
+		{
+			mContent.removeAllViews();
+		}
+
 		if (mDetailView != null)
 		{
 			// remove values, to ensure all listeners get released
 			mDetailView.setValues(null);
 		}
+
 	}
 
 
@@ -228,17 +247,13 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		{
 			if (mContent != null && mContentSet != null)
 			{
-				// register listener and observer
+				// register for content updates
 				mContentSet.addOnChangeListener(this, null, true);
+
+				// register observer
 				if (mTaskUri != null)
 				{
 					mAppContext.getContentResolver().registerContentObserver(mTaskUri, false, mObserver);
-				}
-
-				if (mContentSet.getAsString(Tasks.ACCOUNT_TYPE) != null)
-				{
-					// the content set contains a valid task, so load the model
-					Sources.loadModelAsync(mAppContext, mContentSet.getAsString(Tasks.ACCOUNT_TYPE), this);
 				}
 			}
 		}
@@ -309,12 +324,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	{
 		if (mTaskUri != null)
 		{
-			if (mTaskUri.equals(uri))
-			{
-				// same URI, no need to do anything. We don't need to reload, since we automatically reload when the content changes.
-				return;
-			}
-
 			/*
 			 * Unregister the observer for any previously shown task first.
 			 */
@@ -387,6 +396,18 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
+	/**
+	 * Update the view. This doesn't call {@link #updateView()} right away, instead it posts it.
+	 */
+	private void postUpdateView()
+	{
+		if (mContent != null)
+		{
+			mContent.post(mUpdateViewRunnable);
+		}
+	}
+
+
 	@Override
 	public void onModelLoaded(Model model)
 	{
@@ -399,7 +420,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		if (mModel == null || !mModel.equals(model))
 		{
 			mModel = model;
-			updateView();
+			postUpdateView();
 		}
 	}
 
@@ -481,6 +502,29 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
+	public static int darkenColor(int color)
+	{
+		float[] hsv = new float[3];
+		Color.colorToHSV(color, hsv);
+		if (hsv[2] > 0.8)
+		{
+			hsv[2] = 0.8f + (hsv[2] - 0.8f) * 0.5f;
+			color = Color.HSVToColor(hsv);
+		}
+		return color;
+	}
+
+
+	public static int darkenColor2(int color)
+	{
+		float[] hsv = new float[3];
+		Color.colorToHSV(color, hsv);
+		hsv[2] = hsv[2] * 0.75f;
+		color = Color.HSVToColor(hsv);
+		return color;
+	}
+
+
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
@@ -489,21 +533,19 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
 			percentage = (float) Math.pow(percentage, 1.5);
 
-			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
-			// because the user might notice a small change in lightness when scrolling
-			// TODO: find a better way to achieve the same effect
+			int newColor = darkenColor2(mListColor);
 
 			float[] hsv = new float[3];
 			Color.colorToHSV(mListColor, hsv);
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
-			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
+			// int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
 			ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-			actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
+			actionBar.setBackgroundDrawable(new ColorDrawable((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24)));
 
 			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
-			actionBar.setDisplayShowTitleEnabled(false);
 			actionBar.setDisplayShowTitleEnabled(true);
+			actionBar.setDisplayShowTitleEnabled(false);
 
 			mColorBar.setBackgroundColor(mListColor);
 		}
@@ -530,7 +572,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			else
 			{
 				// the model didn't change, just update the view
-				updateView();
+				postUpdateView();
 			}
 
 			Activity activity = getActivity();

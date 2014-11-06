@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.ListColorView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget"
+    android:orientation="vertical" >
+
+</org.dmfs.tasks.widget.ListColorView>

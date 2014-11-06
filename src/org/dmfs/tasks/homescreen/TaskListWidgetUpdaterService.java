@@ -21,7 +21,6 @@ package org.dmfs.tasks.homescreen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -66,8 +65,7 @@ import android.widget.RemoteViewsService;
 public class TaskListWidgetUpdaterService extends RemoteViewsService
 {
 	private final static String TAG = "TaskListWidgetUpdaterService";
-
-	Map<Integer, TaskListViewsFactory> mViewFactoryMap = new HashMap<Integer, TaskListWidgetUpdaterService.TaskListViewsFactory>();
+	private HashMap<Integer, TaskListViewsFactory> mViewFactoryMap = new HashMap<Integer, TaskListWidgetUpdaterService.TaskListViewsFactory>(12);
 
 
 	/*
@@ -91,13 +89,14 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			viewFactory.reload();
 		}
 		return viewFactory;
-
 	}
 
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
+		// this function is used on incoming provider changed broadcasts
+
 		int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
 		TaskListViewsFactory viewFactory = mViewFactoryMap.get(widgetId);
@@ -120,7 +119,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 	public static class TaskListViewsFactory implements RemoteViewsService.RemoteViewsFactory, TimeChangeListener
 	{
 		/** The {@link TaskListWidgetItem} array which stores the tasks to be displayed. When the cursor loads it is updated. */
-		private static TaskListWidgetItem[] mItems = null;
+		private TaskListWidgetItem[] mItems = null;
 
 		/** The {@link Context} of the {@link Application} to which this widget belongs. */
 		private Context mContext;
@@ -166,6 +165,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 
 		public void reload()
 		{
+			mItems = null;
 			mExecutor.execute(mReloadTasks);
 
 		}
@@ -237,7 +237,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 
 			RemoteViews row = new RemoteViews(mContext.getPackageName(), R.layout.task_list_widget_item);
 
-			row.setTextViewText(android.R.id.title, items[position].getTaskTitle());
+			String taskTitle = items[position].getTaskTitle();
+			row.setTextViewText(android.R.id.title, taskTitle);
 			row.setInt(R.id.task_list_color, "setBackgroundColor", items[position].getTaskColor());
 
 			Time dueDate = items[position].getDueDate();
@@ -337,6 +338,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public void onDataSetChanged()
 		{
+
 		}
 
 
@@ -372,7 +374,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 			if (mTasksCursor.getCount() > 0)
 			{
-
 				TaskListWidgetItem[] items = new TaskListWidgetItem[mTasksCursor.getCount()];
 				int itemIndex = 0;
 
@@ -396,7 +397,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			@Override
 			public void run()
 			{
-
 				// load TaskLists for this widget
 				WidgetConfigurationDatabaseHelper configHelper = new WidgetConfigurationDatabaseHelper(mContext);
 				SQLiteDatabase db = configHelper.getWritableDatabase();
@@ -457,7 +457,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				if (mAppWidgetId != -1)
 				{
 					widgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.task_list_widget_lv);
-
 				}
 			}
 		};
