@@ -39,6 +39,7 @@ import android.support.v4.app.FragmentActivity;
 public class TaskListWidgetSettingsActivity extends FragmentActivity implements onSelectionListener
 {
 	private int mAppWidgetId;
+	private Intent mResultIntent;
 
 
 	@Override
@@ -51,6 +52,11 @@ public class TaskListWidgetSettingsActivity extends FragmentActivity implements 
 		if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID))
 		{
 			mAppWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+
+			// make the result intent and set the result to canceled
+			mResultIntent = new Intent();
+			mResultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+			setResult(RESULT_CANCELED, mResultIntent);
 		}
 
 		TaskListSelectionFragment fragment = new TaskListSelectionFragment(this);
