@@ -241,6 +241,8 @@
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+        
+        
         <receiver
             android:name="org.dmfs.tasks.homescreen.ProviderChangedBroadcastReceiver"
             android:enabled="@bool/enable_widget_provider" >

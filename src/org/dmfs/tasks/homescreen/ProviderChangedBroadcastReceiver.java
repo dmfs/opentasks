@@ -36,7 +36,6 @@ public class ProviderChangedBroadcastReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-
 		// update all widgets
 		ComponentName smallProvider = new ComponentName(context, TaskListWidgetProvider.class);
 		int[] smallWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(smallProvider);
