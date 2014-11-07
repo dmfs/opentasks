@@ -540,8 +540,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		g1 = Color.green(col1);
 		b1 = Color.blue(col1);
 
-		int a2 = Color.alpha(col2);
-
 		r2 = Color.red(col2);
 		g2 = Color.green(col2);
 		b2 = Color.blue(col2);

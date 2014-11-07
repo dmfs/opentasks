@@ -62,6 +62,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
@@ -564,6 +566,27 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		}
 	}
 
+	public int mixColors(int col1, int col2)
+	{
+		int r1, g1, b1, r2, g2, b2;
+
+		int a1 = Color.alpha(col1);
+
+		r1 = Color.red(col1);
+		g1 = Color.green(col1);
+		b1 = Color.blue(col1);
+
+		r2 = Color.red(col2);
+		g2 = Color.green(col2);
+		b2 = Color.blue(col2);
+
+		int r3 = (r1 * a1 + r2 * (255 - a1)) / 255;
+		int g3 = (g1 * a1 + g2 * (255 - a1)) / 255;
+		int b3 = (b1 * a1 + b2 * (255 - a1)) / 255;
+
+		return Color.rgb(r3, g3, b3);
+	}
+
 
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
@@ -594,13 +617,20 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
 			actionBar.setDisplayShowTitleEnabled(false);
 			actionBar.setDisplayShowTitleEnabled(true);
+			
+			if (VERSION.SDK_INT >= 21)
+			{
+				Window window = getActivity().getWindow();
+				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+				window.setStatusBarColor(mixColors(newColor, mListColor));
+				window.setNavigationBarColor(mixColors(newColor, mListColor));
+			}
 		}
 		mTaskListBar.setBackgroundColor(mListColor);
 		if (mColorBar != null)
 		{
 			mColorBar.setBackgroundColor(mListColor);
 		}
-
 	}
 
 
