@@ -59,6 +59,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 
@@ -528,6 +530,30 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
+	public int mixColors(int col1, int col2)
+	{
+		int r1, g1, b1, r2, g2, b2;
+
+		int a1 = Color.alpha(col1);
+
+		r1 = Color.red(col1);
+		g1 = Color.green(col1);
+		b1 = Color.blue(col1);
+
+		int a2 = Color.alpha(col2);
+
+		r2 = Color.red(col2);
+		g2 = Color.green(col2);
+		b2 = Color.blue(col2);
+
+		int r3 = (r1 * a1 + r2 * (255 - a1)) / 255;
+		int g3 = (g1 * a1 + g2 * (255 - a1)) / 255;
+		int b3 = (b1 * a1 + b2 * (255 - a1)) / 255;
+
+		return Color.rgb(r3, g3, b3);
+	}
+
+
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
@@ -551,6 +577,14 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			actionBar.setDisplayShowTitleEnabled(false);
 
 			mColorBar.setBackgroundColor(mListColor);
+
+			if (VERSION.SDK_INT >= 21)
+			{
+				Window window = getActivity().getWindow();
+				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+				window.setStatusBarColor(mixColors((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24), mListColor));
+				window.setNavigationBarColor(newColor);
+			}
 		}
 	}
 
