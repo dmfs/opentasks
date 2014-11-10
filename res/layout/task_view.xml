@@ -94,6 +94,25 @@
         </org.dmfs.tasks.widget.TimeFieldView>
     </org.dmfs.tasks.widget.ListColorView>
 
+    <FrameLayout
+        android:id="@+id/action_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="right"
+        android:layout_marginBottom="-28dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="-28dp"
+        android:background="@drawable/bg_actionbutton"
+        android:clickable="true" >
+
+        <ImageView
+            android:id="@android:id/icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_notification_action_complete" />
+    </FrameLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
