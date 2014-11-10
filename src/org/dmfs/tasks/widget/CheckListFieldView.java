@@ -120,12 +120,6 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 	public void onContentLoaded(ContentSet contentSet)
 	{
 		super.onContentLoaded(contentSet);
-
-		Integer customBackgroud = getCustomBackgroundColor();
-		if (customBackgroud != null)
-		{
-			mText.setTextColor(getTextColorFromBackground(customBackgroud));
-		}
 	}
 
 
@@ -147,11 +141,6 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 	private void updateCheckList(List<CheckListItem> list)
 	{
 		Context context = getContext();
-		Integer customBackgroud = getCustomBackgroundColor();
-		if (customBackgroud != null)
-		{
-			mText.setTextColor(getTextColorFromBackground(customBackgroud));
-		}
 
 		if (list == null || list.size() == 0)
 		{

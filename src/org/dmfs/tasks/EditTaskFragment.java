@@ -539,7 +539,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		Cursor c = (Cursor) arg0.getItemAtPosition(pos);
 
 		String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
-		mListColor = c.getInt(TASK_LIST_PROJECTION_VALUES.list_color);
+		mListColor = TaskFieldAdapters.LIST_COLOR.get(c);
 		updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 
 		if (mEditor != null)
@@ -565,6 +565,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			postUpdateView();
 		}
 	}
+
 
 	public int mixColors(int col1, int col2)
 	{
@@ -617,7 +618,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
 			actionBar.setDisplayShowTitleEnabled(false);
 			actionBar.setDisplayShowTitleEnabled(true);
-			
+
 			if (VERSION.SDK_INT >= 21)
 			{
 				Window window = getActivity().getWindow();

@@ -22,6 +22,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
@@ -30,7 +31,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -44,11 +44,6 @@ import android.widget.TextView;
  */
 public abstract class AbstractFieldView extends LinearLayout implements OnContentChangeListener
 {
-
-	/**
-	 * A {@link FieldAdapter} that knows how to load the color of the task list.
-	 */
-	private final static IntegerFieldAdapter LIST_COLOR_ADAPTER = new IntegerFieldAdapter(Tasks.LIST_COLOR);
 
 	/**
 	 * A {@link FieldAdapter} that knows how to load the color of a task.
@@ -173,12 +168,12 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 		{
 			if (mLayoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_LIST_BACKGROUND_COLOR, false))
 			{
-				return LIST_COLOR_ADAPTER.get(mValues);
+				return TaskFieldAdapters.LIST_COLOR.get(mValues);
 			}
 			else if (mLayoutOptions.getBoolean(LayoutDescriptor.OPTION_USE_TASK_BACKGROUND_COLOR, false))
 			{
 				Integer taskColor = TASK_COLOR_ADAPTER.get(mValues);
-				return taskColor == null ? LIST_COLOR_ADAPTER.get(mValues) : taskColor;
+				return taskColor == null ? TaskFieldAdapters.LIST_COLOR.get(mValues) : taskColor;
 			}
 		}
 		return null;
@@ -208,42 +203,7 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 			else
 			{
 				titleId.setText(descriptor.getTitle().toUpperCase());
-				Integer customBackgroud = getCustomBackgroundColor();
-				if (customBackgroud != null)
-				{
-					titleId.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
-				}
 			}
-		}
-	}
-
-
-	/**
-	 * Make up a text color for a given background color.
-	 * <p>
-	 * This method determines an approximate luminance of the background color and returns white for dark colors and a dark gray for bright colors.
-	 * </p>
-	 * 
-	 * @param color
-	 *            The background color.
-	 * @return An appropriate text color.
-	 */
-	public static int getTextColorFromBackground(int color)
-	{
-		int redComponent = Color.red(color);
-		int greenComponent = Color.green(color);
-		int blueComponent = Color.blue(color);
-		int alphaComponent = Color.alpha(color);
-		int determinant = ((redComponent + redComponent + redComponent + blueComponent + greenComponent + greenComponent + greenComponent + greenComponent) >> 3)
-			* alphaComponent / 255;
-		// Value 180 has been set by trial and error.
-		if (determinant > 180)
-		{
-			return Color.argb(255, 0x33, 0x33, 0x33);
-		}
-		else
-		{
-			return Color.WHITE;
 		}
 	}
 

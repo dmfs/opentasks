@@ -28,7 +28,7 @@ import android.database.Cursor;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class IntegerFieldAdapter extends FieldAdapter<Integer>
+public class IntegerFieldAdapter extends FieldAdapter<Integer>
 {
 
 	/**
