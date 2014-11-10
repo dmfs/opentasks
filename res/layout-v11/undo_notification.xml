@@ -27,7 +27,7 @@
     <ImageView
         android:layout_width="@android:dimen/notification_large_icon_width"
         android:layout_height="@android:dimen/notification_large_icon_height"
-        android:background="@android:color/black"
+        android:background="@android:color/transparent"
         android:scaleType="center"
         android:src="@drawable/ic_notification_completed" />
 
