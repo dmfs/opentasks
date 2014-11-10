@@ -94,12 +94,6 @@ public class TextFieldView extends AbstractFieldView
 			if (!TextUtils.isEmpty(adapterStringValue))
 			{
 				mText.setText(adapterStringValue);
-
-				Integer customBackgroud = getCustomBackgroundColor();
-				if (customBackgroud != null)
-				{
-					mText.setTextColor(getTextColorFromBackground(customBackgroud));
-				}
 				setVisibility(View.VISIBLE);
 			}
 			else

@@ -19,7 +19,7 @@ package org.dmfs.tasks.utils;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.widget.AbstractFieldView;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -95,11 +95,6 @@ public class TasksListCursorSpinnerAdapter extends android.support.v4.widget.Cur
 
 		listName.setText(cursor.getString(mTaskNameColumn));
 		accountName.setText(cursor.getString(mAccountNameColumn));
-		int taskListColor = cursor.getInt(mTaskColorColumn);
-		int backgroundBasedColor = AbstractFieldView.getTextColorFromBackground(taskListColor);
-
-		listName.setTextColor(backgroundBasedColor);
-		accountName.setTextColor(backgroundBasedColor);
 		return convertView;
 	}
 
@@ -108,8 +103,7 @@ public class TasksListCursorSpinnerAdapter extends android.support.v4.widget.Cur
 	{
 		if (convertView == null)
 		{
-			convertView = mInflater.inflate(R.layout.list_spinner_item_dropdown, null);
-
+			convertView = mInflater.inflate(R.layout.list_spinner_item_dropdown, parent, false);
 		}
 
 		View listColor = convertView.findViewById(R.id.task_list_color);
@@ -117,7 +111,7 @@ public class TasksListCursorSpinnerAdapter extends android.support.v4.widget.Cur
 		TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
 		Cursor cursor = (Cursor) getItem(position);
 
-		listColor.setBackgroundColor(cursor.getInt(mTaskColorColumn));
+		listColor.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
 		listName.setText(cursor.getString(mTaskNameColumn));
 		accountName.setText(cursor.getString(mAccountNameColumn));
 		return convertView;

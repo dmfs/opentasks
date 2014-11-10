@@ -20,6 +20,7 @@ package org.dmfs.tasks.model.adapters;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -107,6 +108,13 @@ public final class FloatFieldAdapter extends FieldAdapter<Float>
 
 	@Override
 	public void set(ContentSet values, Float value)
+	{
+		values.put(mFieldName, value);
+	}
+
+
+	@Override
+	public void set(ContentValues values, Float value)
 	{
 		values.put(mFieldName, value);
 	}

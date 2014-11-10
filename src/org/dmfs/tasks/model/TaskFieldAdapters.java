@@ -21,6 +21,7 @@ import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
+import org.dmfs.tasks.model.adapters.ColorFieldAdapter;
 import org.dmfs.tasks.model.adapters.DescriptionStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
@@ -132,7 +133,7 @@ public final class TaskFieldAdapters
 	/**
 	 * Adapter for the Color of the task.
 	 * */
-	public final static IntegerFieldAdapter LIST_COLOR = new IntegerFieldAdapter(TaskContract.Tasks.LIST_COLOR);
+	public final static IntegerFieldAdapter LIST_COLOR = new ColorFieldAdapter(TaskContract.Tasks.LIST_COLOR, 0.8f);
 
 	/**
 	 * Adpater for the ID of the task.

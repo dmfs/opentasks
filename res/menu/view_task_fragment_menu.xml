@@ -7,6 +7,7 @@
         android:icon="@drawable/ic_action_complete"
         android:title="@string/activity_task_details_complete_task"
         android:titleCondensed="@string/activity_task_details_complete"
+        android:visible="false"
         app:showAsAction="always">
     </item>
     <item

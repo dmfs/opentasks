@@ -185,13 +185,6 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 
 	private void buildCheckList(List<CheckListItem> list)
 	{
-		Context context = getContext();
-		Integer customBackgroud = getCustomBackgroundColor();
-		if (customBackgroud != null)
-		{
-			mText.setTextColor(getTextColorFromBackground(customBackgroud));
-		}
-
 		mBuilding = true;
 
 		int count = 0;

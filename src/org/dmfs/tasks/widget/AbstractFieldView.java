@@ -209,11 +209,6 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 			else
 			{
 				titleId.setText(descriptor.getTitle().toUpperCase());
-				Integer customBackgroud = getCustomBackgroundColor();
-				if (customBackgroud != null)
-				{
-					titleId.setTextColor(AbstractFieldView.getTextColorFromBackground(customBackgroud));
-				}
 			}
 		}
 

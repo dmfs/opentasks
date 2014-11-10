@@ -77,7 +77,7 @@ public class NotificationActionUtils
 
 
 	public static void sendDueAlarmNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long dueDate, boolean dueAllDay,
-		String timezone)
+		String timezone, boolean silent)
 	{
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -103,7 +103,14 @@ public class NotificationActionUtils
 		mBuilder.setTicker(title);
 
 		// enable light, sound and vibration
-		mBuilder.setDefaults(Notification.DEFAULT_ALL);
+		if (silent)
+		{
+			mBuilder.setDefaults(0);
+		}
+		else
+		{
+			mBuilder.setDefaults(Notification.DEFAULT_ALL);
+		}
 
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(Intent.ACTION_VIEW);
@@ -121,14 +128,8 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			if (!dueAllDay)
-			{
-				mBuilder.addAction(NotificationActionIntentService.getDelay1hAction(context, notificationId, taskId, dueDate, timezone));
-			}
-			else
-			{
-				mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone));
-			}
+
+			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone, dueAllDay));
 
 			// complete action
 			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
@@ -155,7 +156,8 @@ public class NotificationActionUtils
 	}
 
 
-	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long startDate, boolean startAllDay)
+	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long startDate, boolean startAllDay,
+		boolean silent)
 	{
 		String startString = "";
 		if (startAllDay)
@@ -181,7 +183,14 @@ public class NotificationActionUtils
 		mBuilder.setTicker(title);
 
 		// enable light, sound and vibration
-		mBuilder.setDefaults(Notification.DEFAULT_ALL);
+		if (silent)
+		{
+			mBuilder.setDefaults(0);
+		}
+		else
+		{
+			mBuilder.setDefaults(Notification.DEFAULT_ALL);
+		}
 
 		// set notification time
 		// set displayed time
@@ -250,6 +259,9 @@ public class NotificationActionUtils
 		builder.setSmallIcon(R.drawable.ic_notification_completed);
 		builder.setWhen(action.getWhen());
 
+		// disable sound & vibration
+		builder.setDefaults(0);
+
 		final RemoteViews undoView = new RemoteViews(context.getPackageName(), R.layout.undo_notification);
 		undoView.setTextViewText(R.id.description_text, context.getString(action.mActionTextResId));
 
@@ -259,9 +271,7 @@ public class NotificationActionUtils
 		clickIntent.setPackage(packageName);
 		putNotificationActionExtra(clickIntent, action);
 		final PendingIntent clickPendingIntent = PendingIntent.getService(context, action.getNotificationId(), clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
 		undoView.setOnClickPendingIntent(R.id.status_bar_latest_event_content, clickPendingIntent);
-
 		builder.setContent(undoView);
 
 		// When the notification is cleared, we perform the destructive action

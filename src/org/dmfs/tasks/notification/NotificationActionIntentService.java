@@ -24,7 +24,6 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
 
@@ -34,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
@@ -69,6 +69,7 @@ public class NotificationActionIntentService extends IntentService
 	public static final String EXTRA_TASK_ID = "org.dmfs.tasks.extras.notification.TASK_ID";
 	public static final String EXTRA_TASK_DUE = "org.dmfs.tasks.extras.notification.TASK_DUE";
 	public static final String EXTRA_TIMEZONE = "org.dmfs.tasks.extras.notification.TIMEZONE";
+	public static final String EXTRA_ALLDAY = "org.dmfs.tasks.extras.notification.ALLDAY";
 
 	private String mAuthority;
 	private Uri mTasksUri;
@@ -108,6 +109,7 @@ public class NotificationActionIntentService extends IntentService
 			{
 				long due = intent.getLongExtra(EXTRA_TASK_DUE, -1);
 				String tz = intent.getStringExtra(EXTRA_TIMEZONE);
+				boolean allDay = intent.getBooleanExtra(EXTRA_ALLDAY, false);
 				if (ACTION_DELAY_1H.equals(action))
 				{
 					Time time = new Time(tz);
@@ -125,7 +127,7 @@ public class NotificationActionIntentService extends IntentService
 					}
 					Time time = new Time(tz);
 					time.set(due);
-					time.allDay = true;
+					time.allDay = allDay;
 					time.monthDay++;
 					time.normalize(true);
 					delayTask(taskId, time);
@@ -200,12 +202,14 @@ public class NotificationActionIntentService extends IntentService
 			Intent dueIntent = new Intent(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM);
 			dueIntent.setPackage(getApplicationContext().getPackageName());
 			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, notificationAction.getWhen());
+			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, true);
 			sendBroadcast(dueIntent);
 
 			// Start broadcast
 			Intent startIntent = new Intent(StartAlarmBroadcastHandler.BROADCAST_START_ALARM);
 			startIntent.setPackage(getApplicationContext().getPackageName());
 			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, notificationAction.getWhen());
+			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, true);
 			sendBroadcast(startIntent);
 		}
 	}
@@ -237,9 +241,9 @@ public class NotificationActionIntentService extends IntentService
 
 	private void delayTask(long taskId, Time dueTime)
 	{
-		ContentSet values = new ContentSet(ContentUris.withAppendedId(mTasksUri, taskId));
+		ContentValues values = new ContentValues(4);
 		TaskFieldAdapters.DUE.set(values, dueTime);
-		values.persist(this);
+		getContentResolver().update(ContentUris.withAppendedId(mTasksUri, taskId), values, null, null);
 	}
 
 
@@ -259,14 +263,14 @@ public class NotificationActionIntentService extends IntentService
 	public static Action getDelay1hAction(Context context, int notificationId, long taskId, long due, String timezone)
 	{
 		return new Action(R.drawable.ic_notification_action_delay, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context,
-			notificationId, taskId, due, true, timezone));
+			notificationId, taskId, due, true, timezone, false));
 	}
 
 
-	public static Action getDelay1dAction(Context context, int notificationId, long taskId, long due, String timezone)
+	public static Action getDelay1dAction(Context context, int notificationId, long taskId, long due, String timezone, boolean allday)
 	{
 		return new Action(R.drawable.ic_notification_action_delay_day, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
-			notificationId, taskId, due, false, timezone));
+			notificationId, taskId, due, false, timezone, allday));
 	}
 
 
@@ -281,7 +285,8 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
-	private static PendingIntent getDelayActionIntent(Context context, int notificationId, long taskId, long due, boolean delay1h, String timezone)
+	private static PendingIntent getDelayActionIntent(Context context, int notificationId, long taskId, long due, boolean delay1h, String timezone,
+		boolean allday)
 	{
 		String action = null;
 		if (delay1h)
@@ -297,6 +302,7 @@ public class NotificationActionIntentService extends IntentService
 		intent.putExtra(EXTRA_TASK_ID, taskId);
 		intent.putExtra(EXTRA_TASK_DUE, due);
 		intent.putExtra(EXTRA_TIMEZONE, timezone);
+		intent.putExtra(EXTRA_ALLDAY, allday);
 		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
 		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_DELAY, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		return pendingIntent;

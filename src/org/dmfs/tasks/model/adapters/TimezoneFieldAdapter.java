@@ -22,6 +22,7 @@ import java.util.TimeZone;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -170,6 +171,25 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 	 *            The cursor to read from.
 	 * @return <code>true</code> if the cursor points to an all-day date.
 	 */
+	public boolean isAllDay(ContentValues values)
+	{
+		if (mAllDayFieldName == null)
+		{
+			return false;
+		}
+
+		Integer allday = values.getAsInteger(mAllDayFieldName);
+		return allday != null && allday > 0;
+	}
+
+
+	/**
+	 * Returns whether this is an "all-day timezone".
+	 * 
+	 * @param cursor
+	 *            The cursor to read from.
+	 * @return <code>true</code> if the cursor points to an all-day date.
+	 */
 	public boolean isAllDay(Cursor cursor)
 	{
 		if (mAllDayFieldName == null)
@@ -200,6 +220,23 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 
 	@Override
 	public void set(ContentSet values, TimeZone value)
+	{
+		if (!isAllDay(values))
+		{
+			if (value != null)
+			{
+				values.put(mTzFieldName, value.getID());
+			}
+		}
+		else
+		{
+			values.put(mTzFieldName, (String) null);
+		}
+	}
+
+
+	@Override
+	public void set(ContentValues values, TimeZone value)
 	{
 		if (!isAllDay(values))
 		{

@@ -20,6 +20,7 @@ package org.dmfs.tasks.model.adapters;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -86,6 +87,13 @@ public class StringFieldAdapter extends FieldAdapter<String>
 	}
 
 
+	public String get(ContentValues values)
+	{
+		// return the value as String
+		return values.getAsString(mFieldName);
+	}
+
+
 	@Override
 	public String get(Cursor cursor)
 	{
@@ -107,6 +115,13 @@ public class StringFieldAdapter extends FieldAdapter<String>
 
 	@Override
 	public void set(ContentSet values, String value)
+	{
+		values.put(mFieldName, value);
+	}
+
+
+	@Override
+	public void set(ContentValues values, String value)
 	{
 		values.put(mFieldName, value);
 	}

@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp" >
 
     <TextView
         android:id="@+id/task_list_name"
@@ -18,7 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:ellipsize="end"
-        android:singleLine="true" >
+        android:singleLine="true"
+        android:textColor="#a0ffffff" >
     </TextView>
 
 </LinearLayout>

@@ -227,6 +227,31 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	}
 
 
+	@Override
+	public void set(ContentValues values, Time value)
+	{
+		if (value != null)
+		{
+			// just store all three parts separately
+			values.put(mTimestampField, value.toMillis(false));
+
+			if (mTzField != null)
+			{
+				values.put(mTzField, value.allDay ? null : value.timezone);
+			}
+			if (mAllDayField != null)
+			{
+				values.put(mAllDayField, value.allDay ? 1 : 0);
+			}
+		}
+		else
+		{
+			// write timestamp only, other fields may still use allday and timezone
+			values.put(mTimestampField, (Long) null);
+		}
+	}
+
+
 	/**
 	 * Return whether this adapter reads the time zone field.
 	 * 
