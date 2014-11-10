@@ -61,6 +61,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -74,6 +75,16 @@ import android.widget.Toast;
 public class ViewTaskFragment extends SupportFragment implements OnModelLoadedListener, OnContentChangeListener
 {
 	private final static String ARG_URI = "uri";
+
+	/**
+	 * Edit action assigned to the floating action button.
+	 */
+	private final static int ACTION_EDIT = 1;
+
+	/**
+	 * Complete action assigned to the floating action button.
+	 */
+	private final static int ACTION_COMPLETE = 2;
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -121,8 +132,14 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 
 	private View mColorBar;
 	private int mListColor;
+	private View mActionButton;
 	private ListenableScrollView mRootView;
 	private int mOldStatus = -1;
+
+	/**
+	 * The current action that's assigned to the floating action button.
+	 */
+	private int mActionButtonAction = ACTION_COMPLETE;
 
 	/**
 	 * A {@link Callback} to the activity.
@@ -393,6 +410,41 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				mContent.addView(mDetailView);
 			}
 
+			mActionButton = mDetailView.findViewById(R.id.action_button);
+
+			if (mActionButton != null)
+			{
+				mActionButton.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						switch (mActionButtonAction)
+						{
+							case ACTION_COMPLETE:
+							{
+								completeTask();
+								break;
+							}
+							case ACTION_EDIT:
+							{
+								mCallback.onEditTask(mTaskUri, mContentSet);
+								break;
+							}
+						}
+					}
+				});
+				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet))
+				{
+					((ImageView) mActionButton.findViewById(android.R.id.icon)).setImageResource(R.drawable.content_edit);
+					mActionButtonAction = ACTION_EDIT;
+				}
+				else
+				{
+					mActionButtonAction = ACTION_COMPLETE;
+				}
+			}
+
 			if (mColorBar != null)
 			{
 				updateColor((float) mRootView.getScrollY() / mColorBar.getMeasuredHeight());
@@ -449,8 +501,8 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				}
 				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet) || status != null && status == Tasks.STATUS_COMPLETED)
 				{
-					// can not complete task since it's already closed, disable menu item
-					MenuItem item = menu.findItem(R.id.complete_task);
+					// we disable the edit option, because the task is completed and the action button shows the edit option.
+					MenuItem item = menu.findItem(R.id.edit_task);
 					item.setEnabled(false);
 					item.setVisible(false);
 				}
@@ -493,17 +545,26 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		}
 		else if (itemId == R.id.complete_task)
 		{
-			TaskFieldAdapters.STATUS.set(mContentSet, Tasks.STATUS_COMPLETED);
-			persistTask();
-			Toast.makeText(mAppContext, getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)), Toast.LENGTH_SHORT).show();
-			// at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
-			mCallback.onDelete(mTaskUri);
+			completeTask();
 			return true;
 		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+
+	/**
+	 * Completes the current task.
+	 */
+	private void completeTask()
+	{
+		TaskFieldAdapters.STATUS.set(mContentSet, Tasks.STATUS_COMPLETED);
+		persistTask();
+		Toast.makeText(mAppContext, getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)), Toast.LENGTH_SHORT).show();
+		// at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
+		mCallback.onDelete(mTaskUri);
 	}
 
 
@@ -530,19 +591,20 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
-	public int mixColors(int col1, int col2)
+	/**
+	 * Calculates the resulting color when you put col1 over col2.
+	 */
+	private int blendColors(int col1, int col2)
 	{
-		int r1, g1, b1, r2, g2, b2;
-
 		int a1 = Color.alpha(col1);
 
-		r1 = Color.red(col1);
-		g1 = Color.green(col1);
-		b1 = Color.blue(col1);
+		int r1 = Color.red(col1);
+		int g1 = Color.green(col1);
+		int b1 = Color.blue(col1);
 
-		r2 = Color.red(col2);
-		g2 = Color.green(col2);
-		b2 = Color.blue(col2);
+		int r2 = Color.red(col2);
+		int g2 = Color.green(col2);
+		int b2 = Color.blue(col2);
 
 		int r3 = (r1 * a1 + r2 * (255 - a1)) / 255;
 		int g3 = (g1 * a1 + g2 * (255 - a1)) / 255;
@@ -555,6 +617,9 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
+		float[] hsv = new float[3];
+		Color.colorToHSV(mListColor, hsv);
+
 		if (VERSION.SDK_INT >= 11 && mColorBar != null)
 		{
 			percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
@@ -562,8 +627,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 
 			int newColor = darkenColor2(mListColor);
 
-			float[] hsv = new float[3];
-			Color.colorToHSV(mListColor, hsv);
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
 			// int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
@@ -580,8 +643,22 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			{
 				Window window = getActivity().getWindow();
 				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-				window.setStatusBarColor(mixColors((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24), mListColor));
+				window.setStatusBarColor(blendColors((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24), mListColor));
 				window.setNavigationBarColor(newColor);
+			}
+		}
+
+		if (mActionButton != null)
+		{
+			// adjust color of action button
+			if (hsv[0] > 70 && hsv[0] < 170)
+			{
+				// list color is some shade of green, use an orange action button
+				mActionButton.setBackgroundResource(R.drawable.bg_actionbutton_orange);
+			}
+			else
+			{
+				mActionButton.setBackgroundResource(R.drawable.bg_actionbutton);
 			}
 		}
 	}
@@ -600,16 +677,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				updateColor((float) mRootView.getScrollY() / ((ActionBarActivity) getActivity()).getSupportActionBar().getHeight());
 			}
 
-			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
-			{
-				Sources.loadModelAsync(mAppContext, contentSet.getAsString(Tasks.ACCOUNT_TYPE), this);
-			}
-			else
-			{
-				// the model didn't change, just update the view
-				postUpdateView();
-			}
-
 			Activity activity = getActivity();
 			int newStatus = TaskFieldAdapters.STATUS.get(contentSet);
 			if (VERSION.SDK_INT >= 11 && activity != null
@@ -621,6 +688,16 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			}
 
 			mOldStatus = newStatus;
+
+			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
+			{
+				Sources.loadModelAsync(mAppContext, contentSet.getAsString(Tasks.ACCOUNT_TYPE), this);
+			}
+			else
+			{
+				// the model didn't change, just update the view
+				postUpdateView();
+			}
 		}
 	}
 
