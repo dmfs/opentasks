@@ -88,6 +88,17 @@ public abstract class FieldAdapter<Type>
 
 
 	/**
+	 * Set a value in the given {@link ContentValues}.
+	 * 
+	 * @param values
+	 *            The {@link ContentValues} where to store the new value.
+	 * @param value
+	 *            The new value to store.
+	 */
+	public abstract void set(ContentValues values, Type value);
+
+
+	/**
 	 * Set a value in the given {@link ContentSet}, but validate against the constraints first.
 	 * 
 	 * @param values

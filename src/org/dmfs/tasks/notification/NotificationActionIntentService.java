@@ -24,7 +24,6 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
 
@@ -34,6 +33,7 @@ import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
@@ -241,9 +241,9 @@ public class NotificationActionIntentService extends IntentService
 
 	private void delayTask(long taskId, Time dueTime)
 	{
-		ContentSet values = new ContentSet(ContentUris.withAppendedId(mTasksUri, taskId));
+		ContentValues values = new ContentValues(4);
 		TaskFieldAdapters.DUE.set(values, dueTime);
-		values.persist(this);
+		getContentResolver().update(ContentUris.withAppendedId(mTasksUri, taskId), values, null, null);
 	}
 
 

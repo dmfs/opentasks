@@ -24,6 +24,7 @@ import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -126,6 +127,32 @@ public final class ChecklistFieldAdapter extends FieldAdapter<List<CheckListItem
 			// store the current value just without check list
 			values.put(mFieldName, oldDescription);
 		}
+	}
+
+
+	@Override
+	public void set(ContentValues values, List<CheckListItem> value)
+	{
+		String oldDescription = DescriptionStringFieldAdapter.extractDescription(values.getAsString(mFieldName));
+		if (value != null && value.size() > 0)
+		{
+			StringBuilder sb = new StringBuilder(1024);
+			if (oldDescription != null)
+			{
+				sb.append(oldDescription);
+				sb.append("\n");
+			}
+
+			serializeCheckList(sb, value);
+
+			values.put(mFieldName, sb.toString());
+		}
+		else
+		{
+			// store the current value just without check list
+			values.put(mFieldName, oldDescription);
+		}
+
 	}
 
 

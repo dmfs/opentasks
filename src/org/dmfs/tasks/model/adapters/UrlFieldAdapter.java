@@ -23,6 +23,7 @@ import java.net.URL;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -117,6 +118,13 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 
 	@Override
 	public void set(ContentSet values, URL value)
+	{
+		values.put(mFieldName, value.toString());
+	}
+
+
+	@Override
+	public void set(ContentValues values, URL value)
 	{
 		values.put(mFieldName, value.toString());
 	}
