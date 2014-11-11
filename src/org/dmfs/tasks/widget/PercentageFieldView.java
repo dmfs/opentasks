@@ -80,7 +80,7 @@ public class PercentageFieldView extends AbstractFieldView
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
-		if (mValues != null && mAdapter.get(mValues) != null)
+		if (mValues != null && mAdapter.get(mValues) != null && mAdapter.get(mValues) != 0)
 		{
 			int percentage = mAdapter.get(mValues);
 			mProgress.setProgress(percentage);
