@@ -119,10 +119,10 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:orientation="horizontal"
-        android:paddingEnd="48dp"
-        android:paddingLeft="48dp"
-        android:paddingRight="48dp"
-        android:paddingStart="48dp" >
+        android:paddingEnd="44dp"
+        android:paddingLeft="44dp"
+        android:paddingRight="44dp"
+        android:paddingStart="44dp" >
 
         <TextView
             style="@style/field_view_text_value"

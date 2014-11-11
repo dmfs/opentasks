@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dip"
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
@@ -20,7 +19,7 @@
             style="@style/task_progressbar"
             android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dip"
+            android:layout_marginTop="2dip"
             android:layout_weight="1" />
 
         <TextView

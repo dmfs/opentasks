@@ -127,6 +127,10 @@
         <item name="android:paddingBottom">5dp</item>
     </style>
 
+    <style name="task_edit_widget" parent="task_widget">
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="field_view_text_value" parent="dark_text"> <!-- Common style for all text displays in widgets -->
         <item name="android:layout_marginTop">2dip</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
@@ -203,6 +207,10 @@
 
     <style name="details_label_icon">
         <item name="android:paddingRight">12dp</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:layout_marginLeft">4dp</item>
     </style>
 
 </resources>
