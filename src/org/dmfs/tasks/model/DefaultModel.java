@@ -94,27 +94,27 @@ public class DefaultModel extends Model
 
 		// status
 		addField(new FieldDescriptor(mContext, R.id.task_field_status, R.string.task_status, TaskFieldAdapters.STATUS).setViewLayout(CHOICES_VIEW)
-			.setEditorLayout(CHOICES_EDIT).setChoices(aca));
+			.setEditorLayout(CHOICES_EDIT).setChoices(aca).setIcon(R.drawable.ic_detail_status));
 
 		// location
 		addField(new FieldDescriptor(mContext, R.id.task_field_location, R.string.task_location, TaskFieldAdapters.LOCATION).setViewLayout(TEXT_VIEW)
-			.setEditorLayout(TEXT_EDIT));
+			.setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_location));
 
 		// description
 		addField(new FieldDescriptor(mContext, R.id.task_field_description, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(TEXT_VIEW)
-			.setEditorLayout(TEXT_EDIT));
+			.setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_description));
 
 		// description
 		addField(new FieldDescriptor(mContext, R.id.task_field_checklist, R.string.task_checklist, TaskFieldAdapters.CHECKLIST).setViewLayout(CHECKLIST_VIEW)
-			.setEditorLayout(CHECKLIST_EDIT));
+			.setEditorLayout(CHECKLIST_EDIT).setIcon(R.drawable.ic_detail_checklist));
 
 		// start
 		addField(new FieldDescriptor(mContext, R.id.task_field_dtstart, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW)
-			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_label_start));
+			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_detail_start));
 
 		// due
 		addField(new FieldDescriptor(mContext, R.id.task_field_due, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW_ADD_BUTTON)
-			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_label_due));
+			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_detail_due));
 
 		// all day flag
 		addField(new FieldDescriptor(mContext, R.id.task_field_all_day, R.string.task_all_day, TaskFieldAdapters.ALLDAY).setEditorLayout(BOOLEAN_EDIT));
@@ -130,7 +130,7 @@ public class DefaultModel extends Model
 
 		// percent complete
 		addField(new FieldDescriptor(mContext, R.id.task_field_percent_complete, R.string.task_percent_complete, TaskFieldAdapters.PERCENT_COMPLETE)
-			.setViewLayout(PROGRESS_VIEW).setEditorLayout(PROGRESS_EDIT));
+			.setViewLayout(PROGRESS_VIEW).setEditorLayout(PROGRESS_EDIT).setIcon(R.drawable.ic_detail_progress));
 
 		ArrayChoicesAdapter aca2 = new ArrayChoicesAdapter();
 		aca2.addChoice(null, mContext.getString(R.string.priority_undefined), null);
@@ -147,7 +147,7 @@ public class DefaultModel extends Model
 
 		// priority
 		addField(new FieldDescriptor(mContext, R.id.task_field_priority, R.string.task_priority, TaskFieldAdapters.PRIORITY).setViewLayout(CHOICES_VIEW)
-			.setEditorLayout(CHOICES_EDIT).setChoices(aca2));
+			.setEditorLayout(CHOICES_EDIT).setChoices(aca2).setIcon(R.drawable.ic_detail_priority));
 
 		ArrayChoicesAdapter aca3 = new ArrayChoicesAdapter();
 		aca3.addChoice(null, mContext.getString(R.string.classification_not_specified), null);
@@ -157,10 +157,11 @@ public class DefaultModel extends Model
 
 		// privacy
 		addField(new FieldDescriptor(mContext, R.id.task_field_classification, R.string.task_classification, TaskFieldAdapters.CLASSIFICATION)
-			.setViewLayout(CHOICES_VIEW).setEditorLayout(CHOICES_EDIT).setChoices(aca3));
+			.setViewLayout(CHOICES_VIEW).setEditorLayout(CHOICES_EDIT).setChoices(aca3).setIcon(R.drawable.ic_detail_visibility));
 
 		// url
-		addField(new FieldDescriptor(mContext, R.id.task_field_url, R.string.task_url, TaskFieldAdapters.URL).setViewLayout(URL_VIEW).setEditorLayout(URL_EDIT));
+		addField(new FieldDescriptor(mContext, R.id.task_field_url, R.string.task_url, TaskFieldAdapters.URL).setViewLayout(URL_VIEW).setEditorLayout(URL_EDIT)
+			.setIcon(R.drawable.ic_detail_url));
 
 		setAllowRecurrence(false);
 		setAllowExceptions(false);

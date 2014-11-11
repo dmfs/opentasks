@@ -460,25 +460,25 @@ public class XmlModel extends Model
 		 */
 
 		FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.id.task_field_title, R.string.task_title, R.layout.text_field_view,
-			R.layout.text_field_editor, R.drawable.ic_label_start));
+			R.layout.text_field_editor, R.drawable.ic_detail_description));
 		FIELD_INFLATER_MAP.put("location", new FieldInflater(TaskFieldAdapters.LOCATION, R.id.task_field_location, R.string.task_location,
-			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_label_start));
+			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location));
 		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.id.task_field_description, R.string.task_description,
-			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_label_start));
+			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_description));
 		FIELD_INFLATER_MAP.put("checklist", new FieldInflater(TaskFieldAdapters.CHECKLIST, R.id.task_field_checklist, R.string.task_checklist,
-			R.layout.checklist_field_view, R.layout.checklist_field_editor, R.drawable.ic_label_start));
+			R.layout.checklist_field_view, R.layout.checklist_field_editor, R.drawable.ic_detail_checklist));
 
 		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater(TaskFieldAdapters.DTSTART, R.id.task_field_dtstart, R.string.task_start, R.layout.time_field_view,
-			R.layout.time_field_editor, R.drawable.ic_label_start));
+			R.layout.time_field_editor, R.drawable.ic_detail_start));
 		FIELD_INFLATER_MAP.put("due", new FieldInflater(TaskFieldAdapters.DUE, R.id.task_field_due, R.string.task_due, R.layout.time_field_view,
-			R.layout.time_field_editor, R.drawable.ic_label_due).addDetailsLayoutOption(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true));
+			R.layout.time_field_editor, R.drawable.ic_detail_due).addDetailsLayoutOption(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true));
 		FIELD_INFLATER_MAP.put("completed", new FieldInflater(TaskFieldAdapters.COMPLETED, R.id.task_field_completed, R.string.task_completed,
-			R.layout.time_field_view, R.layout.time_field_editor, R.drawable.ic_label_start));
+			R.layout.time_field_view, R.layout.time_field_editor, R.drawable.ic_detail_due));
 
 		FIELD_INFLATER_MAP.put("percent_complete", new FieldInflater(TaskFieldAdapters.PERCENT_COMPLETE, R.id.task_field_percent_complete,
-			R.string.task_percent_complete, R.layout.percentage_field_view, R.layout.percentage_field_editor, R.drawable.ic_label_start));
+			R.string.task_percent_complete, R.layout.percentage_field_view, R.layout.percentage_field_editor, R.drawable.ic_detail_progress));
 		FIELD_INFLATER_MAP.put("status", new FieldInflater(TaskFieldAdapters.STATUS, R.id.task_field_status, R.string.task_status, R.layout.choices_field_view,
-			R.layout.choices_field_editor, R.drawable.ic_label_start)
+			R.layout.choices_field_editor, R.drawable.ic_detail_status)
 		{
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
@@ -494,7 +494,7 @@ public class XmlModel extends Model
 			}
 		});
 		FIELD_INFLATER_MAP.put("priority", new FieldInflater(TaskFieldAdapters.PRIORITY, R.id.task_field_priority, R.string.task_priority,
-			R.layout.choices_field_view, R.layout.choices_field_editor, R.drawable.ic_label_start)
+			R.layout.choices_field_view, R.layout.choices_field_editor, R.drawable.ic_detail_priority)
 		{
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
@@ -517,7 +517,7 @@ public class XmlModel extends Model
 			}
 		});
 		FIELD_INFLATER_MAP.put("classification", new FieldInflater(TaskFieldAdapters.CLASSIFICATION, R.id.task_field_classification,
-			R.string.task_classification, R.layout.choices_field_view, R.layout.choices_field_editor, R.drawable.ic_label_start)
+			R.string.task_classification, R.layout.choices_field_view, R.layout.choices_field_editor, R.drawable.ic_detail_visibility)
 		{
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
@@ -534,10 +534,10 @@ public class XmlModel extends Model
 		});
 
 		FIELD_INFLATER_MAP.put("url", new FieldInflater(TaskFieldAdapters.URL, R.id.task_field_url, R.string.task_url, R.layout.url_field_view,
-			R.layout.url_field_editor, R.drawable.ic_label_start));
+			R.layout.url_field_editor, R.drawable.ic_detail_url));
 
 		FIELD_INFLATER_MAP.put("allday", new FieldInflater(null, R.id.task_field_all_day, R.string.task_all_day, -1, R.layout.boolean_field_editor,
-			R.drawable.ic_label_start)
+			R.drawable.ic_detail_due)
 		{
 			@Override
 			public FieldAdapter<?> getFieldAdapter(DataKind kind)
@@ -548,7 +548,7 @@ public class XmlModel extends Model
 		});
 
 		FIELD_INFLATER_MAP.put("timezone", new FieldInflater(TaskFieldAdapters.TIMEZONE, R.id.task_field_timezone, R.string.task_timezone, -1,
-			R.layout.choices_field_editor, R.drawable.ic_label_start)
+			R.layout.choices_field_editor, R.drawable.ic_detail_due)
 		{
 			@Override
 			void customizeDescriptor(Context context, Context modelContext, FieldDescriptor descriptor, DataKind kind)
