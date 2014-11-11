@@ -473,7 +473,7 @@ public class XmlModel extends Model
 		FIELD_INFLATER_MAP.put("due", new FieldInflater(TaskFieldAdapters.DUE, R.id.task_field_due, R.string.task_due, R.layout.time_field_view,
 			R.layout.time_field_editor, R.drawable.ic_detail_due).addDetailsLayoutOption(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true));
 		FIELD_INFLATER_MAP.put("completed", new FieldInflater(TaskFieldAdapters.COMPLETED, R.id.task_field_completed, R.string.task_completed,
-			R.layout.time_field_view, R.layout.time_field_editor, R.drawable.ic_detail_due));
+			R.layout.time_field_view, R.layout.time_field_editor, R.drawable.ic_detail_completed));
 
 		FIELD_INFLATER_MAP.put("percent_complete", new FieldInflater(TaskFieldAdapters.PERCENT_COMPLETE, R.id.task_field_percent_complete,
 			R.string.task_percent_complete, R.layout.percentage_field_view, R.layout.percentage_field_editor, R.drawable.ic_detail_progress));

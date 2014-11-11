@@ -126,7 +126,7 @@ public class DefaultModel extends Model
 
 		// completed
 		addField(new FieldDescriptor(mContext, R.id.task_field_completed, R.string.task_completed, TaskFieldAdapters.COMPLETED).setViewLayout(TIME_VIEW)
-			.setEditorLayout(TIME_EDIT));
+			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_detail_completed));
 
 		// percent complete
 		addField(new FieldDescriptor(mContext, R.id.task_field_percent_complete, R.string.task_percent_complete, TaskFieldAdapters.PERCENT_COMPLETE)

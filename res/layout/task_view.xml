@@ -52,9 +52,9 @@
                 style="@style/field_view_text_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_tab_due"
+                android:drawableLeft="@drawable/ic_detail_due_flag_inverse"
                 android:drawablePadding="12dp"
-                android:drawableStart="@drawable/ic_tab_due"
+                android:drawableStart="@drawable/ic_detail_due_flag_inverse"
                 android:textColor="#ffffffff"
                 android:textSize="18sp" >
             </TextView>
@@ -119,10 +119,10 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:orientation="horizontal"
-        android:paddingEnd="48dp"
-        android:paddingLeft="48dp"
-        android:paddingRight="48dp"
-        android:paddingStart="48dp" >
+        android:paddingEnd="44dp"
+        android:paddingLeft="44dp"
+        android:paddingRight="44dp"
+        android:paddingStart="44dp" >
 
         <TextView
             style="@style/field_view_text_value"
