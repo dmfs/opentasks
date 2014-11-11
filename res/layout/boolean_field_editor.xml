@@ -1,41 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.BooleanFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/task_widget"
-    android:clickable="true"
-    android:focusable="true"
+    style="@style/task_edit_widget"
     android:orientation="horizontal"
-    android:paddingLeft="20dp" >
+    android:paddingLeft="20dp" 
+    android:clickable="true"
+    android:focusable="true">
 
-    <ImageView
-        android:id="@android:id/icon"
-        style="@style/details_label_icon"
+    <!-- <include layout="@layout/editor_header" /> -->
+
+    <CheckBox
+        android:id="@android:id/checkbox"
+        style="@style/dark_edit_text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:duplicateParentState="true"
-        android:orientation="vertical" >
+        android:layout_gravity="center"
+        android:layout_margin="0dp"
+        android:padding="0dp" 
+        android:duplicateParentState="true">
+    </CheckBox>
 
-        <CheckBox
-            android:id="@android:id/checkbox"
-            style="@style/dark_edit_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="0dp"
-            android:duplicateParentState="true"
-            android:padding="0dp" >
-        </CheckBox>
-
-        <TextView
-            android:id="@android:id/title"
-            style="@style/editor_label_text"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textIsSelectable="false" />
-    </LinearLayout>
+    <TextView
+        android:id="@android:id/title"
+        style="@style/editor_label_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textIsSelectable="false" />
 
 </org.dmfs.tasks.widget.BooleanFieldEditor>
