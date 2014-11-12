@@ -104,6 +104,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 			viewFactory = new TaskListViewsFactory(this, intent);
 			mViewFactoryMap.put(widgetId, viewFactory);
+			viewFactory.onCreate();
 		}
 		else
 		{
