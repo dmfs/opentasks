@@ -97,7 +97,13 @@ public class DateFormatter
 		 * 
 		 * Currently this inherits the default short format.
 		 */
-		WIDGET_VIEW,
+		WIDGET_VIEW {
+			@Override
+			public int getDateUtilsFlags(Time now, Time date)
+			{
+				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
+			}
+		},
 
 		/**
 		 * The date format in the dash clock. This shows a time only.

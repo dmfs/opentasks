@@ -47,6 +47,10 @@ public class ProviderChangedBroadcastReceiver extends BroadcastReceiver
 		Intent remoteServiceIntent = new Intent(context, TaskListWidgetUpdaterService.class);
 		remoteServiceIntent.setData(Uri.parse(remoteServiceIntent.toUri(Intent.URI_INTENT_SCHEME)));
 
+		AppWidgetManager manager = AppWidgetManager.getInstance(context);
+		new TaskListWidgetProviderLarge().onUpdate(context, manager, largeWidgetIds);
+		new TaskListWidgetProvider().onUpdate(context, manager, smallWidgetIds);
+
 		for (int id : smallWidgetIds)
 		{
 			remoteServiceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
