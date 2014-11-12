@@ -83,6 +83,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 			viewFactory = new TaskListViewsFactory(this, intent);
 			mViewFactoryMap.put(widgetId, viewFactory);
+			viewFactory.onCreate();
 		}
 		else
 		{
@@ -96,7 +97,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		// this function is used on incoming provider changed broadcasts
-
 		int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
 		TaskListViewsFactory viewFactory = mViewFactoryMap.get(widgetId);
@@ -104,7 +104,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 			viewFactory = new TaskListViewsFactory(this, intent);
 			mViewFactoryMap.put(widgetId, viewFactory);
-			viewFactory.onCreate();
 		}
 		else
 		{
@@ -168,7 +167,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		{
 			mItems = null;
 			mExecutor.execute(mReloadTasks);
-
 		}
 
 
