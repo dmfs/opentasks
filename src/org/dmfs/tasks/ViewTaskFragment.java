@@ -135,6 +135,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private View mActionButton;
 	private ListenableScrollView mRootView;
 	private int mOldStatus = -1;
+	private boolean mRestored;
 
 	/**
 	 * The current action that's assigned to the floating action button.
@@ -261,6 +262,8 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		ListenableScrollView rootView = mRootView = (ListenableScrollView) inflater.inflate(R.layout.fragment_task_view_detail, container, false);
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mColorBar = rootView.findViewById(R.id.headercolorbar);
+
+		mRestored = savedInstanceState != null;
 
 		if (savedInstanceState != null)
 		{
@@ -477,7 +480,17 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		if (mModel == null || !mModel.equals(model))
 		{
 			mModel = model;
-			postUpdateView();
+			if (mRestored)
+			{
+				// The fragment has been restored from a saved state
+				// We need to wait until all views are ready, otherwise the new data might get lost and all widgets show their default state (and no data).
+				postUpdateView();
+			}
+			else
+			{
+				// This is the initial update. Just go ahead and update the view right away to ensure the activity comes up with a filled form.
+				updateView();
+			}
 		}
 	}
 
