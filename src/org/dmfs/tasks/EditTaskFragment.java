@@ -146,6 +146,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	private String mAuthority;
 	private View mColorBar;
 
+	private boolean mRestored;
+
 	private int mListColor = -1;
 	private ListenableScrollView mRootView;
 
@@ -227,6 +229,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
 		mHeader = (ViewGroup) rootView.findViewById(R.id.header);
 		mColorBar = rootView.findViewById(R.id.headercolorbar);
+
+		mRestored = savedInstanceState != null;
 
 		if (mColorBar != null)
 		{
@@ -415,7 +419,17 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		if (mModel == null || !mModel.equals(model))
 		{
 			mModel = model;
-			postUpdateView();
+			if (mRestored)
+			{
+				// The fragment has been restored from a saved state
+				// We need to wait until all views are ready, otherwise the new data might get lost and all widgets show their default state (and no data).
+				postUpdateView();
+			}
+			else
+			{
+				// This is the initial update. Just go ahead and update the view right away to ensure the activity comes up with a filled form.
+				updateView();
+			}
 		}
 	}
 
