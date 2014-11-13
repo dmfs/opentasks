@@ -101,7 +101,16 @@ public class DateFormatter
 			@Override
 			public int getDateUtilsFlags(Time now, Time date)
 			{
-				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
+				int result = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
+				if (!date.allDay)
+				{
+					result |= DateUtils.FORMAT_SHOW_TIME;
+				}
+				if (now.year != date.year)
+				{
+					result |= DateUtils.FORMAT_SHOW_YEAR;
+				}
+				return result;
 			}
 		},
 
