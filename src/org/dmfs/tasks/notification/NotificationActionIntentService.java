@@ -249,14 +249,14 @@ public class NotificationActionIntentService extends IntentService
 
 	public static Action getCompleteAction(Context context, PendingIntent intent)
 	{
-		return new Action(R.drawable.ic_notification_action_complete, context.getString(R.string.notification_action_complete), intent);
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), intent);
 	}
 
 
 	public static Action getCompleteAction(Context context, int notificationId, long taskId)
 	{
-		return new Action(R.drawable.ic_notification_action_complete, context.getString(R.string.notification_action_complete), getCompleteActionIntent(
-			context, notificationId, taskId));
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), getCompleteActionIntent(context,
+			notificationId, taskId));
 	}
 
 
