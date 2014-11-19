@@ -29,18 +29,15 @@ import android.database.Cursor;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class StringFieldAdapter extends FieldAdapter<String>
+public class FormattedStringFieldAdapter extends FieldAdapter<String>
 {
 
 	/**
-	 * The field name this adapter uses to store the values.
+	 * The format of the result, just like {@link String#format(String, Object...)} expects it.
 	 */
-	private final String mFieldName;
+	private final String mFormat;
 
-	/**
-	 * The default value, if any.
-	 */
-	private final String mDefaultValue;
+	private final FieldAdapter<String>[] mParamFields;
 
 
 	/**
@@ -49,87 +46,83 @@ public class StringFieldAdapter extends FieldAdapter<String>
 	 * @param fieldName
 	 *            The name of the field to use when loading or storing the value.
 	 */
-	public StringFieldAdapter(String fieldName)
+	public FormattedStringFieldAdapter(String format, FieldAdapter<String>... paramFields)
 	{
-		if (fieldName == null)
+		if (format == null)
 		{
-			throw new IllegalArgumentException("fieldName must not be null");
+			throw new IllegalArgumentException("format must not be null");
 		}
-		mFieldName = fieldName;
-		mDefaultValue = null;
-	}
-
-
-	/**
-	 * Constructor for a new StringFieldAdapter with default value.
-	 * 
-	 * @param fieldName
-	 *            The name of the field to use when loading or storing the value.
-	 * @param defaultValue
-	 *            The default value.
-	 */
-	public StringFieldAdapter(String fieldName, String defaultValue)
-	{
-		if (fieldName == null)
-		{
-			throw new IllegalArgumentException("fieldName must not be null");
-		}
-		mFieldName = fieldName;
-		mDefaultValue = defaultValue;
+		mFormat = format;
+		mParamFields = paramFields;
 	}
 
 
 	@Override
 	public String get(ContentSet values)
 	{
-		// return the value as String
-		return values.getAsString(mFieldName);
+		String[] params = new String[mParamFields.length];
+		for (int i = 0, len = mParamFields.length; i < len; ++i)
+		{
+			params[i] = mParamFields[i].get(values);
+		}
+		return String.format(mFormat, (Object[]) params);
 	}
 
 
 	@Override
 	public String get(Cursor cursor)
 	{
-		int columnIdx = cursor.getColumnIndex(mFieldName);
-		if (columnIdx < 0)
+		String[] params = new String[mParamFields.length];
+		for (int i = 0, len = mParamFields.length; i < len; ++i)
 		{
-			throw new IllegalArgumentException("The fieldName column missing in cursor.");
+			params[i] = mParamFields[i].get(cursor);
 		}
-		return cursor.getString(columnIdx);
+		return String.format(mFormat, (Object[]) params);
 	}
 
 
 	@Override
 	public String getDefault(ContentSet values)
 	{
-		return mDefaultValue;
+		String[] params = new String[mParamFields.length];
+		for (int i = 0, len = mParamFields.length; i < len; ++i)
+		{
+			params[i] = mParamFields[i].getDefault(values);
+		}
+		return String.format(mFormat, (Object[]) params);
 	}
 
 
 	@Override
 	public void set(ContentSet values, String value)
 	{
-		values.put(mFieldName, value);
+		// setting values is not supported
 	}
 
 
 	@Override
 	public void set(ContentValues values, String value)
 	{
-		values.put(mFieldName, value);
+		// setting values is not supported
 	}
 
 
 	@Override
 	public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
 	{
-		values.addOnChangeListener(listener, mFieldName, initalNotification);
+		for (FieldAdapter<?> adapter : mParamFields)
+		{
+			adapter.registerListener(values, listener, initalNotification);
+		}
 	}
 
 
 	@Override
 	public void unregisterListener(ContentSet values, OnContentChangeListener listener)
 	{
-		values.removeOnChangeListener(listener, mFieldName);
+		for (FieldAdapter<?> adapter : mParamFields)
+		{
+			adapter.unregisterListener(values, listener);
+		}
 	}
 }
