@@ -25,7 +25,11 @@ import android.database.Cursor;
 
 
 /**
- * Knows how to load and store a {@link String} value in a certain field of a {@link ContentSet}.
+ * A {@link FieldAdapter} that can format values from multiple String fields into one value.
+ * 
+ * <p>
+ * Note: This adapter doesn't support any set method. Attempts to modify a value will be ignored.
+ * </p>
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -37,16 +41,19 @@ public class FormattedStringFieldAdapter extends FieldAdapter<String>
 	 */
 	private final String mFormat;
 
+	/**
+	 * The adapters of the parameter fields.
+	 */
 	private final FieldAdapter<String>[] mParamFields;
 
 
 	/**
-	 * Constructor for a new StringFieldAdapter without default value.
+	 * Constructor for a new FormattedStringFieldAdapter with the given format string and the given {@link StringFieldAdapter}s as parameters.
 	 * 
-	 * @param fieldName
-	 *            The name of the field to use when loading or storing the value.
+	 * @param format
+	 *            The format of the resulting strings. This uses the format of {@link String#format(String, Object...)}.
 	 */
-	public FormattedStringFieldAdapter(String format, FieldAdapter<String>... paramFields)
+	public FormattedStringFieldAdapter(String format, StringFieldAdapter... paramFields)
 	{
 		if (format == null)
 		{

@@ -32,7 +32,7 @@ import android.content.Context;
 public class DefaultModel extends Model
 {
 	private final Context mContext;
-	private final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view);
+	final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view);
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
 	private final static LayoutDescriptor CHECKLIST_VIEW = new LayoutDescriptor(R.layout.checklist_field_view);
 	private final static LayoutDescriptor CHECKLIST_EDIT = new LayoutDescriptor(R.layout.checklist_field_editor);
@@ -162,6 +162,10 @@ public class DefaultModel extends Model
 		// url
 		addField(new FieldDescriptor(mContext, R.id.task_field_url, R.string.task_url, TaskFieldAdapters.URL).setViewLayout(URL_VIEW).setEditorLayout(URL_EDIT)
 			.setIcon(R.drawable.ic_detail_url));
+
+		// task list name
+		addField(new FieldDescriptor(mContext, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
+			.setViewLayout(TEXT_VIEW).setIcon(R.drawable.ic_detail_checklist));
 
 		setAllowRecurrence(false);
 		setAllowExceptions(false);

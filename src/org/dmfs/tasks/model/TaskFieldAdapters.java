@@ -24,6 +24,7 @@ import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
 import org.dmfs.tasks.model.adapters.ColorFieldAdapter;
 import org.dmfs.tasks.model.adapters.DescriptionStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
+import org.dmfs.tasks.model.adapters.FormattedStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -149,6 +150,11 @@ public final class TaskFieldAdapters
 	 * Adpater for the score (i.e. the relevance) of the task in a search.
 	 * */
 	public static final FloatFieldAdapter SCORE = new FloatFieldAdapter(TaskContract.Tasks.SCORE, 0f);
+
+	/**
+	 * Adatper that contains list name and account name.
+	 * */
+	public static final FormattedStringFieldAdapter LIST_AND_ACCOUNT_NAME = new FormattedStringFieldAdapter("%1$s (%2$s)", LIST_NAME, ACCOUNT_NAME);
 
 
 	/**

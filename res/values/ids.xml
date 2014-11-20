@@ -2,6 +2,7 @@
 
     <item name="task_field_account_type" type="id"/>
     <item name="task_field_account_name" type="id"/>
+    <item name="task_field_list_and_account_name" type="id"/>
     <item name="task_field_list_color" type="id"/>
     <item name="task_field_list_name" type="id"/>
     <item name="task_field_title" type="id"/>
