@@ -37,10 +37,8 @@ import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build;
 import android.os.Build.VERSION;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
 
@@ -81,27 +79,10 @@ public class ByDueDate extends AbstractGroupingFactory
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
-			TextView title = (TextView) view.findViewById(android.R.id.title);
+			TextView title = getView(view, android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
 
-			// get the view inside that was flinged if the view has an integrated fling content view
-			View flingContentView = (View) view.findViewById(mFlingContentViewId);
-			if (flingContentView == null)
-			{
-				flingContentView = view;
-			}
-
-			if (android.os.Build.VERSION.SDK_INT >= 14)
-			{
-				flingContentView.setTranslationX(0);
-				flingContentView.setAlpha(1);
-			}
-			else
-			{
-				LayoutParams layoutParams = (LayoutParams) flingContentView.getLayoutParams();
-				layoutParams.setMargins(0, layoutParams.topMargin, 0, layoutParams.bottomMargin);
-				flingContentView.setLayoutParams(layoutParams);
-			}
+			resetFlingView(view);
 
 			if (title != null)
 			{
@@ -117,9 +98,9 @@ public class ByDueDate extends AbstractGroupingFactory
 				}
 			}
 
-			setDueDate((TextView) view.findViewById(R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
+			setDueDate((TextView) getView(view, R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
-			View divider = view.findViewById(R.id.divider);
+			View divider = getView(view, R.id.divider);
 			if (divider != null)
 			{
 				divider.setVisibility((flags & FLAG_IS_LAST_CHILD) != 0 ? View.GONE : View.VISIBLE);
@@ -127,7 +108,7 @@ public class ByDueDate extends AbstractGroupingFactory
 
 			// display priority
 			int priority = TaskFieldAdapters.PRIORITY.get(cursor);
-			View priorityView = view.findViewById(R.id.task_priority_view_medium);
+			View priorityView = getView(view, R.id.task_priority_view_medium);
 			priorityView.setBackgroundResource(android.R.color.transparent);
 			priorityView.setVisibility(View.VISIBLE);
 
@@ -146,7 +127,7 @@ public class ByDueDate extends AbstractGroupingFactory
 			if (VERSION.SDK_INT >= 11)
 			{
 				// update percentage background
-				View background = view.findViewById(R.id.percentage_background_view);
+				View background = getView(view, R.id.percentage_background_view);
 				background.setPivotX(0);
 				Integer percentComplete = TaskFieldAdapters.PERCENT_COMPLETE.get(cursor);
 				if (percentComplete < 100)

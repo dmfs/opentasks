@@ -24,11 +24,11 @@ import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeStartCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
-import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -40,7 +40,6 @@ import android.os.Build.VERSION;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -69,27 +68,11 @@ public class ByStartDate extends AbstractGroupingFactory
 		@Override
 		public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
 		{
-			TextView title = (TextView) view.findViewById(android.R.id.title);
+			TextView title = getView(view, android.R.id.title);
 			boolean isClosed = cursor.getInt(13) > 0;
 
-			// get the view inside that was flinged if the view has an integrated fling content view
-			View flingContentView = (View) view.findViewById(mFlingContentViewId);
-			if (flingContentView == null)
-			{
-				flingContentView = view;
-			}
+			resetFlingView(view);
 
-			if (android.os.Build.VERSION.SDK_INT >= 14)
-			{
-				flingContentView.setTranslationX(0);
-				flingContentView.setAlpha(1);
-			}
-			else
-			{
-				LayoutParams layoutParams = (LayoutParams) flingContentView.getLayoutParams();
-				layoutParams.setMargins(0, layoutParams.topMargin, 0, layoutParams.bottomMargin);
-				flingContentView.setLayoutParams(layoutParams);
-			}
 			if (title != null)
 			{
 				String text = cursor.getString(5);
@@ -104,10 +87,9 @@ public class ByStartDate extends AbstractGroupingFactory
 				}
 			}
 
-			setDueDate((TextView) view.findViewById(R.id.task_due_date), (ImageView) view.findViewById(R.id.task_due_image), INSTANCE_DUE_ADAPTER.get(cursor),
-				isClosed);
+			setDueDate((TextView) getView(view, R.id.task_due_date), (ImageView) getView(view, R.id.task_due_image), INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
-			TextView startDateField = (TextView) view.findViewById(R.id.task_start_date);
+			TextView startDateField = getView(view, R.id.task_start_date);
 			if (startDateField != null)
 			{
 				Time startDate = INSTANCE_START_ADAPTER.get(cursor);
@@ -121,7 +103,7 @@ public class ByStartDate extends AbstractGroupingFactory
 					// format time
 					startDateField.setTextAppearance(view.getContext(), R.style.task_list_due_text);
 
-					ImageView icon = (ImageView) view.findViewById(R.id.task_start_image);
+					ImageView icon = getView(view, R.id.task_start_image);
 					if (icon != null)
 					{
 						icon.setVisibility(View.VISIBLE);
@@ -133,7 +115,7 @@ public class ByStartDate extends AbstractGroupingFactory
 				}
 			}
 
-			View divider = view.findViewById(R.id.divider);
+			View divider = getView(view, R.id.divider);
 			if (divider != null)
 			{
 				divider.setVisibility((flags & FLAG_IS_LAST_CHILD) != 0 ? View.GONE : View.VISIBLE);
@@ -141,7 +123,7 @@ public class ByStartDate extends AbstractGroupingFactory
 
 			// display priority
 			int priority = TaskFieldAdapters.PRIORITY.get(cursor);
-			View priorityView = view.findViewById(R.id.task_priority_view_medium);
+			View priorityView = getView(view, R.id.task_priority_view_medium);
 			priorityView.setBackgroundResource(android.R.color.transparent);
 			priorityView.setVisibility(View.VISIBLE);
 
@@ -161,7 +143,7 @@ public class ByStartDate extends AbstractGroupingFactory
 			if (VERSION.SDK_INT >= 11)
 			{
 				// update percentage background
-				View background = view.findViewById(R.id.percentage_background_view);
+				View background = getView(view, R.id.percentage_background_view);
 				background.setPivotX(0);
 				Integer percentComplete = TaskFieldAdapters.PERCENT_COMPLETE.get(cursor);
 				if (percentComplete < 100)
@@ -332,8 +314,8 @@ public class ByStartDate extends AbstractGroupingFactory
 		return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and (" + Instances.IS_ALLDAY
 			+ "=0 and (((" + Instances.INSTANCE_START + ">=?) and (" + Instances.INSTANCE_START + "<?)) or ((" + Instances.INSTANCE_START + ">=? or "
 			+ Instances.INSTANCE_START + " is ?) and ? is null)) or " + Instances.IS_ALLDAY + "=1 and (((" + Instances.INSTANCE_START + ">=?+?) and ("
-			+ Instances.INSTANCE_START + "<?+?)) or ((" + Instances.INSTANCE_START + ">=?+? or " + Instances.INSTANCE_START
-			+ " is ?) and ? is null)))", Instances.INSTANCE_START, 0, 1, 0, 1, 1, 0, 9, 1, 10, 0, 9, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
+			+ Instances.INSTANCE_START + "<?+?)) or ((" + Instances.INSTANCE_START + ">=?+? or " + Instances.INSTANCE_START + " is ?) and ? is null)))",
+			Instances.INSTANCE_START, 0, 1, 0, 1, 1, 0, 9, 1, 10, 0, 9, 1, 1).setViewDescriptor(TASK_VIEW_DESCRIPTOR);
 	}
 
 
