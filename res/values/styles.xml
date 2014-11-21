@@ -134,6 +134,7 @@
     <style name="field_view_text_value" parent="dark_text"> <!-- Common style for all text displays in widgets -->
         <item name="android:layout_marginTop">2dip</item>
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
@@ -210,7 +211,6 @@
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginLeft">4dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:includeFontPadding">false</item>
     </style>
 
 </resources>

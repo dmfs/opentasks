@@ -40,6 +40,8 @@
 
     <style name="task_widget" parent="task_widget_parent">
         <item name="android:padding">12dp</item>
+        <item name="android:layout_marginTop">2sp</item>
+        <item name="android:layout_marginBottom">2sp</item>
     </style>
 
     <style name="task_progressbar" parent="android:Widget.ProgressBar.Horizontal">
@@ -69,6 +71,7 @@
     <style name="field_view_text_value" parent="dark_text">
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:textIsSelectable">true</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="field_editor_text_value" parent="dark_edit_text"> <!-- Common style for all text edit fields in widgets -->
