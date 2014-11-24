@@ -64,6 +64,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.LinearLayout;
@@ -391,6 +392,20 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		mEditor.setModel(mModel);
 		mEditor.setValues(mValues);
 		mContent.addView(mEditor);
+
+		// update focus to title
+		String title = mValues.getAsString(Tasks.TITLE);
+		if (title == null || title.length() == 0)
+		{
+			// set focus to first element of the editor
+			mEditor.requestFocus();
+		}
+		else
+		{
+			// close soft input as there is already a title
+			InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(mEditor.getWindowToken(), 0);
+		}
 
 		updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 	}

@@ -19,7 +19,8 @@
 
     <style name="btn_remove">
         <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:src">@drawable/content_remove_light</item>
+        <item name="android:src">@drawable/content_remove</item>
+        <item name="android:padding">8dp</item>
     </style>
 
     <style name="detail_label_line">
