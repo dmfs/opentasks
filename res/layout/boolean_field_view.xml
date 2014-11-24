@@ -3,7 +3,7 @@
     style="@style/task_widget"
     android:orientation="horizontal" >
 
-    <ImageView
+    <TextView
         android:id="@android:id/icon"
         style="@style/details_label_icon"
         android:layout_width="wrap_content"

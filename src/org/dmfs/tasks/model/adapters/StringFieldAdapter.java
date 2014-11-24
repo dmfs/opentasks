@@ -87,13 +87,6 @@ public class StringFieldAdapter extends FieldAdapter<String>
 	}
 
 
-	public String get(ContentValues values)
-	{
-		// return the value as String
-		return values.getAsString(mFieldName);
-	}
-
-
 	@Override
 	public String get(Cursor cursor)
 	{

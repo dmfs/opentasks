@@ -28,11 +28,12 @@
 
             <TextView
                 android:id="@+id/text"
-                style="@style/field_view_text_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="none"
-                android:fontFamily="sans-serif-light"
+                android:ellipsize="end"
+                android:lineSpacingMultiplier="1.1"
+                android:maxLines="3"
                 android:textColor="#ffffffff"
                 android:textSize="28sp" >
             </TextView>
@@ -55,6 +56,8 @@
                 android:drawableLeft="@drawable/ic_tab_due"
                 android:drawablePadding="12dp"
                 android:drawableStart="@drawable/ic_tab_due"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
                 android:textColor="#ffffffff"
                 android:textSize="18sp" >
             </TextView>
@@ -71,24 +74,30 @@
                 android:id="@+id/buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="44dp"
                 android:orientation="horizontal"
                 android:visibility="gone" >
 
                 <TextView
                     android:id="@+id/button_add_one_day"
                     style="@style/time_forward_button"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/ic_detail_delay_1d"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_detail_delay_1d"
                     android:text="@string/button_add_one_day"
                     android:textColor="#a0ffffff" />
 
                 <TextView
                     android:id="@+id/button_add_one_hour"
                     style="@style/time_forward_button"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginLeft="24dp"
+                    android:drawableLeft="@drawable/ic_detail_delay_1h"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_detail_delay_1h"
                     android:text="@string/button_add_one_hour"
                     android:textColor="#a0ffffff" />
             </LinearLayout>
@@ -113,61 +122,5 @@
             android:layout_gravity="center"
             android:src="@drawable/ic_action_complete" />
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:orientation="horizontal"
-        android:paddingEnd="44dp"
-        android:paddingLeft="44dp"
-        android:paddingRight="44dp"
-        android:paddingStart="44dp" >
-
-        <TextView
-            style="@style/field_view_text_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:autoLink="none"
-            android:text=" in "
-            android:textColor="#80000000"
-            android:textSize="14sp" >
-        </TextView>
-
-        <org.dmfs.tasks.widget.TextFieldView
-            android:id="@+id/list_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fieldDescriptor="@id/task_field_list_name" >
-
-            <TextView
-                android:id="@id/text"
-                style="@style/field_view_text_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoLink="none"
-                android:textColor="#80000000"
-                android:textSize="14sp" >
-            </TextView>
-        </org.dmfs.tasks.widget.TextFieldView>
-
-        <org.dmfs.tasks.widget.TextFieldView
-            android:id="@+id/account_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fieldDescriptor="@id/task_field_account_name" >
-
-            <TextView
-                android:id="@id/text"
-                style="@style/field_view_text_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoLink="none"
-                android:textColor="#80000000"
-                android:textSize="14sp"
-                android:visibility="gone" >
-            </TextView>
-        </org.dmfs.tasks.widget.TextFieldView>
-    </LinearLayout>
 
 </org.dmfs.tasks.widget.TaskView>

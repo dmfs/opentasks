@@ -202,18 +202,35 @@ public class DateFormatter
 	{
 		mNow.clear(TimeZone.getDefault().getID());
 		mNow.setToNow();
+		return format(date, mNow, dateContext);
+	}
+
+
+	/**
+	 * Format the given due date. The result depends on the current date and on the all-day flag of the due date.
+	 * 
+	 * 
+	 * @param date
+	 *            The due date to format.
+	 * @param useToday
+	 *            <code>true</code> to write "today" instead of the date when the date is on the present day
+	 * @return A string with the formatted due date.
+	 */
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	public String format(Time date, Time now, DateFormatContext dateContext)
+	{
 
 		// normalize time to ensure yearDay is set properly
 		date.normalize(false);
 
-		if (dateContext.useRelative(mNow, date))
+		if (dateContext.useRelative(now, date))
 		{
-			long delta = Math.abs(mNow.toMillis(false) - date.toMillis(false));
+			long delta = Math.abs(now.toMillis(false) - date.toMillis(false));
 
 			if (date.allDay)
 			{
 				Time allDayNow = new Time("UTC");
-				allDayNow.set(mNow.monthDay, mNow.month, mNow.year);
+				allDayNow.set(now.monthDay, now.month, now.year);
 				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), allDayNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
 			}
 			else if (delta < 60 * 1000)
@@ -224,33 +241,33 @@ public class DateFormatter
 			else if (delta < 60 * 60 * 1000)
 			{
 				// time is within this hour, show number of minutes left
-				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
+				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), now.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
 			}
 			else if (delta < 24 * 60 * 60 * 1000)
 			{
 				// time is within 24 hours, show relative string with time
 				// FIXME: instead of using a fixed 24 hour interval this should be aligned to midnight tomorrow and yesterday
 				return DateUtils.getRelativeDateTimeString(mContext, date.toMillis(false), DateUtils.DAY_IN_MILLIS, DateUtils.WEEK_IN_MILLIS,
-					dateContext.getDateUtilsFlags(mNow, date)).toString();
+					dateContext.getDateUtilsFlags(now, date)).toString();
 			}
 			else
 			{
-				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), mNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
+				return DateUtils.getRelativeTimeSpanString(date.toMillis(false), now.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
 			}
 		}
 
-		return date.allDay ? formatAllDay(date, dateContext) : formatNonAllDay(date, dateContext);
+		return date.allDay ? formatAllDay(date, now, dateContext) : formatNonAllDay(date, now, dateContext);
 	}
 
 
 	@SuppressLint("NewApi")
-	private String formatAllDay(Time date, DateFormatContext dateContext)
+	private String formatAllDay(Time date, Time now, DateFormatContext dateContext)
 	{
 		// use DataRange in order to set the correct timezone
 		if (Build.VERSION.SDK_INT > 8)
 		{
 			return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), date.toMillis(false), date.toMillis(false),
-				dateContext.getDateUtilsFlags(mNow, date), "UTC").toString();
+				dateContext.getDateUtilsFlags(now, date), "UTC").toString();
 		}
 		else
 		{
@@ -260,8 +277,8 @@ public class DateFormatter
 	}
 
 
-	private String formatNonAllDay(Time date, DateFormatContext dateContext)
+	private String formatNonAllDay(Time date, Time now, DateFormatContext dateContext)
 	{
-		return DateUtils.formatDateTime(mContext, date.toMillis(false), dateContext.getDateUtilsFlags(mNow, date));
+		return DateUtils.formatDateTime(mContext, date.toMillis(false), dateContext.getDateUtilsFlags(now, date));
 	}
 }

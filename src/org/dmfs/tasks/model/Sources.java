@@ -167,6 +167,12 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 
 			AuthenticatorDescription authenticator = getAuthenticator(authenticators, syncAdapter.accountType);
 
+			if (authenticator.packageName == null)
+			{
+				// package name is null
+				continue;
+			}
+
 			Model model;
 			try
 			{

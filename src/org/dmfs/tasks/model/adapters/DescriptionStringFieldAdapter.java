@@ -19,7 +19,6 @@ package org.dmfs.tasks.model.adapters;
 
 import org.dmfs.tasks.model.ContentSet;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 
 
@@ -73,26 +72,6 @@ public final class DescriptionStringFieldAdapter extends StringFieldAdapter
 
 	@Override
 	public void set(ContentSet values, String value)
-	{
-		String oldValue = super.get(values);
-		if (oldValue != null && oldValue.length() > 0)
-		{
-			String oldDescription = extractDescription(oldValue);
-			String oldChecklist = oldValue.substring(oldDescription.length());
-
-			// store the new description with the old check list
-			super.set(values, oldChecklist.length() == 0 ? value : oldChecklist.startsWith("\n") ? value + oldChecklist : value + "\n" + oldChecklist);
-		}
-		else
-		{
-			// there was no old check list
-			super.set(values, value);
-		}
-	}
-
-
-	@Override
-	public void set(ContentValues values, String value)
 	{
 		String oldValue = super.get(values);
 		if (oldValue != null && oldValue.length() > 0)

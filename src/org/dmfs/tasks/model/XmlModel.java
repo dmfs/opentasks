@@ -293,6 +293,10 @@ public class XmlModel extends Model
 				throw new ModelInflaterException("Invalid model definition in " + mPackageName + ": root node must be 'TaskSource'");
 			}
 
+			// task list name
+			addField(new FieldDescriptor(mContext, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
+				.setViewLayout(DefaultModel.TEXT_VIEW).setIcon(R.drawable.ic_detail_checklist));
+
 		}
 		catch (Exception e)
 		{

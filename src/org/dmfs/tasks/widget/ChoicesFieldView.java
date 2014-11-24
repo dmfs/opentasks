@@ -27,7 +27,6 @@ import org.dmfs.tasks.model.layout.LayoutOptions;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -40,7 +39,6 @@ public class ChoicesFieldView extends AbstractFieldView
 {
 	private FieldAdapter<Object> mAdapter;
 	private TextView mText;
-	private ImageView mImage;
 
 
 	public ChoicesFieldView(Context context, AttributeSet attrs, int defStyle)
@@ -66,7 +64,6 @@ public class ChoicesFieldView extends AbstractFieldView
 	{
 		super.onFinishInflate();
 		mText = (TextView) findViewById(R.id.text);
-		mImage = (ImageView) findViewById(R.id.choice_drawable);
 	}
 
 
@@ -90,14 +87,13 @@ public class ChoicesFieldView extends AbstractFieldView
 			{
 				// no choices adapter -> nothing to show
 				mText.setText(mAdapter.get(mValues).toString());
-				mImage.setVisibility(View.GONE);
+				mText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 			}
 			else
 			{
 				// just show title and drawable (if any)
 				mText.setText(choicesAdapter.getTitle(mAdapter.get(mValues)));
-				mImage.setImageDrawable(choicesAdapter.getDrawable(mAdapter.get(mValues)));
-				mImage.setVisibility(View.VISIBLE);
+				mText.setCompoundDrawables(choicesAdapter.getDrawable(mAdapter.get(mValues)), null, null, null);
 			}
 		}
 		else

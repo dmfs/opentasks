@@ -33,7 +33,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -213,12 +212,15 @@ public abstract class AbstractFieldView extends LinearLayout implements OnConten
 		}
 
 		// set icon if we have any
-		ImageView icon = (ImageView) findViewById(android.R.id.icon);
+
+		// Note that the icon view is actually a TextView, not an ImageView and we just set a compound drawable. That ensures the image is always nicely
+		// aligned with the first text line.
+		TextView icon = (TextView) findViewById(android.R.id.icon);
 		if (icon != null)
 		{
 			if (descriptor.getIcon() != 0)
 			{
-				icon.setImageResource(descriptor.getIcon());
+				icon.setCompoundDrawablesWithIntrinsicBounds(descriptor.getIcon(), 0, 0, 0);
 				icon.setVisibility(View.VISIBLE);
 			}
 			else
