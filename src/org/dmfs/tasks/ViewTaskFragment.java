@@ -666,7 +666,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			// adjust color of action button
 			if (hsv[0] > 70 && hsv[0] < 170 && hsv[2] < 0.62)
 			{
-				mActionButton.setBackgroundResource(R.drawable.bg_actionbutton_light_green);
+				mActionButton.setBackgroundResource(R.drawable.bg_actionbutton_light);
 			}
 			else
 			{

@@ -106,8 +106,8 @@
 
     <FrameLayout
         android:id="@+id/action_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="right"
         android:layout_marginBottom="-28dp"
         android:layout_marginRight="16dp"

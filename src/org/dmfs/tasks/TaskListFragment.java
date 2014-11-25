@@ -640,7 +640,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 						leftFlingView.setText(R.string.fling_task_delete);
 						leftFlingView.setCompoundDrawablesWithIntrinsicBounds(resources.getDrawable(R.drawable.content_discard), null, null, null);
 						rightFlingView.setText(R.string.fling_task_uncomplete);
-						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, resources.getDrawable(R.drawable.content_remove), null);
+						rightFlingView.setCompoundDrawablesWithIntrinsicBounds(null, null, resources.getDrawable(R.drawable.content_remove_light), null);
 					}
 					else
 					{

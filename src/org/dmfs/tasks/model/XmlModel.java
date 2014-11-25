@@ -295,7 +295,7 @@ public class XmlModel extends Model
 
 			// task list name
 			addField(new FieldDescriptor(mContext, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
-				.setViewLayout(DefaultModel.TEXT_VIEW).setIcon(R.drawable.ic_detail_checklist));
+				.setViewLayout(DefaultModel.TEXT_VIEW).setIcon(R.drawable.ic_detail_list));
 
 		}
 		catch (Exception e)

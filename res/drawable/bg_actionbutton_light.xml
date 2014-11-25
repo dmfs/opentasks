@@ -5,7 +5,7 @@
     </item>
     <item>
         <inset
-            android:drawable="@drawable/bg_actionbutton_circle"
+            android:drawable="@drawable/bg_actionbutton_circle_light"
             android:insetLeft="7dp"
             android:insetRight="7dp"
             android:insetTop="7dp"

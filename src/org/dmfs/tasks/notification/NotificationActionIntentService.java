@@ -262,14 +262,14 @@ public class NotificationActionIntentService extends IntentService
 
 	public static Action getDelay1hAction(Context context, int notificationId, long taskId, long due, String timezone)
 	{
-		return new Action(R.drawable.ic_notification_action_delay, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context,
+		return new Action(R.drawable.ic_detail_delay_1h_inverse, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context,
 			notificationId, taskId, due, true, timezone, false));
 	}
 
 
 	public static Action getDelay1dAction(Context context, int notificationId, long taskId, long due, String timezone, boolean allday)
 	{
-		return new Action(R.drawable.ic_notification_action_delay_day, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
+		return new Action(R.drawable.ic_detail_delay_1d_inverse, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
 			notificationId, taskId, due, false, timezone, allday));
 	}
 

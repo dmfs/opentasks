@@ -395,16 +395,17 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
 		// update focus to title
 		String title = mValues.getAsString(Tasks.TITLE);
-		if (title == null || title.length() == 0)
+
+		// set focus to first element of the editor
+		if (mEditor != null)
 		{
-			// set focus to first element of the editor
 			mEditor.requestFocus();
-		}
-		else
-		{
-			// close soft input as there is already a title
-			InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.hideSoftInputFromWindow(mEditor.getWindowToken(), 0);
+			if (title != null && title.length() > 0)
+			{
+				// close soft input as there is already a title
+				InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(mEditor.getWindowToken(), 0);
+			}
 		}
 
 		updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
