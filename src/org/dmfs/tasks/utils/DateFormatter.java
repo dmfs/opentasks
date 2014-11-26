@@ -88,7 +88,13 @@ public class DateFormatter
 			@Override
 			public boolean useRelative(Time now, Time date)
 			{
-				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+				{
+					return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+				}
+				// The DateUtils implementation of pre ICS android calculates the relative date times in fixed 24h slots and therefore is unusable for us.
+				return false;
+
 			}
 		},
 

@@ -29,7 +29,8 @@
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@string/activity_add_task_title"
-            android:src="@drawable/content_new_invert" />
+            android:src="@drawable/content_new_light"
+            android:padding="4dp" />
     </LinearLayout>
 
     <LinearLayout
