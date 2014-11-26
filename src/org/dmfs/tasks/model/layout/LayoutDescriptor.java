@@ -19,6 +19,7 @@ package org.dmfs.tasks.model.layout;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,12 @@ public class LayoutDescriptor
 	public final static String OPTION_USE_TASK_BACKGROUND_COLOR = "use_task_background_color";
 	public final static String OPTION_NO_TITLE = "no_title";
 	public final static String OPTION_MULTILINE = "multiline";
+
+	/**
+	 * <code>int</code> option to control the linkification of the displayed text. Use native {@link Linkify} options as parameter or <code>0</code> to disable
+	 * links.
+	 **/
+	public final static String OPTION_LINKIFY = "linkify";
 	public final static String OPTION_TIME_FIELD_SHOW_ADD_BUTTONS = "time_field_show_add_buttons";
 
 	/**
@@ -133,8 +140,20 @@ public class LayoutDescriptor
 	}
 
 
+	public LayoutDescriptor setOption(String key, int value)
+	{
+		if (mOptions == null)
+		{
+			mOptions = new LayoutOptions();
+		}
+		mOptions.put(key, value);
+		return this;
+	}
+
+
 	public LayoutOptions getOptions()
 	{
 		return mOptions != null ? mOptions : DEFAULT_OPTIONS;
 	}
+
 }

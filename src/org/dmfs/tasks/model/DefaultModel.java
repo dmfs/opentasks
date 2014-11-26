@@ -22,6 +22,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 
 import android.content.Context;
+import android.text.util.Linkify;
 
 
 /**
@@ -32,7 +33,8 @@ import android.content.Context;
 public class DefaultModel extends Model
 {
 	private final Context mContext;
-	final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view);
+	final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view).setOption(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL);
+	final static LayoutDescriptor TEXT_VIEW_NO_LINKS = new LayoutDescriptor(R.layout.text_field_view).setOption(LayoutDescriptor.OPTION_LINKIFY, 0);
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
 	private final static LayoutDescriptor CHECKLIST_VIEW = new LayoutDescriptor(R.layout.checklist_field_view);
 	private final static LayoutDescriptor CHECKLIST_EDIT = new LayoutDescriptor(R.layout.checklist_field_editor);
@@ -101,8 +103,9 @@ public class DefaultModel extends Model
 			.setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_location));
 
 		// description
-		addField(new FieldDescriptor(mContext, R.id.task_field_description, R.string.task_description, TaskFieldAdapters.DESCRIPTION).setViewLayout(TEXT_VIEW)
-			.setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_description));
+		addField(new FieldDescriptor(mContext, R.id.task_field_description, R.string.task_description, TaskFieldAdapters.DESCRIPTION)
+			.setViewLayout(TEXT_VIEW.setOption(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL)).setEditorLayout(TEXT_EDIT)
+			.setIcon(R.drawable.ic_detail_description));
 
 		// description
 		addField(new FieldDescriptor(mContext, R.id.task_field_checklist, R.string.task_checklist, TaskFieldAdapters.CHECKLIST).setViewLayout(CHECKLIST_VIEW)
@@ -165,7 +168,7 @@ public class DefaultModel extends Model
 
 		// task list name
 		addField(new FieldDescriptor(mContext, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
-			.setViewLayout(TEXT_VIEW).setIcon(R.drawable.ic_detail_list));
+			.setViewLayout(TEXT_VIEW_NO_LINKS).setIcon(R.drawable.ic_detail_list));
 
 		setAllowRecurrence(false);
 		setAllowExceptions(false);

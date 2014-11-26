@@ -55,6 +55,24 @@ public final class LayoutOptions
 
 
 	/**
+	 * Put an int option.
+	 * 
+	 * @param key
+	 *            The name of the option.
+	 * @param value
+	 *            The value of the option.
+	 */
+	void put(String key, int value)
+	{
+		if (mOptionMap == null)
+		{
+			mOptionMap = new HashMap<String, Object>();
+		}
+		mOptionMap.put(key, value);
+	}
+
+
+	/**
 	 * Get the value of a boolean option.
 	 * 
 	 * @param key
@@ -71,5 +89,32 @@ public final class LayoutOptions
 		}
 		Object value = mOptionMap.get(key);
 		return value instanceof Boolean && (Boolean) value || (!(value instanceof Boolean) && defaultValue);
+	}
+
+
+	/**
+	 * Get the value of an int option.
+	 * 
+	 * @param key
+	 *            The name of this option.
+	 * @param defaultValue
+	 *            The value to return if the option is not set yet.
+	 * @return The value or defaultValue.
+	 */
+	public int getInt(String key, int defaultValue)
+	{
+		if (mOptionMap == null)
+		{
+			return defaultValue;
+		}
+		Object value = mOptionMap.get(key);
+		if (value instanceof Integer)
+		{
+			return (Integer) value;
+		}
+		else
+		{
+			return defaultValue;
+		}
 	}
 }

@@ -21,10 +21,12 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
@@ -80,6 +82,7 @@ public class TextFieldView extends AbstractFieldView
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
+		mText.setAutoLinkMask(layoutOptions.getInt(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL));
 	}
 
 
