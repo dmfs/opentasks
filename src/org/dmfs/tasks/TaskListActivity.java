@@ -135,7 +135,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		// check for single pane activity change
 		mTwoPane = getResources().getBoolean(R.bool.has_two_panes);
 
-		if (mSelectedTaskUri != null && !mTwoPane)
+		if (mSelectedTaskUri != null)
 		{
 			Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
 			viewTaskIntent.setData(mSelectedTaskUri);
@@ -300,15 +300,18 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	public void onItemSelected(Uri uri, boolean forceReload)
 	{
-
 		if (mTwoPane)
 		{
-			mSelectedTaskUri = null;
+			if (forceReload)
+			{
+				mSelectedTaskUri = null;
+			}
 			mTaskDetailFrag.loadUri(uri);
 		}
 		else if (forceReload)
 		{
 			mSelectedTaskUri = uri;
+
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);

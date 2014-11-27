@@ -177,6 +177,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	{
 		/**
 		 * Callback for when an item has been selected.
+		 * 
+		 * @param taskUri
+		 *            The {@link Uri} of the selected task.
+		 * @param forceReload
+		 *            Whether to reload the task or not.
 		 */
 		public void onItemSelected(Uri taskUri, boolean forceReload);
 
@@ -305,7 +310,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onPause()
 	{
-		mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
 		stopAutomaticRedraw();
 		super.onPause();
 	}
