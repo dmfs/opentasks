@@ -21,6 +21,7 @@ import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.utils.ActionBarActivity;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -28,7 +29,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 

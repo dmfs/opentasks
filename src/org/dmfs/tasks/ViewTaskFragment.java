@@ -630,6 +630,11 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
+		if (getActivity() instanceof TaskListActivity)
+		{
+			return;
+		}
+
 		float[] hsv = new float[3];
 		Color.colorToHSV(mListColor, hsv);
 

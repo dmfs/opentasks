@@ -30,6 +30,7 @@ import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
+import org.dmfs.tasks.utils.ActionBarActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
@@ -45,11 +46,12 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.util.Log;
@@ -87,6 +89,8 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	 */
 	private final static int SEARCH_UPDATE_DELAY = 400; // ms
 
+	private final static String DETAIL_FRAGMENT_TAG = "taskListActivity.ViewTaskFragment";
+
 	/**
 	 * Array of {@link ExpandableGroupDescriptor}s.
 	 */
@@ -117,6 +121,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 	private boolean mAutoExpandSearchView = false;
 
+	@Retain
+	private Uri mSelectedTaskUri;
+
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
@@ -124,6 +131,18 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	{
 		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
+
+		// check for single pane activity change
+		mTwoPane = getResources().getBoolean(R.bool.has_two_panes);
+
+		if (mSelectedTaskUri != null && !mTwoPane)
+		{
+			Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
+			viewTaskIntent.setData(mSelectedTaskUri);
+			// editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
+			startActivity(viewTaskIntent);
+		}
+
 		setContentView(R.layout.activity_task_list);
 
 		mAuthority = getString(R.string.org_dmfs_tasks_authority);
@@ -131,8 +150,6 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 		if (findViewById(R.id.task_detail_container) != null)
 		{
-			mTwoPane = true;
-
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
 
@@ -146,7 +163,16 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
 			 */
 			mTaskDetailFrag = new ViewTaskFragment();
-			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag).commit();
+			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag, DETAIL_FRAGMENT_TAG).commit();
+		}
+		else
+		{
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			Fragment detailFragment = fragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG);
+			if (detailFragment != null)
+			{
+				fragmentManager.beginTransaction().remove(detailFragment).commit();
+			}
 		}
 
 		mGroupingFactories = new AbstractGroupingFactory[] { new ByList(mAuthority), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
@@ -274,18 +300,22 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	public void onItemSelected(Uri uri, boolean forceReload)
 	{
+
 		if (mTwoPane)
 		{
+			mSelectedTaskUri = null;
 			mTaskDetailFrag.loadUri(uri);
 		}
 		else if (forceReload)
 		{
+			mSelectedTaskUri = uri;
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
 			detailIntent.setData(uri);
 			startActivity(detailIntent);
 		}
+
 	}
 
 

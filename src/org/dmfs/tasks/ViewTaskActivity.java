@@ -18,13 +18,12 @@
 package org.dmfs.tasks;
 
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.utils.ActionBarActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
 
@@ -45,6 +44,13 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_detail);
 
+		// If should be in two-pane mode, finish to return to main activity
+		if (getResources().getBoolean(R.bool.has_two_panes))
+		{
+			finish();
+			return;
+		}
+
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,16 +64,16 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 	}
 
 
-//	@Override
-//	public void onAttachFragment(Fragment fragment)
-//	{
-//		if (fragment instanceof ViewTaskFragment)
-//		{
-//			ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
-//		//	detailFragment.loadUri(getIntent().getData());
-//		}
-//	}
-//
+	// @Override
+	// public void onAttachFragment(Fragment fragment)
+	// {
+	// if (fragment instanceof ViewTaskFragment)
+	// {
+	// ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
+	// // detailFragment.loadUri(getIntent().getData());
+	// }
+	// }
+	//
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
