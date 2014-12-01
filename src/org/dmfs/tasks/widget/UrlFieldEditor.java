@@ -28,6 +28,7 @@ import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
+import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -83,10 +84,14 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 			mText.addTextChangedListener(this);
 
 			/*
-			 * enable memory leak workaround: disable spell checker
+			 * enable memory leak workaround on android < 4.3: disable spell checker
 			 */
 			int inputType = mText.getInputType();
-			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS | InputType.TYPE_TEXT_VARIATION_URI);
+			if (VERSION.SDK_INT < 18)
+			{
+				inputType = inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+			}
+			mText.setInputType(inputType | InputType.TYPE_TEXT_VARIATION_URI);
 		}
 	}
 

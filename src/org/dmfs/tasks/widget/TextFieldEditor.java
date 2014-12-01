@@ -23,6 +23,7 @@ import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -76,10 +77,14 @@ public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChang
 		if (mText != null)
 		{
 			/*
-			 * enable memory leak workaround: disable spell checker
+			 * enable memory leak workaround on android < 4.3: disable spell checker
 			 */
+
 			int inputType = mText.getInputType();
-			mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+			if (Build.VERSION.SDK_INT < 18)
+			{
+				mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+			}
 			mText.setOnFocusChangeListener(this);
 		}
 	}
