@@ -121,6 +121,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 	private boolean mAutoExpandSearchView = false;
 
+	/** Indicates that the activity switched to detail view due to rotation. **/
+	private boolean mSwitchedToDetail = false;
+
 	@Retain
 	private Uri mSelectedTaskUri;
 
@@ -141,6 +144,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			viewTaskIntent.setData(mSelectedTaskUri);
 			// editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
 			startActivity(viewTaskIntent);
+			mSwitchedToDetail = true;
 		}
 
 		setContentView(R.layout.activity_task_list);
@@ -283,6 +287,17 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				}
 			}
 		});
+	}
+
+
+	@Override
+	protected void onResume()
+	{
+		if (!mSwitchedToDetail)
+		{
+			mSelectedTaskUri = null;
+		}
+		super.onResume();
 	}
 
 
