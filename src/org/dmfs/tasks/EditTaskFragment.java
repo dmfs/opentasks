@@ -597,6 +597,16 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
+	private static int darkenColor(int color)
+	{
+		float[] hsv = new float[3];
+		Color.colorToHSV(color, hsv);
+		hsv[2] = hsv[2] * 0.75f;
+		color = Color.HSVToColor(hsv);
+		return color;
+	}
+
+
 	public int mixColors(int col1, int col2)
 	{
 		int r1, g1, b1, r2, g2, b2;
@@ -619,6 +629,35 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	}
 
 
+	private int getBlendColor(int baseColor, int targetColor, float alpha)
+	{
+		int r1, g1, b1, r3, g3, b3;
+
+		if (alpha <= 0)
+		{
+			return targetColor;
+		}
+		else if (alpha > 254)
+		{
+			return targetColor;
+		}
+
+		r1 = Color.red(baseColor);
+		g1 = Color.green(baseColor);
+		b1 = Color.blue(baseColor);
+
+		r3 = Color.red(targetColor);
+		g3 = Color.green(targetColor);
+		b3 = Color.blue(targetColor);
+
+		int r2 = (int) Math.ceil((Math.max(0, r3 * 255 - r1 * (255 - alpha))) / alpha);
+		int g2 = (int) Math.ceil((Math.max(0, g3 * 255 - g1 * (255 - alpha))) / alpha);
+		int b2 = (int) Math.ceil((Math.max(0, b3 * 255 - b1 * (255 - alpha))) / alpha);
+
+		return Color.argb((int) alpha, r2, g2, b2);
+	}
+
+
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
@@ -632,16 +671,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			{
 				percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
 			}
-			// the action bar background color will fade from a very dark semi-transparent color to a dark solid color, the current solution is not perfect yet,
-			// because the user might notice a small change in lightness when scrolling
-			// TODO: find a better way to achieve the same effect
 
-			percentage = (float) Math.pow(percentage, 1.5);
-			float[] hsv = new float[3];
-			Color.colorToHSV(mListColor, hsv);
-			hsv[2] *= (0.5 + 0.25 * percentage);
-
-			int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
+			int newColor = getBlendColor(mListColor, darkenColor(mListColor), (int) ((0.5 + 0.5 * percentage) * 255));
 			ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 			actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
 
@@ -654,7 +685,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 				Window window = getActivity().getWindow();
 				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 				window.setStatusBarColor(mixColors(newColor, mListColor));
-				window.setNavigationBarColor(mixColors(newColor, mListColor));
+				// window.setNavigationBarColor(mixColors(newColor, mListColor));
 			}
 		}
 		mTaskListBar.setBackgroundColor(mListColor);

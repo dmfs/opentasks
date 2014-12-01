@@ -647,7 +647,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 
 			hsv[2] *= (0.5 + 0.25 * percentage);
 
-			// int newColor = Color.HSVToColor((int) ((0.5 + 0.5 * percentage) * 255), hsv);
 			ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
 			actionBar.setBackgroundDrawable(new ColorDrawable((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24)));
 
@@ -662,7 +661,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				Window window = getActivity().getWindow();
 				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 				window.setStatusBarColor(blendColors((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24), mListColor));
-				window.setNavigationBarColor(newColor);
+				// window.setNavigationBarColor(newColor);
 			}
 		}
 
