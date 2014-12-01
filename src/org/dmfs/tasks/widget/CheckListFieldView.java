@@ -33,7 +33,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.TextView;
 
 
 /**
@@ -41,11 +40,10 @@ import android.widget.TextView;
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class CheckListFieldView extends AbstractFieldEditor implements OnCheckedChangeListener
+public class CheckListFieldView extends AbstractFieldView implements OnCheckedChangeListener
 {
 	private ChecklistFieldAdapter mAdapter;
 	private ViewGroup mContainer;
-	private TextView mText;
 
 	private List<CheckListItem> mCurrentValue;
 
@@ -79,7 +77,6 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 	{
 		super.onFinishInflate();
 		mContainer = (ViewGroup) findViewById(R.id.checklist);
-		mText = (TextView) findViewById(R.id.text);
 	}
 
 
@@ -160,7 +157,7 @@ public class CheckListFieldView extends AbstractFieldEditor implements OnChecked
 				checkbox = (CheckBox) mInflater.inflate(R.layout.checklist_field_view_element, mContainer, false);
 				mContainer.addView(checkbox);
 			}
-			// make sure we don't receive our onw updates
+			// make sure we don't receive our own updates
 			checkbox.setOnCheckedChangeListener(null);
 			checkbox.setChecked(item.checked);
 			checkbox.setOnCheckedChangeListener(CheckListFieldView.this);
