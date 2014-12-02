@@ -6,7 +6,7 @@
     android:minWidth="250dp"
     android:previewImage="@drawable/ic_launcher"
     android:resizeMode="none"
-    android:updatePeriodMillis="3600000"
+    android:updatePeriodMillis="7200000"
     android:widgetCategory="keyguard|home_screen" >
 
 </appwidget-provider>

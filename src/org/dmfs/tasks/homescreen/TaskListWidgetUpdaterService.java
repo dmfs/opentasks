@@ -20,7 +20,6 @@
 package org.dmfs.tasks.homescreen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -48,6 +47,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.text.format.Time;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -65,7 +65,6 @@ import android.widget.RemoteViewsService;
 public class TaskListWidgetUpdaterService extends RemoteViewsService
 {
 	private final static String TAG = "TaskListWidgetUpdaterService";
-	private HashMap<Integer, TaskListViewsFactory> mViewFactoryMap = new HashMap<Integer, TaskListWidgetUpdaterService.TaskListViewsFactory>(12);
 
 
 	/*
@@ -76,40 +75,8 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent)
 	{
-		int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
 
-		TaskListViewsFactory viewFactory = mViewFactoryMap.get(widgetId);
-		if (viewFactory == null)
-		{
-			viewFactory = new TaskListViewsFactory(this, intent);
-			mViewFactoryMap.put(widgetId, viewFactory);
-			viewFactory.onCreate();
-		}
-		else
-		{
-			viewFactory.reload();
-		}
-		return viewFactory;
-	}
-
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
-	{
-		// this function is used on incoming provider changed broadcasts
-		int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
-
-		TaskListViewsFactory viewFactory = mViewFactoryMap.get(widgetId);
-		if (viewFactory == null)
-		{
-			viewFactory = new TaskListViewsFactory(this, intent);
-			mViewFactoryMap.put(widgetId, viewFactory);
-		}
-		else
-		{
-			viewFactory.reload();
-		}
-		return START_NOT_STICKY;
+		return new TaskListViewsFactory(this, intent);
 	}
 
 	/**
@@ -142,6 +109,9 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		private final Executor mExecutor = Executors.newSingleThreadExecutor();
 
 		private String mAuthority;
+
+		/** A status variable that is used in onDataSetChanged to switch between updating the view and reloading the the whole dataset **/
+		private boolean mDoNotReload;
 
 
 		/**
@@ -186,7 +156,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public void onCreate()
 		{
-			mExecutor.execute(mReloadTasks);
 		}
 
 
@@ -233,7 +202,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			{
 				return null;
 			}
-
 			RemoteViews row = new RemoteViews(mContext.getPackageName(), R.layout.task_list_widget_item);
 
 			String taskTitle = items[position].getTaskTitle();
@@ -241,7 +209,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			row.setInt(R.id.task_list_color, "setBackgroundColor", items[position].getTaskColor());
 
 			Time dueDate = items[position].getDueDate();
-
 			if (dueDate != null)
 			{
 				if (mNow == null)
@@ -277,6 +244,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			i.setData(taskUri);
 
 			row.setOnClickFillInIntent(R.id.widget_list_item, i);
+			Log.d(TAG, "new row: " + taskTitle);
 			return (row);
 		}
 
@@ -337,7 +305,14 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		@Override
 		public void onDataSetChanged()
 		{
-
+			if (mDoNotReload)
+			{
+				mDoNotReload = false;
+			}
+			else
+			{
+				reload();
+			}
 		}
 
 
@@ -348,7 +323,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 		public void onTimeUpdate(TimeChangeObserver timeChangeObserver)
 		{
 			// reload the tasks
-			mExecutor.execute(mReloadTasks);
+			reload();
 		}
 
 
@@ -452,11 +427,15 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					mItems = new TaskListWidgetItem[0];
 				}
 
+				// tell to only update the view in the next onDataSetChanged();
+				mDoNotReload = true;
+
 				// notify the widget manager about the update
 				AppWidgetManager widgetManager = AppWidgetManager.getInstance(mContext);
 				if (mAppWidgetId != -1)
 				{
 					widgetManager.notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.task_list_widget_lv);
+
 				}
 			}
 		};

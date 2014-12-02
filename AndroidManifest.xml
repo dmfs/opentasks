@@ -242,24 +242,7 @@
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="org.dmfs.tasks.homescreen.ProviderChangedBroadcastReceiver"
-            android:enabled="@bool/enable_widget_provider" >
-            <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED" />
-
-                <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:scheme="content" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_START" />
-
-                <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
-            </intent-filter>
-        </receiver>
+        
         <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
