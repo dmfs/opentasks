@@ -35,6 +35,7 @@
                 android:lineSpacingMultiplier="1.1"
                 android:maxLines="3"
                 android:textColor="#ffffffff"
+                android:textColorLink="#d0ffffff"
                 android:textSize="28sp" >
             </TextView>
         </org.dmfs.tasks.widget.TextFieldView>
