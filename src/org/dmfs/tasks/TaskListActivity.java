@@ -293,7 +293,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	protected void onResume()
 	{
-		if (!mSwitchedToDetail)
+		if (!mSwitchedToDetail && !mTwoPane)
 		{
 			mSelectedTaskUri = null;
 		}

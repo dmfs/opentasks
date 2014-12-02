@@ -73,7 +73,8 @@
             android:name="org.dmfs.tasks.EditTaskActivity"
             android:label="@string/activity_add_task_title"
             android:parentActivityName="org.dmfs.tasks.TaskListActivity"
-            android:theme="@style/DetailsTheme" >
+            android:theme="@style/DetailsTheme"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity" />
@@ -176,7 +177,7 @@
 
                 <data
                     android:host="@string/org_dmfs_tasks_authority"
-                    android:scheme="content" />
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
 
             <meta-data
@@ -204,7 +205,7 @@
 
                 <data
                     android:host="@string/org_dmfs_tasks_authority"
-                    android:scheme="content" />
+                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
 
             <meta-data
@@ -283,23 +284,21 @@
         </receiver>
 
         <!-- notification -->
-        <service android:name="org.dmfs.tasks.notification.NotificationActionIntentService" >
+        <service
+            android:name="org.dmfs.tasks.notification.NotificationActionIntentService"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
+
+                <data
+                    android:host="@string/org_dmfs_tasks_authority"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.UNDO" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
             </intent-filter>
         </service>

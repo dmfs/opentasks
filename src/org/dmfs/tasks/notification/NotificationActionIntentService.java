@@ -32,7 +32,6 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -66,13 +65,11 @@ public class NotificationActionIntentService extends IntentService
 
 	// extras
 	public static final String EXTRA_NOTIFICATION_ID = "org.dmfs.tasks.extras.notification.NOTIFICATION_ID";
-	public static final String EXTRA_TASK_ID = "org.dmfs.tasks.extras.notification.TASK_ID";
 	public static final String EXTRA_TASK_DUE = "org.dmfs.tasks.extras.notification.TASK_DUE";
 	public static final String EXTRA_TIMEZONE = "org.dmfs.tasks.extras.notification.TIMEZONE";
 	public static final String EXTRA_ALLDAY = "org.dmfs.tasks.extras.notification.ALLDAY";
 
 	private String mAuthority;
-	private Uri mTasksUri;
 
 
 	public NotificationActionIntentService()
@@ -87,14 +84,13 @@ public class NotificationActionIntentService extends IntentService
 	protected void onHandleIntent(Intent intent)
 	{
 		mAuthority = getString(R.string.org_dmfs_tasks_authority);
-		mTasksUri = Tasks.getContentUri(mAuthority);
 
 		final String action = intent.getAction();
 		final Context context = this;
 
-		if (intent.hasExtra(EXTRA_TASK_ID) && intent.hasExtra(EXTRA_NOTIFICATION_ID))
+		if (intent.hasExtra(EXTRA_NOTIFICATION_ID))
 		{
-			long taskId = intent.getLongExtra(EXTRA_TASK_ID, -1);
+			Uri taskUri = intent.getData();
 			int notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1);
 
 			NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -102,7 +98,7 @@ public class NotificationActionIntentService extends IntentService
 
 			if (ACTION_COMPLETE.equals(action))
 			{
-				markCompleted(taskId);
+				markCompleted(taskUri);
 
 			}
 			else if (intent.hasExtra(EXTRA_TASK_DUE) && intent.hasExtra(EXTRA_TIMEZONE))
@@ -117,7 +113,7 @@ public class NotificationActionIntentService extends IntentService
 					time.allDay = false;
 					time.hour++;
 					time.normalize(true);
-					delayTask(taskId, time);
+					delayTask(taskUri, time);
 				}
 				else if (ACTION_DELAY_1D.equals(action))
 				{
@@ -130,7 +126,7 @@ public class NotificationActionIntentService extends IntentService
 					time.allDay = allDay;
 					time.monthDay++;
 					time.normalize(true);
-					delayTask(taskId, time);
+					delayTask(taskUri, time);
 				}
 
 			}
@@ -188,7 +184,7 @@ public class NotificationActionIntentService extends IntentService
 	{
 		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
 		{
-			markCompleted(notificationAction.getTaskId());
+			markCompleted(notificationAction.getTaskUri());
 		}
 
 	}
@@ -215,11 +211,11 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
-	private void markCompleted(long taskId)
+	private void markCompleted(Uri taskUri)
 	{
 		ContentResolver contentResolver = getContentResolver();
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>(1);
-		ContentProviderOperation.Builder operation = ContentProviderOperation.newUpdate(ContentUris.withAppendedId(mTasksUri, taskId));
+		ContentProviderOperation.Builder operation = ContentProviderOperation.newUpdate(taskUri);
 		operation.withValue(Tasks.STATUS, Tasks.STATUS_COMPLETED);
 		operations.add(operation.build());
 		try
@@ -233,17 +229,17 @@ public class NotificationActionIntentService extends IntentService
 		}
 		catch (OperationApplicationException e)
 		{
-			Log.e(TAG, "Unable to mark task completed: " + taskId);
+			Log.e(TAG, "Unable to mark task completed: " + taskUri);
 			e.printStackTrace();
 		}
 	}
 
 
-	private void delayTask(long taskId, Time dueTime)
+	private void delayTask(Uri taskUri, Time dueTime)
 	{
 		ContentValues values = new ContentValues(4);
 		TaskFieldAdapters.DUE.set(values, dueTime);
-		getContentResolver().update(ContentUris.withAppendedId(mTasksUri, taskId), values, null, null);
+		getContentResolver().update(taskUri, values, null, null);
 	}
 
 
@@ -253,39 +249,40 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
-	public static Action getCompleteAction(Context context, int notificationId, long taskId)
+	public static Action getCompleteAction(Context context, int notificationId, Uri taskUri)
 	{
 		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), getCompleteActionIntent(context,
-			notificationId, taskId));
+			notificationId, taskUri));
 	}
 
 
-	public static Action getDelay1hAction(Context context, int notificationId, long taskId, long due, String timezone)
+	public static Action getDelay1hAction(Context context, int notificationId, Uri taskUri, long due, String timezone)
 	{
 		return new Action(R.drawable.ic_detail_delay_1h_inverse, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context,
-			notificationId, taskId, due, true, timezone, false));
+			notificationId, taskUri, due, true, timezone, false));
 	}
 
 
-	public static Action getDelay1dAction(Context context, int notificationId, long taskId, long due, String timezone, boolean allday)
+	public static Action getDelay1dAction(Context context, int notificationId, Uri taskUri, long due, String timezone, boolean allday)
 	{
 		return new Action(R.drawable.ic_detail_delay_1d_inverse, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
-			notificationId, taskId, due, false, timezone, allday));
+			notificationId, taskUri, due, false, timezone, allday));
 	}
 
 
-	private static PendingIntent getCompleteActionIntent(Context context, int notificationId, long taskId)
+	private static PendingIntent getCompleteActionIntent(Context context, int notificationId, Uri taskUri)
 	{
 		final Intent intent = new Intent(NotificationActionIntentService.ACTION_COMPLETE);
+
 		intent.setPackage(context.getPackageName());
-		intent.putExtra(EXTRA_TASK_ID, taskId);
+		intent.setData(taskUri);
 		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
 		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_COMPLETE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		return pendingIntent;
 	}
 
 
-	private static PendingIntent getDelayActionIntent(Context context, int notificationId, long taskId, long due, boolean delay1h, String timezone,
+	private static PendingIntent getDelayActionIntent(Context context, int notificationId, Uri taskUri, long due, boolean delay1h, String timezone,
 		boolean allday)
 	{
 		String action = null;
@@ -299,7 +296,7 @@ public class NotificationActionIntentService extends IntentService
 		}
 		final Intent intent = new Intent(action);
 		intent.setPackage(context.getPackageName());
-		intent.putExtra(EXTRA_TASK_ID, taskId);
+		intent.setData(taskUri);
 		intent.putExtra(EXTRA_TASK_DUE, due);
 		intent.putExtra(EXTRA_TIMEZONE, timezone);
 		intent.putExtra(EXTRA_ALLDAY, allday);

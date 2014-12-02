@@ -400,11 +400,14 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		if (mEditor != null)
 		{
 			mEditor.requestFocus();
-			if (title != null && title.length() > 0)
+			if (title == null || title.length() == 0)
 			{
-				// close soft input as there is already a title
+				// open soft input as there is no title
 				InputMethodManager imm = (InputMethodManager) this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(mEditor.getWindowToken(), 0);
+				if (imm != null)
+				{
+					imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+				}
 			}
 		}
 

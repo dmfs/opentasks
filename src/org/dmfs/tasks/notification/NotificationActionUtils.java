@@ -76,7 +76,7 @@ public class NotificationActionUtils
 	public static final HashMap<Integer, Long> sNotificationTimestamps = new HashMap<Integer, Long>();
 
 
-	public static void sendDueAlarmNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long dueDate, boolean dueAllDay,
+	public static void sendDueAlarmNotification(Context context, String title, Uri taskUri, int notificationId, long dueDate, boolean dueAllDay,
 		String timezone, boolean silent)
 	{
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -128,12 +128,12 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-
-			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskId, dueDate, timezone, dueAllDay));
+			// delay notification
+			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
 
 			// complete action
 			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
-				notificationId, taskId, dueDate);
+				notificationId, taskUri, dueDate);
 			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
@@ -156,8 +156,7 @@ public class NotificationActionUtils
 	}
 
 
-	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long taskId, long startDate, boolean startAllDay,
-		boolean silent)
+	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long startDate, boolean startAllDay, boolean silent)
 	{
 		String startString = "";
 		if (startAllDay)
@@ -210,7 +209,7 @@ public class NotificationActionUtils
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
 			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
-				notificationId, taskId, startDate);
+				notificationId, taskUri, startDate);
 			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
@@ -240,6 +239,7 @@ public class NotificationActionUtils
 	public static PendingIntent getNotificationActionPendingIntent(Context context, NotificationAction action)
 	{
 		final Intent intent = new Intent(action.getActionType());
+		intent.setData(action.getTaskUri());
 		intent.setPackage(context.getPackageName());
 		putNotificationActionExtra(intent, action);
 
@@ -410,16 +410,16 @@ public class NotificationActionUtils
 		private String mActionType;
 		private final int mActionTextResId;
 		private final int mNotificationId;
-		private final long mTaskId;
+		private final Uri mTaskUri;
 		private final long mWhen;
 
 
-		public NotificationAction(String actionType, int actionTextResId, int notificationId, long taskId, long when)
+		public NotificationAction(String actionType, int actionTextResId, int notificationId, Uri taskUri, long when)
 		{
 			mActionType = actionType;
 			mActionTextResId = actionTextResId;
 			mNotificationId = notificationId;
-			mTaskId = taskId;
+			mTaskUri = taskUri;
 			mWhen = when;
 		}
 
@@ -437,7 +437,7 @@ public class NotificationActionUtils
 			out.writeString(mActionType);
 			out.writeInt(mActionTextResId);
 			out.writeInt(mNotificationId);
-			out.writeLong(mTaskId);
+			out.writeString(mTaskUri.toString());
 			out.writeLong(mWhen);
 		}
 
@@ -470,7 +470,7 @@ public class NotificationActionUtils
 			mActionType = in.readString();
 			mActionTextResId = in.readInt();
 			mNotificationId = in.readInt();
-			mTaskId = in.readLong();
+			mTaskUri = Uri.parse(in.readString());
 			mWhen = in.readLong();
 		}
 
@@ -493,9 +493,9 @@ public class NotificationActionUtils
 		}
 
 
-		public long getTaskId()
+		public Uri getTaskUri()
 		{
-			return mTaskId;
+			return mTaskUri;
 		}
 
 

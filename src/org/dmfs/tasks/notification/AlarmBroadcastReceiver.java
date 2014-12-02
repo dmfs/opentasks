@@ -21,9 +21,11 @@ import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 
 /**
@@ -51,15 +53,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 		{
 			if (getAlarmPreference(context))
 			{
-				long taskId = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_ID, 0);
+				Uri taskUri = intent.getData();
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
 				String title = intent.getStringExtra(StartAlarmBroadcastHandler.EXTRA_TASK_TITLE);
 				long startDate = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, Long.MIN_VALUE);
 				boolean startAllDay = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_ALLDAY, false);
 				boolean silent = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, false);
-				int notificationId = (int) taskId;
+				int notificationId = (int) ContentUris.parseId(taskUri);
 
-				NotificationActionUtils.sendStartNotification(context, title, intent.getData(), notificationId, taskId, startDate, startAllDay, silent);
+				NotificationActionUtils.sendStartNotification(context, title, taskUri, notificationId, startDate, startAllDay, silent);
 
 			}
 		}
@@ -67,17 +69,16 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 		{
 			if (getAlarmPreference(context))
 			{
-				long taskId = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_ID, 0);
+				Uri taskUri = intent.getData();
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
 				String title = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TITLE);
 				long dueDate = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, Long.MIN_VALUE);
 				boolean dueAllDay = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_ALLDAY, false);
 				boolean silent = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, false);
 				String timezone = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TIMEZONE);
-				int notificationId = (int) taskId;
+				int notificationId = (int) ContentUris.parseId(taskUri);
 
-				NotificationActionUtils
-					.sendDueAlarmNotification(context, title, intent.getData(), notificationId, taskId, dueDate, dueAllDay, timezone, silent);
+				NotificationActionUtils.sendDueAlarmNotification(context, title, taskUri, notificationId, dueDate, dueAllDay, timezone, silent);
 			}
 		}
 
