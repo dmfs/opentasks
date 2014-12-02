@@ -20,6 +20,7 @@ package org.dmfs.tasks.widget;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.content.Context;
@@ -29,6 +30,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 
@@ -96,6 +98,16 @@ public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChang
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (StringFieldAdapter) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
+
+		if (layoutOptions != null)
+		{
+			boolean multiLine = layoutOptions.getBoolean(LayoutDescriptor.OPTION_MULTILINE, true);
+			mText.setSingleLine(!multiLine);
+			if (!multiLine)
+			{
+				mText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+			}
+		}
 	}
 
 

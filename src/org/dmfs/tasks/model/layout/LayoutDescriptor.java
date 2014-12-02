@@ -151,6 +151,17 @@ public class LayoutDescriptor
 	}
 
 
+	public LayoutDescriptor setOption(String key, Object value)
+	{
+		if (mOptions == null)
+		{
+			mOptions = new LayoutOptions();
+		}
+		mOptions.put(key, value);
+		return this;
+	}
+
+
 	public LayoutOptions getOptions()
 	{
 		return mOptions != null ? mOptions : DEFAULT_OPTIONS;

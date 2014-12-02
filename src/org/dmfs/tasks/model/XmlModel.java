@@ -343,8 +343,8 @@ public class XmlModel extends Model
 		private final int mEditLayout;
 		private final int mIconId;
 		private final int mFieldId;
-		private Map<String, Boolean> mDetailsLayoutOptions;
-		private Map<String, Boolean> mEditLayoutOptions;
+		private Map<String, Object> mDetailsLayoutOptions;
+		private Map<String, Object> mEditLayoutOptions;
 
 
 		public FieldInflater(FieldAdapter<?> adapter, int fieldId, int fieldTitle, int detailsLayout, int editLayout, int iconId)
@@ -399,7 +399,7 @@ public class XmlModel extends Model
 				LayoutDescriptor ld = new LayoutDescriptor(mDetailsLayout);
 				if (mDetailsLayoutOptions != null)
 				{
-					for (Entry<String, Boolean> entry : mDetailsLayoutOptions.entrySet())
+					for (Entry<String, Object> entry : mDetailsLayoutOptions.entrySet())
 					{
 						ld.setOption(entry.getKey(), entry.getValue());
 					}
@@ -412,7 +412,7 @@ public class XmlModel extends Model
 				LayoutDescriptor ld = new LayoutDescriptor(mEditLayout);
 				if (mEditLayoutOptions != null)
 				{
-					for (Entry<String, Boolean> entry : mEditLayoutOptions.entrySet())
+					for (Entry<String, Object> entry : mEditLayoutOptions.entrySet())
 					{
 						ld.setOption(entry.getKey(), entry.getValue());
 					}
@@ -438,7 +438,7 @@ public class XmlModel extends Model
 		{
 			if (mDetailsLayoutOptions == null)
 			{
-				mDetailsLayoutOptions = new HashMap<String, Boolean>(4);
+				mDetailsLayoutOptions = new HashMap<String, Object>(4);
 			}
 			mDetailsLayoutOptions.put(key, value);
 			return this;
@@ -450,7 +450,30 @@ public class XmlModel extends Model
 		{
 			if (mEditLayoutOptions == null)
 			{
-				mEditLayoutOptions = new HashMap<String, Boolean>(4);
+				mEditLayoutOptions = new HashMap<String, Object>(4);
+			}
+			mEditLayoutOptions.put(key, value);
+			return this;
+		}
+
+
+		public FieldInflater addDetailsLayoutOption(String key, int value)
+		{
+			if (mDetailsLayoutOptions == null)
+			{
+				mDetailsLayoutOptions = new HashMap<String, Object>(4);
+			}
+			mDetailsLayoutOptions.put(key, value);
+			return this;
+		}
+
+
+		@SuppressWarnings("unused")
+		public FieldInflater addEditLayoutOption(String key, int value)
+		{
+			if (mEditLayoutOptions == null)
+			{
+				mEditLayoutOptions = new HashMap<String, Object>(4);
 			}
 			mEditLayoutOptions.put(key, value);
 			return this;
@@ -464,9 +487,9 @@ public class XmlModel extends Model
 		 */
 
 		FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.id.task_field_title, R.string.task_title, R.layout.text_field_view,
-			R.layout.text_field_editor, R.drawable.ic_detail_description));
+			R.layout.text_field_editor, R.drawable.ic_detail_description).addEditLayoutOption(LayoutDescriptor.OPTION_MULTILINE, false));
 		FIELD_INFLATER_MAP.put("location", new FieldInflater(TaskFieldAdapters.LOCATION, R.id.task_field_location, R.string.task_location,
-			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location));
+			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location).addDetailsLayoutOption(LayoutDescriptor.OPTION_LINKIFY, 0));
 		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.id.task_field_description, R.string.task_description,
 			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_description));
 		FIELD_INFLATER_MAP.put("checklist", new FieldInflater(TaskFieldAdapters.CHECKLIST, R.id.task_field_checklist, R.string.task_checklist,

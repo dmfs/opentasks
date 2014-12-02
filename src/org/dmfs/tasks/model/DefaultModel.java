@@ -36,6 +36,8 @@ public class DefaultModel extends Model
 	final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view).setOption(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL);
 	final static LayoutDescriptor TEXT_VIEW_NO_LINKS = new LayoutDescriptor(R.layout.text_field_view).setOption(LayoutDescriptor.OPTION_LINKIFY, 0);
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
+	private final static LayoutDescriptor TEXT_EDIT_SINGLE_LINE = new LayoutDescriptor(R.layout.text_field_editor).setOption(LayoutDescriptor.OPTION_MULTILINE,
+		false);
 	private final static LayoutDescriptor CHECKLIST_VIEW = new LayoutDescriptor(R.layout.checklist_field_view);
 	private final static LayoutDescriptor CHECKLIST_EDIT = new LayoutDescriptor(R.layout.checklist_field_editor);
 	private final static LayoutDescriptor CHOICES_VIEW = new LayoutDescriptor(R.layout.choices_field_view);
@@ -85,7 +87,7 @@ public class DefaultModel extends Model
 
 		// task title
 		addField(new FieldDescriptor(mContext, R.id.task_field_title, R.string.task_title, TaskFieldAdapters.TITLE).setViewLayout(TEXT_VIEW).setEditorLayout(
-			TEXT_EDIT));
+			TEXT_EDIT_SINGLE_LINE));
 
 		ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 		aca.addHiddenChoice(null, mContext.getString(R.string.status_needs_action), null);

@@ -55,6 +55,24 @@ public final class LayoutOptions
 
 
 	/**
+	 * Put a generic option.
+	 * 
+	 * @param key
+	 *            The name of the option.
+	 * @param value
+	 *            The value of the option.
+	 */
+	void put(String key, Object value)
+	{
+		if (mOptionMap == null)
+		{
+			mOptionMap = new HashMap<String, Object>();
+		}
+		mOptionMap.put(key, value);
+	}
+
+
+	/**
 	 * Put an int option.
 	 * 
 	 * @param key
