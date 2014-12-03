@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:drawable="@drawable/bg_floating_action_button">
+    </item>
+    <item>
+        <inset
+            android:drawable="@drawable/bg_actionbutton_circle_light_pressed"
+            android:insetLeft="7dp"
+            android:insetRight="7dp"
+            android:insetTop="7dp"
+            android:insetBottom="7dp" />
+    </item>
+
+</layer-list>
