@@ -269,7 +269,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		}
 
 		// setup the views
-		this.updateView();
+		this.prepareReload();
 
 		// expand lists
 		if (mSavedExpandedGroups != null)
@@ -295,6 +295,14 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void onViewCreated(View view, Bundle savedInstanceState)
 	{
 		super.onViewCreated(view, savedInstanceState);
+	}
+
+
+	@Override
+	public void onStart()
+	{
+		reloadCursor();
+		super.onStart();
 	}
 
 
@@ -492,10 +500,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 
 	/**
-	 * Updates the view after the group descriptor was changed
+	 * prepares the update of the view after the group descriptor was changed
+	 * 
 	 * 
 	 */
-	public void updateView()
+	public void prepareReload()
 	{
 		mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), mGroupDescriptor);
 		mExpandableListView.setAdapter(mAdapter);
@@ -504,6 +513,12 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		mAdapter.setOnChildLoadedListener(this);
 		mAdapter.setChildCursorFilter(COMPLETED_FILTER);
 		restoreFilterState();
+
+	}
+
+
+	private void reloadCursor()
+	{
 		getLoaderManager().restartLoader(-1, null, this);
 	}
 
