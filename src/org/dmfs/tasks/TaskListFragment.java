@@ -131,7 +131,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	private Loader<Cursor> mCursorLoader;
 	private String mAuthority;
 
-	@Retain
+	@Retain(permanent = false, instanceNSField = "mInstancePosition")
 	private int mPageId = -1;
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
@@ -756,7 +756,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			TaskListActivity activity = (TaskListActivity) getActivity();
 			if (activity != null)
 			{
-				mGroupDescriptor = activity.getGroupDescriptor(mInstancePosition);
+				mGroupDescriptor = activity.getGroupDescriptor(mPageId);
 			}
 		}
 	}

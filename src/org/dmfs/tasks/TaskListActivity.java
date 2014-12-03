@@ -127,6 +127,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Retain
 	private Uri mSelectedTaskUri;
 
+	@Retain
+	private boolean mShouldShowDetails = false;
+
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
@@ -140,11 +143,19 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 		if (mSelectedTaskUri != null)
 		{
-			Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
-			viewTaskIntent.setData(mSelectedTaskUri);
-			// editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
-			startActivity(viewTaskIntent);
-			mSwitchedToDetail = true;
+			if (mShouldShowDetails)
+			{
+				Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
+				viewTaskIntent.setData(mSelectedTaskUri);
+				// editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
+				startActivity(viewTaskIntent);
+				mSwitchedToDetail = true;
+			}
+
+		}
+		else
+		{
+			mShouldShowDetails = false;
 		}
 
 		setContentView(R.layout.activity_task_list);
@@ -239,6 +250,8 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			@Override
 			public void onPageSelected(int position)
 			{
+				mSelectedTaskUri = null;
+
 				int newPageId = mPagerAdapter.getPageId(position);
 
 				if (newPageId == R.id.task_group_search)
@@ -297,6 +310,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		{
 			mSelectedTaskUri = null;
 		}
+
+		updateTitle(mCurrentPageId);
+
 		super.onResume();
 	}
 
@@ -317,6 +333,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	{
 		if (mTwoPane)
 		{
+			mShouldShowDetails = true;
 			if (forceReload)
 			{
 				mSelectedTaskUri = null;
@@ -553,9 +570,16 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 
 	@Override
-	public ExpandableGroupDescriptor getGroupDescriptor(int position)
+	public ExpandableGroupDescriptor getGroupDescriptor(int pageId)
 	{
-		return mGroupingFactories[position].getExpandableGroupDescriptor();
+		for (AbstractGroupingFactory factory : mGroupingFactories)
+		{
+			if (factory.getId() == pageId)
+			{
+				return factory.getExpandableGroupDescriptor();
+			}
+		}
+		return null;
 	}
 
 	/**
