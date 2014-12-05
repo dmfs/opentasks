@@ -131,7 +131,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	private Loader<Cursor> mCursorLoader;
 	private String mAuthority;
 
-	@Retain(permanent = false, instanceNSField = "mInstancePosition")
+	@Retain
 	private int mPageId = -1;
 
 	private final OnChildClickListener mTaskItemClickListener = new OnChildClickListener()
@@ -318,6 +318,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onPause()
 	{
+		// we can't rely on save instance state being called before onPause, so we get the expanded groups here again 
+		mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
 		stopAutomaticRedraw();
 		super.onPause();
 	}
