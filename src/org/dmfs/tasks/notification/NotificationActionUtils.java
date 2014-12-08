@@ -93,7 +93,7 @@ public class NotificationActionUtils
 		}
 
 		// build notification
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
 
 		// dismisses the notification on click
@@ -172,7 +172,7 @@ public class NotificationActionUtils
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
 		// build notification
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification_completed)
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
 
 		// dismisses the notification on click
@@ -256,7 +256,7 @@ public class NotificationActionUtils
 		builder.setContentTitle(context.getString(action.getActionTextResId()
 
 		));
-		builder.setSmallIcon(R.drawable.ic_notification_completed);
+		builder.setSmallIcon(R.drawable.ic_notification);
 		builder.setWhen(action.getWhen());
 
 		// disable sound & vibration
