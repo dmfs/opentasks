@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
