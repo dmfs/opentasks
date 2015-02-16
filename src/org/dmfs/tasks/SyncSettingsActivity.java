@@ -17,13 +17,13 @@
 package org.dmfs.tasks;
 
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.tasks.utils.LgBugfixActionBarActivity;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 
@@ -33,7 +33,7 @@ import android.widget.Button;
  * 
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
-public class SyncSettingsActivity extends ActionBarActivity
+public class SyncSettingsActivity extends LgBugfixActionBarActivity
 {
 	private FragmentManager mManager;
 	private SettingsListFragment mCurrentFrag;
