@@ -37,6 +37,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 
 /**
@@ -49,6 +50,8 @@ import android.os.Parcelable;
  */
 public final class ContentSet implements OnContentLoadedListener, Parcelable
 {
+	private static final String TAG = "ContentSet";
+
 	/**
 	 * The {@link ContentValues} that have been read from the database (or <code>null</code> for insert operations).
 	 */
@@ -174,19 +177,27 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 	 */
 	public void delete(Context context)
 	{
-		String itemType = context.getContentResolver().getType(mUri);
-		if (itemType != null && !itemType.startsWith(ContentResolver.CURSOR_DIR_BASE_TYPE))
+		if (mUri != null)
 		{
-			context.getContentResolver().delete(mUri, null, null);
-			mBeforeContentValues = null;
-			mAfterContentValues = null;
-			mAfterKeys = null;
-			mUri = null;
+			String itemType = context.getContentResolver().getType(mUri);
+			if (itemType != null && !itemType.startsWith(ContentResolver.CURSOR_DIR_BASE_TYPE))
+			{
+				context.getContentResolver().delete(mUri, null, null);
+				mBeforeContentValues = null;
+				mAfterContentValues = null;
+				mAfterKeys = null;
+				mUri = null;
+			}
+			else
+			{
+				throw new UnsupportedOperationException("Can not load delete a directoy URI: " + mUri);
+			}
 		}
 		else
 		{
-			throw new UnsupportedOperationException("Can not load delete a directoy URI: " + mUri);
+			Log.w(TAG, "Trying to delete empty ContentSet");
 		}
+
 	}
 
 
