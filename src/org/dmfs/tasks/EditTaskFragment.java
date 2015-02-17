@@ -120,6 +120,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		public final static int account_type = 2;
 		@SuppressWarnings("unused")
 		public final static int account_name = 3;
+		@SuppressWarnings("unused")
 		public final static int list_color = 4;
 	}
 
@@ -718,7 +719,10 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		Intent result = null;
 		int toastId = -1;
 
-		mEditor.updateValues();
+		if (mEditor != null)
+		{
+			mEditor.updateValues();
+		}
 
 		if (mValues.isInsert() || mValues.isUpdate())
 		{
