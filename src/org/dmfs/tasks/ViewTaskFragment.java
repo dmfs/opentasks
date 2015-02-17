@@ -411,6 +411,17 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				mDetailView.setModel(mModel);
 				mDetailView.setValues(mContentSet);
 				mContent.addView(mDetailView);
+
+				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet))
+				{
+					((ImageView) mActionButton.findViewById(android.R.id.icon)).setImageResource(R.drawable.content_edit);
+					mActionButtonAction = ACTION_EDIT;
+				}
+				else
+				{
+					mActionButtonAction = ACTION_COMPLETE;
+				}
+
 			}
 
 			mActionButton = mDetailView.findViewById(R.id.action_button);
@@ -437,15 +448,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 						}
 					}
 				});
-				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet))
-				{
-					((ImageView) mActionButton.findViewById(android.R.id.icon)).setImageResource(R.drawable.content_edit);
-					mActionButtonAction = ACTION_EDIT;
-				}
-				else
-				{
-					mActionButtonAction = ACTION_COMPLETE;
-				}
 			}
 
 			if (mColorBar != null)
