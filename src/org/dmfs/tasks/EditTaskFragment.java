@@ -314,6 +314,15 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 					// ensure we start with the current time zone
 					TaskFieldAdapters.TIMEZONE.set(mValues, TimeZone.getDefault());
 				}
+				else
+				{
+					// check id the provided content set contains a list and update the selected list if so
+					Long listId = mValues.getAsLong(Tasks.LIST_ID);
+					if (listId != null)
+					{
+						mSelectedList = listId;
+					}
+				}
 
 				if (mLastAccountType != null)
 				{

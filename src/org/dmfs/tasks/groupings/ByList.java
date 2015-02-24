@@ -19,6 +19,7 @@ package org.dmfs.tasks.groupings;
 
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.tasks.QuickAddDialogFragment;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
@@ -33,7 +34,9 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build.VERSION;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
@@ -213,6 +216,12 @@ public class ByList extends AbstractGroupingFactory
 
 			View colorbar1 = view.findViewById(R.id.colorbar1);
 			View colorbar2 = view.findViewById(R.id.colorbar2);
+			View quickAddTask = view.findViewById(R.id.quick_add_task);
+			if (quickAddTask != null)
+			{
+				quickAddTask.setOnClickListener(quickAddClickListener);
+				quickAddTask.setTag(cursor.getLong(cursor.getColumnIndex(TaskLists._ID)));
+			}
 
 			if ((flags & FLAG_IS_EXPANDED) != 0)
 			{
@@ -224,6 +233,16 @@ public class ByList extends AbstractGroupingFactory
 				if (colorbar2 != null)
 				{
 					colorbar2.setVisibility(View.GONE);
+				}
+
+				// show quick add and hide task count
+				if (quickAddTask != null)
+				{
+					quickAddTask.setVisibility(View.VISIBLE);
+				}
+				if (text2 != null)
+				{
+					text2.setVisibility(View.GONE);
 				}
 			}
 			else
@@ -237,8 +256,32 @@ public class ByList extends AbstractGroupingFactory
 					colorbar2.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
 					colorbar2.setVisibility(View.VISIBLE);
 				}
+
+				// hide quick add and show task count
+				if (quickAddTask != null)
+				{
+					quickAddTask.setVisibility(View.GONE);
+				}
+				if (text2 != null)
+				{
+					text2.setVisibility(View.VISIBLE);
+				}
 			}
 		}
+
+		private final OnClickListener quickAddClickListener = new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				Long tag = (Long) v.getTag();
+				if (tag != null)
+				{
+					QuickAddDialogFragment.newInstance(tag).show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), null);
+				}
+			}
+		};
 
 
 		@Override

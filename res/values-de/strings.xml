@@ -16,6 +16,8 @@
     <string name="menu_show_completed_condensed">Fertige Aufgaben zeigen</string>
     <string name="menu_sync_now">Aktualisieren</string>
     <string name="menu_sync_now_condensed">Aktualisieren</string>
+    <string name="menu_search_hint">Suchen</string>
+    <string name="toast_task_created">\"%1s\" erstellt.</string>
     <string name="toast_task_completed">\"%1s\" fertig gestellt.</string>
     <string name="toast_task_uncompleted">\"%1s\" wiedereröffnet.</string>
     <string name="task_group_title_list">Aufgaben</string>
@@ -87,6 +89,7 @@
     <string name="task_group_all_title">Listen</string>
     <string name="task_group_completed_title">Fertig</string>
     <string name="task_group_start_title">Beginn</string>
+    <string name="task_group_search_title">Suchen</string>
     <string name="task_group_priority_title">Priorität</string>
     <string name="task_group_progress_title">Fortschritt</string>
 
@@ -107,6 +110,7 @@
 
     <string name="action_save">Speichern</string>
     <string name="action_cancel">Abbrechen</string>
+    <string name="action_save_and_continue">Speichern und weiter</string>
 
     <!-- Status labels -->
 

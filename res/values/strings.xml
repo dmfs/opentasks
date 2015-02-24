@@ -17,6 +17,7 @@
     <string name="menu_sync_now">Refresh</string>
     <string name="menu_sync_now_condensed">Refresh</string>
     <string name="menu_search_hint">Search</string>
+    <string name="toast_task_created">\"%1s\" created.</string>
     <string name="toast_task_completed">\"%1s\" completed.</string>
     <string name="toast_task_uncompleted">\"%1s\" reopened.</string>
     <string name="task_group_title_list">Tasks</string>
@@ -109,6 +110,7 @@
 
     <string name="action_save">Save</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_save_and_continue">Save and continue</string>
 
     <!-- Status labels -->
 

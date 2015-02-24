@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="0dp" >
+
+    <LinearLayout
+        android:id="@+id/color_background"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@android:id/title"
+                style="@style/dialog_text_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:padding="8dp"
+                android:text="@string/menu_add_task"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@android:id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:padding="8dp"
+                android:src="@drawable/content_edit" />
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/task_list_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@android:id/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/task_title"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:minWidth="240dp" />
+
+    <LinearLayout
+        android:id="@+id/buttonArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="vertical"
+        android:padding="8dp" >
+
+        <TextView
+            android:id="@android:id/button1"
+            style="@style/dialog_button_stacked_primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_save" />
+
+        <TextView
+            android:id="@android:id/button2"
+            style="@style/dialog_button_stacked_secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_save_and_continue" />
+    </LinearLayout>
+
+</LinearLayout>
