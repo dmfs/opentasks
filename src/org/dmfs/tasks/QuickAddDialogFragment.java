@@ -60,13 +60,24 @@ import android.widget.TextView.OnEditorActionListener;
 
 
 /**
- * A simple prompt for text input.
+ * A quick add dialog. It allows the user to enter a new task without having to deal with the full blown editor interface. At present it support task with a
+ * title only, but there is an option to fire up the full editor.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class QuickAddDialogFragment extends SupportDialogFragment implements OnEditorActionListener, LoaderManager.LoaderCallbacks<Cursor>,
 	OnItemSelectedListener, OnClickListener, TextWatcher
 {
+
+	/**
+	 * The minimal duration for the "Task completed" info to be visible
+	 */
+	private final static int COMPLETION_DELAY_BASE = 500; // ms
+
+	/**
+	 * The maximum time to add for the first time the "Task completed" info is shown.
+	 */
+	private final static int COMPLETION_DELAY_MAX = 1500; // ms
 
 	private final static String ARG_LIST_ID = "list_id";
 	private final static String ARG_CONTENT = "content";
@@ -109,11 +120,14 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	@Parameter(key = ARG_CONTENT)
 	private ContentSet mInitialContent;
 
-	@Retain(permanent = true, key = "quick_add_list_id")
+	@Retain(permanent = true, key = "quick_add_list_id", classNS = "")
 	private long mSelectedListId = -1;
 
 	@Retain
 	private int mLastColor = Color.WHITE;
+
+	@Retain(permanent = true, key = "quick_add_save_count", classNS = "")
+	private int mSaveCounter = 0;
 
 	private View mColorBackground;
 	private Spinner mListSpinner;
@@ -278,8 +292,8 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	{
 		if (EditorInfo.IME_ACTION_DONE == actionId)
 		{
+			notifyUser(true /* close afterwards */);
 			createTask();
-			dismiss();
 			return true;
 		}
 		return false;
@@ -369,30 +383,24 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	public void onClick(View v)
 	{
 		int id = v.getId();
+		mSaveButton.setEnabled(false);
+		mSaveAndNextButton.setEnabled(false);
 
 		if (id == android.R.id.button1)
 		{
-			// save pressed
-			showConfirmation(true);
+			// "save" pressed
+			notifyUser(true /* close afterwards */);
 			createTask();
 		}
 		else if (id == android.R.id.button2)
 		{
-			// save and continue pressed
-			showConfirmation(false);
+			// "save and continue" pressed
+			notifyUser(false /* reset view */);
 			createTask();
-
-			// reset view
-			mEditText.selectAll();
-
-			// bring the keyboard up again
-			mEditText.requestFocus();
-			InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-			inputMethodManager.showSoftInput(mEditText, 0);
 		}
 		else if (id == android.R.id.edit)
 		{
-			// edit pressed
+			// "edit" pressed
 			editTask();
 			dismiss();
 		}
@@ -422,7 +430,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 
 
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-	private void showConfirmation(boolean close)
+	private void notifyUser(boolean close)
 	{
 		if (VERSION.SDK_INT >= 14)
 		{
@@ -439,14 +447,20 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 
 		if (close)
 		{
-			mContent.postDelayed(mDismiss, 700);
+			mContent.postDelayed(mDismiss, 1000);
 		}
 		else
 		{
-			mContent.postDelayed(mRestoreEditText, 1000);
+			// We use a dynamic duration. When you hit "save & continue" for the very first time we use a rather long delay, that gets closer to
+			// COMPLETION_DELAY_BASE with every time you do that.
+			int duration = COMPLETION_DELAY_BASE + COMPLETION_DELAY_MAX / ++mSaveCounter;
+			mContent.postDelayed(mReset, duration);
 		}
 	}
 
+	/**
+	 * A runnable that closes the dialog.
+	 */
 	private final Runnable mDismiss = new Runnable()
 	{
 		@Override
@@ -456,7 +470,10 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		}
 	};
 
-	private final Runnable mRestoreEditText = new Runnable()
+	/**
+	 * A {@link Runnable} that resets the editor view.
+	 */
+	private final Runnable mReset = new Runnable()
 	{
 
 		@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
@@ -473,6 +490,16 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 				mContent.setVisibility(View.VISIBLE);
 				mConfirmation.setVisibility(View.INVISIBLE);
 			}
+			mSaveButton.setEnabled(true);
+			mSaveAndNextButton.setEnabled(true);
+
+			// reset view
+			mEditText.selectAll();
+
+			// bring the keyboard up again
+			mEditText.requestFocus();
+			InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+			inputMethodManager.showSoftInput(mEditText, 0);
 		}
 	};
 }
