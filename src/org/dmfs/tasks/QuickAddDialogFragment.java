@@ -104,13 +104,12 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	}
 
 	@Parameter(key = ARG_LIST_ID)
-	@Retain(permanent = true, key = "quick_add_list_id")
 	private long mListId = -1;
 
 	@Parameter(key = ARG_CONTENT)
 	private ContentSet mInitialContent;
 
-	@Retain
+	@Retain(permanent = true, key = "quick_add_list_id")
 	private long mSelectedListId = -1;
 
 	@Retain
@@ -164,6 +163,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		QuickAddDialogFragment fragment = new QuickAddDialogFragment();
 		Bundle args = new Bundle();
 		args.putParcelable(ARG_CONTENT, content);
+		args.putLong(ARG_LIST_ID, -1);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -189,6 +189,14 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		View view = inflater.inflate(R.layout.fragment_quick_add_dialog, container);
+
+		if (savedInstanceState == null)
+		{
+			if (mListId >= 0)
+			{
+				mSelectedListId = mListId;
+			}
+		}
 
 		mColorBackground = view.findViewById(R.id.color_background);
 		mColorBackground.setBackgroundColor(mLastColor);
@@ -336,7 +344,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	{
 		ContentSet content = buildContentSet();
 		content.persist(getActivity());
-		mListId = mSelectedListId;
 	}
 
 
