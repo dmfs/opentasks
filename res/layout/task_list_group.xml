@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff0f0f0"
-    android:paddingBottom="8dp"
     android:paddingLeft="@dimen/task_list_left_margin"
-    android:paddingRight="@dimen/task_list_right_margin"
-    android:paddingTop="8dp" >
+    android:paddingRight="@dimen/task_list_right_margin" >
 
     <View
         android:id="@+id/colorbar1"
@@ -42,8 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="8dip"
-        android:layout_marginStart="8dip"
+        android:layout_margin="8dip"
         android:layout_toEndOf="@android:id/icon"
         android:layout_toRightOf="@android:id/icon"
         android:orientation="vertical" >
