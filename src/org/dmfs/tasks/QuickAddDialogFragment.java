@@ -69,6 +69,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 {
 
 	private final static String ARG_LIST_ID = "list_id";
+	private final static String ARG_CONTENT = "content";
 
 	public static final String LIST_LOADER_URI = "uri";
 	public static final String LIST_LOADER_FILTER = "filter";
@@ -103,7 +104,11 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	}
 
 	@Parameter(key = ARG_LIST_ID)
+	@Retain(permanent = true, key = "quick_add_list_id")
 	private long mListId = -1;
+
+	@Parameter(key = ARG_CONTENT)
+	private ContentSet mInitialContent;
 
 	@Retain
 	private long mSelectedListId = -1;
@@ -140,6 +145,25 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		QuickAddDialogFragment fragment = new QuickAddDialogFragment();
 		Bundle args = new Bundle();
 		args.putLong(ARG_LIST_ID, listId);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+
+	/**
+	 * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
+	 * 
+	 * @param titleId
+	 *            The resource id of the title.
+	 * @param initalText
+	 *            The initial text in the input field.
+	 * @return A new {@link QuickAddDialogFragment}.
+	 */
+	public static QuickAddDialogFragment newInstance(ContentSet content)
+	{
+		QuickAddDialogFragment fragment = new QuickAddDialogFragment();
+		Bundle args = new Bundle();
+		args.putParcelable(ARG_CONTENT, content);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -312,12 +336,21 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	{
 		ContentSet content = buildContentSet();
 		content.persist(getActivity());
+		mListId = mSelectedListId;
 	}
 
 
 	private ContentSet buildContentSet()
 	{
-		ContentSet task = new ContentSet(Tasks.getContentUri(mAuthority));
+		ContentSet task;
+		if (mInitialContent != null)
+		{
+			task = new ContentSet(mInitialContent);
+		}
+		else
+		{
+			task = new ContentSet(Tasks.getContentUri(mAuthority));
+		}
 		task.put(Tasks.LIST_ID, mListSpinner.getSelectedItemId());
 		TaskFieldAdapters.TITLE.set(task, mEditText.getText().toString());
 		return task;

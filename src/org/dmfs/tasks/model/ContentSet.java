@@ -127,6 +127,34 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 
 	/**
+	 * Clone constructor.
+	 * 
+	 * @param other
+	 *            The {@link ContentSet} to clone.
+	 */
+	public ContentSet(ContentSet other)
+	{
+		if (other == null)
+		{
+			throw new IllegalArgumentException("other must not be null");
+		}
+
+		if (other.mBeforeContentValues != null)
+		{
+			mBeforeContentValues = new ContentValues(other.mBeforeContentValues);
+		}
+
+		if (other.mAfterContentValues != null)
+		{
+			mAfterContentValues = new ContentValues(other.mAfterContentValues);
+			mAfterKeys = new HashSet<String>(other.mAfterKeys);
+		}
+
+		mUri = other.mUri;
+	}
+
+
+	/**
 	 * Load the content. This method must not be called if the URI of this ContentSet is a directory URI and it has not been persited yet.
 	 * 
 	 * @param context

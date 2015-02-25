@@ -70,7 +70,29 @@ public abstract class AbstractArrayChoicesAdapter implements IChoicesAdapter
 	@Override
 	public int getIndex(Object object)
 	{
-		return mVisibleChoices.indexOf(object);
+		int index = mVisibleChoices.indexOf(object);
+		if (index == -1)
+		{
+			// not within visible choices, we should return an alternate value if we have any
+			int hiddenIndex = mChoices.indexOf(object);
+			if (hiddenIndex >= 0)
+			{
+				// there is a hidden element of that value, return the visible element with the same display value
+				// TODO: we should introduce some kind of tag that uniquely identifies elements that are the same
+
+				String title = mTitles.get(hiddenIndex);
+
+				for (int i = 0, count = mVisibleChoices.size(); i < count; ++i)
+				{
+					Object o = mVisibleChoices.get(i);
+					if (title.equals(getTitle(o)))
+					{
+						return i;
+					}
+				}
+			}
+		}
+		return index;
 	}
 
 
