@@ -27,12 +27,15 @@ import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -54,7 +57,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 
 /**
@@ -113,6 +115,8 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	private Spinner mListSpinner;
 
 	private EditText mEditText;
+	private View mConfirmation;
+	private View mContent;
 
 	private View mSaveButton;
 	private View mSaveAndNextButton;
@@ -176,6 +180,9 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		mEditText.setOnEditorActionListener(this);
 		mEditText.addTextChangedListener(this);
 
+		mConfirmation = view.findViewById(R.id.created_confirmation);
+		mContent = view.findViewById(R.id.content);
+
 		mSaveButton = view.findViewById(android.R.id.button1);
 		mSaveButton.setOnClickListener(this);
 		mSaveAndNextButton = view.findViewById(android.R.id.button2);
@@ -183,6 +190,8 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		view.findViewById(android.R.id.edit).setOnClickListener(this);
 
 		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+
+		afterTextChanged(mEditText.getEditableText());
 
 		setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
 
@@ -303,7 +312,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	{
 		ContentSet content = buildContentSet();
 		content.persist(getActivity());
-		Toast.makeText(getActivity(), getString(R.string.toast_task_created, mEditText.getText().toString()), Toast.LENGTH_LONG).show();
 	}
 
 
@@ -316,6 +324,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	}
 
 
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public void onClick(View v)
 	{
@@ -324,22 +333,22 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		if (id == android.R.id.button1)
 		{
 			// save pressed
+			showConfirmation(true);
 			createTask();
-			dismiss();
 		}
 		else if (id == android.R.id.button2)
 		{
 			// save and continue pressed
+			showConfirmation(false);
 			createTask();
 
 			// reset view
-			mEditText.setText("");
+			mEditText.selectAll();
 
 			// bring the keyboard up again
 			mEditText.requestFocus();
 			InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 			inputMethodManager.showSoftInput(mEditText, 0);
-
 		}
 		else if (id == android.R.id.edit)
 		{
@@ -366,9 +375,64 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	public void afterTextChanged(Editable s)
 	{
 		// disable buttons if there is no title
-		boolean enabled = s.length() != 0;
+		boolean enabled = s == null || s.length() != 0;
 		mSaveButton.setEnabled(enabled);
 		mSaveAndNextButton.setEnabled(enabled);
 	}
 
+
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	private void showConfirmation(boolean close)
+	{
+		if (VERSION.SDK_INT >= 14)
+		{
+			mContent.animate().alpha(0).setDuration(250).start();
+			mConfirmation.setAlpha(0);
+			mConfirmation.setVisibility(View.VISIBLE);
+			mConfirmation.animate().alpha(1).setDuration(250).start();
+		}
+		else
+		{
+			mContent.setVisibility(View.INVISIBLE);
+			mConfirmation.setVisibility(View.VISIBLE);
+		}
+
+		if (close)
+		{
+			mContent.postDelayed(mDismiss, 700);
+		}
+		else
+		{
+			mContent.postDelayed(mRestoreEditText, 1000);
+		}
+	}
+
+	private final Runnable mDismiss = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			dismiss();
+		}
+	};
+
+	private final Runnable mRestoreEditText = new Runnable()
+	{
+
+		@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+		@Override
+		public void run()
+		{
+			if (VERSION.SDK_INT >= 14)
+			{
+				mContent.animate().alpha(1).setDuration(250).start();
+				mConfirmation.animate().alpha(0).setDuration(250).start();
+			}
+			else
+			{
+				mContent.setVisibility(View.VISIBLE);
+				mConfirmation.setVisibility(View.INVISIBLE);
+			}
+		}
+	};
 }

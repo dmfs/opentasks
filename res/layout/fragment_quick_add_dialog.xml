@@ -43,46 +43,76 @@
 
         <Spinner
             android:id="@+id/task_list_spinner"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:spinnerMode="dropdown" />
     </LinearLayout>
 
-    <EditText
-        android:id="@android:id/input"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:hint="@string/task_title"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:minWidth="240dp" />
+        android:layout_margin="4dp" >
 
-    <LinearLayout
-        android:id="@+id/buttonArea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="vertical"
-        android:padding="8dp" >
+        <!-- This empty view seems to be necessary to stretch the dialog over the full width -->
 
-        <TextView
-            android:id="@android:id/button1"
-            style="@style/dialog_button_stacked_primary"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+        <LinearLayout
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_save" />
+            android:orientation="vertical"
+            android:padding="4dp" >
+
+            <EditText
+                android:id="@android:id/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:hint="@string/task_title"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:minWidth="240dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="end"
+                android:orientation="vertical"
+                android:padding="4dp" >
+
+                <TextView
+                    android:id="@android:id/button1"
+                    style="@style/dialog_button_stacked_primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_save" />
+
+                <TextView
+                    android:id="@android:id/button2"
+                    style="@style/dialog_button_stacked_secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_save_and_continue" />
+            </LinearLayout>
+        </LinearLayout>
 
         <TextView
-            android:id="@android:id/button2"
-            style="@style/dialog_button_stacked_secondary"
-            android:layout_width="match_parent"
+            android:id="@+id/created_confirmation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/action_save_and_continue" />
-    </LinearLayout>
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_checkmark_light"
+            android:drawableStart="@drawable/ic_checkmark_light"
+            android:gravity="center"
+            android:text="@string/quick_add_task_created"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:visibility="invisible" />
+    </FrameLayout>
 
 </LinearLayout>

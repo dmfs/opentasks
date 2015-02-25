@@ -26,6 +26,7 @@
     <string name="task_group_title_priority">Aufgaben Priorität</string>
     <string name="task_group_title_progress">Aufgaben Fortschritt</string>
     <string name="task_group_title_default">Aufgaben</string>
+    <string name="quick_add_task_created">Aufgabe erstellt</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d Aufgabe</item>
