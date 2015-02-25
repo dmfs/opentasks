@@ -16,8 +16,17 @@
     <string name="menu_show_completed_condensed">Pokaż zakończone</string>
     <string name="menu_sync_now">Odśwież</string>
     <string name="menu_sync_now_condensed">Odśwież</string>
+    <string name="menu_search_hint">Szukaj</string>
+    <string name="toast_task_created">\"%1s\" utworzone.</string>
     <string name="toast_task_completed">\"%1s\" zrealizowane.</string>
     <string name="toast_task_uncompleted">\"%1s\" ponownie otwarte.</string>
+    <string name="task_group_title_list">Zadania</string>
+    <string name="task_group_title_start">Rozpoczynające się</string>
+    <string name="task_group_title_due">Zaplanowane</string>
+    <string name="task_group_title_priority">Priorytetowe</string>
+    <string name="task_group_title_progress">Stan realizacji</string>
+    <string name="task_group_title_default">Zadania</string>
+    <string name="quick_add_task_created">Zadanie utworzone</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d zadanie</item>
@@ -47,6 +56,7 @@
     <string name="task_title">Tytuł</string>
     <string name="task_location">Lokalizacja</string>
     <string name="task_description">Opis</string>
+    <string name="task_checklist">Lista</string>
     <string name="task_start">Początek</string>
     <string name="task_due">Koniec</string>
     <string name="task_completed">Zakończenie</string>
@@ -82,6 +92,7 @@
     <string name="task_group_all_title">Listy</string>
     <string name="task_group_completed_title">Zakończone</string>
     <string name="task_group_start_title">Rozpocznij</string>
+    <string name="task_group_search_title">Szukaj</string>
     <string name="task_group_priority_title">Priorytet</string>
     <string name="task_group_progress_title">Postęp</string>
 
@@ -102,6 +113,7 @@
 
     <string name="action_save">Zapisz</string>
     <string name="action_cancel">Anuluj</string>
+    <string name="action_save_and_continue">Zachowaj i kontynuuj</string>
 
     <!-- Status labels -->
 
@@ -131,6 +143,7 @@
     <string name="title_activity_settings">Ustawienia</string>
     <string name="action_settings">Ustawienia</string>
     <string name="visible_task_lists">Wyświetlane listy</string>
+    <string name="enable_alarms">Powiadomienia</string>
     <string name="synced_task_lists">Synchronizowane listy</string>
 
     <!-- Label for Expandable Group Descriptors -->
@@ -144,9 +157,16 @@
     <string name="confirm_delete_message_with_title">Usunąć \"%1s\"?</string>
     <string name="toast_task_deleted">\"%1s\" usunięte.</string>
 
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">Brak dostępej listy zadań</string>
+    <string name="task_list_selection_title">Wybierz listy do wyświetlenia</string>
+    <string name="task_list_selection_ok">OK</string>
+    <string name="task_list_selection_cancel">ANULUJ</string>
+
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Bieżące zadania</string>
     <string name="task_list_widget_title_4x4">Bieżące zadania 4x4</string>
+
     <!-- Strings for fling actions -->
     <string name="fling_task_complete">Zakończone</string>
     <string name="fling_task_edit">Edytuj</string>
@@ -156,5 +176,43 @@
     <!-- Accessibility content description -->
     <string name="cd_start_date">ikonka rozpoczęcia daty zadania</string>
     <string name="cd_due_date">ikonka terminu zakończenia zadania</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Zaplanowane %1s</string>
+    <string name="notification_task_start_date">Rozpoczynające się %1s</string>
+    <string name="notification_task_due_today">Zaplanowane na dziś</string>
+    <string name="notification_task_start_today">Rozpoczynające się dziś</string>
+    <string name="notification_action_complete">ukończone</string>
+    <string name="notification_action_completed">Zrealizowane</string>
+    <string name="notification_action_delay_1h">+1 godzina</string>
+    <string name="notification_action_delay_1d">+1 dzień</string>
+    <string name="notification_action_delay_toast">Czas zaplanowanych zaktualizowany</string>
+    <string name="notification_undo">Cofnij</string>
+
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 godzina</string>
+    <string name="button_add_one_day">+1 dzień</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Zadania</string>
+    <string name="dashclock_extension_description">Wyświetla informacje dla ostatnich zadań.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s zaplanowanych due - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s zaplanowane</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s zaczynające się - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s zaczynające się dziś</string>
+    <string name="dashclock_pref_displayed_task_title">Wyświetlone zadania</string>
+    <string name="dashclock_pref_displayed_task_summary">Wybierz, które zdarzenia zadań są wyświetlane w widżecie paska zadań</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Wydarzenia do wyświetlenia</string>
+    <string name="dashclock_display_type_due">zadania zaplanowane</string>
+    <string name="dashclock_display_type_start">zadania rozpoczynające się</string>
+    <string name="dashclock_display_type_start_and_due">zadania rozpoczynające się i zaplanowane</string>
+    <string name="dashclock_preference_title">Ustawienia paska zadań</string>
+
+    <!-- General -->
+    <string name="accept">Akceptuj</string>
+    <string name="now">teraz</string>
 
 </resources>
