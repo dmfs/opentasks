@@ -42,6 +42,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -202,7 +203,17 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		View view = inflater.inflate(R.layout.fragment_quick_add_dialog, container);
+
+		// create ContextThemeWrapper from the original Activity Context with the custom theme
+		final Context contextThemeWrapperLight = new ContextThemeWrapper(getActivity(), R.style.ThemeOverlay_AppCompat_Light);
+		final Context contextThemeWrapperDark = new ContextThemeWrapper(getActivity(), R.style.Base_Theme_AppCompat);
+
+		LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapperLight);
+		View view = localInflater.inflate(R.layout.fragment_quick_add_dialog, container);
+
+		ViewGroup headerContainer = (ViewGroup) view.findViewById(R.id.header_container);
+		localInflater = inflater.cloneInContext(contextThemeWrapperDark);
+		View header = localInflater.inflate(R.layout.fragment_quick_add_dialog_header, headerContainer);
 
 		if (savedInstanceState == null)
 		{
