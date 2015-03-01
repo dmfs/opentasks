@@ -62,6 +62,12 @@ public class ChecklistConstraint extends AbstractConstraint<List<CheckListItem>>
 			if (mStatusAdapter != null)
 			{
 				Integer oldStatus = mStatusAdapter.get(currentValues);
+
+				if (oldStatus == null)
+				{
+					oldStatus = mStatusAdapter.getDefault(currentValues);
+				}
+
 				Integer newStatus = newPercentComplete == 100 ? Tasks.STATUS_COMPLETED : newPercentComplete > 0 || oldStatus != null
 					&& oldStatus == Tasks.STATUS_COMPLETED ? Tasks.STATUS_IN_PROCESS : oldStatus;
 				if (oldStatus == null && newStatus != null || oldStatus != null && !oldStatus.equals(newStatus) && oldStatus != Tasks.STATUS_CANCELLED)
