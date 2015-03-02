@@ -18,6 +18,7 @@
     <string name="menu_sync_now_condensed">Ververs</string>
     <string name="toast_task_completed">\"%1s\" afgerond.</string>
     <string name="toast_task_uncompleted">\"%1s\" heropend.</string>
+    <string name="toast_x_removed">\"%1s\" verwijderd.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d taak</item>

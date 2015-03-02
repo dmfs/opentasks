@@ -16,6 +16,7 @@
     <string name="menu_sync_now">Rafraichir</string>
     <string name="menu_sync_now_condensed">Rafraichir</string>
     <string name="toast_task_completed">\"%1s\" terminée.</string>
+    <string name="toast_x_removed">\"%1s\" supprimée.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d tâches</item>

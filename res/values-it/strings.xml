@@ -17,6 +17,7 @@
     <string name="menu_sync_now_condensed">Aggiorna</string>
     <string name="toast_task_completed">\"%1s\" completata.</string>
     <string name="toast_task_uncompleted">\"%1s\" riaperta.</string>
+    <string name="toast_x_removed">\"%1s\" rimossa.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d attività</item>

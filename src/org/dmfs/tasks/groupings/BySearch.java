@@ -41,10 +41,11 @@ import android.graphics.Typeface;
 import android.os.Build.VERSION;
 import android.text.format.DateUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -186,10 +187,11 @@ public class BySearch extends AbstractGroupingFactory
 			int position = cursor.getPosition();
 
 			// set list title
+			String groupTitle = getTitle(cursor, view.getContext());
 			TextView title = (TextView) view.findViewById(android.R.id.title);
 			if (title != null)
 			{
-				title.setText(getTitle(cursor, view.getContext()));
+				title.setText(groupTitle);
 
 			}
 			// set search time
@@ -229,6 +231,42 @@ public class BySearch extends AbstractGroupingFactory
 				colorbar2.setVisibility(View.GONE);
 			}
 
+			View removeSearch = view.findViewById(R.id.quick_add_task);
+			if (removeSearch != null)
+			{
+				((ImageView) removeSearch).setImageResource(R.drawable.content_remove);
+				removeSearch.setOnClickListener(removeListener);
+				GroupTag tag = (GroupTag) removeSearch.getTag();
+				Long groupId = cursor.getLong(cursor.getColumnIndex(SearchHistoryColumns._ID));
+				if (tag == null || tag.groupId != groupId)
+				{
+					removeSearch.setTag(new GroupTag(groupTitle, groupId));
+				}
+			}
+
+			if ((flags & FLAG_IS_EXPANDED) != 0)
+			{
+				if (removeSearch != null)
+				{
+					removeSearch.setVisibility(View.VISIBLE);
+				}
+				if (text2 != null)
+				{
+					text2.setVisibility(View.GONE);
+				}
+			}
+			else
+			{
+				if (removeSearch != null)
+				{
+					removeSearch.setVisibility(View.GONE);
+				}
+				if (text2 != null)
+				{
+					text2.setVisibility(View.VISIBLE);
+				}
+			}
+
 			// TODO: swap styles instead of modifying the font style
 			boolean isHistoric = cursor.getInt(cursor.getColumnIndex(SearchHistoryColumns.HISTORIC)) > 0;
 			Typeface oldtypeface = title.getTypeface();
@@ -238,6 +276,39 @@ public class BySearch extends AbstractGroupingFactory
 			ImageView icon = (ImageView) view.findViewById(android.R.id.icon);
 			icon.setImageResource(R.drawable.ic_history);
 			icon.setVisibility(isHistoric ? View.VISIBLE : View.INVISIBLE);
+		}
+
+		private final OnClickListener removeListener = new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				GroupTag tag = (GroupTag) v.getTag();
+				if (tag != null)
+				{
+					Context context = v.getContext();
+					mHelper.removeSearch(tag.groupId);
+					mSearchCursorFactory.forceUpdate();
+					Toast.makeText(context, context.getString(R.string.toast_x_removed, tag.groupName), Toast.LENGTH_SHORT).show();
+				}
+			}
+		};
+
+		/**
+		 * A tag that holds information about a search group.
+		 */
+		final class GroupTag
+		{
+			final String groupName;
+			final long groupId;
+
+
+			GroupTag(String groupName, long groupId)
+			{
+				this.groupName = groupName;
+				this.groupId = groupId;
+			}
 		}
 
 
@@ -284,12 +355,14 @@ public class BySearch extends AbstractGroupingFactory
 	};
 
 	private final SearchHistoryHelper mHelper;
+	private final SearchHistoryCursorLoaderFactory mSearchCursorFactory;
 
 
 	public BySearch(String authority, SearchHistoryHelper helper)
 	{
 		super(authority);
 		mHelper = helper;
+		mSearchCursorFactory = new SearchHistoryCursorLoaderFactory(mHelper);
 	}
 
 
@@ -306,8 +379,7 @@ public class BySearch extends AbstractGroupingFactory
 	@Override
 	public ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
 	{
-		return new ExpandableGroupDescriptor(new SearchHistoryCursorLoaderFactory(mHelper), makeExpandableChildDescriptor(authority))
-			.setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
+		return new ExpandableGroupDescriptor(mSearchCursorFactory, makeExpandableChildDescriptor(authority)).setViewDescriptor(GROUP_VIEW_DESCRIPTOR);
 	}
 
 

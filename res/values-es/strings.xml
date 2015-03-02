@@ -16,6 +16,7 @@
     <string name="menu_sync_now">Recargar</string>
     <string name="menu_sync_now_condensed">Recargar</string>
     <string name="toast_task_completed">\"%1s\" completada.</string>
+    <string name="toast_x_removed">\"%1s\" eliminada.</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d tarea</item>

@@ -20,6 +20,7 @@
     <string name="toast_task_created">\"%1s\" utworzone.</string>
     <string name="toast_task_completed">\"%1s\" zrealizowane.</string>
     <string name="toast_task_uncompleted">\"%1s\" ponownie otwarte.</string>
+    <string name="toast_x_removed">\"%1s\" usunięte.</string>
     <string name="task_group_title_list">Zadania</string>
     <string name="task_group_title_start">Rozpoczynające się</string>
     <string name="task_group_title_due">Zaplanowane</string>
@@ -190,7 +191,6 @@
     <string name="notification_action_delay_1d">+1 dzień</string>
     <string name="notification_action_delay_toast">Czas zaplanowanych zaktualizowany</string>
     <string name="notification_undo">Cofnij</string>
-
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 godzina</string>

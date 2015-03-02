@@ -20,6 +20,7 @@
     <string name="toast_task_created">\"%1s\" created.</string>
     <string name="toast_task_completed">\"%1s\" completed.</string>
     <string name="toast_task_uncompleted">\"%1s\" reopened.</string>
+    <string name="toast_x_removed">\"%1s\" removed.</string>
     <string name="task_group_title_list">Tasks</string>
     <string name="task_group_title_start">Tasks starting</string>
     <string name="task_group_title_due">Tasks due</string>

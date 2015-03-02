@@ -21,6 +21,7 @@
     <string name="menu_sync_now_condensed">Обновить</string>
     <string name="toast_task_completed">\"%1s\" выполнено.</string>
     <string name="toast_task_uncompleted">\"%1s\" возобновлено.</string>
+    <string name="toast_x_removed">\"%1s\" удалена.</string>
 
     <plurals name="number_of_tasks">
 

@@ -33,6 +33,7 @@ public class SearchHistoryCursorLoaderFactory extends AbstractCursorLoaderFactor
 {
 
 	private final SearchHistoryHelper mSeachHistory;
+	private CustomCursorLoader mLastLoader;
 
 
 	public SearchHistoryCursorLoaderFactory(SearchHistoryHelper history)
@@ -44,6 +45,19 @@ public class SearchHistoryCursorLoaderFactory extends AbstractCursorLoaderFactor
 	@Override
 	public Loader<Cursor> getLoader(Context context)
 	{
-		return new CustomCursorLoader(context, new SearchHistoryCursorFactory(context, null, mSeachHistory));
+		return mLastLoader = new CustomCursorLoader(context, new SearchHistoryCursorFactory(context, null, mSeachHistory));
+
+	}
+
+
+	/**
+	 * Trigger an update for the last loader that has been created.
+	 */
+	public void forceUpdate()
+	{
+		if (mLastLoader != null && !mLastLoader.isAbandoned())
+		{
+			mLastLoader.forceLoad();
+		}
 	}
 }

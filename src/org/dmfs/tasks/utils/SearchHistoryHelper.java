@@ -101,6 +101,15 @@ public class SearchHistoryHelper
 
 
 	/**
+	 * Remove a specific search entry.
+	 */
+	public void removeSearch(long id)
+	{
+		mDb.delete(SearchHistoryDatabaseHelper.SEARCH_HISTORY_TABLE, SearchHistoryColumns._ID + "=" + id, null);
+	}
+
+
+	/**
 	 * Close the database connection.
 	 */
 	public void close()
