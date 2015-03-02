@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="79"
-    android:versionName="1.1.3-pre2" >
+    android:versionCode="81"
+    android:versionName="1.1.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
