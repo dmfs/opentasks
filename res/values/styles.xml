@@ -67,7 +67,7 @@
     <!-- Styles for main task list -->
 
     <style name="tasks_expandable_list_item">
-        <item name="android:background">@android:drawable/list_selector_background</item>
+         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
     <style name="expandable_task_list">

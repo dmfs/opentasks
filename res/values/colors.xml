@@ -14,6 +14,9 @@
     <color name="priority_yellow">#FFFD16</color>
     
     
+    <color name="list_background_pressed">#ffcccccc</color>
+    <color name="list_background_activated">#b2dfdb</color>
+    
     <!-- A light Holo shade of blue -->
     <color name="holo_blue_light">#ff33b5e5</color>
     <!-- A light Holo shade of green -->

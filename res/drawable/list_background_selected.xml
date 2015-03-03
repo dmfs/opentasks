@@ -4,8 +4,8 @@
 
     <stroke
         android:width="2dp"
-        android:color="#8033b5e5" />
+        android:color="@color/list_background_pressed" />
 
-    <solid android:color="#4033b5e5" />
+    <solid android:color="@color/list_background_pressed" />
     
 </shape>
