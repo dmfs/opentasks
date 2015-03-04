@@ -289,7 +289,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 						// ensure we're using the latest values
 						mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
 					}
-					mListColor = mValues.getAsInteger(Tasks.LIST_COLOR);
+					mListColor = TaskFieldAdapters.LIST_COLOR.get(mValues);
 					// update the color of the action bar as soon as possible
 					updateColor(0);
 					setListUri(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), mValues.getAsLong(Tasks.LIST_ID)), null);
@@ -537,7 +537,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	{
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
-			mListColor = contentSet.getAsInteger(Tasks.LIST_COLOR);
+			mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
 			updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 
 			if (mAppForEdit)
