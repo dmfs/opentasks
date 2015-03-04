@@ -697,7 +697,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
-			((TaskListActivity) getActivity()).updateColor(darkenColor2(mListColor));
+			((Callback) getActivity()).updateColor(darkenColor2(mListColor));
 
 			if (VERSION.SDK_INT >= 11)
 			{

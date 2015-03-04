@@ -135,6 +135,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	private boolean mShouldShowDetails = false;
 
 
+	@SuppressLint("NewApi")
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -163,9 +164,6 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		}
 
 		setContentView(R.layout.activity_task_list);
-
-		// make sure the status bar color is set properly on Android 5+ devices
-		updateColor(getResources().getColor(R.color.colorPrimary));
 
 		mAuthority = getString(R.string.org_dmfs_tasks_authority);
 		mSearchHistoryHelper = new SearchHistoryHelper(this);
@@ -307,6 +305,14 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				}
 			}
 		});
+
+		// make sure the status bar color is set properly on Android 5+ devices
+		if (VERSION.SDK_INT >= 21)
+		{
+			Window window = getWindow();
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDarker));
+		}
 	}
 
 

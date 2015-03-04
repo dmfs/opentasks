@@ -38,5 +38,6 @@
 
     <!-- Our primary color - a nice shade of teal -->
     <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDarker">#00796b</color>
 
 </resources>
