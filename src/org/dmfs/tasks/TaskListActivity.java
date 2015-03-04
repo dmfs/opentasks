@@ -84,6 +84,9 @@ import com.astuetz.PagerSlidingTabStrip;
 public class TaskListActivity extends ActionBarActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
 
+	/** Tells the activity to select and display the details of the task with the URI from the intent data. **/
+	public static final String EXTRA_DISPLAY_TASK = "org.dmfs.tasks.DISPLAY_TASK";
+
 	private static final String TAG = "TaskListActivity";
 
 	private final static int REQUEST_CODE_NEW_TASK = 2924;
@@ -126,13 +129,19 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	private boolean mAutoExpandSearchView = false;
 
 	/** Indicates that the activity switched to detail view due to rotation. **/
+	@Retain
 	private boolean mSwitchedToDetail = false;
 
 	@Retain
 	private Uri mSelectedTaskUri;
 
+	/** Indicates to display the two pane layout with details **/
 	@Retain
 	private boolean mShouldShowDetails = false;
+
+	/** Indicates to show ViewTaskActivity when rotating to single pane. **/
+	@Retain
+	private boolean mShouldSwitchToDetail = false;
 
 
 	@SuppressLint("NewApi")
@@ -146,17 +155,20 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		// check for single pane activity change
 		mTwoPane = getResources().getBoolean(R.bool.has_two_panes);
 
+		if (getIntent().hasExtra(EXTRA_DISPLAY_TASK))
+		{
+			mShouldSwitchToDetail = true;
+		}
+
 		if (mSelectedTaskUri != null)
 		{
-			if (mShouldShowDetails)
+			if (mShouldShowDetails && mShouldSwitchToDetail)
 			{
 				Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
 				viewTaskIntent.setData(mSelectedTaskUri);
-				// editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
 				startActivity(viewTaskIntent);
 				mSwitchedToDetail = true;
 			}
-
 		}
 		else
 		{
@@ -331,6 +343,17 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 
 	@Override
+	protected void onNewIntent(Intent intent)
+	{
+		if (intent.hasExtra(EXTRA_DISPLAY_TASK))
+		{
+			mShouldSwitchToDetail = true;
+		}
+		super.onNewIntent(intent);
+	}
+
+
+	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
@@ -350,6 +373,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			if (forceReload)
 			{
 				mSelectedTaskUri = null;
+				mShouldSwitchToDetail = false;
 			}
 			mTaskDetailFrag.loadUri(uri);
 		}
@@ -362,6 +386,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
 			detailIntent.setData(uri);
 			startActivity(detailIntent);
+			mSwitchedToDetail = true;
 		}
 
 	}

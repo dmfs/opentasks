@@ -48,6 +48,8 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 		if (getResources().getBoolean(R.bool.has_two_panes))
 		{
 			Intent taskListIntent = new Intent(this, TaskListActivity.class);
+			taskListIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
+			taskListIntent.setData(getIntent().getData());
 			startActivity(taskListIntent);
 			finish();
 			return;
