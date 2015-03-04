@@ -179,6 +179,15 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		 *            The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
 		 */
 		public void onDelete(Uri taskUri);
+
+
+		/**
+		 * Notifies the listener about the list color of the current task.
+		 * 
+		 * @param color
+		 *            The color.
+		 */
+		public void updateColor(int color);
 	}
 
 
@@ -688,6 +697,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
+			((Callback) getActivity()).updateColor(darkenColor2(mListColor));
 
 			if (VERSION.SDK_INT >= 11)
 			{

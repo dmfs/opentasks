@@ -47,6 +47,8 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 		// If should be in two-pane mode, finish to return to main activity
 		if (getResources().getBoolean(R.bool.has_two_panes))
 		{
+			Intent taskListIntent = new Intent(this, TaskListActivity.class);
+			startActivity(taskListIntent);
 			finish();
 			return;
 		}
@@ -112,6 +114,13 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 		 * The task we're showing has been deleted, just finish.
 		 */
 		finish();
+	}
+
+
+	@Override
+	public void updateColor(int color)
+	{
+		// nothing to do here
 	}
 
 }
