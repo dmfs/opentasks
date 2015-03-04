@@ -324,21 +324,11 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	}
 
 
-	private static int darkenColor(int color)
-	{
-		float[] hsv = new float[3];
-		Color.colorToHSV(color, hsv);
-		hsv[2] = hsv[2] * 0.75f;
-		color = Color.HSVToColor(hsv);
-		return color;
-	}
-
-
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 	{
 		Cursor c = (Cursor) parent.getItemAtPosition(position);
-		mLastColor = darkenColor(TaskFieldAdapters.LIST_COLOR.get(c));
+		mLastColor = TaskFieldAdapters.LIST_COLOR.get(c);
 		mColorBackground.setBackgroundColor(mLastColor);
 		mSelectedListId = id;
 	}

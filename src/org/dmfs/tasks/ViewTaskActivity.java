@@ -114,4 +114,11 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 		finish();
 	}
 
+
+	@Override
+	public void updateColor(int color)
+	{
+		// nothing to do here
+	}
+
 }
