@@ -213,7 +213,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 
 		ViewGroup headerContainer = (ViewGroup) view.findViewById(R.id.header_container);
 		localInflater = inflater.cloneInContext(contextThemeWrapperDark);
-		View header = localInflater.inflate(R.layout.fragment_quick_add_dialog_header, headerContainer);
+		localInflater.inflate(R.layout.fragment_quick_add_dialog_header, headerContainer);
 
 		if (savedInstanceState == null)
 		{

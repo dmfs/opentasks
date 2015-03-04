@@ -189,6 +189,7 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/task_list_title_text"
                         android:textSize="12sp"
                         android:visibility="gone" />
                 </LinearLayout>
