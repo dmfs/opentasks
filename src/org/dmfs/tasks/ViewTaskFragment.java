@@ -614,29 +614,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
-	/**
-	 * Calculates the resulting color when you put col1 over col2.
-	 */
-	private int blendColors(int col1, int col2)
-	{
-		int a1 = Color.alpha(col1);
-
-		int r1 = Color.red(col1);
-		int g1 = Color.green(col1);
-		int b1 = Color.blue(col1);
-
-		int r2 = Color.red(col2);
-		int g2 = Color.green(col2);
-		int b2 = Color.blue(col2);
-
-		int r3 = (r1 * a1 + r2 * (255 - a1)) / 255;
-		int g3 = (g1 * a1 + g2 * (255 - a1)) / 255;
-		int b3 = (b1 * a1 + b2 * (255 - a1)) / 255;
-
-		return Color.rgb(r3, g3, b3);
-	}
-
-
 	@SuppressLint("NewApi")
 	private void updateColor(float percentage)
 	{
@@ -670,8 +647,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			{
 				Window window = getActivity().getWindow();
 				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-				window.setStatusBarColor(blendColors((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24), mListColor));
-				// window.setNavigationBarColor(newColor);
+				window.setStatusBarColor(newColor | 0xff000000);
 			}
 		}
 

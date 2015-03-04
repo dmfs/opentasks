@@ -4,7 +4,7 @@
 
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:textColor">#FF333333</item>
-        <item name="primaryColor">#009688</item>
+        <item name="primaryColor">@color/colorPrimary</item>
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
 
@@ -67,7 +67,7 @@
     <!-- Styles for main task list -->
 
     <style name="tasks_expandable_list_item">
-         <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
     <style name="expandable_task_list">
@@ -197,8 +197,8 @@
     <style name="dialog_button_secondary" parent="dialog_button_primary">
         <item name="android:textColor">#90000000</item>
     </style>
-    
-     <style name="dialog_button_stacked_primary" parent="dialog_button_primary">
+
+    <style name="dialog_button_stacked_primary" parent="dialog_button_primary">
         <item name="android:gravity">right</item>
         <item name="android:padding">8dp</item>
     </style>

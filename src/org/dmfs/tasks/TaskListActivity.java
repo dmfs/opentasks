@@ -36,11 +36,13 @@ import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -58,6 +60,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -131,6 +135,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	private boolean mShouldShowDetails = false;
 
 
+	@SuppressLint("NewApi")
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -300,6 +305,14 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				}
 			}
 		});
+
+		// make sure the status bar color is set properly on Android 5+ devices
+		if (VERSION.SDK_INT >= 21)
+		{
+			Window window = getWindow();
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDarker));
+		}
 	}
 
 
@@ -601,4 +614,19 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		}
 	};
 
+
+	@SuppressLint("NewApi")
+	@Override
+	public void updateColor(int color)
+	{
+		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+		mTabs.setBackgroundColor(color);
+
+		if (VERSION.SDK_INT >= 21)
+		{
+			Window window = getWindow();
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			window.setStatusBarColor(color);
+		}
+	}
 }
