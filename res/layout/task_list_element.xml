@@ -216,7 +216,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dip"
                         android:layout_weight="1"
-                        android:background="@color/priority_yellow"
+                        android:background="@color/priority_orange"
                         android:visibility="invisible" />
 
                     <View
