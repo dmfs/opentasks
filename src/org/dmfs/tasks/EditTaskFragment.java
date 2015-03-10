@@ -18,6 +18,7 @@ package org.dmfs.tasks;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -27,6 +28,7 @@ import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -735,6 +737,42 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
 		if (mValues.isInsert() || mValues.isUpdate())
 		{
+			if (TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)))
+			{
+				// there is no title, try to set one from the description or check list
+
+				String description = TaskFieldAdapters.DESCRIPTION.get(mValues);
+				if (description != null)
+				{
+					// remove spaces and empty lines
+					description = description.trim();
+				}
+
+				if (!TextUtils.isEmpty(description))
+				{
+					// we have a description, use it to make up a title
+					int eol = description.indexOf('\n');
+					TaskFieldAdapters.TITLE.set(mValues, description.substring(0, eol));
+				}
+				else
+				{
+					// no description, try to find a non-empty checklist item
+					List<CheckListItem> checklist = TaskFieldAdapters.CHECKLIST.get(mValues);
+					if (checklist != null && checklist.size() > 0)
+					{
+						for (CheckListItem item : checklist)
+						{
+							String trimmedItem = item.text.trim();
+							if (!TextUtils.isEmpty(trimmedItem))
+							{
+								TaskFieldAdapters.TITLE.set(mValues, trimmedItem);
+								break;
+							}
+						}
+					}
+				}
+			}
+
 			if (!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || mValues.isUpdate())
 			{
 
