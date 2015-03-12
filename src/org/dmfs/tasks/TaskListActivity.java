@@ -38,7 +38,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -485,18 +484,11 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		if (resultCode == Activity.RESULT_OK)
+		Uri taskUri = intent.getData();
+		if (taskUri != null)
 		{
-			switch (requestCode)
-			{
-				case REQUEST_CODE_NEW_TASK:
-					Uri newTaskUri = intent.getData();
-					if (newTaskUri != null)
-					{
-						// select the new task
-						onItemSelected(newTaskUri, false, -1);
-					}
-			}
+			// select the new task
+			onItemSelected(taskUri, false, -1);
 		}
 	}
 
