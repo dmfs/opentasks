@@ -118,7 +118,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	private int mCurrentPageId;
 
 	/** The current pager position **/
-	private int mCurrentPagePosition = -1;
+	private int mCurrentPagePosition = 0;
 
 	private int mPreviousPagePosition = -1;
 
@@ -255,8 +255,8 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 		if (currentPageIndex >= 0)
 		{
-			mViewPager.setCurrentItem(currentPageIndex);
 			mCurrentPagePosition = currentPageIndex;
+			mViewPager.setCurrentItem(currentPageIndex);
 			if (VERSION.SDK_INT >= 14 && mCurrentPageId == R.id.task_group_search)
 			{
 				if (mSearchItem != null)
@@ -270,7 +270,6 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				}
 			}
 		}
-
 		updateTitle(currentPageIndex);
 
 		// Bind the tabs to the ViewPager
