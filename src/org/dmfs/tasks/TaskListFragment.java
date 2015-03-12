@@ -53,6 +53,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -85,6 +86,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	OnFlingListener
 {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "org.dmfs.tasks.TaskListFragment";
 
 	private final static String ARG_INSTANCE_ID = "instance_id";
@@ -130,6 +132,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 	private Loader<Cursor> mCursorLoader;
 	private String mAuthority;
+
+	private Uri mSelectedTaskUri;
+
+	/** The child position to open when the fragment is displayed. **/
+	private ListPosition mSelectedChildPosition;
 
 	@Retain
 	private int mPageId = -1;
@@ -182,8 +189,10 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		 *            The {@link Uri} of the selected task.
 		 * @param forceReload
 		 *            Whether to reload the task or not.
+		 * @param sender
+		 *            The sender of the callback.
 		 */
-		public void onItemSelected(Uri taskUri, boolean forceReload);
+		public void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
 
 
 		public ExpandableGroupDescriptor getGroupDescriptor(int position);
@@ -281,12 +290,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			.getApplicationContext());
 		swiper.setOnFlingListener(this);
 
-		if (mTwoPaneLayout)
-		{
-			setListViewScrollbarPositionLeft(true);
-			setActivateOnItemClick(true);
-		}
-
 		return rootView;
 	}
 
@@ -312,6 +315,13 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		super.onResume();
 		mExpandableListView.invalidateViews();
 		startAutomaticRedraw();
+		openSelectedChild();
+
+		if (mTwoPaneLayout)
+		{
+			setListViewScrollbarPositionLeft(true);
+			setActivateOnItemClick(true);
+		}
 	}
 
 
@@ -319,7 +329,10 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void onPause()
 	{
 		// we can't rely on save instance state being called before onPause, so we get the expanded groups here again
-		mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
+		if (!((TaskListActivity) getActivity()).isInTransientState())
+		{
+			mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
+		}
 		stopAutomaticRedraw();
 		super.onPause();
 	}
@@ -336,7 +349,10 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
+		if (!((TaskListActivity) getActivity()).isInTransientState())
+		{
+			mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
+		}
 		super.onSaveInstanceState(outState);
 	}
 
@@ -411,7 +427,6 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		if (mGroupDescriptor != null)
 		{
 			mCursorLoader = mGroupDescriptor.getGroupCursorLoader(mAppContext);
-
 		}
 		return mCursorLoader;
 
@@ -421,6 +436,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
+
 		if (mSavedExpandedGroups == null)
 		{
 			mSavedExpandedGroups = mExpandableListView.getExpandedGroups();
@@ -431,7 +447,10 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		if (mSavedExpandedGroups != null)
 		{
 			mExpandableListView.expandGroups(mSavedExpandedGroups);
-			mSavedExpandedGroups = null;
+			if (!((TaskListActivity) getActivity()).isInTransientState())
+			{
+				mSavedExpandedGroups = null;
+			}
 		}
 
 		mHandler.post(new Runnable()
@@ -453,7 +472,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 
 
 	@Override
-	public void onChildLoaded(int pos)
+	public void onChildLoaded(final int pos, Cursor childCursor)
 	{
 		if (mActivatedPositionChild != ExpandableListView.INVALID_POSITION)
 		{
@@ -462,7 +481,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				mHandler.post(setOpenHandler);
 			}
 		}
-
+		// check for child to select
+		if (mTwoPaneLayout)
+		{
+			selectChild(pos, childCursor);
+		}
 	}
 
 
@@ -495,7 +518,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				// TODO: use the instance URI one we support recurrence
 				Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), selectTaskId);
 
-				mCallbacks.onItemSelected(taskUri, force);
+				mCallbacks.onItemSelected(taskUri, force, mInstancePosition);
 			}
 		}
 	}
@@ -941,5 +964,109 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void setPageId(int pageId)
 	{
 		mPageId = pageId;
+	}
+
+
+	private void selectChild(final int groupPosition, Cursor childCursor)
+	{
+		mSelectedTaskUri = ((TaskListActivity) getActivity()).getSelectedTaskUri();
+		if (mSelectedTaskUri != null)
+		{
+			new AsyncSelectChildTask().execute(new SelectChildTaskParams(groupPosition, childCursor, mSelectedTaskUri));
+		}
+	}
+
+
+	public void openSelectedChild()
+	{
+		if (mSelectedChildPosition != null)
+		{
+			// post delayed to allow the list view to finish creation
+			mExpandableListView.postDelayed(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					mSelectedChildPosition.flatListPosition = mExpandableListView.getFlatListPosition(RetainExpandableListView.getPackedPositionForChild(
+						mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition));
+
+					mExpandableListView.expandGroup(mSelectedChildPosition.groupPosition);
+					setActivatedItem(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition);
+					selectChildView(mExpandableListView, mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition, true);
+					mExpandableListView.smoothScrollToPosition(mSelectedChildPosition.flatListPosition);
+				}
+			}, 0);
+		}
+	}
+
+
+	/** Returns the position of the task in the cursor. Returns -1 if the task is not in the cursor **/
+	private int getSelectedChildPostion(Uri taskUri, Cursor listCursor)
+	{
+		if (taskUri != null && listCursor != null && listCursor.moveToFirst())
+		{
+			Long taskIdToSelect = Long.valueOf(taskUri.getLastPathSegment());
+			do
+			{
+				Long taskId = listCursor.getLong(listCursor.getColumnIndex(Tasks._ID));
+				if (taskId.equals(taskIdToSelect))
+				{
+					return listCursor.getPosition();
+				}
+			} while (listCursor.moveToNext());
+		}
+		return -1;
+	}
+
+	private static class SelectChildTaskParams
+	{
+		int groupPosition;
+		Uri taskUriToSelect;
+		Cursor childCursor;
+
+
+		SelectChildTaskParams(int groupPosition, Cursor childCursor, Uri taskUriToSelect)
+		{
+			this.groupPosition = groupPosition;
+			this.childCursor = childCursor;
+			this.taskUriToSelect = taskUriToSelect;
+		}
+	}
+
+	private static class ListPosition
+	{
+		int groupPosition;
+		int childPosition;
+		int flatListPosition;
+
+
+		ListPosition(int groupPosition, int childPosition)
+		{
+			this.groupPosition = groupPosition;
+			this.childPosition = childPosition;
+		}
+	}
+
+	private class AsyncSelectChildTask extends AsyncTask<SelectChildTaskParams, Void, Void>
+	{
+
+		@Override
+		protected Void doInBackground(SelectChildTaskParams... params)
+		{
+			int count = params.length;
+			for (int i = 0; i < count; i++)
+			{
+				final SelectChildTaskParams param = params[i];
+
+				final int childPosition = getSelectedChildPostion(param.taskUriToSelect, param.childCursor);
+				if (childPosition > -1)
+				{
+					mSelectedChildPosition = new ListPosition(param.groupPosition, childPosition);
+					openSelectedChild();
+				}
+			}
+			return null;
+		}
+
 	}
 }

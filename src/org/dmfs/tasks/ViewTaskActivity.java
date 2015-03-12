@@ -47,7 +47,10 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 		// If should be in two-pane mode, finish to return to main activity
 		if (getResources().getBoolean(R.bool.has_two_panes))
 		{
+
 			Intent taskListIntent = new Intent(this, TaskListActivity.class);
+			taskListIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, getIntent()
+				.getBooleanExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, false));
 			taskListIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
 			taskListIntent.setData(getIntent().getData());
 			startActivity(taskListIntent);

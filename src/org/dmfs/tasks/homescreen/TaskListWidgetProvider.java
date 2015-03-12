@@ -214,6 +214,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			}
 
 			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
+			detailIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
 			PendingIntent clickPI = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 			widget.setPendingIntentTemplate(R.id.task_list_widget_lv, clickPI);

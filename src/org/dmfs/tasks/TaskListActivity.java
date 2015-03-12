@@ -84,8 +84,11 @@ import com.astuetz.PagerSlidingTabStrip;
 public class TaskListActivity extends ActionBarActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
 
-	/** Tells the activity to select and display the details of the task with the URI from the intent data. **/
+	/** Tells the activity to display the details of the task with the URI from the intent data. **/
 	public static final String EXTRA_DISPLAY_TASK = "org.dmfs.tasks.DISPLAY_TASK";
+
+	/** Tells the activity to select the task in the list with the URI from the intent data. **/
+	public static final String EXTRA_FORCE_LIST_SELECTION = "org.dmfs.tasks.FORCE_LIST_SELECTION";
 
 	private static final String TAG = "TaskListActivity";
 
@@ -114,6 +117,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Retain(permanent = true)
 	private int mCurrentPageId;
 
+	/** The current pager position **/
+	private int mCurrentPagePosition = -1;
+
 	private int mPreviousPagePosition = -1;
 
 	private String mAuthority;
@@ -132,8 +138,12 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Retain
 	private boolean mSwitchedToDetail = false;
 
+	/** The Uri of the task to display/highlight in the list view. **/
 	@Retain
 	private Uri mSelectedTaskUri;
+
+	/** The Uri of the task to display/highlight in the list view coming from the widget. **/
+	private Uri mSelectedTaskUriOnLaunch;
 
 	/** Indicates to display the two pane layout with details **/
 	@Retain
@@ -142,6 +152,12 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	/** Indicates to show ViewTaskActivity when rotating to single pane. **/
 	@Retain
 	private boolean mShouldSwitchToDetail = false;
+
+	/** Indicates the TaskListFragments to select/highlight the mSelectedTaskUri item **/
+	private boolean mShouldSelectTaskListItem = false;
+
+	/** Indicates a transient state after rotation to redirect to the TaskViewActivtiy **/
+	private boolean mTransientState = false;
 
 
 	@SuppressLint("NewApi")
@@ -155,10 +171,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		// check for single pane activity change
 		mTwoPane = getResources().getBoolean(R.bool.has_two_panes);
 
-		if (getIntent().hasExtra(EXTRA_DISPLAY_TASK))
-		{
-			mShouldSwitchToDetail = true;
-		}
+		resolveIntentAction(getIntent());
 
 		if (mSelectedTaskUri != null)
 		{
@@ -168,6 +181,8 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				viewTaskIntent.setData(mSelectedTaskUri);
 				startActivity(viewTaskIntent);
 				mSwitchedToDetail = true;
+				mShouldSwitchToDetail = false;
+				mTransientState = true;
 			}
 		}
 		else
@@ -194,7 +209,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			/*
 			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
 			 */
-			mTaskDetailFrag = new ViewTaskFragment();
+			mTaskDetailFrag = ViewTaskFragment.newInstance(mSelectedTaskUri);
 			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag, DETAIL_FRAGMENT_TAG).commit();
 		}
 		else
@@ -230,9 +245,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			// TODO Automatisch generierter Erfassungsblock
 			e.printStackTrace();
 		}
-		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 
 		// Setup ViewPager
+		mPagerAdapter.setTwoPaneLayout(mTwoPane);
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mPagerAdapter);
 
@@ -241,6 +256,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		if (currentPageIndex >= 0)
 		{
 			mViewPager.setCurrentItem(currentPageIndex);
+			mCurrentPagePosition = currentPageIndex;
 			if (VERSION.SDK_INT >= 14 && mCurrentPageId == R.id.task_group_search)
 			{
 				if (mSearchItem != null)
@@ -268,6 +284,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			public void onPageSelected(int position)
 			{
 				mSelectedTaskUri = null;
+				mCurrentPagePosition = position;
 
 				int newPageId = mPagerAdapter.getPageId(position);
 
@@ -331,13 +348,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	protected void onResume()
 	{
-		if (!mSwitchedToDetail && !mTwoPane)
-		{
-			mSelectedTaskUri = null;
-		}
-
 		updateTitle(mCurrentPageId);
-
 		super.onResume();
 	}
 
@@ -345,10 +356,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		if (intent.hasExtra(EXTRA_DISPLAY_TASK))
-		{
-			mShouldSwitchToDetail = true;
-		}
+		resolveIntentAction(intent);
 		super.onNewIntent(intent);
 	}
 
@@ -365,30 +373,38 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	 * Callback method from {@link TaskListFragment.Callbacks} indicating that the item with the given ID was selected.
 	 */
 	@Override
-	public void onItemSelected(Uri uri, boolean forceReload)
+	public void onItemSelected(Uri uri, boolean forceReload, int pagePosition)
 	{
-		if (mTwoPane)
+		// only accept selections from the current visible task fragment or the activity itself
+		if (pagePosition == -1 || pagePosition == mCurrentPagePosition)
 		{
-			mShouldShowDetails = true;
-			if (forceReload)
+			if (mTwoPane)
 			{
-				mSelectedTaskUri = null;
+				mShouldShowDetails = true;
+				if (forceReload)
+				{
+					mSelectedTaskUri = null;
+					mShouldSwitchToDetail = false;
+					mTaskDetailFrag.loadUri(uri);
+				}
+				else
+				{
+					mTaskDetailFrag.loadUri(uri);
+				}
+			}
+			else if (forceReload)
+			{
+				mSelectedTaskUri = uri;
+
+				// In single-pane mode, simply start the detail activity
+				// for the selected item ID.
+				Intent detailIntent = new Intent(Intent.ACTION_VIEW);
+				detailIntent.setData(uri);
+				startActivity(detailIntent);
+				mSwitchedToDetail = true;
 				mShouldSwitchToDetail = false;
 			}
-			mTaskDetailFrag.loadUri(uri);
 		}
-		else if (forceReload)
-		{
-			mSelectedTaskUri = uri;
-
-			// In single-pane mode, simply start the detail activity
-			// for the selected item ID.
-			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
-			detailIntent.setData(uri);
-			startActivity(detailIntent);
-			mSwitchedToDetail = true;
-		}
-
 	}
 
 
@@ -441,6 +457,32 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	}
 
 
+	private void resolveIntentAction(Intent intent)
+	{
+		// check which task should be selected
+		if (intent.hasExtra(EXTRA_DISPLAY_TASK))
+
+		{
+			mShouldSwitchToDetail = true;
+			mSelectedTaskUri = intent.getData();
+		}
+
+		if (intent != null && intent.hasExtra(EXTRA_DISPLAY_TASK) && intent.getBooleanExtra(EXTRA_FORCE_LIST_SELECTION, true) && mTwoPane)
+		{
+			mShouldSwitchToDetail = true;
+			Uri newSelection = intent.getData();
+			mSelectedTaskUriOnLaunch = newSelection;
+			mShouldSelectTaskListItem = true;
+			mPagerAdapter.notifyDataSetChanged();
+		}
+		else
+		{
+			mSelectedTaskUriOnLaunch = null;
+			mShouldSelectTaskListItem = false;
+		}
+	}
+
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
@@ -453,7 +495,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 					if (newTaskUri != null)
 					{
 						// select the new task
-						onItemSelected(newTaskUri, false);
+						onItemSelected(newTaskUri, false, -1);
 					}
 			}
 		}
@@ -653,5 +695,21 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 			window.setStatusBarColor(color);
 		}
+	}
+
+
+	public Uri getSelectedTaskUri()
+	{
+		if (mShouldSelectTaskListItem)
+		{
+			return mSelectedTaskUriOnLaunch;
+		}
+		return null;
+	}
+
+
+	public boolean isInTransientState()
+	{
+		return mTransientState;
 	}
 }

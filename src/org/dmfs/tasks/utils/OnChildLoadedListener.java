@@ -17,6 +17,9 @@
 
 package org.dmfs.tasks.utils;
 
+import android.database.Cursor;
+
+
 /**
  * A listener that is notified when an {@link ExpandableGroupDescriptorAdapter} has loaded a child cursor.
  * 
@@ -29,6 +32,8 @@ public interface OnChildLoadedListener
 	 * 
 	 * @param pos
 	 *            The position of the group whose child cursor has been loaded.
+	 * @param childCursor
+	 *            The cursor of the children for the group.
 	 */
-	public void onChildLoaded(int pos);
+	public void onChildLoaded(int pos, Cursor childCursor);
 }
