@@ -17,8 +17,10 @@
 
 package org.dmfs.tasks.widget;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.dmfs.tasks.R;
@@ -27,12 +29,17 @@ import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.Context;
+import android.content.res.Resources.NotFoundException;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.AttributeSet;
@@ -41,6 +48,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 
@@ -185,7 +194,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 			Dialog dialog;
 			if (id == R.id.task_date_picker)
 			{
-				dialog = new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
+				dialog = getDatePickerWithSamsungWorkaround();
 			}
 			else
 			{
@@ -408,5 +417,66 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 		}
 
 		mDateTime = newTime;
+	}
+
+
+	/**
+	 * A workaround method to display DatePicker while avoiding crashed on Samsung Android 5.0 devices
+	 * 
+	 * @see http://stackoverflow.com/questions/28345413/datepicker-crash-in-samsung-with-android-5-0
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private Dialog getDatePickerWithSamsungWorkaround()
+	{
+		// The datepicker on Samsung Android 5.0 devices crashes for certain languages, e.g. french and polish
+		// We fall back to the holo datepicker in this case. German and English are confirmed to work.
+		if (Build.VERSION.SDK_INT == VERSION_CODES.LOLLIPOP && Build.MANUFACTURER.equalsIgnoreCase("samsung")
+			&& !(Locale.getDefault().getLanguage().toString().equals("de") || Locale.getDefault().getLanguage().toString().equals("en")))
+		{
+			// get holo picker
+			DatePickerDialog dialog = new DatePickerDialog(getContext(), R.style.DatePickerHolo, TimeFieldEditor.this, mDateTime.year, mDateTime.month,
+				mDateTime.monthDay);
+			dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+
+			// change divider color
+			DatePicker dpView = dialog.getDatePicker();
+			LinearLayout llFirst = (LinearLayout) dpView.getChildAt(0);
+			LinearLayout llSecond = (LinearLayout) llFirst.getChildAt(0);
+			for (int i = 0; i < llSecond.getChildCount(); i++)
+			{
+				NumberPicker picker = (NumberPicker) llSecond.getChildAt(i); // Numberpickers in llSecond
+				// reflection - picker.setDividerDrawable(divider); << didn't seem to work.
+				Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+				for (Field pf : pickerFields)
+				{
+					if (pf.getName().equals("mSelectionDivider"))
+					{
+						pf.setAccessible(true);
+						try
+						{
+							pf.set(picker, new ColorDrawable(getResources().getColor(R.color.material_deep_teal_500)));
+						}
+						catch (IllegalArgumentException e)
+						{
+							e.printStackTrace();
+						}
+						catch (NotFoundException e)
+						{
+							e.printStackTrace();
+						}
+						catch (IllegalAccessException e)
+						{
+							e.printStackTrace();
+						}
+						break;
+					}
+				}
+			}
+			return dialog;
+		}
+		else
+		{
+			return new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
+		}
 	}
 }
