@@ -32,6 +32,10 @@
         <item name="android:textColor">#ffffffff</item>
     </style>
 
+    <style name="DatePickerHolo" parent="@android:style/Theme.Holo.Light.Dialog">
+    </style>
+
+
     <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 
     <style name="task_seekbar" parent="android:Widget.Holo.SeekBar"></style>
