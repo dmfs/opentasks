@@ -484,11 +484,17 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		Uri taskUri = intent.getData();
-		if (taskUri != null)
+		if (resultCode == RESULT_OK)
 		{
-			// select the new task
-			onItemSelected(taskUri, false, -1);
+			if (intent != null)
+			{
+				Uri taskUri = intent.getData();
+				if (taskUri != null)
+				{
+					// select the new task
+					onItemSelected(taskUri, false, -1);
+				}
+			}
 		}
 	}
 
