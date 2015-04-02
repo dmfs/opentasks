@@ -2,61 +2,61 @@
 <resources>
 
     <!-- Russian Translation (c) Nikita Tratorov, NiXProSoft.Ru, 18.05.2014 -->
-    <!-- Updated 2015-03-16 by dmfs.org -->
+
 
     <!-- Manifest stuff -->
-    <string name="app_name">Задания</string>
-    <string name="permission_read_tasks">чтение заданий</string>
-    <string name="permission_description_read_tasks">Разрешить приложению читать задания из Ваших списков заданий.</string>
-    <string name="permission_write_tasks">запись заданий</string>
-    <string name="permission_description_write_tasks">Разрешить приложению сохранять задания в Ваших списках заданий.</string>
+    <string name="app_name">Задачи</string>
+    <string name="permission_read_tasks">чтение задач</string>
+    <string name="permission_description_read_tasks">Разрешить приложению читать задачи из Ваших списков задач.</string>
+    <string name="permission_write_tasks">запись задач</string>
+    <string name="permission_description_write_tasks">Разрешить приложению сохранять задачи в Ваших списках задач.</string>
 
     <!-- Task list -->
-    <string name="menu_add_task">Добавить задание</string>
-    <string name="menu_add_task_condensed">Новое</string>
-    <string name="menu_show_completed">Показать выполненные задания</string>
-    <string name="menu_hide_completed">Скрыть выполненные задания</string>
-    <string name="menu_show_completed_condensed">Показать выполненные задания</string>
+    <string name="menu_add_task">Добавить задачу</string>
+    <string name="menu_add_task_condensed">Новая</string>
+    <string name="menu_show_completed">Показать выполненные задачи</string>
+    <string name="menu_hide_completed">Скрыть выполненные задачи</string>
+    <string name="menu_show_completed_condensed">Показать выполненные задачи</string>
     <string name="menu_sync_now">Обновить</string>
     <string name="menu_sync_now_condensed">Обновить</string>
     <string name="menu_search_hint">Поиск</string>
-    <string name="toast_task_created">\"%1s\" создано.</string>
-    <string name="toast_task_completed">\"%1s\" выполнено.</string>
-    <string name="toast_task_uncompleted">\"%1s\" возобновлено.</string>
-    <string name="toast_x_removed">\"%1s\" удалено.</string>
-    <string name="task_group_title_list">Задания</string>
-    <string name="task_group_title_start">Начало задания</string>
-    <string name="task_group_title_due">Срок выполнения задания</string>
-    <string name="task_group_title_priority">Приоритет задания</string>
-    <string name="task_group_title_progress">Прогресс в задании</string>
-    <string name="task_group_title_default">Задания</string>
-    <string name="quick_add_task_created">Задание создано</string>
+    <string name="toast_task_created">\"%1s\" создана.</string>
+    <string name="toast_task_completed">\"%1s\" выполнена.</string>
+    <string name="toast_task_uncompleted">\"%1s\" возобновлена.</string>
+    <string name="toast_x_removed">\"%1s\" удалена.</string>
+    <string name="task_group_title_list">Задачи</string>
+    <string name="task_group_title_start">Начало задачи</string>
+    <string name="task_group_title_due">Срок выполнения задачи</string>
+    <string name="task_group_title_priority">Приоритет задачи</string>
+    <string name="task_group_title_progress">Прогресс в задаче</string>
+    <string name="task_group_title_default">Задачи</string>
+    <string name="quick_add_task_created">Задача создана</string>
 
     <plurals name="number_of_tasks">
 
         <!-- last number 1 -->
-        <item quantity="one">%d задание</item>
+        <item quantity="one">%d задача</item>
         <!-- last number 2-4 -->
-        <item quantity="few">%d задания</item>
+        <item quantity="few">%d задачи</item>
         <!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
-        <item quantity="many">%d заданий</item>
-        <item quantity="other">%d задания</item>
+        <item quantity="many">%d задач</item>
+        <item quantity="other">%d задачи</item>
     </plurals>
 
     <!-- Task detail view -->
-    <string name="activity_task_details_edit">Изменить</string>
-    <string name="activity_task_details_edit_task">Изменить задание</string>
+    <string name="activity_task_details_edit">Править</string>
+    <string name="activity_task_details_edit_task">Править задачу</string>
     <string name="activity_task_details_delete">Удалить</string>
-    <string name="activity_task_details_delete_task">Удалить задание</string>
+    <string name="activity_task_details_delete_task">Удалить задачу</string>
     <string name="activity_task_details_complete">Завершить</string>
-    <string name="activity_task_details_complete_task">Завершить задание</string>
+    <string name="activity_task_details_complete_task">Завершить задачу</string>
 
     <!-- Task editor -->
-    <string name="activity_edit_task_title">Изменить</string>
-    <string name="activity_add_task_title">Новое задание</string>
+    <string name="activity_edit_task_title">Править</string>
+    <string name="activity_add_task_title">Новая задача</string>
     <string name="activity_edit_task_error_invalid_url">Неверная ссылка URL</string>
-    <string name="activity_edit_task_task_saved">Задание сохранено.</string>
-    <string name="activity_edit_task_empty_task_not_saved">Пустое задание не сохранено.</string>
+    <string name="activity_edit_task_task_saved">Задача сохранена.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Пустая задача не сохранена.</string>
 
     <!-- Names of task attributes -->
 
@@ -70,12 +70,12 @@
     <string name="task_completed">Выполнено</string>
     <string name="task_percent_complete">Процент выполнения</string>
     <string name="task_status">Состояние</string>
-    <string name="task_classification">Классификация</string>
+    <string name="task_classification">Приватность</string>
     <string name="task_url">URL</string>
-    <string name="title_task_detail">Детали задания</string>
-    <string name="title_task_list">Задания</string>
-    <string name="provider_label">Задания</string>
-    <string name="task_detail_activity">Детали задания</string>
+    <string name="title_task_detail">Подробности задачи</string>
+    <string name="title_task_list">Задачи</string>
+    <string name="provider_label">Задачи</string>
+    <string name="task_detail_activity">Подробности задачи</string>
     <string name="task_priority">Приоритет</string>
     <string name="task_timezone">Часовой пояс</string>
     <string name="task_all_day">Весь день</string>
@@ -91,7 +91,7 @@
     <string name="task_group_due_in_future">В ближайшем будущем</string>
 
     <!-- Task list start group titles -->
-    <string name="task_group_start_started">Уже начато</string>
+    <string name="task_group_start_started">Уже начата</string>
     <string name="task_group_start_today">Сегодня</string>
     <string name="task_group_start_tomorrow">Завтра</string>
     <string name="task_group_start_within_7_days">В течение недели</string>
@@ -122,22 +122,22 @@
 
     <string name="action_save">Сохранить</string>
     <string name="action_cancel">Отменить</string>
-    <string name="action_save_and_continue">Сохранить и далее</string>
+    <string name="action_save_and_continue">Сохранить и дальше</string>
 
     <!-- Status labels -->
 
     <string name="status_needs_action">в ожидании</string>
     <string name="status_in_process">выполняется</string>
-    <string name="status_completed">выполнено</string>
-    <string name="status_cancelled">отменено</string>
-    <string name="status_incomplete">не выполнено</string>
+    <string name="status_completed">выполнена</string>
+    <string name="status_cancelled">отменена</string>
+    <string name="status_incomplete">не выполнена</string>
 
     <!-- Classification labels -->
 
     <string name="classification_not_specified">не указана</string>
-    <string name="classification_public">публично</string>
-    <string name="classification_private">личное</string>
-    <string name="classification_confidential">конфиденциальное</string>
+    <string name="classification_public">публичная</string>
+    <string name="classification_private">личная</string>
+    <string name="classification_confidential">конфиденциальная</string>
 
     <!-- Priority labels -->
 
@@ -162,39 +162,39 @@
 
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Подтвердите удаление</string>
-    <string name="confirm_delete_message">Удалить это задание?</string>
+    <string name="confirm_delete_message">Удалить эту задачу?</string>
     <string name="confirm_delete_message_with_title">Удалить \"%1s\"?</string>
-    <string name="toast_task_deleted">\"%1s\" удалено.</string>
+    <string name="toast_task_deleted">\"%1s\" удалена.</string>
 
     <!-- Strings in the Task List Selection Fragment -->
-    <string name="task_list_selection_empty">Нет списка заданий</string>
+    <string name="task_list_selection_empty">Нет списка задач</string>
     <string name="task_list_selection_title">Селекция списков</string>
     <string name="task_list_selection_ok">ОК</string>
     <string name="task_list_selection_cancel">ОТМЕНИТЬ</string>
 
     <!-- Strings for Task List Widget -->
-    <string name="task_list_widget_title">Текущие задания</string>
-    <string name="task_list_widget_title_4x4">Текущие задания 4x4</string>
+    <string name="task_list_widget_title">Текущие задачи</string>
+    <string name="task_list_widget_title_4x4">Текущие задачи 4x4</string>
 
     <!-- Strings for fling actions -->
     <string name="fling_task_complete">Завершить</string>
     <string name="fling_task_edit">Изменить</string>
     <string name="fling_task_delete">Удалить</string>
-    <string name="fling_task_uncomplete">Не выполнено</string>
+    <string name="fling_task_uncomplete">Не выполнена</string>
 
     <!-- Accessibility content description -->
-    <string name="cd_start_date">значок для даты начала задания</string>
-    <string name="cd_due_date">значок для срока выполнения задания</string>
+    <string name="cd_start_date">значок для даты начала задачи</string>
+    <string name="cd_due_date">значок для срока выполнения задачи</string>
 
     <!-- Strings for notification -->
     <string name="notification_task_due_title">%1s</string>
     <string name="notification_task_start_title">%1s</string>
-    <string name="notification_task_due_date">Срок выполнения задания %1s</string>
-    <string name="notification_task_start_date">Начало задания %1s</string>
-    <string name="notification_task_due_today">Срок задания сегодня</string>
-    <string name="notification_task_start_today">Начало задания сегодня</string>
+    <string name="notification_task_due_date">Срок выполнения задачи %1s</string>
+    <string name="notification_task_start_date">Начало задачи %1s</string>
+    <string name="notification_task_due_today">Срок выполнения задачи сегодня</string>
+    <string name="notification_task_start_today">Начало задачи сегодня</string>
     <string name="notification_action_complete">Завершить</string>
-    <string name="notification_action_completed">Выполнено</string>
+    <string name="notification_action_completed">Выполнена</string>
     <string name="notification_action_delay_1h">+1 час</string>
     <string name="notification_action_delay_1d">+1 день</string>
     <string name="notification_action_delay_toast">Обновить срок выполнения</string>
@@ -205,19 +205,19 @@
     <string name="button_add_one_day">+1 день</string>
 
     <!-- Dashclock -->
-    <string name="dashclock_extension_title">Задания</string>
-    <string name="dashclock_extension_description">Информация по актуальным заданиям.</string>
+    <string name="dashclock_extension_title">Задачи</string>
+    <string name="dashclock_extension_description">Информация по актуальным задачам.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s срок - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s срок</string>
     <string name="dashclock_widget_title_start_expanded">%1$s начало - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s начало сегодня</string>
-    <string name="dashclock_pref_displayed_task_title">Доступные задания</string>
-    <string name="dashclock_pref_displayed_task_summary">Выбор, какие задания показываются в виджет часов экрана</string>
-    <string name="dashclock_pref_displayed_task_dialog_title">Задания для показа</string>
-    <string name="dashclock_display_type_due">Задания по сроку</string>
-    <string name="dashclock_display_type_start">Начатые задания</string>
-    <string name="dashclock_display_type_start_and_due">Задания начатые и по сроку</string>
-    <string name="dashclock_preference_title">Задания часы экрана установки</string>
+    <string name="dashclock_pref_displayed_task_title">Доступные задачи</string>
+    <string name="dashclock_pref_displayed_task_summary">Выбор, какие задачи показываются в виджет часы экрана</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Задачи для показа</string>
+    <string name="dashclock_display_type_due">Задачи по сроку выполнения</string>
+    <string name="dashclock_display_type_start">Начатые задачи</string>
+    <string name="dashclock_display_type_start_and_due">Задачи начатые и по сроку выполнения</string>
+    <string name="dashclock_preference_title">Задачи часы экрана установки</string>
 
     <!-- General -->
     <string name="accept">Подтвердить</string>
