@@ -471,7 +471,10 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			Uri newSelection = intent.getData();
 			mSelectedTaskUriOnLaunch = newSelection;
 			mShouldSelectTaskListItem = true;
-			mPagerAdapter.notifyDataSetChanged();
+			if (mPagerAdapter != null)
+			{
+				mPagerAdapter.notifyDataSetChanged();
+			}
 		}
 		else
 		{
