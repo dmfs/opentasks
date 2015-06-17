@@ -315,6 +315,41 @@
             android:exported="true"
             android:label="@string/title_task_list" >
         </activity>
+        <!-- Color Picker -->
+        <activity android:name="org.dmfs.android.colorpicker.ColorPickerActivity" android:theme="@style/Theme.AppCompat.Light.Dialog" >
+            <intent-filter>
+                <action android:name="org.openintents.action.PICK_COLOR" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!-- Manage List -->
+        <activity
+            android:name="org.dmfs.tasks.ManageListActivity"
+            android:theme="@style/AppThemeDialog" >
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="org.dmfs.intent.category.LOCAL" />
+
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasklists"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="org.dmfs.intent.category.LOCAL" />
+
+                <data
+                    android:host="org.dmfs.tasks"
+                    android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasklists"
+                    android:scheme="content" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
