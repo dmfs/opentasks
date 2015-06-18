@@ -141,9 +141,33 @@
 
     <string name="title_activity_settings">Einstellungen</string>
     <string name="action_settings">Einstellungen</string>
+    <string name="action_add_local_list">Liste anlegen</string>
     <string name="visible_task_lists">Sichtbare Listen</string>
     <string name="enable_alarms">Benachrichtigungen</string>
     <string name="synced_task_lists">Synchronisierte Listen</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Choose an account</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">Speichern</string>
+    <string name="activity_manage_list_btn_delete">Liste löschen</string>
+    <string name="activity_add_list_title">Lokale Liste anlegen</string>
+    <string name="activity_edit_list_title">Einstellungen</string>
+    <string name="task_list_name_caption">Name</string>
+    <string name="task_list_no_sync">Hinweiß: Dies erzeugt eine lokale Liste. Lokale Listen werden nicht synchronisiert.</string>
+    <string name="task_list_color_caption">Listenfarbe</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">Listenname</string>
+    <string name="task_list_name_dialog_title">Listename eingeben</string>
+    <string name="task_list_name_dialog_error">Geben Sie einen Namen ein.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">%s löschen</string>
+    <string name="task_list_delete_dialog_message">Diese Liste und alle enthaltenen Aufgaben löschen?\nAchtung: Gelöschte Listen können nicht wieder hergestellt werden.</string>
+    <string name="task_list_delete_toast">%s gelöscht</string>
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">Fälligkeit</string>

@@ -20,6 +20,16 @@ package org.dmfs.tasks.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.tasks.ManageListActivity;
+import org.dmfs.tasks.R;
+
+import android.accounts.Account;
+import android.app.Activity;
+import android.content.ComponentName;
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
@@ -31,11 +41,16 @@ import android.text.TextUtils;
  */
 public abstract class Model
 {
+	private final static String INTENT_CATEGORY_PREFIX = "org.dmfs.intent.category.";
+
 	/**
 	 * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
 	 */
 	private final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
 	private final SparseArrayCompat<FieldDescriptor> mFieldIndex = new SparseArrayCompat<FieldDescriptor>(16);
+
+	private final Context mContext;
+	private final String mAuthority;
 
 	boolean mInflated = false;
 
@@ -44,6 +59,23 @@ public abstract class Model
 	private int mIconId = -1;
 	private int mLabelId = -1;
 	private String mAccountType;
+
+	private Boolean mSupportsInsertListIntent;
+	private Boolean mSupportsEditListIntent;
+
+
+	protected Model(Context context, String accountType)
+	{
+		mContext = context;
+		mAccountType = accountType;
+		mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
+	}
+
+
+	public final Context getContext()
+	{
+		return mContext;
+	}
 
 
 	public abstract void inflate() throws ModelInflaterException;
@@ -137,9 +169,73 @@ public abstract class Model
 	}
 
 
-	void setAccountType(String accountType)
+	public String getAccountLabel()
 	{
-		mAccountType = accountType;
+		return "";
+	}
+
+
+	public void startInsertIntent(Activity activity, Account account)
+	{
+		if (!hasInsertActivity())
+		{
+			throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support inserting lists.");
+		}
+
+		activity.startActivity(getListIntent(mContext, Intent.ACTION_INSERT, account));
+	}
+
+
+	public void startEditIntent(Activity activity, Account account, long listId)
+	{
+		if (!hasEditActivity())
+		{
+			throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support editing lists.");
+		}
+
+		activity.startActivityForResult(
+			getListIntent(mContext, Intent.ACTION_EDIT, account).setData(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), listId)), 11);
+	}
+
+
+	public boolean hasEditActivity()
+	{
+		if (mSupportsEditListIntent == null)
+		{
+			ComponentName editComponent = getListIntent(mContext, Intent.ACTION_EDIT, null).setData(
+				ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), 0 /* for pure intent resolution it doesn't matter which id we append */))
+				.resolveActivity(mContext.getPackageManager());
+			mSupportsEditListIntent = editComponent != null;
+		}
+
+		return mSupportsEditListIntent;
+	}
+
+
+	public boolean hasInsertActivity()
+	{
+		if (mSupportsInsertListIntent == null)
+		{
+			ComponentName insertComponent = getListIntent(mContext, Intent.ACTION_INSERT, null).resolveActivity(mContext.getPackageManager());
+			mSupportsInsertListIntent = insertComponent != null;
+		}
+
+		return mSupportsInsertListIntent;
+	}
+
+
+	private Intent getListIntent(Context context, String action, Account account)
+	{
+		// insert action
+		Intent insertIntent = new Intent();
+		insertIntent.setAction(action);
+		insertIntent.setData(TaskLists.getContentUri(mAuthority));
+		insertIntent.addCategory(INTENT_CATEGORY_PREFIX + mAccountType);
+		if (account != null)
+		{
+			insertIntent.putExtra(ManageListActivity.EXTRA_ACCOUNT, account);
+		}
+		return insertIntent;
 	}
 
 

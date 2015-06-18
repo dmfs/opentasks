@@ -5,5 +5,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="task_list_left_margin">0dp</dimen>
     <dimen name="task_list_right_margin">0dp</dimen>
+    <dimen name="dialog_buttom_bar_height">52dp</dimen>
 
 </resources>

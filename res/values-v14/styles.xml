@@ -32,9 +32,7 @@
         <item name="android:textColor">#ffffffff</item>
     </style>
 
-    <style name="DatePickerHolo" parent="@android:style/Theme.Holo.Light.Dialog">
-    </style>
-
+    <style name="DatePickerHolo" parent="@android:style/Theme.Holo.Light.Dialog"></style>
 
     <style name="task_progressbar" parent="android:Widget.Holo.ProgressBar.Horizontal"></style>
 
@@ -87,11 +85,9 @@
         <item name="android:background">@android:color/holo_blue_bright</item>
     </style>
 
-    <style name="dialog_button_primary" parent="android:Widget.Holo.Light.TextView">
-        <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
+    <style name="dialog_button_primary" parent="TextAppearance.AppCompat.Button">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:textColor">@color/accent_material_light</item>
-        <item name="android:textSize">16sp</item>
         <item name="android:padding">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>

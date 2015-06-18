@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.widget.CheckBox;
 
 
@@ -21,148 +22,148 @@ import android.widget.CheckBox;
  */
 public class ColoredShapeCheckBox extends CheckBox
 {
-	/**
-	 * The initial color in case no other color is set. This color is transparent but the check mark will be dark.
-	 */
-	private final static int DEFAULT_COLOR = 0x00ffffff;
+    /**
+     * The initial color in case no other color is set. This color is transparent but the check mark will be dark.
+     */
+    private final static int DEFAULT_COLOR = 0x00ffffff;
 
-	/**
-	 * The shape in the background of the check mark.
-	 */
-	private GradientDrawable mBackgroundShape;
+    /**
+     * The shape in the background of the check mark.
+     */
+    private GradientDrawable mBackgroundShape;
 
-	/**
-	 * The check mark used for dark background shapes.
-	 */
-	private Drawable mLightCheckmark;
+    /**
+     * The check mark used for dark background shapes.
+     */
+    private Drawable mLightCheckmark;
 
-	/**
-	 * The check mark used for light background shapes.
-	 */
-	private Drawable mDarkCheckmark;
+    /**
+     * The check mark used for light background shapes.
+     */
+    private Drawable mDarkCheckmark;
 
-	/**
-	 * A color state list that defines the background color.
-	 */
-	private ColorStateList mColorStateList;
+    /**
+     * A color state list that defines the background color.
+     */
+    private ColorStateList mColorStateList;
 
-	/**
-	 * The current color.
-	 */
-	private int mCurrentColor;
-
-
-	public ColoredShapeCheckBox(Context context)
-	{
-		super(context);
-		Resources resources = context.getResources();
-		mBackgroundShape = (GradientDrawable) resources.getDrawable(R.drawable.oval_shape);
-		mLightCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_dark);
-		mDarkCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_light);
-		setColor(DEFAULT_COLOR);
-	}
+    /**
+     * The current color.
+     */
+    private int mCurrentColor;
 
 
-	public ColoredShapeCheckBox(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-		loadAttrs(attrs);
-	}
+    public ColoredShapeCheckBox(Context context)
+    {
+        super(context);
+        Resources resources = context.getResources();
+        mBackgroundShape = (GradientDrawable) resources.getDrawable(R.drawable.oval_shape);
+        mLightCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_dark);
+        mDarkCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_light);
+        setColor(DEFAULT_COLOR);
+    }
 
 
-	public ColoredShapeCheckBox(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-		loadAttrs(attrs);
-	}
+    public ColoredShapeCheckBox(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+        loadAttrs(attrs);
+    }
 
 
-	private void loadAttrs(AttributeSet attrs)
-	{
-		TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ColoredShapeCheckBox);
-
-		Resources resources = getResources();
-
-		Drawable backgroundShape = typedArray.getDrawable(R.styleable.ColoredShapeCheckBox_backgroundShape);
-		if (backgroundShape instanceof GradientDrawable)
-		{
-			mBackgroundShape = (GradientDrawable) backgroundShape;
-		}
-		else
-		{
-			mBackgroundShape = (GradientDrawable) resources.getDrawable(R.drawable.oval_shape);
-		}
-
-		Drawable darkCheckmark = typedArray.getDrawable(R.styleable.ColoredShapeCheckBox_darkCheckmark);
-		if (darkCheckmark != null)
-		{
-			mDarkCheckmark = darkCheckmark;
-		}
-		else
-		{
-			mDarkCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_light);
-		}
-
-		Drawable lightCheckmark = typedArray.getDrawable(R.styleable.ColoredShapeCheckBox_lightCheckmark);
-		if (lightCheckmark != null)
-		{
-			mLightCheckmark = lightCheckmark;
-		}
-		else
-		{
-			mLightCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_dark);
-		}
-		setColorStateList(typedArray.getColorStateList(R.styleable.ColoredShapeCheckBox_shapeColor));
-
-		typedArray.recycle();
-	}
+    public ColoredShapeCheckBox(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+        loadAttrs(attrs);
+    }
 
 
-	public void setColor(int color)
-	{
-		mColorStateList = null;
-		applyColor(color);
-	}
+    private void loadAttrs(AttributeSet attrs)
+    {
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ColoredShapeCheckBox);
+
+        Resources resources = getResources();
+
+        Drawable backgroundShape = typedArray.getDrawable(R.styleable.ColoredShapeCheckBox_backgroundShape);
+        if (backgroundShape instanceof GradientDrawable)
+        {
+            mBackgroundShape = (GradientDrawable) backgroundShape;
+        }
+        else
+        {
+            mBackgroundShape = (GradientDrawable) resources.getDrawable(R.drawable.oval_shape);
+        }
+
+        Drawable darkCheckmark = typedArray.getDrawable(R.styleable.ColoredShapeCheckBox_darkCheckmark);
+        if (darkCheckmark != null)
+        {
+            mDarkCheckmark = darkCheckmark;
+        }
+        else
+        {
+            mDarkCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_light);
+        }
+
+        Drawable lightCheckmark = typedArray.getDrawable(R.styleable.ColoredShapeCheckBox_lightCheckmark);
+        if (lightCheckmark != null)
+        {
+            mLightCheckmark = lightCheckmark;
+        }
+        else
+        {
+            mLightCheckmark = resources.getDrawable(R.drawable.org_dmfs_colorshape_checkbox_selector_dark);
+        }
+        setColorStateList(typedArray.getColorStateList(R.styleable.ColoredShapeCheckBox_shapeColor));
+
+        typedArray.recycle();
+    }
 
 
-	private void applyColor(int color)
-	{
-		mCurrentColor = color;
-
-		// get an approximation for the lightness of the given color
-		int y = (3 * Color.red(color) + 4 * Color.green(color) + Color.blue(color)) >> 3;
-
-		mBackgroundShape.setColor(color);
-
-		LayerDrawable layerDrawable = new LayerDrawable(new Drawable[] { mBackgroundShape, y > 190 ? mDarkCheckmark : mLightCheckmark });
-		setButtonDrawable(layerDrawable);
-	}
+    public void setColor(int color)
+    {
+        mColorStateList = null;
+        applyColor(color);
+    }
 
 
-	public void setColorStateList(ColorStateList colorStateList)
-	{
-		mColorStateList = colorStateList;
-		applyColor(colorStateList == null ? DEFAULT_COLOR : colorStateList.getColorForState(getDrawableState(), DEFAULT_COLOR));
-	}
+    private void applyColor(int color)
+    {
+        mCurrentColor = color;
+
+        // get an approximation for the lightness of the given color
+        int y = (3 * Color.red(color) + 4 * Color.green(color) + Color.blue(color)) >> 3;
+
+        mBackgroundShape.setColor(color);
+
+        LayerDrawable layerDrawable = new LayerDrawable(new Drawable[] { mBackgroundShape, y > 190 ? mDarkCheckmark : mLightCheckmark });
+        setButtonDrawable(layerDrawable);
+    }
 
 
-	public void setColorStateList(int id)
-	{
-		setColorStateList(getResources().getColorStateList(id));
-	}
+    public void setColorStateList(ColorStateList colorStateList)
+    {
+        mColorStateList = colorStateList;
+        applyColor(colorStateList == null ? DEFAULT_COLOR : colorStateList.getColorForState(getDrawableState(), DEFAULT_COLOR));
+    }
 
 
-	@Override
-	protected void drawableStateChanged()
-	{
-		super.drawableStateChanged();
-		if (mColorStateList != null)
-		{
-			int newColor = mColorStateList.getColorForState(getDrawableState(), mCurrentColor);
-			if (newColor != mCurrentColor)
-			{
-				applyColor(newColor);
-			}
-		}
-	}
+    public void setColorStateList(int id)
+    {
+        setColorStateList(getResources().getColorStateList(id));
+    }
+
+
+    @Override
+    protected void drawableStateChanged()
+    {
+        super.drawableStateChanged();
+        if (mColorStateList != null)
+        {
+            int newColor = mColorStateList.getColorForState(getDrawableState(), mCurrentColor);
+            if (newColor != mCurrentColor)
+            {
+                applyColor(newColor);
+            }
+        }
+    }
 }

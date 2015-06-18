@@ -141,9 +141,33 @@
 
     <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
+    <string name="action_add_local_list">Add List</string>
     <string name="visible_task_lists">Displayed Lists</string>
     <string name="enable_alarms">Notifications</string>
     <string name="synced_task_lists">Synchronized Lists</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Choose an account</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">save</string>
+    <string name="activity_manage_list_btn_delete">delete list</string>
+    <string name="activity_add_list_title">Create local list</string>
+    <string name="activity_edit_list_title">List settings</string>
+    <string name="task_list_name_caption">Name</string>
+    <string name="task_list_no_sync">Note: This creates a local list. Tasks in local lists will not be synced.</string>
+    <string name="task_list_color_caption">List Color</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">list name</string>
+    <string name="task_list_name_dialog_title">Enter list name</string>
+    <string name="task_list_name_dialog_error">Enter a name.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Delete %s</string>
+    <string name="task_list_delete_dialog_message">Delete the list and all tasks within?\nNote: There is no way to restore a deleted list.</string>
+    <string name="task_list_delete_toast">%s deleted</string>
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">By Due Date</string>

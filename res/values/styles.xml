@@ -8,6 +8,17 @@
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
 
+    <style name="AppThemeDialog" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">#FF333333</item>
+        <item name="primaryColor">@color/colorPrimary</item>
+        <item name="android:windowTitleStyle">@style/window_dialog_title_style</item>
+    </style>
+
+    <style name="window_dialog_title_style" >
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
     <style name="DetailsTheme" parent="AppTheme">
         <item name="android:editTextStyle">@style/legacyEditText</item>
     </style>

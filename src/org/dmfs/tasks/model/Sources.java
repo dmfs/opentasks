@@ -177,14 +177,14 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 			try
 			{
 				// try to load the XML model
-				model = new XmlModel(mContext, authenticator.packageName);
+				model = new XmlModel(mContext, authenticator);
 				model.inflate();
 				Log.i(TAG, "inflated model for " + authenticator.type);
 			}
 			catch (ModelInflaterException e)
 			{
 				Log.e(TAG, "error inflating model for " + authenticator.packageName, e);
-				model = new DefaultModel(mContext);
+				model = new DefaultModel(mContext, authenticator.type);
 				try
 				{
 					model.inflate();
@@ -203,7 +203,6 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 			{
 				model.setLabelId(authenticator.labelId);
 			}
-			model.setAccountType(authenticator.type);
 
 			mAccountModelMap.put(authenticator.type, model);
 		}
@@ -211,9 +210,8 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 		try
 		{
 			// add default model for LOCAL account type (i.e. the unsynced account).
-			Model defaultModel = new DefaultModel(mContext);
+			Model defaultModel = new DefaultModel(mContext, TaskContract.LOCAL_ACCOUNT);
 			defaultModel.inflate();
-			defaultModel.setAccountType(TaskContract.LOCAL_ACCOUNT);
 			mAccountModelMap.put(TaskContract.LOCAL_ACCOUNT, defaultModel);
 		}
 		catch (ModelInflaterException e)

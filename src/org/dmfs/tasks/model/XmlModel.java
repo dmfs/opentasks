@@ -37,6 +37,8 @@ import org.dmfs.xmlobjects.pull.XmlObjectPull;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.dmfs.xmlobjects.pull.XmlPath;
 
+import android.accounts.AccountManager;
+import android.accounts.AuthenticatorDescription;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -83,6 +85,8 @@ public class XmlModel extends Model
 	public final static QualifiedName ATTR_HIDECHECKLIST = QualifiedName.get("hideCheckList");
 
 	private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
+
+	private String mAccountLabel;
 
 	/**
 	 * POJO that stores the attributes of a &lt;datakind> element.
@@ -156,7 +160,8 @@ public class XmlModel extends Model
 
 					if (inflater != null)
 					{
-						FieldDescriptor fieldDescriptor = inflater.inflate(object.mContext, object.mModelContext, datakind);
+						Context appContext = object.getContext();
+						FieldDescriptor fieldDescriptor = inflater.inflate(appContext, object.mModelContext, datakind);
 						object.addField(fieldDescriptor);
 
 						ModelParserState state = (ModelParserState) context.getState();
@@ -176,7 +181,7 @@ public class XmlModel extends Model
 						else if ("description".equals(datakind.datakind) && !datakind.hideCheckList)
 						{
 							Log.i(TAG, "found old description data kind, adding checklist");
-							object.addField(FIELD_INFLATER_MAP.get("checklist").inflate(object.mContext, object.mModelContext, datakind));
+							object.addField(FIELD_INFLATER_MAP.get("checklist").inflate(appContext, object.mModelContext, datakind));
 						}
 					}
 					// we don't need the datakind object anymore, so recycle it
@@ -240,24 +245,32 @@ public class XmlModel extends Model
 	private final PackageManager mPackageManager;
 	private final String mPackageName;
 	private final Context mModelContext;
-	private final Context mContext;
 	private boolean mInflated = false;
 
 
-	public XmlModel(Context context, String packageName) throws ModelInflaterException
+	public XmlModel(Context context, AuthenticatorDescription authenticator) throws ModelInflaterException
 	{
-		mContext = context;
-		mPackageName = packageName;
+		super(context, authenticator.type);
+		mPackageName = authenticator.packageName;
 		mPackageManager = context.getPackageManager();
 		try
 		{
-			mModelContext = context.createPackageContext(packageName, 0);
+			mModelContext = context.createPackageContext(authenticator.packageName, 0);
+			AccountManager am = AccountManager.get(context);
+			mAccountLabel = mModelContext.getString(authenticator.labelId);
 		}
 		catch (NameNotFoundException e)
 		{
 			throw new ModelInflaterException("No model definition found for package " + mPackageName);
 		}
 
+	}
+
+
+	@Override
+	public String getAccountLabel()
+	{
+		return mAccountLabel;
 	}
 
 
@@ -276,14 +289,16 @@ public class XmlModel extends Model
 			throw new ModelInflaterException("No model definition found for package " + mPackageName);
 		}
 
+		Context context = getContext();
+
 		try
 		{
 			// add a field for the list
-			addField(new FieldDescriptor(mContext, R.id.task_field_list_color, R.string.task_list, null, TaskFieldAdapters.LIST_COLOR)
+			addField(new FieldDescriptor(context, R.id.task_field_list_color, R.string.task_list, null, TaskFieldAdapters.LIST_COLOR)
 				.setViewLayout(DefaultModel.LIST_COLOR_VIEW).setEditorLayout(DefaultModel.LIST_COLOR_VIEW).setNoAutoAdd(true));
-			addField(new FieldDescriptor(mContext, R.id.task_field_list_name, R.string.task_list, null, new StringFieldAdapter(Tasks.LIST_NAME)).setViewLayout(
+			addField(new FieldDescriptor(context, R.id.task_field_list_name, R.string.task_list, null, new StringFieldAdapter(Tasks.LIST_NAME)).setViewLayout(
 				new LayoutDescriptor(R.layout.text_field_view_nodivider_large).setOption(LayoutDescriptor.OPTION_NO_TITLE, true)).setNoAutoAdd(true));
-			addField(new FieldDescriptor(mContext, R.id.task_field_account_name, R.string.task_list, null, new StringFieldAdapter(Tasks.ACCOUNT_NAME))
+			addField(new FieldDescriptor(context, R.id.task_field_account_name, R.string.task_list, null, new StringFieldAdapter(Tasks.ACCOUNT_NAME))
 				.setViewLayout(new LayoutDescriptor(R.layout.text_field_view_nodivider_small).setOption(LayoutDescriptor.OPTION_NO_TITLE, true)).setNoAutoAdd(
 					true));
 
@@ -294,7 +309,7 @@ public class XmlModel extends Model
 			}
 
 			// task list name
-			addField(new FieldDescriptor(mContext, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
+			addField(new FieldDescriptor(context, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
 				.setViewLayout(DefaultModel.TEXT_VIEW_NO_LINKS).setIcon(R.drawable.ic_detail_list));
 
 		}

@@ -172,7 +172,6 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	}
 
 
-	@Override
 	public Drawable getPageIconDrawable(int position)
 	{
 		return null;
