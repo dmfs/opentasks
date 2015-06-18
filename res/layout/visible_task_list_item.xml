@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
@@ -27,13 +28,12 @@
         android:id="@+id/btn_settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:padding="8dp"
+        android:padding="12dp"
         android:src="@drawable/ic_settings_grey600_24dp"
         android:tint="?attr/colorAccent" />
 
