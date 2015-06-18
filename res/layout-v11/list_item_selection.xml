@@ -19,10 +19,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:background="@null"
             android:checked="true"
             android:clickable="false"
             android:focusable="false"
-            app:backgroundShape="@drawable/rect_shape" />
+            app:backgroundShape="@drawable/rect_shape_corners"
+            app:darkCheckmark="@drawable/org_dmfs_colorshape_checkbox_white_shape_selector"
+            app:lightCheckmark="@drawable/org_dmfs_colorshape_checkbox_white_shape_selector" />
     </RelativeLayout>
 
     <LinearLayout

@@ -316,7 +316,9 @@
             android:label="@string/title_task_list" >
         </activity>
         <!-- Color Picker -->
-        <activity android:name="org.dmfs.android.colorpicker.ColorPickerActivity" android:theme="@style/Theme.AppCompat.Light.Dialog" >
+        <activity
+            android:name="org.dmfs.android.colorpicker.ColorPickerActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" >
             <intent-filter>
                 <action android:name="org.openintents.action.PICK_COLOR" />
 
@@ -331,7 +333,7 @@
                 <action android:name="android.intent.action.INSERT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="org.dmfs.intent.category.LOCAL" />
+                <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL" />
 
                 <data
                     android:host="org.dmfs.tasks"
@@ -342,11 +344,11 @@
                 <action android:name="android.intent.action.EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="org.dmfs.intent.category.LOCAL" />
+                <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL" />
 
                 <data
                     android:host="org.dmfs.tasks"
-                    android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasklists"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasklists"
                     android:scheme="content" />
             </intent-filter>
         </activity>
