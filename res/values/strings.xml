@@ -141,7 +141,7 @@
 
     <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
-    <string name="action_add_local_list">Add Local List</string>
+    <string name="action_add_local_list">Add List</string>
     <string name="visible_task_lists">Displayed Lists</string>
     <string name="enable_alarms">Notifications</string>
     <string name="synced_task_lists">Synchronized Lists</string>
@@ -153,7 +153,6 @@
 
     <string name="activity_manage_list_btn_save">save</string>
     <string name="activity_manage_list_btn_delete">delete list</string>
-    <string name="activity_manage_list_btn_cancel">Cancel</string>
     <string name="activity_add_list_title">Create local list</string>
     <string name="activity_edit_list_title">List settings</string>
     <string name="task_list_name_caption">Name</string>

@@ -201,7 +201,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
 		{
 			final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.task_list_delete_dialog_title, mListName))
 				.setMessage(R.string.task_list_delete_dialog_message).setPositiveButton(R.string.activity_manage_list_btn_delete, this)
-				.setNegativeButton(R.string.activity_manage_list_btn_cancel, this).create();
+				.setNegativeButton(android.R.string.cancel, this).create();
 			// changes the color of the delete list button to red
 			dialog.setOnShowListener(new OnShowListener()
 			{
