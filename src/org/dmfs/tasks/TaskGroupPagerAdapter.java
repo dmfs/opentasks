@@ -46,6 +46,7 @@ import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider
 {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "TaskGroupPager";
 	private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
 	private final Context mContext;

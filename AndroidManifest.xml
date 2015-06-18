@@ -352,6 +352,30 @@
                     android:scheme="content" />
             </intent-filter>
         </activity>
+
+        <!-- Pin Task -->
+        <receiver android:name="org.dmfs.tasks.notification.PinTaskHandler" >
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data
+                    android:host="@string/org_dmfs_tasks_authority"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FIRST_LAUNCH" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data
+                    android:path="org.dmfs.tasks"
+                    android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -30,6 +30,7 @@ import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.notification.PinTaskHandler;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.ListenableScrollView;
@@ -529,6 +530,19 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 					item.setEnabled(false);
 					item.setVisible(false);
 				}
+
+				// check pinned status
+				if (TaskFieldAdapters.PINNED.get(mContentSet))
+				{
+					// we disable the edit option, because the task is completed and the action button shows the edit option.
+					MenuItem item = menu.findItem(R.id.pin_task);
+					item.setIcon(R.drawable.ic_pin_off_white_24dp);
+				}
+				else
+				{
+					MenuItem item = menu.findItem(R.id.pin_task);
+					item.setIcon(R.drawable.ic_pin_white_24dp);
+				}
 			}
 		}
 	}
@@ -569,6 +583,20 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		else if (itemId == R.id.complete_task)
 		{
 			completeTask();
+			return true;
+		}
+		else if (itemId == R.id.pin_task)
+		{
+			if (TaskFieldAdapters.PINNED.get(mContentSet))
+			{
+				item.setIcon(R.drawable.ic_pin_white_24dp);
+				PinTaskHandler.unpinTask(mAppContext, mContentSet);
+			}
+			else
+			{
+				item.setIcon(R.drawable.ic_pin_off_white_24dp);
+				PinTaskHandler.pinTask(mAppContext, mContentSet);
+			}
 			return true;
 		}
 		else
