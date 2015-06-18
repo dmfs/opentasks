@@ -41,6 +41,8 @@
     <string name="activity_task_details_delete_task">Delete task</string>
     <string name="activity_task_details_complete">Complete</string>
     <string name="activity_task_details_complete_task">Complete task</string>
+    <string name="activity_task_details_pin">Pin</string>
+    <string name="activity_task_details_pin_task">Pin task</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edit</string>
@@ -189,6 +191,8 @@
     <string name="notification_action_delay_1d">+1 day</string>
     <string name="notification_action_delay_toast">Due date updated</string>
     <string name="notification_undo">Undo</string>
+    <string name="notification_action_unpin">unpin</string>
+    <string name="notification_task_pin_ticker">%1$s was pinned</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 hour</string>
@@ -207,6 +211,8 @@
     <string name="dashclock_display_type_due">due tasks</string>
     <string name="dashclock_display_type_start">starting tasks</string>
     <string name="dashclock_display_type_start_and_due">starting and due tasks</string>
+    <string name="dashclock_display_type_all">all</string>
+    <string name="dashclock_display_type_pinned">pinned tasks</string>
     <string name="dashclock_preference_title">Task DashClock Preferences</string>
 
     <!-- General -->

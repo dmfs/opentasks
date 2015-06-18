@@ -8,7 +8,14 @@
         android:title="@string/activity_task_details_complete_task"
         android:titleCondensed="@string/activity_task_details_complete"
         android:visible="false"
-        app:showAsAction="always">
+        app:showAsAction="ifRoom">
+    </item>
+    <item
+        android:id="@+id/pin_task"
+        android:icon="@drawable/ic_pin_off_white_24dp"
+        android:title="@string/activity_task_details_pin_task"
+        android:titleCondensed="@string/activity_task_details_pin"
+        app:showAsAction="ifRoom">
     </item>
     <item
         android:id="@+id/delete_task"

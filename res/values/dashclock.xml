@@ -2,15 +2,17 @@
 <resources>
 
     <string-array name="dashclock_displayed_task_types">
-        <item name="1">@string/dashclock_display_type_due</item>
-        <item name="2">@string/dashclock_display_type_start</item>
-        <item name="3">@string/dashclock_display_type_start_and_due</item>
+        <item name="1">@string/dashclock_display_type_all</item>
+        <item name="2">@string/dashclock_display_type_due</item>
+        <item name="3">@string/dashclock_display_type_start</item>
+        <item name="4">@string/dashclock_display_type_pinned</item>
     </string-array>
     
     <string-array name="dashclock_displayed_task_types_values">
         <item name="1">1</item>
         <item name="2">2</item>
         <item name="3">3</item>
+        <item name="4">4</item>
     </string-array>
     
 

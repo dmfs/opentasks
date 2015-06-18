@@ -57,9 +57,11 @@ public class NotificationActionIntentService extends IntentService
 	private static final String TAG = "NotificationActionIntentService";
 	private static final int REQUEST_CODE_COMPLETE = 1;
 	private static final int REQUEST_CODE_DELAY = 2;
+	private static final int REQUEST_CODE_UNPIN = 3;
 
 	// actions
 	public static final String ACTION_COMPLETE = "org.dmfs.tasks.action.notification.COMPLETE";
+	public static final String ACTION_UNPIN = "org.dmfs.tasks.action.notification.UNPIN";
 	public static final String ACTION_DELAY_1H = "org.dmfs.tasks.action.notification.DELAY_1H";
 	public static final String ACTION_DELAY_1D = "org.dmfs.tasks.action.notification.DELAY_1D";
 
@@ -99,6 +101,11 @@ public class NotificationActionIntentService extends IntentService
 			if (ACTION_COMPLETE.equals(action))
 			{
 				markCompleted(taskUri);
+
+			}
+			else if (ACTION_UNPIN.equals(action))
+			{
+				unpinTask(taskUri);
 
 			}
 			else if (intent.hasExtra(EXTRA_TASK_DUE) && intent.hasExtra(EXTRA_TIMEZONE))
@@ -217,6 +224,7 @@ public class NotificationActionIntentService extends IntentService
 		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>(1);
 		ContentProviderOperation.Builder operation = ContentProviderOperation.newUpdate(taskUri);
 		operation.withValue(Tasks.STATUS, Tasks.STATUS_COMPLETED);
+		operation.withValue(Tasks.PINNED, false);
 		operations.add(operation.build());
 		try
 		{
@@ -235,6 +243,14 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
+	private void unpinTask(Uri taskUri)
+	{
+		ContentValues values = new ContentValues(1);
+		TaskFieldAdapters.PINNED.set(values, false);
+		getContentResolver().update(taskUri, values, null, null);
+	}
+
+
 	private void delayTask(Uri taskUri, Time dueTime)
 	{
 		ContentValues values = new ContentValues(4);
@@ -246,6 +262,19 @@ public class NotificationActionIntentService extends IntentService
 	public static Action getCompleteAction(Context context, PendingIntent intent)
 	{
 		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), intent);
+	}
+
+
+	public static Action getUnpinAction(Context context, PendingIntent intent)
+	{
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), intent);
+	}
+
+
+	public static Action getUnpinAction(Context context, int notificationId, Uri taskUri)
+	{
+		return new Action(R.drawable.ic_pin_off_white_24dp, context.getString(R.string.notification_action_unpin), getUnpinActionIntent(context,
+			notificationId, taskUri));
 	}
 
 
@@ -270,7 +299,7 @@ public class NotificationActionIntentService extends IntentService
 	}
 
 
-	private static PendingIntent getCompleteActionIntent(Context context, int notificationId, Uri taskUri)
+	public static PendingIntent getCompleteActionIntent(Context context, int notificationId, Uri taskUri)
 	{
 		final Intent intent = new Intent(NotificationActionIntentService.ACTION_COMPLETE);
 
@@ -278,6 +307,18 @@ public class NotificationActionIntentService extends IntentService
 		intent.setData(taskUri);
 		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
 		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_COMPLETE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		return pendingIntent;
+	}
+
+
+	public static PendingIntent getUnpinActionIntent(Context context, int notificationId, Uri taskUri)
+	{
+		final Intent intent = new Intent(NotificationActionIntentService.ACTION_UNPIN);
+
+		intent.setPackage(context.getPackageName());
+		intent.setData(taskUri);
+		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_UNPIN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		return pendingIntent;
 	}
 

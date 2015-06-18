@@ -15,7 +15,7 @@
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:protectionLevel="dangerous" >
     </permission>
-    <permission
+      <permission
         android:name="org.dmfs.permission.WRITE_TASKS"
         android:description="@string/permission_description_write_tasks"
         android:label="@string/permission_write_tasks"
@@ -315,6 +315,27 @@
             android:exported="true"
             android:label="@string/title_task_list" >
         </activity>
+
+        <!-- Pin Task -->
+        <receiver android:name="org.dmfs.tasks.notification.PinTaskHandler" >
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data
+                    android:host="@string/org_dmfs_tasks_authority"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FIRST_LAUNCH" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" android:path="org.dmfs.tasks"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

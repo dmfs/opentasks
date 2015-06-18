@@ -28,7 +28,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -46,6 +45,7 @@ import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider
 {
 
+	@SuppressWarnings("unused")
 	private static final String TAG = "TaskGroupPager";
 	private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
 	private final Context mContext;
@@ -169,12 +169,5 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	public int getPageIconResId(int position)
 	{
 		return mTabConfig.getVisibleItem(position).getIcon();
-	}
-
-
-	@Override
-	public Drawable getPageIconDrawable(int position)
-	{
-		return null;
 	}
 }
