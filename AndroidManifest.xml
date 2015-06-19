@@ -245,6 +245,10 @@
         <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
+
+                <!-- This broadcast receiver should run on boot to clean up all accounts that may have been removed in safe mode. -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <!-- custom alarm receivers -->
