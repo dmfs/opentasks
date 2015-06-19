@@ -318,6 +318,7 @@
         <!-- Color Picker -->
         <activity
             android:name="org.dmfs.android.colorpicker.ColorPickerActivity"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.Dialog" >
             <intent-filter>
                 <action android:name="org.openintents.action.PICK_COLOR" />
