@@ -136,6 +136,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private View mActionButton;
 	private ListenableScrollView mRootView;
 	private int mOldStatus = -1;
+	private boolean mIsPinned = false;
 	private boolean mRestored;
 
 	/**
@@ -597,6 +598,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				item.setIcon(R.drawable.ic_pin_off_white_24dp);
 				PinTaskHandler.pinTask(mAppContext, mContentSet);
 			}
+			persistTask();
 			return true;
 		}
 		else
@@ -612,6 +614,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private void completeTask()
 	{
 		TaskFieldAdapters.STATUS.set(mContentSet, Tasks.STATUS_COMPLETED);
+		TaskFieldAdapters.PINNED.set(mContentSet, false);
 		persistTask();
 		Toast.makeText(mAppContext, getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)), Toast.LENGTH_SHORT).show();
 		// at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
@@ -710,14 +713,14 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 
 			Activity activity = getActivity();
 			int newStatus = TaskFieldAdapters.STATUS.get(contentSet);
-			if (VERSION.SDK_INT >= 11 && activity != null
-				&& (mOldStatus != -1 && mOldStatus != newStatus || mOldStatus == -1 && TaskFieldAdapters.IS_CLOSED.get(mContentSet)))
+			boolean newPinned = TaskFieldAdapters.PINNED.get(contentSet);
+			if (VERSION.SDK_INT >= 11 && activity != null && (hasNewStatus(newStatus) || wasPinChanged(newPinned)))
 			{
 				// new need to update the options menu, because the status of the task has changed
 				activity.invalidateOptionsMenu();
-
 			}
 
+			mIsPinned = newPinned;
 			mOldStatus = newStatus;
 
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
@@ -752,5 +755,17 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
+	}
+
+
+	private boolean hasNewStatus(int newStatus)
+	{
+		return (mOldStatus != -1 && mOldStatus != newStatus || mOldStatus == -1 && TaskFieldAdapters.IS_CLOSED.get(mContentSet));
+	}
+
+
+	private boolean wasPinChanged(boolean newPinned)
+	{
+		return !(mIsPinned == newPinned);
 	}
 }

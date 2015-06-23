@@ -335,7 +335,7 @@ public class TasksExtension extends DashClockExtension
 	private Cursor loadPinnedTaskCursor()
 	{
 		return getContentResolver().query(Instances.getContentUri(mAuthority), INSTANCE_PROJECTION, INSTANCE_PINNED_SELECTION, null,
-			Instances.PRIORITY + " DESC");
+			Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + " DESC");
 	}
 
 

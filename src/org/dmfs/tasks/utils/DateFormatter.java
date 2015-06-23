@@ -140,7 +140,18 @@ public class DateFormatter
 			@Override
 			public int getDateUtilsFlags(Time now, Time date)
 			{
+				if (date.allDay)
+				{
+					return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
+				}
 				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
+			}
+
+
+			@Override
+			public boolean useRelative(Time now, Time date)
+			{
+				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
 			}
 		};
 

@@ -275,6 +275,7 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
+                <action android:name="org.dmfs.tasks.action.notification.UNPIN" />
                 <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
                 <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
 
@@ -370,6 +371,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_FIRST_LAUNCH" />
@@ -381,6 +385,8 @@
                     android:scheme="package" />
             </intent-filter>
         </receiver>
+
+        <service android:name="org.dmfs.tasks.notification.NotificationUpdaterService" />
     </application>
 
 </manifest>
