@@ -179,8 +179,8 @@
     <!-- Strings for notification -->
     <string name="notification_task_due_title">%1s</string>
     <string name="notification_task_start_title">%1s</string>
-    <string name="notification_task_due_date">Aufgabe fällig am %1s</string>
-    <string name="notification_task_start_date">Aufgabe beginnt am %1s</string>
+    <string name="notification_task_due_date">Aufgabe fällig %1s</string>
+    <string name="notification_task_start_date">Aufgabe beginnt %1s</string>
     <string name="notification_task_due_today">Aufgabe heute fällig</string>
     <string name="notification_task_start_today">Aufgabe beginnt heute</string>
     <string name="notification_action_complete">erledigt</string>

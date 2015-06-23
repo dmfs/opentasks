@@ -54,6 +54,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 			if (getAlarmPreference(context))
 			{
 				Uri taskUri = intent.getData();
+
+				// check for pinned task
+				if (PinTaskHandler.isTaskPinned(context, taskUri))
+				{
+					// PinTaskHandler.resendPinNotification(context, taskUri);
+					return;
+				}
+
+				// create regular notification
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
 				String title = intent.getStringExtra(StartAlarmBroadcastHandler.EXTRA_TASK_TITLE);
 				long startDate = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, Long.MIN_VALUE);
@@ -70,6 +79,15 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 			if (getAlarmPreference(context))
 			{
 				Uri taskUri = intent.getData();
+
+				// check for pinned task
+				if (PinTaskHandler.isTaskPinned(context, taskUri))
+				{
+					// PinTaskHandler.resendPinNotification(context, taskUri);
+					return;
+				}
+
+				// create regular notification
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
 				String title = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TITLE);
 				long dueDate = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, Long.MIN_VALUE);
