@@ -96,6 +96,9 @@ public class NotificationActionUtils
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
 
+		// color
+		mBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
+
 		// dismisses the notification on click
 		mBuilder.setAutoCancel(true);
 
@@ -128,13 +131,13 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			// delay notification
-			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
+			// delay action
+			mBuilder.addAction(NotificationUpdaterService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
 
 			// complete action
-			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				notificationId, taskUri, dueDate);
-			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
+			mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
 
@@ -175,6 +178,9 @@ public class NotificationActionUtils
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
 
+		// color
+		mBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
+
 		// dismisses the notification on click
 		mBuilder.setAutoCancel(true);
 
@@ -208,9 +214,9 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				notificationId, taskUri, startDate);
-			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
+			mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
 		}
@@ -238,7 +244,8 @@ public class NotificationActionUtils
 	 */
 	public static PendingIntent getNotificationActionPendingIntent(Context context, NotificationAction action)
 	{
-		final Intent intent = new Intent(action.getActionType());
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(action.getActionType());
 		intent.setData(action.getTaskUri());
 		intent.setPackage(context.getPackageName());
 		putNotificationActionExtra(intent, action);
@@ -267,7 +274,8 @@ public class NotificationActionUtils
 
 		final String packageName = context.getPackageName();
 
-		final Intent clickIntent = new Intent(ACTION_UNDO);
+		final Intent clickIntent = new Intent(context, NotificationUpdaterService.class);
+		clickIntent.setAction(ACTION_UNDO);
 		clickIntent.setPackage(packageName);
 		putNotificationActionExtra(clickIntent, action);
 		final PendingIntent clickPendingIntent = PendingIntent.getService(context, action.getNotificationId(), clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -275,7 +283,8 @@ public class NotificationActionUtils
 		builder.setContent(undoView);
 
 		// When the notification is cleared, we perform the destructive action
-		final Intent deleteIntent = new Intent(ACTION_DESTRUCT);
+		final Intent deleteIntent = new Intent(context, NotificationUpdaterService.class);
+		deleteIntent.setAction(ACTION_DESTRUCT);
 		deleteIntent.setPackage(packageName);
 		putNotificationActionExtra(deleteIntent, action);
 		final PendingIntent deletePendingIntent = PendingIntent
@@ -342,7 +351,8 @@ public class NotificationActionUtils
 	 */
 	private static PendingIntent createUndoTimeoutPendingIntent(final Context context, final NotificationAction notificationAction)
 	{
-		final Intent intent = new Intent(ACTION_UNDO_TIMEOUT);
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(ACTION_UNDO_TIMEOUT);
 		intent.setPackage(context.getPackageName());
 		putNotificationActionExtra(intent, notificationAction);
 		final int requestCode = notificationAction.mNotificationId;

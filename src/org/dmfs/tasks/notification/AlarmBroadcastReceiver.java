@@ -58,7 +58,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				// check for pinned task
 				if (PinTaskHandler.isTaskPinned(context, taskUri))
 				{
-					// PinTaskHandler.resendPinNotification(context, taskUri);
+					PinTaskHandler.sendPinnedTaskStartNotification(context, taskUri);
 					return;
 				}
 
@@ -83,7 +83,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				// check for pinned task
 				if (PinTaskHandler.isTaskPinned(context, taskUri))
 				{
-					// PinTaskHandler.resendPinNotification(context, taskUri);
+					PinTaskHandler.sendPinnedTaskDueNotification(context, taskUri);
 					return;
 				}
 

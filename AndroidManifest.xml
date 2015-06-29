@@ -265,27 +265,6 @@
             </intent-filter>
         </receiver>
 
-        <!-- notification -->
-        <service
-            android:name="org.dmfs.tasks.notification.NotificationActionIntentService"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
-                <action android:name="org.dmfs.tasks.action.notification.UNPIN" />
-                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
-                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
-
-                <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.UNDO" />
-                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
-                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
-            </intent-filter>
-        </service>
-
         <!-- Dashclock extension -->
         <service
             android:name="org.dmfs.tasks.dashclock.TasksExtension"
@@ -317,8 +296,10 @@
             android:label="@string/title_task_list" >
         </activity>
 
-        <!-- Pin Task -->
-        <receiver android:name="org.dmfs.tasks.notification.PinTaskHandler" >
+        <!-- Notification -->
+        <receiver
+            android:name="org.dmfs.tasks.notification.PinTaskHandler"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
@@ -341,6 +322,21 @@
                 <data
                     android:path="org.dmfs.tasks"
                     android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
+                <action android:name="org.dmfs.tasks.action.notification.UNPIN" />
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
+
+                <data
+                    android:host="@string/org_dmfs_tasks_authority"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.UNDO" />
+                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
+                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
             </intent-filter>
         </receiver>
 
