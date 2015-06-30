@@ -563,7 +563,7 @@ public class NotificationUpdaterService extends Service
 			final Parcel in = Parcel.obtain();
 			in.unmarshall(data, 0, data.length);
 			in.setDataPosition(0);
-			notificationAction = NotificationAction.CREATOR.createFromParcel(in, NotificationAction.class.getClassLoader());
+			notificationAction = NotificationAction.CREATOR.createFromParcel(in);
 		}
 		else
 		{

@@ -145,8 +145,8 @@ public class NotificationActionUtils
 			// complete action
 			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				notificationId, taskUri, dueDate);
-			mBuilder.addAction(
-				NotificationUpdaterService.getCompleteAction(context, NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
+				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
 
 		// set displayed time
@@ -168,8 +168,7 @@ public class NotificationActionUtils
 
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long startDate, boolean startAllDay,
-		boolean silent)
+	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long startDate, boolean startAllDay, boolean silent)
 	{
 		String startString = "";
 		if (startAllDay)
@@ -232,8 +231,8 @@ public class NotificationActionUtils
 		{
 			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				notificationId, taskUri, startDate);
-			mBuilder.addAction(
-				NotificationUpdaterService.getCompleteAction(context, NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
+				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
 		}
 
@@ -303,8 +302,8 @@ public class NotificationActionUtils
 		deleteIntent.setAction(ACTION_DESTRUCT);
 		deleteIntent.setPackage(packageName);
 		putNotificationActionExtra(deleteIntent, action);
-		final PendingIntent deletePendingIntent = PendingIntent.getService(context, action.getNotificationId(), deleteIntent,
-			PendingIntent.FLAG_CANCEL_CURRENT);
+		final PendingIntent deletePendingIntent = PendingIntent
+			.getService(context, action.getNotificationId(), deleteIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 		builder.setDeleteIntent(deletePendingIntent);
 
 		final Notification notification = builder.build();
@@ -467,7 +466,7 @@ public class NotificationActionUtils
 			out.writeLong(mWhen);
 		}
 
-		public static final Parcelable.ClassLoaderCreator<NotificationAction> CREATOR = new Parcelable.ClassLoaderCreator<NotificationAction>()
+		public static final Parcelable.Creator<NotificationAction> CREATOR = new Parcelable.Creator<NotificationAction>()
 		{
 			@Override
 			public NotificationAction createFromParcel(final Parcel in)
@@ -480,13 +479,6 @@ public class NotificationActionUtils
 			public NotificationAction[] newArray(final int size)
 			{
 				return new NotificationAction[size];
-			}
-
-
-			@Override
-			public NotificationAction createFromParcel(final Parcel in, final ClassLoader loader)
-			{
-				return new NotificationAction(in, loader);
 			}
 		};
 
