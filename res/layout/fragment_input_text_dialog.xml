@@ -4,16 +4,26 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:background="@color/background_material_light"
     android:padding="8dp" >
 
     <TextView
         android:id="@android:id/title"
-        style="@style/dialog_text_title"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
+        android:gravity="start|left|center_vertical"
         android:padding="16dp"
         android:text="" />
+
+    <TextView
+        android:id="@android:id/message"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:visibility="gone" />
 
     <EditText
         android:id="@android:id/input"
@@ -23,6 +33,7 @@
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
         android:layout_marginTop="12dp"
+        android:hint="@string/task_list_name_dialog_hint"
         android:imeOptions="actionDone"
         android:inputType="text"
         android:minWidth="240dp"
@@ -35,29 +46,33 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:textColor="@color/holo_red_light"
+        android:textColor="@color/priority_red"
         android:visibility="invisible" />
 
     <LinearLayout
         android:id="@+id/buttonArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="end|right"
+        android:gravity="right"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@android:id/button2"
-            style="@style/dialog_button_secondary"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@android:string/cancel" />
+            android:text="@android:string/cancel"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="?attr/colorAccent" />
 
         <TextView
             android:id="@android:id/button1"
-            style="@style/dialog_button_primary"
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@android:string/ok" />
+            android:text="@android:string/ok"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="?attr/colorAccent" />
     </LinearLayout>
 
 </LinearLayout>

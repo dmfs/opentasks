@@ -147,7 +147,7 @@
     <string name="synced_task_lists">Synchronisierte Listen</string>
 
     <!-- dialogs -->
-    <string name="task_list_settings_dialog_account_title">Choose an account</string>
+    <string name="task_list_settings_dialog_account_title">Account auswählen</string>
 
     <!-- manage task list activity -->
 

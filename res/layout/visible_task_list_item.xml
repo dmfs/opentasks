@@ -8,8 +8,8 @@
 
     <org.dmfs.android.widgets.ColoredShapeCheckBox
         android:id="@+id/visible_task_list_checked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerInParent="true"

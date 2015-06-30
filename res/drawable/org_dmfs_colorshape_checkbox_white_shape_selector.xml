@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/unchecked_layer" android:drawable="@drawable/rect_shape_corners_white_insert" android:state_checked="false"></item>
-    <item android:id="@+id/checked_layer" android:drawable="@android:color/transparent" android:state_checked="true"></item>
+    <item android:drawable="@drawable/rect_shape_corners_white_insert" android:state_checked="false"></item>
+    <item android:drawable="@android:color/transparent" android:state_checked="true"></item>
 
 </selector>
