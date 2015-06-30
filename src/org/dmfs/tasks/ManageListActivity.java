@@ -37,7 +37,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnCreateContextMenuListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 
 
@@ -91,6 +91,12 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
             return;
         }
         setContentView(R.layout.activity_manage_task_list);
+
+        LayoutParams params = getWindow().getAttributes();
+        params.height = LayoutParams.WRAP_CONTENT;
+        params.width = LayoutParams.WRAP_CONTENT;
+        getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+
         findViewById(R.id.color_setting).setOnClickListener(this);
         findViewById(R.id.name_setting).setOnClickListener(this);
         mNameView = (TextView) findViewById(R.id.list_name);
@@ -165,8 +171,8 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
 
         if (savedInstanceState == null)
         {
-            InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(R.string.task_list_name_dialog_title, null,
-                R.layout.fragment_input_list_name_dialog);
+            InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(getString(R.string.task_list_name_dialog_title),
+                getString(R.string.task_list_name_dialog_hint), null, getString(R.string.task_list_no_sync));
             dialog.show(getSupportFragmentManager(), null);
         }
         if (mListColor == NO_COLOR)
@@ -222,8 +228,8 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         }
         if (R.id.name_setting == v.getId())
         {
-            InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(R.string.task_list_name_dialog_title, mNameView.getText().toString(),
-                R.layout.fragment_input_list_name_dialog);
+            InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(getString(R.string.task_list_name_dialog_title),
+                getString(R.string.task_list_name_dialog_hint), mNameView.getText().toString());
             dialog.show(getSupportFragmentManager(), null);
             return;
         }
@@ -349,7 +355,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
      * activity also.
      */
     @Override
-    public void onCancel()
+    public void onCancelInputDialog()
     {
         if (mStateInsert == true)
         {

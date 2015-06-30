@@ -159,8 +159,6 @@
     <string name="task_list_name_caption">Name</string>
     <string name="task_list_no_sync">Note: You are creating a local list. Tasks of lcoal lists will not be synced.</string>
     <string name="task_list_color_caption">List Color</string>
-    <string name="error_manage_list_name_title">Invalid Name</string>
-    <string name="error_manage_list_name_message">Please enter a name with at least 3 characters.</string>
 
     <!-- input dialog -->
     <string name="task_list_name_dialog_hint">list name</string>

@@ -316,10 +316,11 @@
             android:label="@string/title_task_list" >
         </activity>
         <!-- Color Picker -->
-        <activity android:name="org.dmfs.android.colorpicker.ColorPickerActivity" android:theme="@style/Theme.AppCompat.Light.Dialog" >
+        <activity
+            android:name="org.dmfs.android.colorpicker.ColorPickerActivity"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" >
             <intent-filter>
                 <action android:name="org.openintents.action.PICK_COLOR" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

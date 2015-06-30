@@ -22,10 +22,13 @@ import org.dmfs.android.retentionmagic.annotations.Parameter;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,17 +51,20 @@ import android.widget.TextView.OnEditorActionListener;
 public class InputTextDialogFragment extends SupportDialogFragment implements OnEditorActionListener, OnKeyListener
 {
 
-    protected final static String ARG_TITLE_ID = "title_id";
-    protected final static String ARG_LAYOUT_ID = "layout_id";
+    protected final static String ARG_TITLE_TEXT = "title_text";
     protected final static String ARG_INITIAL_TEXT = "initial_text";
-    protected final static String ARG_INITIAL_HINT = "initial_hint";
+    protected final static String ARG_HINT_TEXT = "hint_text";
+    protected final static String ARG_MESSAGE_TEXT = "message_text";
 
-    @Parameter(key = ARG_LAYOUT_ID)
-    protected int mLayoutId = -1;
-    @Parameter(key = ARG_TITLE_ID)
-    protected int mTitleId;
+    @Parameter(key = ARG_TITLE_TEXT)
+    protected String mTitle;
+    @Parameter(key = ARG_HINT_TEXT)
+    protected String mHint;
+    @Parameter(key = ARG_MESSAGE_TEXT)
+    protected String mMessage;
     @Parameter(key = ARG_INITIAL_TEXT)
     protected String mInitialText;
+
     protected EditText mEditText;
     protected TextView mErrorText;
 
@@ -71,21 +77,25 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
     /**
      * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
      * 
-     * @param titleId
-     *            The resource id of the title.
+     * @param title
+     *            The title of the dialog.
+     * @param message
+     *            The text of the message field.
+     * @param hint
+     *            The hint of the input field.
      * @param initalText
      *            The initial text in the input field.
-     * @param layoutId
-     *            The initial layout for the fragment.
+     * 
      * @return A new {@link InputTextDialogFragment}.
      */
-    public static InputTextDialogFragment newInstance(int titleId, String initalText, int layoutId)
+    public static InputTextDialogFragment newInstance(String title, String hint, String initalText, String message)
     {
         InputTextDialogFragment fragment = new InputTextDialogFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_TITLE_ID, titleId);
-        args.putInt(ARG_LAYOUT_ID, layoutId);
+        args.putString(ARG_TITLE_TEXT, title);
+        args.putString(ARG_MESSAGE_TEXT, message);
         args.putString(ARG_INITIAL_TEXT, initalText);
+        args.putString(ARG_HINT_TEXT, hint);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,31 +104,74 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
     /**
      * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
      * 
-     * @param titleId
-     *            The resource id of the title.
-     * @param initalText
-     *            The initial text in the input field. * @param initalText The initial text in the input field.
+     * @param title
+     *            The title of the dialog.
+     * @param message
+     *            The text of the message field.
+     * @param hint
+     *            The hint of the input field.
      * @return A new {@link InputTextDialogFragment}.
      */
-    public static InputTextDialogFragment newInstance(int titleId, String initalText)
+    public static InputTextDialogFragment newInstance(String title, String hint, String initalText)
     {
-        return newInstance(titleId, initalText, -1);
+        return newInstance(title, hint, initalText, null);
+    }
+
+
+    /**
+     * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
+     * 
+     * @param title
+     *            The title of the dialog.
+     * @param message
+     *            The text of the message field.
+     * @return A new {@link InputTextDialogFragment}.
+     */
+    public static InputTextDialogFragment newInstance(String title, String hint)
+    {
+        return newInstance(title, hint, null, null);
+    }
+
+
+    /**
+     * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
+     * 
+     * @param title
+     *            The title of the dialog.
+     * @return A new {@link InputTextDialogFragment}.
+     */
+    public static InputTextDialogFragment newInstance(String title)
+    {
+        return newInstance(title, null, null, null);
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(mLayoutId < 0 ? R.layout.fragment_input_text_dialog : mLayoutId, container);
+        
+        final Context contextThemeWrapperLight = new ContextThemeWrapper(getActivity(), R.style.ThemeOverlay_AppCompat_Light);
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapperLight);
+        
+        View view = localInflater.inflate(R.layout.fragment_input_text_dialog, container);
 
         mEditText = (EditText) view.findViewById(android.R.id.input);
         mErrorText = (TextView) view.findViewById(R.id.error);
-        if (savedInstanceState == null)
+        if (savedInstanceState == null && mInitialText != null)
         {
             mEditText.setText(mInitialText);
         }
-
-        ((TextView) view.findViewById(android.R.id.title)).setText(mTitleId);
+        if (savedInstanceState == null && mHint != null)
+        {
+            mEditText.setHint(mHint);
+        }
+        if (mMessage != null)
+        {
+            TextView mMessageView = (TextView) view.findViewById(android.R.id.message);
+            mMessageView.setText(mMessage);
+            mMessageView.setVisibility(View.VISIBLE);
+        }
+        ((TextView) view.findViewById(android.R.id.title)).setText(mTitle);
 
         mEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_VISIBLE);
@@ -194,16 +247,23 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
 
         if (parentFragment instanceof InputTextListener)
         {
-            ((InputTextListener) parentFragment).onCancel();
+            ((InputTextListener) parentFragment).onCancelInputDialog();
         }
         else if (activity instanceof InputTextListener)
         {
-            ((InputTextListener) activity).onCancel();
+            ((InputTextListener) activity).onCancelInputDialog();
 
         }
         InputTextDialogFragment.this.dismiss();
     }
 
+
+    @Override
+    public void onCancel(DialogInterface dialog)
+    {
+        super.onCancel(dialog);
+        handleCancel();
+    }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
@@ -282,7 +342,7 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
         /**
          * Is Called, when the user want to cancel the input.
          */
-        void onCancel();
+        void onCancelInputDialog();
     }
 
 }
