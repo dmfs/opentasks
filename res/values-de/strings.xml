@@ -153,7 +153,6 @@
 
     <string name="activity_manage_list_btn_save">Speichern</string>
     <string name="activity_manage_list_btn_delete">Liste löschen</string>
-    <string name="activity_manage_list_btn_cancel">Abbrechen</string>
     <string name="activity_add_list_title">Lokale Liste anlegen</string>
     <string name="activity_edit_list_title">Einstellungen</string>
     <string name="task_list_name_caption">Name</string>
