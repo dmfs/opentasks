@@ -143,7 +143,7 @@ public class NotificationUpdaterService extends Service
 			switch (intentAction)
 			{
 				case ACTION_PIN_TASK:
-					pinNewTask(intent);
+					// nothing special to do right now
 					break;
 
 				case ACTION_PINNED_TASK_START:
@@ -182,7 +182,7 @@ public class NotificationUpdaterService extends Service
 
 				case Intent.ACTION_BOOT_COMPLETED:
 				case Intent.ACTION_REBOOT:
-				case PinTaskHandler.ACTION_FASTBOOT:
+				case TaskNotificationHandler.ACTION_FASTBOOT:
 					updateNotifications(true, true, true);
 					break;
 
@@ -214,6 +214,7 @@ public class NotificationUpdaterService extends Service
 	}
 
 
+	@SuppressWarnings("unused")
 	private void pinNewTask(Intent intent)
 	{
 		// check for new task to pin
@@ -222,7 +223,6 @@ public class NotificationUpdaterService extends Service
 			ContentSet newTaskToPin = intent.getParcelableExtra(EXTRA_NEW_PINNED_TASK);
 			makePinNotification(this, mBuilder, newTaskToPin, true, true, false);
 		}
-		updateNotifications(false, true, false);
 	}
 
 
@@ -236,7 +236,7 @@ public class NotificationUpdaterService extends Service
 
 	private void updatePinnedNotifications(ArrayList<ContentSet> tasksToPin, boolean isReboot, boolean withSound, boolean withHeadsUpNotification)
 	{
-		ArrayList<Uri> pinnedTaskUris = PinTaskHandler.getPinnedTaskUris(this);
+		ArrayList<Uri> pinnedTaskUris = TaskNotificationHandler.getPinnedTaskUris(this);
 
 		// show notifications
 		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -269,7 +269,7 @@ public class NotificationUpdaterService extends Service
 				}
 			}
 		}
-		PinTaskHandler.savePinnedTasks(this, tasksToPin);
+		TaskNotificationHandler.savePinnedTasks(this, tasksToPin);
 	}
 
 
@@ -357,8 +357,7 @@ public class NotificationUpdaterService extends Service
 		builder.mActions = new ArrayList<Action>(2);
 
 		// content
-		builder.setSmallIcon(R.drawable.ic_pin_white_24dp).setContentTitle(TaskFieldAdapters.TITLE.get(task)).setOngoing(true).setShowWhen(false)
-			.setDefaults(Notification.DEFAULT_LIGHTS);
+		builder.setSmallIcon(R.drawable.ic_pin_white_24dp).setContentTitle(TaskFieldAdapters.TITLE.get(task)).setOngoing(true).setShowWhen(false);
 
 		// set priority for HeadsUpNotification
 		if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN)
@@ -381,12 +380,6 @@ public class NotificationUpdaterService extends Service
 		if (contentText != null)
 		{
 			builder.setContentText(contentText);
-		}
-
-		// sound
-		if (withSound)
-		{
-			builder.setDefaults(Notification.DEFAULT_ALL);
 		}
 
 		// ticker text
@@ -418,6 +411,16 @@ public class NotificationUpdaterService extends Service
 
 		// unpin action
 		builder.addAction(NotificationUpdaterService.getUnpinAction(context, TaskFieldAdapters.TASK_ID.get(task), task.getUri()));
+
+		// sound
+		if (withSound)
+		{
+			builder.setDefaults(Notification.DEFAULT_ALL);
+		}
+		else
+		{
+			builder.setDefaults(Notification.DEFAULT_LIGHTS);
+		}
 
 		return builder.build();
 	}

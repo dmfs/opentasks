@@ -7,7 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
-
+    
     <permission
         android:name="org.dmfs.permission.READ_TASKS"
         android:description="@string/permission_description_read_tasks"
@@ -21,7 +21,7 @@
         android:label="@string/permission_write_tasks"
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:protectionLevel="dangerous" >
-    </permission>
+    </permission> 
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS" />
     <uses-permission android:name="org.dmfs.permission.WRITE_TASKS" />
@@ -340,7 +340,7 @@
 
         <!-- Notification -->
         <receiver
-            android:name="org.dmfs.tasks.notification.PinTaskHandler"
+            android:name="org.dmfs.tasks.notification.TaskNotificationHandler"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.PROVIDER_CHANGED" />
