@@ -39,6 +39,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -205,9 +206,9 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         // click on delete
         if (android.R.id.button2 == v.getId())
         {
-            final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(R.string.task_list_delete_dialog_title)
+            final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.task_list_delete_dialog_title, mListName))
                 .setMessage(R.string.task_list_delete_dialog_message).setPositiveButton(R.string.activity_manage_list_btn_delete, this)
-                .setNegativeButton(R.string.activity_manage_list_btn_cancel, this).create();
+                .setNegativeButton(android.R.string.cancel, this).create();
             // changes the color of the delete list button to red
             dialog.setOnShowListener(new OnShowListener()
             {
@@ -308,6 +309,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         if (count > 0)
         {
             setResult(Activity.RESULT_OK);
+            Toast.makeText(this, getString(R.string.task_list_delete_toast, mListName), Toast.LENGTH_LONG).show();
             finish();
             return;
         }

@@ -11,7 +11,7 @@
     <style name="AppThemeDialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:textColor">#FF333333</item>
         <item name="primaryColor">@color/colorPrimary</item>
-        <item name="android:background">@color/background_material_light</item>
+<!--         <item name="android:background">@color/background_material_light</item> -->
         <!-- <item name="android:windowTitleStyle">@style/window_dialog_title_style</item> -->
     </style>
 

@@ -9,10 +9,9 @@
     <color name="translucent_white">#22FFFFFF</color>
     <color name="translucent_grey">#BB222222</color>
     <color name="holo_blue">#CC33B5E5</color>
-    <color name="priority_green">#77FF59</color>
-    <color name="priority_red">#FF412B</color>
-    <color name="priority_yellow">#FFFD16</color>
-    
+    <color name="priority_green">#4caf50</color>
+    <color name="priority_red">#f44336</color>
+    <color name="priority_yellow">#ffc107</color>
     <color name="list_background_pressed">#11000000</color>
     <color name="list_background_activated">#33000000</color>
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 SchedJoules
+ * Copyright (C) 2015 Marten Gajda <marten@dmfs.org>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ import android.widget.TextView.OnEditorActionListener;
 
 /**
  * A simple prompt for text input.
+ * <p />
+ * TODO: Use the style from the support library
  * 
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tristan Heinig <tristan@dmfs.org>
