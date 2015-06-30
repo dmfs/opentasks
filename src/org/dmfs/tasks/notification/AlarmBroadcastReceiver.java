@@ -56,9 +56,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				Uri taskUri = intent.getData();
 
 				// check for pinned task
-				if (PinTaskHandler.isTaskPinned(context, taskUri))
+				if (TaskNotificationHandler.isTaskPinned(context, taskUri))
 				{
-					PinTaskHandler.sendPinnedTaskStartNotification(context, taskUri);
+					TaskNotificationHandler.sendPinnedTaskStartNotification(context, taskUri);
 					return;
 				}
 
@@ -81,9 +81,9 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				Uri taskUri = intent.getData();
 
 				// check for pinned task
-				if (PinTaskHandler.isTaskPinned(context, taskUri))
+				if (TaskNotificationHandler.isTaskPinned(context, taskUri))
 				{
-					PinTaskHandler.sendPinnedTaskDueNotification(context, taskUri);
+					TaskNotificationHandler.sendPinnedTaskDueNotification(context, taskUri);
 					return;
 				}
 

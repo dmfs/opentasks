@@ -39,7 +39,7 @@ import android.preference.PreferenceManager;
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class PinTaskHandler extends BroadcastReceiver
+public class TaskNotificationHandler extends BroadcastReceiver
 {
 	@SuppressWarnings("unused")
 	private static final String TAG = "PinTaskHandler";
@@ -74,8 +74,8 @@ public class PinTaskHandler extends BroadcastReceiver
 	 */
 	public static void pinTask(Context context, ContentSet task)
 	{
-		PinTaskHandler.savePinnedTask(context, task);
-		PinTaskHandler.startPinnedTaskService(context, task.getUri(), NotificationUpdaterService.ACTION_PIN_TASK, task);
+		TaskNotificationHandler.savePinnedTask(context, task);
+		TaskNotificationHandler.startPinnedTaskService(context, task.getUri(), NotificationUpdaterService.ACTION_PIN_TASK, task);
 		TaskFieldAdapters.PINNED.set(task, true);
 	}
 

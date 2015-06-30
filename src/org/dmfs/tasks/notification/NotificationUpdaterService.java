@@ -182,7 +182,7 @@ public class NotificationUpdaterService extends Service
 
 				case Intent.ACTION_BOOT_COMPLETED:
 				case Intent.ACTION_REBOOT:
-				case PinTaskHandler.ACTION_FASTBOOT:
+				case TaskNotificationHandler.ACTION_FASTBOOT:
 					updateNotifications(true, true, true);
 					break;
 
@@ -222,7 +222,6 @@ public class NotificationUpdaterService extends Service
 			ContentSet newTaskToPin = intent.getParcelableExtra(EXTRA_NEW_PINNED_TASK);
 			makePinNotification(this, mBuilder, newTaskToPin, true, true, false);
 		}
-		updateNotifications(false, true, false);
 	}
 
 
@@ -236,7 +235,7 @@ public class NotificationUpdaterService extends Service
 
 	private void updatePinnedNotifications(ArrayList<ContentSet> tasksToPin, boolean isReboot, boolean withSound, boolean withHeadsUpNotification)
 	{
-		ArrayList<Uri> pinnedTaskUris = PinTaskHandler.getPinnedTaskUris(this);
+		ArrayList<Uri> pinnedTaskUris = TaskNotificationHandler.getPinnedTaskUris(this);
 
 		// show notifications
 		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -269,7 +268,7 @@ public class NotificationUpdaterService extends Service
 				}
 			}
 		}
-		PinTaskHandler.savePinnedTasks(this, tasksToPin);
+		TaskNotificationHandler.savePinnedTasks(this, tasksToPin);
 	}
 
 

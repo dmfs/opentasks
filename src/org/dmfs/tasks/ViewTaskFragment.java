@@ -30,7 +30,7 @@ import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.notification.PinTaskHandler;
+import org.dmfs.tasks.notification.TaskNotificationHandler;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.ListenableScrollView;
@@ -591,12 +591,12 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			if (TaskFieldAdapters.PINNED.get(mContentSet))
 			{
 				item.setIcon(R.drawable.ic_pin_white_24dp);
-				PinTaskHandler.unpinTask(mAppContext, mContentSet);
+				TaskNotificationHandler.unpinTask(mAppContext, mContentSet);
 			}
 			else
 			{
 				item.setIcon(R.drawable.ic_pin_off_white_24dp);
-				PinTaskHandler.pinTask(mAppContext, mContentSet);
+				TaskNotificationHandler.pinTask(mAppContext, mContentSet);
 			}
 			persistTask();
 			return true;
