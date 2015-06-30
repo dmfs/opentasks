@@ -22,6 +22,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
+import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
@@ -35,21 +37,29 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Parcel;
+import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
 import android.text.format.Time;
+import android.util.Log;
 
 
 /**
@@ -60,12 +70,37 @@ import android.text.format.Time;
  */
 public class NotificationUpdaterService extends Service
 {
-	public static final String INTENT_ACTION_NEXT_DAY = "org.dmfs.tasks.intent.ACTION_DAY_CHANGED";
-	public static final String INTENT_ACTION_PIN_TASK = "org.dmfs.tasks.intent.ACTION_PIN_TASK";
-	public static final String INTENT_EXTRA_NEW_PINNED_TASK = "org.dmfs.intent.EXTRA_NEW_PINNED_TASK";
+	private static final String TAG = "NotificationUpdaterService";
+
+	/** The duration in milliseconds of the heads up notification when pin tasks are due /start **/
+	private static final int HEAD_UP_NOTIFICATION_DURATION = 5000;
+
+	private static final int REQUEST_CODE_COMPLETE = 1;
+	private static final int REQUEST_CODE_DELAY = 2;
+	private static final int REQUEST_CODE_UNPIN = 3;
+
+	// actions
+	public static final String ACTION_PINNED_TASK_DUE = "org.dmfs.tasks.intent.ACTION_PINNED_TASK_DUE";
+	public static final String ACTION_PINNED_TASK_START = "org.dmfs.tasks.intent.ACTION_PINNED_TASK_START";
+	public static final String ACTION_NEXT_DAY = "org.dmfs.tasks.intent.ACTION_DAY_CHANGED";
+	public static final String ACTION_PIN_TASK = "org.dmfs.tasks.intent.ACTION_PIN_TASK";
+	public static final String ACTION_COMPLETE = "org.dmfs.tasks.intent.COMPLETE";
+	public static final String ACTION_UNPIN = "org.dmfs.tasks.intent.UNPIN";
+	public static final String ACTION_DELAY_1H = "org.dmfs.tasks.intent.DELAY_1H";
+	public static final String ACTION_DELAY_1D = "org.dmfs.tasks.intent.DELAY_1D";
+	public static final String ACTION_CANCEL_HEADUP_NOTIFICATION = "org.dmfs.tasks.intent.ACTION_CANCEL_HEADUP";
+
+	// extras
+	public static final String EXTRA_NEW_PINNED_TASK = "org.dmfs.intent.EXTRA_NEW_PINNED_TASK";
+	public static final String EXTRA_NOTIFICATION_ID = "org.dmfs.tasks.extras.notification.NOTIFICATION_ID";
+	public static final String EXTRA_TASK_DUE = "org.dmfs.tasks.extras.notification.TASK_DUE";
+	public static final String EXTRA_TIMEZONE = "org.dmfs.tasks.extras.notification.TIMEZONE";
+	public static final String EXTRA_ALLDAY = "org.dmfs.tasks.extras.notification.ALLDAY";
+
 	private final NotificationCompat.Builder mBuilder = new Builder(this);
 	private PendingIntent mDateChangePendingIntent;
 	ArrayList<ContentSet> mTasksToPin;
+	private String mAuthority;
 
 
 	@Override
@@ -85,7 +120,7 @@ public class NotificationUpdaterService extends Service
 	@Override
 	public void onCreate()
 	{
-		updateNextDayAlarm();
+		mAuthority = getString(R.string.org_dmfs_tasks_authority);
 		super.onCreate();
 	}
 
@@ -107,32 +142,64 @@ public class NotificationUpdaterService extends Service
 		{
 			switch (intentAction)
 			{
-				case INTENT_ACTION_PIN_TASK:
-					// check for new task to pin
-					if (intent.hasExtra(INTENT_EXTRA_NEW_PINNED_TASK))
+				case ACTION_PIN_TASK:
+					pinNewTask(intent);
+					break;
+
+				case ACTION_PINNED_TASK_START:
+					updateNotifications(true, true, true);
+					delayedCancelHeadsUpNotification();
+					break;
+
+				case ACTION_PINNED_TASK_DUE:
+					updateNotifications(true, true, true);
+					delayedCancelHeadsUpNotification();
+					break;
+
+				case ACTION_COMPLETE:
+					if (intent.hasExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION))
 					{
-						ContentSet newTaskToPin = intent.getParcelableExtra(INTENT_EXTRA_NEW_PINNED_TASK);
-						makePinNotification(this, mBuilder, newTaskToPin, true, true);
+						resolveUndoAction(intent);
+						break;
 					}
-					updateNotifications(false);
+					resolveCompleteAction(intent);
+					break;
+
+				case ACTION_UNPIN:
+					resolveUnpinAction(intent);
+					break;
+
+				case ACTION_DELAY_1D:
+				case ACTION_DELAY_1H:
+					resolveDelayAction(intent);
+					break;
+
+				case NotificationActionUtils.ACTION_UNDO:
+				case NotificationActionUtils.ACTION_DESTRUCT:
+				case NotificationActionUtils.ACTION_UNDO_TIMEOUT:
+					resolveUndoAction(intent);
 					break;
 
 				case Intent.ACTION_BOOT_COMPLETED:
 				case Intent.ACTION_REBOOT:
 				case PinTaskHandler.ACTION_FASTBOOT:
-					updateNotifications(true);
+					updateNotifications(true, true, true);
 					break;
 
 				case Intent.ACTION_DATE_CHANGED:
 				case Intent.ACTION_TIME_CHANGED:
 				case Intent.ACTION_TIMEZONE_CHANGED:
-				case INTENT_ACTION_NEXT_DAY:
+				case ACTION_NEXT_DAY:
 					updateNextDayAlarm();
-					updateNotifications(false);
+					updateNotifications(false, false, false);
+					break;
+
+				case ACTION_CANCEL_HEADUP_NOTIFICATION:
+					updateNotifications(false, false, false);
 					break;
 
 				default:
-					updateNotifications(false);
+					updateNotifications(false, false, false);
 					break;
 			}
 		}
@@ -147,16 +214,27 @@ public class NotificationUpdaterService extends Service
 	}
 
 
-	private void updateNotifications(boolean isReboot)
+	private void pinNewTask(Intent intent)
 	{
-		// update pinned tasks
-		mTasksToPin = queryTasksToPin();
-		updatePinnedNotifications(mTasksToPin, isReboot);
-
+		// check for new task to pin
+		if (intent.hasExtra(EXTRA_NEW_PINNED_TASK))
+		{
+			ContentSet newTaskToPin = intent.getParcelableExtra(EXTRA_NEW_PINNED_TASK);
+			makePinNotification(this, mBuilder, newTaskToPin, true, true, false);
+		}
+		updateNotifications(false, true, false);
 	}
 
 
-	private void updatePinnedNotifications(ArrayList<ContentSet> tasksToPin, boolean isReboot)
+	private void updateNotifications(boolean isReboot, boolean withSound, boolean withHeadsUpNotification)
+	{
+		// update pinned tasks
+		mTasksToPin = queryTasksToPin();
+		updatePinnedNotifications(mTasksToPin, isReboot, withSound, withHeadsUpNotification);
+	}
+
+
+	private void updatePinnedNotifications(ArrayList<ContentSet> tasksToPin, boolean isReboot, boolean withSound, boolean withHeadsUpNotification)
 	{
 		ArrayList<Uri> pinnedTaskUris = PinTaskHandler.getPinnedTaskUris(this);
 
@@ -166,7 +244,8 @@ public class NotificationUpdaterService extends Service
 		{
 			boolean isAlreadyShown = pinnedTaskUris.contains(taskContentSet.getUri());
 			Integer taskId = TaskFieldAdapters.TASK_ID.get(taskContentSet);
-			notificationManager.notify(taskId, makePinNotification(this, mBuilder, taskContentSet, !isAlreadyShown, !isAlreadyShown));
+			notificationManager.notify(taskId,
+				makePinNotification(this, mBuilder, taskContentSet, !isAlreadyShown || withSound, !isAlreadyShown || withSound, withHeadsUpNotification));
 		}
 
 		// remove old notifications
@@ -174,10 +253,15 @@ public class NotificationUpdaterService extends Service
 		{
 			for (Uri uri : pinnedTaskUris)
 			{
-				if (uri != null && uri.getLastPathSegment() != null && !containsTask(tasksToPin, uri))
+				if (uri == null || uri.toString().equals("null"))
+				{
+					break;
+				}
+				long taskId = ContentUris.parseId(uri);
+				if (taskId > -1 == !containsTask(tasksToPin, uri))
 				{
 
-					Integer notificationId = Integer.valueOf(uri.getLastPathSegment());
+					Integer notificationId = Long.valueOf(ContentUris.parseId(uri)).intValue();
 					if (notificationId != null)
 					{
 						notificationManager.cancel(notificationId);
@@ -209,16 +293,12 @@ public class NotificationUpdaterService extends Service
 		{
 			return;
 		}
-		String notificationIdString = taskUri.getLastPathSegment();
-		if (notificationIdString == null)
+		long taskId = ContentUris.parseId(taskUri);
+		if (taskId < 0)
 		{
 			return;
 		}
-		Integer notificationId = Integer.valueOf(notificationIdString);
-		if (notificationId == null)
-		{
-			return;
-		}
+		Integer notificationId = Long.valueOf(taskId).intValue();
 		mBuilder.setDefaults(Notification.DEFAULT_ALL);
 		mBuilder.setOngoing(true);
 
@@ -238,8 +318,9 @@ public class NotificationUpdaterService extends Service
 
 		final ContentResolver resolver = this.getContentResolver();
 		final Uri contentUri = Tasks.getContentUri(this.getString(R.string.org_dmfs_tasks_authority));
-		final Cursor cursor = resolver.query(contentUri, new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
-			Tasks.STATUS }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + " DESC");
+		final Cursor cursor = resolver.query(contentUri,
+			new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY, Tasks.STATUS }, Tasks.PINNED + "= 1", null,
+			Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + " DESC");
 		try
 		{
 			if (cursor.moveToFirst())
@@ -268,14 +349,29 @@ public class NotificationUpdaterService extends Service
 	}
 
 
-	private static Notification makePinNotification(Context context, Builder builder, ContentSet task, boolean withSound, boolean withTickerText)
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	private static Notification makePinNotification(Context context, Builder builder, ContentSet task, boolean withSound, boolean withTickerText,
+		boolean withHeadsUpNotification)
 	{
 		// reset actions
 		builder.mActions = new ArrayList<Action>(2);
 
 		// content
 		builder.setSmallIcon(R.drawable.ic_pin_white_24dp).setContentTitle(TaskFieldAdapters.TITLE.get(task)).setOngoing(true).setShowWhen(false)
-			.setOnlyAlertOnce(true).setDefaults(Notification.DEFAULT_LIGHTS);
+			.setDefaults(Notification.DEFAULT_LIGHTS);
+
+		// set priority for HeadsUpNotification
+		if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN)
+		{
+			if (withHeadsUpNotification)
+			{
+				builder.setPriority(Notification.PRIORITY_HIGH);
+			}
+			else
+			{
+				builder.setPriority(Notification.PRIORITY_DEFAULT);
+			}
+		}
 
 		// color
 		builder.setColor(context.getResources().getColor(R.color.colorPrimary));
@@ -314,14 +410,14 @@ public class NotificationUpdaterService extends Service
 			Time dueTime = TaskFieldAdapters.DUE.get(task);
 			long dueTimestamp = dueTime == null ? 0 : dueTime.toMillis(true);
 
-			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				TaskFieldAdapters.TASK_ID.get(task), task.getUri(), dueTimestamp);
-			builder.addAction(NotificationActionIntentService.getCompleteAction(context,
-				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			builder.addAction(
+				NotificationUpdaterService.getCompleteAction(context, NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
 
 		// unpin action
-		builder.addAction(NotificationActionIntentService.getUnpinAction(context, TaskFieldAdapters.TASK_ID.get(task), task.getUri()));
+		builder.addAction(NotificationUpdaterService.getUnpinAction(context, TaskFieldAdapters.TASK_ID.get(task), task.getUri()));
 
 		return builder.build();
 	}
@@ -332,6 +428,7 @@ public class NotificationUpdaterService extends Service
 		boolean isAllDay = TaskFieldAdapters.ALLDAY.get(task);
 		Time now = new Time();
 		now.setToNow();
+		now.minute--;
 		Time start = TaskFieldAdapters.DTSTART.get(task);
 		Time due = TaskFieldAdapters.DUE.get(task);
 
@@ -365,7 +462,7 @@ public class NotificationUpdaterService extends Service
 	private void updateNextDayAlarm()
 	{
 		Intent intent = new Intent(this, NotificationUpdaterService.class);
-		intent.setAction(INTENT_ACTION_NEXT_DAY);
+		intent.setAction(ACTION_NEXT_DAY);
 		mDateChangePendingIntent = PendingIntent.getService(this, 0, intent, 0);
 
 		// set alarm to update the next day
@@ -392,6 +489,306 @@ public class NotificationUpdaterService extends Service
 	{
 		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.cancel(mDateChangePendingIntent);
+	}
+
+
+	private void processDesctructiveNotification(NotificationAction notificationAction)
+	{
+		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
+		{
+			markCompleted(notificationAction.getTaskUri());
+		}
+
+	}
+
+
+	private void resendNotification(NotificationAction notificationAction)
+	{
+		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
+		{
+			// Due broadcast
+			Intent dueIntent = new Intent(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM);
+			dueIntent.setPackage(getApplicationContext().getPackageName());
+			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, notificationAction.getWhen());
+			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, true);
+			sendBroadcast(dueIntent);
+
+			// Start broadcast
+			Intent startIntent = new Intent(StartAlarmBroadcastHandler.BROADCAST_START_ALARM);
+			startIntent.setPackage(getApplicationContext().getPackageName());
+			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, notificationAction.getWhen());
+			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, true);
+			sendBroadcast(startIntent);
+		}
+	}
+
+
+	private void cancelNotificationFromIntent(Intent intent)
+	{
+		if (!intent.hasExtra(EXTRA_NOTIFICATION_ID))
+		{
+			return;
+		}
+		int notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1);
+		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+		notificationManager.cancel(notificationId);
+	}
+
+
+	private void resolveCompleteAction(Intent intent)
+	{
+		cancelNotificationFromIntent(intent);
+		Uri taskUri = intent.getData();
+		markCompleted(taskUri);
+	}
+
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	private void resolveUndoAction(Intent intent)
+	{
+		if (!intent.hasExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION))
+		{
+			return;
+		}
+
+		/*
+		 * Grab the alarm from the intent. Since the remote AlarmManagerService fills in the Intent to add some extra data, it must unparcel the
+		 * NotificationAction object. It throws a ClassNotFoundException when unparcelling. To avoid this, do the marshalling ourselves.
+		 */
+		final NotificationAction notificationAction;
+		final String action = intent.getAction();
+		final byte[] data = intent.getByteArrayExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION);
+		if (data != null)
+		{
+			final Parcel in = Parcel.obtain();
+			in.unmarshall(data, 0, data.length);
+			in.setDataPosition(0);
+			notificationAction = NotificationAction.CREATOR.createFromParcel(in);
+		}
+		else
+		{
+			return;
+		}
+
+		if (NotificationActionUtils.ACTION_UNDO.equals(action))
+		{
+			NotificationActionUtils.cancelUndoTimeout(this, notificationAction);
+			NotificationActionUtils.cancelUndoNotification(this, notificationAction);
+			resendNotification(notificationAction);
+		}
+		else if (ACTION_COMPLETE.equals(action))
+		{
+			// All we need to do is switch to an Undo notification
+			NotificationActionUtils.createUndoNotification(this, notificationAction);
+			NotificationActionUtils.registerUndoTimeout(this, notificationAction);
+		}
+		else
+		{
+			if (NotificationActionUtils.ACTION_UNDO_TIMEOUT.equals(action) || NotificationActionUtils.ACTION_DESTRUCT.equals(action))
+			{
+				// Process the action
+				NotificationActionUtils.cancelUndoTimeout(this, notificationAction);
+				NotificationActionUtils.processUndoNotification(this, notificationAction);
+				processDesctructiveNotification(notificationAction);
+			}
+		}
+	}
+
+
+	private void resolveDelayAction(Intent intent)
+	{
+		if (!(intent.hasExtra(EXTRA_TASK_DUE) && intent.hasExtra(EXTRA_TIMEZONE)))
+		{
+			return;
+		}
+		final String action = intent.getAction();
+		final Uri taskUri = intent.getData();
+		long due = intent.getLongExtra(EXTRA_TASK_DUE, -1);
+		String tz = intent.getStringExtra(EXTRA_TIMEZONE);
+		boolean allDay = intent.getBooleanExtra(EXTRA_ALLDAY, false);
+
+		int notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1);
+
+		NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+		notificationManager.cancel(notificationId);
+
+		if (ACTION_DELAY_1H.equals(action))
+		{
+			Time time = new Time(tz);
+			time.set(due);
+			time.allDay = false;
+			time.hour++;
+			time.normalize(true);
+			delayTask(taskUri, time);
+		}
+		else if (ACTION_DELAY_1D.equals(action))
+		{
+			if (tz == null)
+			{
+				tz = "UTC";
+			}
+			Time time = new Time(tz);
+			time.set(due);
+			time.allDay = allDay;
+			time.monthDay++;
+			time.normalize(true);
+			delayTask(taskUri, time);
+		}
+
+	}
+
+
+	private void resolveUnpinAction(Intent intent)
+	{
+		cancelNotificationFromIntent(intent);
+		Uri taskUri = intent.getData();
+		unpinTask(taskUri);
+	}
+
+
+	private void markCompleted(Uri taskUri)
+	{
+		ContentResolver contentResolver = getContentResolver();
+		ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>(1);
+		ContentProviderOperation.Builder operation = ContentProviderOperation.newUpdate(taskUri);
+		operation.withValue(Tasks.STATUS, Tasks.STATUS_COMPLETED);
+		operation.withValue(Tasks.PINNED, false);
+		operations.add(operation.build());
+		try
+		{
+			contentResolver.applyBatch(mAuthority, operations);
+		}
+		catch (RemoteException e)
+		{
+			Log.e(TAG, "Remote exception during complete task action");
+			e.printStackTrace();
+		}
+		catch (OperationApplicationException e)
+		{
+			Log.e(TAG, "Unable to mark task completed: " + taskUri);
+			e.printStackTrace();
+		}
+	}
+
+
+	private void unpinTask(Uri taskUri)
+	{
+		ContentValues values = new ContentValues(1);
+		TaskFieldAdapters.PINNED.set(values, false);
+		getContentResolver().update(taskUri, values, null, null);
+	}
+
+
+	private void delayTask(Uri taskUri, Time dueTime)
+	{
+		ContentValues values = new ContentValues(4);
+		TaskFieldAdapters.DUE.set(values, dueTime);
+		getContentResolver().update(taskUri, values, null, null);
+	}
+
+
+	private void delayedCancelHeadsUpNotification()
+	{
+		Handler handler = new Handler(Looper.getMainLooper());
+		final Runnable r = new Runnable()
+		{
+			public void run()
+			{
+				Intent intent = new Intent(getBaseContext(), NotificationUpdaterService.class);
+				intent.setAction(ACTION_CANCEL_HEADUP_NOTIFICATION);
+				startService(intent);
+			}
+		};
+		handler.postDelayed(r, HEAD_UP_NOTIFICATION_DURATION);
+	}
+
+
+	public static Action getCompleteAction(Context context, PendingIntent intent)
+	{
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), intent);
+	}
+
+
+	public static Action getUnpinAction(Context context, PendingIntent intent)
+	{
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), intent);
+	}
+
+
+	public static Action getUnpinAction(Context context, int notificationId, Uri taskUri)
+	{
+		return new Action(R.drawable.ic_pin_off_white_24dp, context.getString(R.string.notification_action_unpin),
+			getUnpinActionIntent(context, notificationId, taskUri));
+	}
+
+
+	public static Action getCompleteAction(Context context, int notificationId, Uri taskUri)
+	{
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete),
+			getCompleteActionIntent(context, notificationId, taskUri));
+	}
+
+
+	public static Action getDelay1hAction(Context context, int notificationId, Uri taskUri, long due, String timezone)
+	{
+		return new Action(R.drawable.ic_detail_delay_1h_inverse, context.getString(R.string.notification_action_delay_1h),
+			getDelayActionIntent(context, notificationId, taskUri, due, true, timezone, false));
+	}
+
+
+	public static Action getDelay1dAction(Context context, int notificationId, Uri taskUri, long due, String timezone, boolean allday)
+	{
+		return new Action(R.drawable.ic_detail_delay_1d_inverse, context.getString(R.string.notification_action_delay_1d),
+			getDelayActionIntent(context, notificationId, taskUri, due, false, timezone, allday));
+	}
+
+
+	public static PendingIntent getCompleteActionIntent(Context context, int notificationId, Uri taskUri)
+	{
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(NotificationUpdaterService.ACTION_COMPLETE);
+		intent.setPackage(context.getPackageName());
+		intent.setData(taskUri);
+		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_COMPLETE, intent, 0);
+		return pendingIntent;
+	}
+
+
+	public static PendingIntent getUnpinActionIntent(Context context, int notificationId, Uri taskUri)
+	{
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(NotificationUpdaterService.ACTION_UNPIN);
+		intent.setPackage(context.getPackageName());
+		intent.setData(taskUri);
+		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_UNPIN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		return pendingIntent;
+	}
+
+
+	private static PendingIntent getDelayActionIntent(Context context, int notificationId, Uri taskUri, long due, boolean delay1h, String timezone,
+		boolean allday)
+	{
+		String action = null;
+		if (delay1h)
+		{
+			action = ACTION_DELAY_1H;
+		}
+		else
+		{
+			action = ACTION_DELAY_1D;
+		}
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(action);
+		intent.setPackage(context.getPackageName());
+		intent.setData(taskUri);
+		intent.putExtra(EXTRA_TASK_DUE, due);
+		intent.putExtra(EXTRA_TIMEZONE, timezone);
+		intent.putExtra(EXTRA_ALLDAY, allday);
+		intent.putExtra(EXTRA_NOTIFICATION_ID, notificationId);
+		final PendingIntent pendingIntent = PendingIntent.getService(context, REQUEST_CODE_DELAY, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		return pendingIntent;
 	}
 
 }

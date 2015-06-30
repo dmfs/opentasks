@@ -75,7 +75,7 @@ public class PinTaskHandler extends BroadcastReceiver
 	public static void pinTask(Context context, ContentSet task)
 	{
 		PinTaskHandler.savePinnedTask(context, task);
-		PinTaskHandler.startPinnedTaskService(context, task.getUri(), NotificationUpdaterService.INTENT_ACTION_PIN_TASK, task);
+		PinTaskHandler.startPinnedTaskService(context, task.getUri(), NotificationUpdaterService.ACTION_PIN_TASK, task);
 		TaskFieldAdapters.PINNED.set(task, true);
 	}
 
@@ -99,7 +99,7 @@ public class PinTaskHandler extends BroadcastReceiver
 		Intent intent = new Intent(context, NotificationUpdaterService.class);
 		intent.setData(taskUri);
 		intent.setAction(action);
-		intent.putExtra(NotificationUpdaterService.INTENT_EXTRA_NEW_PINNED_TASK, task);
+		intent.putExtra(NotificationUpdaterService.EXTRA_NEW_PINNED_TASK, task);
 		context.startService(intent);
 	}
 
@@ -124,7 +124,7 @@ public class PinTaskHandler extends BroadcastReceiver
 	{
 		for (Uri uri : getPinnedTaskUris(context))
 		{
-			if (uri.equals(uri))
+			if (uri.equals(taskUri))
 			{
 				return true;
 			}
@@ -183,6 +183,24 @@ public class PinTaskHandler extends BroadcastReceiver
 			pinnedTaskUris.add(Uri.parse(uriString));
 		}
 		return pinnedTaskUris;
+	}
+
+
+	public static void sendPinnedTaskStartNotification(Context context, Uri taskUri)
+	{
+		Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(NotificationUpdaterService.ACTION_PINNED_TASK_START);
+		intent.setData(taskUri);
+		context.startService(intent);
+	}
+
+
+	public static void sendPinnedTaskDueNotification(Context context, Uri taskUri)
+	{
+		Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(NotificationUpdaterService.ACTION_PINNED_TASK_DUE);
+		intent.setData(taskUri);
+		context.startService(intent);
 	}
 
 }
