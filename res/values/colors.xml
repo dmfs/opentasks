@@ -35,6 +35,7 @@
     <color name="holo_orange_dark">#ffff8800</color>
     <!-- A really bright Holo shade of blue -->
     <color name="holo_blue_bright">#ff00ddff</color>
+    <color name="material_red">#f44336</color>
 
     <!-- Our primary color - a nice shade of teal -->
     <color name="colorPrimary">#009688</color>
