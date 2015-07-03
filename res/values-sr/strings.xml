@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Manifest stuff -->
-    <string name="app_name">Задаци</string>
+    <string name="app_name">OpenTasks</string>
     <string name="permission_read_tasks">читање задатака</string>
     <string name="permission_description_read_tasks">Дозвољава апликацији да чита задатке са ваше листе задатака.</string>
     <string name="permission_write_tasks">упис задатака</string>

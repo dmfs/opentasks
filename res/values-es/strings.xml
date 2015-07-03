@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Manifest stuff -->
-    <string name="app_name">Tareas</string>
+    <string name="app_name">OpenTasks</string>
     <string name="permission_read_tasks">leer tareas</string>
     <string name="permission_description_read_tasks">Permite a una aplicación leer tareas de tus listas.</string>
     <string name="permission_write_tasks">escribir tareas</string>
