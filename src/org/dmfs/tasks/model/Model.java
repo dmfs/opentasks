@@ -42,6 +42,8 @@ import android.text.TextUtils;
 public abstract class Model
 {
 	private final static String INTENT_CATEGORY_PREFIX = "org.dmfs.intent.category.";
+	private final static String EXTRA_COLOR_HINT = "org.dmfs.COLOR_HINT";
+	private final static String EXTRA_TITLE_HINT = "org.dmfs.TITLE_HINT";
 
 	/**
 	 * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
@@ -186,15 +188,24 @@ public abstract class Model
 	}
 
 
-	public void startEditIntent(Activity activity, Account account, long listId)
+	public void startEditIntent(Activity activity, Account account, long listId, String nameHint, Integer colorHint)
 	{
 		if (!hasEditActivity())
 		{
 			throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support editing lists.");
 		}
 
-		activity.startActivityForResult(
-			getListIntent(mContext, Intent.ACTION_EDIT, account).setData(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), listId)), 11);
+		Intent intent = getListIntent(mContext, Intent.ACTION_EDIT, account);
+		intent.setData(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), listId));
+		if (nameHint != null)
+		{
+			intent.putExtra(EXTRA_TITLE_HINT, nameHint);
+		}
+		if (colorHint != null)
+		{
+			intent.putExtra(EXTRA_COLOR_HINT, colorHint);
+		}
+		activity.startActivity(intent);
 	}
 
 
