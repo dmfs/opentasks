@@ -28,8 +28,6 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
-import org.dmfs.tasks.utils.DateFormatter;
-import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -319,9 +317,9 @@ public class NotificationUpdaterService extends Service
 
 		final ContentResolver resolver = this.getContentResolver();
 		final Uri contentUri = Tasks.getContentUri(this.getString(R.string.org_dmfs_tasks_authority));
-		final Cursor cursor = resolver.query(contentUri, new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
-			Tasks.STATUS, Tasks.PRIORITY }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, "
-			+ Tasks.DUE + " ASC");
+		final Cursor cursor = resolver.query(contentUri,
+			new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY, Tasks.STATUS, Tasks.PRIORITY },
+			Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, " + Tasks.DUE + " ASC");
 		try
 		{
 			if (cursor.moveToFirst())
@@ -428,8 +426,8 @@ public class NotificationUpdaterService extends Service
 
 			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				TaskFieldAdapters.TASK_ID.get(task), task.getUri(), dueTimestamp);
-			builder.addAction(NotificationUpdaterService.getCompleteAction(context,
-				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			builder.addAction(
+				NotificationUpdaterService.getCompleteAction(context, NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
 
 		// unpin action
@@ -461,16 +459,14 @@ public class NotificationUpdaterService extends Service
 		if (start != null && start.toMillis(true) > 0 && (now.before(start) || due == null))
 		{
 			start.allDay = isAllDay;
-			String startString = context.getString(R.string.notification_task_start_date,
-				new DateFormatter(context).format(start, DateFormatContext.NOTIFICATION_VIEW));
+			String startString = context.getString(R.string.notification_task_start_date, NotificationActionUtils.formatTime(context, start));
 			return startString;
 		}
 
 		if (due != null && due.toMillis(true) > 0)
 		{
 			due.allDay = isAllDay;
-			String dueString = context.getString(R.string.notification_task_due_date,
-				new DateFormatter(context).format(due, DateFormatContext.NOTIFICATION_VIEW));
+			String dueString = context.getString(R.string.notification_task_due_date, NotificationActionUtils.formatTime(context, due));
 			return dueString;
 		}
 
@@ -743,29 +739,29 @@ public class NotificationUpdaterService extends Service
 
 	public static Action getUnpinAction(Context context, int notificationId, Uri taskUri)
 	{
-		return new Action(R.drawable.ic_pin_off_white_24dp, context.getString(R.string.notification_action_unpin), getUnpinActionIntent(context,
-			notificationId, taskUri));
+		return new Action(R.drawable.ic_pin_off_white_24dp, context.getString(R.string.notification_action_unpin),
+			getUnpinActionIntent(context, notificationId, taskUri));
 	}
 
 
 	public static Action getCompleteAction(Context context, int notificationId, Uri taskUri)
 	{
-		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete), getCompleteActionIntent(context,
-			notificationId, taskUri));
+		return new Action(R.drawable.ic_action_complete, context.getString(R.string.notification_action_complete),
+			getCompleteActionIntent(context, notificationId, taskUri));
 	}
 
 
 	public static Action getDelay1hAction(Context context, int notificationId, Uri taskUri, long due, String timezone)
 	{
-		return new Action(R.drawable.ic_detail_delay_1h_inverse, context.getString(R.string.notification_action_delay_1h), getDelayActionIntent(context,
-			notificationId, taskUri, due, true, timezone, false));
+		return new Action(R.drawable.ic_detail_delay_1h_inverse, context.getString(R.string.notification_action_delay_1h),
+			getDelayActionIntent(context, notificationId, taskUri, due, true, timezone, false));
 	}
 
 
 	public static Action getDelay1dAction(Context context, int notificationId, Uri taskUri, long due, String timezone, boolean allday)
 	{
-		return new Action(R.drawable.ic_detail_delay_1d_inverse, context.getString(R.string.notification_action_delay_1d), getDelayActionIntent(context,
-			notificationId, taskUri, due, false, timezone, allday));
+		return new Action(R.drawable.ic_detail_delay_1d_inverse, context.getString(R.string.notification_action_delay_1d),
+			getDelayActionIntent(context, notificationId, taskUri, due, false, timezone, allday));
 	}
 
 

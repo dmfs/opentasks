@@ -36,6 +36,8 @@ import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
@@ -61,8 +63,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 
 /**
