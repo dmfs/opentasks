@@ -6,7 +6,7 @@
         <item name="android:actionBarWidgetTheme">@style/actionBarWidgetTheme</item>
         <item name="android:actionBarItemBackground">@drawable/selectable_background_white</item>
         <item name="searchViewStyle">@style/WhiteSearchViewStyle</item>
-        <item name="android:autoCompleteTextViewStyle">@style/cursorColor</item>
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
     </style>
 
     <!-- ActionBar styles -->
