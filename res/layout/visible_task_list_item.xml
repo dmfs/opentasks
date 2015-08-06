@@ -34,7 +34,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:padding="12dp"
-        android:src="@drawable/ic_settings_grey600_24dp"
+        android:src="@drawable/ic_24_settings_black50"
         android:tint="?attr/colorAccent" />
 
     <TextView

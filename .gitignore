@@ -31,3 +31,5 @@ local.properties
 /.settings
 #
 /gen
+project.properties
+.classpath
