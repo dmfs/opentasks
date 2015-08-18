@@ -11,7 +11,7 @@
     <style name="AppThemeDialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:textColor">#FF333333</item>
         <item name="primaryColor">@color/colorPrimary</item>
-<!--         <item name="android:background">@color/background_material_light</item> -->
+        <!-- <item name="android:background">@color/background_material_light</item> -->
         <!-- <item name="android:windowTitleStyle">@style/window_dialog_title_style</item> -->
     </style>
 
@@ -223,10 +223,6 @@
         <item name="android:textColor">#ff808080</item>
     </style>
 
-    <style name="actionColorBar">
-        <item name="android:layout_height">0dp</item>
-    </style>
-
     <style name="Theme.MaterialDialog" parent="@android:style/Theme.Dialog"></style>
 
     <style name="details_label_icon" parent="field_view_text_value">
@@ -234,6 +230,12 @@
         <item name="android:layout_marginRight">4dp</item>
         <item name="android:layout_marginLeft">4dp</item>
         <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- styles for actionbar / toolbar -->
+
+    <style name="actionColorBar">
+        <item name="android:layout_height">0dp</item>
     </style>
 
 </resources>

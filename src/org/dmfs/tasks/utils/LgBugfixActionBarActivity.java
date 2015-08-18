@@ -24,7 +24,6 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.ViewConfiguration;
@@ -40,7 +39,7 @@ import android.view.ViewConfiguration;
  * 
  */
 
-public class LgBugfixActionBarActivity extends ActionBarActivity
+public class LgBugfixActionBarActivity extends android.support.v7.app.ActionBarActivity
 {
 
 	private static final String TAG = "LgBugfixActionBarActivity";

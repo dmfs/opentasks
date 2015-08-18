@@ -34,12 +34,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 
@@ -76,6 +78,7 @@ public class NotificationActionUtils
 	public static final HashMap<Integer, Long> sNotificationTimestamps = new HashMap<Integer, Long>();
 
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	public static void sendDueAlarmNotification(Context context, String title, Uri taskUri, int notificationId, long dueDate, boolean dueAllDay,
 		String timezone, boolean silent)
 	{
@@ -88,16 +91,24 @@ public class NotificationActionUtils
 		}
 		else
 		{
-			dueString = context.getString(R.string.notification_task_due_date,
-				new DateFormatter(context).format(makeTime(dueDate, dueAllDay), DateFormatContext.NOTIFICATION_VIEW));
+			dueString = context.getString(R.string.notification_task_due_date, formatTime(context, makeTime(dueDate, dueAllDay)));
 		}
 
 		// build notification
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
 
+		// color
+		mBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
+
 		// dismisses the notification on click
 		mBuilder.setAutoCancel(true);
+
+		// set high priority to display heads-up notification
+		if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN)
+		{
+			mBuilder.setPriority(Notification.PRIORITY_HIGH);
+		}
 
 		// set status bar test
 		mBuilder.setTicker(title);
@@ -128,14 +139,14 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			// delay notification
-			mBuilder.addAction(NotificationActionIntentService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
+			// delay action
+			mBuilder.addAction(NotificationUpdaterService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
 
 			// complete action
-			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				notificationId, taskUri, dueDate);
-			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
-				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			mBuilder.addAction(
+				NotificationUpdaterService.getCompleteAction(context, NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
 
 		// set displayed time
@@ -156,7 +167,9 @@ public class NotificationActionUtils
 	}
 
 
-	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long startDate, boolean startAllDay, boolean silent)
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long startDate, boolean startAllDay,
+		boolean silent)
 	{
 		String startString = "";
 		if (startAllDay)
@@ -165,8 +178,7 @@ public class NotificationActionUtils
 		}
 		else
 		{
-			startString = context.getString(R.string.notification_task_start_date,
-				new DateFormatter(context).format(makeTime(startDate, startAllDay), DateFormatContext.NOTIFICATION_VIEW));
+			startString = context.getString(R.string.notification_task_start_date, formatTime(context, makeTime(startDate, startAllDay)));
 		}
 
 		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -175,8 +187,17 @@ public class NotificationActionUtils
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
 
+		// color
+		mBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
+
 		// dismisses the notification on click
 		mBuilder.setAutoCancel(true);
+
+		// set high priority to display heads-up notification
+		if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN)
+		{
+			mBuilder.setPriority(Notification.PRIORITY_HIGH);
+		}
 
 		// set status bar test
 		mBuilder.setTicker(title);
@@ -208,10 +229,10 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			NotificationAction completeAction = new NotificationAction(NotificationActionIntentService.ACTION_COMPLETE, R.string.notification_action_completed,
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
 				notificationId, taskUri, startDate);
-			mBuilder.addAction(NotificationActionIntentService.getCompleteAction(context,
-				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
+			mBuilder.addAction(
+				NotificationUpdaterService.getCompleteAction(context, NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
 		}
 
@@ -238,7 +259,8 @@ public class NotificationActionUtils
 	 */
 	public static PendingIntent getNotificationActionPendingIntent(Context context, NotificationAction action)
 	{
-		final Intent intent = new Intent(action.getActionType());
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(action.getActionType());
 		intent.setData(action.getTaskUri());
 		intent.setPackage(context.getPackageName());
 		putNotificationActionExtra(intent, action);
@@ -267,7 +289,8 @@ public class NotificationActionUtils
 
 		final String packageName = context.getPackageName();
 
-		final Intent clickIntent = new Intent(ACTION_UNDO);
+		final Intent clickIntent = new Intent(context, NotificationUpdaterService.class);
+		clickIntent.setAction(ACTION_UNDO);
 		clickIntent.setPackage(packageName);
 		putNotificationActionExtra(clickIntent, action);
 		final PendingIntent clickPendingIntent = PendingIntent.getService(context, action.getNotificationId(), clickIntent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -275,11 +298,12 @@ public class NotificationActionUtils
 		builder.setContent(undoView);
 
 		// When the notification is cleared, we perform the destructive action
-		final Intent deleteIntent = new Intent(ACTION_DESTRUCT);
+		final Intent deleteIntent = new Intent(context, NotificationUpdaterService.class);
+		deleteIntent.setAction(ACTION_DESTRUCT);
 		deleteIntent.setPackage(packageName);
 		putNotificationActionExtra(deleteIntent, action);
-		final PendingIntent deletePendingIntent = PendingIntent
-			.getService(context, action.getNotificationId(), deleteIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		final PendingIntent deletePendingIntent = PendingIntent.getService(context, action.getNotificationId(), deleteIntent,
+			PendingIntent.FLAG_CANCEL_CURRENT);
 		builder.setDeleteIntent(deletePendingIntent);
 
 		final Notification notification = builder.build();
@@ -342,7 +366,8 @@ public class NotificationActionUtils
 	 */
 	private static PendingIntent createUndoTimeoutPendingIntent(final Context context, final NotificationAction notificationAction)
 	{
-		final Intent intent = new Intent(ACTION_UNDO_TIMEOUT);
+		final Intent intent = new Intent(context, NotificationUpdaterService.class);
+		intent.setAction(ACTION_UNDO_TIMEOUT);
 		intent.setPackage(context.getPackageName());
 		putNotificationActionExtra(intent, notificationAction);
 		final int requestCode = notificationAction.mNotificationId;
@@ -405,6 +430,30 @@ public class NotificationActionUtils
 		return result;
 	}
 
+	/**
+	 * Returns a string representation for the time, with a relative date and an absolute time
+	 */
+	public static String formatTime(Context context, Time time)
+	{
+		Time now = new Time();
+		now.setToNow();
+		String dateString;
+		if (time.allDay)
+		{
+			Time allDayNow = new Time("UTC");
+			allDayNow.set(now.monthDay, now.month, now.year);
+			dateString = DateUtils.getRelativeTimeSpanString(time.toMillis(false), allDayNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
+		}
+		else
+		{
+			dateString = DateUtils.getRelativeTimeSpanString(time.toMillis(false), now.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
+		}
+
+		// return combined date and time
+		String timeString = new DateFormatter(context).format(time, DateFormatContext.NOTIFICATION_VIEW_TIME);
+		return new StringBuilder().append(dateString).append(", ").append(timeString).toString();
+	}
+
 	public static class NotificationAction implements Parcelable
 	{
 		private String mActionType;
@@ -441,7 +490,7 @@ public class NotificationActionUtils
 			out.writeLong(mWhen);
 		}
 
-		public static final Parcelable.ClassLoaderCreator<NotificationAction> CREATOR = new Parcelable.ClassLoaderCreator<NotificationAction>()
+		public static final Parcelable.Creator<NotificationAction> CREATOR = new Parcelable.Creator<NotificationAction>()
 		{
 			@Override
 			public NotificationAction createFromParcel(final Parcel in)
@@ -454,13 +503,6 @@ public class NotificationActionUtils
 			public NotificationAction[] newArray(final int size)
 			{
 				return new NotificationAction[size];
-			}
-
-
-			@Override
-			public NotificationAction createFromParcel(final Parcel in, final ClassLoader loader)
-			{
-				return new NotificationAction(in, loader);
 			}
 		};
 

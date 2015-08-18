@@ -245,6 +245,10 @@
         <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
+
+                <!-- This broadcast receiver should run on boot to clean up all accounts that may have been removed in safe mode. -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
         <!-- custom alarm receivers -->
@@ -264,26 +268,6 @@
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
         </receiver>
-
-        <!-- notification -->
-        <service
-            android:name="org.dmfs.tasks.notification.NotificationActionIntentService"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
-                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
-                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
-
-                <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.tasks.action.notification.UNDO" />
-                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
-                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
-            </intent-filter>
-        </service>
 
         <!-- Dashclock extension -->
         <service
@@ -318,6 +302,7 @@
         <!-- Color Picker -->
         <activity
             android:name="org.dmfs.android.colorpicker.ColorPickerActivity"
+            android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.Dialog" >
             <intent-filter>
                 <action android:name="org.openintents.action.PICK_COLOR" />
@@ -352,6 +337,54 @@
                     android:scheme="content" />
             </intent-filter>
         </activity>
+
+        <!-- Notification -->
+        <receiver
+            android:name="org.dmfs.tasks.notification.TaskNotificationHandler"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data
+                    android:host="@string/org_dmfs_tasks_authority"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_FIRST_LAUNCH" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+
+                <data
+                    android:path="org.dmfs.tasks"
+                    android:scheme="package" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.COMPLETE" />
+                <action android:name="org.dmfs.tasks.action.notification.UNPIN" />
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1H" />
+                <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
+
+                <data
+                    android:host="@string/org_dmfs_tasks_authority"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.notification.UNDO" />
+                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
+                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="org.dmfs.tasks.notification.NotificationUpdaterService"
+            android:exported="false" />
     </application>
 
 </manifest>

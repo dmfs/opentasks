@@ -147,6 +147,11 @@ public final class TaskFieldAdapters
 	public static final BooleanFieldAdapter IS_CLOSED = new BooleanFieldAdapter(TaskContract.Tasks.IS_CLOSED);
 
 	/**
+	 * Adapter for the PINNED flag of a task.
+	 * */
+	public static final BooleanFieldAdapter PINNED = new BooleanFieldAdapter(TaskContract.Tasks.PINNED);
+
+	/**
 	 * Adpater for the score (i.e. the relevance) of the task in a search.
 	 * */
 	public static final FloatFieldAdapter SCORE = new FloatFieldAdapter(TaskContract.Tasks.SCORE, 0f);

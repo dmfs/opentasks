@@ -21,11 +21,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dmfs.android.xmlmagic.AndroidParserContext;
+import org.dmfs.android.xmlmagic.builder.RecyclingReflectionObjectBuilder;
+import org.dmfs.android.xmlmagic.builder.ReflectionObjectBuilder;
 import org.dmfs.xmlobjects.ElementDescriptor;
 import org.dmfs.xmlobjects.QualifiedName;
-import org.dmfs.xmlobjects.android.builder.ReflectionObjectBuilder;
-import org.dmfs.xmlobjects.android.pull.AndroidParserContext;
-import org.dmfs.xmlobjects.android.pull.ResolveInt;
 import org.dmfs.xmlobjects.builder.IObjectBuilder;
 import org.dmfs.xmlobjects.builder.reflection.Attribute;
 import org.dmfs.xmlobjects.builder.reflection.Element;
@@ -60,7 +60,7 @@ public class TabConfig
 	/**
 	 * A Builder that builds a {@link TabConfig} object.
 	 */
-	public final static IObjectBuilder<TabConfig> BUILDER = new ReflectionObjectBuilder<TabConfig>(TabConfig.class);
+	public final static IObjectBuilder<TabConfig> BUILDER = new RecyclingReflectionObjectBuilder<TabConfig>(TabConfig.class);
 
 	/**
 	 * The {@link XmlElementDescriptor} of the tabconfig element.
@@ -92,7 +92,6 @@ public class TabConfig
 		@Attribute(name = "icon")
 		private int icon;
 
-		@ResolveInt(false)
 		@Attribute(name = "id")
 		private int id;
 
@@ -193,7 +192,7 @@ public class TabConfig
 
 		XmlResourceParser parser = res.getXml(tabsResource);
 
-		XmlObjectPull objectParser = new XmlObjectPull(parser, new AndroidParserContext(res));
+		XmlObjectPull objectParser = new XmlObjectPull(parser, new AndroidParserContext(context, null));
 
 		TabConfig groupings = objectParser.pull(DESCRIPTOR, null, new XmlPath());
 		groupings.updateVisible();

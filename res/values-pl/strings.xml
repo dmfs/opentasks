@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Manifest stuff -->
-    <string name="app_name">Zadania</string>
+    <string name="app_name">OpenTasks</string>
     <string name="permission_read_tasks">Czytaj zadania</string>
     <string name="permission_description_read_tasks">Pozwala aplikacji na czytanie zadań z Twojej listy zadań.</string>
     <string name="permission_write_tasks">Zapisuj zadania</string>
@@ -43,6 +43,8 @@
     <string name="activity_task_details_delete_task">Usuń zadanie</string>
     <string name="activity_task_details_complete">Zakończone</string>
     <string name="activity_task_details_complete_task">Zakończone zadanie</string>
+    <string name="activity_task_details_pin">Pin</string> <!-- TODO -->
+    <string name="activity_task_details_pin_task">Pin task</string>  <!-- TODO -->
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edytuj zadanie</string>
@@ -143,9 +145,33 @@
 
     <string name="title_activity_settings">Ustawienia</string>
     <string name="action_settings">Ustawienia</string>
+    <string name="action_add_local_list">Add List</string> <!-- TODO -->
     <string name="visible_task_lists">Wyświetlane listy</string>
     <string name="enable_alarms">Powiadomienia</string>
     <string name="synced_task_lists">Synchronizowane listy</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Choose an account</string>  <!-- TODO -->
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">save</string> <!-- TODO -->
+    <string name="activity_manage_list_btn_delete">delete list</string> <!-- TODO -->
+    <string name="activity_add_list_title">Create local list</string> <!-- TODO -->
+    <string name="activity_edit_list_title">List settings</string> <!-- TODO -->
+    <string name="task_list_name_caption">Name</string> <!-- TODO -->
+    <string name="task_list_no_sync">Note: This creates a local list. Tasks in local lists will not be synced.</string> <!-- TODO -->
+    <string name="task_list_color_caption">List Color</string> <!-- TODO -->
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">list name</string> <!-- TODO -->
+    <string name="task_list_name_dialog_title">Enter list name</string> <!-- TODO -->
+    <string name="task_list_name_dialog_error">Enter a name.</string> <!-- TODO -->
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Delete %s</string> <!-- TODO -->
+    <string name="task_list_delete_dialog_message">Delete the list and all tasks within?\nNote: There is no way to restore a deleted list.</string> <!-- TODO -->
+    <string name="task_list_delete_toast">%s deleted</string> <!-- TODO -->
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">Data zakończenia</string>
@@ -191,6 +217,8 @@
     <string name="notification_action_delay_1d">+1 dzień</string>
     <string name="notification_action_delay_toast">Czas zaplanowanych zaktualizowany</string>
     <string name="notification_undo">Cofnij</string>
+    <string name="notification_action_unpin">unpin</string>  <!-- TODO -->
+    <string name="notification_task_pin_ticker">%1$s was pinned</string>  <!-- TODO -->
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 godzina</string>
@@ -209,6 +237,8 @@
     <string name="dashclock_display_type_due">zadania zaplanowane</string>
     <string name="dashclock_display_type_start">zadania rozpoczynające się</string>
     <string name="dashclock_display_type_start_and_due">zadania rozpoczynające się i zaplanowane</string>
+    <string name="dashclock_display_type_all">all</string>  <!-- TODO -->
+    <string name="dashclock_display_type_pinned">pinned tasks</string>  <!-- TODO -->
     <string name="dashclock_preference_title">Ustawienia paska zadań</string>
 
     <!-- General -->

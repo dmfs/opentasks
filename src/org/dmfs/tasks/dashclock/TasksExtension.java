@@ -25,6 +25,7 @@ import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
@@ -53,6 +54,8 @@ public class TasksExtension extends DashClockExtension
 
 	private static final String[] INSTANCE_PROJECTION = new String[] { Instances._ID, Instances.TASK_ID, Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE,
 		Instances.TITLE, Instances.DESCRIPTION, Instances.STATUS, Instances.DUE, Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY };
+
+	private static final String INSTANCE_PINNED_SELECTION = Instances.PINNED + " = 1";
 
 	private static final String INSTANCE_DUE_SELECTION = Instances.IS_ALLDAY + " = 0 AND " + Instances.STATUS + " != " + Instances.STATUS_COMPLETED + " AND "
 		+ Instances.STATUS + " != " + Instances.STATUS_CANCELLED + " AND (" + Instances.DUE + " > ? AND " + Instances.DUE + " < ? )";
@@ -84,7 +87,7 @@ public class TasksExtension extends DashClockExtension
 		// enable automatic dashclock updates on task changes
 		addWatchContentUris(new String[] { TaskContract.getContentUri(getString(R.string.org_dmfs_tasks_authority)).toString() });
 		super.onInitialize(isReconnect);
-		
+
 		mDateFormatter = new DateFormatter(this);
 	}
 
@@ -104,59 +107,96 @@ public class TasksExtension extends DashClockExtension
 	{
 
 		// get next task that is due
-		Cursor recentTaskCursor;
-		Cursor allDayTaskCursor;
+		Cursor recentTaskCursor = null;
+		Cursor allDayTaskCursor = null;
+		Cursor pinnedTaskCursor = null;
 
-		switch (mDisplayMode)
+		try
 		{
-			case DashClockPreferenceActivity.DISPLAY_MODE_DUE:
-				recentTaskCursor = loadRecentDueTaskCursor();
-				allDayTaskCursor = loadAllDayTasksDueTodayCursor();
-				break;
 
-			case DashClockPreferenceActivity.DISPLAY_MODE_START:
-				recentTaskCursor = loadRecentStartTaskCursor();
-				allDayTaskCursor = loadAllDayTasksStartTodayCursor();
-				break;
-
-			default:
-				recentTaskCursor = loadRecentStartDueTaskCursor();
-				allDayTaskCursor = loadAllDayTasksStartDueTodayCursor();
-				break;
-		}
-
-		int recentTaskCount = recentTaskCursor.getCount();
-		int allDayTaskCount = allDayTaskCursor.getCount();
-		if ((recentTaskCount + allDayTaskCount) > 0)
-		{
-			// select the right cursor
-			Cursor c = recentTaskCount > 0 ? recentTaskCursor : allDayTaskCursor;
-			c.moveToFirst();
-
-			boolean isAllDay = recentTaskCount == 0;
-
-			String description = c.getString(c.getColumnIndex(Tasks.DESCRIPTION));
-			if (description != null)
+			switch (mDisplayMode)
 			{
-				description = description.replaceAll("\\[\\s?\\]", " ").replaceAll("\\[[xX]\\]", "✓");
+				case DashClockPreferenceActivity.DISPLAY_MODE_DUE:
+					recentTaskCursor = loadRecentDueTaskCursor();
+					allDayTaskCursor = loadAllDayTasksDueTodayCursor();
+					break;
+
+				case DashClockPreferenceActivity.DISPLAY_MODE_START:
+					recentTaskCursor = loadRecentStartTaskCursor();
+					allDayTaskCursor = loadAllDayTasksStartTodayCursor();
+					break;
+
+				case DashClockPreferenceActivity.DISPLAY_MODE_PINNED:
+					pinnedTaskCursor = loadPinnedTaskCursor();
+					break;
+
+				default:
+					recentTaskCursor = loadRecentStartDueTaskCursor();
+					allDayTaskCursor = loadAllDayTasksStartDueTodayCursor();
+					pinnedTaskCursor = loadPinnedTaskCursor();
+					break;
 			}
-			String title = getTaskTitleDisplayString(c, isAllDay);
 
-			// intent
-			String accountType = c.getString(c.getColumnIndex(Instances.ACCOUNT_TYPE));
-			Long taskId = c.getLong(c.getColumnIndex(Instances.TASK_ID));
-			Intent clickIntent = buildClickIntent(taskId, accountType);
+			int recentTaskCount = recentTaskCursor == null ? 0 : recentTaskCursor.getCount();
+			int allDayTaskCount = allDayTaskCursor == null ? 0 : allDayTaskCursor.getCount();
+			int pinnedTaskCount = pinnedTaskCursor == null ? 0 : pinnedTaskCursor.getCount();
+			if ((recentTaskCount + allDayTaskCount + pinnedTaskCount) > 0)
+			{
+				// select the right cursor
+				Cursor c = null;
+				if (pinnedTaskCount > 0)
+				{
+					c = pinnedTaskCursor;
+				}
+				else if ((recentTaskCount + allDayTaskCount) > 0)
+				{
+					c = recentTaskCount > 0 ? recentTaskCursor : allDayTaskCursor;
+				}
 
-			// Publish the extension data update.
-			publishUpdate(new ExtensionData().visible(true).icon(R.drawable.ic_dashboard).status(String.valueOf(allDayTaskCount + recentTaskCount))
-				.expandedTitle(title).expandedBody(description).clickIntent(clickIntent));
+				c.moveToFirst();
+
+				boolean isAllDay = allDayTaskCount > 0;
+
+				String description = c.getString(c.getColumnIndex(Tasks.DESCRIPTION));
+				if (description != null)
+				{
+					description = description.replaceAll("\\[\\s?\\]", " ").replaceAll("\\[[xX]\\]", "✓");
+				}
+				String title = getTaskTitleDisplayString(c, isAllDay);
+
+				// intent
+				String accountType = c.getString(c.getColumnIndex(Instances.ACCOUNT_TYPE));
+				Long taskId = c.getLong(c.getColumnIndex(Instances.TASK_ID));
+				Intent clickIntent = buildClickIntent(taskId, accountType);
+
+				// Publish the extension data update.
+				publishUpdate(new ExtensionData().visible(true).icon(R.drawable.ic_dashboard)
+					.status(String.valueOf(allDayTaskCount + recentTaskCount + pinnedTaskCount)).expandedTitle(title).expandedBody(description)
+					.clickIntent(clickIntent));
+			}
+			else
+			{
+				// no upcoming task -> empty update
+				publishUpdate(null);
+			}
 		}
-		else
+		finally
 		{
-			// no upcoming task -> empty update
-			publishUpdate(null);
+			closeCursor(recentTaskCursor);
+			closeCursor(allDayTaskCursor);
+			closeCursor(pinnedTaskCursor);
 		}
 
+	}
+
+
+	private void closeCursor(Cursor cursor)
+	{
+		if (cursor == null || cursor.isClosed())
+		{
+			return;
+		}
+		cursor.close();
 	}
 
 
@@ -172,10 +212,23 @@ public class TasksExtension extends DashClockExtension
 			// START event
 			return getTaskTitleStartString(c, isAllDay);
 		}
+		else if (DashClockPreferenceActivity.DISPLAY_MODE_PINNED == mDisplayMode)
+		{
+			// return task title
+			return TaskFieldAdapters.TITLE.get(c);
+		}
 		else
 		{
 			// START or DUE event
-			return isDueEvent(c, isAllDay) ? getTaskTitleDueString(c, isAllDay) : getTaskTitleStartString(c, isAllDay);
+			String timeEventString = isDueEvent(c, isAllDay) ? getTaskTitleDueString(c, isAllDay) : getTaskTitleStartString(c, isAllDay);
+			if (timeEventString == null)
+			{
+				return TaskFieldAdapters.TITLE.get(c);
+			}
+			else
+			{
+				return timeEventString;
+			}
 		}
 	}
 
@@ -190,6 +243,10 @@ public class TasksExtension extends DashClockExtension
 		{
 			TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DUE, Instances.TZ, Instances.IS_ALLDAY);
 			Time dueTime = timeFieldAdapter.get(c);
+			if (dueTime == null)
+			{
+				return null;
+			}
 			String dueTimeString = mDateFormatter.format(dueTime, DateFormatContext.DASHCLOCK_VIEW);
 			return getString(R.string.dashclock_widget_title_due_expanded, c.getString(c.getColumnIndex(Tasks.TITLE)), dueTimeString);
 		}
@@ -206,6 +263,10 @@ public class TasksExtension extends DashClockExtension
 		{
 			TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY);
 			Time startTime = timeFieldAdapter.get(c);
+			if (startTime == null)
+			{
+				return null;
+			}
 			String startTimeString = mDateFormatter.format(startTime, DateFormatContext.DASHCLOCK_VIEW);
 			return getString(R.string.dashclock_widget_title_start_expanded, c.getString(c.getColumnIndex(Tasks.TITLE)), startTimeString);
 		}
@@ -268,6 +329,13 @@ public class TasksExtension extends DashClockExtension
 		clickIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
 
 		return clickIntent;
+	}
+
+
+	private Cursor loadPinnedTaskCursor()
+	{
+		return getContentResolver().query(Instances.getContentUri(mAuthority), INSTANCE_PROJECTION, INSTANCE_PINNED_SELECTION, null,
+			Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + " DESC");
 	}
 
 

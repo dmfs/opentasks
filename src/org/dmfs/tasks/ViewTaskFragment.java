@@ -30,6 +30,7 @@ import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.notification.TaskNotificationHandler;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.ListenableScrollView;
@@ -135,6 +136,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private View mActionButton;
 	private ListenableScrollView mRootView;
 	private int mOldStatus = -1;
+	private boolean mIsPinned = false;
 	private boolean mRestored;
 
 	/**
@@ -529,6 +531,19 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 					item.setEnabled(false);
 					item.setVisible(false);
 				}
+
+				// check pinned status
+				if (TaskFieldAdapters.PINNED.get(mContentSet))
+				{
+					// we disable the edit option, because the task is completed and the action button shows the edit option.
+					MenuItem item = menu.findItem(R.id.pin_task);
+					item.setIcon(R.drawable.ic_pin_off_white_24dp);
+				}
+				else
+				{
+					MenuItem item = menu.findItem(R.id.pin_task);
+					item.setIcon(R.drawable.ic_pin_white_24dp);
+				}
 			}
 		}
 	}
@@ -571,6 +586,21 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			completeTask();
 			return true;
 		}
+		else if (itemId == R.id.pin_task)
+		{
+			if (TaskFieldAdapters.PINNED.get(mContentSet))
+			{
+				item.setIcon(R.drawable.ic_pin_white_24dp);
+				TaskNotificationHandler.unpinTask(mAppContext, mContentSet);
+			}
+			else
+			{
+				item.setIcon(R.drawable.ic_pin_off_white_24dp);
+				TaskNotificationHandler.pinTask(mAppContext, mContentSet);
+			}
+			persistTask();
+			return true;
+		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
@@ -584,6 +614,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private void completeTask()
 	{
 		TaskFieldAdapters.STATUS.set(mContentSet, Tasks.STATUS_COMPLETED);
+		TaskFieldAdapters.PINNED.set(mContentSet, false);
 		persistTask();
 		Toast.makeText(mAppContext, getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)), Toast.LENGTH_SHORT).show();
 		// at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
@@ -682,14 +713,14 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 
 			Activity activity = getActivity();
 			int newStatus = TaskFieldAdapters.STATUS.get(contentSet);
-			if (VERSION.SDK_INT >= 11 && activity != null
-				&& (mOldStatus != -1 && mOldStatus != newStatus || mOldStatus == -1 && TaskFieldAdapters.IS_CLOSED.get(mContentSet)))
+			boolean newPinned = TaskFieldAdapters.PINNED.get(contentSet);
+			if (VERSION.SDK_INT >= 11 && activity != null && (hasNewStatus(newStatus) || wasPinChanged(newPinned)))
 			{
 				// new need to update the options menu, because the status of the task has changed
 				activity.invalidateOptionsMenu();
-
 			}
 
+			mIsPinned = newPinned;
 			mOldStatus = newStatus;
 
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
@@ -724,5 +755,17 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@Override
 	public void onContentChanged(ContentSet contentSet)
 	{
+	}
+
+
+	private boolean hasNewStatus(int newStatus)
+	{
+		return (mOldStatus != -1 && mOldStatus != newStatus || mOldStatus == -1 && TaskFieldAdapters.IS_CLOSED.get(mContentSet));
+	}
+
+
+	private boolean wasPinChanged(boolean newPinned)
+	{
+		return !(mIsPinned == newPinned);
 	}
 }
