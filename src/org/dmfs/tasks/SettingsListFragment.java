@@ -138,7 +138,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		List<Account> accounts = mSources.getExistingAccounts();
 		if (mContext.getResources().getBoolean(R.bool.org_dmfs_allow_local_lists))
 		{
-			accounts.add(new Account("Local", TaskContract.LOCAL_ACCOUNT));
+			accounts.add(new Account(TaskContract.LOCAL_ACCOUNT_NAME, TaskContract.LOCAL_ACCOUNT_TYPE));
 		}
 		mAccountAdapter = new AccountAdapter(accounts);
 		setListAdapter(mAdapter);

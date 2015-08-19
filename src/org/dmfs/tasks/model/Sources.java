@@ -210,9 +210,9 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 		try
 		{
 			// add default model for LOCAL account type (i.e. the unsynced account).
-			Model defaultModel = new DefaultModel(mContext, TaskContract.LOCAL_ACCOUNT);
+			Model defaultModel = new DefaultModel(mContext, TaskContract.LOCAL_ACCOUNT_TYPE);
 			defaultModel.inflate();
-			mAccountModelMap.put(TaskContract.LOCAL_ACCOUNT, defaultModel);
+			mAccountModelMap.put(TaskContract.LOCAL_ACCOUNT_TYPE, defaultModel);
 		}
 		catch (ModelInflaterException e)
 		{
@@ -283,7 +283,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	 */
 	public Model getDefaultModel()
 	{
-		return mAccountModelMap.get(TaskContract.LOCAL_ACCOUNT);
+		return mAccountModelMap.get(TaskContract.LOCAL_ACCOUNT_TYPE);
 	}
 
 
