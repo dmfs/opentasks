@@ -81,7 +81,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	private String mListSelectionArguments;
 	private String[] mListSelectionParam;
 	private String mListCompareColumnName;
-	private boolean mSaveOnDetach;
+	private boolean mSaveOnPause;
 	private int mFragmentLayout;
 	private String mAuthority;
 
@@ -122,7 +122,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		mListSelectionArguments = args.getString(LIST_SELECTION_ARGS);
 		mListSelectionParam = args.getStringArray(LIST_STRING_PARAMS);
 		mFragmentLayout = args.getInt(LIST_FRAGMENT_LAYOUT);
-		mSaveOnDetach = args.getBoolean(LIST_ONDETACH_SAVE);
+		mSaveOnPause = args.getBoolean(LIST_ONDETACH_SAVE);
 		mListCompareColumnName = args.getString(COMPARE_COLUMN_NAME);
 		View view = inflater.inflate(mFragmentLayout, container, false);
 		return view;
@@ -245,13 +245,14 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 
 	@Override
-	public void onDetach()
+	public void onPause()
 	{
-		if (mSaveOnDetach)
+		super.onPause();
+		if (mSaveOnPause)
 		{
 			saveListState();
+			doneSaveListState();
 		}
-		super.onDetach();
 	}
 
 
