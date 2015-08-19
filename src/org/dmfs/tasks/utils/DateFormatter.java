@@ -135,23 +135,38 @@ public class DateFormatter
 		/**
 		 * The date format in notifications.
 		 */
-		NOTIFICATION_VIEW {
+		NOTIFICATION_VIEW_DATE {
 
 			@Override
 			public int getDateUtilsFlags(Time now, Time date)
 			{
-				if (date.allDay)
-				{
-					return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
-				}
-				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_TIME;
+				return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
 			}
 
 
 			@Override
 			public boolean useRelative(Time now, Time date)
 			{
-				return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+				return true;
+			}
+		},
+
+		/**
+		 * The date format in notifications.
+		 */
+		NOTIFICATION_VIEW_TIME {
+
+			@Override
+			public int getDateUtilsFlags(Time now, Time date)
+			{
+				return DateUtils.FORMAT_SHOW_TIME;
+			}
+
+
+			@Override
+			public boolean useRelative(Time now, Time date)
+			{
+				return false;
 			}
 		};
 

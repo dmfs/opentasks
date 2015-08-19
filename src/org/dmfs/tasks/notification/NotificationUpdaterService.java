@@ -28,8 +28,6 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
-import org.dmfs.tasks.utils.DateFormatter;
-import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -44,6 +42,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -66,7 +65,7 @@ import android.util.Log;
  * A {@link Service} that triggers and updates {@link Notification}s for Due and Start alarms as well as pinned tasks.
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
- *
+ * 
  */
 public class NotificationUpdaterService extends Service
 {
@@ -319,7 +318,8 @@ public class NotificationUpdaterService extends Service
 		final ContentResolver resolver = this.getContentResolver();
 		final Uri contentUri = Tasks.getContentUri(this.getString(R.string.org_dmfs_tasks_authority));
 		final Cursor cursor = resolver.query(contentUri, new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
-			Tasks.STATUS }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + " DESC");
+			Tasks.STATUS, Tasks.PRIORITY }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, "
+			+ Tasks.DUE + " DESC");
 		try
 		{
 			if (cursor.moveToFirst())
@@ -335,6 +335,7 @@ public class NotificationUpdaterService extends Service
 					contentSet.put(Tasks.DTSTART, cursor.getLong(cursor.getColumnIndex(Tasks.DTSTART)));
 					contentSet.put(Tasks.DUE, cursor.getLong(cursor.getColumnIndex(Tasks.DUE)));
 					contentSet.put(Tasks.IS_ALLDAY, cursor.getLong(cursor.getColumnIndex(Tasks.IS_ALLDAY)));
+					contentSet.put(Tasks.PRIORITY, cursor.getLong(cursor.getColumnIndex(Tasks.PRIORITY)));
 					tasksToPin.add(contentSet);
 
 				} while (cursor.moveToNext());
@@ -352,6 +353,8 @@ public class NotificationUpdaterService extends Service
 	private static Notification makePinNotification(Context context, Builder builder, ContentSet task, boolean withSound, boolean withTickerText,
 		boolean withHeadsUpNotification)
 	{
+		Resources resources = context.getResources();
+
 		// reset actions
 		builder.mActions = new ArrayList<Action>(2);
 
@@ -371,8 +374,27 @@ public class NotificationUpdaterService extends Service
 			}
 		}
 
-		// color
-		builder.setColor(context.getResources().getColor(R.color.colorPrimary));
+		// color is based on the priority of the task. If the task has no priority we use the primary color.
+		Integer priority = TaskFieldAdapters.PRIORITY.get(task);
+		if (priority != null && priority > 0)
+		{
+			if (priority < 5)
+			{
+				builder.setColor(resources.getColor(R.color.priority_red));
+			}
+			if (priority == 5)
+			{
+				builder.setColor(resources.getColor(R.color.priority_yellow));
+			}
+			if (priority > 5 && priority <= 9)
+			{
+				builder.setColor(resources.getColor(R.color.priority_green));
+			}
+		}
+		else
+		{
+			builder.setColor(resources.getColor(R.color.colorPrimary));
+		}
 
 		// description
 		String contentText = makePinNotificationContentText(context, task);
@@ -396,8 +418,8 @@ public class NotificationUpdaterService extends Service
 		builder.setContentIntent(resultPendingIntent);
 
 		// complete action
-		Integer taskStatus = TaskFieldAdapters.STATUS.get(task);
-		if (!(Tasks.STATUS_COMPLETED == taskStatus || Tasks.STATUS_CANCELLED == taskStatus))
+		Boolean closed = TaskFieldAdapters.IS_CLOSED.get(task);
+		if (closed == null || !closed)
 		{
 			Time dueTime = TaskFieldAdapters.DUE.get(task);
 			long dueTimestamp = dueTime == null ? 0 : dueTime.toMillis(true);
@@ -437,16 +459,14 @@ public class NotificationUpdaterService extends Service
 		if (start != null && start.toMillis(true) > 0 && (now.before(start) || due == null))
 		{
 			start.allDay = isAllDay;
-			String startString = context.getString(R.string.notification_task_start_date,
-				new DateFormatter(context).format(start, DateFormatContext.NOTIFICATION_VIEW));
+			String startString = context.getString(R.string.notification_task_start_date, NotificationActionUtils.formatTime(context, start));
 			return startString;
 		}
 
 		if (due != null && due.toMillis(true) > 0)
 		{
 			due.allDay = isAllDay;
-			String dueString = context.getString(R.string.notification_task_due_date,
-				new DateFormatter(context).format(due, DateFormatContext.NOTIFICATION_VIEW));
+			String dueString = context.getString(R.string.notification_task_due_date, NotificationActionUtils.formatTime(context, due));
 			return dueString;
 		}
 

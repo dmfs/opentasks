@@ -47,7 +47,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 import android.text.format.Time;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -244,7 +243,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			i.setData(taskUri);
 
 			row.setOnClickFillInIntent(R.id.widget_list_item, i);
-			Log.d(TAG, "new row: " + taskTitle);
 			return (row);
 		}
 

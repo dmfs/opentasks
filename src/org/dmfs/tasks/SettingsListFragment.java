@@ -138,7 +138,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		List<Account> accounts = mSources.getExistingAccounts();
 		if (mContext.getResources().getBoolean(R.bool.org_dmfs_allow_local_lists))
 		{
-			accounts.add(new Account("Local", TaskContract.LOCAL_ACCOUNT));
+			accounts.add(new Account(TaskContract.LOCAL_ACCOUNT_NAME, TaskContract.LOCAL_ACCOUNT_TYPE));
 		}
 		mAccountAdapter = new AccountAdapter(accounts);
 		setListAdapter(mAdapter);
@@ -435,7 +435,8 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 			Cursor cursor = (Cursor) getItem((Integer) v.getTag());
 			if (cursor != null)
 			{
-				onEditListClick(new Account(cursor.getString(accountNameColumn), cursor.getString(accountTypeColumn)), cursor.getLong(mRowIDColumn));
+				onEditListClick(new Account(cursor.getString(accountNameColumn), cursor.getString(accountTypeColumn)), cursor.getLong(mRowIDColumn),
+					cursor.getString(listNameColumn), cursor.getInt(listColorColumn));
 			}
 		}
 
@@ -445,12 +446,16 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 	/**
 	 * Is called, when the user click on the settings icon of a list item. This calls the assigned component to edit the list.
 	 * 
-	 * @param uri
-	 *            The uri of a certain task list. Ensure the database id of the task list is appended.
-	 * @param accountType
-	 *            The account type of the task list holder.
+	 * @param account
+	 *            The account of the list.
+	 * @param listId
+	 *            The id of the list.
+	 * @param name
+	 *            The name of the list.
+	 * @param color
+	 *            The color of the list.
 	 */
-	private void onEditListClick(Account account, long listId)
+	private void onEditListClick(Account account, long listId, String name, Integer color)
 	{
 		Model model = mSources.getModel(account.type);
 
@@ -461,7 +466,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 		try
 		{
-			model.startEditIntent(getActivity(), account, listId);
+			model.startEditIntent(getActivity(), account, listId, name, color);
 		}
 		catch (ActivityNotFoundException e)
 		{

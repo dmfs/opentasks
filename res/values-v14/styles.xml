@@ -6,6 +6,7 @@
         <item name="android:actionBarWidgetTheme">@style/actionBarWidgetTheme</item>
         <item name="android:actionBarItemBackground">@drawable/selectable_background_white</item>
         <item name="searchViewStyle">@style/WhiteSearchViewStyle</item>
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
     </style>
 
     <!-- ActionBar styles -->
@@ -14,6 +15,10 @@
         <item name="displayOptions">showTitle</item>
         <item name="icon">@android:color/transparent</item>
         <item name="actionBarItemBackground">@drawable/selectable_background_white</item>
+
+    </style>
+     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textCursorDrawable">@drawable/text_cursor_white</item>
     </style>
 
     <!-- ActionBar styles -->

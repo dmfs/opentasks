@@ -253,7 +253,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		mCallbacks = (Callbacks) activity;
 
 		// load accounts early
-		Sources.loadModelAsync(activity, TaskContract.LOCAL_ACCOUNT, this);
+		Sources.loadModelAsync(activity, TaskContract.LOCAL_ACCOUNT_TYPE, this);
 	}
 
 

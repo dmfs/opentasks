@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Manifest stuff -->
-    <string name="app_name">Aufgaben</string>
+    <string name="app_name">OpenTasks</string>
     <string name="permission_read_tasks">Aufgaben lesen</string>
     <string name="permission_description_read_tasks">Erlaubt einer App Aufgaben zu lesen.</string>
     <string name="permission_write_tasks">Aufgaben schreiben</string>
@@ -41,6 +41,8 @@
     <string name="activity_task_details_delete_task">Aufgabe löschen</string>
     <string name="activity_task_details_complete">Erledigt</string>
     <string name="activity_task_details_complete_task">Aufgabe erledigt</string>
+    <string name="activity_task_details_pin">Anheften</string>
+    <string name="activity_task_details_pin_task">Aufgabe anheften</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Bearbeiten</string>
@@ -213,6 +215,8 @@
     <string name="notification_action_delay_1d">+1 Tag</string>
     <string name="notification_action_delay_toast">Fälligkeitsdatum aktualisiert</string>
     <string name="notification_undo">Rückgänging</string>
+    <string name="notification_action_unpin">Abheften</string>
+    <string name="notification_task_pin_ticker">%1$s angeheftet</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 Stunde</string>
@@ -231,6 +235,8 @@
     <string name="dashclock_display_type_due">Fällige Aufgaben</string>
     <string name="dashclock_display_type_start">Startende Aufgaben</string>
     <string name="dashclock_display_type_start_and_due">Startende und fällige Aufgaben</string>
+    <string name="dashclock_display_type_all">Alle</string>
+    <string name="dashclock_display_type_pinned">Angeheftete Aufgaben</string>
     <string name="dashclock_preference_title">DashClock Aufgaben Einstellungen</string>
 
     <!-- General -->

@@ -15,8 +15,7 @@
         android:icon="@drawable/ic_pin_off_white_24dp"
         android:title="@string/activity_task_details_pin_task"
         android:titleCondensed="@string/activity_task_details_pin"
-        android:visible="false"
-        app:showAsAction="ifRoom">
+        app:showAsAction="always">
     </item>
     <item
         android:id="@+id/delete_task"
