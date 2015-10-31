@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Manifest stuff -->
-    <string name="app_name">OpenTasks</string>
+    <string name="app_name">Отворени задаци</string>
     <string name="permission_read_tasks">читање задатака</string>
     <string name="permission_description_read_tasks">Дозвољава апликацији да чита задатке са ваше листе задатака.</string>
     <string name="permission_write_tasks">упис задатака</string>
@@ -42,6 +42,8 @@
     <string name="activity_task_details_delete_task">Обриши</string>
     <string name="activity_task_details_complete">Заврши</string>
     <string name="activity_task_details_complete_task">Заврши задатак</string>
+    <string name="activity_task_details_pin">Закачи</string>
+    <string name="activity_task_details_pin_task">Закачи задатак</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Уређивање</string>
@@ -142,9 +144,33 @@
 
     <string name="title_activity_settings">Поставке</string>
     <string name="action_settings">Поставке</string>
+    <string name="action_add_local_list">Додај листу</string>
     <string name="visible_task_lists">Приказане листе</string>
     <string name="enable_alarms">Обавештења</string>
     <string name="synced_task_lists">Синхронизоване листе</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Изаберите налог</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">сачувај</string>
+    <string name="activity_manage_list_btn_delete">обриши листу</string>
+    <string name="activity_add_list_title">Направи локалну листу</string>
+    <string name="activity_edit_list_title">Поставке листе</string>
+    <string name="task_list_name_caption">Назив</string>
+    <string name="task_list_no_sync">Напомена: ово прави локалну листу. Задаци на локалној листи се не синхронизују.</string>
+    <string name="task_list_color_caption">Боја листе</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">назив листе</string>
+    <string name="task_list_name_dialog_title">Унос назива листе</string>
+    <string name="task_list_name_dialog_error">Унесите назив.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Брисање %s</string>
+    <string name="task_list_delete_dialog_message">Обрисати листу и све задатке на њој?\nНапомена: обрисана листа не може бити враћена.</string>
+    <string name="task_list_delete_toast">Листа %s обрисана</string>
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">По датуму истека</string>
@@ -190,6 +216,8 @@
     <string name="notification_action_delay_1d">+1 дан</string>
     <string name="notification_action_delay_toast">Рок ажуриран</string>
     <string name="notification_undo">Врати</string>
+    <string name="notification_action_unpin">откачи</string>
+    <string name="notification_task_pin_ticker">%1$s је закачен</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 сат</string>
@@ -209,6 +237,8 @@
     <string name="dashclock_display_type_start">задаци који почињу</string>
     <string name="dashclock_display_type_start_and_due">сви задаци</string>
     <string name="dashclock_preference_title">Поставке за DashClock Задаци</string>
+    <string name="dashclock_display_type_pinned">закачени задаци</string>
+    <string name="dashclock_preference_title">Поставке за Дешклок прикључак</string>
 
     <!-- General -->
     <string name="accept">Прихвати</string>
