@@ -128,7 +128,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 			mResources = context.getResources();
 			mDueDateFormatter = new DateFormatter(context);
 			new TimeChangeObserver(context, this);
-			mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
+			mAuthority = TaskContract.taskAuthority(context);
 		}
 
 

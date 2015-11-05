@@ -17,8 +17,6 @@
 
 package org.dmfs.tasks.model.contraints;
 
-import java.util.TimeZone;
-
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 

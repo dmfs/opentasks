@@ -28,6 +28,7 @@
     <string name="task_group_title_progress">Aufgaben Fortschritt</string>
     <string name="task_group_title_default">Aufgaben</string>
     <string name="quick_add_task_created">Aufgabe erstellt</string>
+    <string name="initial_local_task_list_name">Meine Aufgaben</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d Aufgabe</item>

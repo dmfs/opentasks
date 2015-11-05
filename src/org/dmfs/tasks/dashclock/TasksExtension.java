@@ -85,7 +85,7 @@ public class TasksExtension extends DashClockExtension
 	protected void onInitialize(boolean isReconnect)
 	{
 		// enable automatic dashclock updates on task changes
-		addWatchContentUris(new String[] { TaskContract.getContentUri(getString(R.string.org_dmfs_tasks_authority)).toString() });
+		addWatchContentUris(new String[] { TaskContract.getContentUri(TaskContract.taskAuthority(this)).toString() });
 		super.onInitialize(isReconnect);
 
 		mDateFormatter = new DateFormatter(this);
@@ -96,7 +96,7 @@ public class TasksExtension extends DashClockExtension
 	protected void onUpdateData(int reason)
 	{
 		mNow = System.currentTimeMillis();
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(this);
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		mDisplayMode = Integer.valueOf(sharedPref.getString(DashClockPreferenceActivity.KEY_PREF_DISPLAY_MODE, "1"));
 		publishRecentTaskUpdate();

@@ -203,7 +203,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(activity);
 		Bundle bundle = getArguments();
 
 		// check for supplied task information from intent

@@ -28,6 +28,7 @@
     <string name="task_group_title_progress">Task progress</string>
     <string name="task_group_title_default">Tasks</string>
     <string name="quick_add_task_created">Task created</string>
+    <string name="initial_local_task_list_name">My tasks</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d task</item>

@@ -98,7 +98,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	@SuppressWarnings("deprecation")
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
-		String authority = context.getString(R.string.org_dmfs_tasks_authority);
+		String authority = TaskContract.taskAuthority(context);
 
 		if (android.os.Build.VERSION.SDK_INT < 11)
 		{

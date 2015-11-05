@@ -19,6 +19,7 @@ package org.dmfs.tasks;
 
 import java.util.TimeZone;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.ActionBarActivity;
@@ -60,7 +61,7 @@ public class EditTaskActivity extends ActionBarActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_task_editor);
 
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(this);
 
 		if (android.os.Build.VERSION.SDK_INT >= 11)
 		{

@@ -82,7 +82,7 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
 	{
 		super.onAttach(activity);
 		mActivity = activity;
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(activity);
 	}
 
 

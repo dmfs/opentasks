@@ -17,6 +17,7 @@
 
 package org.dmfs.tasks.groupings;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.QuickAddDialogFragment;
@@ -262,7 +263,7 @@ public class ByPriority extends AbstractGroupingFactory
 				Integer tag = (Integer) v.getTag();
 				if (tag != null)
 				{
-					ContentSet content = new ContentSet(Tasks.getContentUri(v.getContext().getString(R.string.org_dmfs_tasks_authority)));
+					ContentSet content = new ContentSet(Tasks.getContentUri(TaskContract.taskAuthority(v.getContext())));
 					TaskFieldAdapters.PRIORITY.set(content, tag);
 					QuickAddDialogFragment.newInstance(content).show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), null);
 				}

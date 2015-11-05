@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.tasks.R;
 import org.dmfs.tasks.utils.AsyncModelLoader;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 
@@ -124,7 +123,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	{
 		mContext = context.getApplicationContext();
 
-		mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(context);
 
 		// register to receive package changes
 		IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);

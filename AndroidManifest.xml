@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="91"
-    android:versionName="1.1.7" >
+    android:versionCode="92"
+    android:versionName="1.1.8-pre1" >
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="22" />
 
     <permission
         android:name="org.dmfs.permission.READ_TASKS"
@@ -63,8 +63,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
         </activity>
 
@@ -85,8 +85,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
 
             <!-- Voice command "note to self" in google search -->
@@ -111,23 +111,23 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
+                <data android:mimeType="@string/opentasks_mimetype_task_dir" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title" >
                 <action android:name="android.intent.action.INSERT_OR_EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks" />
+                <data android:mimeType="@string/opentasks_mimetype_task_dir" />
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
         </activity>
 
         <provider
             android:name="org.dmfs.provider.tasks.TaskProvider"
-            android:authorities="@string/org_dmfs_tasks_authority"
+            android:authorities="@string/opentasks_authority"
             android:exported="true"
             android:label="@string/provider_label"
             android:multiprocess="false"
@@ -169,15 +169,15 @@
                 <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
+                    android:host="@string/opentasks_authority"
                     android:scheme="content" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_START" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
 
             <meta-data
@@ -197,15 +197,15 @@
                 <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
+                    android:host="@string/opentasks_authority"
                     android:scheme="content" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_START" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
 
             <meta-data
@@ -242,30 +242,22 @@
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
-        <receiver android:name="org.dmfs.provider.tasks.broadcast.AccountsChangeBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="android.accounts.LOGIN_ACCOUNTS_CHANGED" />
 
-                <!-- This broadcast receiver should run on boot to clean up all accounts that may have been removed in safe mode. -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-            </intent-filter>
-        </receiver>
         <!-- custom alarm receivers -->
         <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver" >
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_DUE" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_START" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
         </receiver>
 
@@ -321,8 +313,8 @@
                 <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL" />
 
                 <data
-                    android:host="org.dmfs.tasks"
-                    android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasklists"
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_tasklist_dir"
                     android:scheme="content" />
             </intent-filter>
             <intent-filter>
@@ -332,8 +324,8 @@
                 <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL" />
 
                 <data
-                    android:host="org.dmfs.tasks"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasklists"
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item"
                     android:scheme="content" />
             </intent-filter>
         </activity>
@@ -346,7 +338,7 @@
                 <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
+                    android:host="@string/opentasks_authority"
                     android:scheme="content" />
             </intent-filter>
             <intent-filter>
@@ -372,13 +364,26 @@
                 <action android:name="org.dmfs.tasks.action.notification.DELAY_1D" />
 
                 <data
-                    android:host="@string/org_dmfs_tasks_authority"
-                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="@string/opentasks_mimetype_task_item" />
             </intent-filter>
             <intent-filter>
                 <action android:name="org.dmfs.tasks.action.notification.UNDO" />
                 <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
                 <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="org.dmfs.tasks.utils.DatabaseInitializedReceiver"
+            android:enabled="@bool/opentasks_support_local_lists"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.DATABASE_INITIALIZED" />
+
+                <data
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="vnd.android.cursor.dir/vnd.org.dmfs.authority.mimetype"
+                    android:scheme="content" />
             </intent-filter>
         </receiver>
 

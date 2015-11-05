@@ -20,6 +20,7 @@ package org.dmfs.tasks;
 import java.io.IOException;
 
 import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
 import org.dmfs.tasks.groupings.ByDueDate;
@@ -35,8 +36,6 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.xmlpull.v1.XmlPullParserException;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -63,6 +62,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.astuetz.PagerSlidingTabStrip;
 
 
 /**
@@ -191,7 +192,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 		setContentView(R.layout.activity_task_list);
 
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(this);
 		mSearchHistoryHelper = new SearchHistoryHelper(this);
 
 		if (findViewById(R.id.task_detail_container) != null)

@@ -246,7 +246,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		mSaveAndNextButton.setOnClickListener(this);
 		view.findViewById(android.R.id.edit).setOnClickListener(this);
 
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(getActivity());
 
 		afterTextChanged(mEditText.getEditableText());
 

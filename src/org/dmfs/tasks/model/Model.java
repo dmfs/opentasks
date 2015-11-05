@@ -20,9 +20,9 @@ package org.dmfs.tasks.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.ManageListActivity;
-import org.dmfs.tasks.R;
 
 import android.accounts.Account;
 import android.app.Activity;
@@ -70,7 +70,7 @@ public abstract class Model
 	{
 		mContext = context;
 		mAccountType = accountType;
-		mAuthority = context.getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(context);
 	}
 
 

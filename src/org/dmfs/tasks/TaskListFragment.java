@@ -240,7 +240,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public void onAttach(Activity activity)
 	{
 		super.onAttach(activity);
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(activity);
 
 		mAppContext = activity.getBaseContext();
 

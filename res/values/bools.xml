@@ -3,6 +3,6 @@
 
     <!-- disable the org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService$TaskListViewsFactory receiver in Android 2.x -->
     <bool name="enable_widget_provider">false</bool>
-    <bool name="has_two_panes">false</bool>  
+    <bool name="has_two_panes">false</bool>
 
 </resources>

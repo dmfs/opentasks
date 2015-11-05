@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
 import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
@@ -119,7 +120,7 @@ public class NotificationUpdaterService extends Service
 	@Override
 	public void onCreate()
 	{
-		mAuthority = getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(this);
 		super.onCreate();
 	}
 
@@ -316,7 +317,7 @@ public class NotificationUpdaterService extends Service
 		ArrayList<ContentSet> tasksToPin = new ArrayList<ContentSet>(20);
 
 		final ContentResolver resolver = this.getContentResolver();
-		final Uri contentUri = Tasks.getContentUri(this.getString(R.string.org_dmfs_tasks_authority));
+		final Uri contentUri = Tasks.getContentUri(TaskContract.taskAuthority(this));
 		final Cursor cursor = resolver.query(contentUri, new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
 			Tasks.STATUS, Tasks.PRIORITY }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, "
 			+ Tasks.DUE + " DESC");

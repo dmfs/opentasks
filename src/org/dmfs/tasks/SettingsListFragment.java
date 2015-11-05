@@ -136,7 +136,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		getLoaderManager().restartLoader(-2, null, this);
 		mAdapter = new VisibleListAdapter(mContext, null, 0);
 		List<Account> accounts = mSources.getExistingAccounts();
-		if (mContext.getResources().getBoolean(R.bool.org_dmfs_allow_local_lists))
+		if (mContext.getResources().getBoolean(R.bool.opentasks_support_local_lists))
 		{
 			accounts.add(new Account(TaskContract.LOCAL_ACCOUNT_NAME, TaskContract.LOCAL_ACCOUNT_TYPE));
 		}
@@ -240,7 +240,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 		super.onAttach(activity);
 		mSources = Sources.getInstance(activity);
 		mContext = activity.getBaseContext();
-		mAuthority = getActivity().getString(R.string.org_dmfs_tasks_authority);
+		mAuthority = TaskContract.taskAuthority(activity);
 	}
 
 
