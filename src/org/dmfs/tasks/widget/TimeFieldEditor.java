@@ -431,7 +431,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 		// The datepicker on Samsung Android 5.0 devices crashes for certain languages, e.g. french and polish
 		// We fall back to the holo datepicker in this case. German and English are confirmed to work.
 		if (Build.VERSION.SDK_INT == VERSION_CODES.LOLLIPOP && Build.MANUFACTURER.equalsIgnoreCase("samsung")
-			&& !(Locale.getDefault().getLanguage().toString().equals("de") || Locale.getDefault().getLanguage().toString().equals("en")))
+			&& !("en".equals(Locale.getDefault().getLanguage().toString())))
 		{
 			// get holo picker
 			DatePickerDialog dialog = new DatePickerDialog(getContext(), R.style.DatePickerHolo, TimeFieldEditor.this, mDateTime.year, mDateTime.month,
