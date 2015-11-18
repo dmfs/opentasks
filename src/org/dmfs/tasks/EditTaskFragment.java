@@ -44,7 +44,6 @@ import org.dmfs.tasks.widget.TaskEdit;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -294,14 +293,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 					mListColor = TaskFieldAdapters.LIST_COLOR.get(mValues);
 					// update the color of the action bar as soon as possible
 					updateColor(0);
-					setListUri(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), mValues.getAsLong(Tasks.LIST_ID)), null);
-				}
-				// disable spinner
-				mListSpinner.setEnabled(false);
-				// hide spinner background
-				if (android.os.Build.VERSION.SDK_INT >= 16)
-				{
-					mListSpinner.setBackground(null);
+					setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
 				}
 			}
 		}
@@ -487,6 +479,10 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 		mTaskListAdapter.changeCursor(cursor);
 		if (cursor != null)
 		{
+			if (mAppForEdit)
+			{
+				mSelectedList = mValues.getAsLong(Tasks.LIST_ID);
+			}
 			// set the list that was used the last time the user created an event
 			if (mSelectedList != -1)
 			{
@@ -550,9 +546,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			/*
 			 * Don't start the model loader here, let onItemSelected do that.
 			 */
-			setListUri(
-				mAppForEdit ? ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), contentSet.getAsLong(Tasks.LIST_ID))
-					: TaskLists.getContentUri(mAuthority), mAppForEdit ? LIST_LOADER_VISIBLE_LISTS_FILTER : null);
+			setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
 		}
 
 	}
@@ -592,13 +586,10 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 			mEditor.updateValues();
 		}
 
-		if (!mAppForEdit)
-		{
-			long listId = c.getLong(TASK_LIST_PROJECTION_VALUES.id);
-			mValues.put(Tasks.LIST_ID, listId);
-			mSelectedList = itemId;
-			mLastAccountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
-		}
+		long listId = c.getLong(TASK_LIST_PROJECTION_VALUES.id);
+		mValues.put(Tasks.LIST_ID, listId);
+		mSelectedList = itemId;
+		mLastAccountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
 
 		if (mModel == null || !mModel.getAccountType().equals(accountType))
 		{
