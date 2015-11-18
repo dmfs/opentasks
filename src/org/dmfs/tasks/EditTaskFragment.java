@@ -41,6 +41,7 @@ import org.dmfs.tasks.widget.ListenableScrollView;
 import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskEdit;
 
+import android.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -752,7 +753,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 				{
 					// we have a description, use it to make up a title
 					int eol = description.indexOf('\n');
-					TaskFieldAdapters.TITLE.set(mValues, description.substring(0, eol));
+					TaskFieldAdapters.TITLE.set(mValues, description.substring(0, eol > 0 ? eol : Math.min(description.length(), 100)));
 				}
 				else
 				{
