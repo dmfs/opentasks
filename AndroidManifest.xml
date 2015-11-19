@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dmfs.tasks"
-    android:versionCode="92"
+    android:versionCode="99"
     android:versionName="1.1.8-pre1" >
 
     <uses-sdk
@@ -325,7 +325,7 @@
 
                 <data
                     android:host="@string/opentasks_authority"
-                    android:mimeType="@string/opentasks_mimetype_task_item"
+                    android:mimeType="@string/opentasks_mimetype_tasklist_item"
                     android:scheme="content" />
             </intent-filter>
         </activity>
