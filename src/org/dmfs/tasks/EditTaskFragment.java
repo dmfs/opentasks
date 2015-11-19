@@ -41,7 +41,6 @@ import org.dmfs.tasks.widget.ListenableScrollView;
 import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskEdit;
 
-import android.R;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
