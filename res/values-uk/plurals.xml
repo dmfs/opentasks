@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="number_of_tasks">
+        <!-- last number 1 -->
+        <item quantity="one">%d завдання</item>
+        <!-- last number 2-4 -->
+        <item quantity="few">%d завдання</item>
+        <!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
+        <item quantity="many">%d завдань</item>
+        <item quantity="other">%d завдання</item>
+    </plurals>
+</resources>
