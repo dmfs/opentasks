@@ -18,16 +18,19 @@
 package org.dmfs.tasks.widget;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
 
 /**
  * Just a {@link ScrollView} that can notify a listener when the user scrolls.
+ * <p />
+ * TODO: get rid of it once the editor is refactored.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class ListenableScrollView extends ScrollView
+public class ListenableScrollView extends NestedScrollView
 {
 
 	public interface OnScrollListener

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="primaryColor" format="color" />
-    <attr name="primaryColorShaded" format="color" />
     <attr name="shapeColor" format="color" />
     <attr name="backgroundShape" format="reference" />
 

@@ -501,8 +501,8 @@ public class XmlModel extends Model
 		 * Add definitions for all supported fields:
 		 */
 
-		FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.id.task_field_title, R.string.task_title, R.layout.text_field_view,
-			R.layout.text_field_editor, R.drawable.ic_detail_description).addEditLayoutOption(LayoutDescriptor.OPTION_MULTILINE, false));
+		FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.id.task_field_title, R.string.task_title, -1, R.layout.text_field_editor,
+			R.drawable.ic_detail_description).addEditLayoutOption(LayoutDescriptor.OPTION_MULTILINE, false));
 		FIELD_INFLATER_MAP.put("location", new FieldInflater(TaskFieldAdapters.LOCATION, R.id.task_field_location, R.string.task_location,
 			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location).addDetailsLayoutOption(LayoutDescriptor.OPTION_LINKIFY, 0));
 		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.id.task_field_description, R.string.task_description,
@@ -512,8 +512,8 @@ public class XmlModel extends Model
 
 		FIELD_INFLATER_MAP.put("dtstart", new FieldInflater(TaskFieldAdapters.DTSTART, R.id.task_field_dtstart, R.string.task_start, R.layout.time_field_view,
 			R.layout.time_field_editor, R.drawable.ic_detail_start));
-		FIELD_INFLATER_MAP.put("due", new FieldInflater(TaskFieldAdapters.DUE, R.id.task_field_due, R.string.task_due, R.layout.time_field_view,
-			R.layout.time_field_editor, R.drawable.ic_detail_due).addDetailsLayoutOption(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true));
+		FIELD_INFLATER_MAP.put("due", new FieldInflater(TaskFieldAdapters.DUE, R.id.task_field_due, R.string.task_due, -1, R.layout.time_field_editor,
+			R.drawable.ic_detail_due).addDetailsLayoutOption(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, true));
 		FIELD_INFLATER_MAP.put("completed", new FieldInflater(TaskFieldAdapters.COMPLETED, R.id.task_field_completed, R.string.task_completed,
 			R.layout.time_field_view, R.layout.time_field_editor, R.drawable.ic_detail_completed));
 

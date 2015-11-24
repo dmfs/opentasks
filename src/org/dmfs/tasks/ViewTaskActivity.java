@@ -18,13 +18,19 @@
 package org.dmfs.tasks;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.utils.ActionBarActivity;
+import org.dmfs.tasks.utils.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 
 /**
@@ -34,10 +40,9 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing more than a {@link ViewTaskFragment}.
  * </p>
  */
-public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragment.Callback
+public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragment.Callback
 {
 
-	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -58,11 +63,6 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 			return;
 		}
 
-		if (android.os.Build.VERSION.SDK_INT >= 11)
-		{
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		}
-
 		if (savedInstanceState == null)
 		{
 			ViewTaskFragment fragment = ViewTaskFragment.newInstance(getIntent().getData());
@@ -71,16 +71,23 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 	}
 
 
-	// @Override
-	// public void onAttachFragment(Fragment fragment)
-	// {
-	// if (fragment instanceof ViewTaskFragment)
-	// {
-	// ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
-	// // detailFragment.loadUri(getIntent().getData());
-	// }
-	// }
-	//
+	@Override
+	public void onAttachFragment(Fragment fragment)
+	{
+		if (fragment instanceof ViewTaskFragment)
+		{
+			final ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
+			new Handler().post(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					detailFragment.setupToolbarAsActionbar(ViewTaskActivity.this);
+				}
+			});
+		}
+	}
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
@@ -122,10 +129,27 @@ public class ViewTaskActivity extends ActionBarActivity implements ViewTaskFragm
 	}
 
 
+	private int darkenColor(int color)
+	{
+		float[] hsv = new float[3];
+		Color.colorToHSV(color, hsv);
+		hsv[2] = hsv[2] * 0.75f;
+		color = Color.HSVToColor(hsv);
+		return color;
+	}
+
+
+	@SuppressLint("NewApi")
 	@Override
 	public void updateColor(int color)
 	{
-		// nothing to do here
+
+		if (VERSION.SDK_INT >= 21)
+		{
+			Window window = getWindow();
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			window.setStatusBarColor(darkenColor(color));
+		}
 	}
 
 }

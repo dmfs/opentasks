@@ -1,16 +1,31 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="OpenTasksAppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="searchViewStyle">@style/WhiteSearchViewStyle</item>
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
+    </style>
+
+    <style name="OpenTasksAppTheme" parent="OpenTasksAppBaseTheme">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowTitleStyle">@style/window_title_style</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="AppBaseTheme" parent="@style/Theme.AppCompat"></style>
 
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:textColor">#FF333333</item>
-        <item name="primaryColor">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="android:windowTitleStyle">@style/window_title_style</item>
     </style>
 
     <style name="AppThemeDialog" parent="@style/Theme.AppCompat.Light.Dialog">
         <item name="android:textColor">#FF333333</item>
-        <item name="primaryColor">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primary</item>
         <!-- <item name="android:background">@color/background_material_light</item> -->
         <!-- <item name="android:windowTitleStyle">@style/window_dialog_title_style</item> -->
     </style>

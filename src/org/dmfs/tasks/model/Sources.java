@@ -255,6 +255,21 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
 	}
 
 
+	public Model getMinimalModel(String accountType)
+	{
+		Model result = new MinimalModel(mContext, accountType);
+		try
+		{
+			result.inflate();
+		}
+		catch (ModelInflaterException e)
+		{
+			throw new RuntimeException("can't inflate mimimal model", e);
+		}
+		return result;
+	}
+
+
 	/**
 	 * Return all accounts that support the task authority.
 	 * 

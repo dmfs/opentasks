@@ -28,12 +28,9 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-
-import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
 
 
 /**
@@ -43,13 +40,12 @@ import com.astuetz.PagerSlidingTabStrip.IconTabProvider;
  * @author Marten Gajda <marten@dmfs.org>
  */
 
-public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements IconTabProvider
+public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 {
 
 	@SuppressWarnings("unused")
 	private static final String TAG = "TaskGroupPager";
 	private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
-	private final Context mContext;
 	private boolean mTwoPaneLayout;
 	private final TabConfig mTabConfig;
 
@@ -74,7 +70,6 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 		IOException, XmlObjectPullParserException
 	{
 		super(fm);
-		mContext = context;
 
 		mTabConfig = TabConfig.load(context, tabRes);
 
@@ -88,7 +83,8 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	@Override
 	public CharSequence getPageTitle(int position)
 	{
-		return mContext.getString(mTabConfig.getVisibleItem(position).getTitleId());
+		// we don't want to show any title
+		return null;
 	}
 
 
@@ -166,15 +162,9 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter implements 
 	}
 
 
-	@Override
-	public int getPageIconResId(int position)
+	public int getTabIcon(int position)
 	{
 		return mTabConfig.getVisibleItem(position).getIcon();
 	}
 
-
-	public Drawable getPageIconDrawable(int position)
-	{
-		return null;
-	}
 }

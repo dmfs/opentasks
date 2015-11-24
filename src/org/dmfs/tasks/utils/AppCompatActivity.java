@@ -31,7 +31,7 @@ import android.os.Bundle;
  * @author Tobias Reinsch <tobias@dmfs.org>
  * 
  */
-public class ActionBarActivity extends android.support.v7.app.ActionBarActivity
+public class AppCompatActivity extends android.support.v7.app.AppCompatActivity
 {
 	private SharedPreferences mPrefs;
 

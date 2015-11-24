@@ -57,6 +57,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -71,7 +72,6 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 /**
@@ -272,6 +272,12 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
 		mExpandableListView = (RetainExpandableListView) rootView.findViewById(android.R.id.list);
 
+		if (!mTwoPaneLayout)
+		{
+			// Add a footer to make sure the floating action button doesn't hide anything.
+			mExpandableListView.addFooterView(inflater.inflate(R.layout.task_list_group, mExpandableListView, false));
+		}
+
 		if (mGroupDescriptor == null)
 		{
 			loadGroupDescriptor();
@@ -389,12 +395,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		int itemId = item.getItemId();
-		if (itemId == R.id.menu_add_task)
-		{
-			mCallbacks.onAddNewTask();
-			return true;
-		}
-		else if (itemId == R.id.menu_show_completed)
+		if (itemId == R.id.menu_show_completed)
 		{
 
 			mSavedCompletedFilter = !mSavedCompletedFilter;
@@ -606,7 +607,7 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				{
 					// TODO: remove the task in a background task
 					mAppContext.getContentResolver().delete(taskUri, null, null);
-					Toast.makeText(mAppContext, getString(R.string.toast_task_deleted, taskTitle), Toast.LENGTH_SHORT).show();
+					Snackbar.make(mExpandableListView, getString(R.string.toast_task_deleted, taskTitle), Snackbar.LENGTH_SHORT).show();
 				}
 			}).setMessage(getString(R.string.confirm_delete_message_with_title, taskTitle)).create().show();
 	}
@@ -885,11 +886,11 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		{
 			if (completedValue)
 			{
-				Toast.makeText(mAppContext, getString(R.string.toast_task_completed, taskTitle), Toast.LENGTH_SHORT).show();
+				Snackbar.make(mExpandableListView, getString(R.string.toast_task_completed, taskTitle), Snackbar.LENGTH_SHORT).show();
 			}
 			else
 			{
-				Toast.makeText(mAppContext, getString(R.string.toast_task_uncompleted, taskTitle), Toast.LENGTH_SHORT).show();
+				Snackbar.make(mExpandableListView, getString(R.string.toast_task_uncompleted, taskTitle), Snackbar.LENGTH_SHORT).show();
 			}
 		}
 		return completed;

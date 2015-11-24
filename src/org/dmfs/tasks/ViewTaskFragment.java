@@ -33,8 +33,6 @@ import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.TaskNotificationHandler;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
-import org.dmfs.tasks.widget.ListenableScrollView;
-import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import android.annotation.SuppressLint;
@@ -44,15 +42,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -60,10 +65,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.view.animation.AlphaAnimation;
+import android.widget.TextView;
 
 
 /**
@@ -73,19 +76,10 @@ import android.widget.Toast;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class ViewTaskFragment extends SupportFragment implements OnModelLoadedListener, OnContentChangeListener
+public class ViewTaskFragment extends SupportFragment implements OnModelLoadedListener, OnContentChangeListener, OnMenuItemClickListener,
+	OnOffsetChangedListener
 {
 	private final static String ARG_URI = "uri";
-
-	/**
-	 * Edit action assigned to the floating action button.
-	 */
-	private final static int ACTION_EDIT = 1;
-
-	/**
-	 * Complete action assigned to the floating action button.
-	 */
-	private final static int ACTION_COMPLETE = 2;
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -97,6 +91,9 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	 * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.
 	 */
 	private static final ContentValueMapper CONTENT_VALUE_MAPPER = EditTaskFragment.CONTENT_VALUE_MAPPER;
+
+	private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
+	private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
 	/**
 	 * The {@link Uri} of the current task in the view.
@@ -131,23 +128,23 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	 */
 	private TaskView mDetailView;
 
-	private View mColorBar;
 	private int mListColor;
-	private View mActionButton;
-	private ListenableScrollView mRootView;
 	private int mOldStatus = -1;
-	private boolean mIsPinned = false;
+	private boolean mPinned = false;
 	private boolean mRestored;
+	private AppBarLayout mAppBar;
+	private Toolbar mToolBar;
 
-	/**
-	 * The current action that's assigned to the floating action button.
-	 */
-	private int mActionButtonAction = ACTION_COMPLETE;
+	private FloatingActionButton mFloatingActionButton;
 
 	/**
 	 * A {@link Callback} to the activity.
 	 */
 	private Callback mCallback;
+
+	private boolean mShowFloatingActionButton = false;
+
+	private boolean mIsTheTitleContainerVisible = true;
 
 	/**
 	 * A Runnable that updates the view.
@@ -270,9 +267,29 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		ListenableScrollView rootView = mRootView = (ListenableScrollView) inflater.inflate(R.layout.fragment_task_view_detail, container, false);
+		mShowFloatingActionButton = getResources().getBoolean(R.bool.opentasks_enabled_detail_view_fab);
+
+		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
 		mContent = (ViewGroup) rootView.findViewById(R.id.content);
-		mColorBar = rootView.findViewById(R.id.headercolorbar);
+		mAppBar = (AppBarLayout) rootView.findViewById(R.id.appbar);
+		mToolBar = (Toolbar) rootView.findViewById(R.id.toolbar);
+		mToolBar.setOnMenuItemClickListener(this);
+		mToolBar.setTitle("");
+		mAppBar.addOnOffsetChangedListener(this);
+
+		animate(mToolBar.findViewById(R.id.toolbar_title), 0, View.INVISIBLE);
+
+		mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.floating_action_button);
+		showFloatingActionButton(false);
+		mFloatingActionButton.setOnClickListener(new View.OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v)
+			{
+				completeTask();
+			}
+		});
 
 		mRestored = savedInstanceState != null;
 
@@ -298,25 +315,6 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			loadUri(uri);
 		}
 
-		if (VERSION.SDK_INT >= 11 && mColorBar != null)
-		{
-			updateColor(0);
-			mRootView.setOnScrollListener(new OnScrollListener()
-			{
-
-				@SuppressLint("NewApi")
-				@Override
-				public void onScroll(int oldScrollY, int newScrollY)
-				{
-					int headerHeight = ((ActionBarActivity) getActivity()).getSupportActionBar().getHeight();
-					if (newScrollY <= headerHeight || oldScrollY <= headerHeight)
-					{
-						updateColor((float) newScrollY / headerHeight);
-					}
-				}
-			});
-		}
-
 		return rootView;
 	}
 
@@ -329,9 +327,10 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
+	@SuppressLint("NewApi")
 	private void persistTask()
 	{
-		Context activity = getActivity();
+		Activity activity = getActivity();
 		if (mContentSet != null && mContentSet.isUpdate() && activity != null)
 		{
 			if (mContentSet.updatesAnyKey(RECURRENCE_VALUES))
@@ -339,6 +338,10 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				mContentSet.ensureUpdates(RECURRENCE_VALUES);
 			}
 			mContentSet.persist(activity);
+			if (Build.VERSION.SDK_INT >= 11)
+			{
+				ActivityCompat.invalidateOptionsMenu(activity);
+			}
 		}
 	}
 
@@ -355,6 +358,8 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	 */
 	public void loadUri(Uri uri)
 	{
+		showFloatingActionButton(false);
+
 		if (mTaskUri != null)
 		{
 			/*
@@ -395,6 +400,8 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			 */
 			ActivityCompat.invalidateOptionsMenu(getActivity());
 		}
+
+		mAppBar.setExpanded(true, false);
 	}
 
 
@@ -422,47 +429,16 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				mDetailView.setModel(mModel);
 				mDetailView.setValues(mContentSet);
 				mContent.addView(mDetailView);
-			}
 
-			mActionButton = mDetailView.findViewById(R.id.action_button);
-
-			if (mActionButton != null)
-			{
-				mActionButton.setOnClickListener(new View.OnClickListener()
+				TaskView mToolbarInfo = (TaskView) mAppBar.findViewById(R.id.toolbar_content);
+				if (mToolbarInfo != null)
 				{
-					@Override
-					public void onClick(View v)
-					{
-						switch (mActionButtonAction)
-						{
-							case ACTION_COMPLETE:
-							{
-								completeTask();
-								break;
-							}
-							case ACTION_EDIT:
-							{
-								mCallback.onEditTask(mTaskUri, mContentSet);
-								break;
-							}
-						}
-					}
-				});
-			}
-
-			if (mContentSet != null && TaskFieldAdapters.IS_CLOSED.get(mContentSet))
-			{
-				((ImageView) mActionButton.findViewById(android.R.id.icon)).setImageResource(R.drawable.content_edit);
-				mActionButtonAction = ACTION_EDIT;
-			}
-			else
-			{
-				mActionButtonAction = ACTION_COMPLETE;
-			}
-
-			if (mColorBar != null)
-			{
-				updateColor((float) mRootView.getScrollY() / mColorBar.getMeasuredHeight());
+					Model minModel = Sources.getInstance(activity).getMinimalModel(TaskFieldAdapters.ACCOUNT_TYPE.get(mContentSet));
+					mToolbarInfo.setModel(minModel);
+					mToolbarInfo.setValues(null);
+					mToolbarInfo.setValues(mContentSet);
+				}
+				((TextView) mToolBar.findViewById(R.id.toolbar_title)).setText(TaskFieldAdapters.TITLE.get(mContentSet));
 			}
 		}
 	}
@@ -515,6 +491,9 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		 */
 		if (mTaskUri != null)
 		{
+			menu = mToolBar.getMenu();
+			menu.clear();
+
 			inflater.inflate(R.menu.view_task_fragment_menu, menu);
 
 			if (mContentSet != null)
@@ -524,12 +503,12 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				{
 					mOldStatus = status;
 				}
-				if (TaskFieldAdapters.IS_CLOSED.get(mContentSet) || status != null && status == Tasks.STATUS_COMPLETED)
+
+				if (!mShowFloatingActionButton && !(TaskFieldAdapters.IS_CLOSED.get(mContentSet) || status != null && status == Tasks.STATUS_COMPLETED))
 				{
-					// we disable the edit option, because the task is completed and the action button shows the edit option.
-					MenuItem item = menu.findItem(R.id.edit_task);
-					item.setEnabled(false);
-					item.setVisible(false);
+					MenuItem item = menu.findItem(R.id.complete_task);
+					item.setEnabled(true);
+					item.setVisible(true);
 				}
 
 				// check pinned status
@@ -546,6 +525,13 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 				}
 			}
 		}
+	}
+
+
+	@Override
+	public boolean onMenuItemClick(MenuItem item)
+	{
+		return onOptionsItemSelected(item);
 	}
 
 
@@ -616,83 +602,37 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		TaskFieldAdapters.STATUS.set(mContentSet, Tasks.STATUS_COMPLETED);
 		TaskFieldAdapters.PINNED.set(mContentSet, false);
 		persistTask();
-		Toast.makeText(mAppContext, getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)), Toast.LENGTH_SHORT).show();
+		Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)),
+			Snackbar.LENGTH_SHORT).show();
 		// at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
 		mCallback.onDelete(mTaskUri);
-	}
-
-
-	public static int darkenColor(int color)
-	{
-		float[] hsv = new float[3];
-		Color.colorToHSV(color, hsv);
-		if (hsv[2] > 0.8)
+		if (mShowFloatingActionButton)
 		{
-			hsv[2] = 0.8f + (hsv[2] - 0.8f) * 0.5f;
-			color = Color.HSVToColor(hsv);
+			// hide fab in two pane mode
+			mFloatingActionButton.hide();
 		}
-		return color;
-	}
-
-
-	public static int darkenColor2(int color)
-	{
-		float[] hsv = new float[3];
-		Color.colorToHSV(color, hsv);
-		hsv[2] = hsv[2] * 0.75f;
-		color = Color.HSVToColor(hsv);
-		return color;
 	}
 
 
 	@SuppressLint("NewApi")
-	private void updateColor(float percentage)
+	private void updateColor()
 	{
-		if (getActivity() instanceof TaskListActivity)
+		mAppBar.setBackgroundColor(mListColor);
+
+		if (mShowFloatingActionButton && mFloatingActionButton.getVisibility() == View.VISIBLE)
 		{
-			return;
-		}
-
-		float[] hsv = new float[3];
-		Color.colorToHSV(mListColor, hsv);
-
-		if (VERSION.SDK_INT >= 11 && mColorBar != null)
-		{
-			percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
-			percentage = (float) Math.pow(percentage, 1.5);
-
-			int newColor = darkenColor2(mListColor);
-
-			hsv[2] *= (0.5 + 0.25 * percentage);
-
-			ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
-			actionBar.setBackgroundDrawable(new ColorDrawable((newColor & 0x00ffffff) | ((int) (percentage * 255) << 24)));
-
-			// this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
-			actionBar.setDisplayShowTitleEnabled(true);
-			actionBar.setDisplayShowTitleEnabled(false);
-
-			mColorBar.setBackgroundColor(mListColor);
-
-			if (VERSION.SDK_INT >= 21)
+			// the FAB gets a slightly lighter color to stand out a bit more. If it's too light, we darken it instead.
+			float[] hsv = new float[3];
+			Color.colorToHSV(mListColor, hsv);
+			if (hsv[2] * (1 - hsv[1]) < 0.4)
 			{
-				Window window = getActivity().getWindow();
-				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-				window.setStatusBarColor(newColor | 0xff000000);
-			}
-		}
-
-		if (mActionButton != null)
-		{
-			// adjust color of action button
-			if (hsv[0] > 70 && hsv[0] < 170 && hsv[2] < 0.62)
-			{
-				mActionButton.setBackgroundResource(R.drawable.bg_actionbutton_light);
+				hsv[2] *= 1.2;
 			}
 			else
 			{
-				mActionButton.setBackgroundResource(R.drawable.bg_actionbutton);
+				hsv[2] /= 1.2;
 			}
+			mFloatingActionButton.setBackgroundTintList(new ColorStateList(new int[][] { new int[] { 0 } }, new int[] { Color.HSVToColor(hsv) }));
 		}
 	}
 
@@ -704,24 +644,40 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 		if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
 		{
 			mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
-			((Callback) getActivity()).updateColor(darkenColor2(mListColor));
+			((Callback) getActivity()).updateColor(mListColor);
 
 			if (VERSION.SDK_INT >= 11)
 			{
-				updateColor((float) mRootView.getScrollY() / ((ActionBarActivity) getActivity()).getSupportActionBar().getHeight());
+				updateColor();
 			}
 
 			Activity activity = getActivity();
 			int newStatus = TaskFieldAdapters.STATUS.get(contentSet);
 			boolean newPinned = TaskFieldAdapters.PINNED.get(contentSet);
-			if (VERSION.SDK_INT >= 11 && activity != null && (hasNewStatus(newStatus) || wasPinChanged(newPinned)))
+			if (activity != null && (hasNewStatus(newStatus) || pinChanged(newPinned)))
 			{
 				// new need to update the options menu, because the status of the task has changed
-				activity.invalidateOptionsMenu();
+				ActivityCompat.invalidateOptionsMenu(activity);
 			}
 
-			mIsPinned = newPinned;
+			mPinned = newPinned;
 			mOldStatus = newStatus;
+
+			if (mShowFloatingActionButton)
+			{
+				if (!TaskFieldAdapters.IS_CLOSED.get(contentSet))
+				{
+					showFloatingActionButton(true);
+					mFloatingActionButton.show();
+				}
+				else
+				{
+					if (mFloatingActionButton.getVisibility() == View.VISIBLE)
+					{
+						mFloatingActionButton.hide();
+					}
+				}
+			}
 
 			if (mModel == null || !TextUtils.equals(mModel.getAccountType(), contentSet.getAsString(Tasks.ACCOUNT_TYPE)))
 			{
@@ -764,8 +720,104 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
-	private boolean wasPinChanged(boolean newPinned)
+	private boolean pinChanged(boolean newPinned)
 	{
-		return !(mIsPinned == newPinned);
+		return !(mPinned == newPinned);
+	}
+
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onOffsetChanged(AppBarLayout appBarLayout, int offset)
+	{
+		int maxScroll = appBarLayout.getTotalScrollRange();
+		float percentage = (float) Math.abs(offset) / (float) maxScroll;
+
+		handleAlphaOnTitle(percentage);
+
+		if (mIsTheTitleContainerVisible)
+		{
+			mAppBar.findViewById(R.id.toolbar_content).setAlpha(1 - percentage);
+		}
+	}
+
+
+	private void handleAlphaOnTitle(float percentage)
+	{
+		if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS)
+		{
+			if (mIsTheTitleContainerVisible)
+			{
+				animate(mAppBar.findViewById(R.id.toolbar_content), ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+				animate(mToolBar.findViewById(R.id.toolbar_title), ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+				mIsTheTitleContainerVisible = false;
+			}
+		}
+		else
+		{
+			if (!mIsTheTitleContainerVisible)
+			{
+				animate(mToolBar.findViewById(R.id.toolbar_title), ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+				animate(mAppBar.findViewById(R.id.toolbar_content), ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+				mIsTheTitleContainerVisible = true;
+			}
+		}
+	}
+
+
+	private void animate(View v, int duration, int visibility)
+	{
+		AlphaAnimation alphaAnimation = (visibility == View.VISIBLE) ? new AlphaAnimation(0f, 1f) : new AlphaAnimation(1f, 0f);
+		alphaAnimation.setDuration(duration);
+		alphaAnimation.setFillAfter(true);
+		v.startAnimation(alphaAnimation);
+	}
+
+
+	/**
+	 * Set the toolbar of this fragment (if any), as the ActionBar if the given Activity.
+	 * 
+	 * @param activty
+	 *            an {@link AppCompatActivity}.
+	 */
+	public void setupToolbarAsActionbar(android.support.v7.app.AppCompatActivity activty)
+	{
+		if (mToolBar == null)
+		{
+			return;
+		}
+
+		activty.setSupportActionBar(mToolBar);
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		{
+			activty.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+	}
+
+
+	/**
+	 * Shows or hides the floating action button.
+	 * 
+	 * @param show
+	 *            <code>true</code> to show the FloatingActionButton, <code>false</code> to hide it.
+	 */
+	@SuppressLint("NewApi")
+	private void showFloatingActionButton(final boolean show)
+	{
+		CoordinatorLayout.LayoutParams p = (CoordinatorLayout.LayoutParams) mFloatingActionButton.getLayoutParams();
+		if (show)
+		{
+			p.setAnchorId(R.id.appbar);
+			mFloatingActionButton.setLayoutParams(p);
+			mFloatingActionButton.setVisibility(View.VISIBLE);
+			// make sure the FAB has the right color
+			updateColor();
+		}
+		else
+		{
+			p.setAnchorId(View.NO_ID);
+			mFloatingActionButton.setLayoutParams(p);
+			mFloatingActionButton.setVisibility(View.GONE);
+		}
 	}
 }

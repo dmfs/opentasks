@@ -87,8 +87,7 @@ public class DefaultModel extends Model
 			new LayoutDescriptor(R.layout.text_field_view_nodivider_small).setOption(LayoutDescriptor.OPTION_NO_TITLE, true)).setNoAutoAdd(true));
 
 		// task title
-		addField(new FieldDescriptor(context, R.id.task_field_title, R.string.task_title, TaskFieldAdapters.TITLE).setViewLayout(TEXT_VIEW).setEditorLayout(
-			TEXT_EDIT_SINGLE_LINE));
+		addField(new FieldDescriptor(context, R.id.task_field_title, R.string.task_title, TaskFieldAdapters.TITLE).setEditorLayout(TEXT_EDIT_SINGLE_LINE));
 
 		ArrayChoicesAdapter aca = new ArrayChoicesAdapter();
 		aca.addHiddenChoice(null, context.getString(R.string.status_needs_action), null);
@@ -119,8 +118,8 @@ public class DefaultModel extends Model
 			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_detail_start));
 
 		// due
-		addField(new FieldDescriptor(context, R.id.task_field_due, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW_ADD_BUTTON)
-			.setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_detail_due));
+		addField(new FieldDescriptor(context, R.id.task_field_due, R.string.task_due, TaskFieldAdapters.DUE).setEditorLayout(TIME_EDIT).setIcon(
+			R.drawable.ic_detail_due));
 
 		// all day flag
 		addField(new FieldDescriptor(context, R.id.task_field_all_day, R.string.task_all_day, TaskFieldAdapters.ALLDAY).setEditorLayout(BOOLEAN_EDIT));

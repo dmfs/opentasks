@@ -38,7 +38,8 @@
     <color name="material_red">#f44336</color>
 
     <!-- Our primary color - a nice shade of teal -->
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDarker">#00796b</color>
+    <color name="primary">#FF009688</color>
+    <color name="primary_dark">#FF00796B</color>
+    <color name="accent">#FFFF5722</color>
 
 </resources>

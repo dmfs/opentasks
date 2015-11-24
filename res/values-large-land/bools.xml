@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  	<bool name="has_two_panes">true</bool>  
+
+    <bool name="has_two_panes">true</bool>
+    <bool name="opentasks_enabled_detail_view_fab">true</bool>
+
 </resources>

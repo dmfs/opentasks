@@ -31,7 +31,7 @@ import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
-import org.dmfs.tasks.utils.ActionBarActivity;
+import org.dmfs.tasks.utils.AppCompatActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
@@ -42,12 +42,17 @@ import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
@@ -56,14 +61,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.astuetz.PagerSlidingTabStrip;
 
 
 /**
@@ -81,7 +87,7 @@ import com.astuetz.PagerSlidingTabStrip;
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class TaskListActivity extends ActionBarActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
+public class TaskListActivity extends AppCompatActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
 
 	/** Tells the activity to display the details of the task with the URI from the intent data. **/
@@ -126,7 +132,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 	private MenuItem mSearchItem;
 
-	private PagerSlidingTabStrip mTabs;
+	private TabLayout mTabs;
 
 	private final Handler mHandler = new Handler();
 
@@ -158,6 +164,12 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 
 	/** Indicates a transient state after rotation to redirect to the TaskViewActivtiy **/
 	private boolean mTransientState = false;
+
+	private CollapsingToolbarLayout mToolbarLayout;
+
+	private AppBarLayout mAppBarLayout;
+
+	private FloatingActionButton mFloatingActionButton;
 
 
 	@SuppressLint("NewApi")
@@ -191,6 +203,9 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		}
 
 		setContentView(R.layout.activity_task_list);
+		mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
 		mAuthority = TaskContract.taskAuthority(this);
 		mSearchHistoryHelper = new SearchHistoryHelper(this);
@@ -273,10 +288,16 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		updateTitle(currentPageIndex);
 
 		// Bind the tabs to the ViewPager
-		mTabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-		mTabs.setViewPager(mViewPager);
+		mTabs = (TabLayout) findViewById(R.id.tabs);
+		mTabs.setupWithViewPager(mViewPager);
 
-		mTabs.setOnPageChangeListener(new OnPageChangeListener()
+		// set up the tab icons
+		for (int i = 0, count = mPagerAdapter.getCount(); i < count; ++i)
+		{
+			mTabs.getTabAt(i).setIcon(mPagerAdapter.getTabIcon(i));
+		}
+
+		mViewPager.addOnPageChangeListener(new OnPageChangeListener()
 		{
 
 			@Override
@@ -285,7 +306,7 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				mSelectedTaskUri = null;
 				mCurrentPagePosition = position;
 
-				int newPageId = mPagerAdapter.getPageId(position);
+				int newPageId = mPagerAdapter.getPageId(mCurrentPagePosition);
 
 				if (newPageId == R.id.task_group_search)
 				{
@@ -304,7 +325,6 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 					hideSearchActionView();
 				}
 				mCurrentPageId = newPageId;
-
 				updateTitle(mCurrentPageId);
 			}
 
@@ -312,7 +332,6 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 			{
-
 			}
 
 
@@ -322,24 +341,31 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 				if (state == ViewPager.SCROLL_STATE_IDLE && mCurrentPageId == R.id.task_group_search)
 				{
 					// the search page is selected now, expand the search view
-					mHandler.post(new Runnable()
+					mHandler.postDelayed(new Runnable()
 					{
 						@Override
 						public void run()
 						{
 							MenuItemCompat.expandActionView(mSearchItem);
 						}
-					});
+					}, 50);
 				}
 			}
+
 		});
 
-		// make sure the status bar color is set properly on Android 5+ devices
-		if (VERSION.SDK_INT >= 21)
+		mFloatingActionButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
+		if (mFloatingActionButton != null)
 		{
-			Window window = getWindow();
-			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-			window.setStatusBarColor(getResources().getColor(R.color.colorPrimaryDarker));
+			mFloatingActionButton.setOnClickListener(new OnClickListener()
+			{
+
+				@Override
+				public void onClick(View v)
+				{
+					onAddNewTask();
+				}
+			});
 		}
 	}
 
@@ -412,23 +438,23 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		switch (pageId)
 		{
 			case R.id.task_group_by_list:
-				setTitle(R.string.task_group_title_list);
+				getSupportActionBar().setTitle(R.string.task_group_title_list);
 				break;
 			case R.id.task_group_by_start:
-				setTitle(R.string.task_group_title_start);
+				getSupportActionBar().setTitle(R.string.task_group_title_start);
 				break;
 			case R.id.task_group_by_due:
-				setTitle(R.string.task_group_title_due);
+				getSupportActionBar().setTitle(R.string.task_group_title_due);
 				break;
 			case R.id.task_group_by_priority:
-				setTitle(R.string.task_group_title_priority);
+				getSupportActionBar().setTitle(R.string.task_group_title_priority);
 				break;
 			case R.id.task_group_by_progress:
-				setTitle(R.string.task_group_title_progress);
+				getSupportActionBar().setTitle(R.string.task_group_title_progress);
 				break;
 
 			default:
-				setTitle(R.string.task_group_title_default);
+				getSupportActionBar().setTitle(R.string.task_group_title_default);
 				break;
 		}
 	}
@@ -522,6 +548,13 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.task_list_activity_menu, menu);
 
+		MenuItem addItem = menu.findItem(R.id.menu_add_task);
+		if (addItem != null && mFloatingActionButton != null)
+		{
+			// hide menu option to add a task if we have a floating action button
+			addItem.setVisible(false);
+		}
+
 		// restore menu state
 		MenuItem item = menu.findItem(R.id.menu_alarms);
 		if (item != null)
@@ -539,7 +572,13 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if (item.getItemId() == R.id.menu_visible_list)
+		int id = item.getItemId();
+		if (id == R.id.menu_add_task)
+		{
+			onAddNewTask();
+			return true;
+		}
+		else if (item.getItemId() == R.id.menu_visible_list)
 		{
 			Intent settingsIntent = new Intent(getBaseContext(), SyncSettingsActivity.class);
 			startActivity(settingsIntent);
@@ -683,18 +722,36 @@ public class TaskListActivity extends ActionBarActivity implements TaskListFragm
 	};
 
 
+	private int darkenColor(int color)
+	{
+		float[] hsv = new float[3];
+		Color.colorToHSV(color, hsv);
+		hsv[2] = hsv[2] * 0.75f;
+		color = Color.HSVToColor(hsv);
+		return color;
+	}
+
+
 	@SuppressLint("NewApi")
 	@Override
 	public void updateColor(int color)
 	{
-		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
-		mTabs.setBackgroundColor(color);
-
-		if (VERSION.SDK_INT >= 21)
+		if (mTwoPane)
 		{
-			Window window = getWindow();
-			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-			window.setStatusBarColor(color);
+			getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
+			mTabs.setBackgroundColor(color);
+
+			if (mAppBarLayout != null)
+			{
+				mAppBarLayout.setBackgroundColor(color);
+			}
+
+			if (VERSION.SDK_INT >= 21)
+			{
+				Window window = getWindow();
+				window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+				window.setStatusBarColor(darkenColor(color));
+			}
 		}
 	}
 

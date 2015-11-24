@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
+        android:id="@+id/menu_add_task"
+        android:icon="@drawable/ic_action_add"
+        android:title="@string/menu_add_task"
+        android:titleCondensed="@string/menu_add_task_condensed"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/search"
         android:title="@string/task_group_search_title"
         android:visible="false"

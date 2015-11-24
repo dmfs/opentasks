@@ -1,5 +1,13 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <style name="OpenTasksAppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="searchViewStyle">@style/WhiteSearchViewStyle</item>
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+    </style>
+
     <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="actionBarStyle">@style/ActionBar</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -11,13 +19,13 @@
 
     <!-- ActionBar styles -->
     <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">?attr/primaryColor</item>
+        <item name="background">?attr/colorPrimary</item>
         <item name="displayOptions">showTitle</item>
         <item name="icon">@android:color/transparent</item>
         <item name="actionBarItemBackground">@drawable/selectable_background_white</item>
-
     </style>
-     <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
+
+    <style name="cursorColor" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textCursorDrawable">@drawable/text_cursor_white</item>
     </style>
 

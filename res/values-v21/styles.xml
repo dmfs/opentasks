@@ -2,7 +2,7 @@
 
     <!-- ActionBar styles -->
     <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="background">?attr/primaryColor</item>
+        <item name="background">?attr/colorPrimary</item>
         <item name="displayOptions">showTitle</item>
         <item name="icon">@android:color/transparent</item>
         <item name="android:elevation">0dp</item>

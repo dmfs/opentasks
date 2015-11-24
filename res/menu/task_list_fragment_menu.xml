@@ -3,21 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <item
-        android:id="@+id/menu_add_task"
-        android:icon="@drawable/ic_action_add"
-        android:title="@string/menu_add_task"
-        android:titleCondensed="@string/menu_add_task_condensed"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/menu_show_completed"
         android:checkable="true"
-        app:showAsAction="never"
         android:title="@string/menu_show_completed"
-        android:titleCondensed="@string/menu_show_completed_condensed"/>
+        android:titleCondensed="@string/menu_show_completed_condensed"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/menu_sync_now"
-        app:showAsAction="never"
         android:title="@string/menu_sync_now"
-        android:titleCondensed="@string/menu_sync_now_condensed"/>
+        android:titleCondensed="@string/menu_sync_now_condensed"
+        app:showAsAction="never"/>
 
 </menu>

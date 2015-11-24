@@ -99,7 +99,7 @@ public class NotificationActionUtils
 			.setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
 
 		// color
-		mBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
+		mBuilder.setColor(context.getResources().getColor(R.color.primary));
 
 		// dismisses the notification on click
 		mBuilder.setAutoCancel(true);
@@ -188,7 +188,7 @@ public class NotificationActionUtils
 			.setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
 
 		// color
-		mBuilder.setColor(context.getResources().getColor(R.color.colorPrimary));
+		mBuilder.setColor(context.getResources().getColor(R.color.primary));
 
 		// dismisses the notification on click
 		mBuilder.setAutoCancel(true);

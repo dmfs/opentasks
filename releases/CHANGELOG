@@ -1,0 +1,11 @@
+
+OpenTasks 1.1.8
+===============
+
+* switch to components from the support library
+ * replace PagerSlidingTabStrip with TabLayout
+ * switch to ToolBar in list view and details view
+* add FloatingActionButton in task list
+* change scroll animation of title in details view
+* move delete option in details view to overflow menu
+* improve tablet layout

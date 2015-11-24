@@ -80,6 +80,11 @@ public final class TaskFieldAdapters
 	public final static StringFieldAdapter ACCOUNT_NAME = new StringFieldAdapter(Tasks.ACCOUNT_NAME);
 
 	/**
+	 * Adapter for the account type of a task.
+	 */
+	public final static StringFieldAdapter ACCOUNT_TYPE = new StringFieldAdapter(Tasks.ACCOUNT_TYPE);
+
+	/**
 	 * Adapter for the title of a task.
 	 */
 	public final static StringFieldAdapter TITLE = new StringFieldAdapter(Tasks.TITLE);

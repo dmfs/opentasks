@@ -394,7 +394,7 @@ public class NotificationUpdaterService extends Service
 		}
 		else
 		{
-			builder.setColor(resources.getColor(R.color.colorPrimary));
+			builder.setColor(resources.getColor(R.color.primary));
 		}
 
 		// description

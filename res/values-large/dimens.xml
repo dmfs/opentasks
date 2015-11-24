@@ -3,5 +3,7 @@
 
     <dimen name="task_list_right_margin">10dp</dimen>
     <dimen name="task_list_left_margin">10dp</dimen>
+    <dimen name="opentasks_details_pane_overlay_top">104dp</dimen>
+    <dimen name="opentasks_details_pane_margin_bottom">-66dp</dimen>
 
 </resources>
