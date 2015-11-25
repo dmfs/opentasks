@@ -202,6 +202,12 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    <style name="Base.TextAppearance.AppCompat.fixed" parent="android:TextAppearance">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+        <item name="android:textSize">@dimen/abc_text_size_body_1_material</item>
+    </style>
+
     <style name="time_forward_button" parent="@style/detail_label_text">
         <item name="android:background">@drawable/selectable_list_item</item>
         <item name="android:gravity">center</item>
@@ -209,7 +215,7 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
-    <style name="dialog_button_primary" parent="@style/Base.TextAppearance.AppCompat">
+    <style name="dialog_button_primary" parent="@style/Base.TextAppearance.AppCompat.fixed">
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/accent_material_light</item>
