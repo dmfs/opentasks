@@ -50,11 +50,14 @@ import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.AppBarLayout.LayoutParams;
 import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -65,6 +68,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
@@ -77,7 +81,7 @@ import android.widget.TextView;
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ViewTaskFragment extends SupportFragment implements OnModelLoadedListener, OnContentChangeListener, OnMenuItemClickListener,
-	OnOffsetChangedListener
+	OnOffsetChangedListener, OnGlobalLayoutListener
 {
 	private final static String ARG_URI = "uri";
 
@@ -132,8 +136,11 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private int mOldStatus = -1;
 	private boolean mPinned = false;
 	private boolean mRestored;
+	private NestedScrollView mScrollView;
 	private AppBarLayout mAppBar;
 	private Toolbar mToolBar;
+
+	private int mAppBarOffset = 0;
 
 	private FloatingActionButton mFloatingActionButton;
 
@@ -315,6 +322,8 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			loadUri(uri);
 		}
 
+		mScrollView = (NestedScrollView) rootView.findViewById(R.id.scrollView);
+		mScrollView.getViewTreeObserver().addOnGlobalLayoutListener(this);
 		return rootView;
 	}
 
@@ -730,6 +739,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@Override
 	public void onOffsetChanged(AppBarLayout appBarLayout, int offset)
 	{
+		mAppBarOffset = offset;
 		int maxScroll = appBarLayout.getTotalScrollRange();
 		float percentage = (float) Math.abs(offset) / (float) maxScroll;
 
@@ -818,6 +828,28 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			p.setAnchorId(View.NO_ID);
 			mFloatingActionButton.setLayoutParams(p);
 			mFloatingActionButton.setVisibility(View.GONE);
+		}
+	}
+
+
+	@Override
+	public void onGlobalLayout()
+	{
+		// check if we actually need scrolling and disable toolbar collapsing if not
+
+		CollapsingToolbarLayout toolbar = (CollapsingToolbarLayout) mAppBar.getChildAt(0);
+		AppBarLayout.LayoutParams p = (LayoutParams) toolbar.getLayoutParams();
+
+		// we need collapsing of the content is larger than the scrollview or if we're already collapsed to some degree
+		boolean needScroll = mScrollView.getHeight() < mContent.getHeight() || mAppBarOffset != 0;
+		boolean hasScroll = (p.getScrollFlags() & AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL) != 0;
+
+		if (hasScroll != needScroll)
+		{
+			// update scroll flags accordingly
+			p.setScrollFlags(needScroll ? AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+				| AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP : 0);
+			toolbar.setLayoutParams(p);
 		}
 	}
 }
