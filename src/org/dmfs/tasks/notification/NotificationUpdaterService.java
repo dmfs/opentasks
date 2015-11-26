@@ -535,7 +535,7 @@ public class NotificationUpdaterService extends Service
 			sendBroadcast(dueIntent);
 
 			// Start broadcast
-			Intent startIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_DUE);
+			Intent startIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_STARTING);
 			startIntent.setPackage(getApplicationContext().getPackageName());
 			startIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
 			startIntent.putExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, true);
