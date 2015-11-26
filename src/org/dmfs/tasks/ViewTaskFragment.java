@@ -745,7 +745,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 
 		handleAlphaOnTitle(percentage);
 
-		if (mIsTheTitleContainerVisible)
+		if (mIsTheTitleContainerVisible && Build.VERSION.SDK_INT >= 11)
 		{
 			mAppBar.findViewById(R.id.toolbar_content).setAlpha(1 - percentage);
 		}
