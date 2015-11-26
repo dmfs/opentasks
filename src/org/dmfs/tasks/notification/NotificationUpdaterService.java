@@ -23,8 +23,6 @@ import java.util.GregorianCalendar;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
-import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
@@ -530,17 +528,17 @@ public class NotificationUpdaterService extends Service
 		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
 		{
 			// Due broadcast
-			Intent dueIntent = new Intent(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM);
+			Intent dueIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_DUE);
 			dueIntent.setPackage(getApplicationContext().getPackageName());
-			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, notificationAction.getWhen());
-			dueIntent.putExtra(DueAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, true);
+			dueIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
+			dueIntent.putExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, true);
 			sendBroadcast(dueIntent);
 
 			// Start broadcast
-			Intent startIntent = new Intent(StartAlarmBroadcastHandler.BROADCAST_START_ALARM);
+			Intent startIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_DUE);
 			startIntent.setPackage(getApplicationContext().getPackageName());
-			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, notificationAction.getWhen());
-			startIntent.putExtra(StartAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, true);
+			startIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
+			startIntent.putExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, true);
 			sendBroadcast(startIntent);
 		}
 	}

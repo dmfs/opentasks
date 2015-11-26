@@ -17,8 +17,7 @@
 
 package org.dmfs.tasks.notification;
 
-import org.dmfs.provider.tasks.broadcast.DueAlarmBroadcastHandler;
-import org.dmfs.provider.tasks.broadcast.StartAlarmBroadcastHandler;
+import org.dmfs.provider.tasks.TaskContract;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentUris;
@@ -49,7 +48,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 	public void onReceive(Context context, Intent intent)
 	{
 		// continue if alarms where enabled
-		if (intent.getAction().equals(StartAlarmBroadcastHandler.BROADCAST_START_ALARM))
+		if (intent.getAction().equals(TaskContract.ACTION_BROADCAST_TASK_STARTING))
 		{
 			if (getAlarmPreference(context))
 			{
@@ -63,18 +62,18 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				}
 
 				// create regular notification
-				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
-				String title = intent.getStringExtra(StartAlarmBroadcastHandler.EXTRA_TASK_TITLE);
-				long startDate = intent.getLongExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_TIME, Long.MIN_VALUE);
-				boolean startAllDay = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_TASK_START_ALLDAY, false);
-				boolean silent = intent.getBooleanExtra(StartAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, false);
+				String title = intent.getStringExtra(TaskContract.EXTRA_TASK_TITLE);
+				long startDate = intent.getLongExtra(TaskContract.EXTRA_TASK_TIMESTAMP, Long.MIN_VALUE);
+				boolean startAllDay = intent.getBooleanExtra(TaskContract.EXTRA_TASK_ALLDAY, false);
+				boolean silent = intent.getBooleanExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, false);
+				String timezone = intent.getStringExtra(TaskContract.EXTRA_TASK_TIMEZONE);
 				int notificationId = (int) ContentUris.parseId(taskUri);
 
-				NotificationActionUtils.sendStartNotification(context, title, taskUri, notificationId, startDate, startAllDay, silent);
+				NotificationActionUtils.sendStartNotification(context, title, taskUri, notificationId, startDate, startAllDay, timezone, silent);
 
 			}
 		}
-		else if (intent.getAction().equals(DueAlarmBroadcastHandler.BROADCAST_DUE_ALARM))
+		else if (intent.getAction().equals(TaskContract.ACTION_BROADCAST_TASK_DUE))
 		{
 			if (getAlarmPreference(context))
 			{
@@ -89,11 +88,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 
 				// create regular notification
 				// long dueTime = intent.getLongExtra(AlarmNotificationHandler.EXTRA_TASK_DUE_TIME, System.currentTimeMillis());
-				String title = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TITLE);
-				long dueDate = intent.getLongExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_TIME, Long.MIN_VALUE);
-				boolean dueAllDay = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_TASK_DUE_ALLDAY, false);
-				boolean silent = intent.getBooleanExtra(DueAlarmBroadcastHandler.EXTRA_SILENT_NOTIFICATION, false);
-				String timezone = intent.getStringExtra(DueAlarmBroadcastHandler.EXTRA_TASK_TIMEZONE);
+				String title = intent.getStringExtra(TaskContract.EXTRA_TASK_TITLE);
+				long dueDate = intent.getLongExtra(TaskContract.EXTRA_TASK_TIMESTAMP, Long.MIN_VALUE);
+				boolean dueAllDay = intent.getBooleanExtra(TaskContract.EXTRA_TASK_ALLDAY, false);
+				boolean silent = intent.getBooleanExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, false);
+				String timezone = intent.getStringExtra(TaskContract.EXTRA_TASK_TIMEZONE);
 				int notificationId = (int) ContentUris.parseId(taskUri);
 
 				NotificationActionUtils.sendDueAlarmNotification(context, title, taskUri, notificationId, dueDate, dueAllDay, timezone, silent);
