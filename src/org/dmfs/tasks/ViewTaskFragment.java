@@ -139,6 +139,7 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	private NestedScrollView mScrollView;
 	private AppBarLayout mAppBar;
 	private Toolbar mToolBar;
+	private View mRootView;
 
 	private int mAppBarOffset = 0;
 
@@ -276,17 +277,17 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	{
 		mShowFloatingActionButton = getResources().getBoolean(R.bool.opentasks_enabled_detail_view_fab);
 
-		View rootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
-		mContent = (ViewGroup) rootView.findViewById(R.id.content);
-		mAppBar = (AppBarLayout) rootView.findViewById(R.id.appbar);
-		mToolBar = (Toolbar) rootView.findViewById(R.id.toolbar);
+		mRootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
+		mContent = (ViewGroup) mRootView.findViewById(R.id.content);
+		mAppBar = (AppBarLayout) mRootView.findViewById(R.id.appbar);
+		mToolBar = (Toolbar) mRootView.findViewById(R.id.toolbar);
 		mToolBar.setOnMenuItemClickListener(this);
 		mToolBar.setTitle("");
 		mAppBar.addOnOffsetChangedListener(this);
 
 		animate(mToolBar.findViewById(R.id.toolbar_title), 0, View.INVISIBLE);
 
-		mFloatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.floating_action_button);
+		mFloatingActionButton = (FloatingActionButton) mRootView.findViewById(R.id.floating_action_button);
 		showFloatingActionButton(false);
 		mFloatingActionButton.setOnClickListener(new View.OnClickListener()
 		{
@@ -322,9 +323,9 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 			loadUri(uri);
 		}
 
-		mScrollView = (NestedScrollView) rootView.findViewById(R.id.scrollView);
+		mScrollView = (NestedScrollView) mRootView.findViewById(R.id.scrollView);
 		mScrollView.getViewTreeObserver().addOnGlobalLayoutListener(this);
-		return rootView;
+		return mRootView;
 	}
 
 
@@ -835,13 +836,26 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@Override
 	public void onGlobalLayout()
 	{
-		// check if we actually need scrolling and disable toolbar collapsing if not
+		if (Build.VERSION.SDK_INT <= 16)
+		{
+			// disabling scroll in code seems to be broken on some Android 4.1 devices. For now we just disable this function.
+			return;
+		}
 
+		if (mScrollView.getHeight() == 0 || mContent.getHeight() == 0)
+		{
+			return;
+		}
+
+		// check if we actually need scrolling and disable toolbar collapsing if not
 		CollapsingToolbarLayout toolbar = (CollapsingToolbarLayout) mAppBar.getChildAt(0);
 		AppBarLayout.LayoutParams p = (LayoutParams) toolbar.getLayoutParams();
 
-		// we need collapsing of the content is larger than the scrollview or if we're already collapsed to some degree
-		boolean needScroll = mScrollView.getHeight() < mContent.getHeight() || mAppBarOffset != 0;
+		int appBarHeight = mAppBar.getHeight();
+		int rootHeight = mRootView.getHeight();
+
+		// we need collapsing of the content is larger than the space under the app bar or if we're already collapsed to some degree
+		boolean needScroll = rootHeight - appBarHeight <= mContent.getHeight() || mAppBarOffset != 0;
 		boolean hasScroll = (p.getScrollFlags() & AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL) != 0;
 
 		if (hasScroll != needScroll)
