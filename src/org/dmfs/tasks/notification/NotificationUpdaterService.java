@@ -18,11 +18,12 @@
 package org.dmfs.tasks.notification;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
@@ -136,6 +137,7 @@ public class NotificationUpdaterService extends Service
 	{
 
 		String intentAction = intent.getAction();
+		boolean silent = intent.getBooleanExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, false);
 		if (intentAction != null)
 		{
 			switch (intentAction)
@@ -145,13 +147,12 @@ public class NotificationUpdaterService extends Service
 					break;
 
 				case ACTION_PINNED_TASK_START:
-					updateNotifications(true, true, true);
-					delayedCancelHeadsUpNotification();
-					break;
-
 				case ACTION_PINNED_TASK_DUE:
-					updateNotifications(true, true, true);
-					delayedCancelHeadsUpNotification();
+					updateNotifications(true, !silent, !silent);
+					if (!silent)
+					{
+						delayedCancelHeadsUpNotification();
+					}
 					break;
 
 				case ACTION_COMPLETE:
@@ -423,8 +424,8 @@ public class NotificationUpdaterService extends Service
 			Time dueTime = TaskFieldAdapters.DUE.get(task);
 			long dueTimestamp = dueTime == null ? 0 : dueTime.toMillis(true);
 
-			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
-				TaskFieldAdapters.TASK_ID.get(task), task.getUri(), dueTimestamp);
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, TaskFieldAdapters.TITLE.get(task),
+				R.string.notification_action_completed, TaskFieldAdapters.TASK_ID.get(task), task.getUri(), dueTimestamp);
 			builder.addAction(NotificationUpdaterService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
@@ -486,22 +487,17 @@ public class NotificationUpdaterService extends Service
 		intent.setAction(ACTION_NEXT_DAY);
 		mDateChangePendingIntent = PendingIntent.getService(this, 0, intent, 0);
 
-		// set alarm to update the next day
-		GregorianCalendar tomorrow = new GregorianCalendar();
-		tomorrow.add(Calendar.DAY_OF_YEAR, 1);
-		tomorrow.set(Calendar.HOUR_OF_DAY, 0);
-		tomorrow.set(Calendar.MINUTE, 0);
-		tomorrow.set(Calendar.SECOND, 0);
-		tomorrow.set(Calendar.MILLISECOND, 0);
+		// tomorrow is today + 1 day
+		DateTime tomorrow = DateTime.today().addDuration(new Duration(1, 1, 0));
 
 		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT)
 		{
-			alarmManager.setWindow(AlarmManager.RTC, tomorrow.getTimeInMillis(), 1000, mDateChangePendingIntent);
+			alarmManager.setWindow(AlarmManager.RTC, tomorrow.swapTimeZone(TimeZone.getDefault()).getTimestamp(), 1000, mDateChangePendingIntent);
 		}
 		else
 		{
-			alarmManager.set(AlarmManager.RTC, tomorrow.getTimeInMillis(), mDateChangePendingIntent);
+			alarmManager.set(AlarmManager.RTC, tomorrow.swapTimeZone(TimeZone.getDefault()).getTimestamp(), mDateChangePendingIntent);
 		}
 	}
 
@@ -527,19 +523,23 @@ public class NotificationUpdaterService extends Service
 	{
 		if (ACTION_COMPLETE.equals(notificationAction.getActionType()))
 		{
-			// Due broadcast
-			Intent dueIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_DUE);
-			dueIntent.setPackage(getApplicationContext().getPackageName());
-			dueIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
-			dueIntent.putExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, true);
-			sendBroadcast(dueIntent);
-
 			// Start broadcast
 			Intent startIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_STARTING);
+			startIntent.setData(notificationAction.getTaskUri());
 			startIntent.setPackage(getApplicationContext().getPackageName());
+			startIntent.putExtra(TaskContract.EXTRA_TASK_TITLE, notificationAction.title());
 			startIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
-			startIntent.putExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, true);
+			startIntent.putExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, true);
 			sendBroadcast(startIntent);
+
+			// Due broadcast
+			Intent dueIntent = new Intent(TaskContract.ACTION_BROADCAST_TASK_DUE);
+			dueIntent.setData(notificationAction.getTaskUri());
+			dueIntent.setPackage(getApplicationContext().getPackageName());
+			dueIntent.putExtra(TaskContract.EXTRA_TASK_TITLE, notificationAction.title());
+			dueIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
+			dueIntent.putExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, true);
+			sendBroadcast(dueIntent);
 		}
 	}
 

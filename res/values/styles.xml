@@ -262,4 +262,12 @@
         <item name="android:layout_height">0dp</item>
     </style>
 
+    <style name="TextAppearance.StatusBar.EventContent.Title.colorFix"></style>
+
+    <style name="TextAppearance.StatusBar.EventContent.Action"></style>
+
+    <style name="ot_notification_icon_undo">
+        <item name="android:src">@drawable/ic_24_undo_white</item>
+    </style>
+
 </resources>

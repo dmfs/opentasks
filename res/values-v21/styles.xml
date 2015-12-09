@@ -10,4 +10,20 @@
         <item name="actionBarItemBackground">@drawable/selectable_background_white</item>
     </style>
 
+    <style name="TextAppearance.StatusBar.EventContent.Title.colorFix">
+        <item name="android:textColor">@color/abc_primary_text_material_light</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.StatusBar.EventContent.Action">
+        <item name="android:textColor">@color/abc_secondary_text_material_light</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="ot_notification_icon_undo">
+        <item name="android:src">@drawable/ic_24_undo_black50</item>
+    </style>
+
 </resources>

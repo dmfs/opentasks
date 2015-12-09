@@ -54,10 +54,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 			{
 				Uri taskUri = intent.getData();
 
+				boolean silent = intent.getBooleanExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, false);
 				// check for pinned task
 				if (TaskNotificationHandler.isTaskPinned(context, taskUri))
 				{
-					TaskNotificationHandler.sendPinnedTaskStartNotification(context, taskUri);
+					TaskNotificationHandler.sendPinnedTaskStartNotification(context, taskUri, silent);
 					return;
 				}
 
@@ -65,7 +66,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				String title = intent.getStringExtra(TaskContract.EXTRA_TASK_TITLE);
 				long startDate = intent.getLongExtra(TaskContract.EXTRA_TASK_TIMESTAMP, Long.MIN_VALUE);
 				boolean startAllDay = intent.getBooleanExtra(TaskContract.EXTRA_TASK_ALLDAY, false);
-				boolean silent = intent.getBooleanExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, false);
 				String timezone = intent.getStringExtra(TaskContract.EXTRA_TASK_TIMEZONE);
 				int notificationId = (int) ContentUris.parseId(taskUri);
 
@@ -79,10 +79,12 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 			{
 				Uri taskUri = intent.getData();
 
+				boolean silent = intent.getBooleanExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, false);
+
 				// check for pinned task
 				if (TaskNotificationHandler.isTaskPinned(context, taskUri))
 				{
-					TaskNotificationHandler.sendPinnedTaskDueNotification(context, taskUri);
+					TaskNotificationHandler.sendPinnedTaskDueNotification(context, taskUri, silent);
 					return;
 				}
 
@@ -91,7 +93,6 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 				String title = intent.getStringExtra(TaskContract.EXTRA_TASK_TITLE);
 				long dueDate = intent.getLongExtra(TaskContract.EXTRA_TASK_TIMESTAMP, Long.MIN_VALUE);
 				boolean dueAllDay = intent.getBooleanExtra(TaskContract.EXTRA_TASK_ALLDAY, false);
-				boolean silent = intent.getBooleanExtra(TaskContract.EXTRA_SILENT_NOTIFICATION, false);
 				String timezone = intent.getStringExtra(TaskContract.EXTRA_TASK_TIMEZONE);
 				int notificationId = (int) ContentUris.parseId(taskUri);
 

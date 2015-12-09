@@ -23,7 +23,6 @@ import java.util.TimeZone;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
-import org.dmfs.tasks.utils.ObservableSparseArrayCompat;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -62,14 +61,13 @@ public class NotificationActionUtils
 
 	public final static String EXTRA_NOTIFICATION_ACTION = "org.dmfs.tasks.extra.notification.EXTRA_NOTIFICATION_ACTION";
 
+	/**
+	 * Boolean extra to indicate that a notification is supposed to be silent, i.e. should not play a sound when it's fired.
+	 */
+	public final static String EXTRA_SILENT_NOTIFICATION = "org.dmfs.provider.tasks.extra.SILENT";
+
 	private static long TIMEOUT_MILLIS = 10000;
 	private static long sUndoTimeoutMillis = -1;
-
-	/**
-	 * If an {@link NotificationAction} exists here for a given notification key, then we should display this undo notification rather than an email
-	 * notification.
-	 */
-	public static final ObservableSparseArrayCompat<NotificationAction> sUndoNotifications = new ObservableSparseArrayCompat<NotificationAction>();
 
 	/**
 	 * If an undo notification is displayed, its timestamp ({@link android.app.Notification.Builder#setWhen(long)}) is stored here so we can use it for the
@@ -143,8 +141,8 @@ public class NotificationActionUtils
 			mBuilder.addAction(NotificationUpdaterService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
 
 			// complete action
-			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
-				notificationId, taskUri, dueDate);
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, title,
+				R.string.notification_action_completed, notificationId, taskUri, dueDate);
 			mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 		}
@@ -229,8 +227,8 @@ public class NotificationActionUtils
 		// add actions
 		if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
 		{
-			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, R.string.notification_action_completed,
-				notificationId, taskUri, startDate);
+			NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, title,
+				R.string.notification_action_completed, notificationId, taskUri, startDate);
 			mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
 				NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
@@ -311,7 +309,6 @@ public class NotificationActionUtils
 		final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(action.getNotificationId(), notification);
 
-		sUndoNotifications.put(action.getNotificationId(), action);
 		sNotificationTimestamps.put(action.getNotificationId(), action.mWhen);
 	}
 
@@ -321,13 +318,9 @@ public class NotificationActionUtils
 	 */
 	public static void cancelUndoNotification(final Context context, final NotificationAction notificationAction)
 	{
-
 		final int notificationId = notificationAction.getNotificationId();
 
-		// Note: we must add the conversation before removing the undo notification
-		// Otherwise, the observer for sUndoNotifications gets called, which calls
-		// handleNotificationActions before the undone conversation has been added to the set.
-		removeUndoNotification(context, notificationId, false);
+		removeUndoNotification(context, notificationId);
 	}
 
 
@@ -378,18 +371,11 @@ public class NotificationActionUtils
 
 	/**
 	 * Removes the undo notification.
-	 * 
-	 * @param removeNow
-	 *            <code>true</code> to remove it from the drawer right away, <code>false</code> to just remove the reference to it
 	 */
-	private static void removeUndoNotification(final Context context, final int notificationId, final boolean removeNow)
+	private static void removeUndoNotification(final Context context, final int notificationId)
 	{
-		sUndoNotifications.delete(notificationId);
-		if (removeNow)
-		{
-			final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			notificationManager.cancel(notificationId);
-		}
+		final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(notificationId);
 	}
 
 
@@ -398,7 +384,7 @@ public class NotificationActionUtils
 	 */
 	public static void processUndoNotification(final Context context, final NotificationAction notificationAction)
 	{
-		removeUndoNotification(context, notificationAction.getNotificationId(), true);
+		removeUndoNotification(context, notificationAction.getNotificationId());
 		sNotificationTimestamps.remove(notificationAction.getNotificationId());
 	}
 
@@ -462,11 +448,13 @@ public class NotificationActionUtils
 		private final int mNotificationId;
 		private final Uri mTaskUri;
 		private final long mWhen;
+		private final String mTitle;
 
 
-		public NotificationAction(String actionType, int actionTextResId, int notificationId, Uri taskUri, long when)
+		public NotificationAction(String actionType, String taskTitle, int actionTextResId, int notificationId, Uri taskUri, long when)
 		{
 			mActionType = actionType;
+			mTitle = taskTitle;
 			mActionTextResId = actionTextResId;
 			mNotificationId = notificationId;
 			mTaskUri = taskUri;
@@ -489,6 +477,7 @@ public class NotificationActionUtils
 			out.writeInt(mNotificationId);
 			out.writeString(mTaskUri.toString());
 			out.writeLong(mWhen);
+			out.writeString(mTitle);
 		}
 
 		public static final Parcelable.Creator<NotificationAction> CREATOR = new Parcelable.Creator<NotificationAction>()
@@ -515,6 +504,7 @@ public class NotificationActionUtils
 			mNotificationId = in.readInt();
 			mTaskUri = Uri.parse(in.readString());
 			mWhen = in.readLong();
+			mTitle = in.readString();
 		}
 
 
@@ -539,6 +529,12 @@ public class NotificationActionUtils
 		public Uri getTaskUri()
 		{
 			return mTaskUri;
+		}
+
+
+		public String title()
+		{
+			return mTitle;
 		}
 
 
