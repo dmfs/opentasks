@@ -67,6 +67,7 @@
                     android:paddingEnd="56dp"
                     android:paddingLeft="56dp"
                     android:paddingStart="56dp"
+                    android:visibility="gone"
                     app:fieldDescriptor="@id/task_field_due" >
 
                     <TextView
