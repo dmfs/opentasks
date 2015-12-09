@@ -836,9 +836,9 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	@Override
 	public void onGlobalLayout()
 	{
-		if (Build.VERSION.SDK_INT <= 16)
+		if (Build.VERSION.SDK_INT < 21)
 		{
-			// disabling scroll in code seems to be broken on some Android 4.1 devices. For now we just disable this function.
+			// disabling scroll in code seems to be broken on some Android 4.x devices. For now we just disable this function.
 			return;
 		}
 
