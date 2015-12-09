@@ -4,6 +4,9 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="searchViewStyle">@style/WhiteSearchViewStyle</item>
         <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="windowActionModeOverlay">true</item>
     </style>
 
     <style name="OpenTasksAppTheme" parent="OpenTasksAppBaseTheme">
