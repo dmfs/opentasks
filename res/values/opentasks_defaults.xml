@@ -4,18 +4,6 @@
     <!-- The name of the task authority. -->
     <string name="opentasks_authority">org.dmfs.tasks</string>
 
-    <!-- The mime type of tasks. -->
-    <string name="opentasks_mimetype_task_item">vnd.android.cursor.item/org.dmfs.tasks.tasks</string>
-
-    <!-- The mime type of the task directory (not the task list). -->
-    <string name="opentasks_mimetype_task_dir">vnd.android.cursor.dir/org.dmfs.tasks.tasks</string>
-
-    <!-- The mime type of task lists. -->
-    <string name="opentasks_mimetype_tasklist_item">vnd.android.cursor.item/org.dmfs.tasks.tasklists</string>
-
-    <!-- The mime type of the task list directory. -->
-    <string name="opentasks_mimetype_tasklist_dir">vnd.android.cursor.dir/org.dmfs.tasks.tasklists</string>
-
     <!-- Enables or disables the support for local lists. In particular this will disable the creation of an initial list when the app is launched the first time. -->
     <bool name="opentasks_support_local_lists">true</bool>
 
