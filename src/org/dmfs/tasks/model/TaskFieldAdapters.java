@@ -34,6 +34,7 @@ import org.dmfs.tasks.model.contraints.AdjustPercentComplete;
 import org.dmfs.tasks.model.contraints.ChecklistConstraint;
 import org.dmfs.tasks.model.contraints.NotAfter;
 import org.dmfs.tasks.model.contraints.NotBefore;
+import org.dmfs.tasks.model.contraints.ShiftIfAfter;
 
 
 /**
@@ -119,7 +120,7 @@ public final class TaskFieldAdapters
 	/**
 	 * Adapter for the start date of a task.
 	 */
-	public final static TimeFieldAdapter DTSTART = (TimeFieldAdapter) _DTSTART.addContraint(new NotAfter(DUE));
+	public final static TimeFieldAdapter DTSTART = (TimeFieldAdapter) _DTSTART.addContraint(new ShiftIfAfter(DUE));
 
 	/**
 	 * Adapter for the completed date of a task.
