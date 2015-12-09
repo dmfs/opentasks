@@ -355,6 +355,7 @@
                     android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
             </intent-filter>
             <intent-filter>
+                <action android:name="org.dmfs.tasks.intent.ACTION_DAY_CHANGED" />
                 <action android:name="org.dmfs.tasks.action.notification.UNDO" />
                 <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
                 <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />

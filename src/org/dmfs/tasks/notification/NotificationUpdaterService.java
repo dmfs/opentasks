@@ -121,13 +121,13 @@ public class NotificationUpdaterService extends Service
 	{
 		mAuthority = TaskContract.taskAuthority(this);
 		super.onCreate();
+		updateNextDayAlarm();
 	}
 
 
 	@Override
 	public void onDestroy()
 	{
-		cancelNextDayAlarm();
 		super.onDestroy();
 	}
 
@@ -485,10 +485,11 @@ public class NotificationUpdaterService extends Service
 	{
 		Intent intent = new Intent(this, NotificationUpdaterService.class);
 		intent.setAction(ACTION_NEXT_DAY);
+		intent.setPackage(getPackageName());
 		mDateChangePendingIntent = PendingIntent.getService(this, 0, intent, 0);
 
 		// tomorrow is today + 1 day
-		DateTime tomorrow = DateTime.today().addDuration(new Duration(1, 1, 0));
+		DateTime tomorrow = DateTime.today().startOfDay().addDuration(new Duration(1, 1, 0));
 
 		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT)
@@ -499,13 +500,6 @@ public class NotificationUpdaterService extends Service
 		{
 			alarmManager.set(AlarmManager.RTC, tomorrow.swapTimeZone(TimeZone.getDefault()).getTimestamp(), mDateChangePendingIntent);
 		}
-	}
-
-
-	private void cancelNextDayAlarm()
-	{
-		AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.cancel(mDateChangePendingIntent);
 	}
 
 
