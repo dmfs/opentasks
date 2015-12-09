@@ -32,7 +32,6 @@ import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.contraints.AdjustPercentComplete;
 import org.dmfs.tasks.model.contraints.ChecklistConstraint;
-import org.dmfs.tasks.model.contraints.NotAfter;
 import org.dmfs.tasks.model.contraints.NotBefore;
 import org.dmfs.tasks.model.contraints.ShiftIfAfter;
 
@@ -146,6 +145,11 @@ public final class TaskFieldAdapters
 	 * Adpater for the ID of the task.
 	 * */
 	public static final IntegerFieldAdapter TASK_ID = new IntegerFieldAdapter(TaskContract.Tasks._ID);
+
+	/**
+	 * Adpater for the TASK_ID of an instance of a task.
+	 * */
+	public static final IntegerFieldAdapter INSTANCE_TASK_ID = new IntegerFieldAdapter(TaskContract.Instances.TASK_ID);
 
 	/**
 	 * Adapter for the IS_CLOSED flag of a task.
