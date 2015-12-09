@@ -9,3 +9,4 @@ OpenTasks 1.1.8
 * change scroll animation of title in details view
 * move delete option in details view to overflow menu
 * improve tablet layout
+* add options to manage checklist to task details view (add, remove, edit and reorder items)

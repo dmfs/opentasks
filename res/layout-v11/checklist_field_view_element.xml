@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/checklist_element"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="-4dp"
+    android:layout_marginStart="-4dp"
+    android:background="#e0ffffff"
+    android:clipChildren="false"
+    android:clipToPadding="false" >
+
+    <CheckBox
+        android:id="@android:id/checkbox"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:padding="8dp" />
+
+    <ImageView
+        android:id="@+id/drag_handle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_24_drag_handle_black50" />
+
+    <ImageView
+        android:id="@+id/remove_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_24_cancel_circle_black50"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@android:id/title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@android:id/checkbox"
+        android:layout_toLeftOf="@id/drag_handle"
+        android:layout_toRightOf="@android:id/checkbox"
+        android:layout_toStartOf="@id/drag_handle"
+        android:background="@android:color/white"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/opentasks_checklist_empty_item_hint"
+        android:imeOptions="actionNext"
+        android:inputType="text|textCapSentences|textMultiLine"
+        android:scrollHorizontally="false"
+        android:singleLine="false"
+        android:textSize="16sp" />
+
+</RelativeLayout>

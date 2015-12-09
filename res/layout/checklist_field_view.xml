@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<org.dmfs.tasks.widget.CheckListFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+<org.dmfs.tasks.widget.CheckListFieldViewLegacy xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/task_widget"
     android:visibility="visible" >
 
@@ -17,4 +17,4 @@
         android:orientation="vertical" >
     </LinearLayout>
 
-</org.dmfs.tasks.widget.CheckListFieldView>
+</org.dmfs.tasks.widget.CheckListFieldViewLegacy>

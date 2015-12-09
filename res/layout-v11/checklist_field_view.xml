@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.CheckListFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/task_widget"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:padding="4dp"
+    android:visibility="visible" >
+
+    <TextView
+        android:id="@android:id/icon"
+        style="@style/details_label_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp" />
+
+    <com.jmedeisis.draglinearlayout.DragLinearLayout
+        android:id="@+id/checklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/add_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-8dp"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/drag_handle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_24_plus_black50" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/opentasks_checklist_add_item" />
+        </LinearLayout>
+    </com.jmedeisis.draglinearlayout.DragLinearLayout>
+
+</org.dmfs.tasks.widget.CheckListFieldView>

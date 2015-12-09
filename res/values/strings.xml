@@ -45,6 +45,15 @@
     <string name="activity_task_details_pin">Pin</string>
     <string name="activity_task_details_pin_task">Pin task</string>
 
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Add item</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Item title</string>
+
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edit</string>
     <string name="activity_add_task_title">Create</string>

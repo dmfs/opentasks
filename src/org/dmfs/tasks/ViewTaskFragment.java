@@ -337,19 +337,19 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 	}
 
 
-	@SuppressLint("NewApi")
 	private void persistTask()
 	{
 		Activity activity = getActivity();
-		if (mContentSet != null && mContentSet.isUpdate() && activity != null)
+		if (mContentSet != null && activity != null)
 		{
-			if (mContentSet.updatesAnyKey(RECURRENCE_VALUES))
+			if (mDetailView != null)
 			{
-				mContentSet.ensureUpdates(RECURRENCE_VALUES);
+				mDetailView.updateValues();
 			}
-			mContentSet.persist(activity);
-			if (Build.VERSION.SDK_INT >= 11)
+
+			if (mContentSet.isUpdate())
 			{
+				mContentSet.persist(activity);
 				ActivityCompat.invalidateOptionsMenu(activity);
 			}
 		}

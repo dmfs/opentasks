@@ -45,6 +45,12 @@
     <string name="activity_task_details_pin">Anheften</string>
     <string name="activity_task_details_pin_task">Aufgabe anheften</string>
 
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Hinzufügen</string>
+
+    <!-- The hint that's shown for a check list item that has no text. -->
+    <string name="opentasks_checklist_empty_item_hint">Titel</string>
+
     <!-- Task editor -->
     <string name="activity_edit_task_title">Bearbeiten</string>
     <string name="activity_add_task_title">Erstellen</string>
