@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">читање задатака</string>
+    <string name="permission_description_read_tasks">Дозвољава апликацији да чита задатке са ваше листе задатака.</string>
+    <string name="permission_write_tasks">упис задатака</string>
+    <string name="permission_description_write_tasks">Дозвољава апликацији да уноси задатке у вашу листу задатака.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Додај задатак</string>
+    <string name="menu_add_task_condensed">Додај</string>
+    <string name="menu_show_completed">Прикажи завршене</string>
+    <string name="menu_hide_completed">Сакриј завршене</string>
+    <string name="menu_show_completed_condensed">Прикажи завршене</string>
+    <string name="menu_sync_now">Освежи</string>
+    <string name="menu_sync_now_condensed">Освежи</string>
+    <string name="menu_search_hint">Претрага</string>
+    <string name="toast_task_created">„%1s“ направљен.</string>
+    <string name="toast_task_completed">„%1s“ завршен.</string>
+    <string name="toast_task_uncompleted">„%1s“ реактивиран.</string>
+    <string name="toast_x_removed">„%1s“ уклоњен.</string>
+    <string name="task_group_title_list">Задаци</string>
+    <string name="task_group_title_start">Задаци почињу</string>
+    <string name="task_group_title_due">Задаци истичу</string>
+    <string name="task_group_title_priority">Приоритет задатка</string>
+    <string name="task_group_title_progress">Напредак задатка</string>
+    <string name="task_group_title_default">Задаци</string>
+    <string name="quick_add_task_created">Задатак направљен</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d задатак</item>
+        <item quantity="few">%d задатка</item>
+        <item quantity="other">%d задатака</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Уреди</string>
+    <string name="activity_task_details_edit_task">Уреди задатак</string>
+    <string name="activity_task_details_delete">Обриши</string>
+    <string name="activity_task_details_delete_task">Обриши</string>
+    <string name="activity_task_details_complete">Заврши</string>
+    <string name="activity_task_details_complete_task">Заврши задатак</string>
+    <string name="activity_task_details_pin">Закачи</string>
+    <string name="activity_task_details_pin_task">Закачи задатак</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Уређивање</string>
+    <string name="activity_add_task_title">Прављење</string>
+    <string name="activity_edit_task_error_invalid_url">Неисправан УРЛ</string>
+    <string name="activity_edit_task_task_saved">Задатак сачуван.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Празан задатак није сачуван.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Листа</string>
+    <string name="task_title">Наслов</string>
+    <string name="task_location">Локација</string>
+    <string name="task_description">Опис</string>
+    <string name="task_checklist">Попис</string>
+    <string name="task_start">Почетак</string>
+    <string name="task_due">Истек</string>
+    <string name="task_completed">Завршен</string>
+    <string name="task_percent_complete">Напредак</string>
+    <string name="task_status">Стање</string>
+    <string name="task_classification">Приватност</string>
+    <string name="task_url">УРЛ</string>
+    <string name="title_task_detail">Детаљи задатка</string>
+    <string name="title_task_list">Задаци</string>
+    <string name="provider_label">Задаци</string>
+    <string name="task_detail_activity">Детаљи задатка</string>
+    <string name="task_priority">Приоритет</string>
+    <string name="task_timezone">Временска зона</string>
+    <string name="task_all_day">Цели дан</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">Без истека</string>
+    <string name="task_group_overdue">Истекло</string>
+    <string name="task_group_due_today">Данас</string>
+    <string name="task_group_due_tomorrow">Сутра</string>
+    <string name="task_group_due_within_7_days">Следећих дана</string>
+    <string name="task_group_due_in_month">Истиче %s</string>
+    <string name="task_group_due_in_year">Истиче за %s</string>
+    <string name="task_group_due_in_future">Једног дана</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Већ почето</string>
+    <string name="task_group_start_today">Данас</string>
+    <string name="task_group_start_tomorrow">Сутра</string>
+    <string name="task_group_start_within_7_days">Једног дана</string>
+    <string name="task_group_start_in_future">Касније</string>
+    <string name="task_group_due_title">Истек</string>
+    <string name="task_group_all_title">Листе</string>
+    <string name="task_group_completed_title">Завршен</string>
+    <string name="task_group_start_title">Почетак</string>
+    <string name="task_group_search_title">Претрага</string>
+    <string name="task_group_priority_title">Приоритет</string>
+    <string name="task_group_progress_title">Напредак</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Ништа постигнуто</string>
+    <string name="task_group_progress_40">Тако треба</string>
+    <string name="task_group_progress_60">На пола пута</string>
+    <string name="task_group_progress_80">Скоро урађен</string>
+    <string name="task_group_progress_100">Урађен</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Висок приоритет</string>
+    <string name="task_group_priority_medium">Средњи приоритет</string>
+    <string name="task_group_priority_low">Низак приоритет</string>
+    <string name="task_group_priority_none">Без приоритета</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Сачувај</string>
+    <string name="action_cancel">Одустани</string>
+    <string name="action_save_and_continue">Сачувај и настави</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">захтева радњу</string>
+    <string name="status_in_process">у току</string>
+    <string name="status_completed">урађен</string>
+    <string name="status_cancelled">отказан</string>
+    <string name="status_incomplete">незавршен</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">неодређена</string>
+    <string name="classification_public">јавно</string>
+    <string name="classification_private">лично</string>
+    <string name="classification_confidential">поверљиво</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">ништа</string>
+    <string name="priority_low">низак</string>
+    <string name="priority_medium">средњи</string>
+    <string name="priority_high">висок</string>
+    <string name="priority_urgent">хитно</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Поставке</string>
+    <string name="action_settings">Поставке</string>
+    <string name="action_add_local_list">Додај листу</string>
+    <string name="visible_task_lists">Приказане листе</string>
+    <string name="enable_alarms">Обавештења</string>
+    <string name="synced_task_lists">Синхронизоване листе</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Изаберите налог</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">сачувај</string>
+    <string name="activity_manage_list_btn_delete">обриши листу</string>
+    <string name="activity_add_list_title">Направи локалну листу</string>
+    <string name="activity_edit_list_title">Поставке листе</string>
+    <string name="task_list_name_caption">Назив</string>
+    <string name="task_list_no_sync">Напомена: ово прави локалну листу. Задаци на локалној листи се не синхронизују.</string>
+    <string name="task_list_color_caption">Боја листе</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">назив листе</string>
+    <string name="task_list_name_dialog_title">Унос назива листе</string>
+    <string name="task_list_name_dialog_error">Унесите назив.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Брисање %s</string>
+    <string name="task_list_delete_dialog_message">Обрисати листу и све задатке на њој?\nНапомена: обрисана листа не може бити враћена.</string>
+    <string name="task_list_delete_toast">Листа %s обрисана</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">По датуму истека</string>
+    <string name="gd_by_completed">По урађености</string>
+    <string name="gd_by_list">По списку</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Потврда брисања</string>
+    <string name="confirm_delete_message">Да обришем овај задатак?</string>
+    <string name="confirm_delete_message_with_title">Обрисати „%1s“?</string>
+    <string name="toast_task_deleted">„%1s“ уклоњен.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">Ниједна листа задатака није доступан</string>
+    <string name="task_list_selection_title">Изаберите листе за приказ</string>
+    <string name="task_list_selection_ok">У РЕДУ</string>
+    <string name="task_list_selection_cancel">ОДУСТАНИ</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Текући задаци</string>
+    <string name="task_list_widget_title_4x4">Текући задаци 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Заврши</string>
+    <string name="fling_task_edit">Уреди</string>
+    <string name="fling_task_delete">Обриши</string>
+    <string name="fling_task_uncomplete">Реактивирај</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">икона за датум почетка задатка</string>
+    <string name="cd_due_date">икона за датум истека задатка</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Задатак истиче у %1s</string>
+    <string name="notification_task_start_date">Задатак почиње у %1s</string>
+    <string name="notification_task_due_today">Задатак истиче данас</string>
+    <string name="notification_task_start_today">Задатак почиње данас</string>
+    <string name="notification_action_complete">Заврши</string>
+    <string name="notification_action_completed">Завршен</string>
+    <string name="notification_action_delay_1h">+1 сат</string>
+    <string name="notification_action_delay_1d">+1 дан</string>
+    <string name="notification_action_delay_toast">Рок ажуриран</string>
+    <string name="notification_undo">Врати</string>
+    <string name="notification_action_unpin">откачи</string>
+    <string name="notification_task_pin_ticker">%1$s је закачен</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 сат</string>
+    <string name="button_add_one_day">+1 дан</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Задаци</string>
+    <string name="dashclock_extension_description">Приказ података за недавне задатке.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s истиче — %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s истиче</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s почиње — %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s почиње данас</string>
+    <string name="dashclock_pref_displayed_task_title">Приказани догађаји</string>
+    <string name="dashclock_pref_displayed_task_summary">Одредите који догађаји задатака се приказују у дашклок виџету</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Догађаји за приказ</string>
+    <string name="dashclock_display_type_due">задаци који истичу</string>
+    <string name="dashclock_display_type_start">задаци који почињу</string>
+    <string name="dashclock_display_type_start_and_due">сви задаци</string>
+    <string name="dashclock_display_type_pinned">закачени задаци</string>
+    <string name="dashclock_preference_title">Поставке за Дешклок прикључак</string>
+
+    <!-- General -->
+    <string name="accept">Прихвати</string>
+    <string name="now">сада</string>
+
+</resources>

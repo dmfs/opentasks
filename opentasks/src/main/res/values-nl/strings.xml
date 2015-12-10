@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">lees taken</string>
+    <string name="permission_description_read_tasks">Staat toe een app om taken in je takenlijst te lezen.</string>
+    <string name="permission_write_tasks">schrijf taken</string>
+    <string name="permission_description_write_tasks">Staat toe een app om taken in je takenlijst aan te maken.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Voeg taak toe</string>
+    <string name="menu_add_task_condensed">Voeg toe</string>
+    <string name="menu_show_completed">Toon afgeronde taken</string>
+    <string name="menu_hide_completed">Verberg afgeronde taken</string>
+    <string name="menu_show_completed_condensed">Toon afgeronde taken</string>
+    <string name="menu_sync_now">Ververs</string>
+    <string name="menu_sync_now_condensed">Ververs</string>
+    <string name="toast_task_completed">\"%1s\" afgerond.</string>
+    <string name="toast_task_uncompleted">\"%1s\" heropend.</string>
+    <string name="toast_x_removed">\"%1s\" verwijderd.</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d taak</item>
+        <item quantity="other">%d taken</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Bewerk</string>
+    <string name="activity_task_details_edit_task">Bewerk taak</string>
+    <string name="activity_task_details_delete">Verwijder</string>
+    <string name="activity_task_details_delete_task">Verwijder taak</string>
+    <string name="activity_task_details_complete">Rond af</string>
+    <string name="activity_task_details_complete_task">Rond taak af</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Bewerk Taak</string>
+    <string name="activity_add_task_title">Creëer Taak</string>
+    <string name="activity_edit_task_error_invalid_url">Ongeldige URL</string>
+    <string name="activity_edit_task_task_saved">Task opgeslagen.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Lege taak niet opgeslagen.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Lijst</string>
+    <string name="task_title">Titel</string>
+    <string name="task_location">Locatie</string>
+    <string name="task_description">Beschrijving</string>
+    <string name="task_start">Start</string>
+    <string name="task_due">Einde</string>
+    <string name="task_completed">Afgerond</string>
+    <string name="task_percent_complete">Percentage af</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Privacy</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Taakdetail</string>
+    <string name="title_task_list">Taken</string>
+    <string name="provider_label">Taken</string>
+    <string name="task_detail_activity">Taakdetail</string>
+    <string name="task_priority">Priority</string>
+    <string name="task_timezone">Tijdzone</string>
+    <string name="task_all_day">Hele Dag</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">Geen einddatum</string>
+    <string name="task_group_overdue">Over datum</string>
+    <string name="task_group_due_today">Vandaag</string>
+    <string name="task_group_due_tomorrow">Morgen</string>
+    <string name="task_group_due_within_7_days">Komende dagen</string>
+    <string name="task_group_due_in_month">Einde in %s</string>
+    <string name="task_group_due_in_year">Einde in %s</string>
+    <string name="task_group_due_in_future">Een keer</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Al Gestart</string>
+    <string name="task_group_start_today">Vandaag</string>
+    <string name="task_group_start_tomorrow">Morgen</string>
+    <string name="task_group_start_within_7_days">Een dag</string>
+    <string name="task_group_start_in_future">Later</string>
+    <string name="task_group_due_title">Einde</string>
+    <string name="task_group_all_title">Lijsten</string>
+    <string name="task_group_completed_title">Afgerond</string>
+    <string name="task_group_start_title">Start</string>
+    <string name="task_group_priority_title">Prioriteit</string>
+    <string name="task_group_progress_title">Voortgang</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Niets gedaan</string>
+    <string name="task_group_progress_40">Goed begin</string>
+    <string name="task_group_progress_60">Halverwege</string>
+    <string name="task_group_progress_80">Bijna afgerond</string>
+    <string name="task_group_progress_100">Afgerond</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Hoge prioriteit</string>
+    <string name="task_group_priority_medium">Middelmatige prioriteit</string>
+    <string name="task_group_priority_low">Lage prioriteit</string>
+    <string name="task_group_priority_none">Geen prioriteit</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Sla op</string>
+    <string name="action_cancel">Annuleer</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">wacht op actie</string>
+    <string name="status_in_process">in behandeling</string>
+    <string name="status_completed">afgerond</string>
+    <string name="status_cancelled">geannuleerd</string>
+    <string name="status_incomplete">incompleet</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">ongespecificeerd</string>
+    <string name="classification_public">publiek</string>
+    <string name="classification_private">privé</string>
+    <string name="classification_confidential">vertrouwelijk</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">geen</string>
+    <string name="priority_low">laag</string>
+    <string name="priority_medium">middelmatig</string>
+    <string name="priority_high">hoog</string>
+    <string name="priority_urgent">urgent</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Instellingen</string>
+    <string name="action_settings">Instellingen</string>
+    <string name="visible_task_lists">Getoonde Lijsten</string>
+    <string name="enable_alarms">Notificaties</string>
+    <string name="synced_task_lists">Gesynchroniseerde Lijst</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Per Einddatum</string>
+    <string name="gd_by_completed">Per Status</string>
+    <string name="gd_by_list">Per Lijst</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Bevestig verwijderen</string>
+    <string name="confirm_delete_message">Verwijder deze taak?</string>
+    <string name="confirm_delete_message_with_title">Verwijder \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" verwijderd.</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Huidige taken</string>
+    <string name="task_list_widget_title_4x4">Huidige taken 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Rond af</string>
+    <string name="fling_task_edit">Bewerk</string>
+    <string name="fling_task_delete">Verwijder</string>
+    <string name="fling_task_uncomplete">Heropen</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">icoon voor startdatum van de taak</string>
+    <string name="cd_due_date">icoon voor einddatum van de taak</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">Taak einde</string>
+    <string name="notification_task_start_title">Taak start</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 uur</string>
+    <string name="button_add_one_day">+1 dag</string>
+
+</resources>

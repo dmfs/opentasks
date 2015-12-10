@@ -1,0 +1,45 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "org.dmfs.tasks"
+        minSdkVersion 8
+        targetSdkVersion 23
+        versionCode 101
+        versionName '1.1.8-pre8'
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles 'proguard.cfg'
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    productFlavors {
+    }
+
+    lintOptions {
+        // TODO: fix these
+        disable 'MissingTranslation'
+        disable 'ManifestResource'
+        disable 'ValidFragment'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.android.support:design:23.1.1'
+    compile('org.dmfs:android-xml-magic:0.1.1') {
+        // xmlpull is part of the runtime, so don't pull it in here
+        exclude group: 'xmlpull', module: 'xmlpull'
+    }
+    compile('org.dmfs:opentasks-provider:1.1.8')
+    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    compile 'com.github.dmfs:color-picker:c3b3b52033dc0b33bd831e731ec6f74fb1e8a69a'
+}

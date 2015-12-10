@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">read tasks</string>
+    <string name="permission_description_read_tasks">Read tasks and task lists.</string>
+    <string name="permission_write_tasks">write tasks</string>
+    <string name="permission_description_write_tasks">Create, modify and delete tasks and task lists.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Add task</string>
+    <string name="menu_add_task_condensed">Add</string>
+    <string name="menu_show_completed">Show completed tasks</string>
+    <string name="menu_hide_completed">Hide completed tasks</string>
+    <string name="menu_show_completed_condensed">Show completed tasks</string>
+    <string name="menu_sync_now">Refresh</string>
+    <string name="menu_sync_now_condensed">Refresh</string>
+    <string name="menu_search_hint">Search</string>
+    <string name="toast_task_created">\"%1s\" created.</string>
+    <string name="toast_task_completed">\"%1s\" completed.</string>
+    <string name="toast_task_uncompleted">\"%1s\" reopened.</string>
+    <string name="toast_x_removed">\"%1s\" removed.</string>
+    <string name="task_group_title_list">Tasks</string>
+    <string name="task_group_title_start">Tasks starting</string>
+    <string name="task_group_title_due">Tasks due</string>
+    <string name="task_group_title_priority">Task priority</string>
+    <string name="task_group_title_progress">Task progress</string>
+    <string name="task_group_title_default">Tasks</string>
+    <string name="quick_add_task_created">Task created</string>
+    <string name="initial_local_task_list_name">My tasks</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Edit</string>
+    <string name="activity_task_details_edit_task">Edit task</string>
+    <string name="activity_task_details_delete">Delete</string>
+    <string name="activity_task_details_delete_task">Delete task</string>
+    <string name="activity_task_details_complete">Complete</string>
+    <string name="activity_task_details_complete_task">Complete task</string>
+    <string name="activity_task_details_pin">Pin</string>
+    <string name="activity_task_details_pin_task">Pin task</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Add item</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Item title</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Edit</string>
+    <string name="activity_add_task_title">Create</string>
+    <string name="activity_edit_task_error_invalid_url">Invalid URL</string>
+    <string name="activity_edit_task_task_saved">Task saved.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Empty task not saved.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">List</string>
+    <string name="task_title">Title</string>
+    <string name="task_location">Location</string>
+    <string name="task_description">Description</string>
+    <string name="task_checklist">Check list</string>
+    <string name="task_start">Start</string>
+    <string name="task_due">Due</string>
+    <string name="task_completed">Completed</string>
+    <string name="task_percent_complete">Percent complete</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Privacy</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Task Detail</string>
+    <string name="title_task_list">Tasks</string>
+    <string name="provider_label">Tasks</string>
+    <string name="task_detail_activity">Task Detail</string>
+    <string name="task_priority">Priority</string>
+    <string name="task_timezone">Time Zone</string>
+    <string name="task_all_day">All Day</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">No due date</string>
+    <string name="task_group_overdue">Overdue</string>
+    <string name="task_group_due_today">Today</string>
+    <string name="task_group_due_tomorrow">Tomorrow</string>
+    <string name="task_group_due_within_7_days">Next days</string>
+    <string name="task_group_due_in_month">Due in %s</string>
+    <string name="task_group_due_in_year">Due in %s</string>
+    <string name="task_group_due_in_future">Someday</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Already Started</string>
+    <string name="task_group_start_today">Today</string>
+    <string name="task_group_start_tomorrow">Tomorrow</string>
+    <string name="task_group_start_within_7_days">Someday</string>
+    <string name="task_group_start_in_future">Later</string>
+    <string name="task_group_due_title">Due</string>
+    <string name="task_group_all_title">Lists</string>
+    <string name="task_group_completed_title">Completed</string>
+    <string name="task_group_start_title">Start</string>
+    <string name="task_group_search_title">Search</string>
+    <string name="task_group_priority_title">Priority</string>
+    <string name="task_group_progress_title">Progress</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Nothing accomplished</string>
+    <string name="task_group_progress_40">Way to go</string>
+    <string name="task_group_progress_60">Halfway there</string>
+    <string name="task_group_progress_80">Almost done</string>
+    <string name="task_group_progress_100">Done</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">High priority</string>
+    <string name="task_group_priority_medium">Medium priority</string>
+    <string name="task_group_priority_low">Low priority</string>
+    <string name="task_group_priority_none">No priority</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save_and_continue">Save and continue</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">needs action</string>
+    <string name="status_in_process">in process</string>
+    <string name="status_completed">done</string>
+    <string name="status_cancelled">cancelled</string>
+    <string name="status_incomplete">incomplete</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">not specified</string>
+    <string name="classification_public">public</string>
+    <string name="classification_private">private</string>
+    <string name="classification_confidential">confidential</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">none</string>
+    <string name="priority_low">low</string>
+    <string name="priority_medium">medium</string>
+    <string name="priority_high">high</string>
+    <string name="priority_urgent">urgent</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Settings</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add_local_list">Add List</string>
+    <string name="visible_task_lists">Displayed Lists</string>
+    <string name="enable_alarms">Notifications</string>
+    <string name="synced_task_lists">Synchronized Lists</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Choose an account</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">save</string>
+    <string name="activity_manage_list_btn_delete">delete list</string>
+    <string name="activity_add_list_title">Create local list</string>
+    <string name="activity_edit_list_title">List settings</string>
+    <string name="task_list_name_caption">Name</string>
+    <string name="task_list_no_sync">Note: This creates a local list. Tasks in local lists will not be synced.</string>
+    <string name="task_list_color_caption">List Color</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">list name</string>
+    <string name="task_list_name_dialog_title">Enter list name</string>
+    <string name="task_list_name_dialog_error">Enter a name.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Delete %s</string>
+    <string name="task_list_delete_dialog_message">Delete the list and all tasks within?\nNote: There is no way to restore a deleted list.</string>
+    <string name="task_list_delete_toast">%s deleted</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">By Due Date</string>
+    <string name="gd_by_completed">By Completed</string>
+    <string name="gd_by_list">By List</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Confirm delete</string>
+    <string name="confirm_delete_message">Delete this task?</string>
+    <string name="confirm_delete_message_with_title">Delete \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" removed.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">No task list available</string>
+    <string name="task_list_selection_title">Select lists to display</string>
+    <string name="task_list_selection_ok">OK</string>
+    <string name="task_list_selection_cancel">CANCEL</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Current tasks</string>
+    <string name="task_list_widget_title_4x4">Current tasks 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Complete</string>
+    <string name="fling_task_edit">Edit</string>
+    <string name="fling_task_delete">Delete</string>
+    <string name="fling_task_uncomplete">Uncomplete</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">icon for the start date of the task</string>
+    <string name="cd_due_date">icon for the due date of the task</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Task due, %1s</string>
+    <string name="notification_task_start_date">Task start, %1s</string>
+    <string name="notification_task_due_today">Task due today</string>
+    <string name="notification_task_start_today">Task starts today</string>
+    <string name="notification_action_complete">complete</string>
+    <string name="notification_action_completed">Completed</string>
+    <string name="notification_action_delay_1h">+1 hour</string>
+    <string name="notification_action_delay_1d">+1 day</string>
+    <string name="notification_action_delay_toast">Due date updated</string>
+    <string name="notification_undo">Undo</string>
+    <string name="notification_action_unpin">unpin</string>
+    <string name="notification_task_pin_ticker">%1$s was pinned</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 hour</string>
+    <string name="button_add_one_day">+1 day</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Tasks</string>
+    <string name="dashclock_extension_description">Displays information for recent tasks.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s is due - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s is due</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s starts - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s starts today</string>
+    <string name="dashclock_pref_displayed_task_title">Displayed events</string>
+    <string name="dashclock_pref_displayed_task_summary">Select which events of tasks are displayed in the dashclock widget</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Events to display</string>
+    <string name="dashclock_display_type_due">due tasks</string>
+    <string name="dashclock_display_type_start">starting tasks</string>
+    <string name="dashclock_display_type_start_and_due">starting and due tasks</string>
+    <string name="dashclock_display_type_all">all</string>
+    <string name="dashclock_display_type_pinned">pinned tasks</string>
+    <string name="dashclock_preference_title">Task DashClock Preferences</string>
+
+    <!-- General -->
+    <string name="accept">Accept</string>
+    <string name="now">now</string>
+
+</resources>

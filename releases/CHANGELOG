@@ -10,3 +10,5 @@ OpenTasks 1.1.8
 * move delete option in details view to overflow menu
 * improve tablet layout
 * add options to manage checklist to task details view (add, remove, edit and reorder items)
+
+* switch from Eclipse to Android Studio/Gradle

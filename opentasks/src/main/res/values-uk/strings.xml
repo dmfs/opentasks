@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">читання завдань</string>
+    <string name="permission_description_read_tasks">Дозволити додатку читати ваші завдання з ваших переліків завдань.</string>
+    <string name="permission_write_tasks">запис завдань</string>
+    <string name="permission_description_write_tasks">Дозволити додатку зберігати завдання до ваших переліків завдань.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Додати завдання</string>
+    <string name="menu_add_task_condensed">Нова</string>
+    <string name="menu_show_completed">Показувати виконані завдання</string>
+    <string name="menu_hide_completed">Приховувати виконані завдання</string>
+    <string name="menu_show_completed_condensed">Показувати виконані завдання</string>
+    <string name="menu_sync_now">Оновити</string>
+    <string name="menu_sync_now_condensed">Оновити</string>
+    <string name="menu_search_hint">Пошук</string>
+    <string name="toast_task_created">\"%1s\" створено.</string>
+    <string name="toast_task_completed">\"%1s\" виконано.</string>
+    <string name="toast_task_uncompleted">\"%1s\" відновлено.</string>
+    <string name="toast_x_removed">\"%1s\" видалено.</string>
+    <string name="task_group_title_list">Завдання</string>
+    <string name="task_group_title_start">Початок завдання</string>
+    <string name="task_group_title_due">Термін виконання завдання</string>
+    <string name="task_group_title_priority">Пріоритет завдання</string>
+    <string name="task_group_title_progress">Поступ завдання</string>
+    <string name="task_group_title_default">Завдання</string>
+    <string name="quick_add_task_created">Завдання створено</string>
+
+    <plurals name="number_of_tasks">
+        <!-- last number 1 -->
+        <item quantity="one">%d завдання</item>
+        <!-- last number 2-4 -->
+        <item quantity="few">%d завдання</item>
+        <!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
+        <item quantity="many">%d завдань</item>
+        <item quantity="other">%d завдання</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Змінити</string>
+    <string name="activity_task_details_edit_task">Змінити завдання</string>
+    <string name="activity_task_details_delete">Видалити</string>
+    <string name="activity_task_details_delete_task">Видалити завдання</string>
+    <string name="activity_task_details_complete">Завершити</string>
+    <string name="activity_task_details_complete_task">Завершити завдання</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Редагувати</string>
+    <string name="activity_add_task_title">Нове завдання</string>
+    <string name="activity_edit_task_error_invalid_url">Помилкове посилання URL</string>
+    <string name="activity_edit_task_task_saved">Завдання збережено.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Пусте завдання. Збереження скасовано.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Список</string>
+    <string name="task_title">Назва</string>
+    <string name="task_location">Місце</string>
+    <string name="task_description">Опис</string>
+    <string name="task_checklist">Перелік</string>
+    <string name="task_start">Початок</string>
+    <string name="task_due">Термін</string>
+    <string name="task_completed">Виконано</string>
+    <string name="task_percent_complete">Процент виконання</string>
+    <string name="task_status">Стан</string>
+    <string name="task_classification">Приватність</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Подробиці завдання</string>
+    <string name="title_task_list">Завдання</string>
+    <string name="provider_label">Завдання</string>
+    <string name="task_detail_activity">Подробиці завдання</string>
+    <string name="task_priority">Пріоритет</string>
+    <string name="task_timezone">Часовий пояс</string>
+    <string name="task_all_day">Весь день</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">Без терміну</string>
+    <string name="task_group_overdue">Термін вийшов</string>
+    <string name="task_group_due_today">Сьогодні</string>
+    <string name="task_group_due_tomorrow">Завтра</string>
+    <string name="task_group_due_within_7_days">На протязі тижня</string>
+    <string name="task_group_due_in_month">Термін у %s</string>
+    <string name="task_group_due_in_year">Термін у %s </string>
+    <string name="task_group_due_in_future">В майбутньому</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Вже розпочато</string>
+    <string name="task_group_start_today">Сьогодні</string>
+    <string name="task_group_start_tomorrow">Завтра</string>
+    <string name="task_group_start_within_7_days">На протязі тижня</string>
+    <string name="task_group_start_in_future">Пізніше</string>
+    <string name="task_group_due_title">Термін</string>
+    <string name="task_group_all_title">Списки</string>
+    <string name="task_group_completed_title">Виконано</string>
+    <string name="task_group_start_title">Початок</string>
+    <string name="task_group_search_title">Пошук</string>
+    <string name="task_group_priority_title">Пріоритет</string>
+    <string name="task_group_progress_title">Поступ</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Нічого не зроблено</string>
+    <string name="task_group_progress_40">Розпочато</string>
+    <string name="task_group_progress_60">Половину виконано</string>
+    <string name="task_group_progress_80">Лишилось трохи</string>
+    <string name="task_group_progress_100">Завершено</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Високий</string>
+    <string name="task_group_priority_medium">Середній</string>
+    <string name="task_group_priority_low">Низький</string>
+    <string name="task_group_priority_none">Без пріоритету</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Зберегти</string>
+    <string name="action_cancel">Скасувати</string>
+    <string name="action_save_and_continue">Зберегти і далі</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">в очікуванні</string>
+    <string name="status_in_process">виконується</string>
+    <string name="status_completed">виконане</string>
+    <string name="status_cancelled">скасоване</string>
+    <string name="status_incomplete">не виконане</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">не вказано</string>
+    <string name="classification_public">публічне</string>
+    <string name="classification_private">особисте</string>
+    <string name="classification_confidential">конфіденційне</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">не визначений</string>
+    <string name="priority_low">низький</string>
+    <string name="priority_medium">середній</string>
+    <string name="priority_high">високий</string>
+    <string name="priority_urgent">негайний</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="action_add_local_list">Додати список</string>
+    <string name="visible_task_lists">Списки, що використовуються</string>
+    <string name="enable_alarms">Нагадування</string>
+    <string name="synced_task_lists">Всі доступні списки</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Оберіть обліковий запис</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">зберегти</string>
+    <string name="activity_manage_list_btn_delete">видалити список</string>
+    <string name="activity_add_list_title">Створити локальний список</string>
+    <string name="activity_edit_list_title">Налаштування списку</string>
+    <string name="task_list_name_caption">Ім\'я</string>
+    <string name="task_list_no_sync">Примітка: Це створить локальний список. Завдання з локального списку не будуть синхронізуватися.</string>
+    <string name="task_list_color_caption">Колір списку</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">назва списку</string>
+    <string name="task_list_name_dialog_title">Введіть назву списку</string>
+    <string name="task_list_name_dialog_error">Введіть назву.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Видалити %s</string>
+    <string name="task_list_delete_dialog_message">Видалити список і всі завдання з нього?\nПримітка: Неможливо буде відновити видалений список.</string>
+    <string name="task_list_delete_toast">%s видалено</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">По терміну</string>
+    <string name="gd_by_completed">По стану</string>
+    <string name="gd_by_list">По списках</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Підтвердіть видалення</string>
+    <string name="confirm_delete_message">Видалити це завдання?</string>
+    <string name="confirm_delete_message_with_title">Видалити \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" видалено.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">Немає списку завдань</string>
+    <string name="task_list_selection_title">Селекція списків</string>
+    <string name="task_list_selection_ok">Гаразд</string>
+    <string name="task_list_selection_cancel">Скасувати</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Поточні завдання</string>
+    <string name="task_list_widget_title_4x4">Поточні завдання 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Завершити</string>
+    <string name="fling_task_edit">Змінити</string>
+    <string name="fling_task_delete">Видалити</string>
+    <string name="fling_task_uncomplete">Скинути</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">значок для дати початку завдання</string>
+    <string name="cd_due_date">значок для терміну виконання завдання</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Термін виконання завдання %1s</string>
+    <string name="notification_task_start_date">Початок завдання %1s</string>
+    <string name="notification_task_due_today">Термін виконання завдання сьогодні</string>
+    <string name="notification_task_start_today">Початок завдання сьогодні</string>
+    <string name="notification_action_complete">Завершити</string>
+    <string name="notification_action_completed">Виконано</string>
+    <string name="notification_action_delay_1h">+1 година</string>
+    <string name="notification_action_delay_1d">+1 день</string>
+    <string name="notification_action_delay_toast">Термін виконання оновлено</string>
+    <string name="notification_undo">Повернути</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 годину</string>
+    <string name="button_add_one_day">+1 день</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Завдання</string>
+    <string name="dashclock_extension_description">Інформація за актуальними завданням.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s термін - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s термін</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s початок - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s початок сьогодні</string>
+    <string name="dashclock_pref_displayed_task_title">Показані завдання</string>
+    <string name="dashclock_pref_displayed_task_summary">Вибір, які завдання будуть виводитись у додаток DashClock на екран</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Завдання для показу</string>
+    <string name="dashclock_display_type_due">Завдання по терміну виконання</string>
+    <string name="dashclock_display_type_start">Розпочаті завдання</string>
+    <string name="dashclock_display_type_start_and_due">Завдання розпочаті та по терміну виконання</string>
+    <string name="dashclock_display_type_all">всі</string>
+    <string name="dashclock_preference_title">Параметри додатку DashClock</string>
+
+    <!-- General -->
+    <string name="accept">Підтвердити</string>
+    <string name="now">Зараз</string>
+
+</resources>
