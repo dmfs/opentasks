@@ -19,7 +19,22 @@
 
 package org.dmfs.tasks.homescreen;
 
-import java.util.TimeZone;
+import android.annotation.TargetApi;
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.text.format.Time;
+import android.util.Log;
+import android.widget.RemoteViews;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -30,21 +45,7 @@ import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
-import android.annotation.TargetApi;
-import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.text.format.Time;
-import android.util.Log;
-import android.widget.RemoteViews;
+import java.util.TimeZone;
 
 
 /**
@@ -146,6 +147,17 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 					}
 				}
 
+				/*
+			 	* Create and set a {@link PendingIntent} to view the task when the list is clicked.
+			 	*/
+				Intent itemClickIntent = new Intent();
+				itemClickIntent.setAction(Intent.ACTION_VIEW);
+				itemClickIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
+				itemClickIntent.setData(ContentUris.withAppendedId(Tasks.getContentUri(authority),  TaskFieldAdapters.TASK_ID.get(cursor)));
+				PendingIntent launchPI = PendingIntent.getActivity(context, 0, itemClickIntent, 0);
+				taskItem.setOnClickPendingIntent(R.id.widget_list_item, launchPI);
+
+
 				widget.addView(android.R.id.list, taskItem);
 				cursor.moveToNext();
 				count++;
@@ -164,13 +176,6 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
-
-			/*
-			 * Create and set a {@link PendingIntent} to launch the application when the list is clicked.
-			 */
-			Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
-			PendingIntent launchPI = PendingIntent.getActivity(context, 0, launchIntent, 0);
-			widget.setOnClickPendingIntent(android.R.id.list, launchPI);
 
 			appWidgetManager.updateAppWidget(appWidgetIds, widget);
 			return;

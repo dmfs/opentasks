@@ -19,22 +19,6 @@
 
 package org.dmfs.tasks.homescreen;
 
-import java.util.ArrayList;
-import java.util.TimeZone;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DateFormatter;
-import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
-import org.dmfs.tasks.utils.TimeChangeListener;
-import org.dmfs.tasks.utils.TimeChangeObserver;
-import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
-
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.appwidget.AppWidgetManager;
@@ -49,6 +33,22 @@ import android.support.v4.content.CursorLoader;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Instances;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
+import org.dmfs.tasks.utils.TimeChangeListener;
+import org.dmfs.tasks.utils.TimeChangeObserver;
+import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
+
+import java.util.ArrayList;
+import java.util.TimeZone;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -238,11 +238,12 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				row.setTextViewText(android.R.id.text1, null);
 			}
 
+
 			Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), items[position].getTaskId());
 			Intent i = new Intent();
 			i.setData(taskUri);
-
 			row.setOnClickFillInIntent(R.id.widget_list_item, i);
+
 			return (row);
 		}
 
