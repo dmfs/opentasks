@@ -6,4 +6,9 @@
     <bool name="has_two_panes">false</bool>
     <bool name="opentasks_enabled_detail_view_fab">true</bool>
 
+
+    <!-- Api level settings -->
+    <bool name="preHoneycomb">true</bool>
+    <bool name="postHoneycomb">false</bool>
+
 </resources>

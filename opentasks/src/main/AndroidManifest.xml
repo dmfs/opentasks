@@ -147,6 +147,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity" />
         </activity>
+        <receiver
+            android:name="org.dmfs.provider.tasks.TaskProviderBroadcastReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- homescreen widgets -->
         <activity
             android:name="org.dmfs.tasks.homescreen.TaskListWidgetSettingsActivity"
             android:label="@string/task_list_selection_title"
@@ -155,14 +168,73 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-
         <service
             android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService"
             android:permission="android.permission.BIND_REMOTEVIEWS" >
         </service>
 
         <receiver
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLegacy"
+            android:enabled="@bool/preHoneycomb"
+            android:label="@string/task_list_widget_title" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data
+                    android:host="@string/opentasks_authority"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
+
+                <data
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/task_widget_info" />
+        </receiver>
+        <receiver
+            android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLargeLegacy"
+            android:enabled="@bool/preHoneycomb"
+            android:label="@string/task_list_widget_title_4x4" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data
+                    android:host="@string/opentasks_authority"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
+
+                <data
+                    android:host="@string/opentasks_authority"
+                    android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/task_widget_info_large" />
+        </receiver>
+
+        <receiver
             android:name="org.dmfs.tasks.homescreen.TaskListWidgetProvider"
+            android:enabled="@bool/postHoneycomb"
             android:label="@string/task_list_widget_title" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -191,6 +263,7 @@
         </receiver>
         <receiver
             android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLarge"
+            android:enabled="@bool/postHoneycomb"
             android:label="@string/task_list_widget_title_4x4" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -216,17 +289,6 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/task_widget_info_large" />
-        </receiver>
-        <receiver
-            android:name="org.dmfs.provider.tasks.TaskProviderBroadcastReceiver"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-                <action android:name="android.intent.action.DATE_CHANGED" />
-            </intent-filter>
         </receiver>
 
         <!-- custom alarm receivers -->

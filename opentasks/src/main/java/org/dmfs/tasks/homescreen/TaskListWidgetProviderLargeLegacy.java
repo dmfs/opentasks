@@ -31,34 +31,53 @@ import android.os.Build;
 
 
 /**
- * The provider for the large homescreen widget on Android Honeycomb and up.
- * @author Tobias Reinsch <tobias@dmfs.org>
+ * The Class TaskListWidgetProvider.
+ * 
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class TaskListWidgetProviderLarge extends TaskListWidgetProvider
+public class TaskListWidgetProviderLargeLegacy extends TaskListWidgetProvider
 {
 
 	/*
 	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
-	 * 
+	 *
 	 * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
 		super.onReceive(context, intent);
+
+		String action = intent.getAction();
+		if (action.equals(Intent.ACTION_PROVIDER_CHANGED))
+		{
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(getComponentName(context));
+			if (Build.VERSION.SDK_INT >= 11)
+			{
+				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
+			}
+			else
+			{
+				onUpdate(context, appWidgetManager, appWidgetIds);
+			}
+		}
 	}
 
 
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds)
 	{
+		// Delete configuration
+		WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(context);
+		dbHelper.deleteWidgetConfiguration(appWidgetIds);
+
 		super.onDeleted(context, appWidgetIds);
 	}
 
 
 	static ComponentName getComponentName(Context context)
 	{
-		return new ComponentName(context, TaskListWidgetProviderLarge.class);
+		return new ComponentName(context, TaskListWidgetProviderLargeLegacy.class);
 	}
 }

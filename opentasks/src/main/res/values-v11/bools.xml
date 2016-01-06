@@ -4,4 +4,9 @@
     <!-- enable the org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService$TaskListViewsFactory receiver in Android 3+ -->
     <bool name="enable_widget_provider">true</bool>
 
+
+    <!-- Api level settings -->
+    <bool name="preHoneycomb">false</bool>
+    <bool name="postHoneycomb">true</bool>
+
 </resources>
