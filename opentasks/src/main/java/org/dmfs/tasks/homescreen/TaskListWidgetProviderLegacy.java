@@ -19,6 +19,17 @@
 
 package org.dmfs.tasks.homescreen;
 
+import java.util.TimeZone;
+
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.TaskListActivity;
+import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.utils.DateFormatter;
+import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
+import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
+
 import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -36,24 +47,12 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.TaskListActivity;
-import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DateFormatter;
-import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
-import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
-
-import java.util.TimeZone;
-
 
 /**
- * The Class TaskListWidgetProvider.
+ * The provider for the small widget for legacy Android 2.x devices
  * 
- * @author Arjun Naik <arjun@arjunnaik.in>
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProviderLegacy extends AppWidgetProvider
 {
 	private final static String TAG = "TaskListWidgetProvider";
@@ -74,16 +73,8 @@ public class TaskListWidgetProviderLegacy extends AppWidgetProvider
 		String action = intent.getAction();
 		if (action.equals(Intent.ACTION_PROVIDER_CHANGED))
 		{
-			// This update method only works on Android 3.0
-			if (Build.VERSION.SDK_INT >= 11)
-			{
-				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
-			}
-			else
-			{
-				//on Android 2.x we update the widget directly
-				onUpdate(context, appWidgetManager, appWidgetIds);
-			}
+			// on Android 2.x we update the widget directly
+			onUpdate(context, appWidgetManager, appWidgetIds);
 		}
 	}
 
@@ -105,132 +96,82 @@ public class TaskListWidgetProviderLegacy extends AppWidgetProvider
 	{
 		String authority = TaskContract.taskAuthority(context);
 
-		if (Build.VERSION.SDK_INT < 11)
-		{
-			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
-			widget.removeAllViews(android.R.id.list);
-			DateFormatter dateFormatter = new DateFormatter(context);
-			ContentResolver resolver = context.getContentResolver();
-			Cursor cursor = resolver.query(TaskContract.Instances.getContentUri(authority), null, TaskContract.Instances.VISIBLE + ">0 and "
-				+ TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR "
-				+ TaskContract.Instances.INSTANCE_START + " is null OR " + TaskContract.Instances.INSTANCE_START + " = " + TaskContract.Instances.INSTANCE_DUE
-				+ " )", null, TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", "
-				+ TaskContract.Instances.PRIORITY + " is null, " + TaskContract.Instances.PRIORITY + ", " + TaskContract.Instances.CREATED + " DESC");
+		RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
+		widget.removeAllViews(android.R.id.list);
+		DateFormatter dateFormatter = new DateFormatter(context);
+		ContentResolver resolver = context.getContentResolver();
+		Cursor cursor = resolver.query(TaskContract.Instances.getContentUri(authority), null,
+			TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND (" + TaskContract.Instances.INSTANCE_START + "<="
+				+ System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START + " is null OR " + TaskContract.Instances.INSTANCE_START + " = "
+				+ TaskContract.Instances.INSTANCE_DUE + " )",
+			null, TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.PRIORITY
+				+ " is null, " + TaskContract.Instances.PRIORITY + ", " + TaskContract.Instances.CREATED + " DESC");
 
-			cursor.moveToFirst();
-			int count = 0;
-			Time now = new Time();
-			now.clear(TimeZone.getDefault().getID());
-			now.setToNow();
-			now.normalize(true);
-			Resources resources = context.getResources();
-			while (!cursor.isAfterLast() && count < 7)
+		cursor.moveToFirst();
+		int count = 0;
+		Time now = new Time();
+		now.clear(TimeZone.getDefault().getID());
+		now.setToNow();
+		now.normalize(true);
+		Resources resources = context.getResources();
+		while (!cursor.isAfterLast() && count < 7)
+		{
+			RemoteViews taskItem = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
+			int taskColor = TaskFieldAdapters.LIST_COLOR.get(cursor);
+			taskItem.setInt(R.id.task_list_color, "setBackgroundColor", taskColor);
+			String title = TaskFieldAdapters.TITLE.get(cursor);
+			taskItem.setTextViewText(android.R.id.title, title);
+			Time dueDate = TaskFieldAdapters.DUE.get(cursor);
+			if (dueDate != null)
 			{
-				RemoteViews taskItem = new RemoteViews(context.getPackageName(), R.layout.task_list_widget_item);
-				int taskColor = TaskFieldAdapters.LIST_COLOR.get(cursor);
-				taskItem.setInt(R.id.task_list_color, "setBackgroundColor", taskColor);
-				String title = TaskFieldAdapters.TITLE.get(cursor);
-				taskItem.setTextViewText(android.R.id.title, title);
-				Time dueDate = TaskFieldAdapters.DUE.get(cursor);
-				if (dueDate != null)
+				dueDate.normalize(true);
+
+				taskItem.setTextViewText(android.R.id.text1, dateFormatter.format(dueDate, DateFormatContext.WIDGET_VIEW));
+
+				// highlight overdue dates & times
+				if ((!dueDate.allDay && dueDate.before(now)
+					|| dueDate.allDay && (dueDate.year < now.year || dueDate.yearDay <= now.yearDay && dueDate.year == now.year))
+					&& !TaskFieldAdapters.IS_CLOSED.get(cursor))
 				{
-					dueDate.normalize(true);
-
-					taskItem.setTextViewText(android.R.id.text1, dateFormatter.format(dueDate, DateFormatContext.WIDGET_VIEW));
-
-					// highlight overdue dates & times
-					if ((!dueDate.allDay && dueDate.before(now) || dueDate.allDay
-						&& (dueDate.year < now.year || dueDate.yearDay <= now.yearDay && dueDate.year == now.year))
-						&& !TaskFieldAdapters.IS_CLOSED.get(cursor))
-					{
-						taskItem.setTextColor(android.R.id.text1, resources.getColor(R.color.holo_red_light));
-					}
-					else
-					{
-						taskItem.setTextColor(android.R.id.text1, resources.getColor(R.color.lighter_gray));
-					}
+					taskItem.setTextColor(android.R.id.text1, resources.getColor(R.color.holo_red_light));
 				}
-
-				/*
-			 	* Create and set a {@link PendingIntent} to view the task when the list is clicked.
-			 	*/
-				Intent itemClickIntent = new Intent();
-				itemClickIntent.setAction(Intent.ACTION_VIEW);
-				itemClickIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
-				itemClickIntent.setData(ContentUris.withAppendedId(Tasks.getContentUri(authority),  TaskFieldAdapters.TASK_ID.get(cursor)));
-				PendingIntent launchPI = PendingIntent.getActivity(context, 0, itemClickIntent, 0);
-				taskItem.setOnClickPendingIntent(R.id.widget_list_item, launchPI);
-
-
-				widget.addView(android.R.id.list, taskItem);
-				cursor.moveToNext();
-				count++;
+				else
+				{
+					taskItem.setTextColor(android.R.id.text1, resources.getColor(R.color.lighter_gray));
+				}
 			}
-			cursor.close();
 
-			/** Add pending Intent to start the Tasks app when the title is clicked */
-			Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
-			tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
+			/*
+			 * Create and set a {@link PendingIntent} to view the task when the list is clicked.
+			 */
+			Intent itemClickIntent = new Intent();
+			itemClickIntent.setAction(Intent.ACTION_VIEW);
+			itemClickIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
+			itemClickIntent.setData(ContentUris.withAppendedId(Tasks.getContentUri(authority), TaskFieldAdapters.TASK_ID.get(cursor)));
+			PendingIntent launchPI = PendingIntent.getActivity(context, 0, itemClickIntent, 0);
+			taskItem.setOnClickPendingIntent(R.id.widget_list_item, launchPI);
 
-			/** Add a pending Intent to start new Task Activity on the new Task Button */
-			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
-			editTaskIntent.setData(Tasks.getContentUri(authority));
-			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
-
-			appWidgetManager.updateAppWidget(appWidgetIds, widget);
-			return;
+			widget.addView(android.R.id.list, taskItem);
+			cursor.moveToNext();
+			count++;
 		}
+		cursor.close();
 
-		/*
-		 * Iterate over all the widgets of this type and update them individually.
-		 */
-		for (int i = 0; i < appWidgetIds.length; i++)
-		{
-			Log.d(TAG, "updating widget " + i);
+		/** Add pending Intent to start the Tasks app when the title is clicked */
+		Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
+		tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
 
-			/** Create an Intent with the {@link RemoteViewsService } and pass it the Widget Id */
-			Intent remoteServiceIntent = new Intent(context, TaskListWidgetUpdaterService.class);
-			remoteServiceIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
-			remoteServiceIntent.setData(Uri.parse(remoteServiceIntent.toUri(Intent.URI_INTENT_SCHEME)));
+		/** Add a pending Intent to start new Task Activity on the new Task Button */
+		Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
+		editTaskIntent.setData(Tasks.getContentUri(authority));
+		editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
 
-			RemoteViews widget = new RemoteViews(context.getPackageName(), R.layout.task_list_widget);
-
-			/** Add pending Intent to start the Tasks app when the title is clicked */
-			Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
-			tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
-
-			/** Add a pending Intent to start new Task Activity on the new Task Button */
-			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
-			editTaskIntent.setData(Tasks.getContentUri(authority));
-			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
-
-			/** Set the {@link RemoteViewsService } subclass as the adapter for the {@link ListView} in the widget. */
-			if (Build.VERSION.SDK_INT < 14)
-			{
-				widget.setRemoteAdapter(appWidgetIds[i], R.id.task_list_widget_lv, remoteServiceIntent);
-			}
-			else
-			{
-				widget.setRemoteAdapter(R.id.task_list_widget_lv, remoteServiceIntent);
-			}
-
-			Intent detailIntent = new Intent(Intent.ACTION_VIEW);
-			detailIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
-			PendingIntent clickPI = PendingIntent.getActivity(context, 0, detailIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-			widget.setPendingIntentTemplate(R.id.task_list_widget_lv, clickPI);
-
-			/* Finally update the widget */
-			appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
-		}
+		appWidgetManager.updateAppWidget(appWidgetIds, widget);
+		return;
 	}
 
 

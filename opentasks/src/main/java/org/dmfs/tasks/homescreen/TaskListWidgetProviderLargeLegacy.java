@@ -31,11 +31,12 @@ import android.os.Build;
 
 
 /**
- * The Class TaskListWidgetProvider.
- * 
+ * The provider for the full 4x4 widget for pre Honeycomb devices.
+ * Inherits the same functionality from the small widget.
+ *
+ * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class TaskListWidgetProviderLargeLegacy extends TaskListWidgetProvider
+public class TaskListWidgetProviderLargeLegacy extends TaskListWidgetProviderLegacy
 {
 
 	/*
@@ -47,31 +48,11 @@ public class TaskListWidgetProviderLargeLegacy extends TaskListWidgetProvider
 	public void onReceive(Context context, Intent intent)
 	{
 		super.onReceive(context, intent);
-
-		String action = intent.getAction();
-		if (action.equals(Intent.ACTION_PROVIDER_CHANGED))
-		{
-			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-			int[] appWidgetIds = appWidgetManager.getAppWidgetIds(getComponentName(context));
-			if (Build.VERSION.SDK_INT >= 11)
-			{
-				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
-			}
-			else
-			{
-				onUpdate(context, appWidgetManager, appWidgetIds);
-			}
-		}
 	}
-
 
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds)
 	{
-		// Delete configuration
-		WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(context);
-		dbHelper.deleteWidgetConfiguration(appWidgetIds);
-
 		super.onDeleted(context, appWidgetIds);
 	}
 
