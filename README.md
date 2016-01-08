@@ -26,7 +26,7 @@ This is a task app for Android.
 
 <a href="https://play.google.com/store/apps/details?id=org.dmfs.tasks">
   <img alt="Get it on Google Play"
-       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+       src="https://cloud.githubusercontent.com/assets/16354543/11904684/0667026e-a5c2-11e5-9f53-4614cc53e01f.png" />
 </a>
 <a href="https://f-droid.org/repository/browse/?fdfilter=tasks&fdid=org.dmfs.tasks">
   <img alt="Get it on F-Droid"
