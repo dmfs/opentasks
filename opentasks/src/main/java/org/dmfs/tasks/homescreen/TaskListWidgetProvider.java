@@ -24,15 +24,10 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.text.format.Time;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -40,12 +35,7 @@ import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.TaskListActivity;
-import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.DateFormatter;
-import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
-
-import java.util.TimeZone;
 
 
 /**
@@ -79,7 +69,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	}
 
 
-	static ComponentName getComponentName(Context context)
+	protected ComponentName getComponentName(Context context)
 	{
 		return new ComponentName(context, TaskListWidgetProvider.class);
 	}

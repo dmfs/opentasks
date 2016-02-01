@@ -57,7 +57,8 @@ public class TaskListWidgetProviderLargeLegacy extends TaskListWidgetProviderLeg
 	}
 
 
-	static ComponentName getComponentName(Context context)
+	@Override
+	protected ComponentName getComponentName(Context context)
 	{
 		return new ComponentName(context, TaskListWidgetProviderLargeLegacy.class);
 	}

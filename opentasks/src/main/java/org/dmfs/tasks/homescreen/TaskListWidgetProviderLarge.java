@@ -19,11 +19,7 @@
 
 package org.dmfs.tasks.homescreen;
 
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
-
 import android.annotation.TargetApi;
-import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -57,7 +53,8 @@ public class TaskListWidgetProviderLarge extends TaskListWidgetProvider
 	}
 
 
-	static ComponentName getComponentName(Context context)
+	@Override
+	protected ComponentName getComponentName(Context context)
 	{
 		return new ComponentName(context, TaskListWidgetProviderLarge.class);
 	}
