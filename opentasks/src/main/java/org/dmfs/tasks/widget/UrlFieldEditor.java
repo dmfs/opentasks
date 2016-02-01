@@ -17,16 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.FieldAdapter;
-import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
-import org.dmfs.tasks.model.layout.LayoutOptions;
-
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.text.Editable;
@@ -35,6 +25,16 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.widget.EditText;
+
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -140,6 +140,11 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
 				{
 					mAdapter.set(mValues, new URL(text));
 				}
+				else
+				{
+					mAdapter.set(mValues, null);
+				}
+				mText.setError(null);
 			}
 			catch (MalformedURLException e)
 			{

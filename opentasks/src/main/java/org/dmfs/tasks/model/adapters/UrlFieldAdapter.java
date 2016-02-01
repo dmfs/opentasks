@@ -119,14 +119,28 @@ public final class UrlFieldAdapter extends FieldAdapter<URL>
 	@Override
 	public void set(ContentSet values, URL value)
 	{
-		values.put(mFieldName, value.toString());
+		if (value == null)
+		{
+			values.put(mFieldName, (String) null);
+		}
+		else
+		{
+			values.put(mFieldName, value.toString());
+		}
 	}
 
 
 	@Override
 	public void set(ContentValues values, URL value)
 	{
-		values.put(mFieldName, value.toString());
+		if (value == null)
+		{
+			values.putNull(mFieldName);
+		}
+		else
+		{
+			values.put(mFieldName, value.toString());
+		}
 	}
 
 
