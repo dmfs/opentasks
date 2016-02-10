@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "org.dmfs.tasks"
         minSdkVersion 8
-        targetSdkVersion 23
-        versionCode 101
-        versionName '1.1.8-pre8'
+        targetSdkVersion 22
+        versionCode 102
+        versionName '1.1.8.1'
     }
     buildTypes {
         release {
