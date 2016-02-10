@@ -11,7 +11,7 @@ This is a task app for Android.
 * [Color Picker](https://github.com/dmfs/color-picker)
 * [Dashclock 2.0](http://code.google.com/p/dashclock/)
 * [Retention Magic 1.2.2](https://github.com/dmfs/retention-magic)
-* [Task Provider 1.1.8](https://github.com/dmfs/task-provider)
+* [Task Provider 1.1.8.1](https://github.com/dmfs/task-provider)
 * [xmlobject 0.4.2](https://github.com/dmfs/xmlobjects)
 
 ## TODO:
