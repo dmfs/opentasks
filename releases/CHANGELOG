@@ -1,3 +1,10 @@
+OpenTasks 1.1.8.2
+=================
+
+* upgrade OpenTasks-Provider
+* fix crash when opening a task from widget in two-pane mode
+* add Portuguese translation
+
 
 OpenTasks 1.1.8
 ===============
