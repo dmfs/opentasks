@@ -82,8 +82,8 @@ import android.widget.TextView;
  * 
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class TaskListFragment extends SupportFragment implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener,
-	OnFlingListener
+public class TaskListFragment extends SupportFragment
+	implements LoaderManager.LoaderCallbacks<Cursor>, OnChildLoadedListener, OnModelLoadedListener, OnFlingListener
 {
 
 	@SuppressWarnings("unused")
@@ -292,8 +292,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 			mExpandableListView.expandGroups(mSavedExpandedGroups);
 		}
 
-		FlingDetector swiper = new FlingDetector(mExpandableListView, mGroupDescriptor.getElementViewDescriptor().getFlingContentViewId(), getActivity()
-			.getApplicationContext());
+		FlingDetector swiper = new FlingDetector(mExpandableListView, mGroupDescriptor.getElementViewDescriptor().getFlingContentViewId(),
+			getActivity().getApplicationContext());
 		swiper.setOnFlingListener(this);
 
 		return rootView;
@@ -935,8 +935,8 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 		{
 			try
 			{
-				mExpandableListView.setItemChecked(
-					mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
+				mExpandableListView
+					.setItemChecked(mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)), true);
 			}
 			catch (NullPointerException e)
 			{
@@ -988,10 +988,10 @@ public class TaskListFragment extends SupportFragment implements LoaderManager.L
 				@Override
 				public void run()
 				{
-					mSelectedChildPosition.flatListPosition = mExpandableListView.getFlatListPosition(RetainExpandableListView.getPackedPositionForChild(
-						mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition));
-
 					mExpandableListView.expandGroup(mSelectedChildPosition.groupPosition);
+					mSelectedChildPosition.flatListPosition = mExpandableListView.getFlatListPosition(
+						RetainExpandableListView.getPackedPositionForChild(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition));
+
 					setActivatedItem(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition);
 					selectChildView(mExpandableListView, mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition, true);
 					mExpandableListView.smoothScrollToPosition(mSelectedChildPosition.flatListPosition);
