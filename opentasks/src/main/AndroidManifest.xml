@@ -101,7 +101,7 @@
             </intent-filter>
 
             <!-- Intent filter for share intents -->
-            <intent-filter android:label="@string/activity_add_task_title">
+            <intent-filter android:label="@string/menu_add_task">
                 <action android:name="android.intent.action.SEND"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
