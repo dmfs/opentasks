@@ -46,7 +46,7 @@ public class ChecklistConstraint extends AbstractConstraint<List<CheckListItem>>
 	@Override
 	public List<CheckListItem> apply(ContentSet currentValues, List<CheckListItem> oldValue, List<CheckListItem> newValue)
 	{
-		if (oldValue != null && newValue != null && oldValue.size() > 0 && newValue.size() > 0 && !oldValue.equals(newValue))
+		if (oldValue != null && newValue != null && !oldValue.isEmpty() && !newValue.isEmpty() && !oldValue.equals(newValue))
 		{
 			int checked = 0;
 			for (CheckListItem item : newValue)
