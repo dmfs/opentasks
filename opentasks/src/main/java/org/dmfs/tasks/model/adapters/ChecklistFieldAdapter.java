@@ -109,7 +109,7 @@ public final class ChecklistFieldAdapter extends FieldAdapter<List<CheckListItem
 	public void set(ContentSet values, List<CheckListItem> value)
 	{
 		String oldDescription = DescriptionStringFieldAdapter.extractDescription(values.getAsString(mFieldName));
-		if (value != null && value.size() > 0)
+		if (value != null && !value.isEmpty())
 		{
 			StringBuilder sb = new StringBuilder(1024);
 			if (oldDescription != null)
@@ -134,7 +134,7 @@ public final class ChecklistFieldAdapter extends FieldAdapter<List<CheckListItem
 	public void set(ContentValues values, List<CheckListItem> value)
 	{
 		String oldDescription = DescriptionStringFieldAdapter.extractDescription(values.getAsString(mFieldName));
-		if (value != null && value.size() > 0)
+		if (value != null && !value.isEmpty())
 		{
 			StringBuilder sb = new StringBuilder(1024);
 			if (oldDescription != null)
@@ -224,7 +224,7 @@ public final class ChecklistFieldAdapter extends FieldAdapter<List<CheckListItem
 
 	private static void serializeCheckList(StringBuilder sb, List<CheckListItem> checklist)
 	{
-		if (checklist == null || checklist.size() == 0)
+		if (checklist == null || checklist.isEmpty())
 		{
 			return;
 		}
