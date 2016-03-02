@@ -366,6 +366,8 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
 					mFlingEnabled = false;
 				}
 				break;
+			default:
+			    break;
 		}
 		return handled;
 	}
