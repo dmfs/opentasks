@@ -382,7 +382,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START
 					+ " is null OR " + TaskContract.Instances.INSTANCE_START + " = " + TaskContract.Instances.INSTANCE_DUE + " )");
 
-				if (lists != null && lists.size() > 0)
+				if (lists != null && !lists.isEmpty())
 				{
 					selection.append(" AND ( ");
 
