@@ -17,9 +17,9 @@
 
 package org.dmfs.tasks.model.adapters;
 
-import org.dmfs.tasks.model.ContentSet;
-
 import android.database.Cursor;
+
+import org.dmfs.tasks.model.ContentSet;
 
 
 /**
@@ -111,7 +111,7 @@ public final class DescriptionStringFieldAdapter extends StringFieldAdapter
 		int checklistpos = -1;
 		while ((checklistpos = value.indexOf("\n[", checklistpos + 1)) >= 0)
 		{
-			if (checklistpos + 2 < valueLen && value.charAt(checklistpos + 3) == ']')
+			if (checklistpos + 3 < valueLen && value.charAt(checklistpos + 3) == ']')
 			{
 				char checkmark = value.charAt(checklistpos + 2);
 				if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
