@@ -9,7 +9,7 @@ This is a task app for Android.
 * Android SDK Level 8
 * [android-xml-magic 0.1.1](https://github.com/dmfs/android-xml-magic)
 * [Color Picker](https://github.com/dmfs/color-picker)
-* [Dashclock 2.0](http://code.google.com/p/dashclock/)
+* [Dashclock 2.0](https://github.com/romannurik/dashclock/)
 * [Retention Magic 1.2.2](https://github.com/dmfs/retention-magic)
 * [Task Provider 1.1.8.1](https://github.com/dmfs/task-provider)
 * [xmlobject 0.4.2](https://github.com/dmfs/xmlobjects)
