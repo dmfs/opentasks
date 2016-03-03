@@ -45,7 +45,8 @@ public class AdjustPercentComplete extends AbstractConstraint<Integer>
 		{
 			mPercentComplete.set(currentValues, 0);
 		}
-		else if (newValue == Tasks.STATUS_IN_PROCESS && oldValue != null && oldValue == Tasks.STATUS_COMPLETED && mPercentComplete.get(currentValues) == 100)
+		else if (newValue == Tasks.STATUS_IN_PROCESS && oldValue != null && oldValue == Tasks.STATUS_COMPLETED
+			&& Integer.valueOf(100).equals(mPercentComplete.get(currentValues)))
 		{
 			mPercentComplete.set(currentValues, 50);
 		}
