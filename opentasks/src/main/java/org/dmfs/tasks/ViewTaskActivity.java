@@ -17,9 +17,6 @@
 
 package org.dmfs.tasks;
 
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.utils.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
@@ -31,6 +28,9 @@ import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.utils.AppCompatActivity;
 
 
 /**
@@ -54,8 +54,8 @@ public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragm
 		{
 
 			Intent taskListIntent = new Intent(this, TaskListActivity.class);
-			taskListIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, getIntent()
-				.getBooleanExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, false));
+			taskListIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION,
+				getIntent().getBooleanExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, false));
 			taskListIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
 			taskListIntent.setData(getIntent().getData());
 			startActivity(taskListIntent);
@@ -102,7 +102,7 @@ public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragm
 				startActivity(upIntent);
 				finish();
 			default:
-			    break;
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -115,7 +115,9 @@ public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragm
 		editTaskIntent.setData(taskUri);
 		if (data != null)
 		{
-			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+			Bundle extraBundle = new Bundle();
+			extraBundle.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, extraBundle);
 		}
 		startActivity(editTaskIntent);
 	}
