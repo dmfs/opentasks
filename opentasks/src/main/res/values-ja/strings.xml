@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">タスクを読む</string>
+    <string name="permission_description_read_tasks">タスクとタスクリストを読み込みます。</string>
+    <string name="permission_write_tasks">タスクを書く</string>
+    <string name="permission_description_write_tasks">タスクとタスクリストを作成、変更、削除します。</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">すべてのタスク</string>
+    <string name="menu_add_task_condensed">追加</string>
+    <string name="menu_show_completed">完了したタスクを表示</string>
+    <string name="menu_hide_completed">完了したタスクを非表示</string>
+    <string name="menu_show_completed_condensed">完了したタスクを表示</string>
+    <string name="menu_sync_now">更新</string>
+    <string name="menu_sync_now_condensed">更新</string>
+    <string name="menu_search_hint">検索</string>
+    <string name="toast_task_created">\"%1s\" を作成しました。</string>
+    <string name="toast_task_completed">\"%1s\" を完了しました。</string>
+    <string name="toast_task_uncompleted">\"%1s\" を再開しました。</string>
+    <string name="toast_x_removed">\"%1s\" を削除しました。</string>
+    <string name="task_group_title_list">タスク</string>
+    <string name="task_group_title_start">開始しているタスク</string>
+    <string name="task_group_title_due">タスクの期限</string>
+    <string name="task_group_title_priority">タスクの優先度</string>
+    <string name="task_group_title_progress">タスクの進捗</string>
+    <string name="task_group_title_default">タスク</string>
+    <string name="quick_add_task_created">タスクを作成しました</string>
+    <string name="initial_local_task_list_name">マイ タスク</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d タスク</item>
+        <item quantity="other">%d タスク</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">編集</string>
+    <string name="activity_task_details_edit_task">タスクを編集</string>
+    <string name="activity_task_details_delete">削除</string>
+    <string name="activity_task_details_delete_task">タスクを削除</string>
+    <string name="activity_task_details_complete">完了</string>
+    <string name="activity_task_details_complete_task">タスクを完了</string>
+    <string name="activity_task_details_pin">ピン留め</string>
+    <string name="activity_task_details_pin_task">タスクをピン留め</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">アイテムを追加</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">アイテムのタイトル</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">編集</string>
+    <string name="activity_add_task_title">作成</string>
+    <string name="activity_edit_task_error_invalid_url">無効な URL</string>
+    <string name="activity_edit_task_task_saved">タスクを保存しました。</string>
+    <string name="activity_edit_task_empty_task_not_saved">空のタスクは保存されませんでした。</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">リスト</string>
+    <string name="task_title">タイトル</string>
+    <string name="task_location">場所</string>
+    <string name="task_description">説明</string>
+    <string name="task_checklist">チェックリスト</string>
+    <string name="task_start">開始</string>
+    <string name="task_due">期限</string>
+    <string name="task_completed">完了</string>
+    <string name="task_percent_complete">完了割合</string>
+    <string name="task_status">ステータス</string>
+    <string name="task_classification">プライバシー</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">タスクの詳細</string>
+    <string name="title_task_list">タスク</string>
+    <string name="provider_label">タスク</string>
+    <string name="task_detail_activity">タスクの詳細</string>
+    <string name="task_priority">優先度</string>
+    <string name="task_timezone">タイムゾーン</string>
+    <string name="task_all_day">終日</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">期限なし</string>
+    <string name="task_group_overdue">期限超過</string>
+    <string name="task_group_due_today">今日</string>
+    <string name="task_group_due_tomorrow">明日</string>
+    <string name="task_group_due_within_7_days">以降</string>
+    <string name="task_group_due_in_month">期限 %s</string>
+    <string name="task_group_due_in_year">期限 %s</string>
+    <string name="task_group_due_in_future">いつか</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">すでに開始済</string>
+    <string name="task_group_start_today">今日</string>
+    <string name="task_group_start_tomorrow">明日</string>
+    <string name="task_group_start_within_7_days">いつか</string>
+    <string name="task_group_start_in_future">以降</string>
+    <string name="task_group_due_title">期限</string>
+    <string name="task_group_all_title">リスト</string>
+    <string name="task_group_completed_title">完了済</string>
+    <string name="task_group_start_title">開始</string>
+    <string name="task_group_search_title">検索</string>
+    <string name="task_group_priority_title">優先度</string>
+    <string name="task_group_progress_title">進捗</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">全く未達成</string>
+    <string name="task_group_progress_40">その調子</string>
+    <string name="task_group_progress_60">道半ば</string>
+    <string name="task_group_progress_80">ほぼ完了</string>
+    <string name="task_group_progress_100">完了</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">高優先度</string>
+    <string name="task_group_priority_medium">中優先度</string>
+    <string name="task_group_priority_low">低優先度</string>
+    <string name="task_group_priority_none">優先度なし</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">保存</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_save_and_continue">保存して続行</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">アクションが必要</string>
+    <string name="status_in_process">進行中</string>
+    <string name="status_completed">完了</string>
+    <string name="status_cancelled">キャンセル済</string>
+    <string name="status_incomplete">未完了</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">指定なし</string>
+    <string name="classification_public">公開</string>
+    <string name="classification_private">プライベート</string>
+    <string name="classification_confidential">秘密</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">なし</string>
+    <string name="priority_low">低</string>
+    <string name="priority_medium">中</string>
+    <string name="priority_high">高</string>
+    <string name="priority_urgent">緊急</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">設定</string>
+    <string name="action_settings">設定</string>
+    <string name="action_add_local_list">リストを追加</string>
+    <string name="visible_task_lists">表示したリスト</string>
+    <string name="enable_alarms">通知</string>
+    <string name="synced_task_lists">同期したリスト</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">アカウントの選択</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">保存</string>
+    <string name="activity_manage_list_btn_delete">リストを削除</string>
+    <string name="activity_add_list_title">ローカル リストを作成</string>
+    <string name="activity_edit_list_title">リストの設定</string>
+    <string name="task_list_name_caption">名前</string>
+    <string name="task_list_no_sync">注: ローカルのリストを作成します。ローカル リストのタスクは同期されません。</string>
+    <string name="task_list_color_caption">リストの色</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">リストの名前</string>
+    <string name="task_list_name_dialog_title">リストの名前を入力</string>
+    <string name="task_list_name_dialog_error">名前を入力してください。</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">%s を削除</string>
+    <string name="task_list_delete_dialog_message">リストと中のタスクをすべて削除しますか?\n注: 削除したリストを元に戻すことはできません。</string>
+    <string name="task_list_delete_toast">%s を削除しました</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">期日で</string>
+    <string name="gd_by_completed">完了済で</string>
+    <string name="gd_by_list">リストで</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">削除の確認</string>
+    <string name="confirm_delete_message">このタスクを削除しますか?</string>
+    <string name="confirm_delete_message_with_title">\"%1s\" を削除しますか?</string>
+    <string name="toast_task_deleted">\"%1s\" を削除しました。</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">タスクリストは利用できません</string>
+    <string name="task_list_selection_title">表示するリストを選択してください</string>
+    <string name="task_list_selection_ok">OK</string>
+    <string name="task_list_selection_cancel">キャンセル</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">現在のタスク</string>
+    <string name="task_list_widget_title_4x4">現在のタスク 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">完了</string>
+    <string name="fling_task_edit">編集</string>
+    <string name="fling_task_delete">削除</string>
+    <string name="fling_task_uncomplete">未完了</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">タスクの開始日のアイコン</string>
+    <string name="cd_due_date">タスクの期日のアイコン</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">タスク期限, %1s</string>
+    <string name="notification_task_start_date">タスク開始, %1s</string>
+    <string name="notification_task_due_today">タスク期限が今日</string>
+    <string name="notification_task_start_today">タスク開始が今日</string>
+    <string name="notification_action_complete">完了</string>
+    <string name="notification_action_completed">完了しました</string>
+    <string name="notification_action_delay_1h">+1 時間</string>
+    <string name="notification_action_delay_1d">+1 日</string>
+    <string name="notification_action_delay_toast">期日を更新しました</string>
+    <string name="notification_undo">元に戻す</string>
+    <string name="notification_action_unpin">ピン留め解除</string>
+    <string name="notification_task_pin_ticker">%1$s をピン留めしました</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 時間</string>
+    <string name="button_add_one_day">+1 日</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">タスク</string>
+    <string name="dashclock_extension_description">最近のタスクの情報を表示します。</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s は期限 - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s は期限</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s 開始します - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s 今日開始します</string>
+    <string name="dashclock_pref_displayed_task_title">表示するイベント</string>
+    <string name="dashclock_pref_displayed_task_summary">dashclock ウィジェットに表示するタスクのイベントを選択します</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">表示するイベント</string>
+    <string name="dashclock_display_type_due">期限のタスク</string>
+    <string name="dashclock_display_type_start">開始しているタスク</string>
+    <string name="dashclock_display_type_start_and_due">開始して期限のタスク</string>
+    <string name="dashclock_display_type_all">すべて</string>
+    <string name="dashclock_display_type_pinned">ピン留めしたタスク</string>
+    <string name="dashclock_preference_title">タスク DashClock 設定</string>
+
+    <!-- General -->
+    <string name="accept">承認</string>
+    <string name="now">今</string>
+
+    <!-- Sharing intent -->
+    <string name="share_as_task">タスクを作成</string>
+
+</resources>
