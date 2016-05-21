@@ -169,7 +169,7 @@
     <string name="activity_edit_list_title">Préférence de la liste</string>
     <string name="task_list_name_caption">Nom</string>
     <string name="task_list_no_sync">Note: Ceci va créer une liste locale. Les tâches dans les listes locales ne seront pas synchronisées.</string>
-    <string name="task_list_color_caption">Liste de couleur</string>
+    <string name="task_list_color_caption">Liste de couleurs</string>
 
     <!-- input dialog -->
     <string name="task_list_name_dialog_hint">Nom de la liste</string>
