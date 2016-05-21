@@ -19,6 +19,7 @@
     <string name="menu_search_hint">Rechercher</string>
     <string name="toast_task_created">\"%1s\" créée.</string>
     <string name="toast_task_completed">\"%1s\" terminée.</string>
+    <string name="toast_task_uncompleted">\"%1s\" réouverte.</string>
     <string name="toast_x_removed">\"%1s\" supprimée.</string>
     <string name="task_group_title_list">Tâches</string>
     <string name="task_group_title_start">Début des tâches</string>
@@ -27,6 +28,7 @@
     <string name="task_group_title_progress">Progression des tâches</string>
     <string name="task_group_title_default">Tâches</string>
     <string name="quick_add_task_created">Tâche créée</string>
+    <string name="initial_local_task_list_name">Mes tâches</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d tâche</item>
@@ -40,6 +42,17 @@
     <string name="activity_task_details_delete_task">Supprimer tâche</string>
     <string name="activity_task_details_complete">Terminer</string>
     <string name="activity_task_details_complete_task">Terminer tâche</string>
+    <string name="activity_task_details_pin">Épingler</string>
+    <string name="activity_task_details_pin_task">Tâche épinglée</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Ajouter un item</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Titre de l'item</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Éditer tâche</string>
@@ -140,8 +153,33 @@
 
     <string name="title_activity_settings">Préférences</string>
     <string name="action_settings">Préférences</string>
+    <string name="action_add_local_list">Ajouter une liste</string>
     <string name="visible_task_lists">Listes montrées</string>
+    <string name="enable_alarms">Notifications</string>
     <string name="synced_task_lists">Listes synchronisées</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Choisir un compte</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">sauvegarder</string>
+    <string name="activity_manage_list_btn_delete">supprimer la liste</string>
+    <string name="activity_add_list_title">Créer une liste locale</string>
+    <string name="activity_edit_list_title">Préférence de la liste</string>
+    <string name="task_list_name_caption">Nom</string>
+    <string name="task_list_no_sync">Note: Ceci va créer une liste locale. Les tâches dans les listes locales ne seront pas synchronisées.</string>
+    <string name="task_list_color_caption">Liste de couleur</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">Nom de la liste</string>
+    <string name="task_list_name_dialog_title">Entrer un nom pour la liste</string>
+    <string name="task_list_name_dialog_error">Entrer un nom.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Supprimer %s</string>
+    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu'elle contient?\nNote: Les listes supprimées ne peuvent être récupérées. </string>
+    <string name="task_list_delete_toast">%s supprimée</string>
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">Par date d\'échéance</string>
@@ -187,6 +225,8 @@
     <string name="notification_action_delay_1d">+1 jour</string>
     <string name="notification_action_delay_toast">Date de fin mise à jour</string>
     <string name="notification_undo">Annuler</string>
+    <string name="notification_action_unpin">desépingler</string>
+    <string name="notification_task_pin_ticker">%1$s était épinglée</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 heure</string>
@@ -205,6 +245,8 @@
     <string name="dashclock_display_type_due">date de fin proche</string>
     <string name="dashclock_display_type_start">date de début proche</string>
     <string name="dashclock_display_type_start_and_due">date de début ou de fin proche</string>
+    <string name="dashclock_display_type_all">Toutes</string>
+    <string name="dashclock_display_type_pinned">tâches épinglées</string>
     <string name="dashclock_preference_title">Préférences DashClock de Tâches</string>
 
     <!-- General -->
