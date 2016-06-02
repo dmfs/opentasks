@@ -200,8 +200,8 @@
     <!-- Strings in the Task List Selection Fragment -->
     <string name="task_list_selection_empty">No hay listas de tareas disponibles</string>
     <string name="task_list_selection_title">Seleccionar listas para mostrar</string>
-    <string name="task_list_selection_ok">ACEPTAR</string>
-    <string name="task_list_selection_cancel">CANCELAR</string>
+    <string name="task_list_selection_ok">Aceptar</string>
+    <string name="task_list_selection_cancel">Cancelar</string>
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Tareas actuales</string>
