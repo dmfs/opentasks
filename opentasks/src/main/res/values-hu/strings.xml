@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">feladatok olvasása</string>
+    <string name="permission_description_read_tasks">Feladatok és feladatlisták olvasása.</string>
+    <string name="permission_write_tasks">feladatok írása</string>
+    <string name="permission_description_write_tasks">Feladatok és feladatlisták létrehozása, módosítása és törlése.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Feladat hozzáadása</string>
+    <string name="menu_add_task_condensed">Hozzáadás</string>
+    <string name="menu_show_completed">Befejezett feladatok megjelenítése</string>
+    <string name="menu_hide_completed">Befejezett feladatok elrejtése</string>
+    <string name="menu_show_completed_condensed">Befejezett feladatok megjelenítése</string>
+    <string name="menu_sync_now">Frissítés</string>
+    <string name="menu_sync_now_condensed">Frissítés</string>
+    <string name="menu_search_hint">Keresés</string>
+    <string name="toast_task_created">„%1s” létrehozva.</string>
+    <string name="toast_task_completed">„%1s” befejezve.</string>
+    <string name="toast_task_uncompleted">„%1s” újranyitva.</string>
+    <string name="toast_x_removed">„%1s” eltávolítva.</string>
+    <string name="task_group_title_list">Feladatok</string>
+    <string name="task_group_title_start">Feladatok kezdet szerint</string>
+    <string name="task_group_title_due">Feladatok határidő szerint</string>
+    <string name="task_group_title_priority">Feladatok fontosság szerint</string>
+    <string name="task_group_title_progress">Feladatok készültség szerint</string>
+    <string name="task_group_title_default">Feladatok</string>
+    <string name="quick_add_task_created">Feladat létrehozva</string>
+    <string name="initial_local_task_list_name">Feladataim</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d feladat</item>
+        <item quantity="other">%d feladat</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Szerkesztés</string>
+    <string name="activity_task_details_edit_task">Feladat szerkesztése</string>
+    <string name="activity_task_details_delete">Törlés</string>
+    <string name="activity_task_details_delete_task">Feladat törlése</string>
+    <string name="activity_task_details_complete">Befejezés</string>
+    <string name="activity_task_details_complete_task">Feladat befejezése</string>
+    <string name="activity_task_details_pin">Rögzítés</string>
+    <string name="activity_task_details_pin_task">Feladat rögzítése</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Elem hozzáadása</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Elem címe</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Szerkesztés</string>
+    <string name="activity_add_task_title">Létrehozás</string>
+    <string name="activity_edit_task_error_invalid_url">Érvénytelen URL</string>
+    <string name="activity_edit_task_task_saved">Feladat elmentve.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Üres feladat nincs elmentve.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Lista</string>
+    <string name="task_title">Cím</string>
+    <string name="task_location">Helyszín</string>
+    <string name="task_description">Leírás</string>
+    <string name="task_checklist">Ellenőrzőlista</string>
+    <string name="task_start">Kezdés</string>
+    <string name="task_due">Határidő</string>
+    <string name="task_completed">Befejezve</string>
+    <string name="task_percent_complete">% kész</string>
+    <string name="task_status">Állapot</string>
+    <string name="task_classification">Adatvédelem</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Feladat részlete</string>
+    <string name="title_task_list">Feladatok</string>
+    <string name="provider_label">Feladatok</string>
+    <string name="task_detail_activity">Feladat részlete</string>
+    <string name="task_priority">Prioritás</string>
+    <string name="task_timezone">Időzóna</string>
+    <string name="task_all_day">Egész nap</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">Nincs határidő</string>
+    <string name="task_group_overdue">Határidőn túl</string>
+    <string name="task_group_due_today">Ma</string>
+    <string name="task_group_due_tomorrow">Holnap</string>
+    <string name="task_group_due_within_7_days">Pár nap múlva</string>
+    <string name="task_group_due_in_month">%s múlva</string>
+    <string name="task_group_due_in_year">%s múlva</string>
+    <string name="task_group_due_in_future">Valamikor</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Elkezdődött</string>
+    <string name="task_group_start_today">Ma</string>
+    <string name="task_group_start_tomorrow">Holnap</string>
+    <string name="task_group_start_within_7_days">Hamarosan</string>
+    <string name="task_group_start_in_future">Később</string>
+    <string name="task_group_due_title">Eddig</string>
+    <string name="task_group_all_title">Listák</string>
+    <string name="task_group_completed_title">Befejezve</string>
+    <string name="task_group_start_title">Kezdet</string>
+    <string name="task_group_search_title">Keresés</string>
+    <string name="task_group_priority_title">Prioritás</string>
+    <string name="task_group_progress_title">Folyamat</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Nem történt semmi</string>
+    <string name="task_group_progress_40">Folyamatban</string>
+    <string name="task_group_progress_60">Félúton</string>
+    <string name="task_group_progress_80">Majdnem kész</string>
+    <string name="task_group_progress_100">Kész</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Fontos</string>
+    <string name="task_group_priority_medium">Közepes</string>
+    <string name="task_group_priority_low">Nem fontos</string>
+    <string name="task_group_priority_none">Nincs prioritás</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Mentés</string>
+    <string name="action_cancel">Mégse</string>
+    <string name="action_save_and_continue">Mentés és folytatás</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">cselekvésre vár</string>
+    <string name="status_in_process">folyamatban</string>
+    <string name="status_completed">kész</string>
+    <string name="status_cancelled">feladva</string>
+    <string name="status_incomplete">nincs kész</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">nincs megadva</string>
+    <string name="classification_public">nyilvános</string>
+    <string name="classification_private">privát</string>
+    <string name="classification_confidential">bizalmas</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">none</string>
+    <string name="priority_low">low</string>
+    <string name="priority_medium">medium</string>
+    <string name="priority_high">high</string>
+    <string name="priority_urgent">urgent</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Beállítások</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="action_add_local_list">Lista létrehozása</string>
+    <string name="visible_task_lists">Megjelenített listák</string>
+    <string name="enable_alarms">Értesítések</string>
+    <string name="synced_task_lists">Szinkronizált listák</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Fiókválasztás</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">mentés</string>
+    <string name="activity_manage_list_btn_delete">lista törlése</string>
+    <string name="activity_add_list_title">Helyi lista létrehozása</string>
+    <string name="activity_edit_list_title">Listabeállítások</string>
+    <string name="task_list_name_caption">Név</string>
+    <string name="task_list_no_sync">Megjegyzés: Ez egy helyi listát hoz létre. A helyi listákon szereplő feladatok nem szinkronizálódnak.</string>
+    <string name="task_list_color_caption">Lista színe</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">Lista neve</string>
+    <string name="task_list_name_dialog_title">Írja be a lista nevét</string>
+    <string name="task_list_name_dialog_error">Írjon be egy nevet.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">%s törlése</string>
+    <string name="task_list_delete_dialog_message">Törli a listát a rajta szereplő összes feladattal?\nMegjegyzés: Nincs lehetőség törölt lista visszaállítására.</string>
+    <string name="task_list_delete_toast">%s törölve</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Határidő szerint</string>
+    <string name="gd_by_completed">Állapot szerint</string>
+    <string name="gd_by_list">Lista szerint</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Törlés megerősítése</string>
+    <string name="confirm_delete_message">Törli ezt a feladatot?</string>
+    <string name="confirm_delete_message_with_title">Törli a(z) „%1s” feladatot?</string>
+    <string name="toast_task_deleted">„%1s” eltávolítva.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">Nincs elérhető feladatlista</string>
+    <string name="task_list_selection_title">Válassza ki a megjelenítendő listákat</string>
+    <string name="task_list_selection_ok">OK</string>
+    <string name="task_list_selection_cancel">Mégse</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Jelenlegi feladatok</string>
+    <string name="task_list_widget_title_4x4">Jelenlegi feladatok 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Befejezés</string>
+    <string name="fling_task_edit">Szerkesztés</string>
+    <string name="fling_task_delete">Törlés</string>
+    <string name="fling_task_uncomplete">Befejezetlen</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">ikon a feladat kezdési időpontjához</string>
+    <string name="cd_due_date">ikon a feladat határidejéhez</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Feladat határideje %1s</string>
+    <string name="notification_task_start_date">Feladat kezdete %1s</string>
+    <string name="notification_task_due_today">Feladat határideje ma</string>
+    <string name="notification_task_start_today">A feladat ma kezdődik</string>
+    <string name="notification_action_complete">befejezés</string>
+    <string name="notification_action_completed">Befejezve</string>
+    <string name="notification_action_delay_1h">+1 óra</string>
+    <string name="notification_action_delay_1d">+1 nap</string>
+    <string name="notification_action_delay_toast">Határidő frissítve</string>
+    <string name="notification_undo">Visszavonás</string>
+    <string name="notification_action_unpin">levétel</string>
+    <string name="notification_task_pin_ticker">%1$s rögzítve</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 óra</string>
+    <string name="button_add_one_day">+1 nap</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Feladatok</string>
+    <string name="dashclock_extension_description">Megjelenít információkat a friss feladatokról.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s esedékes – %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s esedékes</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s kezdődik – %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s ma kezdődik</string>
+    <string name="dashclock_pref_displayed_task_title">Megjelenített események</string>
+    <string name="dashclock_pref_displayed_task_summary">A dashclock widgeten megjelenített feladatesemények kiválasztása</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Megjelenítendő események</string>
+    <string name="dashclock_display_type_due">esedákes feladatok</string>
+    <string name="dashclock_display_type_start">kezdődő feladatok</string>
+    <string name="dashclock_display_type_start_and_due">kezdődő és esedákes feladatok</string>
+    <string name="dashclock_display_type_all">mind</string>
+    <string name="dashclock_display_type_pinned">rögzített feladatok</string>
+    <string name="dashclock_preference_title">DashClock Feladatok beállításai</string>
+
+    <!-- General -->
+    <string name="accept">Elfogadás</string>
+    <string name="now">most</string>
+
+    <!-- Sharing intent -->
+    <string name="share_as_task">Feladat létrehozása</string>
+
+</resources>
