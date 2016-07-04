@@ -380,7 +380,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 				// build selection string
 				StringBuilder selection = new StringBuilder(TaskContract.Instances.VISIBLE + ">0 and " + TaskContract.Instances.IS_CLOSED + "=0 AND ("
 					+ TaskContract.Instances.INSTANCE_START + "<=" + System.currentTimeMillis() + " OR " + TaskContract.Instances.INSTANCE_START
-					+ " is null OR " + TaskContract.Instances.INSTANCE_START + " = " + TaskContract.Instances.INSTANCE_DUE + " )");
+					+ " is null)");
 
 				if (lists != null && lists.size() > 0)
 				{
