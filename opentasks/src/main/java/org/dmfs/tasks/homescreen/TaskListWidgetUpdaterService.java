@@ -134,7 +134,6 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 
 		public void reload()
 		{
-			mItems = null;
 			mExecutor.execute(mReloadTasks);
 		}
 
