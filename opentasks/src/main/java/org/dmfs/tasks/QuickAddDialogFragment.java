@@ -467,7 +467,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		@Override
 		public void run()
 		{
-			dismiss();
+			dismissAllowingStateLoss();
 		}
 	};
 
