@@ -461,19 +461,25 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 		}
 	}
 
-	private void delayedDismiss() {
+
+	private void delayedDismiss()
+	{
 		mContent.postDelayed(mDismiss, 1000);
-        mClosing = true;
-    }
+		mClosing = true;
+	}
+
 
 	@Override
-	public void onPause() {
+	public void onPause()
+	{
 		super.onPause();
-		if (mClosing) {
+		if (mClosing)
+		{
 			mContent.removeCallbacks(mDismiss);
 			dismiss();
 		}
 	}
+
 
 	/**
 	 * A runnable that closes the dialog.
