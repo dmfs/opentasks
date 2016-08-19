@@ -63,7 +63,7 @@ import android.widget.TextView.OnEditorActionListener;
 /**
  * A quick add dialog. It allows the user to enter a new task without having to deal with the full blown editor interface. At present it support task with a
  * title only, but there is an option to fire up the full editor.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class QuickAddDialogFragment extends SupportDialogFragment implements OnEditorActionListener, LoaderManager.LoaderCallbacks<Cursor>,
@@ -130,6 +130,8 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	@Retain(permanent = true, key = "quick_add_save_count", classNS = "")
 	private int mSaveCounter = 0;
 
+	private boolean mClosing;
+
 	private View mColorBackground;
 	private Spinner mListSpinner;
 
@@ -147,7 +149,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 
 	/**
 	 * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
-	 * 
+	 *
 	 * @param titleId
 	 *            The resource id of the title.
 	 * @param initalText
@@ -166,7 +168,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 
 	/**
 	 * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
-	 * 
+	 *
 	 * @param titleId
 	 *            The resource id of the title.
 	 * @param initalText
@@ -448,7 +450,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 
 		if (close)
 		{
-			mContent.postDelayed(mDismiss, 1000);
+			delayedDismiss();
 		}
 		else
 		{
@@ -458,6 +460,26 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 			mContent.postDelayed(mReset, duration);
 		}
 	}
+
+
+	private void delayedDismiss()
+	{
+		mContent.postDelayed(mDismiss, 1000);
+		mClosing = true;
+	}
+
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		if (mClosing)
+		{
+			mContent.removeCallbacks(mDismiss);
+			dismiss();
+		}
+	}
+
 
 	/**
 	 * A runnable that closes the dialog.
