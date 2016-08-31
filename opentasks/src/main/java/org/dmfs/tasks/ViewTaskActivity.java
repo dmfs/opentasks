@@ -101,6 +101,8 @@ public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragm
 				upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(upIntent);
 				finish();
+			default:
+			    break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

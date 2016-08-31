@@ -139,7 +139,7 @@ public class CheckListFieldViewLegacy extends AbstractFieldView implements OnChe
 	{
 		Context context = getContext();
 
-		if (list == null || list.size() == 0)
+		if (list == null || list.isEmpty())
 		{
 			setVisibility(GONE);
 			return;
