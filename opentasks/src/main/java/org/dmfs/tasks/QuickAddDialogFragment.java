@@ -66,8 +66,8 @@ import android.widget.TextView.OnEditorActionListener;
  *
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class QuickAddDialogFragment extends SupportDialogFragment implements OnEditorActionListener, LoaderManager.LoaderCallbacks<Cursor>,
-	OnItemSelectedListener, OnClickListener, TextWatcher
+public class QuickAddDialogFragment extends SupportDialogFragment
+	implements OnEditorActionListener, LoaderManager.LoaderCallbacks<Cursor>, OnItemSelectedListener, OnClickListener, TextWatcher
 {
 
 	/**
@@ -349,7 +349,9 @@ public class QuickAddDialogFragment extends SupportDialogFragment implements OnE
 	{
 		Intent intent = new Intent(Intent.ACTION_INSERT);
 		intent.setData(Tasks.getContentUri(mAuthority));
-		intent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, buildContentSet());
+		Bundle extraBundle = new Bundle();
+		extraBundle.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, buildContentSet());
+		intent.putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, extraBundle);
 		getActivity().startActivity(intent);
 	}
 

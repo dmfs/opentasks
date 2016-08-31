@@ -17,26 +17,6 @@
 
 package org.dmfs.tasks;
 
-import java.io.IOException;
-
-import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.groupings.AbstractGroupingFactory;
-import org.dmfs.tasks.groupings.ByDueDate;
-import org.dmfs.tasks.groupings.ByList;
-import org.dmfs.tasks.groupings.ByPriority;
-import org.dmfs.tasks.groupings.ByProgress;
-import org.dmfs.tasks.groupings.BySearch;
-import org.dmfs.tasks.groupings.ByStartDate;
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
-import org.dmfs.tasks.utils.AppCompatActivity;
-import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
-import org.dmfs.tasks.utils.SearchHistoryHelper;
-import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.SearchManager;
@@ -70,6 +50,26 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+
+import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.groupings.AbstractGroupingFactory;
+import org.dmfs.tasks.groupings.ByDueDate;
+import org.dmfs.tasks.groupings.ByList;
+import org.dmfs.tasks.groupings.ByPriority;
+import org.dmfs.tasks.groupings.ByProgress;
+import org.dmfs.tasks.groupings.BySearch;
+import org.dmfs.tasks.groupings.ByStartDate;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
+import org.dmfs.tasks.utils.AppCompatActivity;
+import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
+import org.dmfs.tasks.utils.SearchHistoryHelper;
+import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 
 /**
@@ -467,7 +467,9 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 		editTaskIntent.setData(taskUri);
 		if (data != null)
 		{
-			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+			Bundle extraBundle = new Bundle();
+			extraBundle.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, extraBundle);
 		}
 		startActivity(editTaskIntent);
 	}

@@ -17,13 +17,6 @@
 
 package org.dmfs.tasks;
 
-import java.util.TimeZone;
-
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.utils.ActionBarActivity;
-
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,6 +25,13 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.utils.ActionBarActivity;
+
+import java.util.TimeZone;
 
 
 /**
@@ -44,6 +44,8 @@ import android.view.MenuItem;
 public class EditTaskActivity extends ActionBarActivity
 {
 	private static final String ACTION_NOTE_TO_SELF = "com.google.android.gm.action.AUTO_SEND";
+
+	final static String EXTRA_DATA_BUNDLE = "org.dmfs.extra.BUNDLE";
 
 	final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
 
@@ -139,10 +141,14 @@ public class EditTaskActivity extends ActionBarActivity
 			{
 				// hand over task URI for editing / creating empty task
 				arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
-				ContentSet data = getIntent().getParcelableExtra(EXTRA_DATA_CONTENT_SET);
-				if (data != null)
+				Bundle extraBundle = getIntent().getBundleExtra(EXTRA_DATA_BUNDLE);
+				if (extraBundle != null)
 				{
-					arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, data);
+					ContentSet data = extraBundle.getParcelable(EXTRA_DATA_CONTENT_SET);
+					if (data != null)
+					{
+						arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, data);
+					}
 				}
 				String accountType = getIntent().getStringExtra(EXTRA_DATA_ACCOUNT_TYPE);
 				if (accountType != null)
@@ -204,7 +210,7 @@ public class EditTaskActivity extends ActionBarActivity
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
 			default:
-			    break;
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
