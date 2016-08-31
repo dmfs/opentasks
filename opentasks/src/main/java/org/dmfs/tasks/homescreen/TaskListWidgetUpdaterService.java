@@ -406,8 +406,10 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 					null,
 					selection.toString(),
 					null,
-					TaskContract.Instances.INSTANCE_DUE + " is null, " + TaskContract.Instances.DEFAULT_SORT_ORDER + ", " + TaskContract.Instances.PRIORITY
-						+ " is null, " + TaskContract.Instances.PRIORITY + ", " + TaskContract.Instances.CREATED + " DESC");
+					Instances.INSTANCE_DUE + " is null, " + Instances.DEFAULT_SORT_ORDER + ", "
+							+ Instances.PRIORITY + " is null, " + Instances.PRIORITY + ", "
+							+ Instances.INSTANCE_START + " is null, " + Instances.INSTANCE_START_SORTING + ", "
+							+ Instances.CREATED + " DESC");
 
 				if (c != null)
 				{
