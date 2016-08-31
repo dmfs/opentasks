@@ -9,7 +9,7 @@
     <string name="permission_description_write_tasks">Crear, modificar y borrar tareas y listas de tareas.</string>
 
     <!-- Task list -->
-<string name="menu_add_task">Añadir tarea</string>
+    <string name="menu_add_task">Añadir tarea</string>
     <string name="menu_add_task_condensed">Añadir</string>
     <string name="menu_show_completed">Mostrar tareas completadas</string>
     <string name="menu_hide_completed">Ocultar tareas completadas</string>
@@ -120,8 +120,6 @@
 
     <string name="task_group_priority_low">Prioridad baja</string>
     <string name="task_group_priority_none">Sin prioridad</string>
-
-
 
 
     <!-- Task editor labels -->
