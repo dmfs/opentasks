@@ -17,24 +17,6 @@
 
 package org.dmfs.tasks;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.dmfs.android.retentionmagic.SupportFragment;
-import org.dmfs.android.retentionmagic.annotations.Parameter;
-import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.Model;
-import org.dmfs.tasks.model.OnContentChangeListener;
-import org.dmfs.tasks.model.Sources;
-import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.notification.TaskNotificationHandler;
-import org.dmfs.tasks.utils.ContentValueMapper;
-import org.dmfs.tasks.utils.OnModelLoadedListener;
-import org.dmfs.tasks.widget.TaskView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -72,6 +54,24 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
+import org.dmfs.android.retentionmagic.SupportFragment;
+import org.dmfs.android.retentionmagic.annotations.Parameter;
+import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.model.Sources;
+import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.notification.TaskNotificationHandler;
+import org.dmfs.tasks.utils.ContentValueMapper;
+import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.widget.TaskView;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 
 /**
  * A fragment representing a single Task detail screen. This fragment is either contained in a {@link TaskListActivity} in two-pane mode (on tablets) or in a
@@ -80,16 +80,16 @@ import android.widget.TextView;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class ViewTaskFragment extends SupportFragment implements OnModelLoadedListener, OnContentChangeListener, OnMenuItemClickListener,
-	OnOffsetChangedListener, OnGlobalLayoutListener
+public class ViewTaskFragment extends SupportFragment
+	implements OnModelLoadedListener, OnContentChangeListener, OnMenuItemClickListener, OnOffsetChangedListener, OnGlobalLayoutListener
 {
 	private final static String ARG_URI = "uri";
 
 	/**
 	 * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
 	 */
-	private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY,
-		Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
+	private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(
+		Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY, Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
 
 	/**
 	 * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.
@@ -570,9 +570,12 @@ public class ViewTaskFragment extends SupportFragment implements OnModelLoadedLi
 					@Override
 					public void onClick(DialogInterface dialog, int which)
 					{
-						// TODO: remove the task in a background task
-						mContentSet.delete(mAppContext);
-						mCallback.onDelete(mTaskUri);
+						if (mContentSet != null)
+						{
+							// TODO: remove the task in a background task
+							mContentSet.delete(mAppContext);
+							mCallback.onDelete(mTaskUri);
+						}
 					}
 				}).setMessage(R.string.confirm_delete_message).create().show();
 			return true;
