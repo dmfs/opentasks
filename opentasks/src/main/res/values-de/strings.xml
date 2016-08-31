@@ -221,7 +221,7 @@
     <string name="notification_action_delay_1h">+1 Stunde</string>
     <string name="notification_action_delay_1d">+1 Tag</string>
     <string name="notification_action_delay_toast">Fälligkeitsdatum aktualisiert</string>
-    <string name="notification_undo">Rückgänging</string>
+    <string name="notification_undo">Rückgängig</string>
     <string name="notification_action_unpin">Abheften</string>
     <string name="notification_task_pin_ticker">%1$s angeheftet</string>
 
