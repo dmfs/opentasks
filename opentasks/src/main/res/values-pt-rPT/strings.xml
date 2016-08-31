@@ -4,9 +4,9 @@
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
     <string name="permission_read_tasks">ler tarefas</string>
-    <string name="permission_description_read_tasks">Permite a uma aplicação ler as tarefas presentes nas suas listas de tarefas.</string>
+    <string name="permission_description_read_tasks">Ler tarefas e listas de tarefas.</string>
     <string name="permission_write_tasks">escrever tarefas</string>
-    <string name="permission_description_write_tasks">Permite a uma aplicação escrever tarefas nas suas listas de tarefas.</string>
+    <string name="permission_description_write_tasks">Criar, modificar e eliminar tarefas e listas de tarefas.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Adicionar tarefa</string>
@@ -28,6 +28,7 @@
     <string name="task_group_title_progress">Progresso das tarefas</string>
     <string name="task_group_title_default">Tarefas</string>
     <string name="quick_add_task_created">Tarefa criada</string>
+    <string name="initial_local_task_list_name">As minhas tarefas</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d tarefa</item>
@@ -43,6 +44,15 @@
     <string name="activity_task_details_complete_task">Concluír tarefa</string>
     <string name="activity_task_details_pin">Fixar</string>
     <string name="activity_task_details_pin_task">Fixar tarefa</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Adicionar item</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Novo item</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Editar</string>
