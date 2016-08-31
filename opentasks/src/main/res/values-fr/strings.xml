@@ -52,7 +52,7 @@
     The hint that's shown for a check list item that has no text.
     Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
     -->
-    <string name="opentasks_checklist_empty_item_hint">Titre de l'item</string>
+    <string name="opentasks_checklist_empty_item_hint">Titre de l\'item</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Éditer tâche</string>
@@ -178,7 +178,7 @@
 
     <!-- delete dialog -->
     <string name="task_list_delete_dialog_title">Supprimer %s</string>
-    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu'elle contient?\nNote: Les listes supprimées ne peuvent être récupérées. </string>
+    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu\'elle contient?\nNote: Les listes supprimées ne peuvent être récupérées. </string>
     <string name="task_list_delete_toast">%s supprimée</string>
 
     <!-- Label for Expandable Group Descriptors -->
