@@ -290,13 +290,13 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 		keySet.retainAll(keys);
 
 		// if there is any element left in keySet both sets had at least one element in common
-		return keySet.size() > 0;
+		return !keySet.isEmpty();
 	}
 
 
 	public void ensureUpdates(Set<String> keys)
 	{
-		if (mBeforeContentValues == null || keys == null || keys.size() == 0)
+		if (mBeforeContentValues == null || keys == null || keys.isEmpty())
 		{
 			// nothing to do
 			return;

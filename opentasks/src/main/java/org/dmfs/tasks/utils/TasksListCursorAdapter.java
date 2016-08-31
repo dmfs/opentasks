@@ -151,11 +151,11 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
 
 				if (mListener != null)
 				{
-					if (oldSize == 0 && mSelectedLists.size() > 0)
+					if (oldSize == 0 && !mSelectedLists.isEmpty())
 					{
 						mListener.onSelectionEnabled();
 					}
-					if (oldSize > 0 && mSelectedLists.size() == 0)
+					if (oldSize > 0 && mSelectedLists.isEmpty())
 					{
 						mListener.onSelectionDisabled();
 					}

@@ -799,6 +799,8 @@ public class DragLinearLayout extends LinearLayout
 					draggedItem.stopDetecting();
 				break;
 			}
+			default:
+			    break;
 		}
 
 		return false;
@@ -854,6 +856,8 @@ public class DragLinearLayout extends LinearLayout
 				}
 				return true;
 			}
+			default:
+			    break;
 		}
 		return false;
 	}
