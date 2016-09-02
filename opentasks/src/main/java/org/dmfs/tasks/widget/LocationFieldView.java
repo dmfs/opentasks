@@ -21,7 +21,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.widget.Toast;
+import org.dmfs.tasks.utils.MapOpener;
 
 
 /**
@@ -32,7 +32,7 @@ import android.widget.Toast;
 public class LocationFieldView extends TextFieldView
 {
     private GestureDetector mGestureDetector;
-    private int counter; // TODO remove
+    private MapOpener mMapOpener;
 
 
     public LocationFieldView(Context context)
@@ -58,6 +58,7 @@ public class LocationFieldView extends TextFieldView
 
     private void init()
     {
+        mMapOpener = new MapOpener(getContext());
         mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
         {
             @Override
@@ -84,8 +85,7 @@ public class LocationFieldView extends TextFieldView
 
     public void onClicked()
     {
-        // TODO temporary, wire in map opening here
-        Toast.makeText(getContext(), getText() + " " + counter++, Toast.LENGTH_SHORT).show();
+        mMapOpener.openMapWithLocation(getText());
     }
 
     // TODO onTouch animation would be nice
