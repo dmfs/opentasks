@@ -106,4 +106,9 @@ public class TextFieldView extends AbstractFieldView
 			}
 		}
 	}
+
+	public String getText()
+	{
+		return mText.getText().toString();
+	}
 }

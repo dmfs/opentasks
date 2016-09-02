@@ -34,6 +34,7 @@ public class DefaultModel extends Model
 {
 	final static LayoutDescriptor TEXT_VIEW = new LayoutDescriptor(R.layout.text_field_view).setOption(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL);
 	final static LayoutDescriptor TEXT_VIEW_NO_LINKS = new LayoutDescriptor(R.layout.text_field_view).setOption(LayoutDescriptor.OPTION_LINKIFY, 0);
+	private final static LayoutDescriptor LOCATION_VIEW = new LayoutDescriptor(R.layout.location_field_view);
 	private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
 	private final static LayoutDescriptor TEXT_EDIT_SINGLE_LINE = new LayoutDescriptor(R.layout.text_field_editor).setOption(LayoutDescriptor.OPTION_MULTILINE,
 		false);
@@ -101,8 +102,8 @@ public class DefaultModel extends Model
 			.setEditorLayout(CHOICES_EDIT).setChoices(aca).setIcon(R.drawable.ic_detail_status));
 
 		// location
-		addField(new FieldDescriptor(context, R.id.task_field_location, R.string.task_location, TaskFieldAdapters.LOCATION).setViewLayout(TEXT_VIEW)
-			.setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_location));
+		addField(new FieldDescriptor(context, R.id.task_field_location, R.string.task_location, TaskFieldAdapters.LOCATION).setViewLayout(LOCATION_VIEW)
+			.setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_location)); // TODO check how this needs to be updated in XmlModel as well
 
 		// description
 		addField(new FieldDescriptor(context, R.id.task_field_description, R.string.task_description, TaskFieldAdapters.DESCRIPTION)
