@@ -143,11 +143,11 @@
 
     <!-- Priority labels -->
 
-    <string name="priority_undefined">none</string>
-    <string name="priority_low">low</string>
-    <string name="priority_medium">medium</string>
-    <string name="priority_high">high</string>
-    <string name="priority_urgent">urgent</string>
+    <string name="priority_undefined">nincs</string>
+    <string name="priority_low">alacsony</string>
+    <string name="priority_medium">közepes</string>
+    <string name="priority_high">magas</string>
+    <string name="priority_urgent">sürgős</string>
 
     <!-- Label for Settings -->
 
@@ -242,9 +242,9 @@
     <string name="dashclock_pref_displayed_task_title">Megjelenített események</string>
     <string name="dashclock_pref_displayed_task_summary">A dashclock widgeten megjelenített feladatesemények kiválasztása</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Megjelenítendő események</string>
-    <string name="dashclock_display_type_due">esedákes feladatok</string>
+    <string name="dashclock_display_type_due">esedékes feladatok</string>
     <string name="dashclock_display_type_start">kezdődő feladatok</string>
-    <string name="dashclock_display_type_start_and_due">kezdődő és esedákes feladatok</string>
+    <string name="dashclock_display_type_start_and_due">kezdődő és esedékes feladatok</string>
     <string name="dashclock_display_type_all">mind</string>
     <string name="dashclock_display_type_pinned">rögzített feladatok</string>
     <string name="dashclock_preference_title">DashClock Feladatok beállításai</string>
