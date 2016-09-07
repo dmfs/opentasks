@@ -216,25 +216,25 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	 * <p>
 	 * Example:
 	 * </p>
-	 * 
+	 *
 	 * <pre>
 	 * input time: 2013-04-02 16:00 Europe/Berlin (GMT+02:00)
 	 * input timeZone: America/New_York (GMT-04:00)
 	 * </pre>
-	 * 
+	 *
 	 * will result in
-	 * 
+	 *
 	 * <pre>
 	 * 2013-04-02 10:00 Europe/Berlin (because the original time is equivalent to 2013-04-02 10:00 America/New_York)
 	 * </pre>
-	 * 
+	 *
 	 * All-day times are not modified.
-	 * 
+	 *
 	 * @param time
 	 *            The {@link Time} to update.
 	 * @param timeZone
 	 *            A time zone id.
-	 * 
+	 *
 	 */
 	private void applyTimeInTimeZone(Time time, String timeZone)
 	{
@@ -436,7 +436,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 			// get holo picker
 			DatePickerDialog dialog = new DatePickerDialog(getContext(), R.style.DatePickerHolo, TimeFieldEditor.this, mDateTime.year, mDateTime.month,
 				mDateTime.monthDay);
-			dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+			dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
 
 			// change divider color
 			DatePicker dpView = dialog.getDatePicker();
