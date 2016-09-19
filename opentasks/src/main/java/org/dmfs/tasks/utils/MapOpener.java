@@ -6,7 +6,7 @@ import android.net.Uri;
 
 
 /**
- * Handles Google Maps opening for a location string.
+ * Handles opening map application on the device with a location query string.
  *
  * @author Gabor Keszthelyi
  */
@@ -21,13 +21,10 @@ public class MapOpener
     }
 
 
-    public void openMapWithLocation(String location)
+    public void openMapWithLocation(String locationQuery)
     {
-        // TODO handle when there is no Google Maps
-
-        Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(location));
+        Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(locationQuery));
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-        mapIntent.setPackage("com.google.android.apps.maps");
         mContext.startActivity(mapIntent);
     }
 }
