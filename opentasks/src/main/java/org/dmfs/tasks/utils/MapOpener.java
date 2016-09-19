@@ -15,9 +15,9 @@ public class MapOpener
     private final Context mContext;
 
 
-    public MapOpener(Context mContext)
+    public MapOpener(Context context)
     {
-        this.mContext = mContext;
+        mContext = context;
     }
 
 
