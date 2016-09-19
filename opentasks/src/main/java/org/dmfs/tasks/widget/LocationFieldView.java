@@ -87,6 +87,4 @@ public class LocationFieldView extends TextFieldView
     {
         mMapOpener.openMapWithLocation(getText());
     }
-
-    // TODO onTouch animation would be nice
 }
