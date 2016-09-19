@@ -72,7 +72,7 @@ public class LocationFieldView extends TextFieldView
 
 
     /*
-     * Note: Should have been easier with a simple OnClickListener,
+     * Note: Would be simpler with an OnClickListener,
      * but that didn't work with any android:clickable and android:focusable variations on the ViewGroup and its children.
      */
     @Override
