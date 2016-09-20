@@ -47,8 +47,9 @@ public class TextFieldView extends AbstractFieldView
 	/**
 	 * The {@link TextView} to show the text in.
 	 */
-	private TextView mText;
+	private TextView mTextView;
 
+	private String mText;
 
 	public TextFieldView(Context context)
 	{
@@ -72,7 +73,7 @@ public class TextFieldView extends AbstractFieldView
 	protected void onFinishInflate()
 	{
 		super.onFinishInflate();
-		mText = (TextView) findViewById(R.id.text);
+		mTextView = (TextView) findViewById(R.id.text);
 	}
 
 
@@ -81,8 +82,8 @@ public class TextFieldView extends AbstractFieldView
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
 		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
-		mText.setAutoLinkMask(layoutOptions.getInt(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL));
+		mTextView.setHint(descriptor.getHint());
+		mTextView.setAutoLinkMask(layoutOptions.getInt(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL));
 	}
 
 
@@ -96,7 +97,8 @@ public class TextFieldView extends AbstractFieldView
 
 			if (!TextUtils.isEmpty(adapterStringValue))
 			{
-				mText.setText(adapterStringValue);
+				mText = adapterStringValue;
+				mTextView.setText(adapterStringValue);
 				setVisibility(View.VISIBLE);
 			}
 			else
@@ -109,6 +111,6 @@ public class TextFieldView extends AbstractFieldView
 
 	public String getText()
 	{
-		return mText.getText().toString();
+		return mText;
 	}
 }
