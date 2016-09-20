@@ -18,10 +18,11 @@
 package org.dmfs.tasks.widget;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import org.dmfs.tasks.utils.MapOpener;
 
 
 /**
@@ -32,7 +33,6 @@ import org.dmfs.tasks.utils.MapOpener;
 public class LocationFieldView extends TextFieldView
 {
     private GestureDetector mGestureDetector;
-    private MapOpener mMapOpener;
 
 
     public LocationFieldView(Context context)
@@ -58,7 +58,6 @@ public class LocationFieldView extends TextFieldView
 
     private void init()
     {
-        mMapOpener = new MapOpener(getContext());
         mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
         {
             @Override
@@ -83,8 +82,16 @@ public class LocationFieldView extends TextFieldView
     }
 
 
-    public void onClicked()
+    private void onClicked()
     {
-        mMapOpener.openMapWithLocation(getText());
+        openMapWithLocation(getText());
+    }
+
+
+    private void openMapWithLocation(String locationQuery)
+    {
+        Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(locationQuery));
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+        getContext().startActivity(mapIntent);
     }
 }
