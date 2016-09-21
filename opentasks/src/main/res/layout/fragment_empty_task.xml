@@ -1,0 +1,18 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+            style="@style/task_detail_appbar">
+
+        <android.support.v4.widget.Space android:layout_width="match_parent"
+                                         android:layout_height="?attr/actionBarSize"/>
+
+        <android.support.v4.widget.Space android:layout_width="match_parent"
+                                         android:layout_height="?attr/actionBarSize"
+                                         android:layout_margin="@dimen/task_detail_toolbar_title_margin"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>

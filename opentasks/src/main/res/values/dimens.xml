@@ -9,5 +9,6 @@
     <dimen name="opentasks_two_pane_list_width">432dp</dimen>
     <dimen name="opentasks_details_pane_overlay_top">120dp</dimen>
     <dimen name="opentasks_details_pane_margin_bottom">-80dp</dimen>
-    
+    <dimen name="task_detail_toolbar_title_margin">8dp</dimen>
+
 </resources>
