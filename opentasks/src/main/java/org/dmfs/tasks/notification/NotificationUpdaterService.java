@@ -126,13 +126,6 @@ public class NotificationUpdaterService extends Service
 
 
 	@Override
-	public void onDestroy()
-	{
-		super.onDestroy();
-	}
-
-
-	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 
@@ -318,7 +311,7 @@ public class NotificationUpdaterService extends Service
 		final ContentResolver resolver = this.getContentResolver();
 		final Uri contentUri = Tasks.getContentUri(TaskContract.taskAuthority(this));
 		final Cursor cursor = resolver.query(contentUri, new String[] { Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
-			Tasks.STATUS, Tasks.PRIORITY }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, "
+			Tasks.STATUS, Tasks.PRIORITY, Tasks.IS_CLOSED }, Tasks.PINNED + "= 1", null, Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, "
 			+ Tasks.DUE + " DESC");
 		try
 		{
@@ -336,6 +329,7 @@ public class NotificationUpdaterService extends Service
 					contentSet.put(Tasks.DUE, cursor.getLong(cursor.getColumnIndex(Tasks.DUE)));
 					contentSet.put(Tasks.IS_ALLDAY, cursor.getLong(cursor.getColumnIndex(Tasks.IS_ALLDAY)));
 					contentSet.put(Tasks.PRIORITY, cursor.getLong(cursor.getColumnIndex(Tasks.PRIORITY)));
+					contentSet.put(Tasks.IS_CLOSED, cursor.getLong(cursor.getColumnIndex(Tasks.IS_CLOSED)));
 					tasksToPin.add(contentSet);
 
 				} while (cursor.moveToNext());
@@ -397,7 +391,8 @@ public class NotificationUpdaterService extends Service
 		}
 
 		// description
-		String contentText = makePinNotificationContentText(context, task);
+		boolean closed = Boolean.TRUE.equals(TaskFieldAdapters.IS_CLOSED.get(task));
+		String contentText = makePinNotificationContentText(context, task, closed);
 		if (contentText != null)
 		{
 			builder.setContentText(contentText);
@@ -418,8 +413,7 @@ public class NotificationUpdaterService extends Service
 		builder.setContentIntent(resultPendingIntent);
 
 		// complete action
-		Boolean closed = TaskFieldAdapters.IS_CLOSED.get(task);
-		if (closed == null || !closed)
+		if (!closed)
 		{
 			Time dueTime = TaskFieldAdapters.DUE.get(task);
 			long dueTimestamp = dueTime == null ? 0 : dueTime.toMillis(true);
@@ -447,8 +441,13 @@ public class NotificationUpdaterService extends Service
 	}
 
 
-	private static String makePinNotificationContentText(Context context, ContentSet task)
+	private static String makePinNotificationContentText(Context context, ContentSet task, boolean closed)
 	{
+		if (closed)
+		{
+			return context.getString(R.string.notification_action_completed);
+		}
+
 		boolean isAllDay = TaskFieldAdapters.ALLDAY.get(task);
 		Time now = new Time();
 		now.setToNow();
