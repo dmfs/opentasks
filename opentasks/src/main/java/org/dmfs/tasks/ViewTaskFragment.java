@@ -23,6 +23,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -36,7 +37,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.text.TextUtils;
@@ -59,6 +62,7 @@ import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.TaskNotificationHandler;
+import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
@@ -375,7 +379,7 @@ public class ViewTaskFragment extends SupportFragment
         if (uri != null)
         {
             /*
-			 * Create a new ContentSet and load the values for the given Uri. Also register listener and observer for changes in the ContentSet and the Uri.
+             * Create a new ContentSet and load the values for the given Uri. Also register listener and observer for changes in the ContentSet and the Uri.
 			 */
             mContentSet = new ContentSet(uri);
             mContentSet.addOnChangeListener(this, null, true);
@@ -385,7 +389,7 @@ public class ViewTaskFragment extends SupportFragment
         else
         {
             /*
-			 * Immediately update the view with the empty task uri, i.e. clear the view.
+             * Immediately update the view with the empty task uri, i.e. clear the view.
 			 */
             mContentSet = null;
             if (mContent != null)
@@ -396,7 +400,7 @@ public class ViewTaskFragment extends SupportFragment
 
         if ((oldUri == null) != (uri == null))
         {
-            /*
+			/*
 			 * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
 			 */
             ActivityCompat.invalidateOptionsMenu(getActivity());
@@ -487,7 +491,7 @@ public class ViewTaskFragment extends SupportFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        /*
+		/*
 		 * Don't show any options if we don't have a task to show.
 		 */
         if (mTaskUri != null)
@@ -591,9 +595,29 @@ public class ViewTaskFragment extends SupportFragment
             persistTask();
             return true;
         }
+        else if (itemId == R.id.opentasks_send_task)
+        {
+            setSendMenuIntent();
+            return false;
+        }
         else
         {
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    private void setSendMenuIntent()
+    {
+        if (mContentSet != null && mModel != null && mToolBar != null && mToolBar.getMenu() != null)
+        {
+            MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_send_task);
+            if (shareItem != null)
+            {
+                ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+                Intent shareIntent = new ShareIntentFactory().create(mContentSet, mModel, mAppContext);
+                actionProvider.setShareIntent(shareIntent);
+            }
         }
     }
 

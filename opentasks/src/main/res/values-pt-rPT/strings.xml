@@ -246,7 +246,7 @@
     <string name="accept">Aceitar</string>
     <string name="now">agora</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Adicionar tarefa</string>
 
 </resources>

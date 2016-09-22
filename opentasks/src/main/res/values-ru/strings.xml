@@ -216,7 +216,7 @@
     <string name="accept">Подтвердить</string>
     <string name="now">Сейчас</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Добавить задачу</string>
 
 </resources>

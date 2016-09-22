@@ -242,7 +242,7 @@
     <string name="accept">Accepteren</string>
     <string name="now">Nu</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Taak toevoegen</string>
 
 </resources>
