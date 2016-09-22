@@ -18,6 +18,13 @@
         app:showAsAction="always">
     </item>
     <item
+        android:id="@+id/share_task"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/activity_task_details_share_task"
+        android:titleCondensed="@string/activity_task_details_share"
+        app:showAsAction="never">
+    </item>
+    <item
         android:id="@+id/delete_task"
         android:icon="@drawable/content_discard"
         android:title="@string/activity_task_details_delete_task"
