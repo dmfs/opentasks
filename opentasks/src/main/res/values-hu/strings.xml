@@ -40,6 +40,8 @@
     <string name="activity_task_details_complete_task">Feladat befejezése</string>
     <string name="activity_task_details_pin">Rögzítés</string>
     <string name="activity_task_details_pin_task">Feladat rögzítése</string>
+    <string name="opentasks_task_details_menu_send_short">Küldés</string>
+    <string name="opentasks_task_details_menu_send">Küldés</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Elem hozzáadása</string>
@@ -246,7 +248,10 @@
     <string name="accept">Elfogadás</string>
     <string name="now">most</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Feladat létrehozása</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">OpenTasks-al küldve</string>
 
 </resources>

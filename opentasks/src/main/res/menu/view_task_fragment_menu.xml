@@ -8,25 +8,31 @@
             android:title="@string/activity_task_details_complete_task"
             android:titleCondensed="@string/activity_task_details_complete"
             android:visible="false"
-            app:showAsAction="ifRoom"></item>
+            app:showAsAction="ifRoom"/>
     <item
             android:id="@+id/pin_task"
             android:icon="@drawable/ic_pin_off_white_24dp"
             android:title="@string/activity_task_details_pin_task"
             android:titleCondensed="@string/activity_task_details_pin"
-            android:visible="false"
-            app:showAsAction="ifRoom"></item>
+            android:visible="@bool/postHoneycomb"
+            app:showAsAction="always"/>
+    <item
+            android:id="@+id/opentasks_send_task"
+            android:title="@string/opentasks_task_details_menu_send"
+            android:titleCondensed="@string/opentasks_task_details_menu_send_short"
+            app:showAsAction="never"
+            app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
     <item
             android:id="@+id/delete_task"
             android:icon="@drawable/content_discard"
             android:title="@string/activity_task_details_delete_task"
             android:titleCondensed="@string/activity_task_details_delete"
-            app:showAsAction="never"></item>
+            app:showAsAction="never"/>
     <item
             android:id="@+id/edit_task"
             android:icon="@drawable/content_edit"
             android:title="@string/activity_task_details_edit_task"
             android:titleCondensed="@string/activity_task_details_edit"
-            app:showAsAction="always"></item>
+            app:showAsAction="always"/>
 
 </menu>

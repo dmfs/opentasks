@@ -236,7 +236,7 @@
     <string name="accept">Прихвати</string>
     <string name="now">сада</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Додај задатак</string>
 
 </resources>

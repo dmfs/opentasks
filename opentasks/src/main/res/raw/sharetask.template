@@ -1,0 +1,18 @@
+{{ $task.title }}
+============
+{% if $task.description %}
+{{ $task.description }}
+{% end %}{% if $task.checklist %}{% for item in $task.checklist %}
+[{{ item.checked and "X" or " " }}]{{ item.text }}{% end %}
+{% end %}{% if $task.location %}
+{{ $R.string.task_location}}: {{ $task.location }}{% end %}{% if $task.start %}
+{{ $R.string.task_start}}: {{ tformat.apply($task.start) }}{% end %}{% if $task.due %}
+{{ $R.string.task_due}}: {{ tformat.apply($task.due) }}{% end %}{% if $task.completed %}
+{{ $R.string.task_completed}}: {{ tformat.apply($task.completed) }}{% end %}{% if $task.priority %}
+{{ $R.string.task_priority}}: {{ $task.priority }}{% end %}{% if $task.privacy %}
+{{ $R.string.task_classification}}: {{ $task.privacy }}{% end %}{% if $task.status %}
+{{ $R.string.task_status}}: {{ $task.status }}{% end %}{% if $task.url %}
+{{ $task.url }}{% end %}
+
+--
+{{ $R.string.opentasks_share_footer}}
