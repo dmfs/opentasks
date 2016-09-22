@@ -249,7 +249,7 @@
     <string name="accept">Aceptar</string>
     <string name="now">ahora</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Crear Tarea</string>
 
 </resources>

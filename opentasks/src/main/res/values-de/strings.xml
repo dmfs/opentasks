@@ -40,6 +40,9 @@
     <string name="activity_task_details_complete_task">Aufgabe erledigt</string>
     <string name="activity_task_details_pin">Anheften</string>
     <string name="activity_task_details_pin_task">Aufgabe anheften</string>
+    <string name="opentasks_details_no_task_selected">Keine Aufgabe ausgewählt</string>
+    <string name="opentasks_task_details_menu_send_short">Teilen</string>
+    <string name="opentasks_task_details_menu_send">Aufgabe teilen</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Hinzufügen</string>
@@ -243,7 +246,10 @@
     <string name="accept">Übernehmen</string>
     <string name="now">Jetzt</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Aufgabe erstellen</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Geteilt mit OpenTasks</string>
 
 </resources>

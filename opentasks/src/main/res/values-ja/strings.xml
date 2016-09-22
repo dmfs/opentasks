@@ -246,7 +246,7 @@
     <string name="accept">承認</string>
     <string name="now">今</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">タスクを作成</string>
 
 </resources>

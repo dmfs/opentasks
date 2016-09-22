@@ -41,6 +41,8 @@
     <string name="activity_task_details_pin">Pin</string>
     <string name="activity_task_details_pin_task">Pin task</string>
     <string name="opentasks_details_no_task_selected">No task selected</string>
+    <string name="opentasks_task_details_menu_send_short">Send</string>
+    <string name="opentasks_task_details_menu_send">Send to</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Add item</string>
@@ -247,7 +249,10 @@
     <string name="accept">Accept</string>
     <string name="now">now</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Create Task</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Shared by OpenTasks</string>
 
 </resources>
