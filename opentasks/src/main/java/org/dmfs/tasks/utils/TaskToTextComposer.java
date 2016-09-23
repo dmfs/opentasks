@@ -9,8 +9,8 @@ import org.dmfs.tasks.model.Model;
  */
 public interface TaskToTextComposer
 {
-    String title(Model model, ContentSet contentSet);
+    String title(ContentSet contentSet);
 
-    String body(Model model, ContentSet contentSet);
+    String body(ContentSet contentSet);
 
 }
