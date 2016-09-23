@@ -37,7 +37,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -63,6 +62,8 @@ import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.TaskNotificationHandler;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.utils.TaskToTextComposerImpl;
+import org.dmfs.tasks.utils.TextSharer;
 import org.dmfs.tasks.widget.TaskView;
 
 import java.util.Arrays;
@@ -594,10 +595,24 @@ public class ViewTaskFragment extends SupportFragment
 			persistTask();
 			return true;
 		}
+		else if (itemId == R.id.share_task)
+		{
+			shareTaskDescription();
+			return true;
+		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+
+	private void shareTaskDescription()
+	{
+		TaskToTextComposerImpl textComposer = new TaskToTextComposerImpl();
+		String body = textComposer.body(mModel, mContentSet);
+		String title = textComposer.title(mModel, mContentSet);
+		new TextSharer(getContext()).shareTextWithOtherApps(title, body);
 	}
 
 
