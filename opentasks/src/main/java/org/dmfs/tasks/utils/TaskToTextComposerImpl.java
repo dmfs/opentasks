@@ -9,10 +9,12 @@ import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
 
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
 
 
 /*
@@ -130,25 +132,39 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
 
     private void appendTimes(StringBuilder sb, ContentSet contentSet)
     {
-        // TODO Review logic in {@link TimeFieldView#OnContentChanged}, maybe extract that to be re-usable here.
-        appendTime(sb, R.string.task_start, TaskFieldAdapters.DTSTART.get(contentSet));
-        appendTime(sb, R.string.task_due, TaskFieldAdapters.DUE.get(contentSet));
-        appendTime(sb, R.string.task_completed, TaskFieldAdapters.COMPLETED.get(contentSet));
+        TimeZoneWrapper timeZoneW = getTimeZoneWrapper(contentSet);
+        appendTime(sb, R.string.task_start, TaskFieldAdapters.DTSTART.get(contentSet), timeZoneW);
+        appendTime(sb, R.string.task_due, TaskFieldAdapters.DUE.get(contentSet), timeZoneW);
+        appendTime(sb, R.string.task_completed, TaskFieldAdapters.COMPLETED.get(contentSet), timeZoneW);
+
     }
 
 
-    private void appendTime(StringBuilder sb, @StringRes int nameResId, Time time)
+    private TimeZoneWrapper getTimeZoneWrapper(ContentSet contentSet)
+    {
+        TimeZone timeZone = TaskFieldAdapters.TIMEZONE.get(contentSet);
+        return timeZone != null ? new TimeZoneWrapper(timeZone) : null;
+    }
+
+
+    private void appendTime(StringBuilder sb, @StringRes int nameResId, Time time, TimeZoneWrapper timeZone)
     {
         if (time != null)
         {
-            appendProperty(sb, mContext.getString(nameResId), formatTime(time));
+            appendProperty(sb, mContext.getString(nameResId), formatTime(time, timeZone));
         }
     }
 
 
-    private String formatTime(Time dueTime)
+    private String formatTime(Time time, TimeZoneWrapper timeZone)
     {
-        return mDateFormatter.format(dueTime, DateFormatter.DateFormatContext.DETAILS_VIEW);
+        String dateTimeText = mDateFormatter.format(time, DateFormatter.DateFormatContext.DETAILS_VIEW);
+        if (timeZone == null)
+        {
+            return dateTimeText;
+        }
+        String timeZoneText = timeZone.getDisplayName(timeZone.inDaylightTime(time.toMillis(false)), TimeZone.SHORT);
+        return dateTimeText + " " + timeZoneText;
     }
 
 
