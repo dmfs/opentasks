@@ -136,7 +136,6 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
         appendTime(sb, R.string.task_start, TaskFieldAdapters.DTSTART.get(contentSet), timeZoneW);
         appendTime(sb, R.string.task_due, TaskFieldAdapters.DUE.get(contentSet), timeZoneW);
         appendTime(sb, R.string.task_completed, TaskFieldAdapters.COMPLETED.get(contentSet), timeZoneW);
-
     }
 
 
@@ -171,33 +170,45 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
     private void appendPriority(StringBuilder sb, ContentSet contentSet, Model model)
     {
         Integer priorityValue = TaskFieldAdapters.PRIORITY.get(contentSet);
-        String priorityText = model.getField(R.id.task_field_priority).getChoices().getTitle(priorityValue);
-        appendProperty(sb, mContext.getString(R.string.task_priority), priorityText);
+        if (priorityValue != null)
+        {
+            String priorityText = model.getField(R.id.task_field_priority).getChoices().getTitle(priorityValue);
+            appendProperty(sb, mContext.getString(R.string.task_priority), priorityText);
+        }
     }
 
 
     private void appendPrivacy(StringBuilder sb, ContentSet contentSet, Model model)
     {
         Integer classificationValue = TaskFieldAdapters.CLASSIFICATION.get(contentSet);
-        String classificationText = model.getField(R.id.task_field_classification)
-                .getChoices()
-                .getTitle(classificationValue);
-        appendProperty(sb, mContext.getString(R.string.task_classification), classificationText);
+        if (classificationValue != null)
+        {
+            String classificationText = model.getField(R.id.task_field_classification)
+                    .getChoices()
+                    .getTitle(classificationValue);
+            appendProperty(sb, mContext.getString(R.string.task_classification), classificationText);
+        }
     }
 
 
     private void appendStatus(StringBuilder sb, ContentSet contentSet, Model model)
     {
         Integer statusValue = TaskFieldAdapters.STATUS.get(contentSet);
-        String statusText = model.getField(R.id.task_field_status).getChoices().getTitle(statusValue);
-        appendProperty(sb, mContext.getString(R.string.task_status), statusText);
+        if (statusValue != null)
+        {
+            String statusText = model.getField(R.id.task_field_status).getChoices().getTitle(statusValue);
+            appendProperty(sb, mContext.getString(R.string.task_status), statusText);
+        }
     }
 
 
     private void appendUrl(StringBuilder sb, ContentSet contentSet)
     {
         URL url = TaskFieldAdapters.URL.get(contentSet);
-        sb.append(url).append(NEW_LINE);
+        if (url != null)
+        {
+            sb.append(url).append(NEW_LINE);
+        }
     }
 
 
