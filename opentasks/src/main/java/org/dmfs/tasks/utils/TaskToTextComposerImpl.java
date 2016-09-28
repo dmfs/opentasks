@@ -71,9 +71,12 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
         appendTitle(sb, contentSet);
         sb.append(NEW_LINE);
 
-        appendDescription(sb, contentSet);
-        appendChecklistItems(sb, contentSet);
-        sb.append(NEW_LINE);
+        boolean appendedDesc = appendDescription(sb, contentSet);
+        boolean appendedItems = appendChecklistItems(sb, contentSet);
+        if (appendedDesc || appendedItems)
+        {
+            sb.append(NEW_LINE);
+        }
 
         appendTimes(sb, contentSet);
         appendPriority(sb, contentSet, model);
@@ -104,18 +107,21 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
     }
 
 
-    private void appendDescription(StringBuilder sb, ContentSet contentSet)
+    private boolean appendDescription(StringBuilder sb, ContentSet contentSet)
     {
         String description = TaskFieldAdapters.DESCRIPTION.get(contentSet);
-        if (description != null)
+        if (!TextUtils.isEmpty(description))
         {
             sb.append(description).append(NEW_LINE);
+            return true;
         }
+        return false;
     }
 
 
-    private void appendChecklistItems(StringBuilder sb, ContentSet contentSet)
+    private boolean appendChecklistItems(StringBuilder sb, ContentSet contentSet)
     {
+        boolean appended = false;
         List<CheckListItem> checkListItems = TaskFieldAdapters.CHECKLIST.get(contentSet);
         if (checkListItems != null)
         {
@@ -124,9 +130,11 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
                 if (!TextUtils.isEmpty(item.text))
                 {
                     sb.append('[').append(item.checked ? 'x' : ' ').append("] ").append(item.text).append(NEW_LINE);
+                    appended = true;
                 }
             }
         }
+        return appended;
     }
 
 
