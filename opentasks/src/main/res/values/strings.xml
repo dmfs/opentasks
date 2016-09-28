@@ -255,8 +255,10 @@
     <string name="accept">Accept</string>
     <string name="now">now</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Create Task</string>
+
+    <!-- Outgoing share -->
     <string name="share_footer">Shared by OpenTasks</string>
 
 </resources>
