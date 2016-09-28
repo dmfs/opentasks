@@ -1,4 +1,4 @@
-package org.dmfs.tasks.utils;
+package org.dmfs.tasks.share;
 
 import android.content.Context;
 import android.support.annotation.StringRes;
@@ -10,6 +10,7 @@ import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
+import org.dmfs.tasks.utils.DateFormatter;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -37,11 +38,12 @@ import java.util.TimeZone;
  Shared by OpenTasks
  */
 
-
 /**
+ * {@link TaskTextDescriptionComposer} that creates the format above.
+ *
  * @author Gabor Keszthelyi
  */
-public class TaskToTextComposerImpl implements TaskToTextComposer
+public class BasicTaskTextDescriptionComposer implements TaskTextDescriptionComposer
 {
     private static final String NEW_LINE = "\n";
 
@@ -49,7 +51,7 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
     private final DateFormatter mDateFormatter;
 
 
-    public TaskToTextComposerImpl(Context context)
+    public BasicTaskTextDescriptionComposer(Context context)
     {
         mContext = context;
         mDateFormatter = new DateFormatter(mContext);
@@ -57,7 +59,7 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
 
 
     @Override
-    public String title(ContentSet contentSet)
+    public String title(ContentSet contentSet, Model model)
     {
         return TaskFieldAdapters.TITLE.get(contentSet);
     }

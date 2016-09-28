@@ -1,13 +1,14 @@
-package org.dmfs.tasks.utils;
+package org.dmfs.tasks.share;
 
 import android.content.Context;
 import android.content.Intent;
 
 
 /**
+ * Shares text content with other apps.
+ *
  * @author Gabor Keszthelyi
  */
-
 public class TextSharer
 {
     private final Context mContext;
@@ -19,12 +20,12 @@ public class TextSharer
     }
 
 
-    public void shareTextWithOtherApps(String title, String body)
+    public void share(String subject, String text)
     {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, body);
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, text);
         sendIntent.setType("text/plain");
         mContext.startActivity(sendIntent);
     }
