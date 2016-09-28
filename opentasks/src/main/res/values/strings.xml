@@ -257,5 +257,6 @@
 
     <!-- Sharing intent -->
     <string name="share_as_task">Create Task</string>
+    <string name="share_footer">Shared by OpenTasks</string>
 
 </resources>

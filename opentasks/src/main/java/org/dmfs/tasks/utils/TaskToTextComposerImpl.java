@@ -5,10 +5,35 @@ import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.text.format.Time;
 import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.*;
+import org.dmfs.tasks.model.CheckListItem;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+
+
+/*
+ <task title>
+ ============
+
+ <task description>
+ [X] checked list item
+ [ ] unchecked list item
+
+ Start: <start date time> <timezone>
+ Due: <due date time> <timezone>
+ Completed: <due date time> <timezone>
+ Priority: <priority text>
+ Privacy: <privacy text>
+ Status: <status text>
+ <url>
+
+ --
+ Shared by OpenTasks
+ */
 
 
 /**
@@ -20,6 +45,7 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
 
     private final Context mContext;
     private final DateFormatter mDateFormatter;
+
 
     public TaskToTextComposerImpl(Context context)
     {
@@ -36,49 +62,53 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
 
 
     @Override
-    public String body(ContentSet contentSet)
+    public String body(ContentSet contentSet, Model model)
     {
         StringBuilder sb = new StringBuilder();
 
         appendTitle(sb, contentSet);
         sb.append(NEW_LINE);
+
         appendDescription(sb, contentSet);
         appendChecklistItems(sb, contentSet);
         sb.append(NEW_LINE);
-        appendTimes(sb, contentSet);
 
-        /*
-        TODO
-        Priority: <priority text>
-        Privacy: <privacy text>
-        <url>
-        + "We still need to add the overall status of the task (i.e. needs action/in progress/completed/cancelled)."
-         */
+        appendTimes(sb, contentSet);
+        appendPriority(sb, contentSet, model);
+        appendPrivacy(sb, contentSet, model);
+        appendStatus(sb, contentSet, model);
+        appendUrl(sb, contentSet);
+        sb.append(NEW_LINE);
+
+        appendFooter(sb);
 
         return sb.toString();
     }
 
 
-    private void appendTimes(StringBuilder sb, ContentSet contentSet)
+    private void appendTitle(StringBuilder sb, ContentSet contentSet)
     {
-        // TODO Review logic in {@link TimeFieldView#OnContentChanged}, maybe extract that to be re-usable here.
-        appendTime(sb, R.string.task_start, TaskFieldAdapters.DTSTART.get(contentSet));
-        appendTime(sb, R.string.task_due, TaskFieldAdapters.DUE.get(contentSet));
-        appendTime(sb, R.string.task_completed, TaskFieldAdapters.COMPLETED.get(contentSet));
-    }
-
-    private void appendTime(StringBuilder sb, @StringRes int nameResId, Time time)
-    {
-        if (time != null)
+        String title = TaskFieldAdapters.TITLE.get(contentSet);
+        if (title != null)
         {
-            sb.append(mContext.getString(nameResId)).append(": ").append(formatTime(time)).append(NEW_LINE);
+            sb.append(title).append(NEW_LINE);
+
+            // try to create about the same length of underline as the title ('=' char is wider than average char width):
+            char[] underlineChars = new char[(int) (title.length() * 0.85)];
+            Arrays.fill(underlineChars, '=');
+            sb.append(new String(underlineChars)).append(NEW_LINE);
         }
+
     }
 
 
-    private String formatTime(Time dueTime)
+    private void appendDescription(StringBuilder sb, ContentSet contentSet)
     {
-        return mDateFormatter.format(dueTime, DateFormatter.DateFormatContext.DETAILS_VIEW);
+        String description = TaskFieldAdapters.DESCRIPTION.get(contentSet);
+        if (description != null)
+        {
+            sb.append(description).append(NEW_LINE);
+        }
     }
 
 
@@ -98,28 +128,74 @@ public class TaskToTextComposerImpl implements TaskToTextComposer
     }
 
 
-    private void appendDescription(StringBuilder sb, ContentSet contentSet)
+    private void appendTimes(StringBuilder sb, ContentSet contentSet)
     {
-        String description = TaskFieldAdapters.DESCRIPTION.get(contentSet);
-        if (description != null)
+        // TODO Review logic in {@link TimeFieldView#OnContentChanged}, maybe extract that to be re-usable here.
+        appendTime(sb, R.string.task_start, TaskFieldAdapters.DTSTART.get(contentSet));
+        appendTime(sb, R.string.task_due, TaskFieldAdapters.DUE.get(contentSet));
+        appendTime(sb, R.string.task_completed, TaskFieldAdapters.COMPLETED.get(contentSet));
+    }
+
+
+    private void appendTime(StringBuilder sb, @StringRes int nameResId, Time time)
+    {
+        if (time != null)
         {
-            sb.append(description).append(NEW_LINE);
+            appendProperty(sb, mContext.getString(nameResId), formatTime(time));
         }
     }
 
 
-    private void appendTitle(StringBuilder sb, ContentSet contentSet)
+    private String formatTime(Time dueTime)
     {
-        String title = TaskFieldAdapters.TITLE.get(contentSet);
-        if (title != null)
-        {
-            sb.append(title).append(NEW_LINE);
-
-            // try to create about the same length of underline as the title ('=' char is wider than average char width):
-            char[] underlineChars = new char[(int) (title.length() * 0.85)];
-            Arrays.fill(underlineChars, '=');
-            sb.append(new String(underlineChars)).append(NEW_LINE);
-        }
-
+        return mDateFormatter.format(dueTime, DateFormatter.DateFormatContext.DETAILS_VIEW);
     }
+
+
+    private void appendPriority(StringBuilder sb, ContentSet contentSet, Model model)
+    {
+        Integer priorityValue = TaskFieldAdapters.PRIORITY.get(contentSet);
+        String priorityText = model.getField(R.id.task_field_priority).getChoices().getTitle(priorityValue);
+        appendProperty(sb, mContext.getString(R.string.task_priority), priorityText);
+    }
+
+
+    private void appendPrivacy(StringBuilder sb, ContentSet contentSet, Model model)
+    {
+        Integer classificationValue = TaskFieldAdapters.CLASSIFICATION.get(contentSet);
+        String classificationText = model.getField(R.id.task_field_classification)
+                .getChoices()
+                .getTitle(classificationValue);
+        appendProperty(sb, mContext.getString(R.string.task_classification), classificationText);
+    }
+
+
+    private void appendStatus(StringBuilder sb, ContentSet contentSet, Model model)
+    {
+        Integer statusValue = TaskFieldAdapters.STATUS.get(contentSet);
+        String statusText = model.getField(R.id.task_field_status).getChoices().getTitle(statusValue);
+        appendProperty(sb, mContext.getString(R.string.task_status), statusText);
+    }
+
+
+    private void appendUrl(StringBuilder sb, ContentSet contentSet)
+    {
+        URL url = TaskFieldAdapters.URL.get(contentSet);
+        sb.append(url).append(NEW_LINE);
+    }
+
+
+    private void appendFooter(StringBuilder sb)
+    {
+
+        sb.append("--").append(NEW_LINE);
+        sb.append(mContext.getString(R.string.share_footer));
+    }
+
+
+    private void appendProperty(StringBuilder sb, String name, String value)
+    {
+        sb.append(name).append(": ").append(value).append(NEW_LINE);
+    }
+
 }

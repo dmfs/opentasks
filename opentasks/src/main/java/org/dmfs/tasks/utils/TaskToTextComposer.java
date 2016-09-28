@@ -11,6 +11,6 @@ public interface TaskToTextComposer
 {
     String title(ContentSet contentSet);
 
-    String body(ContentSet contentSet);
+    String body(ContentSet contentSet, Model model);
 
 }

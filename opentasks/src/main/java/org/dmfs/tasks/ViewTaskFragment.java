@@ -610,7 +610,7 @@ public class ViewTaskFragment extends SupportFragment
 	private void shareTaskDescription()
 	{
 		TaskToTextComposerImpl textComposer = new TaskToTextComposerImpl(mAppContext);
-		String body = textComposer.body(mContentSet);
+		String body = textComposer.body(mContentSet, mModel);
 		String title = textComposer.title(mContentSet);
 		new TextSharer(getContext()).shareTextWithOtherApps(title, body);
 	}
