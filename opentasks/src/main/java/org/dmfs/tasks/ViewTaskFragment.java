@@ -608,7 +608,7 @@ public class ViewTaskFragment extends SupportFragment
 
 	private void shareTaskDescription()
 	{
-		new TextDescriptionTaskSharer(getContext()).share(mContentSet, mModel);
+		new TextDescriptionTaskSharer(getActivity()).share(mContentSet, mModel);
 	}
 
 

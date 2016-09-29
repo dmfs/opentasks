@@ -17,6 +17,7 @@
 
 package org.dmfs.tasks.share;
 
+import android.app.Activity;
 import android.content.Context;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -33,10 +34,10 @@ public class TextDescriptionTaskSharer implements TaskSharer
     private final TextSharer mTextSharer;
 
 
-    public TextDescriptionTaskSharer(Context context)
+    public TextDescriptionTaskSharer(Activity activity)
     {
-        mTextComposer = new BasicTaskTextDescriptionComposer(context);
-        mTextSharer = new TextSharer(context);
+        mTextComposer = new BasicTaskTextDescriptionComposer(activity);
+        mTextSharer = new TextSharer(activity);
     }
 
 

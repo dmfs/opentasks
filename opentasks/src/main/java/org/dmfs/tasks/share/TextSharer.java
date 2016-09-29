@@ -17,8 +17,9 @@
 
 package org.dmfs.tasks.share;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
+import android.widget.Toast;
 
 
 /**
@@ -28,12 +29,14 @@ import android.content.Intent;
  */
 public class TextSharer
 {
-    private final Context mContext;
+    // Needs Activity, not Context, because startActivity() from not Activity
+    // crashes if Intent.FLAG_ACTIVITY_NEW_TASK is not used.
+    private final Activity mActivity;
 
 
-    public TextSharer(Context context)
+    public TextSharer(Activity activity)
     {
-        mContext = context;
+        mActivity = activity;
     }
 
 
@@ -44,7 +47,16 @@ public class TextSharer
         sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         sendIntent.putExtra(Intent.EXTRA_TEXT, text);
         sendIntent.setType("text/plain");
-        mContext.startActivity(sendIntent);
+
+        if (sendIntent.resolveActivity(mActivity.getPackageManager()) != null)
+        {
+            mActivity.startActivity(sendIntent);
+        }
+        else
+        {
+            // This will probably never happen, so no need to localize the text.
+            Toast.makeText(mActivity, "No app found to receive shared text", Toast.LENGTH_LONG).show();
+        }
     }
 
 }
