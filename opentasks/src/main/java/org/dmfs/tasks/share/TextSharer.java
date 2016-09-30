@@ -20,6 +20,7 @@ package org.dmfs.tasks.share;
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.Toast;
+import org.dmfs.tasks.R;
 
 
 /**
@@ -50,7 +51,9 @@ public class TextSharer
 
         if (sendIntent.resolveActivity(mActivity.getPackageManager()) != null)
         {
-            mActivity.startActivity(sendIntent);
+            Intent chooserIntent = Intent.createChooser(sendIntent,
+                    mActivity.getString(R.string.activity_task_details_share_task));
+            mActivity.startActivity(chooserIntent);
         }
         else
         {
