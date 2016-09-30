@@ -21,6 +21,7 @@ import android.content.Context;
 import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.text.format.Time;
+import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
@@ -221,7 +222,7 @@ public class BasicTaskTextDescriptionComposer implements TaskTextDescriptionComp
     private void appendStatus(StringBuilder sb, ContentSet contentSet, Model model)
     {
         Integer statusValue = TaskFieldAdapters.STATUS.get(contentSet);
-        if (statusValue != null)
+        if (statusValue != null && !statusValue.equals(TaskContract.Tasks.STATUS_COMPLETED))
         {
             String statusText = model.getField(R.id.task_field_status).getChoices().getTitle(statusValue);
             appendProperty(sb, mContext.getString(R.string.task_status), statusText);

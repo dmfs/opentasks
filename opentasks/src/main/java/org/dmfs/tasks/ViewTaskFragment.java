@@ -596,19 +596,13 @@ public class ViewTaskFragment extends SupportFragment
 		}
 		else if (itemId == R.id.share_task)
 		{
-			shareTaskDescription();
+			new TextDescriptionTaskSharer(getActivity()).share(mContentSet, mModel);
 			return true;
 		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-
-	private void shareTaskDescription()
-	{
-		new TextDescriptionTaskSharer(getActivity()).share(mContentSet, mModel);
 	}
 
 
