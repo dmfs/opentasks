@@ -37,7 +37,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.text.TextUtils;
@@ -49,7 +51,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
-
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -60,7 +61,7 @@ import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.TaskNotificationHandler;
-import org.dmfs.tasks.share.TextDescriptionTaskSharer;
+import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
@@ -527,8 +528,17 @@ public class ViewTaskFragment extends SupportFragment
 					MenuItem item = menu.findItem(R.id.pin_task);
 					item.setIcon(R.drawable.ic_pin_white_24dp);
 				}
+
+				setupShareIntent(menu.findItem(R.id.share_task));
 			}
 		}
+	}
+
+
+	private void setupShareIntent(MenuItem shareItem)
+	{
+		ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+		new ShareIntentFactory(mAppContext).setShareIntentAsync(actionProvider, mContentSet, mModel);
 	}
 
 
@@ -592,11 +602,6 @@ public class ViewTaskFragment extends SupportFragment
 				TaskNotificationHandler.pinTask(mAppContext, mContentSet);
 			}
 			persistTask();
-			return true;
-		}
-		else if (itemId == R.id.share_task)
-		{
-			new TextDescriptionTaskSharer(getActivity()).share(mContentSet, mModel);
 			return true;
 		}
 		else

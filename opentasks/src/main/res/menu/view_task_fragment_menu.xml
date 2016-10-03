@@ -20,10 +20,10 @@
     </item>
     <item
         android:id="@+id/share_task"
-        android:icon="@android:drawable/ic_menu_share"
         android:title="@string/activity_task_details_share_task"
         android:titleCondensed="@string/activity_task_details_share"
-        app:showAsAction="never">
+        app:showAsAction="never"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider">
     </item>
     <item
         android:id="@+id/delete_task"
