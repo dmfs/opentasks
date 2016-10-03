@@ -44,8 +44,8 @@
     <string name="activity_task_details_complete_task">Complete task</string>
     <string name="activity_task_details_pin">Pin</string>
     <string name="activity_task_details_pin_task">Pin task</string>
-    <string name="opentasks_activity_task_details_share">Share</string>
-    <string name="opentasks_activity_task_details_share_task">Share task</string>
+    <string name="opentasks_activity_task_details_send">Send</string>
+    <string name="opentasks_activity_task_details_send_task">Send to</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Add item</string>

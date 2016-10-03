@@ -24,6 +24,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -222,6 +223,7 @@ public class ViewTaskFragment extends SupportFragment
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
+
 	}
 
 
@@ -528,17 +530,8 @@ public class ViewTaskFragment extends SupportFragment
 					MenuItem item = menu.findItem(R.id.pin_task);
 					item.setIcon(R.drawable.ic_pin_white_24dp);
 				}
-
-				setupShareIntent(menu.findItem(R.id.share_task));
 			}
 		}
-	}
-
-
-	private void setupShareIntent(MenuItem shareItem)
-	{
-		ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-		new ShareIntentFactory(mAppContext).setShareIntentAsync(actionProvider, mContentSet, mModel);
 	}
 
 
@@ -604,9 +597,29 @@ public class ViewTaskFragment extends SupportFragment
 			persistTask();
 			return true;
 		}
+		else if (itemId == R.id.opentasks_send_task)
+		{
+			setSendMenuIntent();
+			return false;
+		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
+	private void setSendMenuIntent()
+	{
+		if (mContentSet != null && mModel != null && mToolBar != null && mToolBar.getMenu() != null)
+		{
+			MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_send_task);
+			if (shareItem != null)
+			{
+				ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+				Intent shareIntent = new ShareIntentFactory().createTaskTextShareIntent(mContentSet, mModel, mAppContext);
+				actionProvider.setShareIntent(shareIntent);
+			}
 		}
 	}
 

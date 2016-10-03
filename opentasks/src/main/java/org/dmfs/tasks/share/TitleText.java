@@ -18,24 +18,18 @@
 package org.dmfs.tasks.share;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.Model;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 
 
 /**
- * Creates a text description for a task.
+ * {@link TaskText} for simply the title.
  *
  * @author Gabor Keszthelyi
  */
-public interface TaskTextDescriptionComposer
+public class TitleText extends StringTaskText
 {
-    /**
-     * Creates a title for the task text description.
-     */
-    String title(ContentSet contentSet, Model model);
-
-    /**
-     * Creates the body of the task text description.
-     */
-    String body(ContentSet contentSet, Model model);
-
+    public TitleText(ContentSet contentSet)
+    {
+        super(TaskFieldAdapters.TITLE.get(contentSet));
+    }
 }

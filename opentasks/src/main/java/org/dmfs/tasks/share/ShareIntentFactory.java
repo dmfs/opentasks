@@ -1,8 +1,24 @@
+/*
+ * Copyright 2016 Marten Gajda <marten@dmfs.org>
+ *
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.dmfs.tasks.share;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.ShareActionProvider;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 
@@ -12,16 +28,8 @@ import org.dmfs.tasks.model.Model;
  *
  * @author Gabor Keszthelyi
  */
-public class ShareIntentFactory
+public final class ShareIntentFactory
 {
-    private final TaskTextDescriptionComposer mTextComposer;
-
-
-    public ShareIntentFactory(Context context)
-    {
-        mTextComposer = new BasicTaskTextDescriptionComposer(context);
-    }
-
 
     /**
      * Creates an intent for sharing the description of the whole task in the {@link ContentSet} with other apps.
@@ -33,10 +41,10 @@ public class ShareIntentFactory
      *
      * @return the created intent
      */
-    public Intent createTaskTextShareIntent(ContentSet contentSet, Model model)
+    public Intent createTaskTextShareIntent(ContentSet contentSet, Model model, Context context)
     {
-        String title = mTextComposer.title(contentSet, model);
-        String body = mTextComposer.body(contentSet, model);
+        String title = new TitleText(contentSet).toString();
+        String body = new ShareTaskText(contentSet, model, context).toString();
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
@@ -47,27 +55,4 @@ public class ShareIntentFactory
         return sendIntent;
     }
 
-
-    /**
-     * Convenience method to set the share intent on the {@link ShareActionProvider} on a background thread, to not
-     * block UI thread while text composing is ongoing.
-     *
-     * @param shareActionProvider
-     *         it's {@link ShareActionProvider#setShareIntent(Intent)} will be called with the created Intent
-     * @param contentSet
-     *         actual {@link ContentSet} for the task
-     * @param model
-     *         the model used currently
-     */
-    public void setShareIntentAsync(final ShareActionProvider shareActionProvider, final ContentSet contentSet, final Model model)
-    {
-        new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                shareActionProvider.setShareIntent(createTaskTextShareIntent(contentSet, model));
-            }
-        }).start();
-    }
 }
