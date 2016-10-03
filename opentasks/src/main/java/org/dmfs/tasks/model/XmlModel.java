@@ -504,7 +504,7 @@ public class XmlModel extends Model
 		FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.id.task_field_title, R.string.task_title, -1, R.layout.text_field_editor,
 			R.drawable.ic_detail_description).addEditLayoutOption(LayoutDescriptor.OPTION_MULTILINE, false));
 		FIELD_INFLATER_MAP.put("location", new FieldInflater(TaskFieldAdapters.LOCATION, R.id.task_field_location, R.string.task_location,
-			R.layout.location_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location).addDetailsLayoutOption(LayoutDescriptor.OPTION_LINKIFY, 0));
+			R.layout.opentasks_location_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location).addDetailsLayoutOption(LayoutDescriptor.OPTION_LINKIFY, 0));
 		FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.id.task_field_description, R.string.task_description,
 			R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_description));
 		FIELD_INFLATER_MAP.put("checklist", new FieldInflater(TaskFieldAdapters.CHECKLIST, R.id.task_field_checklist, R.string.task_checklist,
