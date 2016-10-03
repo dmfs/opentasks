@@ -244,7 +244,7 @@ public class BasicTaskTextDescriptionComposer implements TaskTextDescriptionComp
     {
 
         sb.append("--").append(NEW_LINE);
-        sb.append(mContext.getString(R.string.share_footer));
+        sb.append(mContext.getString(R.string.opentasks_share_footer));
     }
 
 

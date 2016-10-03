@@ -20,8 +20,8 @@
     </item>
     <item
         android:id="@+id/share_task"
-        android:title="@string/activity_task_details_share_task"
-        android:titleCondensed="@string/activity_task_details_share"
+        android:title="@string/opentasks_activity_task_details_share_task"
+        android:titleCondensed="@string/opentasks_activity_task_details_share"
         app:showAsAction="never"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider">
     </item>
