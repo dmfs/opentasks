@@ -14,12 +14,12 @@ import org.dmfs.tasks.model.Model;
  */
 public class ShareIntentFactory
 {
-    private final TaskTextDescriptionComposer mTextComposer;
+    private final Context mContext;
 
 
     public ShareIntentFactory(Context context)
     {
-        mTextComposer = new BasicTaskTextDescriptionComposer(context);
+        mContext = context;
     }
 
 
@@ -35,8 +35,8 @@ public class ShareIntentFactory
      */
     public Intent createTaskTextShareIntent(ContentSet contentSet, Model model)
     {
-        String title = mTextComposer.title(contentSet, model);
-        String body = mTextComposer.body(contentSet, model);
+        String title = new TitleText(contentSet).toString();
+        String body = new ShareTaskText(contentSet, model, mContext).toString();
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);

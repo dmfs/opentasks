@@ -445,7 +445,16 @@ public class ViewTaskFragment extends SupportFragment
 				}
 				((TextView) mToolBar.findViewById(R.id.toolbar_title)).setText(TaskFieldAdapters.TITLE.get(mContentSet));
 			}
+
+			setShareIntent();
 		}
+	}
+
+	private void setShareIntent()
+	{
+		MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_share_task);
+		ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+		new ShareIntentFactory(mAppContext).setShareIntentAsync(actionProvider, mContentSet, mModel);
 	}
 
 
@@ -528,17 +537,8 @@ public class ViewTaskFragment extends SupportFragment
 					MenuItem item = menu.findItem(R.id.pin_task);
 					item.setIcon(R.drawable.ic_pin_white_24dp);
 				}
-
-				setupShareIntent(menu.findItem(R.id.share_task));
 			}
 		}
-	}
-
-
-	private void setupShareIntent(MenuItem shareItem)
-	{
-		ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-		new ShareIntentFactory(mAppContext).setShareIntentAsync(actionProvider, mContentSet, mModel);
 	}
 
 
