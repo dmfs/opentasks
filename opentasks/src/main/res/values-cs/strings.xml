@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+    <string name="permission_read_tasks">přečíst úkoly</string>
+    <string name="permission_description_read_tasks">Číst úkoly a seznamy úkolů.</string>
+    <string name="permission_write_tasks">zapsat úkoly</string>
+    <string name="permission_description_write_tasks">Vytvořit, změnit a smazat úkoly a seznamy úkolů.</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Přidat úkol</string>
+    <string name="menu_add_task_condensed">Přidat</string>
+    <string name="menu_show_completed">Ukázat splněné úkoly</string>
+    <string name="menu_hide_completed">Skrýt splněné úkoly</string>
+    <string name="menu_show_completed_condensed">Ukázat splněné úkoly</string>
+    <string name="menu_sync_now">Obnovit</string>
+    <string name="menu_sync_now_condensed">Obnovit</string>
+    <string name="menu_search_hint">Hledat</string>
+    <string name="toast_task_created">\"%1s\" vytvořen.</string>
+    <string name="toast_task_completed">\"%1s\" splněn.</string>
+    <string name="toast_task_uncompleted">\"%1s\" znovu otevřen.</string>
+    <string name="toast_x_removed">\"%1s\" odstraněn.</string>
+    <string name="task_group_title_list">Úkoly</string>
+    <string name="task_group_title_start">Začínající úkoly</string>
+    <string name="task_group_title_due">Nesplněné úkoly</string>
+    <string name="task_group_title_priority">Priorita úkolu</string>
+    <string name="task_group_title_progress">Progres úkolu</string>
+    <string name="task_group_title_default">Úkoly</string>
+    <string name="quick_add_task_created">Úkol vytvořen</string>
+    <string name="initial_local_task_list_name">Mé úkoly</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d úkol</item>
+        <item quantity="other">%d úkolů</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Editovat</string>
+    <string name="activity_task_details_edit_task">Editovat úkol</string>
+    <string name="activity_task_details_delete">Smazat</string>
+    <string name="activity_task_details_delete_task">Smazat úkol</string>
+    <string name="activity_task_details_complete">Ukončit</string>
+    <string name="activity_task_details_complete_task">Ukončit úkol</string>
+    <string name="activity_task_details_pin">Připíchnout</string>
+    <string name="activity_task_details_pin_task">Připíchnout úkol</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Přidat položku</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Název položky</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Editovat</string>
+    <string name="activity_add_task_title">Vytvořit</string>
+    <string name="activity_edit_task_error_invalid_url">Neplatné URL</string>
+    <string name="activity_edit_task_task_saved">Úkol uložen.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Prázdný úkol nebyl uložen.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">Seznam</string>
+    <string name="task_title">Název</string>
+    <string name="task_location">Umístění</string>
+    <string name="task_description">Popis</string>
+    <string name="task_checklist">Kontrolní seznam</string>
+    <string name="task_start">Začátek</string>
+    <string name="task_due">Konec</string>
+    <string name="task_completed">Ukončen</string>
+    <string name="task_percent_complete">Splněno v procentech</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Soukromí</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Detail úkolu</string>
+    <string name="title_task_list">Úkoly</string>
+    <string name="provider_label">Úkoly</string>
+    <string name="task_detail_activity">Detail úkolu</string>
+    <string name="task_priority">Priorita</string>
+    <string name="task_timezone">Časová zóna</string>
+    <string name="task_all_day">Celodenní</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">Žádné datum ukončení</string>
+    <string name="task_group_overdue">Zpoždění</string>
+    <string name="task_group_due_today">Dnes</string>
+    <string name="task_group_due_tomorrow">Zítra</string>
+    <string name="task_group_due_within_7_days">Další dny</string>
+    <string name="task_group_due_in_month">Splnit v %s</string>
+    <string name="task_group_due_in_year">Splnit v %s</string>
+    <string name="task_group_due_in_future">Někdy</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Již začalo</string>
+    <string name="task_group_start_today">Dnes</string>
+    <string name="task_group_start_tomorrow">Zítra</string>
+    <string name="task_group_start_within_7_days">Někdy</string>
+    <string name="task_group_start_in_future">Později</string>
+    <string name="task_group_due_title">Do</string>
+    <string name="task_group_all_title">Seznamy</string>
+    <string name="task_group_completed_title">Ukončeno</string>
+    <string name="task_group_start_title">Začátek</string>
+    <string name="task_group_search_title">Hledat</string>
+    <string name="task_group_priority_title">Priorita</string>
+    <string name="task_group_progress_title">Progres</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Nesplněno</string>
+    <string name="task_group_progress_40">Daleko k cíli</string>
+    <string name="task_group_progress_60">Napůl cesty</string>
+    <string name="task_group_progress_80">Skoro hotovo</string>
+    <string name="task_group_progress_100">Hotovo</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Vysoká priorita</string>
+    <string name="task_group_priority_medium">Střední priorita</string>
+    <string name="task_group_priority_low">Nízká priorita</string>
+    <string name="task_group_priority_none">Žádná priorita</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Uložit</string>
+    <string name="action_cancel">Zrušit</string>
+    <string name="action_save_and_continue">Uložit a pokračovat</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">vyžaduje akci</string>
+    <string name="status_in_process">v procesu</string>
+    <string name="status_completed">dokončeno</string>
+    <string name="status_cancelled">zrušeno</string>
+    <string name="status_incomplete">nedokončeno</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">nespecifikováno</string>
+    <string name="classification_public">veřejný</string>
+    <string name="classification_private">soukromý</string>
+    <string name="classification_confidential">důvěrný</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">žádná</string>
+    <string name="priority_low">nízká</string>
+    <string name="priority_medium">střední</string>
+    <string name="priority_high">vysoká</string>
+    <string name="priority_urgent">urgentní</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Nastavení</string>
+    <string name="action_settings">Nastavení</string>
+    <string name="action_add_local_list">Přidat seznam</string>
+    <string name="visible_task_lists">Zobrazené seznamy</string>
+    <string name="enable_alarms">Upozornění</string>
+    <string name="synced_task_lists">Synchronizované seznamy</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Vybrat účet</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">uložit</string>
+    <string name="activity_manage_list_btn_delete">smazat seznam</string>
+    <string name="activity_add_list_title">Vytvořit lokální seznam</string>
+    <string name="activity_edit_list_title">Nastavení seznamu</string>
+    <string name="task_list_name_caption">Jméno</string>
+    <string name="task_list_no_sync">Poznámka: Vytvoří lokální seznam. Úkoly v lokálních seznamech nebudou synchronizovány.</string>
+    <string name="task_list_color_caption">Barva seznamu</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">jméno seznamu</string>
+    <string name="task_list_name_dialog_title">Vlož jméno seznamu</string>
+    <string name="task_list_name_dialog_error">Vlož jméno.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Smazat %s</string>
+    <string name="task_list_delete_dialog_message">Smazat seznam a všechny jeho úkoly?\nPoznámka: Smazaný seznam nebude možné obnovit.</string>
+    <string name="task_list_delete_toast">%s smazán</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Dle data dokončení</string>
+    <string name="gd_by_completed">Dle dokončení</string>
+    <string name="gd_by_list">Dle seznamu</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Potvrdit smazání</string>
+    <string name="confirm_delete_message">Smazat tento úkol?</string>
+    <string name="confirm_delete_message_with_title">Smazat \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" odstraněn.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">Žádný seznam úkolů</string>
+    <string name="task_list_selection_title">Vyber seznamy pro zobrazení</string>
+    <string name="task_list_selection_ok">OK</string>
+    <string name="task_list_selection_cancel">ZRUŠIT</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Aktuální úkoly</string>
+    <string name="task_list_widget_title_4x4">Aktuální úkoly 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Dokončit</string>
+    <string name="fling_task_edit">Editovat</string>
+    <string name="fling_task_delete">Smazat</string>
+    <string name="fling_task_uncomplete">Nedokončit</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">ikona počátečního data úkolu</string>
+    <string name="cd_due_date">ikona data ukončení úkolu</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_title">%1s</string>
+    <string name="notification_task_start_title">%1s</string>
+    <string name="notification_task_due_date">Do kdy, %1s</string>
+    <string name="notification_task_start_date">Od kdy, %1s</string>
+    <string name="notification_task_due_today">Dodnes</string>
+    <string name="notification_task_start_today">Úkol začíná dnes</string>
+    <string name="notification_action_complete">ukončit</string>
+    <string name="notification_action_completed">Dokončen</string>
+    <string name="notification_action_delay_1h">+1 hodina</string>
+    <string name="notification_action_delay_1d">+1 den</string>
+    <string name="notification_action_delay_toast">Datum dokončení aktualizováno</string>
+    <string name="notification_undo">Zpět</string>
+    <string name="notification_action_unpin">odstranit připíchnutí</string>
+    <string name="notification_task_pin_ticker">%1$s byl připíchnut</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 hodina</string>
+    <string name="button_add_one_day">+1 den</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Úkoly</string>
+    <string name="dashclock_extension_description">Zobrazí informace k nedávným úkolům.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s do - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s do</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s začíná - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s začíná dnes</string>
+    <string name="dashclock_pref_displayed_task_title">Zobrazené události</string>
+    <string name="dashclock_pref_displayed_task_summary">Vybrat události, které mají být zobrazeny ve dashclock widgetu</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Události k zobrazení</string>
+    <string name="dashclock_display_type_due">úkoly k ukončení</string>
+    <string name="dashclock_display_type_start">začínající úkoly</string>
+    <string name="dashclock_display_type_start_and_due">začínající a opožděné úkoly</string>
+    <string name="dashclock_display_type_all">všechny</string>
+    <string name="dashclock_display_type_pinned">připíchnuté úkoly</string>
+    <string name="dashclock_preference_title">Předvolby DashClock</string>
+
+    <!-- General -->
+    <string name="accept">Akceptovat</string>
+    <string name="now">nyní</string>
+
+    <!-- Sharing intent -->
+    <string name="share_as_task">Vytvořit úkol</string>
+
+</resources>
