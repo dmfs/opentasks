@@ -90,8 +90,21 @@ public class LocationFieldView extends TextFieldView
 
     private void openMapWithLocation(String locationQuery)
     {
-        Uri uri = Uri.parse("geo:0,0?q=" + Uri.encode(locationQuery));
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
-        getContext().startActivity(mapIntent);
+        Uri mapAppUri = Uri.parse("geo:0,0?q=" + Uri.encode(locationQuery));
+        Intent mapAppIntent = new Intent(Intent.ACTION_VIEW, mapAppUri);
+        if (mapAppIntent.resolveActivity(getContext().getPackageManager()) != null)
+        {
+            getContext().startActivity(mapAppIntent);
+        }
+        else
+        {
+            Uri googleMapInBrowserUri = Uri.parse("http://maps.google.com/?q=" + Uri.encode(locationQuery));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, googleMapInBrowserUri);
+            if (browserIntent.resolveActivity(getContext().getPackageManager()) != null)
+            {
+                getContext().startActivity(browserIntent);
+            }
+        }
+
     }
 }
