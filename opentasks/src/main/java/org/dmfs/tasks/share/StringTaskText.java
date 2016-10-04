@@ -18,6 +18,8 @@
 package org.dmfs.tasks.share;
 
 /**
+ * Base class for {@link TaskText}s that use a String as the underlying value.
+ *
  * @author Gabor Keszthelyi
  */
 public abstract class StringTaskText implements TaskText
@@ -33,6 +35,7 @@ public abstract class StringTaskText implements TaskText
         }
         mValue = value;
     }
+
 
     @Override
     public final int length()
@@ -56,7 +59,7 @@ public abstract class StringTaskText implements TaskText
 
 
     @Override
-    public String toString()
+    public final String toString()
     {
         return mValue;
     }
