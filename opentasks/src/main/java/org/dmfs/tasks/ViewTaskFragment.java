@@ -24,6 +24,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -62,19 +63,13 @@ import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.TaskNotificationHandler;
 import org.dmfs.tasks.share.ShareIntentFactory;
-import org.dmfs.tasks.share.ShareIntentUpdateEventTracker;
 import org.dmfs.tasks.utils.ContentValueMapper;
-import org.dmfs.tasks.utils.DerivedEventTracker;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.dmfs.tasks.share.ShareIntentUpdateEventTracker.Event.CONTENT_LOADED;
-import static org.dmfs.tasks.share.ShareIntentUpdateEventTracker.Event.MENU_CREATED;
-import static org.dmfs.tasks.share.ShareIntentUpdateEventTracker.Event.MODEL_LOADED;
 
 
 /**
@@ -157,8 +152,6 @@ public class ViewTaskFragment extends SupportFragment
 
 	private boolean mIsTheTitleContainerVisible = true;
 
-	private final ShareIntentUpdateEventTracker mShareIntentUpdateTracker = new ShareIntentUpdateEventTracker();
-
 	/**
 	 * A Runnable that updates the view.
 	 */
@@ -231,14 +224,6 @@ public class ViewTaskFragment extends SupportFragment
 
 		setHasOptionsMenu(true);
 
-		mShareIntentUpdateTracker.setListener(new DerivedEventTracker.Listener()
-		{
-			@Override
-			public void onDerivedEvent()
-			{
-				setShareMenuIntent();
-			}
-		});
 	}
 
 
@@ -468,11 +453,15 @@ public class ViewTaskFragment extends SupportFragment
 
 	private void setShareMenuIntent()
 	{
-		MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_share_task);
-		if (shareItem != null)
+		if (mContentSet != null && mModel != null && mToolBar != null && mToolBar.getMenu() != null)
 		{
-			ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-			new ShareIntentFactory(mAppContext).setShareIntentAsync(actionProvider, mContentSet, mModel);
+			MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_share_task);
+			if (shareItem != null)
+			{
+				ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+				Intent shareIntent = new ShareIntentFactory(mAppContext).createTaskTextShareIntent(mContentSet, mModel);
+				actionProvider.setShareIntent(shareIntent);
+			}
 		}
 	}
 
@@ -512,7 +501,6 @@ public class ViewTaskFragment extends SupportFragment
 				// This is the initial update. Just go ahead and update the view right away to ensure the activity comes up with a filled form.
 				updateView();
 			}
-			mShareIntentUpdateTracker.event(MODEL_LOADED);
 		}
 	}
 
@@ -558,7 +546,6 @@ public class ViewTaskFragment extends SupportFragment
 					item.setIcon(R.drawable.ic_pin_white_24dp);
 				}
 			}
-			mShareIntentUpdateTracker.event(MENU_CREATED);
 		}
 	}
 
@@ -624,6 +611,11 @@ public class ViewTaskFragment extends SupportFragment
 			}
 			persistTask();
 			return true;
+		}
+		else if (itemId == R.id.opentasks_share_task)
+		{
+			setShareMenuIntent();
+			return false;
 		}
 		else
 		{
@@ -726,7 +718,6 @@ public class ViewTaskFragment extends SupportFragment
 				// the model didn't change, just update the view
 				postUpdateView();
 			}
-			mShareIntentUpdateTracker.event(CONTENT_LOADED);
 		}
 	}
 
