@@ -451,21 +451,6 @@ public class ViewTaskFragment extends SupportFragment
 	}
 
 
-	private void setShareMenuIntent()
-	{
-		if (mContentSet != null && mModel != null && mToolBar != null && mToolBar.getMenu() != null)
-		{
-			MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_share_task);
-			if (shareItem != null)
-			{
-				ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
-				Intent shareIntent = new ShareIntentFactory(mAppContext).createTaskTextShareIntent(mContentSet, mModel);
-				actionProvider.setShareIntent(shareIntent);
-			}
-		}
-	}
-
-
 	/**
 	 * Update the view. This doesn't call {@link #updateView()} right away, instead it posts it.
 	 */
@@ -620,6 +605,21 @@ public class ViewTaskFragment extends SupportFragment
 		else
 		{
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
+	private void setShareMenuIntent()
+	{
+		if (mContentSet != null && mModel != null && mToolBar != null && mToolBar.getMenu() != null)
+		{
+			MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_share_task);
+			if (shareItem != null)
+			{
+				ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+				Intent shareIntent = new ShareIntentFactory(mAppContext).createTaskTextShareIntent(mContentSet, mModel);
+				actionProvider.setShareIntent(shareIntent);
+			}
 		}
 	}
 
