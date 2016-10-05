@@ -538,17 +538,15 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		if (resultCode == RESULT_OK)
+		if (resultCode == RESULT_OK && intent != null && intent.getData() != null)
 		{
-			if (intent != null)
-			{
-				Uri taskUri = intent.getData();
-				if (taskUri != null)
-				{
-					// select the new task
-					onItemSelected(taskUri, false, -1);
-				}
-			}
+			// Use the same flow to display the new task as if it was opened from the widget
+			Intent displayIntent = new Intent(this, TaskListActivity.class);
+			displayIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
+			displayIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
+			Uri newTaskUri = intent.getData();
+			displayIntent.setData(newTaskUri);
+			onNewIntent(displayIntent);
 		}
 	}
 
