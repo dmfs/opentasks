@@ -4,14 +4,14 @@
                                                  android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
-            style="@style/task_detail_appbar">
+            style="@style/opentasks_details_appbar">
 
         <android.support.v4.widget.Space android:layout_width="match_parent"
                                          android:layout_height="?attr/actionBarSize"/>
 
         <android.support.v4.widget.Space android:layout_width="match_parent"
                                          android:layout_height="?attr/actionBarSize"
-                                         android:layout_margin="@dimen/task_detail_toolbar_title_margin"/>
+                                         android:layout_margin="@dimen/opentasks_details_toolbar_title_margin"/>
 
     </android.support.design.widget.AppBarLayout>
 

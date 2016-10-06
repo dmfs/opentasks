@@ -50,7 +50,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -426,18 +425,18 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 
 	private void loadTaskDetailFragment(Uri uri)
 	{
-        Fragment detailFragment = getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+		Fragment detailFragment = getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
 
 		if (uri == null)
 		{
-            if (!(detailFragment instanceof EmptyTaskFragment))
-            {
-                replaceDetailFragment(new EmptyTaskFragment());
-            }
+			if (!(detailFragment instanceof EmptyTaskFragment))
+			{
+				replaceDetailFragment(new EmptyTaskFragment());
+			}
 		}
 		else
 		{
-            if (detailFragment instanceof ViewTaskFragment)
+			if (detailFragment instanceof ViewTaskFragment)
 			{
 				((ViewTaskFragment) detailFragment).loadUri(uri);
 			}
