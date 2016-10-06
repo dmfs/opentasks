@@ -29,7 +29,7 @@
                     android:id="@+id/task_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/opentasks_details_toolbar_title_margin"
+                    android:layout_margin="8dp"
                     android:gravity="center_vertical"
                     android:minHeight="?attr/actionBarSize"
                     android:paddingEnd="48dp"
