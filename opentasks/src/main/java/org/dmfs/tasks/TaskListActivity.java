@@ -42,7 +42,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,7 +49,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -172,12 +170,24 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	private FloatingActionButton mFloatingActionButton;
 
 
+	/**
+	 * Creates a blank (without data, extras, action) intent with correct flags to launch this Activity by bringing it forward if an instance exists.
+	 *
+	 * (Alternative way to use launchMode=single* has issues, see http://stackoverflow.com/q/2417468/4247460)
+     */
+	public static Intent bringActivityForwardIntent(Context context)
+	{
+		Intent intent = new Intent(context, TaskListActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		return intent;
+	}
+
+
 	@SuppressLint("NewApi")
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
 
 		// check for single pane activity change
@@ -381,7 +391,8 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
-		resolveIntentAction(intent);
+        setIntent(intent);
+        resolveIntentAction(intent);
 		super.onNewIntent(intent);
 	}
 

@@ -43,8 +43,7 @@
         <!-- TaskListActivity listens for MAIN intents -->
         <activity
             android:name="org.dmfs.tasks.TaskListActivity"
-            android:label="@string/title_task_list"
-            android:launchMode="singleTask">
+            android:label="@string/title_task_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -56,7 +55,6 @@
         <activity
             android:name="org.dmfs.tasks.ViewTaskActivity"
             android:label="@string/title_task_detail"
-            android:parentActivityName="org.dmfs.tasks.TaskListActivity"
             android:theme="@style/OpenTasksAppTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter android:label="edit">
@@ -71,16 +69,12 @@
             </intent-filter>
         </activity>
 
-        <!-- EditTaskActivity listens for EDIT, INSERT and INDERT_OR_EDIT intents -->
+        <!-- EditTaskActivity listens for EDIT, INSERT and INSERT_OR_EDIT intents -->
         <activity
             android:name="org.dmfs.tasks.EditTaskActivity"
             android:label="@string/activity_add_task_title"
-            android:parentActivityName="org.dmfs.tasks.TaskListActivity"
             android:theme="@style/DetailsTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.dmfs.tasks.TaskListActivity"/>
 
             <intent-filter android:label="@string/activity_edit_task_title">
                 <action android:name="android.intent.action.EDIT"/>

@@ -156,8 +156,7 @@ public class TaskListWidgetProviderLegacy extends AppWidgetProvider
 		cursor.close();
 
 		/** Add pending Intent to start the Tasks app when the title is clicked */
-		Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
-		tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Intent tasksAppIntent = TaskListActivity.bringActivityForwardIntent(context);
 		PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
 
