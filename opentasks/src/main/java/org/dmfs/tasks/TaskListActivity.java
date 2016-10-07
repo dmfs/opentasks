@@ -42,7 +42,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -177,7 +176,6 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		Log.d(TAG, "onCreate called again");
 		super.onCreate(savedInstanceState);
 
 		// check for single pane activity change
@@ -381,6 +379,7 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	@Override
 	protected void onNewIntent(Intent intent)
 	{
+		setIntent(intent);
 		resolveIntentAction(intent);
 		super.onNewIntent(intent);
 	}

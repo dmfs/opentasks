@@ -40,23 +40,28 @@
         android:taskAffinity="org.dmfs.tasks.TaskListActivity"
         android:theme="@style/OpenTasksAppTheme">
 
-        <!-- TaskListActivity listens for MAIN intents -->
+        <!-- LaunchActivity listens for MAIN intents -->
+        <activity
+            android:name="org.dmfs.tasks.LaunchActivity"
+            android:theme="@android:style/Theme.NoDisplay"
+            android:label="@string/title_task_list">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- TaskListActivity is the root Activity opened by LaunchActivity -->
         <activity
             android:name="org.dmfs.tasks.TaskListActivity"
             android:label="@string/title_task_list"
             android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!-- ViewTaskActivity listens for VIEW intents -->
         <activity
             android:name="org.dmfs.tasks.ViewTaskActivity"
             android:label="@string/title_task_detail"
-            android:parentActivityName="org.dmfs.tasks.TaskListActivity"
             android:theme="@style/OpenTasksAppTheme"
             android:windowSoftInputMode="adjustResize">
             <intent-filter android:label="edit">
@@ -75,12 +80,8 @@
         <activity
             android:name="org.dmfs.tasks.EditTaskActivity"
             android:label="@string/activity_add_task_title"
-            android:parentActivityName="org.dmfs.tasks.TaskListActivity"
             android:theme="@style/DetailsTheme"
             android:windowSoftInputMode="stateHidden|adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.dmfs.tasks.TaskListActivity"/>
 
             <intent-filter android:label="@string/activity_edit_task_title">
                 <action android:name="android.intent.action.EDIT"/>

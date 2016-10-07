@@ -36,6 +36,7 @@ import android.widget.RemoteViews;
 
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.LaunchActivity;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.TaskListActivity;
 import org.dmfs.tasks.model.TaskFieldAdapters;
@@ -156,7 +157,7 @@ public class TaskListWidgetProviderLegacy extends AppWidgetProvider
 		cursor.close();
 
 		/** Add pending Intent to start the Tasks app when the title is clicked */
-		Intent tasksAppIntent = new Intent(context, TaskListActivity.class);
+		Intent tasksAppIntent = new Intent(context, LaunchActivity.class);
 		tasksAppIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		PendingIntent taskAppPI = PendingIntent.getActivity(context, 0, tasksAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);

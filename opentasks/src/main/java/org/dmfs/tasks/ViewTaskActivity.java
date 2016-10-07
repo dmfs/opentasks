@@ -98,7 +98,6 @@ public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragm
 				Intent upIntent = new Intent(this, TaskListActivity.class);
 				// provision the task uri, so the main activity will be opened with the right task selected
 				upIntent.setData(getIntent().getData());
-				upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(upIntent);
 				finish();
 			default:

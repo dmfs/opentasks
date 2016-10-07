@@ -21,7 +21,6 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -207,7 +206,7 @@ public class EditTaskActivity extends ActionBarActivity
 		switch (item.getItemId())
 		{
 			case android.R.id.home:
-				NavUtils.navigateUpFromSameTask(this);
+				finish();
 				return true;
 			default:
 				break;
