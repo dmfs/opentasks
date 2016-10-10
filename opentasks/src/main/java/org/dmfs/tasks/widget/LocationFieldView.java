@@ -20,9 +20,15 @@ package org.dmfs.tasks.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
 
 /**
@@ -30,81 +36,116 @@ import android.view.MotionEvent;
  *
  * @author Gabor Keszthelyi
  */
-public class LocationFieldView extends TextFieldView
+public class LocationFieldView extends AbstractFieldView implements View.OnClickListener
 {
-    private GestureDetector mGestureDetector;
+    /**
+     * The {@link FieldAdapter} of the field for this view.
+     */
+    private FieldAdapter<?> mAdapter;
+
+    /**
+     * The {@link TextView} to show the text in.
+     */
+    private TextView mTextView;
+
+    private String mText;
 
 
     public LocationFieldView(Context context)
     {
         super(context);
-        init();
     }
 
 
     public LocationFieldView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        init();
     }
 
 
     public LocationFieldView(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);
-        init();
     }
 
 
-    private void init()
-    {
-        mGestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener()
-        {
-            @Override
-            public boolean onSingleTapUp(MotionEvent e)
-            {
-                onClicked();
-                return false;
-            }
-        });
-    }
-
-
-    /*
-     * Note: Would be simpler with an OnClickListener,
-     * but that didn't work with any android:clickable and android:focusable variations on the ViewGroup and its children.
-     */
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent event)
+    protected void onFinishInflate()
     {
-        mGestureDetector.onTouchEvent(event);
-        return false;
+        super.onFinishInflate();
+        mTextView = (TextView) findViewById(R.id.text);
+        setOnClickListener(this);
     }
 
 
-    private void onClicked()
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
     {
-        openMapWithLocation(getText());
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = descriptor.getFieldAdapter();
+    }
+
+
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        if (mValues != null)
+        {
+            Object adapterValue = mAdapter.get(mValues);
+            String adapterStringValue = adapterValue != null ? adapterValue.toString() : null;
+
+            if (!TextUtils.isEmpty(adapterStringValue))
+            {
+                mText = adapterStringValue;
+                mTextView.setText(adapterStringValue);
+                setVisibility(View.VISIBLE);
+            }
+            else
+            {
+                // don't show empty values
+                setVisibility(View.GONE);
+            }
+        }
+    }
+
+
+    @Override
+    public void onClick(View v)
+    {
+        openMapWithLocation(mText);
     }
 
 
     private void openMapWithLocation(String locationQuery)
+    {
+        boolean resolved = tryOpeningMapApplication(locationQuery);
+        if (!resolved)
+        {
+            tryOpenGoogleMapsInBrowser(locationQuery);
+        }
+    }
+
+
+    private boolean tryOpeningMapApplication(String locationQuery)
     {
         Uri mapAppUri = Uri.parse("geo:0,0?q=" + Uri.encode(locationQuery));
         Intent mapAppIntent = new Intent(Intent.ACTION_VIEW, mapAppUri);
         if (mapAppIntent.resolveActivity(getContext().getPackageManager()) != null)
         {
             getContext().startActivity(mapAppIntent);
+            return true;
         }
-        else
-        {
-            Uri googleMapInBrowserUri = Uri.parse("http://maps.google.com/?q=" + Uri.encode(locationQuery));
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, googleMapInBrowserUri);
-            if (browserIntent.resolveActivity(getContext().getPackageManager()) != null)
-            {
-                getContext().startActivity(browserIntent);
-            }
-        }
+        return false;
+    }
 
+
+    private void tryOpenGoogleMapsInBrowser(String locationQuery)
+    {
+        Uri googleMapInBrowserUri = Uri.parse("http://maps.google.com/?q=" + Uri.encode(locationQuery));
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, googleMapInBrowserUri);
+        if (browserIntent.resolveActivity(getContext().getPackageManager()) != null)
+        {
+            getContext().startActivity(browserIntent);
+        }
     }
 }
