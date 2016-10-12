@@ -47,7 +47,7 @@ public class EditTaskActivity extends ActionBarActivity
 
 	final static String EXTRA_DATA_BUNDLE = "org.dmfs.extra.BUNDLE";
 
-	final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
+	public final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
 
 	public final static String EXTRA_DATA_ACCOUNT_TYPE = "org.dmfs.ACCOUNT_TYPE";
 

@@ -25,6 +25,7 @@ import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
+import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
 
 import android.annotation.TargetApi;
@@ -362,6 +363,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
 	private void createTask()
 	{
 		ContentSet content = buildContentSet();
+		RecentlyUsedLists.use(getContext(), content.getAsLong(Tasks.LIST_ID)); // update recently used lists
 		content.persist(getActivity());
 	}
 

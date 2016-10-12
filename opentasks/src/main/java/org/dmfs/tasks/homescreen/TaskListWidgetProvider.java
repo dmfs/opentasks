@@ -26,16 +26,25 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.TaskListActivity;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
+
+import java.util.ArrayList;
 
 
 /**
@@ -48,6 +57,7 @@ import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 public class TaskListWidgetProvider extends AppWidgetProvider
 {
 	private final static String TAG = "TaskListWidgetProvider";
+	public static String ACTION_CREATE_TASK = "CreateTask";
 
 	/*
 	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
@@ -66,6 +76,48 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 		{
 			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
 		}
+		else if(action.equals(ACTION_CREATE_TASK))
+		{
+			int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
+			WidgetConfigurationDatabaseHelper configHelper = new WidgetConfigurationDatabaseHelper(context);
+			SQLiteDatabase db = configHelper.getReadableDatabase();
+			ArrayList<Long> widgetLists = WidgetConfigurationDatabaseHelper.loadTaskLists(db, widgetId);
+			db.close();
+			ArrayList<Long> writableLists = new ArrayList<>();
+			String authority = TaskContract.taskAuthority(context);
+			if(!widgetLists.isEmpty()) {
+				Cursor cursor = context.getContentResolver().query(
+						TaskLists.getContentUri(authority),
+						new String[]{TaskLists._ID},
+						TaskLists.SYNC_ENABLED + "=1 AND " + TaskLists._ID + " IN (" + TextUtils.join(",", widgetLists) + ")",
+						null,
+						null);
+				if (cursor != null) {
+					while (cursor.moveToNext()) {
+						writableLists.add(cursor.getLong(0));
+					}
+					cursor.close();
+				}
+			}
+			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
+			editTaskIntent.setData(Tasks.getContentUri(authority));
+			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			if(!writableLists.isEmpty())
+			{
+				Long preselectList;
+				if(writableLists.size()==1) {
+					// if there is only one list, then select this one
+					preselectList = writableLists.get(0);
+				} else {
+					// if there are multiple lists, then select the most recently used
+					preselectList = RecentlyUsedLists.getRecentFromList(context, writableLists);
+				}
+				ContentSet contentSet = new ContentSet(Tasks.getContentUri(authority));
+				contentSet.put(Tasks.LIST_ID, preselectList);
+				editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, contentSet);
+			}
+			context.startActivity(editTaskIntent);
+		}
 	}
 
 
@@ -83,8 +135,6 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
-		String authority = TaskContract.taskAuthority(context);
-
 		/*
 		 * Iterate over all the widgets of this type and update them individually.
 		 */
@@ -106,10 +156,10 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 			widget.setOnClickPendingIntent(android.R.id.button1, taskAppPI);
 
 			/** Add a pending Intent to start new Task Activity on the new Task Button */
-			Intent editTaskIntent = new Intent(Intent.ACTION_INSERT);
-			editTaskIntent.setData(Tasks.getContentUri(authority));
-			editTaskIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			PendingIntent newTaskPI = PendingIntent.getActivity(context, 0, editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent editTaskIntent = new Intent(context, TaskListWidgetProvider.class);
+			editTaskIntent.setAction(ACTION_CREATE_TASK);
+			editTaskIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetIds[i]);
+			PendingIntent newTaskPI = PendingIntent.getBroadcast(context, appWidgetIds[i], editTaskIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
 
 			/** Set the {@link RemoteViewsService } subclass as the adapter for the {@link ListView} in the widget. */

@@ -36,6 +36,7 @@ import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
 import org.dmfs.tasks.widget.ListenableScrollView;
 import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
@@ -770,6 +771,11 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 				if (mValues.updatesAnyKey(RECURRENCE_VALUES))
 				{
 					mValues.ensureUpdates(RECURRENCE_VALUES);
+				}
+
+				if(mValues.isInsert()) {
+					// update recently used lists
+					RecentlyUsedLists.use(getContext(), mValues.getAsLong(Tasks.LIST_ID));
 				}
 
 				mTaskUri = mValues.persist(activity);
