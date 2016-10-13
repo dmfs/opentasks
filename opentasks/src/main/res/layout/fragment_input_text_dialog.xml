@@ -35,7 +35,7 @@
         android:layout_marginTop="12dp"
         android:hint="@string/task_list_name_dialog_hint"
         android:imeOptions="actionDone"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:minWidth="240dp"
         android:textCursorDrawable="@null" />
 
