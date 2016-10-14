@@ -90,40 +90,66 @@ public final class DescriptionStringFieldAdapter extends StringFieldAdapter
 	}
 
 
+	/**
+	 * Extracts the leading description placed before the possible checklists from the combined description-checklist
+	 * value.
+	 * <p>
+	 * Checklist items can start with one of these four markers: [ ], [], [x], [X] (unchecked and checked items)
+	 * Checklist is only identified as one if a new line character precedes it or it starts the value ('[' is the first
+	 * char).
+	 *
+	 * @param value
+	 *         the combined value of the description + possible checklist items.
+	 *
+	 * @return the description without the checklists
+	 */
 	static String extractDescription(String value)
 	{
-		if (value == null || value.length() < 3)
+		if (value == null || value.length() < 2)
 		{
 			return value;
 		}
+		int valueLen = value.length();
 
-		if (value.charAt(0) == '[' && value.charAt(2) == ']')
+		// check if checklist start right away, so there is no description
+		if (value.charAt(0) == '[' && value.charAt(1) == ']')
 		{
-			char checkmark = value.charAt(1);
-			if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
+			return "";
+		}
+		if (valueLen > 2 && value.charAt(0) == '[' && value.charAt(2) == ']')
+		{
+			char checkMark = value.charAt(1);
+			if (checkMark == ' ' || checkMark == 'x' || checkMark == 'X')
 			{
-				// value doesn't contain a description, only a check list
 				return "";
 			}
 		}
 
-		int valueLen = value.length();
-		int checklistpos = -1;
-		while ((checklistpos = value.indexOf("\n[", checklistpos + 1)) >= 0)
+		// check if there is checklist at the rest of the value
+		int checklistPos = -1;
+		while ((checklistPos = value.indexOf("\n[", checklistPos + 1)) >= 0)
 		{
-			if (checklistpos + 3 < valueLen && value.charAt(checklistpos + 3) == ']')
+			boolean foundChecklist = false;
+			if (checklistPos + 2 < valueLen && value.charAt(checklistPos + 2) == ']')
 			{
-				char checkmark = value.charAt(checklistpos + 2);
-				if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
+				foundChecklist = true;
+			}
+			if (checklistPos + 3 < valueLen && value.charAt(checklistPos + 3) == ']')
+			{
+				char checkMark = value.charAt(checklistPos + 2);
+				if (checkMark == ' ' || checkMark == 'x' || checkMark == 'X')
 				{
-					// found a check list
-					if (checklistpos > 0 && value.charAt(checklistpos - 1) == 0x0d)
-					{
-						// the list was separated by a CR LF sequence, remove the CR
-						--checklistpos;
-					}
-					return value.substring(0, checklistpos);
+					foundChecklist = true;
 				}
+			}
+			if (foundChecklist)
+			{
+				if (checklistPos > 0 && value.charAt(checklistPos - 1) == 0x0d)
+				{
+					// the list was separated by a CR LF sequence, remove the CR
+					--checklistPos;
+				}
+				return value.substring(0, checklistPos);
 			}
 		}
 
