@@ -68,7 +68,7 @@
     <string name="task_start">Beginn</string>
     <string name="task_due">Fällig</string>
     <string name="task_completed">Fertiggestellt</string>
-    <string name="task_percent_complete">Fertig in prozent</string>
+    <string name="task_percent_complete">Fertig in Prozent</string>
     <string name="task_status">Status</string>
     <string name="task_classification">Privatsphäre</string>
     <string name="task_url">URL</string>
@@ -165,12 +165,12 @@
     <string name="activity_add_list_title">Lokale Liste anlegen</string>
     <string name="activity_edit_list_title">Einstellungen</string>
     <string name="task_list_name_caption">Name</string>
-    <string name="task_list_no_sync">Hinweiß: Dies erzeugt eine lokale Liste. Lokale Listen werden nicht synchronisiert.</string>
+    <string name="task_list_no_sync">Hinweis: Dies erzeugt eine lokale Liste. Lokale Listen werden nicht synchronisiert.</string>
     <string name="task_list_color_caption">Listenfarbe</string>
 
     <!-- input dialog -->
     <string name="task_list_name_dialog_hint">Listenname</string>
-    <string name="task_list_name_dialog_title">Listename eingeben</string>
+    <string name="task_list_name_dialog_title">Listenname eingeben</string>
     <string name="task_list_name_dialog_error">Geben Sie einen Namen ein.</string>
 
     <!-- delete dialog -->
@@ -221,7 +221,7 @@
     <string name="notification_action_delay_1h">+1 Stunde</string>
     <string name="notification_action_delay_1d">+1 Tag</string>
     <string name="notification_action_delay_toast">Fälligkeitsdatum aktualisiert</string>
-    <string name="notification_undo">Rückgänging</string>
+    <string name="notification_undo">Rückgängig</string>
     <string name="notification_action_unpin">Abheften</string>
     <string name="notification_task_pin_ticker">%1$s angeheftet</string>
 
