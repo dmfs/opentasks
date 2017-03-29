@@ -17,9 +17,6 @@
 
 package org.dmfs.tasks;
 
-import org.dmfs.android.retentionmagic.SupportDialogFragment;
-import org.dmfs.android.retentionmagic.annotations.Parameter;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -40,12 +37,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import org.dmfs.android.retentionmagic.SupportDialogFragment;
+import org.dmfs.android.retentionmagic.annotations.Parameter;
+
 
 /**
  * A simple prompt for text input.
- * <p />
+ * <p/>
  * TODO: Use the style from the support library
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tristan Heinig <tristan@dmfs.org>
  */
@@ -77,16 +77,16 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
 
     /**
      * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
-     * 
+     *
      * @param title
-     *            The title of the dialog.
+     *         The title of the dialog.
      * @param message
-     *            The text of the message field.
+     *         The text of the message field.
      * @param hint
-     *            The hint of the input field.
+     *         The hint of the input field.
      * @param initalText
-     *            The initial text in the input field.
-     * 
+     *         The initial text in the input field.
+     *
      * @return A new {@link InputTextDialogFragment}.
      */
     public static InputTextDialogFragment newInstance(String title, String hint, String initalText, String message)
@@ -104,13 +104,14 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
 
     /**
      * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
-     * 
+     *
      * @param title
-     *            The title of the dialog.
+     *         The title of the dialog.
      * @param message
-     *            The text of the message field.
+     *         The text of the message field.
      * @param hint
-     *            The hint of the input field.
+     *         The hint of the input field.
+     *
      * @return A new {@link InputTextDialogFragment}.
      */
     public static InputTextDialogFragment newInstance(String title, String hint, String initalText)
@@ -121,11 +122,12 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
 
     /**
      * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
-     * 
+     *
      * @param title
-     *            The title of the dialog.
+     *         The title of the dialog.
      * @param message
-     *            The text of the message field.
+     *         The text of the message field.
+     *
      * @return A new {@link InputTextDialogFragment}.
      */
     public static InputTextDialogFragment newInstance(String title, String hint)
@@ -136,9 +138,10 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
 
     /**
      * Creates a {@link InputTextDialogFragment} with the given title and initial text value.
-     * 
+     *
      * @param title
-     *            The title of the dialog.
+     *         The title of the dialog.
+     *
      * @return A new {@link InputTextDialogFragment}.
      */
     public static InputTextDialogFragment newInstance(String title)
@@ -150,10 +153,10 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        
+
         final Context contextThemeWrapperLight = new ContextThemeWrapper(getActivity(), R.style.ThemeOverlay_AppCompat_Light);
         LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapperLight);
-        
+
         View view = localInflater.inflate(R.layout.fragment_input_text_dialog, container);
 
         mEditText = (EditText) view.findViewById(android.R.id.input);
@@ -266,6 +269,7 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
         handleCancel();
     }
 
+
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
     {
@@ -306,9 +310,10 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
 
     /**
      * Validates the user input and returns true if the input is valid.
-     * 
+     *
      * @param input
-     *            the text of the {@link EditText} field.
+     *         the text of the {@link EditText} field.
+     *
      * @return true, if there is user input, otherwise false.
      */
     protected boolean validate(String input)
@@ -323,22 +328,21 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
         return true;
     }
 
+
     /**
      * Interface to listen to InputTextDialog events.
-     * 
+     *
      * @author Tristan Heinig <tristan@dmfs.org>
-     * 
      */
     public interface InputTextListener
     {
         /**
          * Is Called, when the user wants to save his input.
-         * 
+         *
          * @param inputText
-         *            the user input.
+         *         the user input.
          */
         void onInputTextChanged(String inputText);
-
 
         /**
          * Is Called, when the user want to cancel the input.

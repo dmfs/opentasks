@@ -17,117 +17,117 @@
 
 package org.dmfs.provider.tasks.model;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-
 
 /**
  * A {@link TaskAdapter} for tasks that are stored in a {@link ContentValues}.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ContentValuesTaskAdapter extends AbstractTaskAdapter
 {
-	private long mId;
-	private final ContentValues mValues;
+    private long mId;
+    private final ContentValues mValues;
 
 
-	public ContentValuesTaskAdapter(ContentValues values)
-	{
-		this(-1L, values);
-	}
+    public ContentValuesTaskAdapter(ContentValues values)
+    {
+        this(-1L, values);
+    }
 
 
-	public ContentValuesTaskAdapter(long id, ContentValues values)
-	{
-		mId = id;
-		mValues = values;
-	}
+    public ContentValuesTaskAdapter(long id, ContentValues values)
+    {
+        mId = id;
+        mValues = values;
+    }
 
 
-	@Override
-	public long id()
-	{
-		return mId;
-	}
+    @Override
+    public long id()
+    {
+        return mId;
+    }
 
 
-	@Override
-	public <T> T valueOf(FieldAdapter<T, TaskAdapter> fieldAdapter)
-	{
-		return fieldAdapter.getFrom(mValues);
-	}
+    @Override
+    public <T> T valueOf(FieldAdapter<T, TaskAdapter> fieldAdapter)
+    {
+        return fieldAdapter.getFrom(mValues);
+    }
 
 
-	@Override
-	public <T> T oldValueOf(FieldAdapter<T, TaskAdapter> fieldAdapter)
-	{
-		return null;
-	}
+    @Override
+    public <T> T oldValueOf(FieldAdapter<T, TaskAdapter> fieldAdapter)
+    {
+        return null;
+    }
 
 
-	@Override
-	public <T> boolean isUpdated(FieldAdapter<T, TaskAdapter> fieldAdapter)
-	{
-		return fieldAdapter.isSetIn(mValues);
-	}
+    @Override
+    public <T> boolean isUpdated(FieldAdapter<T, TaskAdapter> fieldAdapter)
+    {
+        return fieldAdapter.isSetIn(mValues);
+    }
 
 
-	@Override
-	public boolean isWriteable()
-	{
-		return true;
-	}
+    @Override
+    public boolean isWriteable()
+    {
+        return true;
+    }
 
 
-	@Override
-	public boolean hasUpdates()
-	{
-		return mValues.size() > 0;
-	}
+    @Override
+    public boolean hasUpdates()
+    {
+        return mValues.size() > 0;
+    }
 
 
-	@Override
-	public <T> void set(FieldAdapter<T, TaskAdapter> fieldAdapter, T value) throws IllegalStateException
-	{
-		fieldAdapter.setIn(mValues, value);
-	}
+    @Override
+    public <T> void set(FieldAdapter<T, TaskAdapter> fieldAdapter, T value) throws IllegalStateException
+    {
+        fieldAdapter.setIn(mValues, value);
+    }
 
 
-	@Override
-	public <T> void unset(FieldAdapter<T, TaskAdapter> fieldAdapter) throws IllegalStateException
-	{
-		fieldAdapter.removeFrom(mValues);
-	}
+    @Override
+    public <T> void unset(FieldAdapter<T, TaskAdapter> fieldAdapter) throws IllegalStateException
+    {
+        fieldAdapter.removeFrom(mValues);
+    }
 
 
-	@Override
-	public int commit(SQLiteDatabase db)
-	{
-		if (mValues.size() == 0)
-		{
-			return 0;
-		}
+    @Override
+    public int commit(SQLiteDatabase db)
+    {
+        if (mValues.size() == 0)
+        {
+            return 0;
+        }
 
-		if (mId < 0)
-		{
-			mId = db.insert(TaskDatabaseHelper.Tables.TASKS, null, mValues);
-			return mId > 0 ? 1 : 0;
-		}
-		else
-		{
-			return db.update(TaskDatabaseHelper.Tables.TASKS, mValues, TaskContract.TaskColumns._ID + "=" + mId, null);
-		}
-	}
+        if (mId < 0)
+        {
+            mId = db.insert(TaskDatabaseHelper.Tables.TASKS, null, mValues);
+            return mId > 0 ? 1 : 0;
+        }
+        else
+        {
+            return db.update(TaskDatabaseHelper.Tables.TASKS, mValues, TaskContract.TaskColumns._ID + "=" + mId, null);
+        }
+    }
 
 
-	@Override
-	public TaskAdapter duplicate()
-	{
-		return new ContentValuesTaskAdapter(new ContentValues(mValues));
-	}
+    @Override
+    public TaskAdapter duplicate()
+    {
+        return new ContentValuesTaskAdapter(new ContentValues(mValues));
+    }
 }

@@ -17,80 +17,80 @@
 
 package org.dmfs.provider.tasks.model.adapters;
 
-import java.net.URI;
-import java.net.URL;
-
 import android.content.ContentValues;
 import android.database.Cursor;
+
+import java.net.URI;
+import java.net.URL;
 
 
 /**
  * Knows how to load and store {@link URL} values from a {@link Cursor} or {@link ContentValues}.
- * 
- * @author Marten Gajda <marten@dmfs.org>
- * 
+ *
  * @param <EntityType>
- *            The type of the entity the field belongs to.
+ *         The type of the entity the field belongs to.
+ *
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public final class UrlFieldAdapter<EntityType> extends SimpleFieldAdapter<URI, EntityType>
 {
 
-	private final String mFieldName;
+    private final String mFieldName;
 
 
-	/**
-	 * Constructor for a new {@link UrlFieldAdapter}.
-	 * 
-	 * @param urlField
-	 *            The field name that holds the URL.
-	 */
-	public UrlFieldAdapter(String urlField)
-	{
-		if (urlField == null)
-		{
-			throw new IllegalArgumentException("urlField must not be null");
-		}
-		mFieldName = urlField;
-	}
+    /**
+     * Constructor for a new {@link UrlFieldAdapter}.
+     *
+     * @param urlField
+     *         The field name that holds the URL.
+     */
+    public UrlFieldAdapter(String urlField)
+    {
+        if (urlField == null)
+        {
+            throw new IllegalArgumentException("urlField must not be null");
+        }
+        mFieldName = urlField;
+    }
 
 
-	@Override
-	String fieldName()
-	{
-		return mFieldName;
-	}
+    @Override
+    String fieldName()
+    {
+        return mFieldName;
+    }
 
 
-	@Override
-	public URI getFrom(ContentValues values)
-	{
-		return values.get(mFieldName) == null ? null : URI.create(values.getAsString(mFieldName));
-	}
+    @Override
+    public URI getFrom(ContentValues values)
+    {
+        return values.get(mFieldName) == null ? null : URI.create(values.getAsString(mFieldName));
+    }
 
 
-	@Override
-	public URI getFrom(Cursor cursor)
-	{
-		int columnIdx = cursor.getColumnIndex(mFieldName);
-		if (columnIdx < 0)
-		{
-			throw new IllegalArgumentException("The column '" + mFieldName + "' is missing in cursor.");
-		}
+    @Override
+    public URI getFrom(Cursor cursor)
+    {
+        int columnIdx = cursor.getColumnIndex(mFieldName);
+        if (columnIdx < 0)
+        {
+            throw new IllegalArgumentException("The column '" + mFieldName + "' is missing in cursor.");
+        }
 
-		return cursor.isNull(columnIdx) ? null : URI.create(cursor.getString(columnIdx));
-	}
+        return cursor.isNull(columnIdx) ? null : URI.create(cursor.getString(columnIdx));
+    }
 
 
-	@Override
-	public void setIn(ContentValues values, URI value)
-	{
-		if (value != null)
-		{
-			values.put(mFieldName, value.toASCIIString());
-		}
-		else
-		{
-			values.putNull(mFieldName);
-		}
-	}
+    @Override
+    public void setIn(ContentValues values, URI value)
+    {
+        if (value != null)
+        {
+            values.put(mFieldName, value.toASCIIString());
+        }
+        else
+        {
+            values.putNull(mFieldName);
+        }
+    }
 }

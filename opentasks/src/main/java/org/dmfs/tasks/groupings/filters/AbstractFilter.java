@@ -22,26 +22,25 @@ import java.util.List;
 
 /**
  * An abstract filter for child cursors in a grouped list.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public interface AbstractFilter
 {
 
-	/**
-	 * Append the selection part of this filter to a {@link StringBuilder}. This is much more efficiently when you're using a StringBuilder anyway.
-	 * 
-	 * @param stringBuilder
-	 *            The {@link StringBuilder} where to append the selection string.
-	 */
-	public abstract void getSelection(StringBuilder stringBuilder);
+    /**
+     * Append the selection part of this filter to a {@link StringBuilder}. This is much more efficiently when you're using a StringBuilder anyway.
+     *
+     * @param stringBuilder
+     *         The {@link StringBuilder} where to append the selection string.
+     */
+    public abstract void getSelection(StringBuilder stringBuilder);
 
-
-	/**
-	 * Append the selection arguments of this filter to a {@link List} of {@link String}s.
-	 * 
-	 * @param selectionArgs
-	 *            The List where to append the arguments.
-	 */
-	public abstract void getSelectionArgs(List<String> selectionArgs);
+    /**
+     * Append the selection arguments of this filter to a {@link List} of {@link String}s.
+     *
+     * @param selectionArgs
+     *         The List where to append the arguments.
+     */
+    public abstract void getSelectionArgs(List<String> selectionArgs);
 }

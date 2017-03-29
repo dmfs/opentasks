@@ -22,30 +22,30 @@ import android.database.Cursor;
 
 /**
  * A factory that builds shiny new {@link Cursor}s with time ranges.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractCustomCursorFactory
 {
-	protected String[] mProjection;
+    protected String[] mProjection;
 
 
-	/**
-	 * Initialize the factory with the given projection.
-	 * 
-	 * @param projection
-	 *            An array of column names.
-	 */
-	public AbstractCustomCursorFactory(String[] projection)
-	{
-		mProjection = projection;
-	}
+    /**
+     * Initialize the factory with the given projection.
+     *
+     * @param projection
+     *         An array of column names.
+     */
+    public AbstractCustomCursorFactory(String[] projection)
+    {
+        mProjection = projection;
+    }
 
 
-	/**
-	 * Get a new {@link Cursor} from this factory.
-	 * 
-	 * @return A {@link Cursor}.
-	 */
-	public abstract Cursor getCursor();
+    /**
+     * Get a new {@link Cursor} from this factory.
+     *
+     * @return A {@link Cursor}.
+     */
+    public abstract Cursor getCursor();
 }

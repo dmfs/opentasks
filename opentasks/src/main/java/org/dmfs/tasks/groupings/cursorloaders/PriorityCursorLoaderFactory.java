@@ -24,24 +24,24 @@ import android.support.v4.content.Loader;
 
 /**
  * An {@link AbstractCursorLoaderFactory} that returns {@link CursorLoaderFactory} that know how to load cursors with priority information as values.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class PriorityCursorLoaderFactory extends AbstractCursorLoaderFactory
 {
 
-	private final String[] mProjection;
+    private final String[] mProjection;
 
 
-	public PriorityCursorLoaderFactory(String[] projection)
-	{
-		mProjection = projection;
-	}
+    public PriorityCursorLoaderFactory(String[] projection)
+    {
+        mProjection = projection;
+    }
 
 
-	@Override
-	public Loader<Cursor> getLoader(Context context)
-	{
-		return new CustomCursorLoader(context, new PriorityCursorFactory(mProjection));
-	}
+    @Override
+    public Loader<Cursor> getLoader(Context context)
+    {
+        return new CustomCursorLoader(context, new PriorityCursorFactory(mProjection));
+    }
 }

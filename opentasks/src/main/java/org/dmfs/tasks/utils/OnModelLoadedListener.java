@@ -22,16 +22,16 @@ import org.dmfs.tasks.model.Model;
 
 /**
  * A listener that is notified when a {@link AsyncModelLoader} has loaded a model.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public interface OnModelLoadedListener
 {
-	/**
-	 * Called when a model has been loaded.
-	 * 
-	 * @param model
-	 *            The {@link Model} for the requested account type or {@code null} if no such account type exists.
-	 */
-	public void onModelLoaded(Model model);
+    /**
+     * Called when a model has been loaded.
+     *
+     * @param model
+     *         The {@link Model} for the requested account type or {@code null} if no such account type exists.
+     */
+    public void onModelLoaded(Model model);
 }

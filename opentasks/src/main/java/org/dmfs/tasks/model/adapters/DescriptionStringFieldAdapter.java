@@ -24,110 +24,110 @@ import org.dmfs.tasks.model.ContentSet;
 
 /**
  * Knows how to load and store descriptions from/to a combined description/check list field.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class DescriptionStringFieldAdapter extends StringFieldAdapter
 {
 
-	/**
-	 * Constructor for a new DescriptionStringFieldAdapter without default value.
-	 * 
-	 * @param fieldName
-	 *            The name of the field to use when loading or storing the value.
-	 */
-	public DescriptionStringFieldAdapter(String fieldName)
-	{
-		super(fieldName);
-	}
+    /**
+     * Constructor for a new DescriptionStringFieldAdapter without default value.
+     *
+     * @param fieldName
+     *         The name of the field to use when loading or storing the value.
+     */
+    public DescriptionStringFieldAdapter(String fieldName)
+    {
+        super(fieldName);
+    }
 
 
-	/**
-	 * Constructor for a new StringFieldAdapter with default value.
-	 * 
-	 * @param fieldName
-	 *            The name of the field to use when loading or storing the value.
-	 * @param defaultValue
-	 *            The default value.
-	 */
-	public DescriptionStringFieldAdapter(String fieldName, String defaultValue)
-	{
-		super(fieldName, defaultValue);
-	}
+    /**
+     * Constructor for a new StringFieldAdapter with default value.
+     *
+     * @param fieldName
+     *         The name of the field to use when loading or storing the value.
+     * @param defaultValue
+     *         The default value.
+     */
+    public DescriptionStringFieldAdapter(String fieldName, String defaultValue)
+    {
+        super(fieldName, defaultValue);
+    }
 
 
-	@Override
-	public String get(ContentSet values)
-	{
-		return extractDescription(super.get(values));
-	}
+    @Override
+    public String get(ContentSet values)
+    {
+        return extractDescription(super.get(values));
+    }
 
 
-	@Override
-	public String get(Cursor cursor)
-	{
-		return extractDescription(super.get(cursor));
-	}
+    @Override
+    public String get(Cursor cursor)
+    {
+        return extractDescription(super.get(cursor));
+    }
 
 
-	@Override
-	public void set(ContentSet values, String value)
-	{
-		String oldValue = super.get(values);
-		if (oldValue != null && oldValue.length() > 0)
-		{
-			String oldDescription = extractDescription(oldValue);
-			String oldChecklist = oldValue.substring(oldDescription.length());
+    @Override
+    public void set(ContentSet values, String value)
+    {
+        String oldValue = super.get(values);
+        if (oldValue != null && oldValue.length() > 0)
+        {
+            String oldDescription = extractDescription(oldValue);
+            String oldChecklist = oldValue.substring(oldDescription.length());
 
-			// store the new description with the old check list
-			super.set(values, oldChecklist.length() == 0 ? value : oldChecklist.startsWith("\n") ? value + oldChecklist : value + "\n" + oldChecklist);
-		}
-		else
-		{
-			// there was no old check list
-			super.set(values, value);
-		}
-	}
+            // store the new description with the old check list
+            super.set(values, oldChecklist.length() == 0 ? value : oldChecklist.startsWith("\n") ? value + oldChecklist : value + "\n" + oldChecklist);
+        }
+        else
+        {
+            // there was no old check list
+            super.set(values, value);
+        }
+    }
 
 
-	static String extractDescription(String value)
-	{
-		if (value == null || value.length() < 3)
-		{
-			return value;
-		}
+    static String extractDescription(String value)
+    {
+        if (value == null || value.length() < 3)
+        {
+            return value;
+        }
 
-		if (value.charAt(0) == '[' && value.charAt(2) == ']')
-		{
-			char checkmark = value.charAt(1);
-			if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
-			{
-				// value doesn't contain a description, only a check list
-				return "";
-			}
-		}
+        if (value.charAt(0) == '[' && value.charAt(2) == ']')
+        {
+            char checkmark = value.charAt(1);
+            if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
+            {
+                // value doesn't contain a description, only a check list
+                return "";
+            }
+        }
 
-		int valueLen = value.length();
-		int checklistpos = -1;
-		while ((checklistpos = value.indexOf("\n[", checklistpos + 1)) >= 0)
-		{
-			if (checklistpos + 3 < valueLen && value.charAt(checklistpos + 3) == ']')
-			{
-				char checkmark = value.charAt(checklistpos + 2);
-				if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
-				{
-					// found a check list
-					if (checklistpos > 0 && value.charAt(checklistpos - 1) == 0x0d)
-					{
-						// the list was separated by a CR LF sequence, remove the CR
-						--checklistpos;
-					}
-					return value.substring(0, checklistpos);
-				}
-			}
-		}
+        int valueLen = value.length();
+        int checklistpos = -1;
+        while ((checklistpos = value.indexOf("\n[", checklistpos + 1)) >= 0)
+        {
+            if (checklistpos + 3 < valueLen && value.charAt(checklistpos + 3) == ']')
+            {
+                char checkmark = value.charAt(checklistpos + 2);
+                if (checkmark == ' ' || checkmark == 'x' || checkmark == 'X')
+                {
+                    // found a check list
+                    if (checklistpos > 0 && value.charAt(checklistpos - 1) == 0x0d)
+                    {
+                        // the list was separated by a CR LF sequence, remove the CR
+                        --checklistpos;
+                    }
+                    return value.substring(0, checklistpos);
+                }
+            }
+        }
 
-		// didn't find a valid check list
-		return value;
-	}
+        // didn't find a valid check list
+        return value;
+    }
 }

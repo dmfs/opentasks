@@ -25,69 +25,61 @@ import android.widget.ExpandableListView;
 
 /**
  * The interface to a class that knows how to populate a view in an {@link ExpandableListView}.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public interface ViewDescriptor
 {
-	/**
-	 * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is the last child in a group.
-	 */
-	public final static int FLAG_IS_LAST_CHILD = 0x0001;
+    /**
+     * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is the last child in a group.
+     */
+    public final static int FLAG_IS_LAST_CHILD = 0x0001;
 
-	/**
-	 * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is group that's currently expanded.
-	 */
-	public final static int FLAG_IS_EXPANDED = 0x0002;
+    /**
+     * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is group that's currently expanded.
+     */
+    public final static int FLAG_IS_EXPANDED = 0x0002;
 
+    /**
+     * Populate a view in an {@link ExpandableListView}.
+     *
+     * @param view
+     *         The {@link View} to populate.
+     * @param cursor
+     *         A {@link Cursor} that points to the current data item.
+     * @param adapter
+     *         The {@link BaseExpandableListAdapter}.
+     * @param flags
+     *         Some flags that give additional information about the view. Any combination of {@link #FLAG_IS_EXPANDED} or {@link #FLAG_IS_LAST_CHILD}.
+     */
+    public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags);
 
-	/**
-	 * Populate a view in an {@link ExpandableListView}.
-	 * 
-	 * @param view
-	 *            The {@link View} to populate.
-	 * @param cursor
-	 *            A {@link Cursor} that points to the current data item.
-	 * @param adapter
-	 *            The {@link BaseExpandableListAdapter}.
-	 * @param flags
-	 *            Some flags that give additional information about the view. Any combination of {@link #FLAG_IS_EXPANDED} or {@link #FLAG_IS_LAST_CHILD}.
-	 */
-	public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags);
+    /**
+     * Get the resource id of the view to use.
+     *
+     * @return The id of a layout resource.
+     */
+    public int getView();
 
+    /**
+     * Get the id of the inner content view that is supposed to fling
+     *
+     * @return The id of the view (-1) if the view is missing
+     */
+    public int getFlingContentViewId();
 
-	/**
-	 * Get the resource id of the view to use.
-	 * 
-	 * @return The id of a layout resource.
-	 */
-	public int getView();
+    /**
+     * Get the id of the view that reveals from the left side
+     *
+     * @return The id of the view (-1) if the view is missing
+     */
+    public int getFlingRevealLeftViewId();
 
-
-	/**
-	 * 
-	 * Get the id of the inner content view that is supposed to fling
-	 * 
-	 * @return The id of the view (-1) if the view is missing
-	 */
-	public int getFlingContentViewId();
-
-
-	/**
-	 * 
-	 * Get the id of the view that reveals from the left side
-	 * 
-	 * @return The id of the view (-1) if the view is missing
-	 */
-	public int getFlingRevealLeftViewId();
-
-
-	/**
-	 * 
-	 * Get the id of the view that reveals from the right side
-	 * 
-	 * @return The id of the view (-1) if the view is missing
-	 */
-	public int getFlingRevealRightViewId();
+    /**
+     * Get the id of the view that reveals from the right side
+     *
+     * @return The id of the view (-1) if the view is missing
+     */
+    public int getFlingRevealRightViewId();
 }

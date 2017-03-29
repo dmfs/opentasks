@@ -1,7 +1,5 @@
 package org.dmfs.android.widgets;
 
-import org.dmfs.tasks.R;
-
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -13,10 +11,12 @@ import android.graphics.drawable.LayerDrawable;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
+import org.dmfs.tasks.R;
+
 
 /**
  * A checkbox with a colored shape in the background and a check mark (if checked). The check mark is chosen by the lightness of the current color of the shape.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ColoredShapeCheckBox extends CheckBox

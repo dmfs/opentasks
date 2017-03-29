@@ -17,41 +17,41 @@
 
 package org.dmfs.provider.tasks.model;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
+
 
 /**
  * An abstract implementation of a {@link ListAdapter} to server as the base for more concrete adapters.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractListAdapter implements ListAdapter
 {
-	private final ContentValues mState = new ContentValues(10);
+    private final ContentValues mState = new ContentValues(10);
 
 
-	@Override
-	public Uri uri(String authority)
-	{
-		return ContentUris.withAppendedId(TaskContract.TaskLists.getContentUri(authority), id());
-	}
+    @Override
+    public Uri uri(String authority)
+    {
+        return ContentUris.withAppendedId(TaskContract.TaskLists.getContentUri(authority), id());
+    }
 
 
-	@Override
-	public <T> T getState(FieldAdapter<T, ListAdapter> stateFieldAdater)
-	{
-		return stateFieldAdater.getFrom(mState);
-	}
+    @Override
+    public <T> T getState(FieldAdapter<T, ListAdapter> stateFieldAdater)
+    {
+        return stateFieldAdater.getFrom(mState);
+    }
 
 
-	@Override
-	public <T> void setState(FieldAdapter<T, ListAdapter> stateFieldAdater, T value)
-	{
-		stateFieldAdater.setIn(mState, value);
-	}
+    @Override
+    public <T> void setState(FieldAdapter<T, ListAdapter> stateFieldAdater, T value)
+    {
+        stateFieldAdater.setIn(mState, value);
+    }
 }

@@ -22,50 +22,50 @@ import java.util.List;
 
 /**
  * A filter that filters by a constant selection.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class ConstantFilter implements AbstractFilter
 {
-	private final String mSelection;
-	private final String[] mSelectionArgs;
+    private final String mSelection;
+    private final String[] mSelectionArgs;
 
 
-	/**
-	 * Creates a ConstantFilter.
-	 * 
-	 * @param selection
-	 *            The selection string.
-	 * @param selectionArgs
-	 *            The positional selection arguments.
-	 */
-	public ConstantFilter(String selection, String... selectionArgs)
-	{
-		mSelection = selection;
-		mSelectionArgs = selectionArgs;
-	}
+    /**
+     * Creates a ConstantFilter.
+     *
+     * @param selection
+     *         The selection string.
+     * @param selectionArgs
+     *         The positional selection arguments.
+     */
+    public ConstantFilter(String selection, String... selectionArgs)
+    {
+        mSelection = selection;
+        mSelectionArgs = selectionArgs;
+    }
 
 
-	@Override
-	public void getSelection(StringBuilder stringBuilder)
-	{
-		if (mSelection != null)
-		{
-			stringBuilder.append(mSelection);
-		}
-	}
+    @Override
+    public void getSelection(StringBuilder stringBuilder)
+    {
+        if (mSelection != null)
+        {
+            stringBuilder.append(mSelection);
+        }
+    }
 
 
-	@Override
-	public void getSelectionArgs(List<String> selectionArgs)
-	{
-		if (mSelectionArgs != null)
-		{
-			// append all arguments, if any
-			for (String arg : mSelectionArgs)
-			{
-				selectionArgs.add(arg);
-			}
-		}
-	}
+    @Override
+    public void getSelectionArgs(List<String> selectionArgs)
+    {
+        if (mSelectionArgs != null)
+        {
+            // append all arguments, if any
+            for (String arg : mSelectionArgs)
+            {
+                selectionArgs.add(arg);
+            }
+        }
+    }
 }

@@ -19,13 +19,13 @@ package org.dmfs.tasks.groupings.filters;
 
 /**
  * A filter that joins a list of {@link AbstractFilter}s using the "OR" operator.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class OrFilter extends BinaryOperationFilter
 {
-	public OrFilter(AbstractFilter... filters)
-	{
-		super("OR", filters);
-	}
+    public OrFilter(AbstractFilter... filters)
+    {
+        super("OR", filters);
+    }
 }

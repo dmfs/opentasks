@@ -19,15 +19,9 @@
 
 package org.dmfs.tasks.homescreen;
 
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
-
-import android.annotation.TargetApi;
-import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 
 /**
@@ -39,27 +33,28 @@ import android.os.Build;
 public class TaskListWidgetProviderLargeLegacy extends TaskListWidgetProviderLegacy
 {
 
-	/*
-	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
-	 *
-	 * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
-	 */
-	@Override
-	public void onReceive(Context context, Intent intent)
-	{
-		super.onReceive(context, intent);
-	}
-
-	@Override
-	public void onDeleted(Context context, int[] appWidgetIds)
-	{
-		super.onDeleted(context, appWidgetIds);
-	}
+    /*
+     * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
+     *
+     * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
+     */
+    @Override
+    public void onReceive(Context context, Intent intent)
+    {
+        super.onReceive(context, intent);
+    }
 
 
-	@Override
-	protected ComponentName getComponentName(Context context)
-	{
-		return new ComponentName(context, TaskListWidgetProviderLargeLegacy.class);
-	}
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds)
+    {
+        super.onDeleted(context, appWidgetIds);
+    }
+
+
+    @Override
+    protected ComponentName getComponentName(Context context)
+    {
+        return new ComponentName(context, TaskListWidgetProviderLargeLegacy.class);
+    }
 }

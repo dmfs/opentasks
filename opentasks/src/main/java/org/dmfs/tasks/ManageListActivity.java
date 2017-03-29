@@ -17,14 +17,6 @@
 
 package org.dmfs.tasks;
 
-import org.dmfs.android.colorpicker.ColorPickerActivity;
-import org.dmfs.android.colorpicker.palettes.RandomPalette;
-import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.tasks.InputTextDialogFragment.InputTextListener;
-import org.dmfs.tasks.utils.ActionBarActivity;
-
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.ContentValues;
@@ -41,12 +33,19 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.dmfs.android.colorpicker.ColorPickerActivity;
+import org.dmfs.android.colorpicker.palettes.RandomPalette;
+import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.tasks.InputTextDialogFragment.InputTextListener;
+import org.dmfs.tasks.utils.ActionBarActivity;
+
 
 /**
  * Activity to create and edit local task lists. This activity provides an interface to edit the name and the color of a local list.
- * 
+ *
  * @author Tristan Heinig <tristan@dmfs.org>
- * 
  */
 public class ManageListActivity extends ActionBarActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener
 {
@@ -119,9 +118,9 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
 
     /**
      * Initializes the user interface for editing tasks.
-     * 
+     *
      * @param savedInstanceState
-     *            saved activity state from {@link #onCreate(Bundle)}
+     *         saved activity state from {@link #onCreate(Bundle)}
      */
     private void initEditing(Bundle savedInstanceState)
     {
@@ -133,9 +132,10 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         if (savedInstanceState == null)
         {
             Cursor cursor = getContentResolver().query(
-                mTaskListUri,
-                new String[] { TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME, TaskContract.TaskLists.LIST_COLOR,
-                    TaskContract.TaskLists.ACCOUNT_NAME }, null, null, null);
+                    mTaskListUri,
+                    new String[] {
+                            TaskContract.TaskLists._ID, TaskContract.TaskLists.LIST_NAME, TaskContract.TaskLists.LIST_COLOR,
+                            TaskContract.TaskLists.ACCOUNT_NAME }, null, null, null);
             if (cursor == null || cursor.getCount() < 1)
             {
                 setResult(Activity.RESULT_CANCELED);
@@ -159,9 +159,9 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
 
     /**
      * Initializes the user interface for creating tasks.
-     * 
+     *
      * @param savedInstanceState
-     *            saved activity state from {@link #onCreate(Bundle)}
+     *         saved activity state from {@link #onCreate(Bundle)}
      */
     private void initInsert(Bundle savedInstanceState)
     {
@@ -173,7 +173,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         if (savedInstanceState == null)
         {
             InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(getString(R.string.task_list_name_dialog_title),
-                getString(R.string.task_list_name_dialog_hint), null, getString(R.string.task_list_no_sync));
+                    getString(R.string.task_list_name_dialog_hint), null, getString(R.string.task_list_no_sync));
             dialog.show(getSupportFragmentManager(), null);
         }
         if (mListColor == NO_COLOR)
@@ -207,8 +207,8 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         if (android.R.id.button2 == v.getId())
         {
             final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.task_list_delete_dialog_title, mListName))
-                .setMessage(R.string.task_list_delete_dialog_message).setPositiveButton(R.string.activity_manage_list_btn_delete, this)
-                .setNegativeButton(android.R.string.cancel, this).create();
+                    .setMessage(R.string.task_list_delete_dialog_message).setPositiveButton(R.string.activity_manage_list_btn_delete, this)
+                    .setNegativeButton(android.R.string.cancel, this).create();
             // changes the color of the delete list button to red
             dialog.setOnShowListener(new OnShowListener()
             {
@@ -230,7 +230,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         if (R.id.name_setting == v.getId())
         {
             InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(getString(R.string.task_list_name_dialog_title),
-                getString(R.string.task_list_name_dialog_hint), mNameView.getText().toString());
+                    getString(R.string.task_list_name_dialog_hint), mNameView.getText().toString());
             dialog.show(getSupportFragmentManager(), null);
             return;
         }
@@ -262,8 +262,9 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         values.put(TaskLists.SYNC_ENABLED, 1);
         values.put(TaskLists.OWNER, "");
         getContentResolver().insert(
-            mTaskListUri.buildUpon().appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "1")
-                .appendQueryParameter(TaskContract.ACCOUNT_TYPE, mAccount.type).appendQueryParameter(TaskContract.ACCOUNT_NAME, mAccount.name).build(), values);
+                mTaskListUri.buildUpon().appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "1")
+                        .appendQueryParameter(TaskContract.ACCOUNT_TYPE, mAccount.type).appendQueryParameter(TaskContract.ACCOUNT_NAME, mAccount.name).build(),
+                values);
         setResult(Activity.RESULT_OK);
         finish();
     }
@@ -282,9 +283,10 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         values.put(TaskLists.SYNC_ENABLED, 1);
         values.put(TaskLists.OWNER, "");
         int count = getContentResolver().update(
-            mTaskListUri.buildUpon().appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "1")
-                .appendQueryParameter(TaskContract.ACCOUNT_TYPE, mAccount.type).appendQueryParameter(TaskContract.ACCOUNT_NAME, mAccount.name).build(), values,
-            null, null);
+                mTaskListUri.buildUpon().appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "1")
+                        .appendQueryParameter(TaskContract.ACCOUNT_TYPE, mAccount.type).appendQueryParameter(TaskContract.ACCOUNT_NAME, mAccount.name).build(),
+                values,
+                null, null);
         if (count > 0)
         {
             setResult(Activity.RESULT_OK);
@@ -303,9 +305,10 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
     private void deleteList()
     {
         int count = getContentResolver().delete(
-            mTaskListUri.buildUpon().appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "1")
-                .appendQueryParameter(TaskContract.ACCOUNT_TYPE, mAccount.type).appendQueryParameter(TaskContract.ACCOUNT_NAME, mAccount.name).build(), null,
-            null);
+                mTaskListUri.buildUpon().appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "1")
+                        .appendQueryParameter(TaskContract.ACCOUNT_TYPE, mAccount.type).appendQueryParameter(TaskContract.ACCOUNT_NAME, mAccount.name).build(),
+                null,
+                null);
         if (count > 0)
         {
             setResult(Activity.RESULT_OK);

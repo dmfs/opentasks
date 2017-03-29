@@ -25,84 +25,86 @@ import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 
 /**
  * An abstract factory to create {@link ExpandableGroupDescriptor}s.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractGroupingFactory
 {
 
-	/**
-	 * The projection we use when we load instances. We don't need every detail of a task here. This is used by all groupings.
-	 */
-	public final static String[] INSTANCE_PROJECTION = new String[] { Instances.INSTANCE_START, Instances.INSTANCE_DURATION, Instances.INSTANCE_DUE,
-		Instances.IS_ALLDAY, Instances.TZ, Instances.TITLE, Instances.LIST_COLOR, Instances.PRIORITY, Instances.LIST_ID, Instances.TASK_ID, Instances._ID,
-		Instances.STATUS, Instances.COMPLETED, Instances.IS_CLOSED, Instances.PERCENT_COMPLETE, Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE,
-		Instances.DESCRIPTION };
+    /**
+     * The projection we use when we load instances. We don't need every detail of a task here. This is used by all groupings.
+     */
+    public final static String[] INSTANCE_PROJECTION = new String[] {
+            Instances.INSTANCE_START, Instances.INSTANCE_DURATION, Instances.INSTANCE_DUE,
+            Instances.IS_ALLDAY, Instances.TZ, Instances.TITLE, Instances.LIST_COLOR, Instances.PRIORITY, Instances.LIST_ID, Instances.TASK_ID, Instances._ID,
+            Instances.STATUS, Instances.COMPLETED, Instances.IS_CLOSED, Instances.PERCENT_COMPLETE, Instances.ACCOUNT_NAME, Instances.ACCOUNT_TYPE,
+            Instances.DESCRIPTION };
 
-	/**
-	 * An adapter to load the due date from the instances projection. This is used by most groupings
-	 */
-	public final static TimeFieldAdapter INSTANCE_DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
+    /**
+     * An adapter to load the due date from the instances projection. This is used by most groupings
+     */
+    public final static TimeFieldAdapter INSTANCE_DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
 
-	/**
-	 * An adapter to load the start date from the instances projection. This is used by most groupings
-	 */
-	public final static TimeFieldAdapter INSTANCE_START_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_START, Instances.TZ, Instances.IS_ALLDAY);
+    /**
+     * An adapter to load the start date from the instances projection. This is used by most groupings
+     */
+    public final static TimeFieldAdapter INSTANCE_START_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_START, Instances.TZ, Instances.IS_ALLDAY);
 
-	/**
-	 * The authority of the content provider.
-	 */
-	private final String mAuthority;
+    /**
+     * The authority of the content provider.
+     */
+    private final String mAuthority;
 
-	/**
-	 * The instance of the {@link ExpandableGroupDescriptor}. This is created on demand in a lazy manner.
-	 */
-	private ExpandableGroupDescriptor mDescriptorInstance;
-
-
-	public AbstractGroupingFactory(String authority)
-	{
-		mAuthority = authority;
-	}
+    /**
+     * The instance of the {@link ExpandableGroupDescriptor}. This is created on demand in a lazy manner.
+     */
+    private ExpandableGroupDescriptor mDescriptorInstance;
 
 
-	/**
-	 * Returns an {@link ExpandableChildDescriptor} for this grouping and the given authority.
-	 * 
-	 * @param authority
-	 *            The authority.
-	 * @return An {@link ExpandableChildDescriptor}.
-	 */
-	abstract ExpandableChildDescriptor makeExpandableChildDescriptor(String authority);
+    public AbstractGroupingFactory(String authority)
+    {
+        mAuthority = authority;
+    }
 
 
-	/**
-	 * Returns an {@link ExpandableGroupDescriptor} for this grouping and the given authority.
-	 * 
-	 * @param authority
-	 *            The authority.
-	 * @return An {@link ExpandableGroupDescriptor}.
-	 */
-	abstract ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority);
+    /**
+     * Returns an {@link ExpandableChildDescriptor} for this grouping and the given authority.
+     *
+     * @param authority
+     *         The authority.
+     *
+     * @return An {@link ExpandableChildDescriptor}.
+     */
+    abstract ExpandableChildDescriptor makeExpandableChildDescriptor(String authority);
+
+    /**
+     * Returns an {@link ExpandableGroupDescriptor} for this grouping and the given authority.
+     *
+     * @param authority
+     *         The authority.
+     *
+     * @return An {@link ExpandableGroupDescriptor}.
+     */
+    abstract ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority);
 
 
-	/**
-	 * Return an {@link ExpandableGroupDescriptor} for this grouping.
-	 * <p>
-	 * This method is not synchronized because it's intended to be called from the main thread only.
-	 * </p>
-	 * 
-	 * @return An {@link ExpandableGroupDescriptor}.
-	 */
-	public ExpandableGroupDescriptor getExpandableGroupDescriptor()
-	{
-		if (mDescriptorInstance == null)
-		{
-			mDescriptorInstance = makeExpandableGroupDescriptor(mAuthority);
-		}
-		return mDescriptorInstance;
-	}
+    /**
+     * Return an {@link ExpandableGroupDescriptor} for this grouping.
+     * <p>
+     * This method is not synchronized because it's intended to be called from the main thread only.
+     * </p>
+     *
+     * @return An {@link ExpandableGroupDescriptor}.
+     */
+    public ExpandableGroupDescriptor getExpandableGroupDescriptor()
+    {
+        if (mDescriptorInstance == null)
+        {
+            mDescriptorInstance = makeExpandableGroupDescriptor(mAuthority);
+        }
+        return mDescriptorInstance;
+    }
 
 
-	public abstract int getId();
+    public abstract int getId();
 }

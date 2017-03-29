@@ -17,25 +17,25 @@
 
 package org.dmfs.tasks;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.dmfs.tasks.groupings.AbstractGroupingFactory;
-import org.dmfs.tasks.groupings.TabConfig;
-import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import org.dmfs.tasks.groupings.AbstractGroupingFactory;
+import org.dmfs.tasks.groupings.TabConfig;
+import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * An adapter to populate the different views of grouped tasks for a ViewPager.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -43,128 +43,132 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "TaskGroupPager";
-	private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
-	private boolean mTwoPaneLayout;
-	private final TabConfig mTabConfig;
+    @SuppressWarnings("unused")
+    private static final String TAG = "TaskGroupPager";
+    private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
+    private boolean mTwoPaneLayout;
+    private final TabConfig mTabConfig;
 
 
-	/**
-	 * Create a new {@link TaskGroupPagerAdapter}.
-	 * 
-	 * @param fm
-	 *            A {@link FragmentManager}
-	 * @param groupingFactories
-	 *            An array of {@link AbstractGroupingFactory}.
-	 * @param context
-	 *            A context to access resources
-	 * @param tabRes
-	 *            The resource id of an XML resource that describes the items of the pager
-	 * @throws XmlObjectPullParserException
-	 * @throws IOException
-	 * @throws XmlPullParserException
-	 */
-	@SuppressLint("NewApi")
-	public TaskGroupPagerAdapter(FragmentManager fm, AbstractGroupingFactory[] groupingFactories, Context context, int tabRes) throws XmlPullParserException,
-		IOException, XmlObjectPullParserException
-	{
-		super(fm);
+    /**
+     * Create a new {@link TaskGroupPagerAdapter}.
+     *
+     * @param fm
+     *         A {@link FragmentManager}
+     * @param groupingFactories
+     *         An array of {@link AbstractGroupingFactory}.
+     * @param context
+     *         A context to access resources
+     * @param tabRes
+     *         The resource id of an XML resource that describes the items of the pager
+     *
+     * @throws XmlObjectPullParserException
+     * @throws IOException
+     * @throws XmlPullParserException
+     */
+    @SuppressLint("NewApi")
+    public TaskGroupPagerAdapter(FragmentManager fm, AbstractGroupingFactory[] groupingFactories, Context context, int tabRes) throws XmlPullParserException,
+            IOException, XmlObjectPullParserException
+    {
+        super(fm);
 
-		mTabConfig = TabConfig.load(context, tabRes);
+        mTabConfig = TabConfig.load(context, tabRes);
 
-		for (AbstractGroupingFactory factory : groupingFactories)
-		{
-			mGroupingFactories.put(factory.getId(), factory);
-		}
-	}
-
-
-	@Override
-	public CharSequence getPageTitle(int position)
-	{
-		// we don't want to show any title
-		return null;
-	}
+        for (AbstractGroupingFactory factory : groupingFactories)
+        {
+            mGroupingFactories.put(factory.getId(), factory);
+        }
+    }
 
 
-	@Override
-	public Fragment getItem(int position)
-	{
-		int pageId = mTabConfig.getVisibleItem(position).getId();
-		AbstractGroupingFactory factory = getGroupingFactoryForId(pageId);
-
-		TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
-		fragment.setExpandableGroupDescriptor(factory.getExpandableGroupDescriptor());
-		fragment.setPageId(pageId);
-		return fragment;
-
-	}
+    @Override
+    public CharSequence getPageTitle(int position)
+    {
+        // we don't want to show any title
+        return null;
+    }
 
 
-	/**
-	 * Get the id of a specific page.
-	 * 
-	 * @param position
-	 *            The position of the page.
-	 * @return The id of the page.
-	 */
-	public int getPageId(int position)
-	{
-		return mTabConfig.getVisibleItem(position).getId();
-	}
+    @Override
+    public Fragment getItem(int position)
+    {
+        int pageId = mTabConfig.getVisibleItem(position).getId();
+        AbstractGroupingFactory factory = getGroupingFactoryForId(pageId);
+
+        TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
+        fragment.setExpandableGroupDescriptor(factory.getExpandableGroupDescriptor());
+        fragment.setPageId(pageId);
+        return fragment;
+
+    }
 
 
-	/**
-	 * Returns the position of the page with the given id.
-	 * 
-	 * @param id
-	 *            The id of the page.
-	 * @return The position of the page or <code>-1</code> if the page doesn't exist or is not visible.
-	 */
-	public int getPagePosition(int id)
-	{
-		TabConfig groupings = mTabConfig;
-		for (int i = 0, count = groupings.visibleSize(); i < count; ++i)
-		{
-			if (groupings.getVisibleItem(i).getId() == id)
-			{
-				return i;
-			}
-		}
-		return -1;
-	}
+    /**
+     * Get the id of a specific page.
+     *
+     * @param position
+     *         The position of the page.
+     *
+     * @return The id of the page.
+     */
+    public int getPageId(int position)
+    {
+        return mTabConfig.getVisibleItem(position).getId();
+    }
 
 
-	/**
-	 * Get an {@link AbstractGroupingFactory} for the page with the given id.
-	 * 
-	 * @param id
-	 *            The is of the page.
-	 * @return The {@link AbstractGroupingFactory} that belongs to the id, if any, <code>null</code> otherwise.
-	 */
-	public AbstractGroupingFactory getGroupingFactoryForId(int id)
-	{
-		return mGroupingFactories.get(id);
-	}
+    /**
+     * Returns the position of the page with the given id.
+     *
+     * @param id
+     *         The id of the page.
+     *
+     * @return The position of the page or <code>-1</code> if the page doesn't exist or is not visible.
+     */
+    public int getPagePosition(int id)
+    {
+        TabConfig groupings = mTabConfig;
+        for (int i = 0, count = groupings.visibleSize(); i < count; ++i)
+        {
+            if (groupings.getVisibleItem(i).getId() == id)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
-	@Override
-	public int getCount()
-	{
-		return mTabConfig.visibleSize();
-	}
+    /**
+     * Get an {@link AbstractGroupingFactory} for the page with the given id.
+     *
+     * @param id
+     *         The is of the page.
+     *
+     * @return The {@link AbstractGroupingFactory} that belongs to the id, if any, <code>null</code> otherwise.
+     */
+    public AbstractGroupingFactory getGroupingFactoryForId(int id)
+    {
+        return mGroupingFactories.get(id);
+    }
 
 
-	public void setTwoPaneLayout(boolean twoPane)
-	{
-		mTwoPaneLayout = twoPane;
-	}
+    @Override
+    public int getCount()
+    {
+        return mTabConfig.visibleSize();
+    }
 
 
-	public int getTabIcon(int position)
-	{
-		return mTabConfig.getVisibleItem(position).getIcon();
-	}
+    public void setTwoPaneLayout(boolean twoPane)
+    {
+        mTwoPaneLayout = twoPane;
+    }
+
+
+    public int getTabIcon(int position)
+    {
+        return mTabConfig.getVisibleItem(position).getIcon();
+    }
 
 }
