@@ -35,7 +35,7 @@ import android.text.TextUtils;
 
 /**
  * Supports the {@link TaskDatabaseHelper} in the manner of full-text-search.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -125,8 +125,8 @@ public class FTSDatabaseHelper
 	// FIXME: at present the minimum score is hard coded can we leave that decision to the caller?
 	private final static String SQL_RAW_QUERY_SEARCH_TASK = "SELECT %s " + ", min(1.0*count(*)/?, 1.0) as " + TaskContract.Tasks.SCORE + " from "
 		+ FTS_NGRAM_TABLE + " join " + FTS_CONTENT_TABLE + " on (" + FTS_NGRAM_TABLE + "." + NGramColumns.NGRAM_ID + "=" + FTS_CONTENT_TABLE + "."
-		+ FTSContentColumns.NGRAM_ID + ") join " + Tables.INSTANCE_VIEW + " on (" + Tables.INSTANCE_VIEW + "." + Tasks._ID + " = " + FTS_CONTENT_TABLE + "."
-		+ FTSContentColumns.TASK_ID + ") where %s group by " + Tasks._ID + " having " + TaskContract.Tasks.SCORE + " >= " + SEARCH_RESULTS_MIN_SCORE
+		+ FTSContentColumns.NGRAM_ID + ") join " + Tables.INSTANCE_VIEW + " on (" + Tables.INSTANCE_VIEW + "." + TaskContract.Instances.TASK_ID + " = " + FTS_CONTENT_TABLE + "."
+		+ FTSContentColumns.TASK_ID + ") where %s group by " + TaskContract.Instances.TASK_ID + " having " + TaskContract.Tasks.SCORE + " >= " + SEARCH_RESULTS_MIN_SCORE
 		+ " order by %s;";
 
 	private final static String SQL_RAW_QUERY_SEARCH_TASK_DEFAULT_PROJECTION = Tables.INSTANCE_VIEW + ".* ," + FTS_NGRAM_TABLE + "." + NGramColumns.TEXT;
@@ -140,7 +140,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * The different types of searchable entries for tasks linked to the <code>TYPE</code> column.
-	 * 
+	 *
 	 * @author Tobias Reinsch <tobias@dmfs.org>
 	 * @author Marten Gajda <marten@dmfs.org>
 	 */
@@ -192,7 +192,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Creates the tables and triggers used in FTS.
-	 * 
+	 *
 	 * @param db
 	 *            The {@link SQLiteDatabase}.
 	 */
@@ -218,7 +218,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Creates the FTS entries for the existing tasks.
-	 * 
+	 *
 	 * @param db
 	 *            The writable {@link SQLiteDatabase}.
 	 */
@@ -236,10 +236,10 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Inserts the searchable texts of the task in the database.
-	 * 
+	 *
 	 * @param db
 	 *            The writable {@link SQLiteDatabase}.
-	 * 
+	 *
 	 * @param taskId
 	 *            The row id of the task.
 	 * @param title
@@ -272,7 +272,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Updates the existing searchables entries for the task.
-	 * 
+	 *
 	 * @param db
 	 *            The writable {@link SQLiteDatabase}.
 	 * @param task
@@ -303,7 +303,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Updates or creates the searchable entries for a property. Passing <code>null</code> as searchable text will remove the entry.
-	 * 
+	 *
 	 * @param db
 	 *            The writable {@link SQLiteDatabase}.
 	 * @param taskId
@@ -321,7 +321,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Inserts NGrams into the NGram database.
-	 * 
+	 *
 	 * @param db
 	 *            A writable {@link SQLiteDatabase}.
 	 * @param ngrams
@@ -385,7 +385,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Inserts NGrams relations for a task entry.
-	 * 
+	 *
 	 * @param db
 	 *            A writable {@link SQLiteDatabase}.
 	 * @param ngramIds
@@ -421,7 +421,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Deletes the NGram relations of a task
-	 * 
+	 *
 	 * @param db
 	 *            The writable {@link SQLiteDatabase}.
 	 * @param taskId
@@ -446,7 +446,7 @@ public class FTSDatabaseHelper
 
 	/**
 	 * Queries the task database to get a cursor with the search results.
-	 * 
+	 *
 	 * @param db
 	 *            The {@link SQLiteDatabase}.
 	 * @param searchString
@@ -552,7 +552,6 @@ public class FTSDatabaseHelper
 		{
 			sortOrder = Tasks.SCORE + " desc, " + sortOrder;
 		}
-
 		Cursor c = db.rawQueryWithFactory(null,
 			String.format(SQL_RAW_QUERY_SEARCH_TASK, SQL_RAW_QUERY_SEARCH_TASK_DEFAULT_PROJECTION, selectionBuilder.toString(), sortOrder), queryArgs, null);
 		return c;
