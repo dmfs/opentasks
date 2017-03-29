@@ -17,58 +17,58 @@
 
 package org.dmfs.provider.tasks.processors;
 
-import org.dmfs.provider.tasks.model.EntityAdapter;
-
 import android.database.sqlite.SQLiteDatabase;
+
+import org.dmfs.provider.tasks.model.EntityAdapter;
 
 
 /**
  * A default implementation of {@link EntityProcessor} that does nothing. It can be used as the basis of concrete {@link EntityProcessor}s without having to
  * override all the methods.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractEntityProcessor<T extends EntityAdapter<?>> implements EntityProcessor<T>
 {
-	@Override
-	public void beforeInsert(SQLiteDatabase db, T list, boolean isSyncAdapter)
-	{
-		// the default implementation doesn't do anything
-	}
+    @Override
+    public void beforeInsert(SQLiteDatabase db, T list, boolean isSyncAdapter)
+    {
+        // the default implementation doesn't do anything
+    }
 
 
-	@Override
-	public void afterInsert(SQLiteDatabase db, T list, boolean isSyncAdapter)
-	{
-		// the default implementation doesn't do anything
-	}
+    @Override
+    public void afterInsert(SQLiteDatabase db, T list, boolean isSyncAdapter)
+    {
+        // the default implementation doesn't do anything
+    }
 
 
-	@Override
-	public void beforeUpdate(SQLiteDatabase db, T list, boolean isSyncAdapter)
-	{
-		// the default implementation doesn't do anything
-	}
+    @Override
+    public void beforeUpdate(SQLiteDatabase db, T list, boolean isSyncAdapter)
+    {
+        // the default implementation doesn't do anything
+    }
 
 
-	@Override
-	public void afterUpdate(SQLiteDatabase db, T list, boolean isSyncAdapter)
-	{
-		// the default implementation doesn't do anything
-	}
+    @Override
+    public void afterUpdate(SQLiteDatabase db, T list, boolean isSyncAdapter)
+    {
+        // the default implementation doesn't do anything
+    }
 
 
-	@Override
-	public void beforeDelete(SQLiteDatabase db, T list, boolean isSyncAdapter)
-	{
-		// the default implementation doesn't do anything
-	}
+    @Override
+    public void beforeDelete(SQLiteDatabase db, T list, boolean isSyncAdapter)
+    {
+        // the default implementation doesn't do anything
+    }
 
 
-	@Override
-	public void afterDelete(SQLiteDatabase db, T list, boolean isSyncAdapter)
-	{
-		// the default implementation doesn't do anything
-	}
+    @Override
+    public void afterDelete(SQLiteDatabase db, T list, boolean isSyncAdapter)
+    {
+        // the default implementation doesn't do anything
+    }
 
 }

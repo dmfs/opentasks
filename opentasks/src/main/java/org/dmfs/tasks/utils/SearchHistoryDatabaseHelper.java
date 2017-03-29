@@ -24,59 +24,61 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Maintains the search history in a databse.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
 {
 
-	/**
-	 * Database schema version number.
-	 */
-	private final static int VERSION = 1;
+    /**
+     * Database schema version number.
+     */
+    private final static int VERSION = 1;
 
-	/**
-	 * Number of old entries to keep.
-	 */
-	private final static int SEARCH_HISTORY_SIZE = 10;
+    /**
+     * Number of old entries to keep.
+     */
+    private final static int SEARCH_HISTORY_SIZE = 10;
 
-	/**
-	 * Name of the database.
-	 */
-	private final static String SEARCH_HISTORY_DATABASE = "org.dmfs.tasks.search_history.db";
+    /**
+     * Name of the database.
+     */
+    private final static String SEARCH_HISTORY_DATABASE = "org.dmfs.tasks.search_history.db";
 
-	/**
-	 * Columns of the search history table.
-	 */
-	public interface SearchHistoryColumns
-	{
-		/**
-		 * The row id.
-		 */
-		public static final String _ID = "_id";
 
-		/**
-		 * The search query string.
-		 */
-		public static final String SEARCH_QUERY = "query";
+    /**
+     * Columns of the search history table.
+     */
+    public interface SearchHistoryColumns
+    {
+        /**
+         * The row id.
+         */
+        public static final String _ID = "_id";
 
-		/**
-		 * Flag for historic search entries.
-		 */
-		public static final String HISTORIC = "historic";
+        /**
+         * The search query string.
+         */
+        public static final String SEARCH_QUERY = "query";
 
-		/**
-		 * Time since the epoch in milliseconds of when the item was updated the last time.
-		 */
-		public static final String TIMESTAMP = "timestamp";
-	}
+        /**
+         * Flag for historic search entries.
+         */
+        public static final String HISTORIC = "historic";
 
-	/**
-	 * The table name.
-	 */
-	static final String SEARCH_HISTORY_TABLE = "search_history";
+        /**
+         * Time since the epoch in milliseconds of when the item was updated the last time.
+         */
+        public static final String TIMESTAMP = "timestamp";
+    }
 
-	// @formatter:off
+
+    /**
+     * The table name.
+     */
+    static final String SEARCH_HISTORY_TABLE = "search_history";
+
+    // @formatter:off
 	private final static String SQL_CREATE_SEARCH_HISTORY_TABLE =
 		"CREATE TABLE " + SEARCH_HISTORY_TABLE + " ( "
 			+ SearchHistoryColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -86,7 +88,7 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
 			+ " )";
 	// @formatter:on
 
-	// @formatter:off
+    // @formatter:off
 	private final static String SQL_CREATE_SEARCH_HISTORY_ADD_TRIGGER =
 		"CREATE TRIGGER search_history_add_trigger AFTER INSERT ON " + SEARCH_HISTORY_TABLE + " BEGIN "
 			// remove old entries
@@ -100,23 +102,24 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
 			+ " END";
 	// @formatter:on
 
-	public SearchHistoryDatabaseHelper(Context context)
-	{
-		super(context, SEARCH_HISTORY_DATABASE, null, VERSION);
-	}
+
+    public SearchHistoryDatabaseHelper(Context context)
+    {
+        super(context, SEARCH_HISTORY_DATABASE, null, VERSION);
+    }
 
 
-	public void onCreate(SQLiteDatabase db)
-	{
-		db.execSQL(SQL_CREATE_SEARCH_HISTORY_TABLE);
-		db.execSQL(SQL_CREATE_SEARCH_HISTORY_ADD_TRIGGER);
-	}
+    public void onCreate(SQLiteDatabase db)
+    {
+        db.execSQL(SQL_CREATE_SEARCH_HISTORY_TABLE);
+        db.execSQL(SQL_CREATE_SEARCH_HISTORY_ADD_TRIGGER);
+    }
 
 
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-	{
-		// nothing to do, yet
-	}
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
+        // nothing to do, yet
+    }
 
 }

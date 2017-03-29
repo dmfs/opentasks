@@ -22,16 +22,16 @@ import android.content.ContentValues;
 
 /**
  * A listener that is notified when an {@link AsyncContentLoader} has finished loading a set of {@link ContentValues}.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public interface OnContentLoadedListener
 {
-	/**
-	 * Called when the {@link AsyncContentLoader} has loaded new {@link ContentValues}.
-	 * 
-	 * @param values
-	 *            The loaded {@link ContentValues}.
-	 */
-	public void onContentLoaded(ContentValues values);
+    /**
+     * Called when the {@link AsyncContentLoader} has loaded new {@link ContentValues}.
+     *
+     * @param values
+     *         The loaded {@link ContentValues}.
+     */
+    public void onContentLoaded(ContentValues values);
 }

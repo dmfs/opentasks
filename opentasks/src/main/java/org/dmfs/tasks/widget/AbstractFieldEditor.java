@@ -26,25 +26,25 @@ import android.util.AttributeSet;
  * <p>
  * At present it doesn't do anything beside inheriting from {@link AbstractFieldView}, but it might come in handy for future developments, so we till keep it.
  * </p>
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractFieldEditor extends AbstractFieldView
 {
-	public AbstractFieldEditor(Context context)
-	{
-		super(context);
-	}
+    public AbstractFieldEditor(Context context)
+    {
+        super(context);
+    }
 
 
-	public AbstractFieldEditor(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public AbstractFieldEditor(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public AbstractFieldEditor(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public AbstractFieldEditor(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 }

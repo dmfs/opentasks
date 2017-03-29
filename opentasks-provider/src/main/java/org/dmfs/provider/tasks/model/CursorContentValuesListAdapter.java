@@ -17,117 +17,116 @@
 
 package org.dmfs.provider.tasks.model;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskDatabaseHelper;
-import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskDatabaseHelper;
+import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
+
 
 /**
- * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class CursorContentValuesListAdapter extends AbstractListAdapter
 {
-	private final long mId;
-	private final Cursor mCursor;
-	private final ContentValues mValues;
+    private final long mId;
+    private final Cursor mCursor;
+    private final ContentValues mValues;
 
 
-	public CursorContentValuesListAdapter(long id, Cursor cursor, ContentValues values)
-	{
-		mId = id;
-		mCursor = cursor;
-		mValues = values;
-	}
+    public CursorContentValuesListAdapter(long id, Cursor cursor, ContentValues values)
+    {
+        mId = id;
+        mCursor = cursor;
+        mValues = values;
+    }
 
 
-	@Override
-	public long id()
-	{
-		return mId;
-	}
+    @Override
+    public long id()
+    {
+        return mId;
+    }
 
 
-	@Override
-	public <T> T valueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
-	{
-		return fieldAdapter.getFrom(mCursor, mValues);
-	}
+    @Override
+    public <T> T valueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
+    {
+        return fieldAdapter.getFrom(mCursor, mValues);
+    }
 
 
-	@Override
-	public <T> T oldValueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
-	{
-		return fieldAdapter.getFrom(mCursor);
-	}
+    @Override
+    public <T> T oldValueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
+    {
+        return fieldAdapter.getFrom(mCursor);
+    }
 
 
-	@Override
-	public <T> boolean isUpdated(FieldAdapter<T, ListAdapter> fieldAdapter)
-	{
-		return mValues != null && fieldAdapter.isSetIn(mValues);
-	}
+    @Override
+    public <T> boolean isUpdated(FieldAdapter<T, ListAdapter> fieldAdapter)
+    {
+        return mValues != null && fieldAdapter.isSetIn(mValues);
+    }
 
 
-	@Override
-	public boolean isWriteable()
-	{
-		return true;
-	}
+    @Override
+    public boolean isWriteable()
+    {
+        return true;
+    }
 
 
-	@Override
-	public boolean hasUpdates()
-	{
-		return mValues != null && mValues.size() > 0;
-	}
+    @Override
+    public boolean hasUpdates()
+    {
+        return mValues != null && mValues.size() > 0;
+    }
 
 
-	@Override
-	public <T> void set(FieldAdapter<T, ListAdapter> fieldAdapter, T value) throws IllegalStateException
-	{
-		fieldAdapter.setIn(mValues, value);
-	}
+    @Override
+    public <T> void set(FieldAdapter<T, ListAdapter> fieldAdapter, T value) throws IllegalStateException
+    {
+        fieldAdapter.setIn(mValues, value);
+    }
 
 
-	@Override
-	public <T> void unset(FieldAdapter<T, ListAdapter> fieldAdapter) throws IllegalStateException
-	{
-		fieldAdapter.removeFrom(mValues);
-	}
+    @Override
+    public <T> void unset(FieldAdapter<T, ListAdapter> fieldAdapter) throws IllegalStateException
+    {
+        fieldAdapter.removeFrom(mValues);
+    }
 
 
-	@Override
-	public int commit(SQLiteDatabase db)
-	{
-		if (mValues.size() == 0)
-		{
-			return 0;
-		}
+    @Override
+    public int commit(SQLiteDatabase db)
+    {
+        if (mValues.size() == 0)
+        {
+            return 0;
+        }
 
-		return db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
-	}
+        return db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
+    }
 
 
-	@Override
-	public ListAdapter duplicate()
-	{
-		ContentValues newValues = new ContentValues(mValues);
+    @Override
+    public ListAdapter duplicate()
+    {
+        ContentValues newValues = new ContentValues(mValues);
 
-		// copy all columns (except _ID) that are not in the values yet
-		for (int i = 0, count = mCursor.getColumnCount(); i < count; ++i)
-		{
-			String column = mCursor.getColumnName(i);
-			if (!newValues.containsKey(column) && !TaskContract.Tasks._ID.equals(column))
-			{
-				newValues.put(column, mCursor.getString(i));
-			}
-		}
+        // copy all columns (except _ID) that are not in the values yet
+        for (int i = 0, count = mCursor.getColumnCount(); i < count; ++i)
+        {
+            String column = mCursor.getColumnName(i);
+            if (!newValues.containsKey(column) && !TaskContract.Tasks._ID.equals(column))
+            {
+                newValues.put(column, mCursor.getString(i));
+            }
+        }
 
-		return new ContentValuesListAdapter(newValues);
-	}
+        return new ContentValuesListAdapter(newValues);
+    }
 }

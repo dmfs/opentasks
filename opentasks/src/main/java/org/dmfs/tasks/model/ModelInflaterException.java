@@ -20,20 +20,20 @@ package org.dmfs.tasks.model;
 public class ModelInflaterException extends Exception
 {
 
-	/**
-	 * Generated serial.
-	 */
-	private static final long serialVersionUID = 2498148128490322210L;
+    /**
+     * Generated serial.
+     */
+    private static final long serialVersionUID = 2498148128490322210L;
 
 
-	public ModelInflaterException(String msg)
-	{
-		super(msg);
-	}
+    public ModelInflaterException(String msg)
+    {
+        super(msg);
+    }
 
 
-	public ModelInflaterException(String msg, Throwable e)
-	{
-		super(msg, e);
-	}
+    public ModelInflaterException(String msg, Throwable e)
+    {
+        super(msg, e);
+    }
 }

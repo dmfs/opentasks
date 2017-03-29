@@ -28,34 +28,35 @@ import android.os.Build;
 
 /**
  * The provider for the large homescreen widget on Android Honeycomb and up.
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProviderLarge extends TaskListWidgetProvider
 {
 
-	/*
-	 * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
-	 * 
-	 * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
-	 */
-	@Override
-	public void onReceive(Context context, Intent intent)
-	{
-		super.onReceive(context, intent);
-	}
+    /*
+     * Override the onReceive method from the {@link BroadcastReceiver } class so that we can intercept broadcast for manual refresh of widget.
+     *
+     * @see android.appwidget.AppWidgetProvider#onReceive(android.content.Context, android.content.Intent)
+     */
+    @Override
+    public void onReceive(Context context, Intent intent)
+    {
+        super.onReceive(context, intent);
+    }
 
 
-	@Override
-	public void onDeleted(Context context, int[] appWidgetIds)
-	{
-		super.onDeleted(context, appWidgetIds);
-	}
+    @Override
+    public void onDeleted(Context context, int[] appWidgetIds)
+    {
+        super.onDeleted(context, appWidgetIds);
+    }
 
 
-	@Override
-	protected ComponentName getComponentName(Context context)
-	{
-		return new ComponentName(context, TaskListWidgetProviderLarge.class);
-	}
+    @Override
+    protected ComponentName getComponentName(Context context)
+    {
+        return new ComponentName(context, TaskListWidgetProviderLarge.class);
+    }
 }

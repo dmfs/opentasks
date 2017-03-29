@@ -17,11 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
-import org.dmfs.tasks.model.layout.LayoutOptions;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -30,87 +25,91 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
+
 
 /**
  * Editor for boolean values using a {@link CheckBox}.
- * 
+ *
  * @author Arjun Naik<arjun@arjunnaik.in>
- * 
  */
 public class BooleanFieldEditor extends AbstractFieldEditor implements OnCheckedChangeListener, OnClickListener
 {
-	private CheckBox mCheckBox;
-	private BooleanFieldAdapter mAdapter;
+    private CheckBox mCheckBox;
+    private BooleanFieldAdapter mAdapter;
 
 
-	public BooleanFieldEditor(Context context)
-	{
-		super(context);
-	}
+    public BooleanFieldEditor(Context context)
+    {
+        super(context);
+    }
 
 
-	public BooleanFieldEditor(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public BooleanFieldEditor(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public BooleanFieldEditor(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public BooleanFieldEditor(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-		this.setOnClickListener(this);
-		mCheckBox = (CheckBox) findViewById(android.R.id.checkbox);
-		if (mCheckBox != null)
-		{
-			mCheckBox.setOnCheckedChangeListener(this);
-		}
-	}
+    @Override
+    protected void onFinishInflate()
+    {
+        super.onFinishInflate();
+        this.setOnClickListener(this);
+        mCheckBox = (CheckBox) findViewById(android.R.id.checkbox);
+        if (mCheckBox != null)
+        {
+            mCheckBox.setOnCheckedChangeListener(this);
+        }
+    }
 
 
-	@Override
-	public void onClick(View v)
-	{
-		mCheckBox.toggle();
-	}
+    @Override
+    public void onClick(View v)
+    {
+        mCheckBox.toggle();
+    }
 
 
-	@Override
-	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
-	{
-		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (BooleanFieldAdapter) descriptor.getFieldAdapter();
-	}
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
+    {
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = (BooleanFieldAdapter) descriptor.getFieldAdapter();
+    }
 
 
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		if (mValues != null)
-		{
-			Boolean newValue = mAdapter.get(mValues);
-			if (newValue != null)
-			{
-				mCheckBox.setChecked(newValue.booleanValue());
-			}
-		}
-	}
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        if (mValues != null)
+        {
+            Boolean newValue = mAdapter.get(mValues);
+            if (newValue != null)
+            {
+                mCheckBox.setChecked(newValue.booleanValue());
+            }
+        }
+    }
 
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-	{
-		Boolean oldValue = mAdapter.get(mValues);
-		if (oldValue == null || oldValue != isChecked) // don't trigger unnecessary updates
-		{
-			mAdapter.validateAndSet(mValues, isChecked);
-		}
-	}
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+    {
+        Boolean oldValue = mAdapter.get(mValues);
+        if (oldValue == null || oldValue != isChecked) // don't trigger unnecessary updates
+        {
+            mAdapter.validateAndSet(mValues, isChecked);
+        }
+    }
 
 }

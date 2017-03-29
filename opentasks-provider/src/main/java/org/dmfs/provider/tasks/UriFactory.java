@@ -17,40 +17,40 @@
 
 package org.dmfs.provider.tasks;
 
+import android.net.Uri;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import android.net.Uri;
 
 
 public class UriFactory
 {
-	public final String authority;
+    public final String authority;
 
-	private final Map<String, Uri> mUriMap = new HashMap<String, Uri>(16);
-
-
-	UriFactory(String authority)
-	{
-		this.authority = authority;
-		mUriMap.put((String) null, Uri.parse("content://" + authority));
-	}
+    private final Map<String, Uri> mUriMap = new HashMap<String, Uri>(16);
 
 
-	void addUri(String path)
-	{
-		mUriMap.put(path, Uri.parse("content://" + authority + "/" + path));
-	}
+    UriFactory(String authority)
+    {
+        this.authority = authority;
+        mUriMap.put((String) null, Uri.parse("content://" + authority));
+    }
 
 
-	public Uri getUri()
-	{
-		return mUriMap.get(null);
-	}
+    void addUri(String path)
+    {
+        mUriMap.put(path, Uri.parse("content://" + authority + "/" + path));
+    }
 
 
-	public Uri getUri(String path)
-	{
-		return mUriMap.get(path);
-	}
+    public Uri getUri()
+    {
+        return mUriMap.get(null);
+    }
+
+
+    public Uri getUri(String path)
+    {
+        return mUriMap.get(path);
+    }
 }

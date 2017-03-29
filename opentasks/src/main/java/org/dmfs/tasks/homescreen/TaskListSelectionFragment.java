@@ -17,14 +17,6 @@
 
 package org.dmfs.tasks.homescreen;
 
-import java.util.ArrayList;
-
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.utils.TasksListCursorAdapter;
-import org.dmfs.tasks.utils.TasksListCursorAdapter.SelectionEnabledListener;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
@@ -41,145 +33,153 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.utils.TasksListCursorAdapter;
+import org.dmfs.tasks.utils.TasksListCursorAdapter.SelectionEnabledListener;
+
+import java.util.ArrayList;
+
 
 /**
  * Provides the selection of task list.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
- * 
  */
 public class TaskListSelectionFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
 
-	public static final String LIST_LOADER_URI = "uri";
-	public static final String LIST_LOADER_FILTER = "filter";
+    public static final String LIST_LOADER_URI = "uri";
+    public static final String LIST_LOADER_FILTER = "filter";
 
-	public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.SYNC_ENABLED + "=1";
+    public static final String LIST_LOADER_VISIBLE_LISTS_FILTER = TaskLists.SYNC_ENABLED + "=1";
 
-	/**
-	 * Projection into the task list.
-	 */
-	private final static String[] TASK_LIST_PROJECTION = new String[] { TaskContract.TaskListColumns._ID, TaskContract.TaskListColumns.LIST_NAME,
-		TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR };
+    /**
+     * Projection into the task list.
+     */
+    private final static String[] TASK_LIST_PROJECTION = new String[] {
+            TaskContract.TaskListColumns._ID, TaskContract.TaskListColumns.LIST_NAME,
+            TaskContract.TaskListSyncColumns.ACCOUNT_TYPE, TaskContract.TaskListSyncColumns.ACCOUNT_NAME, TaskContract.TaskListColumns.LIST_COLOR };
 
-	private TasksListCursorAdapter mTaskListAdapter;
-	private Activity mActivity;
-	private ListView mTaskList;
-	private String mAuthority;
-	private onSelectionListener mListener;
-	private TextView mButtonOk;
-	private TextView mButtonCancel;
-
-
-	public TaskListSelectionFragment(onSelectionListener listener)
-	{
-		mListener = listener;
-	}
+    private TasksListCursorAdapter mTaskListAdapter;
+    private Activity mActivity;
+    private ListView mTaskList;
+    private String mAuthority;
+    private onSelectionListener mListener;
+    private TextView mButtonOk;
+    private TextView mButtonCancel;
 
 
-	@Override
-	public void onAttach(Activity activity)
-	{
-		super.onAttach(activity);
-		mActivity = activity;
-		mAuthority = TaskContract.taskAuthority(activity);
-	}
+    public TaskListSelectionFragment(onSelectionListener listener)
+    {
+        mListener = listener;
+    }
 
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		View rootView = inflater.inflate(R.layout.fragment_task_list_selection, container, false);
-		mButtonOk = (TextView) rootView.findViewById(android.R.id.button1);
-		mButtonCancel = (TextView) rootView.findViewById(android.R.id.button2);
-
-		mButtonOk.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				if (mListener != null)
-				{
-					mListener.onSelection(mTaskListAdapter.getSelectedLists());
-				}
-
-			}
-		});
-		mButtonCancel.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				if (mListener != null)
-				{
-					mListener.onSelectionCancel();
-				}
-
-			}
-		});
-
-		return rootView;
-	}
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mActivity = activity;
+        mAuthority = TaskContract.taskAuthority(activity);
+    }
 
 
-	@Override
-	public void onActivityCreated(@Nullable Bundle savedInstanceState)
-	{
-		super.onActivityCreated(savedInstanceState);
-		mTaskList = getListView();
-		mTaskListAdapter = new TasksListCursorAdapter(mActivity);
-		mTaskList.setAdapter(mTaskListAdapter);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.fragment_task_list_selection, container, false);
+        mButtonOk = (TextView) rootView.findViewById(android.R.id.button1);
+        mButtonCancel = (TextView) rootView.findViewById(android.R.id.button2);
 
-		mTaskListAdapter.setSelectionEnabledListener(new SelectionEnabledListener()
-		{
-			@Override
-			public void onSelectionEnabled()
-			{
-				mButtonOk.setEnabled(true);
-			}
+        mButtonOk.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mListener != null)
+                {
+                    mListener.onSelection(mTaskListAdapter.getSelectedLists());
+                }
 
+            }
+        });
+        mButtonCancel.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (mListener != null)
+                {
+                    mListener.onSelectionCancel();
+                }
 
-			@Override
-			public void onSelectionDisabled()
-			{
-				mButtonOk.setEnabled(false);
+            }
+        });
 
-			}
-		});
-
-		Bundle bundle = new Bundle();
-		bundle.putParcelable(LIST_LOADER_URI, TaskLists.getContentUri(mAuthority));
-		bundle.putString(LIST_LOADER_FILTER, LIST_LOADER_VISIBLE_LISTS_FILTER);
-		getLoaderManager().restartLoader(-2, bundle, this);
-	}
-
-
-	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
-	{
-		return new CursorLoader(mActivity, (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null, null);
-	}
+        return rootView;
+    }
 
 
-	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
-	{
-		mTaskListAdapter.changeCursor(cursor);
-	}
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        mTaskList = getListView();
+        mTaskListAdapter = new TasksListCursorAdapter(mActivity);
+        mTaskList.setAdapter(mTaskListAdapter);
+
+        mTaskListAdapter.setSelectionEnabledListener(new SelectionEnabledListener()
+        {
+            @Override
+            public void onSelectionEnabled()
+            {
+                mButtonOk.setEnabled(true);
+            }
 
 
-	@Override
-	public void onLoaderReset(Loader<Cursor> loader)
-	{
-		mTaskListAdapter.changeCursor(null);
-	}
+            @Override
+            public void onSelectionDisabled()
+            {
+                mButtonOk.setEnabled(false);
 
-	public interface onSelectionListener
-	{
-		public void onSelection(ArrayList<Long> selectedLists);
+            }
+        });
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(LIST_LOADER_URI, TaskLists.getContentUri(mAuthority));
+        bundle.putString(LIST_LOADER_FILTER, LIST_LOADER_VISIBLE_LISTS_FILTER);
+        getLoaderManager().restartLoader(-2, bundle, this);
+    }
 
 
-		public void onSelectionCancel();
-	}
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
+    {
+        return new CursorLoader(mActivity, (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null, null);
+    }
+
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
+    {
+        mTaskListAdapter.changeCursor(cursor);
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader)
+    {
+        mTaskListAdapter.changeCursor(null);
+    }
+
+
+    public interface onSelectionListener
+    {
+        public void onSelection(ArrayList<Long> selectedLists);
+
+        public void onSelectionCancel();
+    }
 
 }

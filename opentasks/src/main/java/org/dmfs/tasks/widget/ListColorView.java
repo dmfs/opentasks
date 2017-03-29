@@ -17,61 +17,61 @@
 
 package org.dmfs.tasks.widget;
 
+import android.content.Context;
+import android.util.AttributeSet;
+
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
-import android.content.Context;
-import android.util.AttributeSet;
-
 
 /**
  * A widget that shows the string representation of an object.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ListColorView extends AbstractFieldView
 {
-	/**
-	 * The {@link FieldAdapter} of the field for this view.
-	 */
-	private FieldAdapter<Integer> mAdapter;
+    /**
+     * The {@link FieldAdapter} of the field for this view.
+     */
+    private FieldAdapter<Integer> mAdapter;
 
 
-	public ListColorView(Context context)
-	{
-		super(context);
-	}
+    public ListColorView(Context context)
+    {
+        super(context);
+    }
 
 
-	public ListColorView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public ListColorView(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public ListColorView(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public ListColorView(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
-	{
-		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (FieldAdapter<Integer>) descriptor.getFieldAdapter();
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
+    {
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = (FieldAdapter<Integer>) descriptor.getFieldAdapter();
+    }
 
 
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		if (mValues != null)
-		{
-			this.setBackgroundColor(mAdapter.get(contentSet));
-		}
-	}
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        if (mValues != null)
+        {
+            this.setBackgroundColor(mAdapter.get(contentSet));
+        }
+    }
 }

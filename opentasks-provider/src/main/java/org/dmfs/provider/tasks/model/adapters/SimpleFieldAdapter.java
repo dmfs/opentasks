@@ -23,85 +23,84 @@ import android.database.Cursor;
 
 /**
  * An abstract {@link FieldAdapter} that implements a couple of methods as used by most simple FieldAdapters.
- * 
- * @author Marten Gajda <marten@dmfs.org>
- * 
+ *
  * @param <FieldType>
- *            The Type of the field this adapter handles.
- * 
+ *         The Type of the field this adapter handles.
  * @param <EntityType>
- *            The type of the entity the field belongs to.
+ *         The type of the entity the field belongs to.
+ *
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class SimpleFieldAdapter<FieldType, EntityType> implements FieldAdapter<FieldType, EntityType>
 {
 
-	/**
-	 * Returns the sole field name of this adapter.
-	 * 
-	 * @return
-	 */
-	abstract String fieldName();
+    /**
+     * Returns the sole field name of this adapter.
+     *
+     * @return
+     */
+    abstract String fieldName();
 
 
-	@Override
-	public boolean existsIn(ContentValues values)
-	{
-		return values.get(fieldName()) != null;
-	}
+    @Override
+    public boolean existsIn(ContentValues values)
+    {
+        return values.get(fieldName()) != null;
+    }
 
 
-	@Override
-	public boolean isSetIn(ContentValues values)
-	{
-		return values.containsKey(fieldName());
-	}
+    @Override
+    public boolean isSetIn(ContentValues values)
+    {
+        return values.containsKey(fieldName());
+    }
 
 
-	@Override
-	public boolean existsIn(Cursor cursor)
-	{
-		int columnIdx = cursor.getColumnIndex(fieldName());
-		if (columnIdx < 0)
-		{
-			throw new IllegalArgumentException("The column '" + fieldName() + "' is missing in cursor.");
-		}
+    @Override
+    public boolean existsIn(Cursor cursor)
+    {
+        int columnIdx = cursor.getColumnIndex(fieldName());
+        if (columnIdx < 0)
+        {
+            throw new IllegalArgumentException("The column '" + fieldName() + "' is missing in cursor.");
+        }
 
-		return !cursor.isNull(columnIdx);
-	}
-
-
-	@Override
-	public FieldType getFrom(Cursor cursor, ContentValues values)
-	{
-		return values.containsKey(fieldName()) ? getFrom(values) : getFrom(cursor);
-	}
+        return !cursor.isNull(columnIdx);
+    }
 
 
-	@Override
-	public boolean existsIn(Cursor cursor, ContentValues values)
-	{
-		return existsIn(values) || existsIn(cursor);
-	}
+    @Override
+    public FieldType getFrom(Cursor cursor, ContentValues values)
+    {
+        return values.containsKey(fieldName()) ? getFrom(values) : getFrom(cursor);
+    }
 
 
-	@Override
-	public void removeFrom(ContentValues values)
-	{
-		values.remove(fieldName());
-	}
+    @Override
+    public boolean existsIn(Cursor cursor, ContentValues values)
+    {
+        return existsIn(values) || existsIn(cursor);
+    }
 
 
-	@Override
-	public void copyValue(Cursor cursor, ContentValues values)
-	{
-		setIn(values, getFrom(cursor));
-	}
+    @Override
+    public void removeFrom(ContentValues values)
+    {
+        values.remove(fieldName());
+    }
 
 
-	@Override
-	public void copyValue(ContentValues oldValues, ContentValues newValues)
-	{
-		setIn(newValues, getFrom(oldValues));
-	}
+    @Override
+    public void copyValue(Cursor cursor, ContentValues values)
+    {
+        setIn(values, getFrom(cursor));
+    }
+
+
+    @Override
+    public void copyValue(ContentValues oldValues, ContentValues newValues)
+    {
+        setIn(newValues, getFrom(oldValues));
+    }
 
 }

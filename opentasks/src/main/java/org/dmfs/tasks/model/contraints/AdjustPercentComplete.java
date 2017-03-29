@@ -24,33 +24,33 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 
 /**
  * Adjust percent complete to 0% if status is set to NEEDS_ACTION. Also sets percent complete to 50% if status is changed from COMPLETED to IN_PROCESS.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class AdjustPercentComplete extends AbstractConstraint<Integer>
 {
-	private final IntegerFieldAdapter mPercentComplete;
+    private final IntegerFieldAdapter mPercentComplete;
 
 
-	public AdjustPercentComplete(IntegerFieldAdapter adapter)
-	{
-		mPercentComplete = adapter;
-	}
+    public AdjustPercentComplete(IntegerFieldAdapter adapter)
+    {
+        mPercentComplete = adapter;
+    }
 
 
-	@Override
-	public Integer apply(ContentSet currentValues, Integer oldValue, Integer newValue)
-	{
-		if (newValue == null || newValue == Tasks.STATUS_NEEDS_ACTION)
-		{
-			mPercentComplete.set(currentValues, 0);
-		}
-		else if (newValue == Tasks.STATUS_IN_PROCESS && oldValue != null && oldValue == Tasks.STATUS_COMPLETED
-			&& Integer.valueOf(100).equals(mPercentComplete.get(currentValues)))
-		{
-			mPercentComplete.set(currentValues, 50);
-		}
-		return newValue;
-	}
+    @Override
+    public Integer apply(ContentSet currentValues, Integer oldValue, Integer newValue)
+    {
+        if (newValue == null || newValue == Tasks.STATUS_NEEDS_ACTION)
+        {
+            mPercentComplete.set(currentValues, 0);
+        }
+        else if (newValue == Tasks.STATUS_IN_PROCESS && oldValue != null && oldValue == Tasks.STATUS_COMPLETED
+                && Integer.valueOf(100).equals(mPercentComplete.get(currentValues)))
+        {
+            mPercentComplete.set(currentValues, 50);
+        }
+        return newValue;
+    }
 
 }

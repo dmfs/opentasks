@@ -17,91 +17,91 @@
 
 package org.dmfs.provider.tasks.model.adapters;
 
-import org.dmfs.rfc5545.Duration;
-
 import android.content.ContentValues;
 import android.database.Cursor;
+
+import org.dmfs.rfc5545.Duration;
 
 
 /**
  * Knows how to load and store {@link Duration} values from a {@link Cursor} or {@link ContentValues}.
- * 
- * @author Marten Gajda <marten@dmfs.org>
- * 
+ *
  * @param <EntityType>
- *            The type of the entity the field belongs to.
+ *         The type of the entity the field belongs to.
+ *
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public final class DurationFieldAdapter<EntityType> extends SimpleFieldAdapter<Duration, EntityType>
 {
 
-	private final String mFieldName;
+    private final String mFieldName;
 
 
-	/**
-	 * Constructor for a new {@link DurationFieldAdapter}.
-	 * 
-	 * @param urlField
-	 *            The field name that holds the {@link Duration}.
-	 */
-	public DurationFieldAdapter(String urlField)
-	{
-		if (urlField == null)
-		{
-			throw new IllegalArgumentException("urlField must not be null");
-		}
-		mFieldName = urlField;
-	}
+    /**
+     * Constructor for a new {@link DurationFieldAdapter}.
+     *
+     * @param urlField
+     *         The field name that holds the {@link Duration}.
+     */
+    public DurationFieldAdapter(String urlField)
+    {
+        if (urlField == null)
+        {
+            throw new IllegalArgumentException("urlField must not be null");
+        }
+        mFieldName = urlField;
+    }
 
 
-	@Override
-	String fieldName()
-	{
-		return mFieldName;
-	}
+    @Override
+    String fieldName()
+    {
+        return mFieldName;
+    }
 
 
-	@Override
-	public Duration getFrom(ContentValues values)
-	{
-		String rawValue = values.getAsString(mFieldName);
-		if (rawValue == null)
-		{
-			return null;
-		}
+    @Override
+    public Duration getFrom(ContentValues values)
+    {
+        String rawValue = values.getAsString(mFieldName);
+        if (rawValue == null)
+        {
+            return null;
+        }
 
-		return Duration.parse(rawValue);
-	}
-
-
-	@Override
-	public Duration getFrom(Cursor cursor)
-	{
-		int columnIdx = cursor.getColumnIndex(mFieldName);
-		if (columnIdx < 0)
-		{
-			throw new IllegalArgumentException("The column '" + mFieldName + "' is missing in cursor.");
-		}
-
-		if (cursor.isNull(columnIdx))
-		{
-			return null;
-		}
-
-		return Duration.parse(cursor.getString(columnIdx));
-	}
+        return Duration.parse(rawValue);
+    }
 
 
-	@Override
-	public void setIn(ContentValues values, Duration value)
-	{
-		if (value != null)
-		{
-			values.put(mFieldName, value.toString());
-		}
-		else
-		{
-			values.putNull(mFieldName);
-		}
-	}
+    @Override
+    public Duration getFrom(Cursor cursor)
+    {
+        int columnIdx = cursor.getColumnIndex(mFieldName);
+        if (columnIdx < 0)
+        {
+            throw new IllegalArgumentException("The column '" + mFieldName + "' is missing in cursor.");
+        }
+
+        if (cursor.isNull(columnIdx))
+        {
+            return null;
+        }
+
+        return Duration.parse(cursor.getString(columnIdx));
+    }
+
+
+    @Override
+    public void setIn(ContentValues values, Duration value)
+    {
+        if (value != null)
+        {
+            values.put(mFieldName, value.toString());
+        }
+        else
+        {
+            values.putNull(mFieldName);
+        }
+    }
 
 }

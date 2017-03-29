@@ -17,103 +17,102 @@
 
 package org.dmfs.tasks.homescreen;
 
-import java.util.ArrayList;
-
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.homescreen.TaskListSelectionFragment.onSelectionListener;
-import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
-
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.homescreen.TaskListSelectionFragment.onSelectionListener;
+import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
+
+import java.util.ArrayList;
+
 
 /**
  * Allows to configure the task list widget prior to adding to the home screen
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
- * 
  */
 public class TaskListWidgetSettingsActivity extends FragmentActivity implements onSelectionListener
 {
-	private int mAppWidgetId;
-	private Intent mResultIntent;
+    private int mAppWidgetId;
+    private Intent mResultIntent;
 
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_widget_configuration);
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_widget_configuration);
 
-		Intent intent = getIntent();
-		if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID))
-		{
-			mAppWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+        Intent intent = getIntent();
+        if (intent.hasExtra(AppWidgetManager.EXTRA_APPWIDGET_ID))
+        {
+            mAppWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
 
-			// make the result intent and set the result to canceled
-			mResultIntent = new Intent();
-			mResultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-			setResult(RESULT_CANCELED, mResultIntent);
-		}
+            // make the result intent and set the result to canceled
+            mResultIntent = new Intent();
+            mResultIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+            setResult(RESULT_CANCELED, mResultIntent);
+        }
 
-		TaskListSelectionFragment fragment = new TaskListSelectionFragment(this);
-		getSupportFragmentManager().beginTransaction().add(R.id.task_list_selection_container, fragment).commit();
-	}
-
-
-	@Override
-	public void onSelection(ArrayList<Long> selectedLists)
-	{
-		persistSelectedTaskLists(selectedLists);
-		finishWithResult(true);
-
-	}
+        TaskListSelectionFragment fragment = new TaskListSelectionFragment(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.task_list_selection_container, fragment).commit();
+    }
 
 
-	@Override
-	public void onSelectionCancel()
-	{
-		finishWithResult(false);
+    @Override
+    public void onSelection(ArrayList<Long> selectedLists)
+    {
+        persistSelectedTaskLists(selectedLists);
+        finishWithResult(true);
 
-	}
-
-
-	private void persistSelectedTaskLists(ArrayList<Long> lists)
-	{
-		WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(this);
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-		// delete old configuration
-		WidgetConfigurationDatabaseHelper.deleteConfiguration(db, mAppWidgetId);
-
-		// add new configuration
-		for (Long taskId : lists)
-		{
-			WidgetConfigurationDatabaseHelper.insertTaskList(db, mAppWidgetId, taskId);
-		}
-		db.close();
-	}
+    }
 
 
-	private void finishWithResult(boolean ok)
-	{
-		Bundle bundle = new Bundle();
-		bundle.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-		Intent intent = new Intent();
-		intent.putExtras(bundle);
+    @Override
+    public void onSelectionCancel()
+    {
+        finishWithResult(false);
 
-		if (ok)
-		{
-			setResult(RESULT_OK, intent);
-		}
-		else
-		{
-			setResult(RESULT_CANCELED, intent);
-		}
+    }
 
-		finish();
-	}
+
+    private void persistSelectedTaskLists(ArrayList<Long> lists)
+    {
+        WidgetConfigurationDatabaseHelper dbHelper = new WidgetConfigurationDatabaseHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // delete old configuration
+        WidgetConfigurationDatabaseHelper.deleteConfiguration(db, mAppWidgetId);
+
+        // add new configuration
+        for (Long taskId : lists)
+        {
+            WidgetConfigurationDatabaseHelper.insertTaskList(db, mAppWidgetId, taskId);
+        }
+        db.close();
+    }
+
+
+    private void finishWithResult(boolean ok)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+        Intent intent = new Intent();
+        intent.putExtras(bundle);
+
+        if (ok)
+        {
+            setResult(RESULT_OK, intent);
+        }
+        else
+        {
+            setResult(RESULT_CANCELED, intent);
+        }
+
+        finish();
+    }
 }

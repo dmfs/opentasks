@@ -38,144 +38,144 @@ import org.dmfs.tasks.model.contraints.ShiftIfAfter;
 
 /**
  * This class holds a static reference for all field adapters. That allows us to use them across different models.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class TaskFieldAdapters
 {
-	/**
-	 * Adapter for the all day flag of a task.
-	 */
-	public final static BooleanFieldAdapter ALLDAY = new BooleanFieldAdapter(Tasks.IS_ALLDAY);
+    /**
+     * Adapter for the all day flag of a task.
+     */
+    public final static BooleanFieldAdapter ALLDAY = new BooleanFieldAdapter(Tasks.IS_ALLDAY);
 
-	/**
-	 * Adapter for the percent complete value of a task.
-	 */
-	public final static IntegerFieldAdapter PERCENT_COMPLETE = new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE);
+    /**
+     * Adapter for the percent complete value of a task.
+     */
+    public final static IntegerFieldAdapter PERCENT_COMPLETE = new IntegerFieldAdapter(Tasks.PERCENT_COMPLETE);
 
-	/**
-	 * Adapter for the status of a task.
-	 */
-	public final static IntegerFieldAdapter STATUS = (IntegerFieldAdapter) new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION)
-		.addContraint(new AdjustPercentComplete(PERCENT_COMPLETE));
+    /**
+     * Adapter for the status of a task.
+     */
+    public final static IntegerFieldAdapter STATUS = (IntegerFieldAdapter) new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION)
+            .addContraint(new AdjustPercentComplete(PERCENT_COMPLETE));
 
-	/**
-	 * Adapter for the priority value of a task.
-	 */
-	public final static IntegerFieldAdapter PRIORITY = new IntegerFieldAdapter(Tasks.PRIORITY);
+    /**
+     * Adapter for the priority value of a task.
+     */
+    public final static IntegerFieldAdapter PRIORITY = new IntegerFieldAdapter(Tasks.PRIORITY);
 
-	/**
-	 * Adapter for the classification value of a task.
-	 */
-	public final static IntegerFieldAdapter CLASSIFICATION = new IntegerFieldAdapter(Tasks.CLASSIFICATION);
+    /**
+     * Adapter for the classification value of a task.
+     */
+    public final static IntegerFieldAdapter CLASSIFICATION = new IntegerFieldAdapter(Tasks.CLASSIFICATION);
 
-	/**
-	 * Adapter for the list name of a task.
-	 */
-	public final static StringFieldAdapter LIST_NAME = new StringFieldAdapter(Tasks.LIST_NAME);
+    /**
+     * Adapter for the list name of a task.
+     */
+    public final static StringFieldAdapter LIST_NAME = new StringFieldAdapter(Tasks.LIST_NAME);
 
-	/**
-	 * Adapter for the account name of a task.
-	 */
-	public final static StringFieldAdapter ACCOUNT_NAME = new StringFieldAdapter(Tasks.ACCOUNT_NAME);
+    /**
+     * Adapter for the account name of a task.
+     */
+    public final static StringFieldAdapter ACCOUNT_NAME = new StringFieldAdapter(Tasks.ACCOUNT_NAME);
 
-	/**
-	 * Adapter for the account type of a task.
-	 */
-	public final static StringFieldAdapter ACCOUNT_TYPE = new StringFieldAdapter(Tasks.ACCOUNT_TYPE);
+    /**
+     * Adapter for the account type of a task.
+     */
+    public final static StringFieldAdapter ACCOUNT_TYPE = new StringFieldAdapter(Tasks.ACCOUNT_TYPE);
 
-	/**
-	 * Adapter for the title of a task.
-	 */
-	public final static StringFieldAdapter TITLE = new StringFieldAdapter(Tasks.TITLE);
+    /**
+     * Adapter for the title of a task.
+     */
+    public final static StringFieldAdapter TITLE = new StringFieldAdapter(Tasks.TITLE);
 
-	/**
-	 * Adapter for the location of a task.
-	 */
-	public final static StringFieldAdapter LOCATION = new StringFieldAdapter(Tasks.LOCATION);
+    /**
+     * Adapter for the location of a task.
+     */
+    public final static StringFieldAdapter LOCATION = new StringFieldAdapter(Tasks.LOCATION);
 
-	/**
-	 * Adapter for the description of a task.
-	 */
-	public final static DescriptionStringFieldAdapter DESCRIPTION = new DescriptionStringFieldAdapter(Tasks.DESCRIPTION);
+    /**
+     * Adapter for the description of a task.
+     */
+    public final static DescriptionStringFieldAdapter DESCRIPTION = new DescriptionStringFieldAdapter(Tasks.DESCRIPTION);
 
-	/**
-	 * Adapter for the checklist of a task.
-	 */
-	public final static ChecklistFieldAdapter CHECKLIST = (ChecklistFieldAdapter) new ChecklistFieldAdapter(Tasks.DESCRIPTION)
-		.addContraint(new ChecklistConstraint(STATUS, PERCENT_COMPLETE));
+    /**
+     * Adapter for the checklist of a task.
+     */
+    public final static ChecklistFieldAdapter CHECKLIST = (ChecklistFieldAdapter) new ChecklistFieldAdapter(Tasks.DESCRIPTION)
+            .addContraint(new ChecklistConstraint(STATUS, PERCENT_COMPLETE));
 
-	/**
-	 * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.
-	 */
-	private final static TimeFieldAdapter _DTSTART = new TimeFieldAdapter(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
+    /**
+     * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.
+     */
+    private final static TimeFieldAdapter _DTSTART = new TimeFieldAdapter(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
 
-	/**
-	 * Adapter for the due date of a task.
-	 */
-	public final static TimeFieldAdapter DUE = (TimeFieldAdapter) new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY).addContraint(new NotBefore(
-		_DTSTART));
+    /**
+     * Adapter for the due date of a task.
+     */
+    public final static TimeFieldAdapter DUE = (TimeFieldAdapter) new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY).addContraint(new NotBefore(
+            _DTSTART));
 
-	/**
-	 * Adapter for the start date of a task.
-	 */
-	public final static TimeFieldAdapter DTSTART = (TimeFieldAdapter) _DTSTART.addContraint(new ShiftIfAfter(DUE));
+    /**
+     * Adapter for the start date of a task.
+     */
+    public final static TimeFieldAdapter DTSTART = (TimeFieldAdapter) _DTSTART.addContraint(new ShiftIfAfter(DUE));
 
-	/**
-	 * Adapter for the completed date of a task.
-	 */
-	public final static TimeFieldAdapter COMPLETED = new TimeFieldAdapter(Tasks.COMPLETED, null, null);
+    /**
+     * Adapter for the completed date of a task.
+     */
+    public final static TimeFieldAdapter COMPLETED = new TimeFieldAdapter(Tasks.COMPLETED, null, null);
 
-	/**
-	 * Adapter for the time zone of a task.
-	 */
-	public final static TimezoneFieldAdapter TIMEZONE = new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY, Tasks.DUE);
+    /**
+     * Adapter for the time zone of a task.
+     */
+    public final static TimezoneFieldAdapter TIMEZONE = new TimezoneFieldAdapter(Tasks.TZ, Tasks.IS_ALLDAY, Tasks.DUE);
 
-	/**
-	 * Adapter for the URL of a task.
-	 */
-	public final static UrlFieldAdapter URL = new UrlFieldAdapter(TaskContract.Tasks.URL);
+    /**
+     * Adapter for the URL of a task.
+     */
+    public final static UrlFieldAdapter URL = new UrlFieldAdapter(TaskContract.Tasks.URL);
 
-	/**
-	 * Adapter for the Color of the task.
-	 * */
-	public final static IntegerFieldAdapter LIST_COLOR = new ColorFieldAdapter(TaskContract.Tasks.LIST_COLOR, 0.8f);
+    /**
+     * Adapter for the Color of the task.
+     */
+    public final static IntegerFieldAdapter LIST_COLOR = new ColorFieldAdapter(TaskContract.Tasks.LIST_COLOR, 0.8f);
 
-	/**
-	 * Adpater for the ID of the task.
-	 * */
-	public static final IntegerFieldAdapter TASK_ID = new IntegerFieldAdapter(TaskContract.Tasks._ID);
+    /**
+     * Adpater for the ID of the task.
+     */
+    public static final IntegerFieldAdapter TASK_ID = new IntegerFieldAdapter(TaskContract.Tasks._ID);
 
-	/**
-	 * Adpater for the TASK_ID of an instance of a task.
-	 * */
-	public static final IntegerFieldAdapter INSTANCE_TASK_ID = new IntegerFieldAdapter(TaskContract.Instances.TASK_ID);
+    /**
+     * Adpater for the TASK_ID of an instance of a task.
+     */
+    public static final IntegerFieldAdapter INSTANCE_TASK_ID = new IntegerFieldAdapter(TaskContract.Instances.TASK_ID);
 
-	/**
-	 * Adapter for the IS_CLOSED flag of a task.
-	 * */
-	public static final BooleanFieldAdapter IS_CLOSED = new BooleanFieldAdapter(TaskContract.Tasks.IS_CLOSED);
+    /**
+     * Adapter for the IS_CLOSED flag of a task.
+     */
+    public static final BooleanFieldAdapter IS_CLOSED = new BooleanFieldAdapter(TaskContract.Tasks.IS_CLOSED);
 
-	/**
-	 * Adapter for the PINNED flag of a task.
-	 * */
-	public static final BooleanFieldAdapter PINNED = new BooleanFieldAdapter(TaskContract.Tasks.PINNED);
+    /**
+     * Adapter for the PINNED flag of a task.
+     */
+    public static final BooleanFieldAdapter PINNED = new BooleanFieldAdapter(TaskContract.Tasks.PINNED);
 
-	/**
-	 * Adpater for the score (i.e. the relevance) of the task in a search.
-	 * */
-	public static final FloatFieldAdapter SCORE = new FloatFieldAdapter(TaskContract.Tasks.SCORE, 0f);
+    /**
+     * Adpater for the score (i.e. the relevance) of the task in a search.
+     */
+    public static final FloatFieldAdapter SCORE = new FloatFieldAdapter(TaskContract.Tasks.SCORE, 0f);
 
-	/**
-	 * Adatper that contains list name and account name.
-	 * */
-	public static final FormattedStringFieldAdapter LIST_AND_ACCOUNT_NAME = new FormattedStringFieldAdapter("%1$s (%2$s)", LIST_NAME, ACCOUNT_NAME);
+    /**
+     * Adatper that contains list name and account name.
+     */
+    public static final FormattedStringFieldAdapter LIST_AND_ACCOUNT_NAME = new FormattedStringFieldAdapter("%1$s (%2$s)", LIST_NAME, ACCOUNT_NAME);
 
 
-	/**
-	 * Private constructor to prevent instantiation.
-	 */
-	private TaskFieldAdapters()
-	{
-	}
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private TaskFieldAdapters()
+    {
+    }
 }

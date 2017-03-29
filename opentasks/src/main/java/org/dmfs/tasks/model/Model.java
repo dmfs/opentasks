@@ -17,13 +17,6 @@
 
 package org.dmfs.tasks.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.tasks.ManageListActivity;
-
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -33,234 +26,241 @@ import android.content.Intent;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.tasks.ManageListActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * An abstract model class.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class Model
 {
-	private final static String INTENT_CATEGORY_PREFIX = "org.dmfs.intent.category.";
-	private final static String EXTRA_COLOR_HINT = "org.dmfs.COLOR_HINT";
-	private final static String EXTRA_TITLE_HINT = "org.dmfs.TITLE_HINT";
+    private final static String INTENT_CATEGORY_PREFIX = "org.dmfs.intent.category.";
+    private final static String EXTRA_COLOR_HINT = "org.dmfs.COLOR_HINT";
+    private final static String EXTRA_TITLE_HINT = "org.dmfs.TITLE_HINT";
 
-	/**
-	 * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
-	 */
-	private final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
-	private final SparseArrayCompat<FieldDescriptor> mFieldIndex = new SparseArrayCompat<FieldDescriptor>(16);
+    /**
+     * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
+     */
+    private final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
+    private final SparseArrayCompat<FieldDescriptor> mFieldIndex = new SparseArrayCompat<FieldDescriptor>(16);
 
-	private final Context mContext;
-	private final String mAuthority;
+    private final Context mContext;
+    private final String mAuthority;
 
-	boolean mInflated = false;
+    boolean mInflated = false;
 
-	private boolean mAllowRecurrence = false;
-	private boolean mAllowExceptions = false;
-	private int mIconId = -1;
-	private int mLabelId = -1;
-	private String mAccountType;
+    private boolean mAllowRecurrence = false;
+    private boolean mAllowExceptions = false;
+    private int mIconId = -1;
+    private int mLabelId = -1;
+    private String mAccountType;
 
-	private Boolean mSupportsInsertListIntent;
-	private Boolean mSupportsEditListIntent;
-
-
-	protected Model(Context context, String accountType)
-	{
-		mContext = context;
-		mAccountType = accountType;
-		mAuthority = TaskContract.taskAuthority(context);
-	}
+    private Boolean mSupportsInsertListIntent;
+    private Boolean mSupportsEditListIntent;
 
 
-	public final Context getContext()
-	{
-		return mContext;
-	}
+    protected Model(Context context, String accountType)
+    {
+        mContext = context;
+        mAccountType = accountType;
+        mAuthority = TaskContract.taskAuthority(context);
+    }
 
 
-	public abstract void inflate() throws ModelInflaterException;
+    public final Context getContext()
+    {
+        return mContext;
+    }
 
 
-	/**
-	 * Adds another field (identified by its field descriptor) to this model.
-	 * 
-	 * @param descriptor
-	 *            The {@link FieldDescriptor} of the field to add.
-	 */
-	protected void addField(FieldDescriptor descriptor)
-	{
-		mFields.add(descriptor);
-		mFieldIndex.put(descriptor.getFieldId(), descriptor);
-	}
+    public abstract void inflate() throws ModelInflaterException;
 
 
-	public FieldDescriptor getField(int fieldId)
-	{
-		return mFieldIndex.get(fieldId, null);
-	}
+    /**
+     * Adds another field (identified by its field descriptor) to this model.
+     *
+     * @param descriptor
+     *         The {@link FieldDescriptor} of the field to add.
+     */
+    protected void addField(FieldDescriptor descriptor)
+    {
+        mFields.add(descriptor);
+        mFieldIndex.put(descriptor.getFieldId(), descriptor);
+    }
 
 
-	public List<FieldDescriptor> getFields()
-	{
-		try
-		{
-			inflate();
-		}
-		catch (ModelInflaterException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return new ArrayList<FieldDescriptor>(mFields);
-	}
+    public FieldDescriptor getField(int fieldId)
+    {
+        return mFieldIndex.get(fieldId, null);
+    }
 
 
-	public boolean getAllowRecurrence()
-	{
-		return mAllowRecurrence;
-	}
+    public List<FieldDescriptor> getFields()
+    {
+        try
+        {
+            inflate();
+        }
+        catch (ModelInflaterException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return new ArrayList<FieldDescriptor>(mFields);
+    }
 
 
-	void setAllowRecurrence(boolean allowRecurrence)
-	{
-		mAllowRecurrence = allowRecurrence;
-	}
+    public boolean getAllowRecurrence()
+    {
+        return mAllowRecurrence;
+    }
 
 
-	public boolean getAllowExceptions()
-	{
-		return mAllowExceptions;
-	}
+    void setAllowRecurrence(boolean allowRecurrence)
+    {
+        mAllowRecurrence = allowRecurrence;
+    }
 
 
-	void setAllowExceptions(boolean allowExceptions)
-	{
-		mAllowExceptions = allowExceptions;
-	}
+    public boolean getAllowExceptions()
+    {
+        return mAllowExceptions;
+    }
 
 
-	public int getIconId()
-	{
-		return mIconId;
-	}
+    void setAllowExceptions(boolean allowExceptions)
+    {
+        mAllowExceptions = allowExceptions;
+    }
 
 
-	void setIconId(int iconId)
-	{
-		mIconId = iconId;
-	}
+    public int getIconId()
+    {
+        return mIconId;
+    }
 
 
-	public int getLabelId()
-	{
-		return mLabelId;
-	}
+    void setIconId(int iconId)
+    {
+        mIconId = iconId;
+    }
 
 
-	void setLabelId(int titleId)
-	{
-		mLabelId = titleId;
-	}
+    public int getLabelId()
+    {
+        return mLabelId;
+    }
 
 
-	public String getAccountType()
-	{
-		return mAccountType;
-	}
+    void setLabelId(int titleId)
+    {
+        mLabelId = titleId;
+    }
 
 
-	public String getAccountLabel()
-	{
-		return "";
-	}
+    public String getAccountType()
+    {
+        return mAccountType;
+    }
 
 
-	public void startInsertIntent(Activity activity, Account account)
-	{
-		if (!hasInsertActivity())
-		{
-			throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support inserting lists.");
-		}
-
-		activity.startActivity(getListIntent(mContext, Intent.ACTION_INSERT, account));
-	}
+    public String getAccountLabel()
+    {
+        return "";
+    }
 
 
-	public void startEditIntent(Activity activity, Account account, long listId, String nameHint, Integer colorHint)
-	{
-		if (!hasEditActivity())
-		{
-			throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support editing lists.");
-		}
+    public void startInsertIntent(Activity activity, Account account)
+    {
+        if (!hasInsertActivity())
+        {
+            throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support inserting lists.");
+        }
 
-		Intent intent = getListIntent(mContext, Intent.ACTION_EDIT, account);
-		intent.setData(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), listId));
-		if (nameHint != null)
-		{
-			intent.putExtra(EXTRA_TITLE_HINT, nameHint);
-		}
-		if (colorHint != null)
-		{
-			intent.putExtra(EXTRA_COLOR_HINT, colorHint);
-		}
-		activity.startActivity(intent);
-	}
+        activity.startActivity(getListIntent(mContext, Intent.ACTION_INSERT, account));
+    }
 
 
-	public boolean hasEditActivity()
-	{
-		if (mSupportsEditListIntent == null)
-		{
-			ComponentName editComponent = getListIntent(mContext, Intent.ACTION_EDIT, null).setData(
-				ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), 0 /* for pure intent resolution it doesn't matter which id we append */))
-				.resolveActivity(mContext.getPackageManager());
-			mSupportsEditListIntent = editComponent != null;
-		}
+    public void startEditIntent(Activity activity, Account account, long listId, String nameHint, Integer colorHint)
+    {
+        if (!hasEditActivity())
+        {
+            throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support editing lists.");
+        }
 
-		return mSupportsEditListIntent;
-	}
-
-
-	public boolean hasInsertActivity()
-	{
-		if (mSupportsInsertListIntent == null)
-		{
-			ComponentName insertComponent = getListIntent(mContext, Intent.ACTION_INSERT, null).resolveActivity(mContext.getPackageManager());
-			mSupportsInsertListIntent = insertComponent != null;
-		}
-
-		return mSupportsInsertListIntent;
-	}
+        Intent intent = getListIntent(mContext, Intent.ACTION_EDIT, account);
+        intent.setData(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), listId));
+        if (nameHint != null)
+        {
+            intent.putExtra(EXTRA_TITLE_HINT, nameHint);
+        }
+        if (colorHint != null)
+        {
+            intent.putExtra(EXTRA_COLOR_HINT, colorHint);
+        }
+        activity.startActivity(intent);
+    }
 
 
-	private Intent getListIntent(Context context, String action, Account account)
-	{
-		// insert action
-		Intent insertIntent = new Intent();
-		insertIntent.setAction(action);
-		insertIntent.setData(TaskLists.getContentUri(mAuthority));
-		insertIntent.addCategory(INTENT_CATEGORY_PREFIX + mAccountType);
-		if (account != null)
-		{
-			insertIntent.putExtra(ManageListActivity.EXTRA_ACCOUNT, account);
-		}
-		return insertIntent;
-	}
+    public boolean hasEditActivity()
+    {
+        if (mSupportsEditListIntent == null)
+        {
+            ComponentName editComponent = getListIntent(mContext, Intent.ACTION_EDIT, null).setData(
+                    ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), 0 /* for pure intent resolution it doesn't matter which id we append */))
+                    .resolveActivity(mContext.getPackageManager());
+            mSupportsEditListIntent = editComponent != null;
+        }
+
+        return mSupportsEditListIntent;
+    }
 
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if (!(o instanceof Model))
-		{
-			return false;
-		}
-		Class<?> otherClass = o.getClass();
-		Class<?> myClass = getClass();
+    public boolean hasInsertActivity()
+    {
+        if (mSupportsInsertListIntent == null)
+        {
+            ComponentName insertComponent = getListIntent(mContext, Intent.ACTION_INSERT, null).resolveActivity(mContext.getPackageManager());
+            mSupportsInsertListIntent = insertComponent != null;
+        }
 
-		return myClass.equals(otherClass) && TextUtils.equals(mAccountType, ((Model) o).mAccountType);
-	}
+        return mSupportsInsertListIntent;
+    }
+
+
+    private Intent getListIntent(Context context, String action, Account account)
+    {
+        // insert action
+        Intent insertIntent = new Intent();
+        insertIntent.setAction(action);
+        insertIntent.setData(TaskLists.getContentUri(mAuthority));
+        insertIntent.addCategory(INTENT_CATEGORY_PREFIX + mAccountType);
+        if (account != null)
+        {
+            insertIntent.putExtra(ManageListActivity.EXTRA_ACCOUNT, account);
+        }
+        return insertIntent;
+    }
+
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof Model))
+        {
+            return false;
+        }
+        Class<?> otherClass = o.getClass();
+        Class<?> myClass = getClass();
+
+        return myClass.equals(otherClass) && TextUtils.equals(mAccountType, ((Model) o).mAccountType);
+    }
 
 }

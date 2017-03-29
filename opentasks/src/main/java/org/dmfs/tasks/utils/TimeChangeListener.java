@@ -19,26 +19,24 @@ package org.dmfs.tasks.utils;
 
 /**
  * A listener that is invoked whenever a time event occurs or an alarm has been triggered.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
- * 
  */
 public interface TimeChangeListener
 {
-	/**
-	 * Callback that is invoked when a time or time zone change has been detected.
-	 * 
-	 * @param timeChangeObserver
-	 *            The {@TimeChangeObserver} that has detected this update.
-	 */
-	public void onTimeUpdate(TimeChangeObserver timeChangeObserver);
+    /**
+     * Callback that is invoked when a time or time zone change has been detected.
+     *
+     * @param timeChangeObserver
+     *         The {@TimeChangeObserver} that has detected this update.
+     */
+    public void onTimeUpdate(TimeChangeObserver timeChangeObserver);
 
-
-	/**
-	 * Callback that is invoked when an alarm has been triggered.
-	 * 
-	 * @param timeChangeObserver
-	 *            The {@TimeChangeObserver} that has been triggered.
-	 */
-	public void onAlarm(TimeChangeObserver timeChangeObserver);
+    /**
+     * Callback that is invoked when an alarm has been triggered.
+     *
+     * @param timeChangeObserver
+     *         The {@TimeChangeObserver} that has been triggered.
+     */
+    public void onAlarm(TimeChangeObserver timeChangeObserver);
 }

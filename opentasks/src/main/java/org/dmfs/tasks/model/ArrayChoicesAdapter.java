@@ -17,68 +17,69 @@
 
 package org.dmfs.tasks.model;
 
-import java.util.ArrayList;
-
 import android.graphics.drawable.Drawable;
+
+import java.util.ArrayList;
 
 
 /**
  * Used for creating a generic array type adapter. Supports adding choices of types regular and hidden into the adapter.
- * 
+ *
  * @author Arjun Naik<arjun@arjunnaik.in>
  * @author Marten Gajda<marten@dmfs.org>
- * 
  */
 public class ArrayChoicesAdapter extends AbstractArrayChoicesAdapter
 {
 
-	public ArrayChoicesAdapter()
-	{
-		mChoices = new ArrayList<Object>();
-		mDrawables = new ArrayList<Drawable>();
-		mTitles = new ArrayList<String>();
-		mVisibleChoices = new ArrayList<Object>();
-	}
+    public ArrayChoicesAdapter()
+    {
+        mChoices = new ArrayList<Object>();
+        mDrawables = new ArrayList<Drawable>();
+        mTitles = new ArrayList<String>();
+        mVisibleChoices = new ArrayList<Object>();
+    }
 
 
-	/**
-	 * Adds a choice which is visible.
-	 * 
-	 * @param choice
-	 *            Choice to be adde3d
-	 * @param title
-	 *            Title of the choice
-	 * @param drawable
-	 *            {@link Drawable} used to display choice
-	 * @return itself as a reference so that it can used for chaining.
-	 */
-	public ArrayChoicesAdapter addChoice(Object choice, String title, Drawable drawable)
-	{
-		mVisibleChoices.add(choice);
-		mChoices.add(choice);
-		mTitles.add(title);
-		mDrawables.add(drawable);
-		return this;
-	}
+    /**
+     * Adds a choice which is visible.
+     *
+     * @param choice
+     *         Choice to be adde3d
+     * @param title
+     *         Title of the choice
+     * @param drawable
+     *         {@link Drawable} used to display choice
+     *
+     * @return itself as a reference so that it can used for chaining.
+     */
+    public ArrayChoicesAdapter addChoice(Object choice, String title, Drawable drawable)
+    {
+        mVisibleChoices.add(choice);
+        mChoices.add(choice);
+        mTitles.add(title);
+        mDrawables.add(drawable);
+        return this;
+    }
 
 
-	/**
-	 * Add a choice which is hidden.
-	 * 
-	 * @param choice
-	 *            Choice to be adde3d
-	 * @param title
-	 *            Title of the choice
-	 * @param drawable
-	 *            {@link Drawable} used to display choice
-	 * @return itself as a reference so that it can used for chaining.
-	 */
-	public ArrayChoicesAdapter addHiddenChoice(Object choice, String title, Drawable drawable)
-	{
-		mChoices.add(choice);
-		mTitles.add(title);
-		mDrawables.add(drawable);
-		return this;
-	}
+    /**
+     * Add a choice which is hidden.
+     *
+     * @param choice
+     *         Choice to be adde3d
+     * @param title
+     *         Title of the choice
+     * @param drawable
+     *         {@link Drawable} used to display choice
+     *
+     * @return itself as a reference so that it can used for chaining.
+     */
+    public ArrayChoicesAdapter addHiddenChoice(Object choice, String title, Drawable drawable)
+    {
+        mChoices.add(choice);
+        mTitles.add(title);
+        mDrawables.add(drawable);
+        return this;
+    }
 
 }
