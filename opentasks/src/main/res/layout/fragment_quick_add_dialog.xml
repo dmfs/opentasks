@@ -39,7 +39,7 @@
                 android:layout_margin="4dp"
                 android:hint="@string/task_title"
                 android:imeOptions="actionDone"
-                android:inputType="text"
+                android:inputType="textCapSentences"
                 android:minWidth="240dp" />
 
             <LinearLayout
