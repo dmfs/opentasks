@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.dmfs.tasks.widget.LocationFieldView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:clickable="true"
+        style="@style/task_widget">
+
+    <!-- TODO Touch feedback could be added later (android:background="?android:attr/selectableItemBackground" requires min API 11)-->
+
+    <TextView
+            android:id="@android:id/icon"
+            style="@style/details_label_icon"
+            android:textIsSelectable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <TextView
+            android:id="@+id/text"
+            style="@style/field_view_text_value"
+            android:textIsSelectable="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+</org.dmfs.tasks.widget.LocationFieldView>
