@@ -52,6 +52,8 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
+import static org.dmfs.tasks.model.TaskFieldAdapters.ALLDAY;
+
 
 /**
  * Widget to edit DateTime values.
@@ -254,7 +256,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	@Override
 	public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
 	{
-		if (mAdapter.isAllDay(mValues))
+		if (ALLDAY.get(mValues))
 		{
 			mDateTime.timezone = Time.TIMEZONE_UTC;
 			mDateTime.set(dayOfMonth, monthOfYear, year);
@@ -406,7 +408,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 			if (mTimePickerButton != null)
 			{
 				mTimePickerButton.setText("");
-				mTimePickerButton.setVisibility(mAdapter.isAllDay(mValues) ? View.GONE : View.VISIBLE);
+				mTimePickerButton.setVisibility(ALLDAY.get(mValues) ? View.GONE : View.VISIBLE);
 			}
 
 			if (mClearDateButton != null)

@@ -155,7 +155,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 
 				formattedTime = mDateFormatter.format(newValue, DateFormatContext.DETAILS_VIEW);
 
-				if (!taskTimeZone.equals(mDefaultTimeZone) && mAdapter.hasTimeZoneField() && mTimeZoneText != null)
+				if (!taskTimeZone.equals(mDefaultTimeZone) && !Time.TIMEZONE_UTC.equals(newValue.timezone) && mTimeZoneText != null)
 				{
 					/*
 					 * The date has a time zone that is different from the default time zone, so show the original time too.
