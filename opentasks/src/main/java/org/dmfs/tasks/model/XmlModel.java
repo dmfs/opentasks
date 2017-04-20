@@ -26,7 +26,7 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
-import org.dmfs.tasks.model.contraints.UpdateAllDay;
+import org.dmfs.tasks.model.constraints.UpdateAllDay;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.xmlobjects.ElementDescriptor;
 import org.dmfs.xmlobjects.QualifiedName;

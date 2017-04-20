@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
-import org.dmfs.tasks.model.contraints.AbstractConstraint;
+import org.dmfs.tasks.model.constraints.AbstractConstraint;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -58,7 +58,7 @@ public abstract class FieldAdapter<Type>
 	/**
 	 * Get the value from the given {@link Cursor}
 	 * 
-	 * @param values
+	 * @param cursor
 	 *            The {@link Cursor} that contain the value to return.
 	 * @return The value.
 	 */
@@ -139,16 +139,16 @@ public abstract class FieldAdapter<Type>
 	/**
 	 * Add a new constraint to this field adapter. Constraints are evaluated in the order they have been added.
 	 * 
-	 * @param contraint
+	 * @param constraint
 	 *            The new constraint.
 	 */
-	public final FieldAdapter<Type> addContraint(AbstractConstraint<Type> contraint)
+	public final FieldAdapter<Type> addContraint(AbstractConstraint<Type> constraint)
 	{
 		if (mConstraints == null)
 		{
 			mConstraints = new LinkedList<AbstractConstraint<Type>>();
 		}
-		mConstraints.add(contraint);
+		mConstraints.add(constraint);
 		return this;
 	}
 

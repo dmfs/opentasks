@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.model.contraints;
+package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -24,16 +24,24 @@ import android.text.format.Time;
 
 
 /**
- * Ensure a time is not before a specific reference time. The new value will be set to the reference time otherwise.
+ * Shift a reference time by the same amount that value has been shifted.
+ * 
+ * TODO: use Duration class to get the duration in days and shift without summer/winter time switches
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class NotBefore extends AbstractConstraint<Time>
+public class ShiftTime extends AbstractConstraint<Time>
 {
 	private final TimeFieldAdapter mTimeAdapter;
 
 
-	public NotBefore(TimeFieldAdapter adapter)
+	/**
+	 * Creates a new ShiftTime instance.
+	 * 
+	 * @param adapter
+	 *            A {@link TimeFieldAdapter} that knows how to load the value to shift.
+	 */
+	public ShiftTime(TimeFieldAdapter adapter)
 	{
 		mTimeAdapter = adapter;
 	}
@@ -42,13 +50,18 @@ public class NotBefore extends AbstractConstraint<Time>
 	@Override
 	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
 	{
-		Time notBeforeThisTime = mTimeAdapter.get(currentValues);
-		if (notBeforeThisTime != null && newValue != null)
+		Time timeToShift = mTimeAdapter.get(currentValues);
+		if (timeToShift != null && newValue != null && oldValue != null)
 		{
-			if (newValue.before(notBeforeThisTime))
+			boolean isAllDay = timeToShift.allDay;
+			timeToShift.set(timeToShift.toMillis(false) + (newValue.toMillis(false) - oldValue.toMillis(false)));
+
+			// ensure the event is still allday if is was allday before.
+			if (isAllDay)
 			{
-				newValue.set(notBeforeThisTime);
+				timeToShift.set(timeToShift.monthDay, timeToShift.month, timeToShift.year);
 			}
+			mTimeAdapter.set(currentValues, timeToShift);
 		}
 		return newValue;
 	}
