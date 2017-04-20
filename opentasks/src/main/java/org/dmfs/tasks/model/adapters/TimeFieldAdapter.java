@@ -105,31 +105,6 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 	}
 
 
-	/**
-	 * Method to check if allday flag in values is set. If a <code>null</code> allday field name has been passed to the constructor then return default
-	 * {@link TimeFieldAdapter#mAllDayDefault}
-	 * 
-	 * @param values
-	 *            The {@link ContentSet} to get the value of
-	 * @return <code>true</code> if allday flag is set, <code>false</code> otherwise
-	 */
-	public boolean isAllDay(ContentSet values)
-	{
-		// cache mAlldayField locally
-		String allDayField = mAllDayField;
-
-		if (allDayField == null)
-		{
-			return mAllDayDefault;
-		}
-
-		Integer allDayInt = values.getAsInteger(allDayField);
-
-		return (allDayInt != null && allDayInt != 0);
-
-	}
-
-
 	@Override
 	public Time get(Cursor cursor)
 	{
@@ -249,17 +224,6 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 			// write timestamp only, other fields may still use allday and timezone
 			values.put(mTimestampField, (Long) null);
 		}
-	}
-
-
-	/**
-	 * Return whether this adapter reads the time zone field.
-	 * 
-	 * @return <code>true</code> if this adapter evaluates any time zone field, <code>false</code> otherwise.
-	 */
-	public boolean hasTimeZoneField()
-	{
-		return mTzField != null;
 	}
 
 
