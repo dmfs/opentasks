@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.model.contraints;
+package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;

@@ -30,10 +30,10 @@ import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
-import org.dmfs.tasks.model.contraints.AdjustPercentComplete;
-import org.dmfs.tasks.model.contraints.ChecklistConstraint;
-import org.dmfs.tasks.model.contraints.NotBefore;
-import org.dmfs.tasks.model.contraints.ShiftIfAfter;
+import org.dmfs.tasks.model.constraints.AdjustPercentComplete;
+import org.dmfs.tasks.model.constraints.ChecklistConstraint;
+import org.dmfs.tasks.model.constraints.NotBefore;
+import org.dmfs.tasks.model.constraints.ShiftIfAfter;
 
 
 /**

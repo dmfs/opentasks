@@ -15,7 +15,7 @@
  * 
  */
 
-package org.dmfs.tasks.model.contraints;
+package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
@@ -24,16 +24,16 @@ import android.text.format.Time;
 
 
 /**
- * Ensure a time is not after a specific reference time. The new value will be set to the reference time otherwise.
+ * Ensure a time is not before a specific reference time. The new value will be set to the reference time otherwise.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class NotAfter extends AbstractConstraint<Time>
+public class NotBefore extends AbstractConstraint<Time>
 {
 	private final TimeFieldAdapter mTimeAdapter;
 
 
-	public NotAfter(TimeFieldAdapter adapter)
+	public NotBefore(TimeFieldAdapter adapter)
 	{
 		mTimeAdapter = adapter;
 	}
@@ -42,12 +42,12 @@ public class NotAfter extends AbstractConstraint<Time>
 	@Override
 	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
 	{
-		Time notAfterThisTime = mTimeAdapter.get(currentValues);
-		if (notAfterThisTime != null && newValue != null)
+		Time notBeforeThisTime = mTimeAdapter.get(currentValues);
+		if (notBeforeThisTime != null && newValue != null)
 		{
-			if (newValue.after(notAfterThisTime))
+			if (newValue.before(notBeforeThisTime))
 			{
-				newValue.set(notAfterThisTime);
+				newValue.set(notBeforeThisTime);
 			}
 		}
 		return newValue;
