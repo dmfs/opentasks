@@ -156,13 +156,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 		{
 			// make it an allday value
 			value.set(value.monthDay, value.month, value.year);
-		}
-		else
-		{
-			value.second = 0;
-			// round up to next quarter-hour
-			value.minute = ((value.minute + 14) / 15) * 15;
-			value.normalize(false);
+			value.timezone = Time.TIMEZONE_UTC; // all-day values are saved in UTC
 		}
 
 		return value;
