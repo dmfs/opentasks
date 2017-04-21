@@ -24,6 +24,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -37,8 +38,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.NestedScrollView;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.text.TextUtils;
@@ -50,7 +52,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
-
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -61,6 +62,7 @@ import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.TaskNotificationHandler;
+import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
@@ -73,7 +75,7 @@ import java.util.Set;
 /**
  * A fragment representing a single Task detail screen. This fragment is either contained in a {@link TaskListActivity} in two-pane mode (on tablets) or in a
  * {@link ViewTaskActivity} on handsets.
- * 
+ *
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Marten Gajda <marten@dmfs.org>
  */
@@ -166,7 +168,7 @@ public class ViewTaskFragment extends SupportFragment
 	{
 		/**
 		 * This is called to instruct the Activity to call the editor for a specific task.
-		 * 
+		 *
 		 * @param taskUri
 		 *            The {@link Uri} of the task to edit.
 		 * @param data
@@ -177,7 +179,7 @@ public class ViewTaskFragment extends SupportFragment
 
 		/**
 		 * This is called to inform the Activity that a task has been deleted.
-		 * 
+		 *
 		 * @param taskUri
 		 *            The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
 		 */
@@ -186,7 +188,7 @@ public class ViewTaskFragment extends SupportFragment
 
 		/**
 		 * Notifies the listener about the list color of the current task.
-		 * 
+		 *
 		 * @param color
 		 *            The color.
 		 */
@@ -221,6 +223,7 @@ public class ViewTaskFragment extends SupportFragment
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
+
 	}
 
 
@@ -356,7 +359,7 @@ public class ViewTaskFragment extends SupportFragment
 	 * At present only Task Uris are supported.
 	 * </p>
 	 * TODO: add support for instance Uris.
-	 * 
+	 *
 	 * @param uri
 	 *            The {@link Uri} of the task to show.
 	 */
@@ -594,9 +597,29 @@ public class ViewTaskFragment extends SupportFragment
 			persistTask();
 			return true;
 		}
+		else if (itemId == R.id.opentasks_share_task)
+		{
+			setShareMenuIntent();
+			return false;
+		}
 		else
 		{
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+
+	private void setShareMenuIntent()
+	{
+		if (mContentSet != null && mModel != null && mToolBar != null && mToolBar.getMenu() != null)
+		{
+			MenuItem shareItem = mToolBar.getMenu().findItem(R.id.opentasks_share_task);
+			if (shareItem != null)
+			{
+				ShareActionProvider actionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareItem);
+				Intent shareIntent = new ShareIntentFactory(mAppContext).createTaskTextShareIntent(mContentSet, mModel);
+				actionProvider.setShareIntent(shareIntent);
+			}
 		}
 	}
 
@@ -784,7 +807,7 @@ public class ViewTaskFragment extends SupportFragment
 
 	/**
 	 * Set the toolbar of this fragment (if any), as the ActionBar if the given Activity.
-	 * 
+	 *
 	 * @param activty
 	 *            an {@link AppCompatActivity}.
 	 */
@@ -805,7 +828,7 @@ public class ViewTaskFragment extends SupportFragment
 
 	/**
 	 * Shows or hides the floating action button.
-	 * 
+	 *
 	 * @param show
 	 *            <code>true</code> to show the FloatingActionButton, <code>false</code> to hide it.
 	 */
