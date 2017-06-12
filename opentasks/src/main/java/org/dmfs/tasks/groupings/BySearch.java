@@ -22,7 +22,6 @@ import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -56,11 +55,6 @@ import android.widget.Toast;
  */
 public class BySearch extends AbstractGroupingFactory
 {
-	/**
-	 * An adapter to load the due date from the tasks projection.
-	 */
-	public final static TimeFieldAdapter TASK_DUE_ADAPTER = new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
-
 	/**
 	 * A {@link ViewDescriptor} that knows how to present the tasks in the task list grouped by priority.
 	 */

@@ -18,7 +18,7 @@
 package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 import android.text.format.Time;
 
@@ -30,10 +30,10 @@ import android.text.format.Time;
  */
 public class NotAfter extends AbstractConstraint<Time>
 {
-	private final TimeFieldAdapter mTimeAdapter;
+	private final FieldAdapter<Time> mTimeAdapter;
 
 
-	public NotAfter(TimeFieldAdapter adapter)
+	public NotAfter(FieldAdapter<Time> adapter)
 	{
 		mTimeAdapter = adapter;
 	}

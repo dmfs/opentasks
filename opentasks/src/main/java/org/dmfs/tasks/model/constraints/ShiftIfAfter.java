@@ -18,7 +18,7 @@
 package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 import android.text.format.Time;
 
@@ -30,10 +30,10 @@ import android.text.format.Time;
  */
 public class ShiftIfAfter extends AbstractConstraint<Time>
 {
-	private final TimeFieldAdapter mTimeAdapter;
+	private final FieldAdapter<Time> mTimeAdapter;
 
 
-	public ShiftIfAfter(TimeFieldAdapter adapter)
+	public ShiftIfAfter(FieldAdapter<Time> adapter)
 	{
 		mTimeAdapter = adapter;
 	}

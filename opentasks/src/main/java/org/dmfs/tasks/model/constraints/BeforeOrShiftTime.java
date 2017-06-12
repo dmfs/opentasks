@@ -18,7 +18,7 @@ package org.dmfs.tasks.model.constraints;
 import android.text.format.Time;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.defaults.Default;
 import org.dmfs.tasks.model.defaults.DefaultAfter;
 
@@ -30,11 +30,11 @@ import org.dmfs.tasks.model.defaults.DefaultAfter;
  */
 public class BeforeOrShiftTime extends AbstractConstraint<Time>
 {
-	private final TimeFieldAdapter mReferenceAdapter;
+	private final FieldAdapter<Time> mReferenceAdapter;
 	private final Default<Time> mDefault;
 
 
-	public BeforeOrShiftTime(TimeFieldAdapter referenceAdapter)
+	public BeforeOrShiftTime(FieldAdapter<Time> referenceAdapter)
 	{
 		mReferenceAdapter = referenceAdapter;
 		mDefault = new DefaultAfter(null);

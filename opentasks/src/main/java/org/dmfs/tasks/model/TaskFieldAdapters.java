@@ -120,12 +120,12 @@ public final class TaskFieldAdapters
 	/**
 	 * Adapter for the due date of a task.
 	 */
-	public final static FieldAdapter<Time> DUE = new CustomizedDefaultFieldAdapter<Time>(_DUE.addContraint(new After(_DTSTART)), new DefaultAfter(_DTSTART));
+	public final static FieldAdapter<Time> DUE = new CustomizedDefaultFieldAdapter<Time>(_DUE, new DefaultAfter(_DTSTART)).addContraint(new After(_DTSTART));
 
 	/**
 	 * Adapter for the start date of a task.
 	 */
-	public final static FieldAdapter<Time> DTSTART = new CustomizedDefaultFieldAdapter<Time>(_DTSTART.addContraint(new BeforeOrShiftTime(_DUE)), new DefaultBefore(_DUE));
+	public final static FieldAdapter<Time> DTSTART = new CustomizedDefaultFieldAdapter<Time>(_DTSTART, new DefaultBefore(DUE)).addContraint(new BeforeOrShiftTime(DUE));
 
 	/**
 	 * Adapter for the completed date of a task.

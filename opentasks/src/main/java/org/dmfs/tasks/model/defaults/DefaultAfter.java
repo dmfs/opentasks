@@ -18,7 +18,7 @@ package org.dmfs.tasks.model.defaults;
 import android.text.format.Time;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 /**
  * Provides a value which defaults to NOW, but is always after a specific reference value.
@@ -27,10 +27,10 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 public class DefaultAfter implements Default<Time>
 {
 
-	private final TimeFieldAdapter mReferenceAdapter;
+	private final FieldAdapter<Time> mReferenceAdapter;
 
 
-	public DefaultAfter(TimeFieldAdapter referenceAdapter)
+	public DefaultAfter(FieldAdapter<Time> referenceAdapter)
 	{
 		mReferenceAdapter = referenceAdapter;
 	}

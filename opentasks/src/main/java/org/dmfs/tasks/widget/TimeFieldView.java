@@ -25,7 +25,6 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
@@ -57,7 +56,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 	/**
 	 * The {@link FieldAdapter} of the field for this view.
 	 */
-	private TimeFieldAdapter mAdapter;
+	private FieldAdapter<Time> mAdapter;
 
 	/**
 	 * The text view that shows the time in the local time zone.
@@ -133,7 +132,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
 	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
+		mAdapter = (FieldAdapter<Time>) descriptor.getFieldAdapter();
 		mText.setHint(descriptor.getHint());
 		findViewById(R.id.buttons).setVisibility(layoutOptions.getBoolean(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, false) ? VISIBLE : GONE);
 	}
