@@ -713,103 +713,86 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	/**
 	 * Persist the current task (if anything has been edited) and close the editor.
 	 */
-	public void saveAndExit()
-	{
-		// TODO: put that in a background task
-		Activity activity = getActivity();
+    public void saveAndExit()
+    {
+        // TODO: put that in a background task
+        Activity activity = getActivity();
 
-		int resultCode = Activity.RESULT_CANCELED;
-		Intent result = null;
-		int toastId = -1;
+        if (mEditor != null)
+        {
+            mEditor.updateValues();
+        }
 
-		if (mEditor != null)
-		{
-			mEditor.updateValues();
-		}
+        if (mValues.isInsert() || mValues.isUpdate())
+        {
+            if (TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)))
+            {
+                // there is no title, try to set one from the description or check list
 
-		if (mValues.isInsert() || mValues.isUpdate())
-		{
-			if (TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)))
-			{
-				// there is no title, try to set one from the description or check list
+                String description = TaskFieldAdapters.DESCRIPTION.get(mValues);
+                if (description != null)
+                {
+                    // remove spaces and empty lines
+                    description = description.trim();
+                }
 
-				String description = TaskFieldAdapters.DESCRIPTION.get(mValues);
-				if (description != null)
-				{
-					// remove spaces and empty lines
-					description = description.trim();
-				}
+                if (!TextUtils.isEmpty(description))
+                {
+                    // we have a description, use it to make up a title
+                    int eol = description.indexOf('\n');
+                    TaskFieldAdapters.TITLE.set(mValues, description.substring(0, eol > 0 ? eol : Math.min(description.length(), 100)));
+                }
+                else
+                {
+                    // no description, try to find a non-empty checklist item
+                    List<CheckListItem> checklist = TaskFieldAdapters.CHECKLIST.get(mValues);
+                    if (checklist != null && checklist.size() > 0)
+                    {
+                        for (CheckListItem item : checklist)
+                        {
+                            String trimmedItem = item.text.trim();
+                            if (!TextUtils.isEmpty(trimmedItem))
+                            {
+                                TaskFieldAdapters.TITLE.set(mValues, trimmedItem);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
 
-				if (!TextUtils.isEmpty(description))
-				{
-					// we have a description, use it to make up a title
-					int eol = description.indexOf('\n');
-					TaskFieldAdapters.TITLE.set(mValues, description.substring(0, eol > 0 ? eol : Math.min(description.length(), 100)));
-				}
-				else
-				{
-					// no description, try to find a non-empty checklist item
-					List<CheckListItem> checklist = TaskFieldAdapters.CHECKLIST.get(mValues);
-					if (checklist != null && checklist.size() > 0)
-					{
-						for (CheckListItem item : checklist)
-						{
-							String trimmedItem = item.text.trim();
-							if (!TextUtils.isEmpty(trimmedItem))
-							{
-								TaskFieldAdapters.TITLE.set(mValues, trimmedItem);
-								break;
-							}
-						}
-					}
-				}
-			}
+            if (!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || mValues.isUpdate())
+            {
 
-			if (!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || mValues.isUpdate())
-			{
-
-				if (mValues.updatesAnyKey(RECURRENCE_VALUES))
-				{
-					mValues.ensureUpdates(RECURRENCE_VALUES);
-				}
+                if (mValues.updatesAnyKey(RECURRENCE_VALUES))
+                {
+                    mValues.ensureUpdates(RECURRENCE_VALUES);
+                }
 
 				if(mValues.isInsert()) {
 					// update recently used lists
 					RecentlyUsedLists.use(getContext(), mValues.getAsLong(Tasks.LIST_ID));
 				}
 
-				mTaskUri = mValues.persist(activity);
+                mTaskUri = mValues.persist(activity);
 
-				// return proper result
-				result = new Intent();
-				result.setData(mTaskUri);
-				resultCode = Activity.RESULT_OK;
-				toastId = R.string.activity_edit_task_task_saved;
-			}
-			else
-			{
-				toastId = R.string.activity_edit_task_empty_task_not_saved;
-			}
-		}
-		else
-		{
-			Log.i(TAG, "nothing to save");
-		}
+                activity.setResult(Activity.RESULT_OK, new Intent().setData(mTaskUri));
+                Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
+                activity.finish();
+                activity.startActivity(new Intent("android.intent.action.VIEW", mTaskUri));
+            }
+            else
+            {
+                activity.setResult(Activity.RESULT_CANCELED);
+                Toast.makeText(activity, R.string.activity_edit_task_empty_task_not_saved, Toast.LENGTH_SHORT).show();
+                activity.finish();
+            }
+        }
+        else
+        {
+            Log.i(TAG, "nothing to save");
+        }
 
-		if (toastId != -1)
-		{
-			Toast.makeText(activity, toastId, Toast.LENGTH_SHORT).show();
-		}
+    }
 
-		if (result != null)
-		{
-			activity.setResult(resultCode, result);
-		}
-		else
-		{
-			activity.setResult(resultCode);
-		}
-
-		activity.finish();
-	}
 }
