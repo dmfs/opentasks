@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectCodeStyleSettingsManager">
+    <option name="PER_PROJECT_SETTINGS">
+      <value>
+        <option name="FIELD_NAME_PREFIX" value="m" />
+        <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+        <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+        <option name="PACKAGES_TO_USE_IMPORT_ON_DEMAND">
+          <value />
+        </option>
+        <option name="IMPORT_LAYOUT_TABLE">
+          <value>
+            <package name="android" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="com" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="junit" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="net" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="org" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="java" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="javax" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="" withSubpackages="true" static="false" />
+            <emptyLine />
+            <package name="" withSubpackages="true" static="true" />
+            <emptyLine />
+          </value>
+        </option>
+        <option name="RIGHT_MARGIN" value="160" />
+        <option name="JD_ALIGN_PARAM_COMMENTS" value="false" />
+        <option name="JD_ALIGN_EXCEPTION_COMMENTS" value="false" />
+        <option name="JD_ADD_BLANK_AFTER_PARM_COMMENTS" value="true" />
+        <option name="JD_ADD_BLANK_AFTER_RETURN" value="true" />
+        <option name="JD_PARAM_DESCRIPTION_ON_NEW_LINE" value="true" />
+        <option name="FORMATTER_TAGS_ENABLED" value="true" />
+        <option name="WRAP_COMMENTS" value="true" />
+        <AndroidXmlCodeStyleSettings>
+          <option name="USE_CUSTOM_SETTINGS" value="true" />
+          <option name="VALUE_RESOURCE_FILE_SETTINGS">
+            <value>
+              <option name="WRAP_ATTRIBUTES" value="2" />
+            </value>
+          </option>
+        </AndroidXmlCodeStyleSettings>
+        <JavaCodeStyleSettings>
+          <option name="CLASS_NAMES_IN_JAVADOC" value="3" />
+        </JavaCodeStyleSettings>
+        <Objective-C-extensions>
+          <file>
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Import" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Macro" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Typedef" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Enum" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Constant" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Global" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Struct" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="FunctionPredecl" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Function" />
+          </file>
+          <class>
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Property" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Synthesize" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="InitMethod" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="StaticMethod" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="InstanceMethod" />
+            <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="DeallocMethod" />
+          </class>
+          <extensions>
+            <pair source="cpp" header="h" />
+            <pair source="c" header="h" />
+          </extensions>
+        </Objective-C-extensions>
+        <XML>
+          <option name="XML_ATTRIBUTE_WRAP" value="2" />
+          <option name="XML_KEEP_LINE_BREAKS" value="false" />
+          <option name="XML_KEEP_LINE_BREAKS_IN_TEXT" value="true" />
+          <option name="XML_ALIGN_ATTRIBUTES" value="false" />
+          <option name="XML_KEEP_WHITE_SPACES_INSIDE_CDATA" value="true" />
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
+        </XML>
+        <codeStyleSettings language="JAVA">
+          <option name="KEEP_CONTROL_STATEMENT_IN_ONE_LINE" value="false" />
+          <option name="KEEP_BLANK_LINES_IN_DECLARATIONS" value="1" />
+          <option name="KEEP_BLANK_LINES_IN_CODE" value="1" />
+          <option name="KEEP_BLANK_LINES_BEFORE_RBRACE" value="1" />
+          <option name="BLANK_LINES_AFTER_IMPORTS" value="2" />
+          <option name="BLANK_LINES_AROUND_CLASS" value="2" />
+          <option name="BLANK_LINES_AROUND_METHOD" value="2" />
+          <option name="BRACE_STYLE" value="2" />
+          <option name="CLASS_BRACE_STYLE" value="2" />
+          <option name="METHOD_BRACE_STYLE" value="2" />
+          <option name="ELSE_ON_NEW_LINE" value="true" />
+          <option name="CATCH_ON_NEW_LINE" value="true" />
+          <option name="FINALLY_ON_NEW_LINE" value="true" />
+          <option name="SPACE_WITHIN_ARRAY_INITIALIZER_BRACES" value="true" />
+          <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
+          <option name="CALL_PARAMETERS_WRAP" value="1" />
+          <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
+          <option name="ARRAY_INITIALIZER_WRAP" value="1" />
+          <option name="ARRAY_INITIALIZER_LBRACE_ON_NEXT_LINE" value="true" />
+          <option name="IF_BRACE_FORCE" value="3" />
+          <option name="DOWHILE_BRACE_FORCE" value="3" />
+          <option name="WHILE_BRACE_FORCE" value="3" />
+          <option name="FOR_BRACE_FORCE" value="3" />
+          <option name="ENUM_CONSTANTS_WRAP" value="5" />
+        </codeStyleSettings>
+      </value>
+    </option>
+    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+  </component>
+</project>
