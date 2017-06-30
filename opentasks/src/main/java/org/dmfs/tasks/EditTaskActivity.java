@@ -45,7 +45,7 @@ public class EditTaskActivity extends ActionBarActivity
 {
 	private static final String ACTION_NOTE_TO_SELF = "com.google.android.gm.action.AUTO_SEND";
 
-	final static String EXTRA_DATA_BUNDLE = "org.dmfs.extra.BUNDLE";
+	public final static String EXTRA_DATA_BUNDLE = "org.dmfs.extra.BUNDLE";
 
 	public final static String EXTRA_DATA_CONTENT_SET = "org.dmfs.DATA";
 

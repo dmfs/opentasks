@@ -21,7 +21,7 @@ public class RecentlyUsedLists {
      */
     public static List<Long> getList(Context context) {
         String strLists = PreferenceManager.getDefaultSharedPreferences(context).getString(PREFERENCE_KEY, "");
-        Log.d(RecentlyUsedLists.class.getSimpleName(), "getList:  "+strLists);
+        Log.v(RecentlyUsedLists.class.getSimpleName(), "getList:  "+strLists);
         List<Long> lists = new ArrayList<>();
         if(strLists.length()>0) {
             for (String lid : strLists.split(",")) {
@@ -38,7 +38,7 @@ public class RecentlyUsedLists {
      */
     private static void setList(Context context, List<Long> lists) {
         String strLists = TextUtils.join(",", lists);
-        Log.d(RecentlyUsedLists.class.getSimpleName(), "setList:  "+strLists);
+        Log.v(RecentlyUsedLists.class.getSimpleName(), "setList:  "+strLists);
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREFERENCE_KEY, strLists).commit();
     }
 

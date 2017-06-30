@@ -30,6 +30,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -112,9 +113,12 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 					// if there are multiple lists, then select the most recently used
 					preselectList = RecentlyUsedLists.getRecentFromList(context, writableLists);
 				}
+				Log.d(getClass().getSimpleName(), "create task with preselected list "+preselectList);
 				ContentSet contentSet = new ContentSet(Tasks.getContentUri(authority));
 				contentSet.put(Tasks.LIST_ID, preselectList);
-				editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_CONTENT_SET, contentSet);
+				Bundle extraBundle = new Bundle();
+				extraBundle.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, contentSet);
+				editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, extraBundle);
 			}
 			context.startActivity(editTaskIntent);
 		}
