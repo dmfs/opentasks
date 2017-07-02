@@ -3,10 +3,6 @@
 
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
-    <string name="permission_read_tasks">читање задатака</string>
-    <string name="permission_description_read_tasks">Дозвољава апликацији да чита задатке са ваше листе задатака.</string>
-    <string name="permission_write_tasks">упис задатака</string>
-    <string name="permission_description_write_tasks">Дозвољава апликацији да уноси задатке у вашу листу задатака.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Додај задатак</string>
@@ -68,7 +64,6 @@
     <string name="task_url">УРЛ</string>
     <string name="title_task_detail">Детаљи задатка</string>
     <string name="title_task_list">Задаци</string>
-    <string name="provider_label">Задаци</string>
     <string name="task_detail_activity">Детаљи задатка</string>
     <string name="task_priority">Приоритет</string>
     <string name="task_timezone">Временска зона</string>

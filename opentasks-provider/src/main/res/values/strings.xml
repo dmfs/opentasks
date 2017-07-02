@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The name of the provider -->
+    <string name="opentasks_provider_label">Tasks</string>
+
+    <!-- Permissions -->
+
+    <string name="opentasks_permission_read_tasks">read tasks</string>
+    <string name="opentasks_permission_description_read_tasks">Read tasks and task lists.</string>
+    <string name="opentasks_permission_write_tasks">write tasks</string>
+    <string name="opentasks_permission_description_write_tasks">Create, modify and delete tasks and task lists.</string>
+
+</resources>

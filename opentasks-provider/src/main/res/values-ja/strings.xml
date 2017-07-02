@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The name of the provider -->
+    <string name="opentasks_provider_label">タスク</string>
+
+    <!-- Permissions -->
+
+    <string name="opentasks_permission_read_tasks">タスクを読む</string>
+    <string name="opentasks_permission_description_read_tasks">タスクとタスクリストを読み込みます。</string>
+    <string name="opentasks_permission_write_tasks">タスクを書く</string>
+    <string name="opentasks_permission_description_write_tasks">タスクとタスクリストを作成、変更、削除します。</string>
+
+</resources>

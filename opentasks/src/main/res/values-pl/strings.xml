@@ -3,10 +3,6 @@
 
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
-    <string name="permission_read_tasks">Czytaj zadania</string>
-    <string name="permission_description_read_tasks">Pozwala aplikacji na czytanie zadań z Twojej listy zadań.</string>
-    <string name="permission_write_tasks">Zapisuj zadania</string>
-    <string name="permission_description_write_tasks">Pozwala aplikacji na zapisywanie zadań na Twojej liście zadań.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Dodaj zadanie</string>
@@ -69,7 +65,6 @@
     <string name="task_url">URL</string>
     <string name="title_task_detail">Szczegóły zadania</string>
     <string name="title_task_list">Zadania</string>
-    <string name="provider_label">Zadania</string>
     <string name="task_detail_activity">Szczegóły zadania</string>
     <string name="task_priority">Priorytet</string>
     <string name="task_timezone">Strefa czasowa</string>

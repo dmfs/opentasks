@@ -3,10 +3,6 @@
 
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
-    <string name="permission_read_tasks">ler tarefas</string>
-    <string name="permission_description_read_tasks">Ler tarefas e listas de tarefas.</string>
-    <string name="permission_write_tasks">escrever tarefas</string>
-    <string name="permission_description_write_tasks">Criar, modificar e eliminar tarefas e listas de tarefas.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Adicionar tarefa</string>
@@ -77,7 +73,6 @@
     <string name="task_url">URL</string>
     <string name="title_task_detail">Detalhes da tarefa</string>
     <string name="title_task_list">Tarefas</string>
-    <string name="provider_label">Tarefas</string>
     <string name="task_detail_activity">Detalhes da tarefa</string>
     <string name="task_priority">Prioridade</string>
     <string name="task_timezone">Fuso horário</string>

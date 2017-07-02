@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- The name of the task authority. -->
-    <string name="opentasks_authority">org.dmfs.tasks</string>
-
     <!-- Enables or disables the support for local lists. In particular this will disable the creation of an initial list when the app is launched the first time. -->
     <bool name="opentasks_support_local_lists">true</bool>
 

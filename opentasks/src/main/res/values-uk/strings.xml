@@ -3,10 +3,6 @@
 
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
-    <string name="permission_read_tasks">читання завдань</string>
-    <string name="permission_description_read_tasks">Дозволити додатку читати ваші завдання з ваших переліків завдань.</string>
-    <string name="permission_write_tasks">запис завдань</string>
-    <string name="permission_description_write_tasks">Дозволити додатку зберігати завдання до ваших переліків завдань.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Додати завдання</string>
@@ -70,7 +66,6 @@
     <string name="task_url">URL</string>
     <string name="title_task_detail">Подробиці завдання</string>
     <string name="title_task_list">Завдання</string>
-    <string name="provider_label">Завдання</string>
     <string name="task_detail_activity">Подробиці завдання</string>
     <string name="task_priority">Пріоритет</string>
     <string name="task_timezone">Часовий пояс</string>

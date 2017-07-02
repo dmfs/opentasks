@@ -3,10 +3,6 @@
 
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
-    <string name="permission_read_tasks">Aufgaben lesen</string>
-    <string name="permission_description_read_tasks">Aufgaben lesen.</string>
-    <string name="permission_write_tasks">Aufgaben schreiben</string>
-    <string name="permission_description_write_tasks">Aufgaben und Aufgabenlisten erstellen, bearbeiten und löschen.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Neue Aufgabe</string>
@@ -74,7 +70,6 @@
     <string name="task_url">URL</string>
     <string name="title_task_detail">Aufgaben Details</string>
     <string name="title_task_list">Aufgaben</string>
-    <string name="provider_label">Aufgaben</string>
     <string name="task_detail_activity">Aufgaben Details</string>
     <string name="task_priority">Priorität</string>
     <string name="task_timezone">Zeitzone</string>
