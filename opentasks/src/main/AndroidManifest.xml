@@ -71,7 +71,7 @@
             </intent-filter>
         </activity>
 
-        <!-- EditTaskActivity listens for EDIT, INSERT and INDERT_OR_EDIT intents -->
+        <!-- EditTaskActivity listens for EDIT, INSERT and INSERT_OR_EDIT intents -->
         <activity
             android:name="org.dmfs.tasks.EditTaskActivity"
             android:label="@string/activity_add_task_title"
