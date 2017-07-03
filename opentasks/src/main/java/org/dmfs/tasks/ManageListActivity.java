@@ -44,9 +44,9 @@ import android.widget.Toast;
 
 /**
  * Activity to create and edit local task lists. This activity provides an interface to edit the name and the color of a local list.
- * 
+ *
  * @author Tristan Heinig <tristan@dmfs.org>
- * 
+ *
  */
 public class ManageListActivity extends ActionBarActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener
 {
@@ -119,7 +119,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
 
     /**
      * Initializes the user interface for editing tasks.
-     * 
+     *
      * @param savedInstanceState
      *            saved activity state from {@link #onCreate(Bundle)}
      */
@@ -159,7 +159,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
 
     /**
      * Initializes the user interface for creating tasks.
-     * 
+     *
      * @param savedInstanceState
      *            saved activity state from {@link #onCreate(Bundle)}
      */
@@ -179,7 +179,7 @@ public class ManageListActivity extends ActionBarActivity implements OnClickList
         if (mListColor == NO_COLOR)
         {
             RandomPalette palette = new RandomPalette("generate list color", "random colors", 1);
-            mListColor = palette.getColor(0);
+            mListColor = palette.colorAt(0);
         }
         mNameView.setText(mListName);
         mColorView.setBackgroundColor(mListColor);

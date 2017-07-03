@@ -41,6 +41,6 @@ dependencies {
     }
     compile project(':opentasks-provider')
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    compile 'com.github.dmfs:color-picker:c3b3b52033dc0b33bd831e731ec6f74fb1e8a69a'
+    compile 'com.github.dmfs:color-picker:1.0'
     testCompile 'junit:junit:4.12'
 }
