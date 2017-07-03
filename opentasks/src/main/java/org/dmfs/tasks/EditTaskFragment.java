@@ -53,6 +53,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -477,7 +478,13 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
 	{
-		mTaskListAdapter.changeCursor(cursor);
+		if (cursor == null || cursor.getCount() == 0)
+		{
+			showNoListMessageAndFinish();
+			return;
+		}
+
+        mTaskListAdapter.changeCursor(cursor);
 		if (cursor != null)
 		{
 			if (mAppForEdit)
@@ -500,6 +507,16 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 					cursor.moveToNext();
 				}
 			}
+		}
+	}
+
+	private void showNoListMessageAndFinish()
+	{
+		Toast.makeText(getContext(), R.string.task_list_selection_empty, Toast.LENGTH_LONG).show();
+		FragmentActivity activity = getActivity();
+		if (activity != null)
+		{
+			activity.finish();
 		}
 	}
 
