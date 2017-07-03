@@ -50,7 +50,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
-
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
@@ -80,11 +79,11 @@ import java.io.IOException;
  * The activity makes heavy use of fragments. The list of items is a {@link TaskListFragment} and the item details (if present) is a {@link ViewTaskFragment}.
  * <p>
  * This activity also implements the required {@link TaskListFragment.Callbacks} interface to listen for item selections.
- * 
+ *
  * <p>
  * TODO: move the code to persist the expanded groups into a the GroupingDescriptor class
  * </p>
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class TaskListActivity extends AppCompatActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
@@ -116,7 +115,6 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet device.
 	 */
 	private boolean mTwoPane;
-	private ViewTaskFragment mTaskDetailFrag;
 	private ViewPager mViewPager;
 	private TaskGroupPagerAdapter mPagerAdapter;
 
@@ -221,11 +219,7 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 
 			// mTaskListFrag.setActivateOnItemClick(true);
 
-			/*
-			 * Create a detail fragment, but don't load any URL yet, we do that later when the fragment gets attached
-			 */
-			mTaskDetailFrag = ViewTaskFragment.newInstance(mSelectedTaskUri);
-			getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, mTaskDetailFrag, DETAIL_FRAGMENT_TAG).commit();
+			loadTaskDetailFragment(mSelectedTaskUri);
 		}
 		else
 		{
@@ -410,12 +404,8 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 				{
 					mSelectedTaskUri = null;
 					mShouldSwitchToDetail = false;
-					mTaskDetailFrag.loadUri(uri);
 				}
-				else
-				{
-					mTaskDetailFrag.loadUri(uri);
-				}
+				loadTaskDetailFragment(uri);
 			}
 			else if (forceReload)
 			{
@@ -431,6 +421,37 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 			}
 		}
 	}
+
+
+	private void loadTaskDetailFragment(Uri uri)
+	{
+		Fragment detailFragment = getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+
+		if (uri == null)
+		{
+			if (!(detailFragment instanceof EmptyTaskFragment))
+			{
+				replaceDetailFragment(new EmptyTaskFragment());
+			}
+		}
+		else
+		{
+			if (detailFragment instanceof ViewTaskFragment)
+			{
+				((ViewTaskFragment) detailFragment).loadUri(uri);
+			}
+			else
+			{
+				replaceDetailFragment(ViewTaskFragment.newInstance(uri));
+			}
+		}
+	}
+
+
+    private void replaceDetailFragment(Fragment fragment)
+    {
+        getSupportFragmentManager().beginTransaction().replace(R.id.task_detail_container, fragment, DETAIL_FRAGMENT_TAG).commit();
+    }
 
 
 	private void updateTitle(int pageId)
@@ -516,17 +537,15 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent intent)
 	{
-		if (resultCode == RESULT_OK)
+		if (resultCode == RESULT_OK && intent != null && intent.getData() != null)
 		{
-			if (intent != null)
-			{
-				Uri taskUri = intent.getData();
-				if (taskUri != null)
-				{
-					// select the new task
-					onItemSelected(taskUri, false, -1);
-				}
-			}
+			// Use the same flow to display the new task as if it was opened from the widget
+			Intent displayIntent = new Intent(this, TaskListActivity.class);
+			displayIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
+			displayIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
+			Uri newTaskUri = intent.getData();
+			displayIntent.setData(newTaskUri);
+			onNewIntent(displayIntent);
 		}
 	}
 
@@ -539,7 +558,7 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
 		// empty the detail fragment
 		if (mTwoPane)
 		{
-			mTaskDetailFrag.loadUri(null);
+			loadTaskDetailFragment(null);
 		}
 	}
 

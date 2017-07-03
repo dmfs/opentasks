@@ -1,0 +1,18 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+            style="@style/opentasks_details_appbar"
+            android:layout_height="?attr/actionBarSize"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textColor="@color/light_gray"
+            android:text="@string/opentasks_details_no_task_selected"/>
+
+</android.support.design.widget.CoordinatorLayout>
