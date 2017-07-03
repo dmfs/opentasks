@@ -161,7 +161,7 @@
     <string name="button_add_one_hour">+1 uur</string>
     <string name="button_add_one_day">+1 dag</string>
 
-    <!-- Sharing intent -->
+    <!-- Incoming share -->
     <string name="share_as_task">Voeg taak toe</string>
 
 </resources>
