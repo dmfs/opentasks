@@ -18,7 +18,7 @@
 package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 import android.text.format.Time;
 
@@ -32,16 +32,16 @@ import android.text.format.Time;
  */
 public class ShiftTime extends AbstractConstraint<Time>
 {
-	private final TimeFieldAdapter mTimeAdapter;
+	private final FieldAdapter<Time> mTimeAdapter;
 
 
 	/**
 	 * Creates a new ShiftTime instance.
 	 * 
 	 * @param adapter
-	 *            A {@link TimeFieldAdapter} that knows how to load the value to shift.
+	 *            A {@link FieldAdapter<Time>} that knows how to load the value to shift.
 	 */
-	public ShiftTime(TimeFieldAdapter adapter)
+	public ShiftTime(FieldAdapter<Time> adapter)
 	{
 		mTimeAdapter = adapter;
 	}

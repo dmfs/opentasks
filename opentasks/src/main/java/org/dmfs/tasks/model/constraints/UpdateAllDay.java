@@ -18,23 +18,23 @@
 package org.dmfs.tasks.model.constraints;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 
 import android.text.format.Time;
 
 
 /**
- * Updates the value returned by a {@link TimeFieldAdapter} when the all-day flag changes. We need this if a task model doesn't support start or due dates. The
+ * Updates the value returned by a {@link FieldAdapter} of type Time when the all-day flag changes. We need this if a task model doesn't support start or due dates. The
  * sync adapter might still store those values, so we need to update them when the all-day flag changes.
  * 
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class UpdateAllDay extends AbstractConstraint<Boolean>
 {
-	private final TimeFieldAdapter mTimeAdapter;
+	private final FieldAdapter<Time> mTimeAdapter;
 
 
-	public UpdateAllDay(TimeFieldAdapter adapter)
+	public UpdateAllDay(FieldAdapter<Time> adapter)
 	{
 		mTimeAdapter = adapter;
 	}

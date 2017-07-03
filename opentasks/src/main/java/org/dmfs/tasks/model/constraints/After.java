@@ -1,6 +1,4 @@
 /*
- * Copyright (C) 2013 Marten Gajda <marten@dmfs.org>
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,38 +15,37 @@
 
 package org.dmfs.tasks.model.constraints;
 
+import android.text.format.Time;
+
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
-
-import android.text.format.Time;
+import org.dmfs.tasks.model.defaults.Default;
+import org.dmfs.tasks.model.defaults.DefaultAfter;
 
 
 /**
- * Ensure a time is not after a specific reference time. If that would be the case, the reference time is updated. 
- * 
- * @author Marten Gajda <marten@dmfs.org>
+ * Ensure a time is after a specific reference time. The new value will be set using {@link DefaultAfter} otherwise.
  */
-public class ShiftIfAfter extends AbstractConstraint<Time>
+public class After extends AbstractConstraint<Time>
 {
-	private final FieldAdapter<Time> mTimeAdapter;
+	private final FieldAdapter<Time> mReferenceAdapter;
+	private final Default<Time> mDefault;
 
 
-	public ShiftIfAfter(FieldAdapter<Time> adapter)
+	public After(FieldAdapter<Time> referenceAdapter)
 	{
-		mTimeAdapter = adapter;
+		mReferenceAdapter = referenceAdapter;
+		mDefault = new DefaultAfter(referenceAdapter);
 	}
 
 
 	@Override
 	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
 	{
-		Time notAfterThisTime = mTimeAdapter.get(currentValues);
-		if (notAfterThisTime != null && newValue != null)
+		Time reference = mReferenceAdapter.get(currentValues);
+		if (reference != null && newValue != null && !newValue.after(reference))
 		{
-			if (newValue.after(notAfterThisTime))
-			{
-				mTimeAdapter.set(currentValues, newValue);
-			}
+			newValue.set(mDefault.getCustomDefault(currentValues, reference));
 		}
 		return newValue;
 	}

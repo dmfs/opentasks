@@ -17,12 +17,16 @@
 
 package org.dmfs.tasks.model;
 
+import android.text.format.Time;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
 import org.dmfs.tasks.model.adapters.ColorFieldAdapter;
+import org.dmfs.tasks.model.adapters.CustomizedDefaultFieldAdapter;
 import org.dmfs.tasks.model.adapters.DescriptionStringFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
 import org.dmfs.tasks.model.adapters.FormattedStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
@@ -31,9 +35,11 @@ import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
 import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
 import org.dmfs.tasks.model.constraints.AdjustPercentComplete;
+import org.dmfs.tasks.model.constraints.After;
+import org.dmfs.tasks.model.constraints.BeforeOrShiftTime;
 import org.dmfs.tasks.model.constraints.ChecklistConstraint;
-import org.dmfs.tasks.model.constraints.NotBefore;
-import org.dmfs.tasks.model.constraints.ShiftIfAfter;
+import org.dmfs.tasks.model.defaults.DefaultAfter;
+import org.dmfs.tasks.model.defaults.DefaultBefore;
 
 
 /**
@@ -109,17 +115,17 @@ public final class TaskFieldAdapters
 	 * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.
 	 */
 	private final static TimeFieldAdapter _DTSTART = new TimeFieldAdapter(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
+	private final static TimeFieldAdapter _DUE = new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
 
 	/**
 	 * Adapter for the due date of a task.
 	 */
-	public final static TimeFieldAdapter DUE = (TimeFieldAdapter) new TimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY).addContraint(new NotBefore(
-		_DTSTART));
+	public final static FieldAdapter<Time> DUE = new CustomizedDefaultFieldAdapter<Time>(_DUE, new DefaultAfter(_DTSTART)).addContraint(new After(_DTSTART));
 
 	/**
 	 * Adapter for the start date of a task.
 	 */
-	public final static TimeFieldAdapter DTSTART = (TimeFieldAdapter) _DTSTART.addContraint(new ShiftIfAfter(DUE));
+	public final static FieldAdapter<Time> DTSTART = new CustomizedDefaultFieldAdapter<Time>(_DTSTART, new DefaultBefore(DUE)).addContraint(new BeforeOrShiftTime(DUE));
 
 	/**
 	 * Adapter for the completed date of a task.

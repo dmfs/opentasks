@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 
 import android.annotation.TargetApi;
@@ -66,7 +66,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	/**
 	 * The adapter to load the values from a {@link ContentSet}.
 	 */
-	private TimeFieldAdapter mAdapter;
+	private FieldAdapter<Time> mAdapter;
 
 	/**
 	 * The buttons to show the current date and time and to launch the date & time pickers.
@@ -159,7 +159,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 	{
 		super.setFieldDescription(descriptor, layoutOptions);
 		Context context = getContext();
-		mAdapter = (TimeFieldAdapter) descriptor.getFieldAdapter();
+		mAdapter = (FieldAdapter<Time>) descriptor.getFieldAdapter();
 		mDefaultDateFormat = android.text.format.DateFormat.getDateFormat(context);
 		mDefaultTimeFormat = android.text.format.DateFormat.getTimeFormat(context);
 		mIs24hour = android.text.format.DateFormat.is24HourFormat(context);
