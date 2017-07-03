@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The name of the provider -->
+    <string name="opentasks_provider_label">Taken</string>
+
+    <!-- Permissions -->
+
+    <string name="opentasks_permission_read_tasks">lees taken</string>
+    <string name="opentasks_permission_description_read_tasks">Staat toe een app om taken in je takenlijst te lezen.</string>
+    <string name="opentasks_permission_write_tasks">schrijf taken</string>
+    <string name="opentasks_permission_description_write_tasks">Staat toe een app om taken in je takenlijst aan te maken.</string>
+
+</resources>

@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    compileSdkVersion COMPILE_SDK_VERSION.toInteger()
+    buildToolsVersion BUILD_TOOLS_VERSION
     defaultConfig {
         applicationId "org.dmfs.tasks"
-        minSdkVersion 8
-        targetSdkVersion 22
+        minSdkVersion MIN_SDK_VERSION.toInteger()
+        targetSdkVersion TARGET_SDK_VERSION.toInteger()
         versionCode 103
         versionName '1.1.8.3-pre1'
     }
@@ -33,13 +33,13 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:' + SUPPORT_LIBRARY_VERSION
+    compile 'com.android.support:design:' + SUPPORT_LIBRARY_VERSION
     compile('org.dmfs:android-xml-magic:0.1.1') {
         // xmlpull is part of the runtime, so don't pull it in here
         exclude group: 'xmlpull', module: 'xmlpull'
     }
-    compile('org.dmfs:opentasks-provider:1.1.8.1')
+    compile project(':opentasks-provider')
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.github.dmfs:color-picker:c3b3b52033dc0b33bd831e731ec6f74fb1e8a69a'
 }

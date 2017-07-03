@@ -3,10 +3,6 @@
 
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
-    <string name="permission_read_tasks">lettura attività</string>
-    <string name="permission_description_read_tasks">Permette ad un\'app di leggere le attività del tuo elenco attività.</string>
-    <string name="permission_write_tasks">scrittura attività</string>
-    <string name="permission_description_write_tasks">Permette ad un\'app di modificare le attività del tuo elenco attività.</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Aggiungi attività</string>
@@ -54,7 +50,6 @@
     <string name="task_url">Collegamento</string>
     <string name="title_task_detail">Dettagli Attività</string>
     <string name="title_task_list">Attività</string>
-    <string name="provider_label">Attività</string>
     <string name="task_detail_activity">Dettagli Attività</string>
     <string name="task_priority">Priorità</string>
     <string name="task_timezone">Fuso orario</string>

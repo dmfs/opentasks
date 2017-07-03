@@ -1,28 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     package="org.dmfs.tasks"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionCode="102"
-    android:versionName="1.1.8-pre8">
-
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="23"/>
-
-    <permission
-        android:name="org.dmfs.permission.READ_TASKS"
-        android:description="@string/permission_description_read_tasks"
-        android:label="@string/permission_read_tasks"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
-        android:protectionLevel="dangerous">
-    </permission>
-    <permission
-        android:name="org.dmfs.permission.WRITE_TASKS"
-        android:description="@string/permission_description_write_tasks"
-        android:label="@string/permission_write_tasks"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
-        android:protectionLevel="dangerous">
-    </permission>
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS"/>
     <uses-permission android:name="org.dmfs.permission.WRITE_TASKS"/>
@@ -136,14 +115,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name="org.dmfs.provider.tasks.TaskProvider"
-            android:authorities="@string/opentasks_authority"
-            android:exported="true"
-            android:label="@string/provider_label"
-            android:multiprocess="false"
-            android:readPermission="org.dmfs.permission.READ_TASKS"
-            android:writePermission="org.dmfs.permission.WRITE_TASKS"/>
 
         <activity
             android:name="org.dmfs.tasks.SyncSettingsActivity"
@@ -154,17 +125,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.dmfs.tasks.TaskListActivity"/>
         </activity>
-        <receiver
-            android:name="org.dmfs.provider.tasks.TaskProviderBroadcastReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="android.intent.action.TIME_SET"/>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
-                <action android:name="android.intent.action.DATE_CHANGED"/>
-            </intent-filter>
-        </receiver>
 
         <!-- homescreen widgets -->
         <activity

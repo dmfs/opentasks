@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The name of the provider -->
+    <string name="opentasks_provider_label">Feladatok</string>
+
+    <!-- Permissions -->
+
+    <string name="opentasks_permission_read_tasks">feladatok olvasása</string>
+    <string name="opentasks_permission_description_read_tasks">Feladatok és feladatlisták olvasása.</string>
+    <string name="opentasks_permission_write_tasks">feladatok írása</string>
+    <string name="opentasks_permission_description_write_tasks">Feladatok és feladatlisták létrehozása, módosítása és törlése.</string>
+
+</resources>

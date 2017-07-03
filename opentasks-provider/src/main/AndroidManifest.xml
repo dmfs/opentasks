@@ -1,0 +1,41 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.dmfs.tasks.provider">
+
+    <permission
+            android:name="org.dmfs.permission.READ_TASKS"
+            android:description="@string/opentasks_permission_description_read_tasks"
+            android:label="@string/opentasks_permission_read_tasks"
+            android:permissionGroup="android.permission-group.PERSONAL_INFO"
+            android:protectionLevel="dangerous"/>
+    <permission
+            android:name="org.dmfs.permission.WRITE_TASKS"
+            android:description="@string/opentasks_permission_description_write_tasks"
+            android:label="@string/opentasks_permission_write_tasks"
+            android:permissionGroup="android.permission-group.PERSONAL_INFO"
+            android:protectionLevel="dangerous"/>
+
+    <application>
+        <provider
+                android:name="org.dmfs.provider.tasks.TaskProvider"
+                android:authorities="@string/opentasks_authority"
+                android:exported="true"
+                android:label="@string/opentasks_provider_label"
+                android:multiprocess="false"
+                android:readPermission="org.dmfs.permission.READ_TASKS"
+                android:writePermission="org.dmfs.permission.WRITE_TASKS"/>
+
+        <receiver
+                android:name="org.dmfs.provider.tasks.TaskProviderBroadcastReceiver"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.DATE_CHANGED"/>
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>
