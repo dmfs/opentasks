@@ -71,7 +71,6 @@
     <string name="task_url">URL</string>
     <string name="title_task_detail">Taakdetail</string>
     <string name="title_task_list">Taken</string>
-    <string name="provider_label">Taken</string>
     <string name="task_detail_activity">Taakdetail</string>
     <string name="task_priority">Priority</string>
     <string name="task_timezone">Tijdzone</string>
