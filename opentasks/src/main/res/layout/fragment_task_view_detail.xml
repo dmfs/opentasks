@@ -1,174 +1,165 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                 android:layout_width="match_parent"
-                                                 android:layout_height="match_parent"
-                                                 android:fitsSystemWindows="true">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        style="@style/opentasks_details_appbar">
+            android:id="@+id/appbar"
+            style="@style/opentasks_details_appbar">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/main.collapsing"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-            <org.dmfs.tasks.widget.TaskView
-                android:id="@+id/toolbar_content"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/main.collapsing"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="?attr/actionBarSize"
-                app:layout_collapseMode="parallax">
+                android:minHeight="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-                <org.dmfs.tasks.widget.TextFieldView
-                    android:id="@+id/task_title"
+            <org.dmfs.tasks.widget.TaskView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/toolbar_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:gravity="center_vertical"
-                    android:minHeight="?attr/actionBarSize"
-                    android:paddingEnd="48dp"
-                    android:paddingLeft="48dp"
-                    android:paddingRight="48dp"
-                    android:paddingStart="48dp"
-                    app:fieldDescriptor="@id/task_field_title"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    app:layout_scrollFlags="scroll|enterAlways">
+                    android:orientation="vertical"
+                    android:paddingTop="?attr/actionBarSize"
+                    app:layout_collapseMode="parallax">
 
-                    <TextView
-                        android:id="@+id/text"
+                <org.dmfs.tasks.widget.TextFieldView
+                        android:id="@+id/task_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autoLink="none"
-                        android:ellipsize="end"
-                        android:lineSpacingMultiplier="1.1"
-                        android:maxLines="3"
-                        android:textColor="#ffffffff"
-                        android:textColorLink="#d0ffffff"
-                        android:textSize="28sp">
-                    </TextView>
+                        android:layout_margin="8dp"
+                        android:gravity="center_vertical"
+                        android:minHeight="?attr/actionBarSize"
+                        android:paddingEnd="48dp"
+                        android:paddingLeft="48dp"
+                        android:paddingRight="48dp"
+                        android:paddingStart="48dp"
+                        app:fieldDescriptor="@id/task_field_title"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_scrollFlags="scroll|enterAlways">
+
+                    <TextView
+                            android:id="@+id/text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoLink="none"
+                            android:ellipsize="end"
+                            android:lineSpacingMultiplier="1.1"
+                            android:maxLines="3"
+                            android:textColor="#ffffffff"
+                            android:textColorLink="#d0ffffff"
+                            android:textSize="28sp"></TextView>
                 </org.dmfs.tasks.widget.TextFieldView>
 
-                <org.dmfs.tasks.widget.TimeFieldView
-                    style="@style/task_widget"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:orientation="vertical"
-                    android:paddingEnd="56dp"
-                    android:paddingLeft="56dp"
-                    android:paddingStart="56dp"
-                    android:visibility="gone"
-                    app:fieldDescriptor="@id/task_field_due"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    app:layout_scrollFlags="scroll">
+                <org.dmfs.tasks.widget.TimeFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+                        style="@style/task_widget"
+                        android:orientation="vertical"
+                        android:paddingEnd="56dp"
+                        android:paddingLeft="56dp"
+                        android:paddingStart="56dp"
+                        android:visibility="gone"
+                        app:fieldDescriptor="@id/task_field_due"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_scrollFlags="scroll">
 
                     <TextView
-                        android:id="@android:id/text1"
-                        style="@style/field_view_text_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_tab_due"
-                        android:drawablePadding="12dp"
-                        android:drawableStart="@drawable/ic_tab_due"
-                        android:gravity="center_vertical"
-                        android:includeFontPadding="false"
-                        android:textColor="#ffffffff"
-                        android:textSize="18sp">
-                    </TextView>
+                            android:id="@android:id/text1"
+                            style="@style/field_view_text_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/ic_tab_due"
+                            android:drawablePadding="12dp"
+                            android:drawableStart="@drawable/ic_tab_due"
+                            android:gravity="center_vertical"
+                            android:includeFontPadding="false"
+                            android:textColor="#ffffffff"
+                            android:textSize="18sp"></TextView>
 
                     <TextView
-                        android:id="@android:id/text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="44dp"
-                        android:textColor="#ffffffff">
-                    </TextView>
+                            android:id="@android:id/text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="44dp"
+                            android:textColor="#ffffffff"></TextView>
 
                     <LinearLayout
-                        android:id="@+id/buttons"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="44dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                            android:id="@+id/buttons"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="44dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                         <TextView
-                            android:id="@+id/button_add_one_day"
-                            style="@style/time_forward_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_detail_delay_1d"
-                            android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_detail_delay_1d"
-                            android:text="@string/button_add_one_day"
-                            android:textColor="#a0ffffff"/>
+                                android:id="@+id/button_add_one_day"
+                                style="@style/time_forward_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableLeft="@drawable/ic_detail_delay_1d"
+                                android:drawablePadding="8dp"
+                                android:drawableStart="@drawable/ic_detail_delay_1d"
+                                android:text="@string/button_add_one_day"
+                                android:textColor="#a0ffffff"/>
 
                         <TextView
-                            android:id="@+id/button_add_one_hour"
-                            style="@style/time_forward_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="24dp"
-                            android:drawableLeft="@drawable/ic_detail_delay_1h"
-                            android:drawablePadding="8dp"
-                            android:drawableStart="@drawable/ic_detail_delay_1h"
-                            android:text="@string/button_add_one_hour"
-                            android:textColor="#a0ffffff"/>
+                                android:id="@+id/button_add_one_hour"
+                                style="@style/time_forward_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="24dp"
+                                android:drawableLeft="@drawable/ic_detail_delay_1h"
+                                android:drawablePadding="8dp"
+                                android:drawableStart="@drawable/ic_detail_delay_1h"
+                                android:text="@string/button_add_one_hour"
+                                android:textColor="#a0ffffff"/>
                     </LinearLayout>
                 </org.dmfs.tasks.widget.TimeFieldView>
             </org.dmfs.tasks.widget.TaskView>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="fill_vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/content"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_action_complete"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"/>
+            android:id="@+id/floating_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_action_complete"
+            app:layout_anchor="@id/appbar"
+            app:layout_anchorGravity="bottom|right|end"/>
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_anchor="@id/toolbar_content"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_anchor="@id/toolbar_content"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:text=""
-            android:textColor="@android:color/white"
-            android:textSize="24sp"/>
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="24sp"/>
     </android.support.v7.widget.Toolbar>
 
 </android.support.design.widget.CoordinatorLayout>

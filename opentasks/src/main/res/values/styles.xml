@@ -273,7 +273,6 @@
     <style name="opentasks_details_appbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:fitsSystemWindows">true</item>
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
         <item name="elevation">0dp</item>
     </style>
