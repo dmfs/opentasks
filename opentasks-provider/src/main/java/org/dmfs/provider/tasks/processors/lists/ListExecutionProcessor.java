@@ -17,39 +17,39 @@
 
 package org.dmfs.provider.tasks.processors.lists;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.ListAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 
-import android.database.sqlite.SQLiteDatabase;
-
 
 /**
  * A processor that performs the actual operations on task lists.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ListExecutionProcessor extends AbstractEntityProcessor<ListAdapter>
 {
 
-	@Override
-	public void beforeInsert(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
-	{
-		list.commit(db);
-	}
+    @Override
+    public void beforeInsert(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
+    {
+        list.commit(db);
+    }
 
 
-	@Override
-	public void beforeUpdate(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
-	{
-		list.commit(db);
-	}
+    @Override
+    public void beforeUpdate(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
+    {
+        list.commit(db);
+    }
 
 
-	@Override
-	public void beforeDelete(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
-	{
-		db.delete(Tables.LISTS, TaskContract.TaskLists._ID + "=" + list.id(), null);
-	}
+    @Override
+    public void beforeDelete(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
+    {
+        db.delete(Tables.LISTS, TaskContract.TaskLists._ID + "=" + list.id(), null);
+    }
 }

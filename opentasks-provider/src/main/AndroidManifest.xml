@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.dmfs.tasks.provider">
+        package="org.dmfs.tasks.provider">
 
     <permission
             android:name="org.dmfs.permission.READ_TASKS"

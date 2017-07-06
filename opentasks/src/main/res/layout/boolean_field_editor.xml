@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.BooleanFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/task_edit_widget"
-    android:orientation="horizontal"
-    android:paddingLeft="20dp" 
-    android:clickable="true"
-    android:focusable="true">
+        style="@style/task_edit_widget"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:clickable="true"
+        android:focusable="true">
 
     <!-- <include layout="@layout/editor_header" /> -->
 
     <CheckBox
-        android:id="@android:id/checkbox"
-        style="@style/dark_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="0dp"
-        android:padding="0dp" 
-        android:duplicateParentState="true">
-    </CheckBox>
+            android:id="@android:id/checkbox"
+            style="@style/dark_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:duplicateParentState="true"></CheckBox>
 
     <TextView
-        android:id="@android:id/title"
-        style="@style/editor_label_text"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textIsSelectable="false" />
+            android:id="@android:id/title"
+            style="@style/editor_label_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textIsSelectable="false"/>
 
 </org.dmfs.tasks.widget.BooleanFieldEditor>

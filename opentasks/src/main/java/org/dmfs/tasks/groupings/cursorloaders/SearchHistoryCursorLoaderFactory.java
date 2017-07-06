@@ -17,47 +17,47 @@
 
 package org.dmfs.tasks.groupings.cursorloaders;
 
-import org.dmfs.tasks.utils.SearchHistoryHelper;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.Loader;
 
+import org.dmfs.tasks.utils.SearchHistoryHelper;
+
 
 /**
  * An {@link AbstractCursorLoaderFactory} that returns {@link CursorLoaderFactory} that know how to load cursors with the search history.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class SearchHistoryCursorLoaderFactory extends AbstractCursorLoaderFactory
 {
 
-	private final SearchHistoryHelper mSeachHistory;
-	private CustomCursorLoader mLastLoader;
+    private final SearchHistoryHelper mSeachHistory;
+    private CustomCursorLoader mLastLoader;
 
 
-	public SearchHistoryCursorLoaderFactory(SearchHistoryHelper history)
-	{
-		mSeachHistory = history;
-	}
+    public SearchHistoryCursorLoaderFactory(SearchHistoryHelper history)
+    {
+        mSeachHistory = history;
+    }
 
 
-	@Override
-	public Loader<Cursor> getLoader(Context context)
-	{
-		return mLastLoader = new CustomCursorLoader(context, new SearchHistoryCursorFactory(context, null, mSeachHistory));
+    @Override
+    public Loader<Cursor> getLoader(Context context)
+    {
+        return mLastLoader = new CustomCursorLoader(context, new SearchHistoryCursorFactory(context, null, mSeachHistory));
 
-	}
+    }
 
 
-	/**
-	 * Trigger an update for the last loader that has been created.
-	 */
-	public void forceUpdate()
-	{
-		if (mLastLoader != null && !mLastLoader.isAbandoned())
-		{
-			mLastLoader.forceLoad();
-		}
-	}
+    /**
+     * Trigger an update for the last loader that has been created.
+     */
+    public void forceUpdate()
+    {
+        if (mLastLoader != null && !mLastLoader.isAbandoned())
+        {
+            mLastLoader.forceLoad();
+        }
+    }
 }

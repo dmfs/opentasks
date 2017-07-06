@@ -26,22 +26,22 @@ import android.support.v4.content.CursorLoader;
 /**
  * A simple cursor loader factory that returns {@link CursorLoader}s that return empty cursors. This is meant as a hack to be able to return <code>null</code>
  * values from onCreateLoader.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class EmptyCursorLoaderFactory extends CustomCursorLoader
 {
-	public EmptyCursorLoaderFactory(Context context, String[] projection)
-	{
-		super(context, new AbstractCustomCursorFactory(projection)
-		{
+    public EmptyCursorLoaderFactory(Context context, String[] projection)
+    {
+        super(context, new AbstractCustomCursorFactory(projection)
+        {
 
-			@Override
-			public Cursor getCursor()
-			{
-				return new MatrixCursor(mProjection);
-			}
-		});
-	}
+            @Override
+            public Cursor getCursor()
+            {
+                return new MatrixCursor(mProjection);
+            }
+        });
+    }
 
 }

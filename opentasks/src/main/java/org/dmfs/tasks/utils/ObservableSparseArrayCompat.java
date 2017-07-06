@@ -21,95 +21,95 @@ import android.support.v4.util.SparseArrayCompat;
 
 public class ObservableSparseArrayCompat<E> extends SparseArrayCompat<E>
 {
-	private final DataSetObservable mDataSetObservable;
+    private final DataSetObservable mDataSetObservable;
 
 
-	public ObservableSparseArrayCompat()
-	{
-		super();
-		mDataSetObservable = new DataSetObservable();
-	}
+    public ObservableSparseArrayCompat()
+    {
+        super();
+        mDataSetObservable = new DataSetObservable();
+    }
 
 
-	public ObservableSparseArrayCompat(final int initialCapacity)
-	{
-		super(initialCapacity);
-		mDataSetObservable = new DataSetObservable();
-	}
+    public ObservableSparseArrayCompat(final int initialCapacity)
+    {
+        super(initialCapacity);
+        mDataSetObservable = new DataSetObservable();
+    }
 
 
-	public DataSetObservable getDataSetObservable()
-	{
-		return mDataSetObservable;
-	}
+    public DataSetObservable getDataSetObservable()
+    {
+        return mDataSetObservable;
+    }
 
 
-	private void notifyChanged()
-	{
-		mDataSetObservable.notifyChanged();
-	}
+    private void notifyChanged()
+    {
+        mDataSetObservable.notifyChanged();
+    }
 
 
-	@Override
-	public void append(final int key, final E value)
-	{
-		super.append(key, value);
-		notifyChanged();
-	}
+    @Override
+    public void append(final int key, final E value)
+    {
+        super.append(key, value);
+        notifyChanged();
+    }
 
 
-	@Override
-	public void clear()
-	{
-		super.clear();
-		notifyChanged();
-	}
+    @Override
+    public void clear()
+    {
+        super.clear();
+        notifyChanged();
+    }
 
 
-	@Override
-	public void delete(final int key)
-	{
-		super.delete(key);
-		notifyChanged();
-	}
+    @Override
+    public void delete(final int key)
+    {
+        super.delete(key);
+        notifyChanged();
+    }
 
 
-	@Override
-	public void put(final int key, final E value)
-	{
-		super.put(key, value);
-		notifyChanged();
-	}
+    @Override
+    public void put(final int key, final E value)
+    {
+        super.put(key, value);
+        notifyChanged();
+    }
 
 
-	@Override
-	public void remove(final int key)
-	{
-		super.remove(key);
-		notifyChanged();
-	}
+    @Override
+    public void remove(final int key)
+    {
+        super.remove(key);
+        notifyChanged();
+    }
 
 
-	@Override
-	public void removeAt(final int index)
-	{
-		super.removeAt(index);
-		notifyChanged();
-	}
+    @Override
+    public void removeAt(final int index)
+    {
+        super.removeAt(index);
+        notifyChanged();
+    }
 
 
-	@Override
-	public void removeAtRange(final int index, final int size)
-	{
-		super.removeAtRange(index, size);
-		notifyChanged();
-	}
+    @Override
+    public void removeAtRange(final int index, final int size)
+    {
+        super.removeAtRange(index, size);
+        notifyChanged();
+    }
 
 
-	@Override
-	public void setValueAt(final int index, final E value)
-	{
-		super.setValueAt(index, value);
-		notifyChanged();
-	}
+    @Override
+    public void setValueAt(final int index, final E value)
+    {
+        super.setValueAt(index, value);
+        notifyChanged();
+    }
 }

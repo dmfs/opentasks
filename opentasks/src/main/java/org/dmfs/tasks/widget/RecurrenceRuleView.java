@@ -23,29 +23,29 @@ import android.util.AttributeSet;
 
 /**
  * Widget to view recurrence rules.
- * 
+ * <p>
  * TODO: Implement it.
- * 
+ *
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
 public class RecurrenceRuleView extends TextFieldView
 {
 
-	public RecurrenceRuleView(Context context)
-	{
-		super(context);
-	}
+    public RecurrenceRuleView(Context context)
+    {
+        super(context);
+    }
 
 
-	public RecurrenceRuleView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public RecurrenceRuleView(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public RecurrenceRuleView(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public RecurrenceRuleView(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 }

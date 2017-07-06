@@ -17,390 +17,396 @@
 
 package org.dmfs.tasks.model;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutDescriptor;
 import org.dmfs.tasks.model.layout.LayoutOptions;
 import org.dmfs.tasks.widget.AbstractFieldView;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
-
 
 /**
  * A FieldDescriptor holds all information about a certain task property or attribute.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class FieldDescriptor
 {
 
-	/**
-	 * An id that identifies the field.
-	 */
-	private final int mFieldId;
+    /**
+     * An id that identifies the field.
+     */
+    private final int mFieldId;
 
-	/**
-	 * The title of the field.
-	 */
-	private final String mTitle;
+    /**
+     * The title of the field.
+     */
+    private final String mTitle;
 
-	/**
-	 * A hint. This is not used by all editors.
-	 */
-	private String mHint;
+    /**
+     * A hint. This is not used by all editors.
+     */
+    private String mHint;
 
-	/**
-	 * The content type of an extended property.
-	 * 
-	 * This is currently unused and is subject to change in upcoming version.
-	 */
-	private final String mContentType;
+    /**
+     * The content type of an extended property.
+     * <p>
+     * This is currently unused and is subject to change in upcoming version.
+     */
+    private final String mContentType;
 
-	/**
-	 * The {@link FieldAdapter} that knows how to load the values of this field form a {@link ContentSet}.
-	 */
-	private final FieldAdapter<?> mFieldAdapter;
+    /**
+     * The {@link FieldAdapter} that knows how to load the values of this field form a {@link ContentSet}.
+     */
+    private final FieldAdapter<?> mFieldAdapter;
 
-	/**
-	 * A class implementing an {@link IChoicesAdapter} that provides the choices for this field. Can be <code>null</code> if this field doesn't support choices.
-	 */
-	private IChoicesAdapter mChoices = null;
+    /**
+     * A class implementing an {@link IChoicesAdapter} that provides the choices for this field. Can be <code>null</code> if this field doesn't support choices.
+     */
+    private IChoicesAdapter mChoices = null;
 
-	/**
-	 * A {@link LayoutDescriptor} that provides the layout of an editor for this field.
-	 */
-	private LayoutDescriptor mEditLayout = null;
+    /**
+     * A {@link LayoutDescriptor} that provides the layout of an editor for this field.
+     */
+    private LayoutDescriptor mEditLayout = null;
 
-	/**
-	 * A {@link LayoutDescriptor} that provides the layout of a detail view for this field.
-	 */
-	private LayoutDescriptor mViewLayout = null;
+    /**
+     * A {@link LayoutDescriptor} that provides the layout of a detail view for this field.
+     */
+    private LayoutDescriptor mViewLayout = null;
 
-	/**
-	 * Icon resource id of the field, if any.
-	 */
-	private int mIconId = 0;
+    /**
+     * Icon resource id of the field, if any.
+     */
+    private int mIconId = 0;
 
-	/**
-	 * Specifies whether this field should be added automatically.
-	 */
-	private boolean mNoAutoAdd = false;
-
-
-	/**
-	 * Constructor for a new field description.
-	 * 
-	 * @param context
-	 *            The context holding the title resource.
-	 * @param titleId
-	 *            The id of the title resource.
-	 * @param fieldAdapter
-	 *            A {@link FieldAdapter} for this field.
-	 */
-	public FieldDescriptor(Context context, int fieldId, int titleId, FieldAdapter<?> fieldAdapter)
-	{
-		this(fieldId, context.getString(titleId), null, fieldAdapter);
-	}
+    /**
+     * Specifies whether this field should be added automatically.
+     */
+    private boolean mNoAutoAdd = false;
 
 
-	/**
-	 * Constructor for a new field description.
-	 * 
-	 * @param context
-	 *            The context holding the title resource.
-	 * @param titleId
-	 *            The id of the title resource.
-	 * @param contentType
-	 *            The contentType of this property.
-	 * @param fieldAdapter
-	 *            A {@link FieldAdapter} for this field.
-	 */
-	public FieldDescriptor(Context context, int fieldId, int titleId, String contentType, FieldAdapter<?> fieldAdapter)
-	{
-		this(fieldId, context.getString(titleId), contentType, fieldAdapter);
-	}
+    /**
+     * Constructor for a new field description.
+     *
+     * @param context
+     *         The context holding the title resource.
+     * @param titleId
+     *         The id of the title resource.
+     * @param fieldAdapter
+     *         A {@link FieldAdapter} for this field.
+     */
+    public FieldDescriptor(Context context, int fieldId, int titleId, FieldAdapter<?> fieldAdapter)
+    {
+        this(fieldId, context.getString(titleId), null, fieldAdapter);
+    }
 
 
-	/**
-	 * Constructor for a new field description.
-	 * 
-	 * @param title
-	 *            A string for the title of this field.
-	 * @param fieldAdapter
-	 *            A {@link FieldAdapter} for this field.
-	 */
-	public FieldDescriptor(int fieldId, String title, FieldAdapter<?> fieldAdapter)
-	{
-		this(fieldId, title, null, fieldAdapter);
-	}
+    /**
+     * Constructor for a new field description.
+     *
+     * @param context
+     *         The context holding the title resource.
+     * @param titleId
+     *         The id of the title resource.
+     * @param contentType
+     *         The contentType of this property.
+     * @param fieldAdapter
+     *         A {@link FieldAdapter} for this field.
+     */
+    public FieldDescriptor(Context context, int fieldId, int titleId, String contentType, FieldAdapter<?> fieldAdapter)
+    {
+        this(fieldId, context.getString(titleId), contentType, fieldAdapter);
+    }
 
 
-	/**
-	 * Constructor for a new data field description (a field with a content type).
-	 * 
-	 * @param title
-	 *            A string for the title of this field.
-	 * @param contentType
-	 *            The content type of the field.
-	 * @param fieldAdapter
-	 *            A {@link FieldAdapter} for this field.
-	 */
-	public FieldDescriptor(int fieldId, String title, String contentType, FieldAdapter<?> fieldAdapter)
-	{
-		if (fieldAdapter == null)
-		{
-			throw new NullPointerException("fieldAdapter must not be null!");
-		}
-		mFieldId = fieldId;
-		mTitle = title;
-		mContentType = contentType;
-		mHint = title; // use title as hint by default
-		mFieldAdapter = fieldAdapter;
-	}
+    /**
+     * Constructor for a new field description.
+     *
+     * @param title
+     *         A string for the title of this field.
+     * @param fieldAdapter
+     *         A {@link FieldAdapter} for this field.
+     */
+    public FieldDescriptor(int fieldId, String title, FieldAdapter<?> fieldAdapter)
+    {
+        this(fieldId, title, null, fieldAdapter);
+    }
 
 
-	/**
-	 * Returns the field id of the field this {@link FieldDescriptor} describes.
-	 * 
-	 * @return The field id.
-	 */
-	public int getFieldId()
-	{
-		return mFieldId;
-	}
+    /**
+     * Constructor for a new data field description (a field with a content type).
+     *
+     * @param title
+     *         A string for the title of this field.
+     * @param contentType
+     *         The content type of the field.
+     * @param fieldAdapter
+     *         A {@link FieldAdapter} for this field.
+     */
+    public FieldDescriptor(int fieldId, String title, String contentType, FieldAdapter<?> fieldAdapter)
+    {
+        if (fieldAdapter == null)
+        {
+            throw new NullPointerException("fieldAdapter must not be null!");
+        }
+        mFieldId = fieldId;
+        mTitle = title;
+        mContentType = contentType;
+        mHint = title; // use title as hint by default
+        mFieldAdapter = fieldAdapter;
+    }
 
 
-	public FieldDescriptor setNoAutoAdd(boolean noAutoAdd)
-	{
-		mNoAutoAdd = noAutoAdd;
-		return this;
-	}
+    /**
+     * Returns the field id of the field this {@link FieldDescriptor} describes.
+     *
+     * @return The field id.
+     */
+    public int getFieldId()
+    {
+        return mFieldId;
+    }
 
 
-	public boolean autoAdd()
-	{
-		return !mNoAutoAdd;
-	}
+    public FieldDescriptor setNoAutoAdd(boolean noAutoAdd)
+    {
+        mNoAutoAdd = noAutoAdd;
+        return this;
+    }
 
 
-	/**
-	 * Returns the title of this field.
-	 * 
-	 * @return The title.
-	 */
-	public String getTitle()
-	{
-		return mTitle;
-	}
+    public boolean autoAdd()
+    {
+        return !mNoAutoAdd;
+    }
 
 
-	/**
-	 * Sets an icon id for this {@link FieldDescriptor}.
-	 * 
-	 * @param iconId
-	 *            The id of the icon resource.
-	 * @return This instance.
-	 */
-	public FieldDescriptor setIcon(int iconId)
-	{
-		mIconId = iconId;
-		return this;
-	}
+    /**
+     * Returns the title of this field.
+     *
+     * @return The title.
+     */
+    public String getTitle()
+    {
+        return mTitle;
+    }
 
 
-	/**
-	 * Get the icon id of this {@link FieldDescriptor}.
-	 * 
-	 * @return The icon resource id or <code>0</code> if there is no icon for this field.
-	 */
-	public int getIcon()
-	{
-		return mIconId;
-	}
+    /**
+     * Sets an icon id for this {@link FieldDescriptor}.
+     *
+     * @param iconId
+     *         The id of the icon resource.
+     *
+     * @return This instance.
+     */
+    public FieldDescriptor setIcon(int iconId)
+    {
+        mIconId = iconId;
+        return this;
+    }
 
 
-	/**
-	 * Return the content type for this field.
-	 * 
-	 * @return The content type or {@code null} if this field has no content type.
-	 */
-	public String getContentType()
-	{
-		return mContentType;
-	}
+    /**
+     * Get the icon id of this {@link FieldDescriptor}.
+     *
+     * @return The icon resource id or <code>0</code> if there is no icon for this field.
+     */
+    public int getIcon()
+    {
+        return mIconId;
+    }
 
 
-	/**
-	 * Returns the hint for this field.
-	 * 
-	 * @return The hint.
-	 */
-	public String getHint()
-	{
-		return mHint;
-	}
+    /**
+     * Return the content type for this field.
+     *
+     * @return The content type or {@code null} if this field has no content type.
+     */
+    public String getContentType()
+    {
+        return mContentType;
+    }
 
 
-	/**
-	 * Sets the hint for this field.
-	 * 
-	 * @param hint
-	 *            The hint for this field.
-	 * @return This instance.
-	 */
-	public FieldDescriptor setHint(String hint)
-	{
-		mHint = hint;
-		return this;
-	}
+    /**
+     * Returns the hint for this field.
+     *
+     * @return The hint.
+     */
+    public String getHint()
+    {
+        return mHint;
+    }
 
 
-	/**
-	 * Returns a {@link FieldAdapter} for this field.
-	 * 
-	 * @return The {@link FieldAdapter} instance. Will never be {@code null}.
-	 */
-	public FieldAdapter<?> getFieldAdapter()
-	{
-		return mFieldAdapter;
-	}
+    /**
+     * Sets the hint for this field.
+     *
+     * @param hint
+     *         The hint for this field.
+     *
+     * @return This instance.
+     */
+    public FieldDescriptor setHint(String hint)
+    {
+        mHint = hint;
+        return this;
+    }
 
 
-	/**
-	 * Return a choices adapter for this field.
-	 * 
-	 * @return An {@link IChoicesAdapter} or <code>null</code> if this field doesn't support choice.
-	 */
-	public IChoicesAdapter getChoices()
-	{
-		return mChoices;
-	}
+    /**
+     * Returns a {@link FieldAdapter} for this field.
+     *
+     * @return The {@link FieldAdapter} instance. Will never be {@code null}.
+     */
+    public FieldAdapter<?> getFieldAdapter()
+    {
+        return mFieldAdapter;
+    }
 
 
-	/**
-	 * Set an {@link IChoicesAdapter} for this field.
-	 * 
-	 * @param choices
-	 *            An {@link IChoicesAdapter} or <code>null</code> to disable choices for this field.
-	 * @return This instance.
-	 */
-	public FieldDescriptor setChoices(IChoicesAdapter choices)
-	{
-		mChoices = choices;
-		return this;
-	}
+    /**
+     * Return a choices adapter for this field.
+     *
+     * @return An {@link IChoicesAdapter} or <code>null</code> if this field doesn't support choice.
+     */
+    public IChoicesAdapter getChoices()
+    {
+        return mChoices;
+    }
 
 
-	/**
-	 * Returns an inflated view to edit this field. This method takes a parent (that can be <code>null</code>) but it doesn't attach the editor to the parent.
-	 * 
-	 * @param inflater
-	 *            A {@link LayoutInflater}.
-	 * @param parent
-	 *            The parent {@link ViewGroup} of the editor.
-	 * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field is not editable.
-	 */
-	public AbstractFieldView getEditorView(LayoutInflater inflater, ViewGroup parent)
-	{
-		if (mEditLayout == null)
-		{
-			return null;
-		}
-
-		AbstractFieldView view = (AbstractFieldView) mEditLayout.inflate(inflater, parent, false);
-		view.setFieldDescription(this, mEditLayout.getOptions());
-		return view;
-	}
+    /**
+     * Set an {@link IChoicesAdapter} for this field.
+     *
+     * @param choices
+     *         An {@link IChoicesAdapter} or <code>null</code> to disable choices for this field.
+     *
+     * @return This instance.
+     */
+    public FieldDescriptor setChoices(IChoicesAdapter choices)
+    {
+        mChoices = choices;
+        return this;
+    }
 
 
-	/**
-	 * Returns an inflated view to edit this field.
-	 * 
-	 * @param inflater
-	 *            A {@link LayoutInflater}.
-	 * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field is not editable.
-	 */
-	public AbstractFieldView getEditorView(LayoutInflater inflater)
-	{
-		return getEditorView(inflater, null);
-	}
+    /**
+     * Returns an inflated view to edit this field. This method takes a parent (that can be <code>null</code>) but it doesn't attach the editor to the parent.
+     *
+     * @param inflater
+     *         A {@link LayoutInflater}.
+     * @param parent
+     *         The parent {@link ViewGroup} of the editor.
+     *
+     * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field is not editable.
+     */
+    public AbstractFieldView getEditorView(LayoutInflater inflater, ViewGroup parent)
+    {
+        if (mEditLayout == null)
+        {
+            return null;
+        }
+
+        AbstractFieldView view = (AbstractFieldView) mEditLayout.inflate(inflater, parent, false);
+        view.setFieldDescription(this, mEditLayout.getOptions());
+        return view;
+    }
 
 
-	/**
-	 * Returns an inflated view to show this field. This method takes a parent (that can be <code>null</code>) but it doesn't attach the detail view to the
-	 * parent.
-	 * 
-	 * @param inflater
-	 *            A {@link LayoutInflater}.
-	 * @param parent
-	 *            The parent {@link ViewGroup} of the detail view.
-	 * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field can be viewed.
-	 */
-	public AbstractFieldView getDetailView(LayoutInflater inflater, ViewGroup parent)
-	{
-		if (mViewLayout == null)
-		{
-			return null;
-		}
-
-		AbstractFieldView view = (AbstractFieldView) mViewLayout.inflate(inflater, parent, false);
-		view.setFieldDescription(this, mViewLayout.getOptions());
-		return view;
-	}
+    /**
+     * Returns an inflated view to edit this field.
+     *
+     * @param inflater
+     *         A {@link LayoutInflater}.
+     *
+     * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field is not editable.
+     */
+    public AbstractFieldView getEditorView(LayoutInflater inflater)
+    {
+        return getEditorView(inflater, null);
+    }
 
 
-	/**
-	 * Returns an inflated view to show this field.
-	 * 
-	 * @param inflater
-	 *            A {@link LayoutInflater}.
-	 */
-	public AbstractFieldView getDetailView(LayoutInflater inflater)
-	{
-		if (mViewLayout == null)
-		{
-			return null;
-		}
+    /**
+     * Returns an inflated view to show this field. This method takes a parent (that can be <code>null</code>) but it doesn't attach the detail view to the
+     * parent.
+     *
+     * @param inflater
+     *         A {@link LayoutInflater}.
+     * @param parent
+     *         The parent {@link ViewGroup} of the detail view.
+     *
+     * @return An {@link AbstractFieldView} that can edit this field or <code>null</code> if this field can be viewed.
+     */
+    public AbstractFieldView getDetailView(LayoutInflater inflater, ViewGroup parent)
+    {
+        if (mViewLayout == null)
+        {
+            return null;
+        }
 
-		AbstractFieldView view = (AbstractFieldView) mViewLayout.inflate(inflater);
-		view.setFieldDescription(this, mViewLayout.getOptions());
-		return view;
-	}
-
-
-	public LayoutOptions getViewLayoutOptions()
-	{
-		if (mViewLayout == null)
-		{
-			return null;
-		}
-
-		return mViewLayout.getOptions();
-	}
+        AbstractFieldView view = (AbstractFieldView) mViewLayout.inflate(inflater, parent, false);
+        view.setFieldDescription(this, mViewLayout.getOptions());
+        return view;
+    }
 
 
-	public LayoutOptions getEditLayoutOptions()
-	{
-		if (mEditLayout == null)
-		{
-			return null;
-		}
+    /**
+     * Returns an inflated view to show this field.
+     *
+     * @param inflater
+     *         A {@link LayoutInflater}.
+     */
+    public AbstractFieldView getDetailView(LayoutInflater inflater)
+    {
+        if (mViewLayout == null)
+        {
+            return null;
+        }
 
-		return mEditLayout.getOptions();
-	}
+        AbstractFieldView view = (AbstractFieldView) mViewLayout.inflate(inflater);
+        view.setFieldDescription(this, mViewLayout.getOptions());
+        return view;
+    }
 
 
-	FieldDescriptor setEditorLayout(LayoutDescriptor layoutDescriptor)
-	{
-		mEditLayout = layoutDescriptor;
-		return this;
-	}
+    public LayoutOptions getViewLayoutOptions()
+    {
+        if (mViewLayout == null)
+        {
+            return null;
+        }
+
+        return mViewLayout.getOptions();
+    }
 
 
-	FieldDescriptor setViewLayout(LayoutDescriptor layoutDescriptor)
-	{
-		mViewLayout = layoutDescriptor;
-		return this;
-	}
+    public LayoutOptions getEditLayoutOptions()
+    {
+        if (mEditLayout == null)
+        {
+            return null;
+        }
+
+        return mEditLayout.getOptions();
+    }
+
+
+    FieldDescriptor setEditorLayout(LayoutDescriptor layoutDescriptor)
+    {
+        mEditLayout = layoutDescriptor;
+        return this;
+    }
+
+
+    FieldDescriptor setViewLayout(LayoutDescriptor layoutDescriptor)
+    {
+        mViewLayout = layoutDescriptor;
+        return this;
+    }
 }

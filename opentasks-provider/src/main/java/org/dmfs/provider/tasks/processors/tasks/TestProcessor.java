@@ -17,59 +17,59 @@
 
 package org.dmfs.provider.tasks.processors.tasks;
 
-import org.dmfs.provider.tasks.model.TaskAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
-
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
+import org.dmfs.provider.tasks.model.TaskAdapter;
+import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 
 
 /**
  * A simple debugging processor. It just logs every operation.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TestProcessor extends AbstractEntityProcessor<TaskAdapter>
 {
 
-	@Override
-	public void beforeInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		Log.d("TestProcessor", "before insert processor called");
-	}
+    @Override
+    public void beforeInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        Log.d("TestProcessor", "before insert processor called");
+    }
 
 
-	@Override
-	public void afterInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		Log.d("TestProcessor", "after insert processor called for " + task.id());
-	}
+    @Override
+    public void afterInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        Log.d("TestProcessor", "after insert processor called for " + task.id());
+    }
 
 
-	@Override
-	public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		Log.d("TestProcessor", "before update processor called for " + task.id());
-	}
+    @Override
+    public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        Log.d("TestProcessor", "before update processor called for " + task.id());
+    }
 
 
-	@Override
-	public void afterUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		Log.d("TestProcessor", "after update processor called for " + task.id());
-	}
+    @Override
+    public void afterUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        Log.d("TestProcessor", "after update processor called for " + task.id());
+    }
 
 
-	@Override
-	public void beforeDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		Log.d("TestProcessor", "before delete processor called for " + task.id());
-	}
+    @Override
+    public void beforeDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        Log.d("TestProcessor", "before delete processor called for " + task.id());
+    }
 
 
-	@Override
-	public void afterDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		Log.i("TestProcessor", "after delete processor called for " + task.id());
-	}
+    @Override
+    public void afterDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        Log.i("TestProcessor", "after delete processor called for " + task.id());
+    }
 }

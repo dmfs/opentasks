@@ -17,55 +17,55 @@
 
 package org.dmfs.provider.tasks.model;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.net.Uri;
 
+import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
+
 
 /**
  * An abstract implementation of a {@link TaskAdapter} to server as the base for more concrete adapters.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractTaskAdapter implements TaskAdapter
 {
-	private final ContentValues mState = new ContentValues(10);
+    private final ContentValues mState = new ContentValues(10);
 
 
-	@Override
-	public Uri uri(String authority)
-	{
-		return ContentUris.withAppendedId(TaskContract.Tasks.getContentUri(authority), id());
-	}
+    @Override
+    public Uri uri(String authority)
+    {
+        return ContentUris.withAppendedId(TaskContract.Tasks.getContentUri(authority), id());
+    }
 
 
-	@Override
-	public boolean isRecurring()
-	{
-		return valueOf(RRULE) != null || valueOf(RDATE) != null;
-	}
+    @Override
+    public boolean isRecurring()
+    {
+        return valueOf(RRULE) != null || valueOf(RDATE) != null;
+    }
 
 
-	@Override
-	public boolean recurrenceUpdated()
-	{
-		return isUpdated(RRULE) || isUpdated(DTSTART) || isUpdated(DUE) || isUpdated(DURATION) || isUpdated(RDATE) || isUpdated(EXDATE);
-	}
+    @Override
+    public boolean recurrenceUpdated()
+    {
+        return isUpdated(RRULE) || isUpdated(DTSTART) || isUpdated(DUE) || isUpdated(DURATION) || isUpdated(RDATE) || isUpdated(EXDATE);
+    }
 
 
-	@Override
-	public <T> T getState(FieldAdapter<T, TaskAdapter> stateFieldAdater)
-	{
-		return stateFieldAdater.getFrom(mState);
-	}
+    @Override
+    public <T> T getState(FieldAdapter<T, TaskAdapter> stateFieldAdater)
+    {
+        return stateFieldAdater.getFrom(mState);
+    }
 
 
-	@Override
-	public <T> void setState(FieldAdapter<T, TaskAdapter> stateFieldAdater, T value)
-	{
-		stateFieldAdater.setIn(mState, value);
-	}
+    @Override
+    public <T> void setState(FieldAdapter<T, TaskAdapter> stateFieldAdater, T value)
+    {
+        stateFieldAdater.setIn(mState, value);
+    }
 }

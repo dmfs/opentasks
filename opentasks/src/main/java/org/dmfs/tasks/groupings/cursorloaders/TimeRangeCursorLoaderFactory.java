@@ -24,23 +24,23 @@ import android.support.v4.content.Loader;
 
 /**
  * A factory that builds {@link TimeRangeCursorLoader}s.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TimeRangeCursorLoaderFactory extends AbstractCursorLoaderFactory
 {
-	private final String[] mProjection;
+    private final String[] mProjection;
 
 
-	public TimeRangeCursorLoaderFactory(String[] projection)
-	{
-		mProjection = projection;
-	}
+    public TimeRangeCursorLoaderFactory(String[] projection)
+    {
+        mProjection = projection;
+    }
 
 
-	@Override
-	public Loader<Cursor> getLoader(Context context)
-	{
-		return new TimeRangeCursorLoader(context, mProjection);
-	}
+    @Override
+    public Loader<Cursor> getLoader(Context context)
+    {
+        return new TimeRangeCursorLoader(context, mProjection);
+    }
 }

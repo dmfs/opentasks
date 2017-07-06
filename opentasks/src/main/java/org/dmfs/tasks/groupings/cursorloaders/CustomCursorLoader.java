@@ -24,94 +24,94 @@ import android.support.v4.content.Loader;
 
 /**
  * A very simple {@link Loader} that returns the {@link Cursor} from a {@link AbstractCustomCursorFactory}.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class CustomCursorLoader extends Loader<Cursor>
 {
-	/**
-	 * The current Cursor.
-	 */
-	private Cursor mCursor;
+    /**
+     * The current Cursor.
+     */
+    private Cursor mCursor;
 
-	/**
-	 * The factory that creates our Cursor.
-	 */
-	private final AbstractCustomCursorFactory mCursorFactory;
-
-
-	public CustomCursorLoader(Context context, AbstractCustomCursorFactory factory)
-	{
-		super(context);
-
-		mCursorFactory = factory;
-	}
+    /**
+     * The factory that creates our Cursor.
+     */
+    private final AbstractCustomCursorFactory mCursorFactory;
 
 
-	@Override
-	public void deliverResult(Cursor cursor)
-	{
-		if (isReset())
-		{
-			// An async query came in while the loader is stopped
-			if (cursor != null && !cursor.isClosed())
-			{
-				cursor.close();
-			}
-			return;
-		}
-		Cursor oldCursor = mCursor;
-		mCursor = cursor;
+    public CustomCursorLoader(Context context, AbstractCustomCursorFactory factory)
+    {
+        super(context);
 
-		if (isStarted())
-		{
-			super.deliverResult(cursor);
-		}
-
-		if (oldCursor != null && oldCursor != cursor && !oldCursor.isClosed())
-		{
-			oldCursor.close();
-		}
-	}
+        mCursorFactory = factory;
+    }
 
 
-	@Override
-	protected void onStartLoading()
-	{
-		if (mCursor == null || takeContentChanged())
-		{
-			// deliver a new cursor, deliverResult will take care of the old one if any
-			deliverResult(mCursorFactory.getCursor());
-		}
-		else
-		{
-			// just deliver the same cursor
-			deliverResult(mCursor);
-		}
-	}
+    @Override
+    public void deliverResult(Cursor cursor)
+    {
+        if (isReset())
+        {
+            // An async query came in while the loader is stopped
+            if (cursor != null && !cursor.isClosed())
+            {
+                cursor.close();
+            }
+            return;
+        }
+        Cursor oldCursor = mCursor;
+        mCursor = cursor;
+
+        if (isStarted())
+        {
+            super.deliverResult(cursor);
+        }
+
+        if (oldCursor != null && oldCursor != cursor && !oldCursor.isClosed())
+        {
+            oldCursor.close();
+        }
+    }
 
 
-	@Override
-	protected void onForceLoad()
-	{
-		// just create a new cursor, deliverResult will take care of storing the new cursor and closing the old one
-		deliverResult(mCursorFactory.getCursor());
-	}
+    @Override
+    protected void onStartLoading()
+    {
+        if (mCursor == null || takeContentChanged())
+        {
+            // deliver a new cursor, deliverResult will take care of the old one if any
+            deliverResult(mCursorFactory.getCursor());
+        }
+        else
+        {
+            // just deliver the same cursor
+            deliverResult(mCursor);
+        }
+    }
 
 
-	@Override
-	protected void onReset()
-	{
-		super.onReset();
+    @Override
+    protected void onForceLoad()
+    {
+        // just create a new cursor, deliverResult will take care of storing the new cursor and closing the old one
+        deliverResult(mCursorFactory.getCursor());
+    }
 
-		onStopLoading();
 
-		// ensure the cursor is closed before we release it
-		if (mCursor != null && !mCursor.isClosed())
-		{
-			mCursor.close();
-		}
+    @Override
+    protected void onReset()
+    {
+        super.onReset();
 
-		mCursor = null;
-	}
+        onStopLoading();
+
+        // ensure the cursor is closed before we release it
+        if (mCursor != null && !mCursor.isClosed())
+        {
+            mCursor.close();
+        }
+
+        mCursor = null;
+    }
 }

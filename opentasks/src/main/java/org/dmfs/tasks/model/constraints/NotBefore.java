@@ -17,40 +17,40 @@
 
 package org.dmfs.tasks.model.constraints;
 
+import android.text.format.Time;
+
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
-
-import android.text.format.Time;
 
 
 /**
  * Ensure a time is not before a specific reference time. The new value will be set to the reference time otherwise.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class NotBefore extends AbstractConstraint<Time>
 {
-	private final FieldAdapter<Time> mTimeAdapter;
+    private final FieldAdapter<Time> mTimeAdapter;
 
 
-	public NotBefore(FieldAdapter<Time> adapter)
-	{
-		mTimeAdapter = adapter;
-	}
+    public NotBefore(FieldAdapter<Time> adapter)
+    {
+        mTimeAdapter = adapter;
+    }
 
 
-	@Override
-	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
-	{
-		Time notBeforeThisTime = mTimeAdapter.get(currentValues);
-		if (notBeforeThisTime != null && newValue != null)
-		{
-			if (newValue.before(notBeforeThisTime))
-			{
-				newValue.set(notBeforeThisTime);
-			}
-		}
-		return newValue;
-	}
+    @Override
+    public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
+    {
+        Time notBeforeThisTime = mTimeAdapter.get(currentValues);
+        if (notBeforeThisTime != null && newValue != null)
+        {
+            if (newValue.before(notBeforeThisTime))
+            {
+                newValue.set(notBeforeThisTime);
+            }
+        }
+        return newValue;
+    }
 
 }

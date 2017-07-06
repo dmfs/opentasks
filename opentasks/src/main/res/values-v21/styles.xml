@@ -1,7 +1,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- ActionBar styles -->
-    <style name="ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <style name="ActionBar"
+            parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="background">?attr/colorPrimary</item>
         <item name="displayOptions">showTitle</item>
         <item name="icon">@android:color/transparent</item>

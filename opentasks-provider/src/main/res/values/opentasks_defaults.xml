@@ -2,6 +2,7 @@
 <resources>
 
     <!-- The name of the task authority. -->
-    <string name="opentasks_authority" translatable="false">org.dmfs.tasks</string>
+    <string name="opentasks_authority"
+            translatable="false">org.dmfs.tasks</string>
 
 </resources>

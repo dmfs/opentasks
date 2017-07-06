@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="shapeColor" format="color" />
-    <attr name="backgroundShape" format="reference" />
+    <attr name="shapeColor"
+            format="color"/>
+    <attr name="backgroundShape"
+            format="reference"/>
 
     <declare-styleable name="AbstractFieldView">
-        <attr name="fieldDescriptor" format="integer" />
+        <attr name="fieldDescriptor"
+                format="integer"/>
     </declare-styleable>
     <declare-styleable name="ColoredShapeCheckBox">
 
         <!-- The shape of the colored background. -->
-        <attr name="backgroundShape" />
+        <attr name="backgroundShape"/>
 
         <!-- The checkmark that is used on light background colors. -->
-        <attr name="darkCheckmark" format="reference" />
+        <attr name="darkCheckmark"
+                format="reference"/>
 
         <!-- The checkmark that is used on dark background colors. -->
-        <attr name="lightCheckmark" format="reference" />
+        <attr name="lightCheckmark"
+                format="reference"/>
 
         <!-- The initial color or color state list -->
-        <attr name="shapeColor" />
+        <attr name="shapeColor"/>
     </declare-styleable>
 
 </resources>

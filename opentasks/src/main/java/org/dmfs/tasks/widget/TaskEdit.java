@@ -17,64 +17,64 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.Model;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.Model;
+
 
 /**
  * Editor view for a task.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TaskEdit extends BaseTaskView
 {
 
-	public TaskEdit(Context context)
-	{
-		super(context);
-	}
+    public TaskEdit(Context context)
+    {
+        super(context);
+    }
 
 
-	public TaskEdit(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public TaskEdit(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public TaskEdit(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public TaskEdit(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	/**
-	 * Set the {@link Model} to use when showing the detail view.
-	 * 
-	 * @param model
-	 *            The {@link Model}.
-	 */
-	public void setModel(Model model)
-	{
-		Model mModel = model;
-		final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    /**
+     * Set the {@link Model} to use when showing the detail view.
+     *
+     * @param model
+     *         The {@link Model}.
+     */
+    public void setModel(Model model)
+    {
+        Model mModel = model;
+        final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		/*
-		 * Add an editor for every field that is supported by this model.
+         * Add an editor for every field that is supported by this model.
 		 */
-		for (FieldDescriptor field : mModel.getFields())
-		{
-			if (field.autoAdd())
-			{
-				AbstractFieldView detailView = field.getEditorView(inflater, this);
-				if (detailView != null)
-				{
-					addView(detailView);
-				}
-			}
-		}
-	}
+        for (FieldDescriptor field : mModel.getFields())
+        {
+            if (field.autoAdd())
+            {
+                AbstractFieldView detailView = field.getEditorView(inflater, this);
+                if (detailView != null)
+                {
+                    addView(detailView);
+                }
+            }
+        }
+    }
 }

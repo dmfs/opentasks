@@ -23,73 +23,73 @@ import android.database.Cursor;
 
 /**
  * Knows how to load and store a {@link Long} value from a {@link Cursor} or {@link ContentValues}.
- * 
- * @author Marten Gajda <marten@dmfs.org>
- * 
+ *
  * @param <EntityType>
- *            The type of the entity the field belongs to.
+ *         The type of the entity the field belongs to.
+ *
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public final class LongFieldAdapter<EntityType> extends SimpleFieldAdapter<Long, EntityType>
 {
 
-	/**
-	 * The field name this adapter uses to store the values.
-	 */
-	private final String mFieldName;
+    /**
+     * The field name this adapter uses to store the values.
+     */
+    private final String mFieldName;
 
 
-	/**
-	 * Constructor for a new {@link LongFieldAdapter}.
-	 * 
-	 * @param fieldName
-	 *            The name of the field to use when loading or storing the value.
-	 */
-	public LongFieldAdapter(String fieldName)
-	{
-		if (fieldName == null)
-		{
-			throw new IllegalArgumentException("fieldName must not be null");
-		}
-		mFieldName = fieldName;
-	}
+    /**
+     * Constructor for a new {@link LongFieldAdapter}.
+     *
+     * @param fieldName
+     *         The name of the field to use when loading or storing the value.
+     */
+    public LongFieldAdapter(String fieldName)
+    {
+        if (fieldName == null)
+        {
+            throw new IllegalArgumentException("fieldName must not be null");
+        }
+        mFieldName = fieldName;
+    }
 
 
-	@Override
-	String fieldName()
-	{
-		return mFieldName;
-	}
+    @Override
+    String fieldName()
+    {
+        return mFieldName;
+    }
 
 
-	@Override
-	public Long getFrom(ContentValues values)
-	{
-		return values.getAsLong(mFieldName);
-	}
+    @Override
+    public Long getFrom(ContentValues values)
+    {
+        return values.getAsLong(mFieldName);
+    }
 
 
-	@Override
-	public Long getFrom(Cursor cursor)
-	{
-		int columnIdx = cursor.getColumnIndex(mFieldName);
-		if (columnIdx < 0)
-		{
-			throw new IllegalArgumentException("The column '" + mFieldName + "' is missing in cursor.");
-		}
-		return cursor.isNull(columnIdx) ? null : cursor.getLong(columnIdx);
-	}
+    @Override
+    public Long getFrom(Cursor cursor)
+    {
+        int columnIdx = cursor.getColumnIndex(mFieldName);
+        if (columnIdx < 0)
+        {
+            throw new IllegalArgumentException("The column '" + mFieldName + "' is missing in cursor.");
+        }
+        return cursor.isNull(columnIdx) ? null : cursor.getLong(columnIdx);
+    }
 
 
-	@Override
-	public void setIn(ContentValues values, Long value)
-	{
-		if (value != null)
-		{
-			values.put(mFieldName, value);
-		}
-		else
-		{
-			values.putNull(mFieldName);
-		}
-	}
+    @Override
+    public void setIn(ContentValues values, Long value)
+    {
+        if (value != null)
+        {
+            values.put(mFieldName, value);
+        }
+        else
+        {
+            values.putNull(mFieldName);
+        }
+    }
 }

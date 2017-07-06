@@ -22,24 +22,24 @@ import org.dmfs.tasks.model.ContentSet;
 
 /**
  * Defines a constraint and provides a method to check that a value complies with that constraint or enforces it if it doesn't.
- * 
- * @author Marten Gajda <marten@dmfs.org>
- * 
+ *
  * @param <T>
- *            The type of the value to check.
+ *         The type of the value to check.
+ *
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractConstraint<T>
 {
-	/**
-	 * Checks that <code>newValue</code> does not violate the constraint within the context of <code>currentValues</code>. Enforces the constraint if possible
-	 * or throws an exception if not.
-	 * 
-	 * @param currentValues
-	 *            The {@link ContentSet} to validate.
-	 * @param oldValue
-	 *            The old value, can be <code>null</code>.
-	 * @param newValue
-	 *            The new value to validate, can be <code>null</code>.
-	 */
-	public abstract T apply(ContentSet currentValues, T oldValue, T newValue);
+    /**
+     * Checks that <code>newValue</code> does not violate the constraint within the context of <code>currentValues</code>. Enforces the constraint if possible
+     * or throws an exception if not.
+     *
+     * @param currentValues
+     *         The {@link ContentSet} to validate.
+     * @param oldValue
+     *         The old value, can be <code>null</code>.
+     * @param newValue
+     *         The new value to validate, can be <code>null</code>.
+     */
+    public abstract T apply(ContentSet currentValues, T oldValue, T newValue);
 }

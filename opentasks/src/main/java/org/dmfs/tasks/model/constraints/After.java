@@ -28,26 +28,26 @@ import org.dmfs.tasks.model.defaults.DefaultAfter;
  */
 public class After extends AbstractConstraint<Time>
 {
-	private final FieldAdapter<Time> mReferenceAdapter;
-	private final Default<Time> mDefault;
+    private final FieldAdapter<Time> mReferenceAdapter;
+    private final Default<Time> mDefault;
 
 
-	public After(FieldAdapter<Time> referenceAdapter)
-	{
-		mReferenceAdapter = referenceAdapter;
-		mDefault = new DefaultAfter(referenceAdapter);
-	}
+    public After(FieldAdapter<Time> referenceAdapter)
+    {
+        mReferenceAdapter = referenceAdapter;
+        mDefault = new DefaultAfter(referenceAdapter);
+    }
 
 
-	@Override
-	public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
-	{
-		Time reference = mReferenceAdapter.get(currentValues);
-		if (reference != null && newValue != null && !newValue.after(reference))
-		{
-			newValue.set(mDefault.getCustomDefault(currentValues, reference));
-		}
-		return newValue;
-	}
+    @Override
+    public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
+    {
+        Time reference = mReferenceAdapter.get(currentValues);
+        if (reference != null && newValue != null && !newValue.after(reference))
+        {
+            newValue.set(mDefault.getCustomDefault(currentValues, reference));
+        }
+        return newValue;
+    }
 
 }
