@@ -31,9 +31,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.cursorloaders.SearchHistoryCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;

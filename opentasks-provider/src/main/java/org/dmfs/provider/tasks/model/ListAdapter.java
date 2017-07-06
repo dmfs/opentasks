@@ -19,10 +19,10 @@ package org.dmfs.provider.tasks.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.provider.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.LongFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
 
 
 /**

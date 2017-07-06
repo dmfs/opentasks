@@ -25,8 +25,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 
@@ -105,7 +105,7 @@ public class TaskNotificationHandler extends BroadcastReceiver
 
     private static int getPinnedTaskCount(Context context)
     {
-        final Cursor countCursor = context.getContentResolver().query(Tasks.getContentUri(TaskContract.taskAuthority(context)),
+        final Cursor countCursor = context.getContentResolver().query(Tasks.getContentUri(AuthorityUtil.taskAuthority(context)),
                 new String[] { "count(*) AS count" }, Tasks.PINNED + " is not null", null, null);
         try
         {

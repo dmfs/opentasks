@@ -28,10 +28,10 @@ import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.QuickAddDialogFragment;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;

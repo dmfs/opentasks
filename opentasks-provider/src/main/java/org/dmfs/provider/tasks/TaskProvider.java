@@ -44,18 +44,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
 
-import org.dmfs.provider.tasks.TaskContract.Alarms;
-import org.dmfs.provider.tasks.TaskContract.Categories;
-import org.dmfs.provider.tasks.TaskContract.CategoriesColumns;
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Properties;
-import org.dmfs.provider.tasks.TaskContract.PropertyColumns;
-import org.dmfs.provider.tasks.TaskContract.SyncState;
-import org.dmfs.provider.tasks.TaskContract.TaskColumns;
-import org.dmfs.provider.tasks.TaskContract.TaskListColumns;
-import org.dmfs.provider.tasks.TaskContract.TaskListSyncColumns;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.OnDatabaseOperationListener;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.handler.PropertyHandler;
@@ -76,6 +64,19 @@ import org.dmfs.provider.tasks.processors.tasks.RelationProcessor;
 import org.dmfs.provider.tasks.processors.tasks.TaskExecutionProcessor;
 import org.dmfs.provider.tasks.processors.tasks.TaskInstancesProcessor;
 import org.dmfs.provider.tasks.processors.tasks.TaskValidatorProcessor;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Alarms;
+import org.dmfs.tasks.contract.TaskContract.Categories;
+import org.dmfs.tasks.contract.TaskContract.CategoriesColumns;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Properties;
+import org.dmfs.tasks.contract.TaskContract.PropertyColumns;
+import org.dmfs.tasks.contract.TaskContract.SyncState;
+import org.dmfs.tasks.contract.TaskContract.TaskColumns;
+import org.dmfs.tasks.contract.TaskContract.TaskListColumns;
+import org.dmfs.tasks.contract.TaskContract.TaskListSyncColumns;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -758,7 +759,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
             }
             /*
-			 * Task won't be removed, just marked as deleted if the caller isn't a sync adapter. Sync adapters can remove tasks immediately.
+             * Task won't be removed, just marked as deleted if the caller isn't a sync adapter. Sync adapters can remove tasks immediately.
 			 */
             case TASK_ID:
                 // add id to selection and fall through

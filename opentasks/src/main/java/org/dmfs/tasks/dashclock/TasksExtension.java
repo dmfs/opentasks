@@ -26,11 +26,12 @@ import android.text.format.Time;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.DateFormatter;
@@ -86,7 +87,7 @@ public class TasksExtension extends DashClockExtension
     protected void onInitialize(boolean isReconnect)
     {
         // enable automatic dashclock updates on task changes
-        addWatchContentUris(new String[] { TaskContract.getContentUri(TaskContract.taskAuthority(this)).toString() });
+        addWatchContentUris(new String[] { TaskContract.getContentUri(AuthorityUtil.taskAuthority(this)).toString() });
         super.onInitialize(isReconnect);
 
         mDateFormatter = new DateFormatter(this);
@@ -97,7 +98,7 @@ public class TasksExtension extends DashClockExtension
     protected void onUpdateData(int reason)
     {
         mNow = System.currentTimeMillis();
-        mAuthority = TaskContract.taskAuthority(this);
+        mAuthority = AuthorityUtil.taskAuthority(this);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         mDisplayMode = Integer.valueOf(sharedPref.getString(DashClockPreferenceActivity.KEY_PREF_DISPLAY_MODE, "1"));
         publishRecentTaskUpdate();

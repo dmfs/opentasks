@@ -47,11 +47,12 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.text.format.Time;
 import android.util.Log;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
@@ -119,7 +120,7 @@ public class NotificationUpdaterService extends Service
     @Override
     public void onCreate()
     {
-        mAuthority = TaskContract.taskAuthority(this);
+        mAuthority = AuthorityUtil.taskAuthority(this);
         super.onCreate();
         updateNextDayAlarm();
     }
@@ -309,7 +310,7 @@ public class NotificationUpdaterService extends Service
         ArrayList<ContentSet> tasksToPin = new ArrayList<ContentSet>(20);
 
         final ContentResolver resolver = this.getContentResolver();
-        final Uri contentUri = Tasks.getContentUri(TaskContract.taskAuthority(this));
+        final Uri contentUri = Tasks.getContentUri(AuthorityUtil.taskAuthority(this));
         final Cursor cursor = resolver.query(contentUri, new String[] {
                         Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
                         Tasks.STATUS, Tasks.PRIORITY, Tasks.IS_CLOSED }, Tasks.PINNED + "= 1", null,

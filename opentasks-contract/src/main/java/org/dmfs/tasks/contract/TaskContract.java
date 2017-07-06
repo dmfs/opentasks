@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package org.dmfs.provider.tasks;
+package org.dmfs.tasks.contract;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ProviderInfo;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.SyncStateContract;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,10 +47,6 @@ import java.util.Map;
  */
 public final class TaskContract
 {
-    /**
-     * The task authority cache.
-     */
-    private static Map<String, String> sAuthorities = Collections.synchronizedMap(new HashMap<String, String>(4));
 
     private static Map<String, UriFactory> sUriFactories = new HashMap<String, UriFactory>(4);
 
@@ -169,7 +159,7 @@ public final class TaskContract
      */
     public static class SyncState implements SyncStateContract.Columns, BaseColumns
     {
-        final static String CONTENT_URI_PATH = "syncstate";
+        public final static String CONTENT_URI_PATH = "syncstate";
 
 
         /**
@@ -180,7 +170,7 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
@@ -196,7 +186,7 @@ public final class TaskContract
      *
      * @return A {@link Uri}.
      */
-    public final static Uri getContentUri(String authority)
+    public static Uri getContentUri(String authority)
     {
         return getUriFactory(authority).getUri();
     }
@@ -434,7 +424,7 @@ public final class TaskContract
      */
     public static final class TaskLists implements TaskListColumns, TaskListSyncColumns, CommonSyncColumns
     {
-        static final String CONTENT_URI_PATH = "tasklists";
+        public static final String CONTENT_URI_PATH = "tasklists";
 
         /**
          * The default sort order.
@@ -457,7 +447,7 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
@@ -944,11 +934,11 @@ public final class TaskContract
          */
         public static final String VISIBLE = "visible";
 
-        static final String CONTENT_URI_PATH = "tasks";
+        public static final String CONTENT_URI_PATH = "tasks";
 
-        static final String SEARCH_URI_PATH = "tasks_search";
+        public static final String SEARCH_URI_PATH = "tasks_search";
 
-        static final String SEARCH_QUERY_PARAMETER = "q";
+        public static final String SEARCH_QUERY_PARAMETER = "q";
 
         public static final String DEFAULT_SORT_ORDER = DUE;
 
@@ -965,13 +955,13 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
 
 
-        public final static Uri getSearchUri(String authority, String query)
+        public static Uri getSearchUri(String authority, String query)
         {
             Uri.Builder builder = getUriFactory(authority).getUri(SEARCH_URI_PATH).buildUpon();
             builder.appendQueryParameter(SEARCH_QUERY_PARAMETER, Uri.encode(query));
@@ -1141,7 +1131,7 @@ public final class TaskContract
          */
         public static final String VISIBLE = "visible";
 
-        static final String CONTENT_URI_PATH = "instances";
+        public static final String CONTENT_URI_PATH = "instances";
 
         public static final String DEFAULT_SORT_ORDER = INSTANCE_DUE_SORTING;
 
@@ -1154,7 +1144,7 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
@@ -1187,7 +1177,7 @@ public final class TaskContract
     public static final class Categories implements CategoriesColumns
     {
 
-        static final String CONTENT_URI_PATH = "categories";
+        public static final String CONTENT_URI_PATH = "categories";
 
         public static final String DEFAULT_SORT_ORDER = NAME;
 
@@ -1200,7 +1190,7 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
@@ -1221,7 +1211,7 @@ public final class TaskContract
     public static final class Alarms implements AlarmsColumns
     {
 
-        static final String CONTENT_URI_PATH = "alarms";
+        public static final String CONTENT_URI_PATH = "alarms";
 
 
         /**
@@ -1232,7 +1222,7 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
@@ -1308,7 +1298,7 @@ public final class TaskContract
     public static final class Properties implements PropertySyncColumns, PropertyColumns
     {
 
-        static final String CONTENT_URI_PATH = "properties";
+        public static final String CONTENT_URI_PATH = "properties";
 
         public static final String DEFAULT_SORT_ORDER = DATA0;
 
@@ -1321,7 +1311,7 @@ public final class TaskContract
          *
          * @return A {@link Uri}.
          */
-        public final static Uri getContentUri(String authority)
+        public static Uri getContentUri(String authority)
         {
             return getUriFactory(authority).getUri(CONTENT_URI_PATH);
         }
@@ -1634,7 +1624,7 @@ public final class TaskContract
             public final static String MINUTES_BEFORE = DATA0;
 
             /**
-             * The reference date for the alarm. Either {@link ALARM_REFERENCE_DUE_DATE} or {@link ALARM_REFERENCE_START_DATE}.
+             * The reference date for the alarm. Either {@link #ALARM_REFERENCE_DUE_DATE} or {@link #ALARM_REFERENCE_START_DATE}.
              * <p>
              * Value: Integer
              * </p>
@@ -1650,8 +1640,8 @@ public final class TaskContract
             public final static String MESSAGE = DATA2;
 
             /**
-             * The type of the alarm. Use the provided alarm types {@link ALARM_TYPE_MESSAGE}, {@link ALARM_TYPE_SOUND}, {@link ALARM_TYPE_NOTHING},
-             * {@link ALARM_TYPE_EMAIL} and {@link ALARM_TYPE_SMS}.
+             * The type of the alarm. Use the provided alarm types {@link #ALARM_TYPE_MESSAGE}, {@link #ALARM_TYPE_SOUND}, {@link #ALARM_TYPE_NOTHING},
+             * {@link #ALARM_TYPE_EMAIL} and {@link #ALARM_TYPE_SMS}.
              * <p>
              * Value: Integer
              * </p>
@@ -1680,66 +1670,6 @@ public final class TaskContract
 
         }
         return uriFactory;
-    }
-
-
-    /**
-     * Returns the authority of the {@link TaskProvider} in the given {@link Context}.
-     * <p/>
-     * TODO: create an Authority class instead that handles everything about authorities. It could replace {@link UriFactory} as well. The Authority class could
-     * have a generic parameter that identifies the authority provider or contract class.
-     *
-     * @param context
-     *         A {@link Context} of an app that contains a {@link TaskProvider}.
-     *
-     * @return The authority.
-     *
-     * @throws RuntimeException
-     *         if there is no {@link TaskProvider} in that {@link Context}.
-     */
-    public static synchronized String taskAuthority(Context context)
-    {
-        String packageName = context.getPackageName();
-        if (sAuthorities.containsKey(packageName))
-        {
-            return sAuthorities.get(packageName);
-        }
-
-        PackageManager packageManager = context.getPackageManager();
-
-        // first get the PackageInfo of this app.
-        PackageInfo packageInfo;
-        try
-        {
-            packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_PROVIDERS);
-        }
-        catch (NameNotFoundException e)
-        {
-            throw new RuntimeException("Could not find TaskProvider!", e);
-        }
-
-        // next scan all providers for TaskProvider
-        for (ProviderInfo provider : packageInfo.providers)
-        {
-            Class<?> providerClass;
-            try
-            {
-                providerClass = Class.forName(provider.name);
-            }
-            catch (ClassNotFoundException e)
-            {
-                continue;
-            }
-
-            if (!TaskProvider.class.isAssignableFrom(providerClass))
-            {
-                continue;
-            }
-
-            sAuthorities.put(packageName, provider.authority);
-            return provider.authority;
-        }
-        throw new RuntimeException("Could not find TaskProvider! Make sure you added it to your AndroidManifest.xml.");
     }
 
 }

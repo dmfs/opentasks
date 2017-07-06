@@ -16,7 +16,7 @@
 
 package org.dmfs.tasks.groupings;
 
-import org.dmfs.provider.tasks.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;

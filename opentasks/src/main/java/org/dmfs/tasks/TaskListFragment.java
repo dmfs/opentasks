@@ -54,9 +54,10 @@ import android.widget.TextView;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;
@@ -245,7 +246,7 @@ public class TaskListFragment extends SupportFragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
-        mAuthority = TaskContract.taskAuthority(activity);
+        mAuthority = AuthorityUtil.taskAuthority(activity);
 
         mAppContext = activity.getBaseContext();
 

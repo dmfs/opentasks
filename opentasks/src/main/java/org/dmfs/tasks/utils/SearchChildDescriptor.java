@@ -21,7 +21,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.filters.AbstractFilter;
 
 

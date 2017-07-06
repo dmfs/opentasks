@@ -18,8 +18,8 @@ package org.dmfs.tasks.model;
 
 import android.text.format.Time;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
 import org.dmfs.tasks.model.adapters.ColorFieldAdapter;
