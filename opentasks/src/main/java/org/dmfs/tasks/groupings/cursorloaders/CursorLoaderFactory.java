@@ -26,42 +26,42 @@ import android.support.v4.content.Loader;
 
 /**
  * A concrete Factory for a {@link CursorLoader}.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class CursorLoaderFactory extends AbstractCursorLoaderFactory
 {
-	private final Uri mUri;
-	private final String[] mProjection;
-	private final String mSelection;
-	private final String[] mSelectionArgs;
-	private final String mSortOrder;
+    private final Uri mUri;
+    private final String[] mProjection;
+    private final String mSelection;
+    private final String[] mSelectionArgs;
+    private final String mSortOrder;
 
 
-	/**
-	 * Initialize the Factory with the arguments to initialize the CursorLoader. The parameters are just passed to
-	 * {@link CursorLoader#CursorLoader(Context, Uri, String[], String, String[], String)}.
-	 * 
-	 * @param uri
-	 * @param projection
-	 * @param selection
-	 * @param selectionArgs
-	 * @param sortOrder
-	 */
-	public CursorLoaderFactory(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)
-	{
-		mUri = uri;
-		mProjection = projection;
-		mSelection = selection;
-		mSelectionArgs = selectionArgs;
-		mSortOrder = sortOrder;
-	}
+    /**
+     * Initialize the Factory with the arguments to initialize the CursorLoader. The parameters are just passed to
+     * {@link CursorLoader#CursorLoader(Context, Uri, String[], String, String[], String)}.
+     *
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     */
+    public CursorLoaderFactory(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)
+    {
+        mUri = uri;
+        mProjection = projection;
+        mSelection = selection;
+        mSelectionArgs = selectionArgs;
+        mSortOrder = sortOrder;
+    }
 
 
-	@Override
-	public Loader<Cursor> getLoader(Context context)
-	{
-		return new CursorLoader(context, mUri, mProjection, mSelection, mSelectionArgs, mSortOrder);
-	}
+    @Override
+    public Loader<Cursor> getLoader(Context context)
+    {
+        return new CursorLoader(context, mUri, mProjection, mSelection, mSelectionArgs, mSortOrder);
+    }
 
 }

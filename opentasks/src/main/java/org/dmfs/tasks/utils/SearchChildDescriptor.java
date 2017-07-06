@@ -17,65 +17,65 @@
 
 package org.dmfs.tasks.utils;
 
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-import org.dmfs.tasks.groupings.filters.AbstractFilter;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.groupings.filters.AbstractFilter;
+
 
 /**
  * Describes how to display the children of the search grouping.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
- * 
  */
 public class SearchChildDescriptor extends ExpandableChildDescriptor
 {
-	private String mAuthority;
-	private String mQueryColumn;
+    private String mAuthority;
+    private String mQueryColumn;
 
 
-	/**
-	 * Create a new {@link SearchChildDescriptor} using the given values.
-	 * 
-	 * @param projection
-	 * @param selection
-	 * @param sortOrder
-	 * @param selectionColumns
-	 */
-	public SearchChildDescriptor(String authority, String queryColumn, String[] projection, String selection, String sortOrder, int... selectionColumns)
-	{
-		super();
-		mAuthority = authority;
-		mQueryColumn = queryColumn;
-		mProjection = projection;
-		mSelection = selection;
-		mSelectionColumns = selectionColumns;
-		mSortOrder = sortOrder;
-	}
+    /**
+     * Create a new {@link SearchChildDescriptor} using the given values.
+     *
+     * @param projection
+     * @param selection
+     * @param sortOrder
+     * @param selectionColumns
+     */
+    public SearchChildDescriptor(String authority, String queryColumn, String[] projection, String selection, String sortOrder, int... selectionColumns)
+    {
+        super();
+        mAuthority = authority;
+        mQueryColumn = queryColumn;
+        mProjection = projection;
+        mSelection = selection;
+        mSelectionColumns = selectionColumns;
+        mSortOrder = sortOrder;
+    }
 
 
-	/**
-	 * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as defined by {@code selectionColumns} in
-	 * {@link #ExpandableChildDescriptor(Uri, String[], String, String, int...)}. Also applies any selection defined by <code>filter</code>.
-	 * 
-	 * @param context
-	 *            A {@link Context}.
-	 * @param cursor
-	 *            The {@link Cursor} containing the selection.
-	 * @param filter
-	 *            An additional {@link AbstractFilter} to apply to the selection of the cursor.
-	 * @return A new {@link CursorLoader} instance.
-	 */
-	@Override
-	public CursorLoader getCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
-	{
-		CursorLoader cursorLoader = super.getCursorLoader(context, cursor, filter);
-		cursorLoader.setUri(Tasks.getSearchUri(mAuthority, cursor.getString(cursor.getColumnIndex(mQueryColumn))));
+    /**
+     * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as defined by {@code selectionColumns} in
+     * {@link #ExpandableChildDescriptor(Uri, String[], String, String, int...)}. Also applies any selection defined by <code>filter</code>.
+     *
+     * @param context
+     *         A {@link Context}.
+     * @param cursor
+     *         The {@link Cursor} containing the selection.
+     * @param filter
+     *         An additional {@link AbstractFilter} to apply to the selection of the cursor.
+     *
+     * @return A new {@link CursorLoader} instance.
+     */
+    @Override
+    public CursorLoader getCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
+    {
+        CursorLoader cursorLoader = super.getCursorLoader(context, cursor, filter);
+        cursorLoader.setUri(Tasks.getSearchUri(mAuthority, cursor.getString(cursor.getColumnIndex(mQueryColumn))));
 
-		return cursorLoader;
-	}
+        return cursorLoader;
+    }
 }

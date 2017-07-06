@@ -17,80 +17,80 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
-import org.dmfs.tasks.model.layout.LayoutOptions;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
+
 
 /**
  * Widget to display Integer values.
- * 
+ *
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
 public class PercentageFieldView extends AbstractFieldView
 {
-	private IntegerFieldAdapter mAdapter;
-	private TextView mText;
-	private ProgressBar mProgress;
+    private IntegerFieldAdapter mAdapter;
+    private TextView mText;
+    private ProgressBar mProgress;
 
 
-	public PercentageFieldView(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public PercentageFieldView(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	public PercentageFieldView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public PercentageFieldView(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public PercentageFieldView(Context context)
-	{
-		super(context);
-	}
+    public PercentageFieldView(Context context)
+    {
+        super(context);
+    }
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-		mText = (TextView) findViewById(R.id.text);
-		mProgress = (ProgressBar) findViewById(R.id.percentage_progress_bar);
-	}
+    @Override
+    protected void onFinishInflate()
+    {
+        super.onFinishInflate();
+        mText = (TextView) findViewById(R.id.text);
+        mProgress = (ProgressBar) findViewById(R.id.percentage_progress_bar);
+    }
 
 
-	@Override
-	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
-	{
-		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
-	}
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
+    {
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = (IntegerFieldAdapter) descriptor.getFieldAdapter();
+    }
 
 
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		if (mValues != null && mAdapter.get(mValues) != null)
-		{
-			int percentage = mAdapter.get(mValues);
-			mProgress.setProgress(percentage);
-			mText.setText(Integer.toString(percentage) + "%");
-			setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			setVisibility(View.GONE);
-		}
-	}
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        if (mValues != null && mAdapter.get(mValues) != null)
+        {
+            int percentage = mAdapter.get(mValues);
+            mProgress.setProgress(percentage);
+            mText.setText(Integer.toString(percentage) + "%");
+            setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            setVisibility(View.GONE);
+        }
+    }
 
 }

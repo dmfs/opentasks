@@ -25,69 +25,94 @@ import org.dmfs.tasks.model.defaults.Default;
 
 /**
  * Enhances an existing {@link FieldAdapter} with a custom default value generator.
- * 
- * @param <Type> Type of the {@link FieldAdapter}
+ *
+ * @param <Type>
+ *         Type of the {@link FieldAdapter}
  */
-public class CustomizedDefaultFieldAdapter<Type> extends FieldAdapter<Type> {
+public class CustomizedDefaultFieldAdapter<Type> extends FieldAdapter<Type>
+{
 
     private final FieldAdapter<Type> mFieldAdapter;
     private final Default<Type> mDefault;
 
+
     /**
      * Constructor for a new CustomizedDefaultFieldAdapter
-     * @param fieldAdapter FieldAdapter which forms the base for this Adapter.
-     * @param defaultGenerator Custom default value generator.
+     *
+     * @param fieldAdapter
+     *         FieldAdapter which forms the base for this Adapter.
+     * @param defaultGenerator
+     *         Custom default value generator.
      */
-    public CustomizedDefaultFieldAdapter(FieldAdapter<Type> fieldAdapter, Default<Type> defaultGenerator) {
-        if (fieldAdapter == null) {
+    public CustomizedDefaultFieldAdapter(FieldAdapter<Type> fieldAdapter, Default<Type> defaultGenerator)
+    {
+        if (fieldAdapter == null)
+        {
             throw new IllegalArgumentException("fieldAdapter must not be null");
         }
-        if (defaultGenerator == null) {
+        if (defaultGenerator == null)
+        {
             throw new IllegalArgumentException("defaultGenerator must not be null");
         }
         this.mFieldAdapter = fieldAdapter;
         this.mDefault = defaultGenerator;
     }
 
+
     @Override
-    public Type get(ContentSet values) {
+    public Type get(ContentSet values)
+    {
         return mFieldAdapter.get(values);
     }
 
+
     @Override
-    public Type get(Cursor cursor) {
+    public Type get(Cursor cursor)
+    {
         return mFieldAdapter.get(cursor);
     }
+
 
     /**
      * Get a default value for the {@link FieldAdapter} based on the {@link Default} instance.
      *
-     * @param values    The {@link ContentSet}.
-     * @return	A default Value
+     * @param values
+     *         The {@link ContentSet}.
+     *
+     * @return A default Value
      */
     @Override
-    public Type getDefault(ContentSet values) {
+    public Type getDefault(ContentSet values)
+    {
         Type defaultValue = mFieldAdapter.getDefault(values);
         return mDefault.getCustomDefault(values, defaultValue);
     }
 
+
     @Override
-    public void set(ContentSet values, Type value) {
+    public void set(ContentSet values, Type value)
+    {
         mFieldAdapter.set(values, value);
     }
 
+
     @Override
-    public void set(ContentValues values, Type value) {
+    public void set(ContentValues values, Type value)
+    {
         mFieldAdapter.set(values, value);
     }
 
+
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification) {
+    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification)
+    {
         mFieldAdapter.registerListener(values, listener, initialNotification);
     }
 
+
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener) {
+    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    {
         mFieldAdapter.unregisterListener(values, listener);
     }
 }

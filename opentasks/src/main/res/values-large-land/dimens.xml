@@ -2,5 +2,5 @@
 
     <dimen name="task_list_right_margin">10dp</dimen>
     <dimen name="opentasks_two_pane_list_width">360dp</dimen>
-    
+
 </resources>

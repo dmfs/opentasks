@@ -1,17 +1,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/editor_action_cancel"
-        android:icon="@drawable/content_remove_light"
-        android:orderInCategory="99"
-        android:title="@string/action_cancel"
-        app:showAsAction="always|withText"/>
+            android:id="@+id/editor_action_cancel"
+            android:icon="@drawable/content_remove_light"
+            android:orderInCategory="99"
+            android:title="@string/action_cancel"
+            app:showAsAction="always|withText"/>
     <item
-        android:id="@+id/editor_action_save"
-        android:icon="@drawable/content_save_light"
-        android:orderInCategory="100"
-        android:title="@string/action_save"
-        app:showAsAction="always|withText"/>
+            android:id="@+id/editor_action_save"
+            android:icon="@drawable/content_save_light"
+            android:orderInCategory="100"
+            android:title="@string/action_save"
+            app:showAsAction="always|withText"/>
 
 </menu>

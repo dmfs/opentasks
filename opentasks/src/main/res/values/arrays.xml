@@ -88,7 +88,8 @@
         <item>"Fiji"</item>
         <item>"Tonga"</item>
     </string-array>
-    <string-array name="timezone_values" translatable="false">
+    <string-array name="timezone_values"
+            translatable="false">
         <item>"Pacific/Majuro"</item>
         <item>"Pacific/Midway"</item>
         <item>"Pacific/Honolulu"</item>

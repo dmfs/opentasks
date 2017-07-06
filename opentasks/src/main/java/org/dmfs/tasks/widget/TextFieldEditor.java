@@ -17,12 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.StringFieldAdapter;
-import org.dmfs.tasks.model.layout.LayoutDescriptor;
-import org.dmfs.tasks.model.layout.LayoutOptions;
-
 import android.content.Context;
 import android.os.Build;
 import android.text.InputType;
@@ -32,6 +26,12 @@ import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutDescriptor;
+import org.dmfs.tasks.model.layout.LayoutOptions;
 
 
 /**
@@ -44,110 +44,110 @@ import android.widget.EditText;
  * <p>
  * TODO: find a way to enable the spell checker (at least temporarily).
  * </p>
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChangeListener
 {
-	private StringFieldAdapter mAdapter;
-	private EditText mText;
+    private StringFieldAdapter mAdapter;
+    private EditText mText;
 
 
-	public TextFieldEditor(Context context)
-	{
-		super(context);
-	}
+    public TextFieldEditor(Context context)
+    {
+        super(context);
+    }
 
 
-	public TextFieldEditor(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public TextFieldEditor(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public TextFieldEditor(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public TextFieldEditor(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-		// super.onFinishInflate();
-		mText = (EditText) findViewById(android.R.id.text1);
-		if (mText != null)
-		{
-			/*
-			 * enable memory leak workaround on android < 4.3: disable spell checker
+    @Override
+    protected void onFinishInflate()
+    {
+        // super.onFinishInflate();
+        mText = (EditText) findViewById(android.R.id.text1);
+        if (mText != null)
+        {
+            /*
+             * enable memory leak workaround on android < 4.3: disable spell checker
 			 */
 
-			int inputType = mText.getInputType();
-			if (Build.VERSION.SDK_INT < 18)
-			{
-				mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-			}
-			mText.setOnFocusChangeListener(this);
-		}
-	}
+            int inputType = mText.getInputType();
+            if (Build.VERSION.SDK_INT < 18)
+            {
+                mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+            }
+            mText.setOnFocusChangeListener(this);
+        }
+    }
 
 
-	@Override
-	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
-	{
-		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (StringFieldAdapter) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
+    {
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = (StringFieldAdapter) descriptor.getFieldAdapter();
+        mText.setHint(descriptor.getHint());
 
-		if (layoutOptions != null)
-		{
-			boolean multiLine = layoutOptions.getBoolean(LayoutDescriptor.OPTION_MULTILINE, true);
-			mText.setSingleLine(!multiLine);
-			if (!multiLine)
-			{
-				mText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-			}
-		}
-	}
-
-
-	@Override
-	public void updateValues()
-	{
-		if (mValues != null)
-		{
-			final String newText = mText.getText().toString();
-			final String oldText = mAdapter.get(mValues);
-			if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
-			{
-				mAdapter.set(mValues, newText);
-			}
-		}
-	}
+        if (layoutOptions != null)
+        {
+            boolean multiLine = layoutOptions.getBoolean(LayoutDescriptor.OPTION_MULTILINE, true);
+            mText.setSingleLine(!multiLine);
+            if (!multiLine)
+            {
+                mText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            }
+        }
+    }
 
 
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		if (mValues != null)
-		{
-			String newValue = mAdapter.get(mValues);
-			String oldValue = mText.getText().toString();
-			if (!TextUtils.equals(oldValue, newValue)) // don't trigger unnecessary updates
-			{
-				mText.setText(newValue);
-			}
-		}
-	}
+    @Override
+    public void updateValues()
+    {
+        if (mValues != null)
+        {
+            final String newText = mText.getText().toString();
+            final String oldText = mAdapter.get(mValues);
+            if (!TextUtils.equals(newText, oldText)) // don't trigger unnecessary updates
+            {
+                mAdapter.set(mValues, newText);
+            }
+        }
+    }
 
 
-	@Override
-	public void onFocusChange(View v, boolean hasFocus)
-	{
-		if (!hasFocus)
-		{
-			// we've just lost the focus, ensure we update the values
-			updateValues();
-		}
-	}
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        if (mValues != null)
+        {
+            String newValue = mAdapter.get(mValues);
+            String oldValue = mText.getText().toString();
+            if (!TextUtils.equals(oldValue, newValue)) // don't trigger unnecessary updates
+            {
+                mText.setText(newValue);
+            }
+        }
+    }
+
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus)
+    {
+        if (!hasFocus)
+        {
+            // we've just lost the focus, ensure we update the values
+            updateValues();
+        }
+    }
 }

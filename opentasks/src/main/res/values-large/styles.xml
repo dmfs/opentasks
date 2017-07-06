@@ -16,11 +16,13 @@
         <item name="android:background">@android:color/white</item>
     </style>
 
-    <style name="task_list_item_date" parent="dark_text">
+    <style name="task_list_item_date"
+            parent="dark_text">
         <item name="android:layout_marginRight">25dp</item>
     </style>
 
-    <style name="task_list_group_count" parent="editor_label_text">
+    <style name="task_list_group_count"
+            parent="editor_label_text">
         <item name="android:layout_marginRight">25dp</item>
     </style>
 

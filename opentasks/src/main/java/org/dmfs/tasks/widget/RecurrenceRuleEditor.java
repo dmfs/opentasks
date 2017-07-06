@@ -23,29 +23,29 @@ import android.util.AttributeSet;
 
 /**
  * Editor widget for recurrence rules.
- * 
+ * <p>
  * TODO: Implement it.
- * 
+ *
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
 public class RecurrenceRuleEditor extends TextFieldEditor
 {
 
-	public RecurrenceRuleEditor(Context context)
-	{
-		super(context);
-	}
+    public RecurrenceRuleEditor(Context context)
+    {
+        super(context);
+    }
 
 
-	public RecurrenceRuleEditor(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public RecurrenceRuleEditor(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public RecurrenceRuleEditor(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public RecurrenceRuleEditor(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 }

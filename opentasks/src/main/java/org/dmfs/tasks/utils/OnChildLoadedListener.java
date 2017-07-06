@@ -22,18 +22,18 @@ import android.database.Cursor;
 
 /**
  * A listener that is notified when an {@link ExpandableGroupDescriptorAdapter} has loaded a child cursor.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public interface OnChildLoadedListener
 {
-	/**
-	 * Called when the cursor for the children of group <code>pos</code> has been loaded.
-	 * 
-	 * @param pos
-	 *            The position of the group whose child cursor has been loaded.
-	 * @param childCursor
-	 *            The cursor of the children for the group.
-	 */
-	public void onChildLoaded(int pos, Cursor childCursor);
+    /**
+     * Called when the cursor for the children of group <code>pos</code> has been loaded.
+     *
+     * @param pos
+     *         The position of the group whose child cursor has been loaded.
+     * @param childCursor
+     *         The cursor of the children for the group.
+     */
+    public void onChildLoaded(int pos, Cursor childCursor);
 }

@@ -23,185 +23,184 @@ import java.util.TimeZone;
 
 /**
  * This is a wrapper for a {@link TimeZone} that provides a less strict {@link #equals(Object)} method than some {@link TimeZone} implementations.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TimeZoneWrapper extends TimeZone
 {
 
-	/**
-	 * Generated serial id.
-	 */
-	private static final long serialVersionUID = -7166830450275216013L;
+    /**
+     * Generated serial id.
+     */
+    private static final long serialVersionUID = -7166830450275216013L;
 
-	/**
-	 * Time stamp of 2013-01-01 00:00:00 UTC.
-	 */
-	private final static Date TEST_DATE = new Date(1356998400000L);
+    /**
+     * Time stamp of 2013-01-01 00:00:00 UTC.
+     */
+    private final static Date TEST_DATE = new Date(1356998400000L);
 
-	/**
-	 * The {@link TimeZone} this instance wraps.
-	 */
-	private final TimeZone mTimeZone;
+    /**
+     * The {@link TimeZone} this instance wraps.
+     */
+    private final TimeZone mTimeZone;
 
-	private Long mReferenceTimeStamp;
-
-
-	/**
-	 * Constructor that wraps the default time zone.
-	 */
-	public TimeZoneWrapper()
-	{
-		mTimeZone = TimeZone.getDefault();
-		setID(mTimeZone.getID());
-	}
+    private Long mReferenceTimeStamp;
 
 
-	/**
-	 * Constructor that wraps the given {@link TimeZone}.
-	 * 
-	 * @param timeZone
-	 *            The {@link TimeZone} to wrap.
-	 */
-	public TimeZoneWrapper(TimeZone timeZone)
-	{
-		mTimeZone = timeZone;
-		setID(timeZone.getID());
-	}
+    /**
+     * Constructor that wraps the default time zone.
+     */
+    public TimeZoneWrapper()
+    {
+        mTimeZone = TimeZone.getDefault();
+        setID(mTimeZone.getID());
+    }
 
 
-	/**
-	 * Constructor that wraps the time zone with the given ID.
-	 * 
-	 * 
-	 * @param id
-	 *            The time zone id of the time zone to wrap.
-	 */
-	public TimeZoneWrapper(String id)
-	{
-		mTimeZone = TimeZone.getTimeZone(id);
-		setID(mTimeZone.getID());
-	}
+    /**
+     * Constructor that wraps the given {@link TimeZone}.
+     *
+     * @param timeZone
+     *         The {@link TimeZone} to wrap.
+     */
+    public TimeZoneWrapper(TimeZone timeZone)
+    {
+        mTimeZone = timeZone;
+        setID(timeZone.getID());
+    }
 
 
-	@Override
-	public int getOffset(int era, int year, int month, int day, int dayOfWeek, int timeOfDayMillis)
-	{
-		return mTimeZone.getOffset(era, year, month, day, dayOfWeek, timeOfDayMillis);
-	}
+    /**
+     * Constructor that wraps the time zone with the given ID.
+     *
+     * @param id
+     *         The time zone id of the time zone to wrap.
+     */
+    public TimeZoneWrapper(String id)
+    {
+        mTimeZone = TimeZone.getTimeZone(id);
+        setID(mTimeZone.getID());
+    }
 
 
-	@Override
-	public int getRawOffset()
-	{
-		return mTimeZone.getRawOffset();
-	}
+    @Override
+    public int getOffset(int era, int year, int month, int day, int dayOfWeek, int timeOfDayMillis)
+    {
+        return mTimeZone.getOffset(era, year, month, day, dayOfWeek, timeOfDayMillis);
+    }
 
 
-	@Override
-	public boolean inDaylightTime(Date time)
-	{
-		return mTimeZone.inDaylightTime(time);
-	}
+    @Override
+    public int getRawOffset()
+    {
+        return mTimeZone.getRawOffset();
+    }
 
 
-	@Override
-	public void setRawOffset(int offsetMillis)
-	{
-		mTimeZone.setRawOffset(offsetMillis);
-	}
+    @Override
+    public boolean inDaylightTime(Date time)
+    {
+        return mTimeZone.inDaylightTime(time);
+    }
 
 
-	@Override
-	public boolean useDaylightTime()
-	{
-		return mTimeZone.useDaylightTime();
-	}
+    @Override
+    public void setRawOffset(int offsetMillis)
+    {
+        mTimeZone.setRawOffset(offsetMillis);
+    }
 
 
-	public void setReferenceTimeStamp(Long timeStamp)
-	{
-		mReferenceTimeStamp = timeStamp;
-	}
+    @Override
+    public boolean useDaylightTime()
+    {
+        return mTimeZone.useDaylightTime();
+    }
 
 
-	public Long getReferenceTimeStamp()
-	{
-		return mReferenceTimeStamp;
-	}
+    public void setReferenceTimeStamp(Long timeStamp)
+    {
+        mReferenceTimeStamp = timeStamp;
+    }
 
 
-	public int getReferenceTimeOffset()
-	{
-		if (mReferenceTimeStamp != null)
-		{
-			return mTimeZone.getOffset(mReferenceTimeStamp);
-		}
-		else
-		{
-			return mTimeZone.getRawOffset();
-		}
-	}
+    public Long getReferenceTimeStamp()
+    {
+        return mReferenceTimeStamp;
+    }
 
 
-	public int getOffset(Long timestamp)
-	{
-		if (timestamp != null)
-		{
-			return mTimeZone.getOffset(timestamp);
-		}
-		else
-		{
-			return mTimeZone.getRawOffset();
-		}
-	}
+    public int getReferenceTimeOffset()
+    {
+        if (mReferenceTimeStamp != null)
+        {
+            return mTimeZone.getOffset(mReferenceTimeStamp);
+        }
+        else
+        {
+            return mTimeZone.getRawOffset();
+        }
+    }
 
 
-	public boolean referenceInDaylightTime()
-	{
-		if (mReferenceTimeStamp != null)
-		{
-			return mTimeZone.inDaylightTime(new Date(mReferenceTimeStamp));
-		}
-		else
-		{
-			return false;
-		}
-	}
+    public int getOffset(Long timestamp)
+    {
+        if (timestamp != null)
+        {
+            return mTimeZone.getOffset(timestamp);
+        }
+        else
+        {
+            return mTimeZone.getRawOffset();
+        }
+    }
 
 
-	public boolean inDaylightTime(Long timestamp)
-	{
-		if (timestamp != null)
-		{
-			return mTimeZone.inDaylightTime(new Date(timestamp));
-		}
-		else
-		{
-			return false;
-		}
-	}
+    public boolean referenceInDaylightTime()
+    {
+        if (mReferenceTimeStamp != null)
+        {
+            return mTimeZone.inDaylightTime(new Date(mReferenceTimeStamp));
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
-	@Override
-	public int hashCode()
-	{
-		/*
-		 * Return the raw offset as hash code. It satisfies the requirements of a hash values: Time zones that are equal have the same raw offset.
+    public boolean inDaylightTime(Long timestamp)
+    {
+        if (timestamp != null)
+        {
+            return mTimeZone.inDaylightTime(new Date(timestamp));
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        /*
+         * Return the raw offset as hash code. It satisfies the requirements of a hash values: Time zones that are equal have the same raw offset.
 		 */
-		return getRawOffset();
-	}
+        return getRawOffset();
+    }
 
 
-	@Override
-	public boolean equals(Object object)
-	{
-		if (!(object instanceof TimeZoneWrapper)) // matches null too
-		{
-			return false;
-		}
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof TimeZoneWrapper)) // matches null too
+        {
+            return false;
+        }
 
-		TimeZone otherTimeZone = (TimeZone) object;
+        TimeZone otherTimeZone = (TimeZone) object;
 
 		/*
 		 * This is a very simple check for equality of two time zones. It returns the wrong result if two time zones have the same UTC offset, but use different
@@ -211,15 +210,16 @@ public class TimeZoneWrapper extends TimeZone
 		 * 
 		 * TODO: improve the check
 		 */
-		return (mTimeZone.getID().equals(otherTimeZone.getID()))
-			|| (mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
-				&& mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(TEST_DATE));
-	}
+        return (mTimeZone.getID().equals(otherTimeZone.getID()))
+                || (mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
+                && mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(
+                TEST_DATE));
+    }
 
 
-	@Override
-	public String toString()
-	{
-		return mTimeZone.toString();
-	}
+    @Override
+    public String toString()
+    {
+        return mTimeZone.toString();
+    }
 }

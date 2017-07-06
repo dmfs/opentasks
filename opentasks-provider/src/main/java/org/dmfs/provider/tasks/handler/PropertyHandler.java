@@ -17,129 +17,129 @@
 
 package org.dmfs.provider.tasks.handler;
 
-import org.dmfs.provider.tasks.FTSDatabaseHelper;
-import org.dmfs.provider.tasks.TaskContract.Properties;
-import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.provider.tasks.FTSDatabaseHelper;
+import org.dmfs.provider.tasks.TaskContract.Properties;
+import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
+
 
 /**
  * Abstract class that is used as template for specific property handlers.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
- * 
  */
 public abstract class PropertyHandler
 {
 
-	/**
-	 * Validates the content of the property prior to insert and update transactions.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            The id of the task this property belongs to.
-	 * @param propertyId
-	 *            The id of the property if <code>isNew</code> is <code>false</code>. If <code>isNew</code> is <code>true</code> this value is ignored.
-	 * @param isNew
-	 *            Indicates that the content is new and not an update.
-	 * @param values
-	 *            The {@link ContentValues} to validate.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * 
-	 * @return The valid {@link ContentValues}.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if the {@link ContentValues} are invalid.
-	 */
-	public abstract ContentValues validateValues(SQLiteDatabase db, long taskId, long propertyId, boolean isNew, ContentValues values, boolean isSyncAdapter);
+    /**
+     * Validates the content of the property prior to insert and update transactions.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         The id of the task this property belongs to.
+     * @param propertyId
+     *         The id of the property if <code>isNew</code> is <code>false</code>. If <code>isNew</code> is <code>true</code> this value is ignored.
+     * @param isNew
+     *         Indicates that the content is new and not an update.
+     * @param values
+     *         The {@link ContentValues} to validate.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return The valid {@link ContentValues}.
+     *
+     * @throws IllegalArgumentException
+     *         if the {@link ContentValues} are invalid.
+     */
+    public abstract ContentValues validateValues(SQLiteDatabase db, long taskId, long propertyId, boolean isNew, ContentValues values, boolean isSyncAdapter);
 
 
-	/**
-	 * Inserts the property {@link ContentValues} into the database.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            The id of the task the new property belongs to.
-	 * @param values
-	 *            The {@link ContentValues} to insert.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * 
-	 * @return The row id of the new property as <code>long</code>
-	 */
-	public long insert(SQLiteDatabase db, long taskId, ContentValues values, boolean isSyncAdapter)
-	{
-		return db.insert(Tables.PROPERTIES, "", values);
-	}
+    /**
+     * Inserts the property {@link ContentValues} into the database.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         The id of the task the new property belongs to.
+     * @param values
+     *         The {@link ContentValues} to insert.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return The row id of the new property as <code>long</code>
+     */
+    public long insert(SQLiteDatabase db, long taskId, ContentValues values, boolean isSyncAdapter)
+    {
+        return db.insert(Tables.PROPERTIES, "", values);
+    }
 
 
-	/**
-	 * Updates the property {@link ContentValues} in the database.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            The id of the task this property belongs to.
-	 * @param propertyId
-	 *            The id of the property.
-	 * @param values
-	 *            The {@link ContentValues} to update.
-	 * @param oldValues
-	 *            A {@link Cursor} pointing to the old values in the database.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * 
-	 * @return The number of rows affected.
-	 */
-	public int update(SQLiteDatabase db, long taskId, long propertyId, ContentValues values, Cursor oldValues, boolean isSyncAdapter)
-	{
-		return db.update(Tables.PROPERTIES, values, Properties.PROPERTY_ID + "=" + propertyId, null);
-	}
+    /**
+     * Updates the property {@link ContentValues} in the database.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         The id of the task this property belongs to.
+     * @param propertyId
+     *         The id of the property.
+     * @param values
+     *         The {@link ContentValues} to update.
+     * @param oldValues
+     *         A {@link Cursor} pointing to the old values in the database.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return The number of rows affected.
+     */
+    public int update(SQLiteDatabase db, long taskId, long propertyId, ContentValues values, Cursor oldValues, boolean isSyncAdapter)
+    {
+        return db.update(Tables.PROPERTIES, values, Properties.PROPERTY_ID + "=" + propertyId, null);
+    }
 
 
-	/**
-	 * Deletes the property in the database.
-	 * 
-	 * @param db
-	 *            The belonging database.
-	 * @param taskId
-	 *            The id of the task this property belongs to.
-	 * @param propertyId
-	 *            The id of the property.
-	 * @param oldValues
-	 *            A {@link Cursor} pointing to the old values in the database.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * @return
-	 */
-	public int delete(SQLiteDatabase db, long taskId, long propertyId, Cursor oldValues, boolean isSyncAdapter)
-	{
-		return db.delete(Tables.PROPERTIES, Properties.PROPERTY_ID + "=" + propertyId, null);
+    /**
+     * Deletes the property in the database.
+     *
+     * @param db
+     *         The belonging database.
+     * @param taskId
+     *         The id of the task this property belongs to.
+     * @param propertyId
+     *         The id of the property.
+     * @param oldValues
+     *         A {@link Cursor} pointing to the old values in the database.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return
+     */
+    public int delete(SQLiteDatabase db, long taskId, long propertyId, Cursor oldValues, boolean isSyncAdapter)
+    {
+        return db.delete(Tables.PROPERTIES, Properties.PROPERTY_ID + "=" + propertyId, null);
 
-	}
+    }
 
 
-	/**
-	 * Method hook to insert FTS entries on database migration.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            the row id of the task this property belongs to
-	 * @param propertyId
-	 *            the id of the property
-	 * @param text
-	 *            the searchable text of the property. If the property has multiple text snippets to search in, concat them separated by a space.
-	 */
-	protected void updateFTSEntry(SQLiteDatabase db, long taskId, long propertyId, String text)
-	{
-		FTSDatabaseHelper.updatePropertyFTSEntry(db, taskId, propertyId, text);
+    /**
+     * Method hook to insert FTS entries on database migration.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         the row id of the task this property belongs to
+     * @param propertyId
+     *         the id of the property
+     * @param text
+     *         the searchable text of the property. If the property has multiple text snippets to search in, concat them separated by a space.
+     */
+    protected void updateFTSEntry(SQLiteDatabase db, long taskId, long propertyId, String text)
+    {
+        FTSDatabaseHelper.updatePropertyFTSEntry(db, taskId, propertyId, text);
 
-	}
+    }
 }

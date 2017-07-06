@@ -1,24 +1,44 @@
 <resources>
 
-    <item name="task_field_account_type" type="id"/>
-    <item name="task_field_account_name" type="id"/>
-    <item name="task_field_list_and_account_name" type="id"/>
-    <item name="task_field_list_color" type="id"/>
-    <item name="task_field_list_name" type="id"/>
-    <item name="task_field_title" type="id"/>
-    <item name="task_field_status" type="id"/>
-    <item name="task_field_description" type="id"/>
-    <item name="task_field_due" type="id"/>
-    <item name="task_field_dtstart" type="id"/>
-    <item name="task_field_location" type="id"/>
-    <item name="task_field_percent_complete" type="id"/>
-    <item name="task_field_completed" type="id"/>
-    <item name="task_field_all_day" type="id"/>
-    <item name="task_field_timezone" type="id"/>
-    <item name="task_field_checklist" type="id"/>
-    <item name="task_field_created" type="id"/>
-    <item name="task_field_priority" type="id"/>
-    <item name="task_field_classification" type="id"/>
-    <item name="task_field_url" type="id"/>
+    <item name="task_field_account_type"
+            type="id"/>
+    <item name="task_field_account_name"
+            type="id"/>
+    <item name="task_field_list_and_account_name"
+            type="id"/>
+    <item name="task_field_list_color"
+            type="id"/>
+    <item name="task_field_list_name"
+            type="id"/>
+    <item name="task_field_title"
+            type="id"/>
+    <item name="task_field_status"
+            type="id"/>
+    <item name="task_field_description"
+            type="id"/>
+    <item name="task_field_due"
+            type="id"/>
+    <item name="task_field_dtstart"
+            type="id"/>
+    <item name="task_field_location"
+            type="id"/>
+    <item name="task_field_percent_complete"
+            type="id"/>
+    <item name="task_field_completed"
+            type="id"/>
+    <item name="task_field_all_day"
+            type="id"/>
+    <item name="task_field_timezone"
+            type="id"/>
+    <item name="task_field_checklist"
+            type="id"/>
+    <item name="task_field_created"
+            type="id"/>
+    <item name="task_field_priority"
+            type="id"/>
+    <item name="task_field_classification"
+            type="id"/>
+    <item name="task_field_url"
+            type="id"/>
 
 </resources>

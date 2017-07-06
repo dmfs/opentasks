@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
-        android:id="@android:id/title"
-        style="@style/editor_label_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="-8dip"
-        android:ellipsize="marquee"
-        android:fadingEdge="horizontal"
-        android:paddingLeft="4dip"
-        android:singleLine="true" />
+            android:id="@android:id/title"
+            style="@style/editor_label_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="-8dip"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:paddingLeft="4dip"
+            android:singleLine="true"/>
 
 </merge>

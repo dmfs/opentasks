@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.CheckListFieldEditor xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/task_edit_widget" >
+        style="@style/task_edit_widget">
 
-    <include layout="@layout/editor_header" />
+    <include layout="@layout/editor_header"/>
 
     <LinearLayout
-        android:id="@+id/checklist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="8dp" >
+            android:id="@+id/checklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
         <!-- Add empty element -->
 
-        <include layout="@layout/checklist_field_editor_element" />
+        <include layout="@layout/checklist_field_editor_element"/>
     </LinearLayout>
 
 </org.dmfs.tasks.widget.CheckListFieldEditor>

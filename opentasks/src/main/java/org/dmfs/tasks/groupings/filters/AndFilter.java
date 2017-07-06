@@ -19,13 +19,13 @@ package org.dmfs.tasks.groupings.filters;
 
 /**
  * A filter that joins a list of {@link AbstractFilter}s using the "AND" operator.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public final class AndFilter extends BinaryOperationFilter
 {
-	public AndFilter(AbstractFilter... filters)
-	{
-		super("AND", filters);
-	}
+    public AndFilter(AbstractFilter... filters)
+    {
+        super("AND", filters);
+    }
 }

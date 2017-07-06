@@ -17,120 +17,124 @@
 
 package org.dmfs.tasks.utils;
 
-import org.dmfs.tasks.groupings.cursorloaders.AbstractCursorLoaderFactory;
-import org.dmfs.tasks.groupings.filters.AbstractFilter;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
+import org.dmfs.tasks.groupings.cursorloaders.AbstractCursorLoaderFactory;
+import org.dmfs.tasks.groupings.filters.AbstractFilter;
+
 
 /**
  * A descriptor that knows how to load and present grouped data.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ExpandableGroupDescriptor
 {
-	private final AbstractCursorLoaderFactory mLoaderFactory;
-	private final ExpandableChildDescriptor mChildDescriptor;
-	private ViewDescriptor mGroupViewDescriptor;
+    private final AbstractCursorLoaderFactory mLoaderFactory;
+    private final ExpandableChildDescriptor mChildDescriptor;
+    private ViewDescriptor mGroupViewDescriptor;
 
 
-	/**
-	 * Create a new descriptor for expandable groups.
-	 * 
-	 * @param loaderFactory
-	 *            An {@link AbstractCursorLoaderFactory} instance that can return {@link CursorLoader}s that load the groups.
-	 * @param childDescriptor
-	 *            An {@link ExpandableChildDescriptor} that knwos how to load the children of the groups.
-	 */
-	public ExpandableGroupDescriptor(AbstractCursorLoaderFactory loaderFactory, ExpandableChildDescriptor childDescriptor)
-	{
-		mLoaderFactory = loaderFactory;
-		mChildDescriptor = childDescriptor;
-	}
+    /**
+     * Create a new descriptor for expandable groups.
+     *
+     * @param loaderFactory
+     *         An {@link AbstractCursorLoaderFactory} instance that can return {@link CursorLoader}s that load the groups.
+     * @param childDescriptor
+     *         An {@link ExpandableChildDescriptor} that knwos how to load the children of the groups.
+     */
+    public ExpandableGroupDescriptor(AbstractCursorLoaderFactory loaderFactory, ExpandableChildDescriptor childDescriptor)
+    {
+        mLoaderFactory = loaderFactory;
+        mChildDescriptor = childDescriptor;
+    }
 
 
-	/**
-	 * Get a {@link Loader} that loads the groups.
-	 * 
-	 * @param context
-	 *            A {@link Context}.
-	 * @return A {@link Loader}.
-	 */
-	public Loader<Cursor> getGroupCursorLoader(Context context)
-	{
-		return mLoaderFactory.getLoader(context);
-	}
+    /**
+     * Get a {@link Loader} that loads the groups.
+     *
+     * @param context
+     *         A {@link Context}.
+     *
+     * @return A {@link Loader}.
+     */
+    public Loader<Cursor> getGroupCursorLoader(Context context)
+    {
+        return mLoaderFactory.getLoader(context);
+    }
 
 
-	/**
-	 * Get a {@link Loader} that loads the children of the group at the current position in a {@link Cursor}.
-	 * 
-	 * @param context
-	 *            A {@link Context}.
-	 * @param cursor
-	 *            A {@link Cursor} that points to the group to load.
-	 * @return A {@link Loader}.
-	 */
-	public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor)
-	{
-		return mChildDescriptor.getCursorLoader(context, cursor);
-	}
+    /**
+     * Get a {@link Loader} that loads the children of the group at the current position in a {@link Cursor}.
+     *
+     * @param context
+     *         A {@link Context}.
+     * @param cursor
+     *         A {@link Cursor} that points to the group to load.
+     *
+     * @return A {@link Loader}.
+     */
+    public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor)
+    {
+        return mChildDescriptor.getCursorLoader(context, cursor);
+    }
 
 
-	/**
-	 * Get a {@link Loader} that loads the children of the group at the current position in a {@link Cursor}.
-	 * 
-	 * @param context
-	 *            A {@link Context}.
-	 * @param cursor
-	 *            A {@link Cursor} that points to the group to load.
-	 * @param filter
-	 *            An additional filter to filter the children.
-	 * @return A {@link Loader}.
-	 */
-	public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
-	{
-		return mChildDescriptor.getCursorLoader(context, cursor, filter);
-	}
+    /**
+     * Get a {@link Loader} that loads the children of the group at the current position in a {@link Cursor}.
+     *
+     * @param context
+     *         A {@link Context}.
+     * @param cursor
+     *         A {@link Cursor} that points to the group to load.
+     * @param filter
+     *         An additional filter to filter the children.
+     *
+     * @return A {@link Loader}.
+     */
+    public Loader<Cursor> getChildCursorLoader(Context context, Cursor cursor, AbstractFilter filter)
+    {
+        return mChildDescriptor.getCursorLoader(context, cursor, filter);
+    }
 
 
-	/**
-	 * Set the {@link ViewDescriptor} that knows how to populate the group views.
-	 * 
-	 * @param descriptor
-	 *            The {@link ViewDescriptor} for the group headers.
-	 * @return This instance.
-	 */
-	public ExpandableGroupDescriptor setViewDescriptor(ViewDescriptor descriptor)
-	{
-		mGroupViewDescriptor = descriptor;
-		return this;
-	}
+    /**
+     * Set the {@link ViewDescriptor} that knows how to populate the group views.
+     *
+     * @param descriptor
+     *         The {@link ViewDescriptor} for the group headers.
+     *
+     * @return This instance.
+     */
+    public ExpandableGroupDescriptor setViewDescriptor(ViewDescriptor descriptor)
+    {
+        mGroupViewDescriptor = descriptor;
+        return this;
+    }
 
 
-	/**
-	 * Get the {@link ViewDescriptor} that knows how to populate the group views.
-	 * 
-	 * @return A {@link ViewDescriptor}.
-	 */
-	public ViewDescriptor getGroupViewDescriptor()
-	{
-		return mGroupViewDescriptor;
-	}
+    /**
+     * Get the {@link ViewDescriptor} that knows how to populate the group views.
+     *
+     * @return A {@link ViewDescriptor}.
+     */
+    public ViewDescriptor getGroupViewDescriptor()
+    {
+        return mGroupViewDescriptor;
+    }
 
 
-	/**
-	 * Get the {@link ViewDescriptor} that knows how to populate the child views.
-	 * 
-	 * @return A {@link ViewDescriptor}.
-	 */
-	public ViewDescriptor getElementViewDescriptor()
-	{
-		return mChildDescriptor.getViewDescriptor();
-	}
+    /**
+     * Get the {@link ViewDescriptor} that knows how to populate the child views.
+     *
+     * @return A {@link ViewDescriptor}.
+     */
+    public ViewDescriptor getElementViewDescriptor()
+    {
+        return mChildDescriptor.getViewDescriptor();
+    }
 
 }

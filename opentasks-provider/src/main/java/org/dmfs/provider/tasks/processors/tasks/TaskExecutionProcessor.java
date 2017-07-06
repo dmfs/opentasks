@@ -17,52 +17,52 @@
 
 package org.dmfs.provider.tasks.processors.tasks;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskContract.TaskColumns;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 
-import android.database.sqlite.SQLiteDatabase;
-
 
 /**
  * A processor that perfomrs the actual operations on tasks.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class TaskExecutionProcessor extends AbstractEntityProcessor<TaskAdapter>
 {
 
-	@Override
-	public void beforeInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		task.commit(db);
-	}
+    @Override
+    public void beforeInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        task.commit(db);
+    }
 
 
-	@Override
-	public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		task.commit(db);
-	}
+    @Override
+    public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        task.commit(db);
+    }
 
 
-	@Override
-	public void beforeDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		String accountType = task.valueOf(TaskAdapter.ACCOUNT_TYPE);
+    @Override
+    public void beforeDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        String accountType = task.valueOf(TaskAdapter.ACCOUNT_TYPE);
 
-		if (isSyncAdapter || TaskContract.LOCAL_ACCOUNT_TYPE.equals(accountType))
-		{
-			// this is a local task or it' removed by a sync adapter, in either case we delete it right away
-			db.delete(Tables.TASKS, TaskColumns._ID + "=" + task.id(), null);
-		}
-		else
-		{
-			// just set the deleted flag otherwise
-			task.set(TaskAdapter._DELETED, true);
-			task.commit(db);
-		}
-	}
+        if (isSyncAdapter || TaskContract.LOCAL_ACCOUNT_TYPE.equals(accountType))
+        {
+            // this is a local task or it' removed by a sync adapter, in either case we delete it right away
+            db.delete(Tables.TASKS, TaskColumns._ID + "=" + task.id(), null);
+        }
+        else
+        {
+            // just set the deleted flag otherwise
+            task.set(TaskAdapter._DELETED, true);
+            task.commit(db);
+        }
+    }
 }

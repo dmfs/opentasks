@@ -17,15 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import java.util.List;
-
-import org.dmfs.tasks.R;
-import org.dmfs.tasks.model.CheckListItem;
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
-import org.dmfs.tasks.model.layout.LayoutOptions;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -34,145 +25,154 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.CheckListItem;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
+
+import java.util.List;
+
 
 /**
  * View widget for checklists.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class CheckListFieldViewLegacy extends AbstractFieldView implements OnCheckedChangeListener
 {
-	private ChecklistFieldAdapter mAdapter;
-	private ViewGroup mContainer;
+    private ChecklistFieldAdapter mAdapter;
+    private ViewGroup mContainer;
 
-	private List<CheckListItem> mCurrentValue;
+    private List<CheckListItem> mCurrentValue;
 
-	private boolean mBuilding = false;
-	private LayoutInflater mInflater;
-
-
-	public CheckListFieldViewLegacy(Context context)
-	{
-		super(context);
-		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+    private boolean mBuilding = false;
+    private LayoutInflater mInflater;
 
 
-	public CheckListFieldViewLegacy(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+    public CheckListFieldViewLegacy(Context context)
+    {
+        super(context);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
 
-	public CheckListFieldViewLegacy(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	}
+    public CheckListFieldViewLegacy(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-		mContainer = (ViewGroup) findViewById(R.id.checklist);
-	}
+    public CheckListFieldViewLegacy(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
 
 
-	@Override
-	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
-	{
-		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (ChecklistFieldAdapter) descriptor.getFieldAdapter();
-	}
+    @Override
+    protected void onFinishInflate()
+    {
+        super.onFinishInflate();
+        mContainer = (ViewGroup) findViewById(R.id.checklist);
+    }
 
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
-	{
-		if (mCurrentValue == null || mBuilding)
-		{
-			return;
-		}
-
-		int childCount = mContainer.getChildCount();
-		for (int i = 0; i < childCount; ++i)
-		{
-			if (mContainer.getChildAt(i) == buttonView)
-			{
-				mCurrentValue.get(i).checked = isChecked;
-				buttonView.setTextAppearance(getContext(), isChecked ? R.style.checklist_checked_item_text : R.style.dark_text);
-				if (mValues != null)
-				{
-					mAdapter.validateAndSet(mValues, mCurrentValue);
-				}
-				return;
-			}
-		}
-	}
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
+    {
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = (ChecklistFieldAdapter) descriptor.getFieldAdapter();
+    }
 
 
-	@Override
-	public void onContentLoaded(ContentSet contentSet)
-	{
-		super.onContentLoaded(contentSet);
-	}
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+    {
+        if (mCurrentValue == null || mBuilding)
+        {
+            return;
+        }
+
+        int childCount = mContainer.getChildCount();
+        for (int i = 0; i < childCount; ++i)
+        {
+            if (mContainer.getChildAt(i) == buttonView)
+            {
+                mCurrentValue.get(i).checked = isChecked;
+                buttonView.setTextAppearance(getContext(), isChecked ? R.style.checklist_checked_item_text : R.style.dark_text);
+                if (mValues != null)
+                {
+                    mAdapter.validateAndSet(mValues, mCurrentValue);
+                }
+                return;
+            }
+        }
+    }
 
 
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		if (mValues != null)
-		{
-			List<CheckListItem> newValue = mAdapter.get(mValues);
-			if (newValue != null && !newValue.equals(mCurrentValue)) // don't trigger unnecessary updates
-			{
-				updateCheckList(newValue);
-				mCurrentValue = newValue;
-			}
-		}
-	}
+    @Override
+    public void onContentLoaded(ContentSet contentSet)
+    {
+        super.onContentLoaded(contentSet);
+    }
 
 
-	private void updateCheckList(List<CheckListItem> list)
-	{
-		Context context = getContext();
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        if (mValues != null)
+        {
+            List<CheckListItem> newValue = mAdapter.get(mValues);
+            if (newValue != null && !newValue.equals(mCurrentValue)) // don't trigger unnecessary updates
+            {
+                updateCheckList(newValue);
+                mCurrentValue = newValue;
+            }
+        }
+    }
 
-		if (list == null || list.isEmpty())
-		{
-			setVisibility(GONE);
-			return;
-		}
-		setVisibility(VISIBLE);
 
-		mBuilding = true;
+    private void updateCheckList(List<CheckListItem> list)
+    {
+        Context context = getContext();
 
-		int count = 0;
-		for (CheckListItem item : list)
-		{
-			CheckBox checkbox = (CheckBox) mContainer.getChildAt(count);
-			if (checkbox == null)
-			{
-				checkbox = (CheckBox) mInflater.inflate(R.layout.checklist_field_view_element, mContainer, false);
-				mContainer.addView(checkbox);
-			}
-			// make sure we don't receive our own updates
-			checkbox.setOnCheckedChangeListener(null);
-			checkbox.setChecked(item.checked);
-			checkbox.setOnCheckedChangeListener(CheckListFieldViewLegacy.this);
+        if (list == null || list.isEmpty())
+        {
+            setVisibility(GONE);
+            return;
+        }
+        setVisibility(VISIBLE);
 
-			checkbox.setTextAppearance(context, item.checked ? R.style.checklist_checked_item_text : R.style.dark_text);
-			checkbox.setText(item.text);
+        mBuilding = true;
 
-			++count;
-		}
+        int count = 0;
+        for (CheckListItem item : list)
+        {
+            CheckBox checkbox = (CheckBox) mContainer.getChildAt(count);
+            if (checkbox == null)
+            {
+                checkbox = (CheckBox) mInflater.inflate(R.layout.checklist_field_view_element, mContainer, false);
+                mContainer.addView(checkbox);
+            }
+            // make sure we don't receive our own updates
+            checkbox.setOnCheckedChangeListener(null);
+            checkbox.setChecked(item.checked);
+            checkbox.setOnCheckedChangeListener(CheckListFieldViewLegacy.this);
 
-		while (mContainer.getChildCount() > count)
-		{
-			mContainer.removeViewAt(count);
-		}
+            checkbox.setTextAppearance(context, item.checked ? R.style.checklist_checked_item_text : R.style.dark_text);
+            checkbox.setText(item.text);
 
-		mBuilding = false;
-	}
+            ++count;
+        }
+
+        while (mContainer.getChildCount() > count)
+        {
+            mContainer.removeViewAt(count);
+        }
+
+        mBuilding = false;
+    }
 }

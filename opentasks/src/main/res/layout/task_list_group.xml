@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/task_group_list_item"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff0f0f0"
-    android:paddingLeft="@dimen/task_list_left_margin"
-    android:paddingRight="@dimen/task_list_right_margin" >
-
-    <View
-        android:id="@+id/colorbar1"
-        android:layout_width="16dip"
-        android:layout_height="16dip"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp" />
-
-    <View
-        android:id="@+id/colorbar2"
-        android:layout_width="10dip"
-        android:layout_height="10dip"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="11dp"
-        android:visibility="gone" />
-
-    <ImageView
-        android:id="@android:id/icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="8dip"
-        android:layout_marginRight="0dip"
-        android:layout_toRightOf="@id/colorbar1"
-        android:visibility="gone" />
-
-    <LinearLayout
+        style="@style/task_group_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dip"
-        android:layout_toEndOf="@android:id/icon"
-        android:layout_toRightOf="@android:id/icon"
-        android:orientation="vertical" >
+        android:background="#fff0f0f0"
+        android:paddingLeft="@dimen/task_list_left_margin"
+        android:paddingRight="@dimen/task_list_right_margin">
 
-        <TextView
-            android:id="@android:id/title"
-            style="@style/task_group_text"
+    <View
+            android:id="@+id/colorbar1"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"/>
+
+    <View
+            android:id="@+id/colorbar2"
+            android:layout_width="10dip"
+            android:layout_height="10dip"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="11dp"
+            android:visibility="gone"/>
+
+    <ImageView
+            android:id="@android:id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
-            android:ellipsize="end"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
-            android:singleLine="true"
-            android:textIsSelectable="false" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dip"
+            android:layout_marginRight="0dip"
+            android:layout_toRightOf="@id/colorbar1"
+            android:visibility="gone"/>
 
-        <LinearLayout
+    <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dip"
+            android:layout_toEndOf="@android:id/icon"
+            android:layout_toRightOf="@android:id/icon"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@android:id/text1"
-                style="@style/editor_label_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textIsSelectable="false" />
-
-            <TextView
-                android:id="@android:id/text2"
-                style="@style/task_list_group_count"
+        <TextView
+                android:id="@android:id/title"
+                style="@style/task_group_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
                 android:ellipsize="end"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
                 android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textIsSelectable="false" />
+                android:textIsSelectable="false"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@android:id/text1"
+                    style="@style/editor_label_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textIsSelectable="false"/>
+
+            <TextView
+                    android:id="@android:id/text2"
+                    style="@style/task_list_group_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textIsSelectable="false"/>
         </LinearLayout>
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/quick_add_task"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_24_plus_black50"
-        android:visibility="gone" />
+            android:id="@+id/quick_add_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_24_plus_black50"
+            android:visibility="gone"/>
 
     <View
-        android:id="@+id/divider"
-        style="@style/task_list_group_divider"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
+            android:id="@+id/divider"
+            style="@style/task_list_group_divider"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"/>
 
 </RelativeLayout>

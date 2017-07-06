@@ -19,25 +19,24 @@ package org.dmfs.tasks.model;
 
 /**
  * Interface for listeners that listen to changes in a {@link ContentSet}.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public interface OnContentChangeListener
 {
-	/**
-	 * Called whenever a specific key in a {@link ContentSet} has changed.
-	 * 
-	 * @param contentSet
-	 *            The {@link ContentSet} that contains the changed key.
-	 */
-	public void onContentChanged(ContentSet contentSet);
+    /**
+     * Called whenever a specific key in a {@link ContentSet} has changed.
+     *
+     * @param contentSet
+     *         The {@link ContentSet} that contains the changed key.
+     */
+    public void onContentChanged(ContentSet contentSet);
 
-
-	/**
-	 * Called whenever the {@link ContentSet} has been (re-)loaded.
-	 * 
-	 * @param contentSet
-	 *            The {@link ContentSet} that has been reloaded.
-	 */
-	public void onContentLoaded(ContentSet contentSet);
+    /**
+     * Called whenever the {@link ContentSet} has been (re-)loaded.
+     *
+     * @param contentSet
+     *         The {@link ContentSet} that has been reloaded.
+     */
+    public void onContentLoaded(ContentSet contentSet);
 }

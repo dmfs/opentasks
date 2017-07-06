@@ -17,39 +17,39 @@
 
 package org.dmfs.tasks.groupings.cursorloaders;
 
-import org.dmfs.tasks.utils.SearchHistoryHelper;
-
 import android.content.Context;
 import android.database.Cursor;
+
+import org.dmfs.tasks.utils.SearchHistoryHelper;
 
 
 /**
  * A factory that builds shiny new {@link Cursor}s with the search history
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public final class SearchHistoryCursorFactory extends AbstractCustomCursorFactory
 {
 
-	private final SearchHistoryHelper mHelper;
+    private final SearchHistoryHelper mHelper;
 
 
-	/**
-	 * Initialize the factory with the given projection.
-	 * 
-	 * @param projection
-	 *            An array of column names.
-	 */
-	public SearchHistoryCursorFactory(Context context, String[] projection, SearchHistoryHelper helper)
-	{
-		super(projection);
-		mHelper = helper;
-	}
+    /**
+     * Initialize the factory with the given projection.
+     *
+     * @param projection
+     *         An array of column names.
+     */
+    public SearchHistoryCursorFactory(Context context, String[] projection, SearchHistoryHelper helper)
+    {
+        super(projection);
+        mHelper = helper;
+    }
 
 
-	@Override
-	public Cursor getCursor()
-	{
-		return mHelper.getSearchHistory();
-	}
+    @Override
+    public Cursor getCursor()
+    {
+        return mHelper.getSearchHistory();
+    }
 }

@@ -26,86 +26,86 @@ import android.graphics.drawable.Drawable;
  * <p>
  * TODO: This is merely a stub. It doesn't do anything useful yet.
  * </p>
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class CursorChoicesAdapter implements IChoicesAdapter
 {
 
-	@SuppressWarnings("unused")
-	private static final String TAG = "CursorChoicesAdapter";
-	private final Cursor mCursor;
-	@SuppressWarnings("unused")
-	private String mTitleColumn;
-	private String mKeyColumn;
+    @SuppressWarnings("unused")
+    private static final String TAG = "CursorChoicesAdapter";
+    private final Cursor mCursor;
+    @SuppressWarnings("unused")
+    private String mTitleColumn;
+    private String mKeyColumn;
 
 
-	public CursorChoicesAdapter(Cursor cursor)
-	{
-		mCursor = cursor;
-	}
+    public CursorChoicesAdapter(Cursor cursor)
+    {
+        mCursor = cursor;
+    }
 
 
-	@Override
-	public String getTitle(Object object)
-	{
-		// return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
-		return null;
-	}
+    @Override
+    public String getTitle(Object object)
+    {
+        // return mCursor.getString(mCursor.getColumnIndex(mTitleColumn));
+        return null;
+    }
 
 
-	@Override
-	public Drawable getDrawable(Object object)
-	{
-		return null;
+    @Override
+    public Drawable getDrawable(Object object)
+    {
+        return null;
 
-	}
-
-
-	public String getKeyColumn()
-	{
-		return mKeyColumn;
-	}
+    }
 
 
-	public CursorChoicesAdapter setKeyColumn(String keyColumn)
-	{
-		mKeyColumn = keyColumn;
-		return this;
-	}
+    public String getKeyColumn()
+    {
+        return mKeyColumn;
+    }
 
 
-	public CursorChoicesAdapter setTitleColumn(String column)
-	{
-		mTitleColumn = column;
-		return this;
-	}
+    public CursorChoicesAdapter setKeyColumn(String keyColumn)
+    {
+        mKeyColumn = keyColumn;
+        return this;
+    }
 
 
-	public Cursor getChoices()
-	{
-		return mCursor;
-	}
+    public CursorChoicesAdapter setTitleColumn(String column)
+    {
+        mTitleColumn = column;
+        return this;
+    }
 
 
-	@Override
-	public int getIndex(Object id)
-	{
-		return 0;
-	}
+    public Cursor getChoices()
+    {
+        return mCursor;
+    }
 
 
-	@Override
-	public int getCount()
-	{
-		return mCursor.getCount();
-	}
+    @Override
+    public int getIndex(Object id)
+    {
+        return 0;
+    }
 
 
-	@Override
-	public Object getItem(int position)
-	{
-		return null;
-	}
+    @Override
+    public int getCount()
+    {
+        return mCursor.getCount();
+    }
+
+
+    @Override
+    public Object getItem(int position)
+    {
+        return null;
+    }
 
 }

@@ -25,61 +25,62 @@ import android.widget.ScrollView;
 
 /**
  * Just a {@link ScrollView} that can notify a listener when the user scrolls.
- * <p />
+ * <p/>
  * TODO: get rid of it once the editor is refactored.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class ListenableScrollView extends NestedScrollView
 {
 
-	public interface OnScrollListener
-	{
-		/**
-		 * Called when the user scrolls the view.
-		 * 
-		 * @param oldScrollY
-		 *            The previous scroll position.
-		 * @param newScrollY
-		 *            The new scroll position.
-		 */
-		public void onScroll(int oldScrollY, int newScrollY);
-	}
+    public interface OnScrollListener
+    {
+        /**
+         * Called when the user scrolls the view.
+         *
+         * @param oldScrollY
+         *         The previous scroll position.
+         * @param newScrollY
+         *         The new scroll position.
+         */
+        public void onScroll(int oldScrollY, int newScrollY);
+    }
 
 
-	public ListenableScrollView(Context context)
-	{
-		super(context);
-	}
+    public ListenableScrollView(Context context)
+    {
+        super(context);
+    }
 
 
-	public ListenableScrollView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public ListenableScrollView(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	public ListenableScrollView(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
-
-	private OnScrollListener mScrollListener;
+    public ListenableScrollView(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	@Override
-	protected void onScrollChanged(int l, int t, int oldl, int oldt)
-	{
-		super.onScrollChanged(l, t, oldl, oldt);
-		if (mScrollListener != null)
-		{
-			mScrollListener.onScroll(oldt, t);
-		}
-	}
+    private OnScrollListener mScrollListener;
 
 
-	public void setOnScrollListener(OnScrollListener listener)
-	{
-		mScrollListener = listener;
-	}
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt)
+    {
+        super.onScrollChanged(l, t, oldl, oldt);
+        if (mScrollListener != null)
+        {
+            mScrollListener.onScroll(oldt, t);
+        }
+    }
+
+
+    public void setOnScrollListener(OnScrollListener listener)
+    {
+        mScrollListener = listener;
+    }
 }

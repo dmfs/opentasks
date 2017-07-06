@@ -23,130 +23,127 @@ import android.database.Cursor;
 
 /**
  * Knows how to load and store a specific field from or to {@link ContentValues} or from {@link Cursor}s.
- * 
- * @author Marten Gajda <marten@dmfs.org>
- * 
+ *
  * @param <FieldType>
- *            The type of the value this adapter stores.
+ *         The type of the value this adapter stores.
  * @param <EntitType>
- *            The type of the entity the field belongs to.
+ *         The type of the entity the field belongs to.
+ *
+ * @author Marten Gajda <marten@dmfs.org>
  */
 public interface FieldAdapter<FieldType, EntitType>
 {
 
-	/**
-	 * Check if a value is present and non-<code>null</code> in the given {@link ContentValues}.
-	 * 
-	 * @param values
-	 *            The {@link ContentValues} to check.
-	 * @return
-	 */
-	public boolean existsIn(ContentValues values);
+    /**
+     * Check if a value is present and non-<code>null</code> in the given {@link ContentValues}.
+     *
+     * @param values
+     *         The {@link ContentValues} to check.
+     *
+     * @return
+     */
+    public boolean existsIn(ContentValues values);
 
+    /**
+     * Check if a value is present (may be <code>null</code>) in the given {@link ContentValues}.
+     *
+     * @param values
+     *         The {@link ContentValues} to check.
+     *
+     * @return
+     */
+    public boolean isSetIn(ContentValues values);
 
-	/**
-	 * Check if a value is present (may be <code>null</code>) in the given {@link ContentValues}.
-	 * 
-	 * @param values
-	 *            The {@link ContentValues} to check.
-	 * @return
-	 */
-	public boolean isSetIn(ContentValues values);
+    /**
+     * Get the value from the given {@link ContentValues}
+     *
+     * @param values
+     *         The {@link ContentValues} that contain the value to return.
+     *
+     * @return The value.
+     */
+    public FieldType getFrom(ContentValues values);
 
+    /**
+     * Check if a value is present and non-<code>null</code> in the given {@link Cursor}.
+     *
+     * @param cursor
+     *         The {@link Cursor} that contains the value to check.
+     *
+     * @return
+     */
+    public boolean existsIn(Cursor cursor);
 
-	/**
-	 * Get the value from the given {@link ContentValues}
-	 * 
-	 * @param values
-	 *            The {@link ContentValues} that contain the value to return.
-	 * @return The value.
-	 */
-	public FieldType getFrom(ContentValues values);
+    /**
+     * Get the value from the given {@link Cursor}
+     *
+     * @param cursor
+     *         The {@link Cursor} that contain the value to return.
+     *
+     * @return The value.
+     */
+    public FieldType getFrom(Cursor cursor);
 
+    /**
+     * Check if a value is present and non-<code>null</code> in the given {@link Cursor} or {@link ContentValues}.
+     *
+     * @param cursor
+     *         The {@link Cursor} that contains the value to check.
+     * @param values
+     *         The {@link ContentValues} that contains the value to check.
+     *
+     * @return
+     */
+    public boolean existsIn(Cursor cursor, ContentValues values);
 
-	/**
-	 * Check if a value is present and non-<code>null</code> in the given {@link Cursor}.
-	 * 
-	 * @param cursor
-	 *            The {@link Cursor} that contains the value to check.
-	 * @return
-	 */
-	public boolean existsIn(Cursor cursor);
+    /**
+     * Get the value from the given {@link Cursor} or {@link ContentValues}, with the {@link ContentValues} taking precedence over the cursor values.
+     *
+     * @param cursor
+     *         The {@link Cursor} that contains the value to return.
+     * @param values
+     *         The {@link ContentValues} that contains the value to return.
+     *
+     * @return The value.
+     */
+    public FieldType getFrom(Cursor cursor, ContentValues values);
 
+    /**
+     * Set a value in the given {@link ContentValues}.
+     *
+     * @param values
+     *         The {@link ContentValues} to store the new value in.
+     * @param value
+     *         The new value to store.
+     */
+    public void setIn(ContentValues values, FieldType value);
 
-	/**
-	 * Get the value from the given {@link Cursor}
-	 * 
-	 * @param cursor
-	 *            The {@link Cursor} that contain the value to return.
-	 * @return The value.
-	 */
-	public FieldType getFrom(Cursor cursor);
+    /**
+     * Remove a value from the given {@link ContentValues}.
+     *
+     * @param values
+     *         The {@link ContentValues} from which to remove the value.
+     */
+    public void removeFrom(ContentValues values);
 
+    /**
+     * Copy the value from a {@link Cursor} to the given {@link ContentValues}.
+     *
+     * @param source
+     *         The {@link Cursor} that contains the value to copy.
+     * @param dest
+     *         The {@link ContentValues} to receive the value.
+     */
+    public void copyValue(Cursor source, ContentValues dest);
 
-	/**
-	 * Check if a value is present and non-<code>null</code> in the given {@link Cursor} or {@link ContentValues}.
-	 * 
-	 * @param cursor
-	 *            The {@link Cursor} that contains the value to check.
-	 * @param values
-	 *            The {@link ContentValues} that contains the value to check.
-	 * @return
-	 */
-	public boolean existsIn(Cursor cursor, ContentValues values);
-
-
-	/**
-	 * Get the value from the given {@link Cursor} or {@link ContentValues}, with the {@link ContentValues} taking precedence over the cursor values.
-	 * 
-	 * @param cursor
-	 *            The {@link Cursor} that contains the value to return.
-	 * @param values
-	 *            The {@link ContentValues} that contains the value to return.
-	 * @return The value.
-	 */
-	public FieldType getFrom(Cursor cursor, ContentValues values);
-
-
-	/**
-	 * Set a value in the given {@link ContentValues}.
-	 * 
-	 * @param values
-	 *            The {@link ContentValues} to store the new value in.
-	 * @param value
-	 *            The new value to store.
-	 */
-	public void setIn(ContentValues values, FieldType value);
-
-
-	/**
-	 * Remove a value from the given {@link ContentValues}.
-	 * 
-	 * @param values
-	 *            The {@link ContentValues} from which to remove the value.
-	 */
-	public void removeFrom(ContentValues values);
-
-
-	/**
-	 * Copy the value from a {@link Cursor} to the given {@link ContentValues}.
-	 * 
-	 * @param source
-	 *            The {@link Cursor} that contains the value to copy.
-	 * @param dest
-	 *            The {@link ContentValues} to receive the value.
-	 */
-	public void copyValue(Cursor source, ContentValues dest);
-
-
-	/**
-	 * Copy the value from {@link ContentValues} to another {@link ContentValues} object.
-	 * 
-	 * @param source
-	 *            The {@link ContentValues} that contains the value to copy.
-	 * @param dest
-	 *            The {@link ContentValues} to receive the value.
-	 */
-	public void copyValue(ContentValues source, ContentValues dest);
+    /**
+     * Copy the value from {@link ContentValues} to another {@link ContentValues} object.
+     *
+     * @param source
+     *         The {@link ContentValues} that contains the value to copy.
+     * @param dest
+     *         The {@link ContentValues} to receive the value.
+     */
+    public void copyValue(ContentValues source, ContentValues dest);
 
 }

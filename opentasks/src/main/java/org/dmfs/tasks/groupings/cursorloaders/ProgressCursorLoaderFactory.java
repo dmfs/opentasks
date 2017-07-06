@@ -24,24 +24,24 @@ import android.support.v4.content.Loader;
 
 /**
  * An {@link AbstractCursorLoaderFactory} that returns {@link CursorLoaderFactory} that know how to load cursors with progress information as values.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class ProgressCursorLoaderFactory extends AbstractCursorLoaderFactory
 {
 
-	private final String[] mProjection;
+    private final String[] mProjection;
 
 
-	public ProgressCursorLoaderFactory(String[] projection)
-	{
-		mProjection = projection;
-	}
+    public ProgressCursorLoaderFactory(String[] projection)
+    {
+        mProjection = projection;
+    }
 
 
-	@Override
-	public Loader<Cursor> getLoader(Context context)
-	{
-		return new CustomCursorLoader(context, new ProgressCursorFactory(mProjection));
-	}
+    @Override
+    public Loader<Cursor> getLoader(Context context)
+    {
+        return new CustomCursorLoader(context, new ProgressCursorFactory(mProjection));
+    }
 }

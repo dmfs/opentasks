@@ -17,99 +17,101 @@
 
 package org.dmfs.provider.tasks;
 
-import org.dmfs.provider.tasks.TaskContract.Properties;
-import org.dmfs.provider.tasks.TaskContract.Property.Alarm;
-import org.dmfs.provider.tasks.TaskContract.Property.Category;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.dmfs.provider.tasks.TaskContract.Properties;
+import org.dmfs.provider.tasks.TaskContract.Property.Alarm;
+import org.dmfs.provider.tasks.TaskContract.Property.Category;
+import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.provider.tasks.TaskContract.Tasks;
+
 
 /**
  * Task database helper takes care of creating and updating the task database, including tables, indices and triggers.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
 public class TaskDatabaseHelper extends SQLiteOpenHelper
 {
 
-	/**
-	 * Interface of a listener that's called when the database has been created or migrated.
-	 */
-	public interface OnDatabaseOperationListener
-	{
-		public void onDatabaseCreated(SQLiteDatabase db);
+    /**
+     * Interface of a listener that's called when the database has been created or migrated.
+     */
+    public interface OnDatabaseOperationListener
+    {
+        public void onDatabaseCreated(SQLiteDatabase db);
+
+        public void onDatabaseUpdate(SQLiteDatabase db, int oldVersion, int newVersion);
+    }
 
 
-		public void onDatabaseUpdate(SQLiteDatabase db, int oldVersion, int newVersion);
-	}
+    private static final String TAG = "TaskDatabaseHelper";
 
-	private static final String TAG = "TaskDatabaseHelper";
+    /**
+     * The name of our database file.
+     */
+    private static final String DATABASE_NAME = "tasks.db";
 
-	/**
-	 * The name of our database file.
-	 */
-	private static final String DATABASE_NAME = "tasks.db";
+    /**
+     * The database version.
+     */
+    static final int DATABASE_VERSION = 16;
 
-	/**
-	 * The database version.
-	 */
-	static final int DATABASE_VERSION = 16;
 
-	/**
-	 * List of all tables we provide.
-	 */
-	public interface Tables
-	{
-		public static final String LISTS = "Lists";
+    /**
+     * List of all tables we provide.
+     */
+    public interface Tables
+    {
+        public static final String LISTS = "Lists";
 
-		public static final String WRITEABLE_LISTS = "Writeable_Lists";
+        public static final String WRITEABLE_LISTS = "Writeable_Lists";
 
-		public static final String TASKS = "Tasks";
+        public static final String TASKS = "Tasks";
 
-		public static final String TASKS_VIEW = "Task_View";
+        public static final String TASKS_VIEW = "Task_View";
 
-		public static final String TASKS_PROPERTY_VIEW = "Task_Property_View";
+        public static final String TASKS_PROPERTY_VIEW = "Task_Property_View";
 
-		public static final String INSTANCES = "Instances";
+        public static final String INSTANCES = "Instances";
 
-		public static final String INSTANCE_VIEW = "Instance_View";
+        public static final String INSTANCE_VIEW = "Instance_View";
 
-		public static final String INSTANCE_PROPERTY_VIEW = "Instance_Property_View";
+        public static final String INSTANCE_PROPERTY_VIEW = "Instance_Property_View";
 
-		public static final String INSTANCE_CATEGORY_VIEW = "Instance_Cagetory_View";
+        public static final String INSTANCE_CATEGORY_VIEW = "Instance_Cagetory_View";
 
-		public static final String CATEGORIES = "Categories";
+        public static final String CATEGORIES = "Categories";
 
-		public static final String CATEGORIES_MAPPING = "Categories_Mapping";
+        public static final String CATEGORIES_MAPPING = "Categories_Mapping";
 
-		public static final String PROPERTIES = "Properties";
+        public static final String PROPERTIES = "Properties";
 
-		public static final String ALARMS = "Alarms";
+        public static final String ALARMS = "Alarms";
 
-		public static final String SYNCSTATE = "SyncState";
-	}
+        public static final String SYNCSTATE = "SyncState";
+    }
 
-	/**
-	 * Columns of internal table for the category mapping.
-	 */
-	public interface CategoriesMapping
-	{
-		public static final String TASK_ID = "task_id";
 
-		public static final String CATEGORY_ID = "category_id";
+    /**
+     * Columns of internal table for the category mapping.
+     */
+    public interface CategoriesMapping
+    {
+        public static final String TASK_ID = "task_id";
 
-		public static final String PROPERTY_ID = "property_id";
+        public static final String CATEGORY_ID = "category_id";
 
-	}
+        public static final String PROPERTY_ID = "property_id";
 
-	// @formatter:off
+    }
+
+    // @formatter:off
 	
 	/**
 	 * SQL command to create a view that combines tasks with some data from the list they belong to.
@@ -505,286 +507,289 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
 	
     // @formatter:on
 
-	/**
-	 * Builds a string that creates an index on the given table for the given columns.
-	 * 
-	 * @param table
-	 *            The table to create the index on.
-	 * @param fields
-	 *            The fields to index.
-	 * @return An SQL command string.
-	 */
-	public final static String createIndexString(String table, boolean unique, String... fields)
-	{
-		if (fields == null || fields.length < 1)
-		{
-			throw new IllegalArgumentException("need at least one field to build an index!");
-		}
 
-		StringBuffer buffer = new StringBuffer();
+    /**
+     * Builds a string that creates an index on the given table for the given columns.
+     *
+     * @param table
+     *         The table to create the index on.
+     * @param fields
+     *         The fields to index.
+     *
+     * @return An SQL command string.
+     */
+    public final static String createIndexString(String table, boolean unique, String... fields)
+    {
+        if (fields == null || fields.length < 1)
+        {
+            throw new IllegalArgumentException("need at least one field to build an index!");
+        }
 
-		// Index name is constructed like this: tablename_fields[0]_idx
-		buffer.append("CREATE ");
-		if (unique)
-		{
-			buffer.append(" UNIQUE ");
-		}
-		buffer.append("INDEX ");
-		buffer.append(table).append("_").append(fields[0]).append("_idx ON ");
-		buffer.append(table).append(" (");
-		buffer.append(fields[0]);
-		for (int i = 1; i < fields.length; i++)
-		{
-			buffer.append(", ").append(fields[i]);
-		}
-		buffer.append(");");
+        StringBuffer buffer = new StringBuffer();
 
-		return buffer.toString();
+        // Index name is constructed like this: tablename_fields[0]_idx
+        buffer.append("CREATE ");
+        if (unique)
+        {
+            buffer.append(" UNIQUE ");
+        }
+        buffer.append("INDEX ");
+        buffer.append(table).append("_").append(fields[0]).append("_idx ON ");
+        buffer.append(table).append(" (");
+        buffer.append(fields[0]);
+        for (int i = 1; i < fields.length; i++)
+        {
+            buffer.append(", ").append(fields[i]);
+        }
+        buffer.append(");");
 
-	}
+        return buffer.toString();
 
-	private final OnDatabaseOperationListener mListener;
-
-
-	TaskDatabaseHelper(Context context, OnDatabaseOperationListener listener)
-	{
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		mListener = listener;
-	}
+    }
 
 
-	/**
-	 * Creates the tables, views, triggers and indices.
-	 * 
-	 * TODO: move all strings to separate final static variables.
-	 */
-	@Override
-	public void onCreate(SQLiteDatabase db)
-	{
-
-		// create task list table
-		db.execSQL(SQL_CREATE_LISTS_TABLE);
-
-		// trigger that removes tasks of a list that has been removed
-		db.execSQL("CREATE TRIGGER task_list_cleanup_trigger AFTER DELETE ON " + Tables.LISTS + " BEGIN DELETE FROM " + Tables.TASKS + " WHERE "
-			+ TaskContract.Tasks.LIST_ID + "= old." + TaskContract.TaskLists._ID + "; END");
-
-		// create task table
-		db.execSQL(SQL_CREATE_TASKS_TABLE);
-
-		// trigger that marks a list as dirty if a task in that list gets marked as dirty or deleted
-		db.execSQL("CREATE TRIGGER task_list_make_dirty_on_update AFTER UPDATE ON " + Tables.TASKS + " BEGIN UPDATE " + Tables.LISTS + " SET "
-			+ TaskContract.TaskLists._DIRTY + "=" + TaskContract.TaskLists._DIRTY + " + " + "new." + TaskContract.Tasks._DIRTY + " + " + "new."
-			+ TaskContract.Tasks._DELETED + " WHERE " + TaskContract.TaskLists._ID + "= new." + TaskContract.Tasks.LIST_ID + "; END");
-
-		// trigger that marks a list as dirty if a task in that list gets marked as dirty or deleted
-		db.execSQL("CREATE TRIGGER task_list_make_dirty_on_insert AFTER INSERT ON " + Tables.TASKS + " BEGIN UPDATE " + Tables.LISTS + " SET "
-			+ TaskContract.TaskLists._DIRTY + "=" + TaskContract.TaskLists._DIRTY + " + " + "new." + TaskContract.Tasks._DIRTY + " + " + "new."
-			+ TaskContract.Tasks._DELETED + " WHERE " + TaskContract.TaskLists._ID + "= new." + TaskContract.Tasks.LIST_ID + "; END");
-
-		// create instances table and view
-		db.execSQL(SQL_CREATE_INSTANCES_TABLE);
-
-		// create categories table
-		db.execSQL(SQL_CREATE_CATEGORIES_TABLE);
-
-		// create categories mapping table
-		db.execSQL(SQL_CREATE_CATEGORIES_MAPPING_TABLE);
-
-		// create alarms table
-		db.execSQL(SQL_CREATE_ALARMS_TABLE);
-
-		// create properties table
-		db.execSQL(SQL_CREATE_PROPERTIES_TABLE);
-
-		// create syncstate table
-		db.execSQL(SQL_CREATE_SYNCSTATE_TABLE);
-
-		// create views
-		db.execSQL(SQL_CREATE_TASK_VIEW);
-		db.execSQL(SQL_CREATE_TASK_PROPERTY_VIEW);
-		db.execSQL(SQL_CREATE_INSTANCE_VIEW);
-		db.execSQL(SQL_CREATE_INSTANCE_PROPERTY_VIEW);
-		db.execSQL(SQL_CREATE_INSTANCE_CATEGORY_VIEW);
-
-		// create indices
-		db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.TASK_ID, TaskContract.Instances.INSTANCE_START,
-			TaskContract.Instances.INSTANCE_DUE));
-		db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
-		db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
-		db.execSQL(createIndexString(Tables.LISTS, false, TaskContract.TaskLists.ACCOUNT_NAME, // not sure if necessary
-			TaskContract.TaskLists.ACCOUNT_TYPE));
-		db.execSQL(createIndexString(Tables.TASKS, false, TaskContract.Tasks.STATUS, TaskContract.Tasks.LIST_ID, TaskContract.Tasks._SYNC_ID));
-		db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.MIMETYPE, TaskContract.Properties.TASK_ID));
-		db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.TASK_ID));
-		db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.ACCOUNT_NAME, TaskContract.Categories.ACCOUNT_TYPE,
-			TaskContract.Categories.NAME));
-		db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.NAME));
-		db.execSQL(createIndexString(Tables.SYNCSTATE, true, TaskContract.SyncState.ACCOUNT_NAME, TaskContract.SyncState.ACCOUNT_TYPE));
-
-		// trigger that removes properties of a task that has been removed
-		db.execSQL(SQL_CREATE_TASKS_CLEANUP_TRIGGER);
-
-		// trigger that removes alarms when an alarm property was deleted
-		db.execSQL(SQL_CREATE_ALARM_PROPERTY_CLEANUP_TRIGGER);
-
-		// trigger that removes tasks when a list was removed
-		db.execSQL(SQL_CREATE_LISTS_CLEANUP_TRIGGER);
-
-		// trigger that counts the alarms for tasks
-		db.execSQL(SQL_CREATE_ALARM_COUNT_CREATE_TRIGGER);
-		db.execSQL(SQL_CREATE_ALARM_COUNT_UPDATE_TRIGGER);
-		db.execSQL(SQL_CREATE_ALARM_COUNT_DELETE_TRIGGER);
-
-		// add cleanup trigger for orphaned properties
-		db.execSQL(SQL_CREATE_TASK_PROPERTY_CLEANUP_TRIGGER);
-
-		// initialize FTS
-		FTSDatabaseHelper.onCreate(db);
-
-		if (mListener != null)
-		{
-			mListener.onDatabaseCreated(db);
-		}
-	}
+    private final OnDatabaseOperationListener mListener;
 
 
-	/**
-	 * Manages the database schema migration.
-	 */
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-	{
-		Log.i(TAG, "updgrading db from " + oldVersion + " to " + newVersion);
-		if (oldVersion < 2)
-		{
-			// add IS_NEW and IS_CLOSED columns and update their values
-			db.execSQL("ALTER TABLE " + Tables.TASKS + " ADD COLUMN " + TaskContract.Tasks.IS_NEW + " INTEGER");
-			db.execSQL("ALTER TABLE " + Tables.TASKS + " ADD COLUMN " + TaskContract.Tasks.IS_CLOSED + " INTEGER");
-			db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_NEW + " = 1 WHERE " + TaskContract.Tasks.STATUS + " = "
-				+ TaskContract.Tasks.STATUS_NEEDS_ACTION);
-			db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_NEW + " = 0 WHERE " + TaskContract.Tasks.STATUS + " != "
-				+ TaskContract.Tasks.STATUS_NEEDS_ACTION);
-			db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_CLOSED + " = 1 WHERE " + TaskContract.Tasks.STATUS + " > "
-				+ TaskContract.Tasks.STATUS_IN_PROCESS);
-			db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_CLOSED + " = 0 WHERE " + TaskContract.Tasks.STATUS + " <= "
-				+ TaskContract.Tasks.STATUS_IN_PROCESS);
-		}
+    TaskDatabaseHelper(Context context, OnDatabaseOperationListener listener)
+    {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mListener = listener;
+    }
 
-		if (oldVersion < 3)
-		{
-			// add instance sortings
-			db.execSQL("ALTER TABLE " + Tables.INSTANCES + " ADD COLUMN " + TaskContract.Instances.INSTANCE_START_SORTING + " INTEGER");
-			db.execSQL("ALTER TABLE " + Tables.INSTANCES + " ADD COLUMN " + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER");
-			db.execSQL("UPDATE " + Tables.INSTANCES + " SET " + TaskContract.Instances.INSTANCE_START_SORTING + " = " + TaskContract.Instances.INSTANCE_START
-				+ ", " + TaskContract.Instances.INSTANCE_DUE_SORTING + " = " + TaskContract.Instances.INSTANCE_DUE);
-		}
-		if (oldVersion < 4)
-		{
-			// drop old view before altering the schema
-			db.execSQL(SQL_DROP_TASK_VIEW);
-			db.execSQL(SQL_DROP_INSTANCE_VIEW);
 
-			// change property id column name to work with the left join in task view
-			db.execSQL(SQL_DROP_TASKS_CLEANUP_TRIGGER);
-			db.execSQL(SQL_DROP_PROPERTIES_TABLE);
-			db.execSQL(SQL_CREATE_PROPERTIES_TABLE);
-			db.execSQL(SQL_CREATE_TASKS_CLEANUP_TRIGGER);
+    /**
+     * Creates the tables, views, triggers and indices.
+     * <p>
+     * TODO: move all strings to separate final static variables.
+     */
+    @Override
+    public void onCreate(SQLiteDatabase db)
+    {
 
-			// create categories mapping table
-			db.execSQL(SQL_CREATE_CATEGORIES_MAPPING_TABLE);
+        // create task list table
+        db.execSQL(SQL_CREATE_LISTS_TABLE);
 
-			// create alarms table
-			db.execSQL(SQL_CREATE_ALARMS_TABLE);
+        // trigger that removes tasks of a list that has been removed
+        db.execSQL("CREATE TRIGGER task_list_cleanup_trigger AFTER DELETE ON " + Tables.LISTS + " BEGIN DELETE FROM " + Tables.TASKS + " WHERE "
+                + TaskContract.Tasks.LIST_ID + "= old." + TaskContract.TaskLists._ID + "; END");
 
-			// update views
-			db.execSQL(SQL_CREATE_TASK_VIEW);
-			db.execSQL(SQL_CREATE_TASK_PROPERTY_VIEW);
-			db.execSQL(SQL_CREATE_INSTANCE_VIEW);
-			db.execSQL(SQL_CREATE_INSTANCE_PROPERTY_VIEW);
-			db.execSQL(SQL_CREATE_INSTANCE_CATEGORY_VIEW);
+        // create task table
+        db.execSQL(SQL_CREATE_TASKS_TABLE);
 
-			// create Indices
-			db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.MIMETYPE, TaskContract.Properties.TASK_ID));
-			db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.TASK_ID));
-			db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.ACCOUNT_NAME, TaskContract.Categories.ACCOUNT_TYPE,
-				TaskContract.Categories.NAME));
-			db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.NAME));
+        // trigger that marks a list as dirty if a task in that list gets marked as dirty or deleted
+        db.execSQL("CREATE TRIGGER task_list_make_dirty_on_update AFTER UPDATE ON " + Tables.TASKS + " BEGIN UPDATE " + Tables.LISTS + " SET "
+                + TaskContract.TaskLists._DIRTY + "=" + TaskContract.TaskLists._DIRTY + " + " + "new." + TaskContract.Tasks._DIRTY + " + " + "new."
+                + TaskContract.Tasks._DELETED + " WHERE " + TaskContract.TaskLists._ID + "= new." + TaskContract.Tasks.LIST_ID + "; END");
 
-			// add new triggers
-			db.execSQL(SQL_CREATE_ALARM_PROPERTY_CLEANUP_TRIGGER);
-			db.execSQL(SQL_CREATE_ALARM_COUNT_CREATE_TRIGGER);
-			db.execSQL(SQL_CREATE_ALARM_COUNT_UPDATE_TRIGGER);
-			db.execSQL(SQL_CREATE_ALARM_COUNT_DELETE_TRIGGER);
+        // trigger that marks a list as dirty if a task in that list gets marked as dirty or deleted
+        db.execSQL("CREATE TRIGGER task_list_make_dirty_on_insert AFTER INSERT ON " + Tables.TASKS + " BEGIN UPDATE " + Tables.LISTS + " SET "
+                + TaskContract.TaskLists._DIRTY + "=" + TaskContract.TaskLists._DIRTY + " + " + "new." + TaskContract.Tasks._DIRTY + " + " + "new."
+                + TaskContract.Tasks._DELETED + " WHERE " + TaskContract.TaskLists._ID + "= new." + TaskContract.Tasks.LIST_ID + "; END");
 
-		}
-		if (oldVersion < 6)
-		{
-			db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.PARENT_ID + " integer;");
-			db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.HAS_ALARMS + " integer;");
-			db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.SORTING + " text;");
-		}
-		if (oldVersion < 7)
-		{
-			db.execSQL(SQL_CREATE_LISTS_CLEANUP_TRIGGER);
-		}
-		if (oldVersion < 8)
-		{
-			// replace priority 0 by null. We need this to sort the widget properly. Since 0 is the default this is no problem when syncing.
-			db.execSQL("update " + Tables.TASKS + " set " + Tasks.PRIORITY + "=null where " + Tasks.PRIORITY + "=0;");
-		}
-		if (oldVersion < 9)
-		{
-			// add missing column _UID
-			db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks._UID + " integer;");
-			// add cleanup trigger for orphaned properties
-			db.execSQL(SQL_CREATE_TASK_PROPERTY_CLEANUP_TRIGGER);
-		}
-		if (oldVersion < 10)
-		{
-			// add property column to categories_mapping table. Since adding a constraint is not supported by SQLite we have to remove and recreate the entire
-			// table
-			db.execSQL("drop table " + Tables.CATEGORIES_MAPPING);
-			db.execSQL(SQL_CREATE_CATEGORIES_MAPPING_TABLE);
-			db.execSQL(SQL_CREATE_CATEGORY_PROPERTY_CLEANUP_TRIGGER);
-		}
-		if (oldVersion < 11)
-		{
-			db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.PINNED + " integer;");
-			db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.HAS_PROPERTIES + " integer;");
-		}
+        // create instances table and view
+        db.execSQL(SQL_CREATE_INSTANCES_TABLE);
 
-		if (oldVersion < 12)
-		{
-			// rename the local account type
-			ContentValues values = new ContentValues(1);
-			values.put(TaskLists.ACCOUNT_TYPE, TaskContract.LOCAL_ACCOUNT_TYPE);
-			db.update(Tables.LISTS, values, TaskLists.ACCOUNT_TYPE + "=?", new String[] { "LOCAL" });
-		}
+        // create categories table
+        db.execSQL(SQL_CREATE_CATEGORIES_TABLE);
 
-		if (oldVersion < 13)
-		{
-			db.execSQL(SQL_CREATE_SYNCSTATE_TABLE);
-		}
+        // create categories mapping table
+        db.execSQL(SQL_CREATE_CATEGORIES_MAPPING_TABLE);
 
-		if (oldVersion < 14)
-		{
-			// create a unique index for account name and account type on the sync state table
-			db.execSQL(createIndexString(Tables.SYNCSTATE, true, TaskContract.SyncState.ACCOUNT_NAME, TaskContract.SyncState.ACCOUNT_TYPE));
-		}
+        // create alarms table
+        db.execSQL(SQL_CREATE_ALARMS_TABLE);
 
-		if (oldVersion < 16)
-		{
-			db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
-			db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
-		}
+        // create properties table
+        db.execSQL(SQL_CREATE_PROPERTIES_TABLE);
 
-		// upgrade FTS
-		FTSDatabaseHelper.onUpgrade(db, oldVersion, newVersion);
+        // create syncstate table
+        db.execSQL(SQL_CREATE_SYNCSTATE_TABLE);
 
-		if (mListener != null)
-		{
-			mListener.onDatabaseUpdate(db, oldVersion, newVersion);
-		}
-	}
+        // create views
+        db.execSQL(SQL_CREATE_TASK_VIEW);
+        db.execSQL(SQL_CREATE_TASK_PROPERTY_VIEW);
+        db.execSQL(SQL_CREATE_INSTANCE_VIEW);
+        db.execSQL(SQL_CREATE_INSTANCE_PROPERTY_VIEW);
+        db.execSQL(SQL_CREATE_INSTANCE_CATEGORY_VIEW);
+
+        // create indices
+        db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.TASK_ID, TaskContract.Instances.INSTANCE_START,
+                TaskContract.Instances.INSTANCE_DUE));
+        db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
+        db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
+        db.execSQL(createIndexString(Tables.LISTS, false, TaskContract.TaskLists.ACCOUNT_NAME, // not sure if necessary
+                TaskContract.TaskLists.ACCOUNT_TYPE));
+        db.execSQL(createIndexString(Tables.TASKS, false, TaskContract.Tasks.STATUS, TaskContract.Tasks.LIST_ID, TaskContract.Tasks._SYNC_ID));
+        db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.MIMETYPE, TaskContract.Properties.TASK_ID));
+        db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.TASK_ID));
+        db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.ACCOUNT_NAME, TaskContract.Categories.ACCOUNT_TYPE,
+                TaskContract.Categories.NAME));
+        db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.NAME));
+        db.execSQL(createIndexString(Tables.SYNCSTATE, true, TaskContract.SyncState.ACCOUNT_NAME, TaskContract.SyncState.ACCOUNT_TYPE));
+
+        // trigger that removes properties of a task that has been removed
+        db.execSQL(SQL_CREATE_TASKS_CLEANUP_TRIGGER);
+
+        // trigger that removes alarms when an alarm property was deleted
+        db.execSQL(SQL_CREATE_ALARM_PROPERTY_CLEANUP_TRIGGER);
+
+        // trigger that removes tasks when a list was removed
+        db.execSQL(SQL_CREATE_LISTS_CLEANUP_TRIGGER);
+
+        // trigger that counts the alarms for tasks
+        db.execSQL(SQL_CREATE_ALARM_COUNT_CREATE_TRIGGER);
+        db.execSQL(SQL_CREATE_ALARM_COUNT_UPDATE_TRIGGER);
+        db.execSQL(SQL_CREATE_ALARM_COUNT_DELETE_TRIGGER);
+
+        // add cleanup trigger for orphaned properties
+        db.execSQL(SQL_CREATE_TASK_PROPERTY_CLEANUP_TRIGGER);
+
+        // initialize FTS
+        FTSDatabaseHelper.onCreate(db);
+
+        if (mListener != null)
+        {
+            mListener.onDatabaseCreated(db);
+        }
+    }
+
+
+    /**
+     * Manages the database schema migration.
+     */
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+    {
+        Log.i(TAG, "updgrading db from " + oldVersion + " to " + newVersion);
+        if (oldVersion < 2)
+        {
+            // add IS_NEW and IS_CLOSED columns and update their values
+            db.execSQL("ALTER TABLE " + Tables.TASKS + " ADD COLUMN " + TaskContract.Tasks.IS_NEW + " INTEGER");
+            db.execSQL("ALTER TABLE " + Tables.TASKS + " ADD COLUMN " + TaskContract.Tasks.IS_CLOSED + " INTEGER");
+            db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_NEW + " = 1 WHERE " + TaskContract.Tasks.STATUS + " = "
+                    + TaskContract.Tasks.STATUS_NEEDS_ACTION);
+            db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_NEW + " = 0 WHERE " + TaskContract.Tasks.STATUS + " != "
+                    + TaskContract.Tasks.STATUS_NEEDS_ACTION);
+            db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_CLOSED + " = 1 WHERE " + TaskContract.Tasks.STATUS + " > "
+                    + TaskContract.Tasks.STATUS_IN_PROCESS);
+            db.execSQL("UPDATE " + Tables.TASKS + " SET " + TaskContract.Tasks.IS_CLOSED + " = 0 WHERE " + TaskContract.Tasks.STATUS + " <= "
+                    + TaskContract.Tasks.STATUS_IN_PROCESS);
+        }
+
+        if (oldVersion < 3)
+        {
+            // add instance sortings
+            db.execSQL("ALTER TABLE " + Tables.INSTANCES + " ADD COLUMN " + TaskContract.Instances.INSTANCE_START_SORTING + " INTEGER");
+            db.execSQL("ALTER TABLE " + Tables.INSTANCES + " ADD COLUMN " + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER");
+            db.execSQL("UPDATE " + Tables.INSTANCES + " SET " + TaskContract.Instances.INSTANCE_START_SORTING + " = " + TaskContract.Instances.INSTANCE_START
+                    + ", " + TaskContract.Instances.INSTANCE_DUE_SORTING + " = " + TaskContract.Instances.INSTANCE_DUE);
+        }
+        if (oldVersion < 4)
+        {
+            // drop old view before altering the schema
+            db.execSQL(SQL_DROP_TASK_VIEW);
+            db.execSQL(SQL_DROP_INSTANCE_VIEW);
+
+            // change property id column name to work with the left join in task view
+            db.execSQL(SQL_DROP_TASKS_CLEANUP_TRIGGER);
+            db.execSQL(SQL_DROP_PROPERTIES_TABLE);
+            db.execSQL(SQL_CREATE_PROPERTIES_TABLE);
+            db.execSQL(SQL_CREATE_TASKS_CLEANUP_TRIGGER);
+
+            // create categories mapping table
+            db.execSQL(SQL_CREATE_CATEGORIES_MAPPING_TABLE);
+
+            // create alarms table
+            db.execSQL(SQL_CREATE_ALARMS_TABLE);
+
+            // update views
+            db.execSQL(SQL_CREATE_TASK_VIEW);
+            db.execSQL(SQL_CREATE_TASK_PROPERTY_VIEW);
+            db.execSQL(SQL_CREATE_INSTANCE_VIEW);
+            db.execSQL(SQL_CREATE_INSTANCE_PROPERTY_VIEW);
+            db.execSQL(SQL_CREATE_INSTANCE_CATEGORY_VIEW);
+
+            // create Indices
+            db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.MIMETYPE, TaskContract.Properties.TASK_ID));
+            db.execSQL(createIndexString(Tables.PROPERTIES, false, TaskContract.Properties.TASK_ID));
+            db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.ACCOUNT_NAME, TaskContract.Categories.ACCOUNT_TYPE,
+                    TaskContract.Categories.NAME));
+            db.execSQL(createIndexString(Tables.CATEGORIES, false, TaskContract.Categories.NAME));
+
+            // add new triggers
+            db.execSQL(SQL_CREATE_ALARM_PROPERTY_CLEANUP_TRIGGER);
+            db.execSQL(SQL_CREATE_ALARM_COUNT_CREATE_TRIGGER);
+            db.execSQL(SQL_CREATE_ALARM_COUNT_UPDATE_TRIGGER);
+            db.execSQL(SQL_CREATE_ALARM_COUNT_DELETE_TRIGGER);
+
+        }
+        if (oldVersion < 6)
+        {
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.PARENT_ID + " integer;");
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.HAS_ALARMS + " integer;");
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.SORTING + " text;");
+        }
+        if (oldVersion < 7)
+        {
+            db.execSQL(SQL_CREATE_LISTS_CLEANUP_TRIGGER);
+        }
+        if (oldVersion < 8)
+        {
+            // replace priority 0 by null. We need this to sort the widget properly. Since 0 is the default this is no problem when syncing.
+            db.execSQL("update " + Tables.TASKS + " set " + Tasks.PRIORITY + "=null where " + Tasks.PRIORITY + "=0;");
+        }
+        if (oldVersion < 9)
+        {
+            // add missing column _UID
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks._UID + " integer;");
+            // add cleanup trigger for orphaned properties
+            db.execSQL(SQL_CREATE_TASK_PROPERTY_CLEANUP_TRIGGER);
+        }
+        if (oldVersion < 10)
+        {
+            // add property column to categories_mapping table. Since adding a constraint is not supported by SQLite we have to remove and recreate the entire
+            // table
+            db.execSQL("drop table " + Tables.CATEGORIES_MAPPING);
+            db.execSQL(SQL_CREATE_CATEGORIES_MAPPING_TABLE);
+            db.execSQL(SQL_CREATE_CATEGORY_PROPERTY_CLEANUP_TRIGGER);
+        }
+        if (oldVersion < 11)
+        {
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.PINNED + " integer;");
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.HAS_PROPERTIES + " integer;");
+        }
+
+        if (oldVersion < 12)
+        {
+            // rename the local account type
+            ContentValues values = new ContentValues(1);
+            values.put(TaskLists.ACCOUNT_TYPE, TaskContract.LOCAL_ACCOUNT_TYPE);
+            db.update(Tables.LISTS, values, TaskLists.ACCOUNT_TYPE + "=?", new String[] { "LOCAL" });
+        }
+
+        if (oldVersion < 13)
+        {
+            db.execSQL(SQL_CREATE_SYNCSTATE_TABLE);
+        }
+
+        if (oldVersion < 14)
+        {
+            // create a unique index for account name and account type on the sync state table
+            db.execSQL(createIndexString(Tables.SYNCSTATE, true, TaskContract.SyncState.ACCOUNT_NAME, TaskContract.SyncState.ACCOUNT_TYPE));
+        }
+
+        if (oldVersion < 16)
+        {
+            db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
+            db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
+        }
+
+        // upgrade FTS
+        FTSDatabaseHelper.onUpgrade(db, oldVersion, newVersion);
+
+        if (mListener != null)
+        {
+            mListener.onDatabaseUpdate(db, oldVersion, newVersion);
+        }
+    }
 }

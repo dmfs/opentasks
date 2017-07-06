@@ -17,11 +17,6 @@
 
 package org.dmfs.tasks.widget;
 
-import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.model.FieldDescriptor;
-import org.dmfs.tasks.model.adapters.FieldAdapter;
-import org.dmfs.tasks.model.layout.LayoutOptions;
-
 import android.content.Context;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -30,84 +25,89 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.FieldDescriptor;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
+import org.dmfs.tasks.model.layout.LayoutOptions;
+
 
 /**
  * A view that shows the a clickable URL.
- * 
+ *
  * @author Arjun Naik <arjun@arjunnaik.in>
  */
 public final class UrlFieldView extends AbstractFieldView
 {
-	/**
-	 * The {@link FieldAdapter} of the field for this view.
-	 */
-	private FieldAdapter<?> mAdapter;
+    /**
+     * The {@link FieldAdapter} of the field for this view.
+     */
+    private FieldAdapter<?> mAdapter;
 
-	/**
-	 * The {@link TextView} to show the URL in.
-	 */
-	private TextView mText;
-
-
-	public UrlFieldView(Context context)
-	{
-		super(context);
-
-	}
+    /**
+     * The {@link TextView} to show the URL in.
+     */
+    private TextView mText;
 
 
-	public UrlFieldView(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-	}
+    public UrlFieldView(Context context)
+    {
+        super(context);
+
+    }
 
 
-	public UrlFieldView(Context context, AttributeSet attrs, int defStyle)
-	{
-		super(context, attrs, defStyle);
-	}
+    public UrlFieldView(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+    }
 
 
-	@Override
-	protected void onFinishInflate()
-	{
-		super.onFinishInflate();
-		mText = (TextView) findViewById(android.R.id.text1);
-
-		if (mText == null)
-		{
-			// on older Android version onFinishInflate can be called multiple times if the view contains includes
-			return;
-		}
-
-		MovementMethod mMethod = LinkMovementMethod.getInstance();
-		mText.setMovementMethod(mMethod);
-	}
+    public UrlFieldView(Context context, AttributeSet attrs, int defStyle)
+    {
+        super(context, attrs, defStyle);
+    }
 
 
-	@Override
-	public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
-	{
-		super.setFieldDescription(descriptor, layoutOptions);
-		mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
-		mText.setHint(descriptor.getHint());
-	}
+    @Override
+    protected void onFinishInflate()
+    {
+        super.onFinishInflate();
+        mText = (TextView) findViewById(android.R.id.text1);
+
+        if (mText == null)
+        {
+            // on older Android version onFinishInflate can be called multiple times if the view contains includes
+            return;
+        }
+
+        MovementMethod mMethod = LinkMovementMethod.getInstance();
+        mText.setMovementMethod(mMethod);
+    }
 
 
-	@Override
-	public void onContentChanged(ContentSet contentSet)
-	{
-		Object value;
-		if (mValues != null && (value = mAdapter.get(mValues)) != null)
-		{
-			String urlString = value.toString();
-			mText.setText(Html.fromHtml("<a href='" + urlString + "'>" + urlString + "</a>"));
-			setVisibility(View.VISIBLE);
-		}
-		else
-		{
-			setVisibility(View.GONE);
-		}
+    @Override
+    public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
+    {
+        super.setFieldDescription(descriptor, layoutOptions);
+        mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
+        mText.setHint(descriptor.getHint());
+    }
 
-	}
+
+    @Override
+    public void onContentChanged(ContentSet contentSet)
+    {
+        Object value;
+        if (mValues != null && (value = mAdapter.get(mValues)) != null)
+        {
+            String urlString = value.toString();
+            mText.setText(Html.fromHtml("<a href='" + urlString + "'>" + urlString + "</a>"));
+            setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            setVisibility(View.GONE);
+        }
+
+    }
 }

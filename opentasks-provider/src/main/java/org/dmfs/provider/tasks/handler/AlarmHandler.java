@@ -17,118 +17,118 @@
 
 package org.dmfs.provider.tasks.handler;
 
-import org.dmfs.provider.tasks.TaskContract.Property;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.provider.tasks.TaskContract.Property;
+
 
 /**
  * This class is used to handle alarm property values during database transactions.
- * 
+ *
  * @author Tobias Reinsch <tobias@dmfs.org>
- * 
  */
 public class AlarmHandler extends PropertyHandler
 {
 
-	// private static final String[] ALARM_ID_PROJECTION = { Alarms.ALARM_ID };
-	// private static final String ALARM_SELECTION = Alarms.ALARM_ID + " =?";
-
-	/**
-	 * Validates the content of the alarm prior to insert and update transactions.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            The id of the task this property belongs to.
-	 * @param propertyId
-	 *            The id of the property if <code>isNew</code> is <code>false</code>. If <code>isNew</code> is <code>true</code> this value is ignored.
-	 * @param isNew
-	 *            Indicates that the content is new and not an update.
-	 * @param values
-	 *            The {@link ContentValues} to validate.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * 
-	 * @return The valid {@link ContentValues}.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if the {@link ContentValues} are invalid.
-	 */
-	@Override
-	public ContentValues validateValues(SQLiteDatabase db, long taskId, long propertyId, boolean isNew, ContentValues values, boolean isSyncAdapter)
-	{
-		// row id can not be changed or set manually
-		if (values.containsKey(Property.Alarm.PROPERTY_ID))
-		{
-			throw new IllegalArgumentException("_ID can not be set manually");
-		}
-
-		if (!values.containsKey(Property.Alarm.MINUTES_BEFORE))
-		{
-			throw new IllegalArgumentException("alarm property requires a time offset");
-		}
-
-		if (!values.containsKey(Property.Alarm.REFERENCE) || values.getAsInteger(Property.Alarm.REFERENCE) < 0)
-		{
-			throw new IllegalArgumentException("alarm property requires a valid reference date ");
-		}
-
-		if (!values.containsKey(Property.Alarm.ALARM_TYPE))
-		{
-			throw new IllegalArgumentException("alarm property requires an alarm type");
-		}
-
-		return values;
-	}
+    // private static final String[] ALARM_ID_PROJECTION = { Alarms.ALARM_ID };
+    // private static final String ALARM_SELECTION = Alarms.ALARM_ID + " =?";
 
 
-	/**
-	 * Inserts the alarm into the database.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            The id of the task the new property belongs to.
-	 * @param values
-	 *            The {@link ContentValues} to insert.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * 
-	 * @return The row id of the new alarm as <code>long</code>
-	 */
-	@Override
-	public long insert(SQLiteDatabase db, long taskId, ContentValues values, boolean isSyncAdapter)
-	{
-		values = validateValues(db, taskId, -1, true, values, isSyncAdapter);
-		return super.insert(db, taskId, values, isSyncAdapter);
-	}
+    /**
+     * Validates the content of the alarm prior to insert and update transactions.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         The id of the task this property belongs to.
+     * @param propertyId
+     *         The id of the property if <code>isNew</code> is <code>false</code>. If <code>isNew</code> is <code>true</code> this value is ignored.
+     * @param isNew
+     *         Indicates that the content is new and not an update.
+     * @param values
+     *         The {@link ContentValues} to validate.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return The valid {@link ContentValues}.
+     *
+     * @throws IllegalArgumentException
+     *         if the {@link ContentValues} are invalid.
+     */
+    @Override
+    public ContentValues validateValues(SQLiteDatabase db, long taskId, long propertyId, boolean isNew, ContentValues values, boolean isSyncAdapter)
+    {
+        // row id can not be changed or set manually
+        if (values.containsKey(Property.Alarm.PROPERTY_ID))
+        {
+            throw new IllegalArgumentException("_ID can not be set manually");
+        }
+
+        if (!values.containsKey(Property.Alarm.MINUTES_BEFORE))
+        {
+            throw new IllegalArgumentException("alarm property requires a time offset");
+        }
+
+        if (!values.containsKey(Property.Alarm.REFERENCE) || values.getAsInteger(Property.Alarm.REFERENCE) < 0)
+        {
+            throw new IllegalArgumentException("alarm property requires a valid reference date ");
+        }
+
+        if (!values.containsKey(Property.Alarm.ALARM_TYPE))
+        {
+            throw new IllegalArgumentException("alarm property requires an alarm type");
+        }
+
+        return values;
+    }
 
 
-	/**
-	 * Updates the alarm in the database.
-	 * 
-	 * @param db
-	 *            The {@link SQLiteDatabase}.
-	 * @param taskId
-	 *            The id of the task this property belongs to.
-	 * @param propertyId
-	 *            The id of the property.
-	 * @param values
-	 *            The {@link ContentValues} to update.
-	 * @param oldValues
-	 *            A {@link Cursor} pointing to the old values in the database.
-	 * @param isSyncAdapter
-	 *            Indicates that the transaction was triggered from a SyncAdapter.
-	 * 
-	 * @return The number of rows affected.
-	 */
-	@Override
-	public int update(SQLiteDatabase db, long taskId, long propertyId, ContentValues values, Cursor oldValues, boolean isSyncAdapter)
-	{
-		values = validateValues(db, taskId, propertyId, false, values, isSyncAdapter);
-		return super.update(db, taskId, propertyId, values, oldValues, isSyncAdapter);
-	}
+    /**
+     * Inserts the alarm into the database.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         The id of the task the new property belongs to.
+     * @param values
+     *         The {@link ContentValues} to insert.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return The row id of the new alarm as <code>long</code>
+     */
+    @Override
+    public long insert(SQLiteDatabase db, long taskId, ContentValues values, boolean isSyncAdapter)
+    {
+        values = validateValues(db, taskId, -1, true, values, isSyncAdapter);
+        return super.insert(db, taskId, values, isSyncAdapter);
+    }
+
+
+    /**
+     * Updates the alarm in the database.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}.
+     * @param taskId
+     *         The id of the task this property belongs to.
+     * @param propertyId
+     *         The id of the property.
+     * @param values
+     *         The {@link ContentValues} to update.
+     * @param oldValues
+     *         A {@link Cursor} pointing to the old values in the database.
+     * @param isSyncAdapter
+     *         Indicates that the transaction was triggered from a SyncAdapter.
+     *
+     * @return The number of rows affected.
+     */
+    @Override
+    public int update(SQLiteDatabase db, long taskId, long propertyId, ContentValues values, Cursor oldValues, boolean isSyncAdapter)
+    {
+        values = validateValues(db, taskId, propertyId, false, values, isSyncAdapter);
+        return super.update(db, taskId, propertyId, values, oldValues, isSyncAdapter);
+    }
 }

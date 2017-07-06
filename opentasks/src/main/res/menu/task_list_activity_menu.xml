@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_add_task"
-        android:icon="@drawable/ic_action_add"
-        android:title="@string/menu_add_task"
-        android:titleCondensed="@string/menu_add_task_condensed"
-        app:showAsAction="always"/>
+            android:id="@+id/menu_add_task"
+            android:icon="@drawable/ic_action_add"
+            android:title="@string/menu_add_task"
+            android:titleCondensed="@string/menu_add_task_condensed"
+            app:showAsAction="always"/>
     <item
-        android:id="@+id/search"
-        android:title="@string/task_group_search_title"
-        android:visible="false"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="collapseActionView"/>
+            android:id="@+id/search"
+            android:title="@string/task_group_search_title"
+            android:visible="false"
+            app:actionViewClass="android.support.v7.widget.SearchView"
+            app:showAsAction="collapseActionView"/>
     <item
-        android:id="@+id/menu_visible_list"
-        android:title="@string/visible_task_lists"
-        app:showAsAction="never">
-    </item>
+            android:id="@+id/menu_visible_list"
+            android:title="@string/visible_task_lists"
+            app:showAsAction="never"></item>
     <item
-        android:id="@+id/menu_alarms"
-        android:checkable="true"
-        android:title="@string/enable_alarms"
-        app:showAsAction="never">
-    </item>
+            android:id="@+id/menu_alarms"
+            android:checkable="true"
+            android:title="@string/enable_alarms"
+            app:showAsAction="never"></item>
 
 </menu>

@@ -17,31 +17,31 @@
 
 package org.dmfs.provider.tasks.processors.tasks;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import org.dmfs.provider.tasks.FTSDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 
-import android.database.sqlite.SQLiteDatabase;
-
 
 /**
  * A {@link TaskProcessor} to update the fast text search table when inserting or updating a task.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public class FtsProcessor extends AbstractEntityProcessor<TaskAdapter>
 {
 
-	@Override
-	public void afterInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		FTSDatabaseHelper.updateTaskFTSEntries(db, task);
-	}
+    @Override
+    public void afterInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+    }
 
 
-	@Override
-	public void afterUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
-	{
-		FTSDatabaseHelper.updateTaskFTSEntries(db, task);
-	}
+    @Override
+    public void afterUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+    }
 }

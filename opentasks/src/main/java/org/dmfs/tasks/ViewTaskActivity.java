@@ -43,117 +43,117 @@ import org.dmfs.tasks.utils.AppCompatActivity;
 public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragment.Callback
 {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_task_detail);
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_task_detail);
 
-		// If should be in two-pane mode, finish to return to main activity
-		if (getResources().getBoolean(R.bool.has_two_panes))
-		{
+        // If should be in two-pane mode, finish to return to main activity
+        if (getResources().getBoolean(R.bool.has_two_panes))
+        {
 
-			Intent taskListIntent = new Intent(this, TaskListActivity.class);
-			taskListIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION,
-				getIntent().getBooleanExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, false));
-			taskListIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
-			taskListIntent.setData(getIntent().getData());
-			startActivity(taskListIntent);
-			finish();
-			return;
-		}
+            Intent taskListIntent = new Intent(this, TaskListActivity.class);
+            taskListIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION,
+                    getIntent().getBooleanExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, false));
+            taskListIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
+            taskListIntent.setData(getIntent().getData());
+            startActivity(taskListIntent);
+            finish();
+            return;
+        }
 
-		if (savedInstanceState == null)
-		{
-			ViewTaskFragment fragment = ViewTaskFragment.newInstance(getIntent().getData());
-			getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
-		}
-	}
-
-
-	@Override
-	public void onAttachFragment(Fragment fragment)
-	{
-		if (fragment instanceof ViewTaskFragment)
-		{
-			final ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
-			new Handler().post(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					detailFragment.setupToolbarAsActionbar(ViewTaskActivity.this);
-				}
-			});
-		}
-	}
+        if (savedInstanceState == null)
+        {
+            ViewTaskFragment fragment = ViewTaskFragment.newInstance(getIntent().getData());
+            getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
+        }
+    }
 
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
-	{
-		switch (item.getItemId())
-		{
-			case android.R.id.home:
-				Intent upIntent = new Intent(this, TaskListActivity.class);
-				// provision the task uri, so the main activity will be opened with the right task selected
-				upIntent.setData(getIntent().getData());
-				upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(upIntent);
-				finish();
-			default:
-				break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    public void onAttachFragment(Fragment fragment)
+    {
+        if (fragment instanceof ViewTaskFragment)
+        {
+            final ViewTaskFragment detailFragment = (ViewTaskFragment) fragment;
+            new Handler().post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    detailFragment.setupToolbarAsActionbar(ViewTaskActivity.this);
+                }
+            });
+        }
+    }
 
 
-	@Override
-	public void onEditTask(Uri taskUri, ContentSet data)
-	{
-		Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
-		editTaskIntent.setData(taskUri);
-		if (data != null)
-		{
-			Bundle extraBundle = new Bundle();
-			extraBundle.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
-			editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, extraBundle);
-		}
-		startActivity(editTaskIntent);
-	}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, TaskListActivity.class);
+                // provision the task uri, so the main activity will be opened with the right task selected
+                upIntent.setData(getIntent().getData());
+                upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(upIntent);
+                finish();
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
-	@Override
-	public void onDelete(Uri taskUri)
-	{
-		/*
-		 * The task we're showing has been deleted, just finish.
+    @Override
+    public void onEditTask(Uri taskUri, ContentSet data)
+    {
+        Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
+        editTaskIntent.setData(taskUri);
+        if (data != null)
+        {
+            Bundle extraBundle = new Bundle();
+            extraBundle.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, data);
+            editTaskIntent.putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, extraBundle);
+        }
+        startActivity(editTaskIntent);
+    }
+
+
+    @Override
+    public void onDelete(Uri taskUri)
+    {
+        /*
+         * The task we're showing has been deleted, just finish.
 		 */
-		finish();
-	}
+        finish();
+    }
 
 
-	private int darkenColor(int color)
-	{
-		float[] hsv = new float[3];
-		Color.colorToHSV(color, hsv);
-		hsv[2] = hsv[2] * 0.75f;
-		color = Color.HSVToColor(hsv);
-		return color;
-	}
+    private int darkenColor(int color)
+    {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = hsv[2] * 0.75f;
+        color = Color.HSVToColor(hsv);
+        return color;
+    }
 
 
-	@SuppressLint("NewApi")
-	@Override
-	public void updateColor(int color)
-	{
+    @SuppressLint("NewApi")
+    @Override
+    public void updateColor(int color)
+    {
 
-		if (VERSION.SDK_INT >= 21)
-		{
-			Window window = getWindow();
-			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-			window.setStatusBarColor(darkenColor(color));
-		}
-	}
+        if (VERSION.SDK_INT >= 21)
+        {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(darkenColor(color));
+        }
+    }
 
 }

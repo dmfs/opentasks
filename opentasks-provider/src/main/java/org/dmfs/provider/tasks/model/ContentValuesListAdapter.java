@@ -17,12 +17,12 @@
 
 package org.dmfs.provider.tasks.model;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
 import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
-
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 
 
 /**
@@ -30,102 +30,102 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class ContentValuesListAdapter extends AbstractListAdapter
 {
-	private long mId;
-	private final ContentValues mValues;
+    private long mId;
+    private final ContentValues mValues;
 
 
-	public ContentValuesListAdapter(ContentValues values)
-	{
-		this(-1L, values);
-	}
+    public ContentValuesListAdapter(ContentValues values)
+    {
+        this(-1L, values);
+    }
 
 
-	public ContentValuesListAdapter(long id, ContentValues values)
-	{
-		mId = id;
-		mValues = values;
-	}
+    public ContentValuesListAdapter(long id, ContentValues values)
+    {
+        mId = id;
+        mValues = values;
+    }
 
 
-	@Override
-	public long id()
-	{
-		return mId;
-	}
+    @Override
+    public long id()
+    {
+        return mId;
+    }
 
 
-	@Override
-	public <T> T valueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
-	{
-		return fieldAdapter.getFrom(mValues);
-	}
+    @Override
+    public <T> T valueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
+    {
+        return fieldAdapter.getFrom(mValues);
+    }
 
 
-	@Override
-	public <T> T oldValueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
-	{
-		return null;
-	}
+    @Override
+    public <T> T oldValueOf(FieldAdapter<T, ListAdapter> fieldAdapter)
+    {
+        return null;
+    }
 
 
-	@Override
-	public <T> boolean isUpdated(FieldAdapter<T, ListAdapter> fieldAdapter)
-	{
-		return fieldAdapter.isSetIn(mValues);
-	}
+    @Override
+    public <T> boolean isUpdated(FieldAdapter<T, ListAdapter> fieldAdapter)
+    {
+        return fieldAdapter.isSetIn(mValues);
+    }
 
 
-	@Override
-	public boolean isWriteable()
-	{
-		return true;
-	}
+    @Override
+    public boolean isWriteable()
+    {
+        return true;
+    }
 
 
-	@Override
-	public boolean hasUpdates()
-	{
-		return mValues.size() > 0;
-	}
+    @Override
+    public boolean hasUpdates()
+    {
+        return mValues.size() > 0;
+    }
 
 
-	@Override
-	public <T> void set(FieldAdapter<T, ListAdapter> fieldAdapter, T value) throws IllegalStateException
-	{
-		fieldAdapter.setIn(mValues, value);
-	}
+    @Override
+    public <T> void set(FieldAdapter<T, ListAdapter> fieldAdapter, T value) throws IllegalStateException
+    {
+        fieldAdapter.setIn(mValues, value);
+    }
 
 
-	@Override
-	public <T> void unset(FieldAdapter<T, ListAdapter> fieldAdapter) throws IllegalStateException
-	{
-		fieldAdapter.removeFrom(mValues);
-	}
+    @Override
+    public <T> void unset(FieldAdapter<T, ListAdapter> fieldAdapter) throws IllegalStateException
+    {
+        fieldAdapter.removeFrom(mValues);
+    }
 
 
-	@Override
-	public int commit(SQLiteDatabase db)
-	{
-		if (mValues.size() == 0)
-		{
-			return 0;
-		}
+    @Override
+    public int commit(SQLiteDatabase db)
+    {
+        if (mValues.size() == 0)
+        {
+            return 0;
+        }
 
-		if (mId < 0)
-		{
-			mId = db.insert(TaskDatabaseHelper.Tables.LISTS, null, mValues);
-			return mId > 0 ? 1 : 0;
-		}
-		else
-		{
-			return db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
-		}
-	}
+        if (mId < 0)
+        {
+            mId = db.insert(TaskDatabaseHelper.Tables.LISTS, null, mValues);
+            return mId > 0 ? 1 : 0;
+        }
+        else
+        {
+            return db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
+        }
+    }
 
 
-	@Override
-	public ListAdapter duplicate()
-	{
-		return new ContentValuesListAdapter(new ContentValues(mValues));
-	}
+    @Override
+    public ListAdapter duplicate()
+    {
+        return new ContentValuesListAdapter(new ContentValues(mValues));
+    }
 }

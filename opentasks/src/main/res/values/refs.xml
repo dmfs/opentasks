@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <item name="fragment_visiblelist" type="layout">@layout/fragment_visiblelist_list</item>
-    <item name="design_layout_tab_icon" type="layout">@layout/opentasks_layout_tab_icon</item>
+    <item name="fragment_visiblelist"
+            type="layout">@layout/fragment_visiblelist_list
+    </item>
+    <item name="design_layout_tab_icon"
+            type="layout">@layout/opentasks_layout_tab_icon
+    </item>
 
 </resources>

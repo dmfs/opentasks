@@ -24,17 +24,18 @@ import android.support.v4.content.Loader;
 
 /**
  * An abstract factory that can create Loader<Cursor> instances.
- * 
+ *
  * @author Marten Gajda <marten@dmfs.org>
  */
 public abstract class AbstractCursorLoaderFactory
 {
-	/**
-	 * Get a new {@link Loader} instance. Override this method to return a custom Loader for Cursors.
-	 * 
-	 * @param context
-	 *            A {@link Context}.
-	 * @return A brand new {@link Loader} for {@link Cursor}s.
-	 */
-	public abstract Loader<Cursor> getLoader(Context context);
+    /**
+     * Get a new {@link Loader} instance. Override this method to return a custom Loader for Cursors.
+     *
+     * @param context
+     *         A {@link Context}.
+     *
+     * @return A brand new {@link Loader} for {@link Cursor}s.
+     */
+    public abstract Loader<Cursor> getLoader(Context context);
 }

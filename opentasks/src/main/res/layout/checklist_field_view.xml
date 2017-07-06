@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.CheckListFieldViewLegacy xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/task_widget"
-    android:visibility="visible" >
+        style="@style/task_widget"
+        android:visibility="visible">
 
     <TextView
-        android:id="@android:id/icon"
-        style="@style/details_label_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp" />
+            android:id="@android:id/icon"
+            style="@style/details_label_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"/>
 
     <LinearLayout
-        android:id="@+id/checklist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-    </LinearLayout>
+            android:id="@+id/checklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"></LinearLayout>
 
 </org.dmfs.tasks.widget.CheckListFieldViewLegacy>
