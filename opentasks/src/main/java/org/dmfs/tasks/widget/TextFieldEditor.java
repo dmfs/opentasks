@@ -73,7 +73,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChang
     @Override
     protected void onFinishInflate()
     {
-        // super.onFinishInflate();
+        super.onFinishInflate();
         mText = (EditText) findViewById(android.R.id.text1);
         if (mText != null)
         {

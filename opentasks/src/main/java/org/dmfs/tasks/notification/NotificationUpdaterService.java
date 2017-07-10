@@ -67,7 +67,7 @@ import java.util.TimeZone;
  */
 public class NotificationUpdaterService extends Service
 {
-    private static final String TAG = "NotificationUpdaterService";
+    private static final String TAG = "NotificationUpdaterSe";
 
     /**
      * The duration in milliseconds of the heads up notification when pin tasks are due /start

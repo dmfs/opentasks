@@ -71,13 +71,6 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
-    <style name="task_list_item_text"
-            parent="android:attr/textAppearanceMedium">
-        <item name="android:textColor"
-                tools:targetApi="14">@style/dark_text
-        </item>
-    </style>
-
     <style name="field_view_text_value"
             parent="dark_text">
         <item name="android:textAppearance">@android:style/TextAppearance.Medium</item>

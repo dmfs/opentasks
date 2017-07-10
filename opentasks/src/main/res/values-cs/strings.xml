@@ -28,6 +28,7 @@
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d úkol</item>
+        <item quantity="few">%d úkoly</item>
         <item quantity="other">%d úkolů</item>
     </plurals>
 
@@ -85,7 +86,7 @@
     <string name="task_group_due_tomorrow">Zítra</string>
     <string name="task_group_due_within_7_days">Další dny</string>
     <string name="task_group_due_in_month">Splnit v %s</string>
-    <string name="task_group_due_in_year">Splnit v %s</string>
+    <string name="task_group_due_in_year">Splnit v %d</string>
     <string name="task_group_due_in_future">Někdy</string>
 
     <!-- Task list start group titles -->
@@ -208,8 +209,6 @@
     <string name="cd_due_date">ikona data ukončení úkolu</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Do kdy, %1s</string>
     <string name="notification_task_start_date">Od kdy, %1s</string>
     <string name="notification_task_due_today">Dodnes</string>

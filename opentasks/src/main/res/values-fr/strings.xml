@@ -85,7 +85,7 @@
     <string name="task_group_due_tomorrow">À finir pour demain</string>
     <string name="task_group_due_within_7_days">À finir bientôt</string>
     <string name="task_group_due_in_month">À finir dans %s</string>
-    <string name="task_group_due_in_year">À finir dans %s</string>
+    <string name="task_group_due_in_year">À finir dans %d</string>
     <string name="task_group_due_in_future">À finir plus tard</string>
 
     <!-- Task list start group titles -->
@@ -208,8 +208,6 @@
     <string name="cd_due_date">icône pour la date de fin de la tâche</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Tâche à finir %1s</string>
     <string name="notification_task_start_date">Début de la tâche %1s</string>
     <string name="notification_task_due_today">Tâche à finir aujourd\'hui</string>

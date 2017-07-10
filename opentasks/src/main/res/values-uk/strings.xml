@@ -78,7 +78,7 @@
     <string name="task_group_due_tomorrow">Завтра</string>
     <string name="task_group_due_within_7_days">На протязі тижня</string>
     <string name="task_group_due_in_month">Термін у %s</string>
-    <string name="task_group_due_in_year">Термін у %s </string>
+    <string name="task_group_due_in_year">Термін у %d</string>
     <string name="task_group_due_in_future">В майбутньому</string>
 
     <!-- Task list start group titles -->
@@ -201,8 +201,6 @@
     <string name="cd_due_date">значок для терміну виконання завдання</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Термін виконання завдання %1s</string>
     <string name="notification_task_start_date">Початок завдання %1s</string>
     <string name="notification_task_due_today">Термін виконання завдання сьогодні</string>

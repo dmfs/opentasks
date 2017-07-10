@@ -35,10 +35,7 @@ android {
     }
 
     lintOptions {
-        // TODO: fix these
-        disable 'MissingTranslation'
-        disable 'ManifestResource'
-        disable 'ValidFragment'
+        disable 'MissingTranslation' // TODO
     }
 }
 

@@ -84,8 +84,8 @@
     <string name="task_group_due_today">Ma</string>
     <string name="task_group_due_tomorrow">Holnap</string>
     <string name="task_group_due_within_7_days">Pár nap múlva</string>
-    <string name="task_group_due_in_month">%s múlva</string>
-    <string name="task_group_due_in_year">%s múlva</string>
+    <string name="task_group_due_in_month">%s</string>
+    <string name="task_group_due_in_year">%d</string>
     <string name="task_group_due_in_future">Valamikor</string>
 
     <!-- Task list start group titles -->
@@ -208,8 +208,6 @@
     <string name="cd_due_date">ikon a feladat határidejéhez</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Feladat határideje %1s</string>
     <string name="notification_task_start_date">Feladat kezdete %1s</string>
     <string name="notification_task_due_today">Feladat határideje ma</string>

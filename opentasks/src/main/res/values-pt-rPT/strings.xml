@@ -85,7 +85,7 @@
     <string name="task_group_due_tomorrow">Amanhã</string>
     <string name="task_group_due_within_7_days">Nos próximos dias</string>
     <string name="task_group_due_in_month">Termina em %s</string>
-    <string name="task_group_due_in_year">Termina em %s</string>
+    <string name="task_group_due_in_year">Termina em %d</string>
     <string name="task_group_due_in_future">Mais tarde</string>
 
     <!-- Task list start group titles -->
@@ -208,8 +208,6 @@
     <string name="cd_due_date">ícone para a data limite da tarefa</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Tarefa termina, %1s</string>
     <string name="notification_task_start_date">Tarefa inicia, %1s</string>
     <string name="notification_task_due_today">Tarefa termina hoje</string>
