@@ -18,10 +18,16 @@ package org.dmfs.tasks.dashclock;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.utils.BaseActivity;
 
 
+/**
+ * TODO This doesn't use {@link BaseActivity}. Could be replaced with that plus {@link PreferenceFragment} or
+ * android.support.v7.preference.PreferenceFragmentCompat.
+ */
 public class DashClockPreferenceActivity extends PreferenceActivity
 {
     public static final String KEY_PREF_DISPLAY_MODE = "pref_db_displayed_tasks";

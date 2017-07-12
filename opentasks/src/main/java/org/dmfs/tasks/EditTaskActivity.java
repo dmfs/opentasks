@@ -28,7 +28,7 @@ import android.view.MenuItem;
 import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.utils.ActionBarActivity;
+import org.dmfs.tasks.utils.BaseActivity;
 
 import java.util.TimeZone;
 
@@ -40,7 +40,7 @@ import java.util.TimeZone;
  * @author Marten Gajda <marten@dmfs.org>
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class EditTaskActivity extends ActionBarActivity
+public class EditTaskActivity extends BaseActivity
 {
     private static final String ACTION_NOTE_TO_SELF = "com.google.android.gm.action.AUTO_SEND";
 
