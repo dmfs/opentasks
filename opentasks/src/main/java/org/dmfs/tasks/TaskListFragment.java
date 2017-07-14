@@ -149,10 +149,14 @@ public class TaskListFragment extends SupportFragment
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
         {
             selectChildView(parent, groupPosition, childPosition, true);
-            if (mExpandableListView.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
             {
-                mActivatedPositionGroup = groupPosition;
-                mActivatedPositionChild = childPosition;
+                if (mExpandableListView.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
+                {
+                    mActivatedPositionGroup = groupPosition;
+                    mActivatedPositionChild = childPosition;
+                }
             }
             /*
              * In contrast to a ListView an ExpandableListView does not set the activated item on it's own. So we have to do that here.
@@ -832,7 +836,10 @@ public class TaskListFragment extends SupportFragment
      */
     public void setActivateOnItemClick(boolean activateOnItemClick)
     {
-        mExpandableListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+        if (android.os.Build.VERSION.SDK_INT >= 11)
+        {
+            mExpandableListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
+        }
     }
 
 
@@ -936,9 +943,12 @@ public class TaskListFragment extends SupportFragment
         {
             try
             {
-                mExpandableListView
-                        .setItemChecked(mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)),
-                                true);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                {
+                    mExpandableListView
+                            .setItemChecked(mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)),
+                                    true);
+                }
             }
             catch (NullPointerException e)
             {

@@ -24,8 +24,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.util.AttributeSet;
-import android.widget.CheckBox;
 
 import org.dmfs.tasks.R;
 
@@ -35,7 +35,7 @@ import org.dmfs.tasks.R;
  *
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class ColoredShapeCheckBox extends CheckBox
+public class ColoredShapeCheckBox extends AppCompatCheckBox
 {
     /**
      * The initial color in case no other color is set. This color is transparent but the check mark will be dark.

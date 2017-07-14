@@ -14,6 +14,8 @@
             android:permissionGroup="android.permission-group.PERSONAL_INFO"
             android:protectionLevel="dangerous"/>
 
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
     <application>
         <provider
                 android:name="org.dmfs.provider.tasks.TaskProvider"

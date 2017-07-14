@@ -83,7 +83,7 @@
     <string name="task_group_due_tomorrow">Morgen</string>
     <string name="task_group_due_within_7_days">Komende dagen</string>
     <string name="task_group_due_in_month">Einde in %s</string>
-    <string name="task_group_due_in_year">Einde in %s</string>
+    <string name="task_group_due_in_year">Einde in %d</string>
     <string name="task_group_due_in_future">Een keer</string>
 
     <!-- Task list start group titles -->
@@ -207,8 +207,6 @@
     <string name="cd_due_date">icoon voor einddatum van de taak</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">Taak einde</string>
-    <string name="notification_task_start_title">Taak start</string>
     <string name="notification_task_due_date">Taak te doen, %1s</string>
     <string name="notification_task_start_date">Taak begint, %1s</string>
     <string name="notification_task_due_today">Taak vandaag te doen</string>

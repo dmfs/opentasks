@@ -82,7 +82,7 @@
     <string name="task_group_due_tomorrow">Завтра</string>
     <string name="task_group_due_within_7_days">В течение недели</string>
     <string name="task_group_due_in_month">Срок в %s</string>
-    <string name="task_group_due_in_year">Срок в %s </string>
+    <string name="task_group_due_in_year">Срок в %d</string>
     <string name="task_group_due_in_future">В будущем</string>
 
     <!-- Task list start group titles -->
@@ -182,8 +182,6 @@
     <string name="cd_due_date">значок для срока выполнения задачи</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Срок выполнения задачи %1s</string>
     <string name="notification_task_start_date">Начало задачи %1s</string>
     <string name="notification_task_due_today">Срок выполнения задачи сегодня</string>

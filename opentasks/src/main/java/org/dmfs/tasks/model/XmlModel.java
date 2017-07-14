@@ -68,7 +68,7 @@ import java.util.Map.Entry;
  */
 public class XmlModel extends Model
 {
-    private final static String TAG = "org.dmfs.tasks.model.XmlModel";
+    private final static String TAG = "tasks.model.XmlModel";
 
     public final static String METADATA_TASKS = "org.dmfs.tasks.TASKS";
 

@@ -47,7 +47,7 @@ import java.util.Map;
 public final class Sources extends BroadcastReceiver implements OnAccountsUpdateListener
 {
 
-    public final static String TAG = "org.dmfs.tasks.model.Sources";
+    public final static String TAG = "tasks.model.Sources";
 
     /**
      * A Singleton instance in order to allow freeing it under memory pressure.

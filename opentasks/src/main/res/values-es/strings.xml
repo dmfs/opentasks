@@ -85,7 +85,7 @@
     <string name="task_group_due_tomorrow">Vence mañana</string>
     <string name="task_group_due_within_7_days">Vence pronto</string>
     <string name="task_group_due_in_month">Vence en %s</string>
-    <string name="task_group_due_in_year">Vence en %s</string>
+    <string name="task_group_due_in_year">Vence en %d</string>
     <string name="task_group_due_in_future">Vence más tarde</string>
 
     <!-- Task list start group titles -->
@@ -211,8 +211,6 @@
     <string name="cd_due_date">icono para la fecha de vencimiento de la tarea</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Vencimiento de la tarea, %1s</string>
     <string name="notification_task_start_date">Comienzo de la tarea, %1s</string>
     <string name="notification_task_due_today">La tarea vence hoy</string>

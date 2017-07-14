@@ -1345,7 +1345,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         // On Android 2.3+ we just call the appropriate method
         try
         {
-            return packageManager.getProviderInfo(new ComponentName(context, providerClass), PackageManager.GET_PROVIDERS | PackageManager.GET_META_DATA);
+            return packageManager.getProviderInfo(new ComponentName(context, providerClass), PackageManager.GET_META_DATA);
         }
         catch (NameNotFoundException e)
         {

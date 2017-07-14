@@ -76,7 +76,7 @@
     <string name="task_group_due_tomorrow">Сутра</string>
     <string name="task_group_due_within_7_days">Следећих дана</string>
     <string name="task_group_due_in_month">Истиче %s</string>
-    <string name="task_group_due_in_year">Истиче за %s</string>
+    <string name="task_group_due_in_year">Истиче за %d</string>
     <string name="task_group_due_in_future">Једног дана</string>
 
     <!-- Task list start group titles -->
@@ -199,8 +199,6 @@
     <string name="cd_due_date">икона за датум истека задатка</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">Задатак истиче у %1s</string>
     <string name="notification_task_start_date">Задатак почиње у %1s</string>
     <string name="notification_task_due_today">Задатак истиче данас</string>

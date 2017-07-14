@@ -65,15 +65,9 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
     private Activity mActivity;
     private ListView mTaskList;
     private String mAuthority;
-    private onSelectionListener mListener;
+    private OnSelectionListener mListener;
     private TextView mButtonOk;
     private TextView mButtonCancel;
-
-
-    public TaskListSelectionFragment(onSelectionListener listener)
-    {
-        mListener = listener;
-    }
 
 
     @Override
@@ -81,6 +75,7 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
     {
         super.onAttach(activity);
         mActivity = activity;
+        mListener = (OnSelectionListener) activity;
         mAuthority = TaskContract.taskAuthority(activity);
     }
 
@@ -174,11 +169,11 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
     }
 
 
-    public interface onSelectionListener
+    public interface OnSelectionListener
     {
-        public void onSelection(ArrayList<Long> selectedLists);
+        void onSelection(ArrayList<Long> selectedLists);
 
-        public void onSelectionCancel();
+        void onSelectionCancel();
     }
 
 }

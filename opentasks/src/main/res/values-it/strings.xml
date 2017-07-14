@@ -62,7 +62,7 @@
     <string name="task_group_due_tomorrow">Scadono domani</string>
     <string name="task_group_due_within_7_days">Scadono prossimamente</string>
     <string name="task_group_due_in_month">Scadono in %s</string>
-    <string name="task_group_due_in_year">Scadono nel %s</string>
+    <string name="task_group_due_in_year">Scadono nel %d</string>
     <string name="task_group_due_in_future">Scadono successivamente</string>
 
     <!-- Task editor labels -->

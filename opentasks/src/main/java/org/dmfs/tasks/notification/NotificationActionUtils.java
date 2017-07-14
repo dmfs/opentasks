@@ -92,7 +92,7 @@ public class NotificationActionUtils
 
         // build notification
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(context.getString(R.string.notification_task_due_title, title)).setContentText(dueString);
+                .setContentTitle(title).setContentText(dueString);
 
         // color
         mBuilder.setColor(context.getResources().getColor(R.color.primary));
@@ -181,7 +181,7 @@ public class NotificationActionUtils
 
         // build notification
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(context.getString(R.string.notification_task_start_title, title)).setContentText(startString);
+                .setContentTitle(title).setContentText(startString);
 
         // color
         mBuilder.setColor(context.getResources().getColor(R.color.primary));

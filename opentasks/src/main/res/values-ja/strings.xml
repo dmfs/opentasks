@@ -85,7 +85,7 @@
     <string name="task_group_due_tomorrow">明日</string>
     <string name="task_group_due_within_7_days">以降</string>
     <string name="task_group_due_in_month">期限 %s</string>
-    <string name="task_group_due_in_year">期限 %s</string>
+    <string name="task_group_due_in_year">期限 %d</string>
     <string name="task_group_due_in_future">いつか</string>
 
     <!-- Task list start group titles -->
@@ -208,8 +208,6 @@
     <string name="cd_due_date">タスクの期日のアイコン</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_title">%1s</string>
-    <string name="notification_task_start_title">%1s</string>
     <string name="notification_task_due_date">タスク期限, %1s</string>
     <string name="notification_task_start_date">タスク開始, %1s</string>
     <string name="notification_task_due_today">タスク期限が今日</string>
