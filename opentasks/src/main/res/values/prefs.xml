@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="schedjoules_pref_notification_enabled"
+            translatable="false">schedjoules_pref_notification_enabled</string>
+
+</resources>

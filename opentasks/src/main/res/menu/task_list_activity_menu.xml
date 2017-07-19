@@ -17,11 +17,12 @@
     <item
             android:id="@+id/menu_visible_list"
             android:title="@string/visible_task_lists"
-            app:showAsAction="never"></item>
+            app:showAsAction="never"/>
+
     <item
-            android:id="@+id/menu_alarms"
-            android:checkable="true"
-            android:title="@string/enable_alarms"
-            app:showAsAction="never"></item>
+            android:id="@+id/opentasks_menu_app_settings"
+            android:title="@string/title_activity_settings"
+            android:visible="@bool/postHoneycomb"
+            app:showAsAction="never"/>
 
 </menu>
