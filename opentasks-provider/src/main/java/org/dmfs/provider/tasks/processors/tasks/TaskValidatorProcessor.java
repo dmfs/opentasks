@@ -19,12 +19,12 @@ package org.dmfs.provider.tasks.processors.tasks;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 import org.dmfs.rfc5545.Duration;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**

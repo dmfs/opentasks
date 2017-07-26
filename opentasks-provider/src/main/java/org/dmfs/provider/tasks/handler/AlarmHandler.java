@@ -20,7 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskContract.Property;
+import org.dmfs.tasks.contract.TaskContract.Property;
 
 
 /**

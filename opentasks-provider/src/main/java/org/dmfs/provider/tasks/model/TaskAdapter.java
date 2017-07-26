@@ -19,9 +19,6 @@ package org.dmfs.provider.tasks.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.model.adapters.BinaryFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.DateTimeArrayFieldAdapter;
@@ -32,6 +29,9 @@ import org.dmfs.provider.tasks.model.adapters.LongFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.RRuleFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**

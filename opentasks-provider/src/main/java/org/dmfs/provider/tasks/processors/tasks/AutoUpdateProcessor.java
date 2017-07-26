@@ -20,13 +20,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**

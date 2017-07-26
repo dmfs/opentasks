@@ -22,9 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
+import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
 
 
 public class DatabaseInitializedReceiver extends BroadcastReceiver
@@ -43,7 +44,7 @@ public class DatabaseInitializedReceiver extends BroadcastReceiver
             listValues.put(TaskLists.OWNER, "");
 
             context.getContentResolver().insert(
-                    TaskContract.TaskLists.getContentUri(TaskContract.taskAuthority(context)).buildUpon()
+                    TaskContract.TaskLists.getContentUri(AuthorityUtil.taskAuthority(context)).buildUpon()
                             .appendQueryParameter(TaskContract.CALLER_IS_SYNCADAPTER, "true")
                             .appendQueryParameter(TaskContract.ACCOUNT_NAME, TaskContract.LOCAL_ACCOUNT_NAME)
                             .appendQueryParameter(TaskContract.ACCOUNT_TYPE, TaskContract.LOCAL_ACCOUNT_TYPE).build(), listValues);

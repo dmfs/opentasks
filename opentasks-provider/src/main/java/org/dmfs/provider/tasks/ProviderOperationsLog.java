@@ -19,6 +19,8 @@ package org.dmfs.provider.tasks;
 import android.net.Uri;
 import android.os.Bundle;
 
+import org.dmfs.tasks.contract.TaskContract;
+
 import java.util.ArrayList;
 
 

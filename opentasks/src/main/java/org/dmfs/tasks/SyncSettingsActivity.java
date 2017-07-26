@@ -24,7 +24,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 
-import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.tasks.contract.TaskContract;
 
 
 /**

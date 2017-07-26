@@ -26,8 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.dmfs.android.widgets.ColoredShapeCheckBox;
-import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.ArrayList;
 

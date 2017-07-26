@@ -51,9 +51,10 @@ import android.widget.TextView.OnEditorActionListener;
 import org.dmfs.android.retentionmagic.SupportDialogFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.RecentlyUsedLists;
@@ -254,7 +255,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
         mSaveAndNextButton.setOnClickListener(this);
         view.findViewById(android.R.id.edit).setOnClickListener(this);
 
-        mAuthority = TaskContract.taskAuthority(getActivity());
+        mAuthority = AuthorityUtil.taskAuthority(getActivity());
 
         afterTextChanged(mEditText.getEditableText());
 

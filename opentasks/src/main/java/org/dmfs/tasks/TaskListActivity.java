@@ -51,8 +51,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
@@ -225,7 +225,7 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mAuthority = TaskContract.taskAuthority(this);
+        mAuthority = AuthorityUtil.taskAuthority(this);
         mSearchHistoryHelper = new SearchHistoryHelper(this);
 
         if (findViewById(R.id.task_detail_container) != null)

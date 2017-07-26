@@ -26,8 +26,8 @@ import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;

@@ -19,11 +19,11 @@ package org.dmfs.provider.tasks.processors.tasks;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskContract.Property.Relation;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.tasks.contract.TaskContract.Property.Relation;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**

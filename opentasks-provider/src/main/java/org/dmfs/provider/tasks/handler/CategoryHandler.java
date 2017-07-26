@@ -20,12 +20,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskContract.Categories;
-import org.dmfs.provider.tasks.TaskContract.Properties;
-import org.dmfs.provider.tasks.TaskContract.Property.Category;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.CategoriesMapping;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
+import org.dmfs.tasks.contract.TaskContract.Categories;
+import org.dmfs.tasks.contract.TaskContract.Properties;
+import org.dmfs.tasks.contract.TaskContract.Property.Category;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**

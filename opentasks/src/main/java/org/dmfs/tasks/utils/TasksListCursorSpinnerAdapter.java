@@ -25,8 +25,8 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 
 

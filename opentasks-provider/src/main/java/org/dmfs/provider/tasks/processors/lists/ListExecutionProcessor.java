@@ -18,10 +18,10 @@ package org.dmfs.provider.tasks.processors.lists;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskContract;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.ListAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.tasks.contract.TaskContract;
 
 
 /**

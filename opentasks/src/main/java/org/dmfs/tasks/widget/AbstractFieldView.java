@@ -25,8 +25,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.OnContentChangeListener;

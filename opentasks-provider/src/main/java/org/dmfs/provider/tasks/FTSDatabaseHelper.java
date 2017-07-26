@@ -22,11 +22,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import org.dmfs.ngrams.NGramGenerator;
-import org.dmfs.provider.tasks.TaskContract.Properties;
-import org.dmfs.provider.tasks.TaskContract.TaskColumns;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.TaskAdapter;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Properties;
+import org.dmfs.tasks.contract.TaskContract.TaskColumns;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 import java.util.HashSet;
 import java.util.Set;

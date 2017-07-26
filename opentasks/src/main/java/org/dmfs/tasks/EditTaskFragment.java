@@ -50,9 +50,10 @@ import android.widget.Toast;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -207,7 +208,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
-        mAuthority = TaskContract.taskAuthority(activity);
+        mAuthority = AuthorityUtil.taskAuthority(activity);
         Bundle bundle = getArguments();
 
         // check for supplied task information from intent
@@ -569,7 +570,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
             }
 
 			/*
-			 * Don't start the model loader here, let onItemSelected do that.
+             * Don't start the model loader here, let onItemSelected do that.
 			 */
             setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
         }

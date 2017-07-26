@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
-import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.tasks.contract.TaskContract;
 
 
 /**

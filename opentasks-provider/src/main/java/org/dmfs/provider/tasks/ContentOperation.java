@@ -30,12 +30,13 @@ import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
-import org.dmfs.provider.tasks.TaskContract.Instances;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.tasks.TaskInstancesProcessor;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Instances;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 import java.util.TimeZone;
 
@@ -338,7 +339,7 @@ public enum ContentOperation
      */
     public void fire(Context context, ContentValues values)
     {
-        context.getContentResolver().update(uri(TaskContract.taskAuthority(context)), values == null ? new ContentValues() : values, null, null);
+        context.getContentResolver().update(uri(AuthorityUtil.taskAuthority(context)), values == null ? new ContentValues() : values, null, null);
     }
 
 

@@ -22,11 +22,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import org.dmfs.provider.tasks.TaskContract.Properties;
-import org.dmfs.provider.tasks.TaskContract.Property.Alarm;
-import org.dmfs.provider.tasks.TaskContract.Property.Category;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
-import org.dmfs.provider.tasks.TaskContract.Tasks;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Properties;
+import org.dmfs.tasks.contract.TaskContract.Property.Alarm;
+import org.dmfs.tasks.contract.TaskContract.Property.Category;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
+import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**

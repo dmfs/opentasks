@@ -35,9 +35,9 @@ import android.widget.Toast;
 import org.dmfs.android.colorpicker.ColorPickerActivity;
 import org.dmfs.android.colorpicker.palettes.RandomPalette;
 import org.dmfs.android.retentionmagic.annotations.Retain;
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.TaskLists;
 import org.dmfs.tasks.InputTextDialogFragment.InputTextListener;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.utils.ActionBarActivity;
 
 

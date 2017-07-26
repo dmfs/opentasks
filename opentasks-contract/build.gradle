@@ -20,8 +20,4 @@ android {
 }
 
 dependencies {
-    compile('org.dmfs:rfc5545-datetime:0.2.4')
-    compile('org.dmfs:lib-recur:0.9.6')
-    compile project(':opentasks-contract')
-    testCompile 'junit:junit:4.12'
 }

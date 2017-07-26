@@ -20,14 +20,14 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import org.dmfs.provider.tasks.TaskContract;
-import org.dmfs.provider.tasks.TaskContract.Instances;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Instances;
 
 import java.sql.RowId;
 import java.util.TimeZone;

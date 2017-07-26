@@ -47,7 +47,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.dmfs.android.widgets.ColoredShapeCheckBox;
-import org.dmfs.provider.tasks.TaskContract;
+import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.Sources;
 
@@ -239,7 +240,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
         super.onAttach(activity);
         mSources = Sources.getInstance(activity);
         mContext = activity.getBaseContext();
-        mAuthority = TaskContract.taskAuthority(activity);
+        mAuthority = AuthorityUtil.taskAuthority(activity);
     }
 
 
