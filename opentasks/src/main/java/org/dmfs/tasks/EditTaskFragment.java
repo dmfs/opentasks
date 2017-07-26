@@ -743,6 +743,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
         // TODO: put that in a background task
         Activity activity = getActivity();
 
+        boolean isNewTask = mValues.isInsert();
+
         if (mEditor != null)
         {
             mEditor.updateValues();
@@ -805,7 +807,10 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 activity.setResult(Activity.RESULT_OK, new Intent().setData(mTaskUri));
                 Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
                 activity.finish();
-                activity.startActivity(new Intent("android.intent.action.VIEW", mTaskUri));
+                if (isNewTask)
+                {
+                    activity.startActivity(new Intent("android.intent.action.VIEW", mTaskUri));
+                }
             }
             else
             {
