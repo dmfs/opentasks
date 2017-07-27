@@ -23,17 +23,11 @@ This is a task app for Android.
 
 ## Download
 
-<a href="https://play.google.com/store/apps/details?id=org.dmfs.tasks">
-  <img alt="Get it on Google Play"
-       src="https://cloud.githubusercontent.com/assets/16354543/11904684/0667026e-a5c2-11e5-9f53-4614cc53e01f.png" />
-</a>
-<a href="https://f-droid.org/repository/browse/?fdfilter=tasks&fdid=org.dmfs.tasks">
-  <img alt="Get it on F-Droid"
-       src="https://cloud.githubusercontent.com/assets/12447257/8024903/ce8dca32-0d44-11e5-95b0-e97d1d027351.png" />
-</a>
+<a href="https://f-droid.org/packages/org.dmfs.tasks/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="100"/></a>
+<a href="https://play.google.com/store/apps/details?id=org.dmfs.tasks" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="100"/></a>
 
 ## License
 
 Copyright (c) Marten Gajda 2013-2015, licensed under Apache2.
-
-
