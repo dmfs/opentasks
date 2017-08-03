@@ -41,6 +41,7 @@
     <string name="activity_task_details_complete_task">Ukončiť úlohu</string>
     <string name="activity_task_details_pin">Pripichnúť</string>
     <string name="activity_task_details_pin_task">Pripichnúť úlohu</string>
+    <string name="opentasks_details_no_task_selected">Nebola vybratá úloha</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Pridať položku</string>
