@@ -37,6 +37,8 @@ import android.text.format.Time;
 import android.widget.RemoteViews;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.notification.signals.NoSignal;
+import org.dmfs.tasks.notification.signals.SwitchableSignal;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
@@ -60,9 +62,9 @@ public class NotificationActionUtils
     public final static String EXTRA_NOTIFICATION_ACTION = "org.dmfs.tasks.extra.notification.EXTRA_NOTIFICATION_ACTION";
 
     /**
-     * Boolean extra to indicate that a notification is supposed to be silent, i.e. should not play a sound when it's fired.
+     * Boolean extra to indicate that a notification is not supposed to be signalling, i.e. should not play sound, vibrate or blink the lights when it's fired.
      */
-    public final static String EXTRA_SILENT_NOTIFICATION = "org.dmfs.provider.tasks.extra.SILENT";
+    public final static String EXTRA_NOTIFICATION_NO_SIGNAL = "org.dmfs.provider.tasks.extra.NO_SIGNAL";
 
     private static long TIMEOUT_MILLIS = 10000;
     private static long sUndoTimeoutMillis = -1;
@@ -110,14 +112,7 @@ public class NotificationActionUtils
         mBuilder.setTicker(title);
 
         // enable light, sound and vibration
-        if (silent)
-        {
-            mBuilder.setDefaults(0);
-        }
-        else
-        {
-            mBuilder.setDefaults(Notification.DEFAULT_ALL);
-        }
+        mBuilder.setDefaults(new SwitchableSignal(context, silent).defaultsValue());
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(Intent.ACTION_VIEW);
@@ -199,14 +194,7 @@ public class NotificationActionUtils
         mBuilder.setTicker(title);
 
         // enable light, sound and vibration
-        if (silent)
-        {
-            mBuilder.setDefaults(0);
-        }
-        else
-        {
-            mBuilder.setDefaults(Notification.DEFAULT_ALL);
-        }
+        mBuilder.setDefaults(new SwitchableSignal(context, silent).defaultsValue());
 
         // set notification time
         // set displayed time
@@ -277,8 +265,7 @@ public class NotificationActionUtils
         builder.setSmallIcon(R.drawable.ic_notification);
         builder.setWhen(action.getWhen());
 
-        // disable sound & vibration
-        builder.setDefaults(0);
+        builder.setDefaults(new NoSignal().defaultsValue());
 
         final RemoteViews undoView = new RemoteViews(context.getPackageName(), R.layout.undo_notification);
         undoView.setTextViewText(R.id.description_text, context.getString(action.mActionTextResId));

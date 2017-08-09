@@ -250,4 +250,15 @@
     <!-- Sharing intent -->
     <string name="share_as_task">Create Task</string>
 
+    <!-- Settings -->
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Notification signals</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Sound</string>
+    <!-- Notification Vibrate enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibrate</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Pulse light</string>
+
+
 </resources>

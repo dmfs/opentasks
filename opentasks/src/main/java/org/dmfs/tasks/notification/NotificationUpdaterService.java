@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks.notification;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -56,6 +55,7 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
+import org.dmfs.tasks.notification.signals.SwitchableSignal;
 
 import java.util.ArrayList;
 import java.util.TimeZone;
@@ -131,7 +131,7 @@ public class NotificationUpdaterService extends Service
     {
 
         String intentAction = intent.getAction();
-        boolean silent = intent.getBooleanExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, false);
+        boolean noSignal = intent.getBooleanExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, false);
         if (intentAction != null)
         {
             switch (intentAction)
@@ -142,8 +142,8 @@ public class NotificationUpdaterService extends Service
 
                 case ACTION_PINNED_TASK_START:
                 case ACTION_PINNED_TASK_DUE:
-                    updateNotifications(true, !silent, !silent);
-                    if (!silent)
+                    updateNotifications(true, noSignal, !noSignal);
+                    if (!noSignal)
                     {
                         delayedCancelHeadsUpNotification();
                     }
@@ -176,7 +176,7 @@ public class NotificationUpdaterService extends Service
                 case Intent.ACTION_BOOT_COMPLETED:
                 case Intent.ACTION_REBOOT:
                 case TaskNotificationHandler.ACTION_FASTBOOT:
-                    updateNotifications(true, false, false);
+                    updateNotifications(true, true, false);
                     break;
 
                 case Intent.ACTION_DATE_CHANGED:
@@ -184,15 +184,15 @@ public class NotificationUpdaterService extends Service
                 case Intent.ACTION_TIMEZONE_CHANGED:
                 case ACTION_NEXT_DAY:
                     updateNextDayAlarm();
-                    updateNotifications(false, false, false);
+                    updateNotifications(false, true, false);
                     break;
 
                 case ACTION_CANCEL_HEADUP_NOTIFICATION:
-                    updateNotifications(false, false, false);
+                    updateNotifications(false, true, false);
                     break;
 
                 default:
-                    updateNotifications(false, false, false);
+                    updateNotifications(false, true, false);
                     break;
             }
         }
@@ -207,27 +207,15 @@ public class NotificationUpdaterService extends Service
     }
 
 
-    @SuppressWarnings("unused")
-    private void pinNewTask(Intent intent)
-    {
-        // check for new task to pin
-        if (intent.hasExtra(EXTRA_NEW_PINNED_TASK))
-        {
-            ContentSet newTaskToPin = intent.getParcelableExtra(EXTRA_NEW_PINNED_TASK);
-            makePinNotification(this, mBuilder, newTaskToPin, true, true, false);
-        }
-    }
-
-
-    private void updateNotifications(boolean isReboot, boolean withSound, boolean withHeadsUpNotification)
+    private void updateNotifications(boolean isReboot, boolean noSignal, boolean withHeadsUpNotification)
     {
         // update pinned tasks
         mTasksToPin = queryTasksToPin();
-        updatePinnedNotifications(mTasksToPin, isReboot, withSound, withHeadsUpNotification);
+        updatePinnedNotifications(mTasksToPin, isReboot, noSignal, withHeadsUpNotification);
     }
 
 
-    private void updatePinnedNotifications(ArrayList<ContentSet> tasksToPin, boolean isReboot, boolean withSound, boolean withHeadsUpNotification)
+    private void updatePinnedNotifications(ArrayList<ContentSet> tasksToPin, boolean isReboot, boolean noSignal, boolean withHeadsUpNotification)
     {
         ArrayList<Uri> pinnedTaskUris = TaskNotificationHandler.getPinnedTaskUris(this);
 
@@ -238,7 +226,7 @@ public class NotificationUpdaterService extends Service
             boolean isAlreadyShown = pinnedTaskUris.contains(taskContentSet.getUri());
             Integer taskId = TaskFieldAdapters.TASK_ID.get(taskContentSet);
             notificationManager.notify(taskId,
-                    makePinNotification(this, mBuilder, taskContentSet, !isAlreadyShown || withSound, !isAlreadyShown || withSound, withHeadsUpNotification));
+                    makePinNotification(this, mBuilder, taskContentSet, isAlreadyShown && noSignal, isAlreadyShown && noSignal, withHeadsUpNotification));
         }
 
         // remove old notifications
@@ -276,32 +264,6 @@ public class NotificationUpdaterService extends Service
             }
         }
         return false;
-    }
-
-
-    @SuppressLint("InlinedApi")
-    public void resendPinNotification(Uri taskUri)
-    {
-        if (taskUri == null)
-        {
-            return;
-        }
-        long taskId = ContentUris.parseId(taskUri);
-        if (taskId < 0)
-        {
-            return;
-        }
-        Integer notificationId = Long.valueOf(taskId).intValue();
-        mBuilder.setDefaults(Notification.DEFAULT_ALL);
-        mBuilder.setOngoing(true);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-        {
-            mBuilder.setPriority(Notification.PRIORITY_HIGH);
-        }
-
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(notificationId, mBuilder.build());
     }
 
 
@@ -347,7 +309,7 @@ public class NotificationUpdaterService extends Service
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private static Notification makePinNotification(Context context, Builder builder, ContentSet task, boolean withSound, boolean withTickerText,
+    private static Notification makePinNotification(Context context, Builder builder, ContentSet task, boolean noSignal, boolean withTickerText,
                                                     boolean withHeadsUpNotification)
     {
         Resources resources = context.getResources();
@@ -430,15 +392,7 @@ public class NotificationUpdaterService extends Service
         // unpin action
         builder.addAction(NotificationUpdaterService.getUnpinAction(context, TaskFieldAdapters.TASK_ID.get(task), task.getUri()));
 
-        // sound
-        if (withSound)
-        {
-            builder.setDefaults(Notification.DEFAULT_ALL);
-        }
-        else
-        {
-            builder.setDefaults(Notification.DEFAULT_LIGHTS);
-        }
+        builder.setDefaults(new SwitchableSignal(context, noSignal).defaultsValue());
 
         return builder.build();
     }
@@ -525,7 +479,7 @@ public class NotificationUpdaterService extends Service
             startIntent.setPackage(getApplicationContext().getPackageName());
             startIntent.putExtra(TaskContract.EXTRA_TASK_TITLE, notificationAction.title());
             startIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
-            startIntent.putExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, true);
+            startIntent.putExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, true);
             sendBroadcast(startIntent);
 
             // Due broadcast
@@ -534,7 +488,7 @@ public class NotificationUpdaterService extends Service
             dueIntent.setPackage(getApplicationContext().getPackageName());
             dueIntent.putExtra(TaskContract.EXTRA_TASK_TITLE, notificationAction.title());
             dueIntent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, notificationAction.getWhen());
-            dueIntent.putExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, true);
+            dueIntent.putExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, true);
             sendBroadcast(dueIntent);
         }
     }

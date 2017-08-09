@@ -185,21 +185,21 @@ public class TaskNotificationHandler extends BroadcastReceiver
     }
 
 
-    public static void sendPinnedTaskStartNotification(Context context, Uri taskUri, boolean silent)
+    public static void sendPinnedTaskStartNotification(Context context, Uri taskUri, boolean noSignal)
     {
         Intent intent = new Intent(context, NotificationUpdaterService.class);
         intent.setAction(NotificationUpdaterService.ACTION_PINNED_TASK_START);
-        intent.putExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, silent);
+        intent.putExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, noSignal);
         intent.setData(taskUri);
         context.startService(intent);
     }
 
 
-    public static void sendPinnedTaskDueNotification(Context context, Uri taskUri, boolean silent)
+    public static void sendPinnedTaskDueNotification(Context context, Uri taskUri, boolean noSignal)
     {
         Intent intent = new Intent(context, NotificationUpdaterService.class);
         intent.setAction(NotificationUpdaterService.ACTION_PINNED_TASK_DUE);
-        intent.putExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, silent);
+        intent.putExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, noSignal);
         intent.setData(taskUri);
         context.startService(intent);
     }
