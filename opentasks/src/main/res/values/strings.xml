@@ -266,4 +266,10 @@
     <!-- Outgoing share -->
     <string name="opentasks_share_footer">Shared via OpenTasks</string>
 
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Permission needed</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message">In order to synchronize tasks for accounts, OpenTasks needs to access the account list which is in the Contacts permission group.</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_negative">I don\'t use sync, don\'t show it again</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_positive">Continue to grant the permission</string>
+
 </resources>

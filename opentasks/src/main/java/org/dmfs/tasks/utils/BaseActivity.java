@@ -16,6 +16,7 @@
 
 package org.dmfs.tasks.utils;
 
+import android.Manifest;
 import android.content.SharedPreferences;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -23,6 +24,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import org.dmfs.android.retentionmagic.RetentionMagic;
+import org.dmfs.tasks.utils.permission.BasicAppPermissions;
+import org.dmfs.tasks.utils.permission.Permission;
+import org.dmfs.tasks.utils.permission.dialog.PermissionRequestDialogFragment;
 
 
 /**
@@ -39,6 +43,16 @@ public abstract class BaseActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        // TODO Maybe DismissiblePermission extends Permission?
+        Permission getAccountsPermission = new BasicAppPermissions(this).forName(Manifest.permission.GET_ACCOUNTS);
+        if (!getAccountsPermission.isGranted()
+                && savedInstanceState == null
+                && !getSharedPreferences(PermissionRequestDialogFragment.PREFS_STORE_IGNORED_PERMISSIONS, MODE_PRIVATE)
+                .getBoolean(Manifest.permission.GET_ACCOUNTS, false))
+        {
+            PermissionRequestDialogFragment.newInstance().show(getSupportFragmentManager(), "permission-dialog");
+        }
 
         mPrefs = getSharedPreferences(getPackageName() + ".sharedPrefences", 0);
 
