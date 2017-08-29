@@ -1,0 +1,9 @@
+<manifest xmlns:tools="http://schemas.android.com/tools"
+        package="org.dmfs.opentaskspal">
+
+    <!--TODO Remove after https://github.com/dmfs/opentasks/issues/392-->
+    <uses-sdk tools:overrideLibrary="org.dmfs.android.contentpal"/>
+
+    <application/>
+
+</manifest>

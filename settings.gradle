@@ -1,1 +1,1 @@
-include ':opentasks', ':opentasks-provider', ':opentasks-contract'
+include ':opentasks', ':opentasks-provider', ':opentasks-contract', ':opentaskspal'
