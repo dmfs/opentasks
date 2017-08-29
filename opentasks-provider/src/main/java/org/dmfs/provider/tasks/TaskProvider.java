@@ -19,19 +19,13 @@ package org.dmfs.provider.tasks;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.UriMatcher;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
@@ -157,9 +151,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     @Override
     public boolean onCreate()
     {
-        ProviderInfo providerInfo = getProviderInfo();
-
-        mAuthority = providerInfo.authority;
+        mAuthority = AuthorityUtil.taskAuthority(getContext());
 
         mTaskProcessors.add(new TaskValidatorProcessor());
         mTaskProcessors.add(new AutoUpdateProcessor());
@@ -1245,9 +1237,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     }
 
 
-    ;
-
-
     @Override
     public SQLiteOpenHelper getDatabaseHelper(Context context)
     {
@@ -1288,70 +1277,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     protected boolean syncToNetwork(Uri uri)
     {
         return true;
-    }
-
-
-    /**
-     * Returns a {@link ProviderInfo} object for this provider.
-     *
-     * @return A {@link ProviderInfo} instance.
-     *
-     * @throws RuntimeException
-     *         if the provider can't be found in the given context.
-     */
-    @SuppressLint("NewApi")
-    private ProviderInfo getProviderInfo()
-    {
-        Context context = getContext();
-        PackageManager packageManager = context.getPackageManager();
-        Class<?> providerClass = this.getClass();
-
-        if (Build.VERSION.SDK_INT <= 8)
-        {
-            // in Android 2.2 PackageManger.getProviderInfo doesn't exist. We need to find it ourselves.
-
-            // First get the PackageInfo of this app.
-            PackageInfo packageInfo;
-            try
-            {
-                packageInfo = packageManager.getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA | PackageManager.GET_PROVIDERS);
-            }
-            catch (NameNotFoundException e)
-            {
-                throw new RuntimeException("Could not find Provider!", e);
-            }
-
-            // next scan all providers for this class
-            for (ProviderInfo provider : packageInfo.providers)
-            {
-                try
-                {
-                    Class<?> providerInfoClass = Class.forName(provider.name);
-                    if (providerInfoClass.equals(providerClass))
-                    {
-                        // We've finally found to ourselves! Isn't that a good feeling?
-                        return provider;
-                    }
-                }
-                catch (ClassNotFoundException e)
-                {
-                    throw new RuntimeException("Missing provider class '" + provider.name + "'");
-                }
-            }
-
-            // We got lost somewhere, no provider matched!?
-            throw new RuntimeException("Could not find Provider!");
-        }
-
-        // On Android 2.3+ we just call the appropriate method
-        try
-        {
-            return packageManager.getProviderInfo(new ComponentName(context, providerClass), PackageManager.GET_META_DATA);
-        }
-        catch (NameNotFoundException e)
-        {
-            throw new RuntimeException("Could not find Provider!", e);
-        }
     }
 
 
