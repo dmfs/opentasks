@@ -60,7 +60,6 @@ import au.com.codeka.carrot.bindings.SingletonBindings;
  *
  * @author Gabor Keszthelyi
  */
-// TODO Try build again after androidcarrot updates without the proguard entry, see if there is any warning left
 public class ShareTaskText extends AbstractCharSequence
 {
     public ShareTaskText(final ContentSet contentSet, final Model model, final Context context)
