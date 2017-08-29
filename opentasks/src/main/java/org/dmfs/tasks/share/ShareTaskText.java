@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.Log;
 
 import org.dmfs.android.carrot.bindings.AndroidBindings;
+import org.dmfs.android.carrot.locaters.RawResourceLocator;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -59,10 +60,6 @@ import au.com.codeka.carrot.bindings.SingletonBindings;
  *
  * @author Gabor Keszthelyi
  */
-// TODO androidcarrot: decrease minSdk and remove uses-sdk here https://github.com/dmfs/androidcarrot/issues/1
-// TODO androidcarrot: contentpal bindings to module https://github.com/dmfs/androidcarrot/issues/3
-// TODO androidcarrot: update to latest carrot, remove RawResourceLocater from here https://github.com/dmfs/androidcarrot/issues/2
-// TODO use latest androidcarrot (after above is done)
 // TODO Try build again after androidcarrot updates without the proguard entry, see if there is any warning left
 public class ShareTaskText extends AbstractCharSequence
 {
@@ -90,9 +87,7 @@ public class ShareTaskText extends AbstractCharSequence
         @Override
         public CharSequence create()
         {
-            CarrotEngine engine = new CarrotEngine();
-            Configuration config = engine.getConfig();
-            config.setResourceLocater(new RawResourceLocater(mContext));
+            CarrotEngine engine = new CarrotEngine(new Configuration.Builder().setResourceLocator(new RawResourceLocator.Builder(mContext)).build());
             try
             {
                 String output = engine.process(String.valueOf(R.raw.sharetask),

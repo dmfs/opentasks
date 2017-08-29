@@ -53,8 +53,8 @@ dependencies {
     compile project(':opentasks-provider')
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.github.dmfs:color-picker:1.0'
-    compile 'com.github.codeka:carrot:1c24074478'
-    compile('com.github.dmfs:androidcarrot:fac29f16e8') {
+    compile 'au.com.codeka:carrot:2.4.0'
+    compile('com.github.dmfs.androidcarrot:androidcarrot:5a4baa0222') {
         exclude module: 'carrot'
         exclude group: 'com.android.support'
     }

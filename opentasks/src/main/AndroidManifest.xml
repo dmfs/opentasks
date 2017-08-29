@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="org.dmfs.tasks"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS"/>
     <uses-permission android:name="org.dmfs.permission.WRITE_TASKS"/>
@@ -10,9 +9,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-    <uses-sdk tools:overrideLibrary="org.dmfs.android.carrot, org.dmfs.android.contentpal"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
 
     <application
             android:icon="@drawable/ic_launcher"
