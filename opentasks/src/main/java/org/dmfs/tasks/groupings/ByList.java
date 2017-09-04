@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build.VERSION;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
@@ -33,7 +34,6 @@ import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.groupings.cursorloaders.CursorLoaderFactory;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.ContextFragmentManager;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -279,7 +279,7 @@ public class ByList extends AbstractGroupingFactory
                 if (tag != null)
                 {
                     QuickAddDialogFragment.newInstance(tag)
-                            .show(new ContextFragmentManager(v).get(), null);
+                            .show(mActivity.getSupportFragmentManager(), null);
                 }
             }
         };
@@ -328,10 +328,13 @@ public class ByList extends AbstractGroupingFactory
 
     };
 
+    private final FragmentActivity mActivity;
 
-    public ByList(String authority)
+
+    public ByList(String authority, FragmentActivity activity)
     {
         super(authority);
+        mActivity = activity;
     }
 
 

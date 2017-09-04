@@ -22,6 +22,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build.VERSION;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.BaseExpandableListAdapter;
@@ -36,7 +37,6 @@ import org.dmfs.tasks.groupings.cursorloaders.PriorityCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.PriorityCursorLoaderFactory;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.utils.ContextFragmentManager;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
@@ -266,7 +266,7 @@ public class ByPriority extends AbstractGroupingFactory
                     ContentSet content = new ContentSet(Tasks.getContentUri(AuthorityUtil.taskAuthority(v.getContext())));
                     TaskFieldAdapters.PRIORITY.set(content, tag);
                     QuickAddDialogFragment.newInstance(content)
-                            .show(new ContextFragmentManager(v).get(), null);
+                            .show(mActivity.getSupportFragmentManager(), null);
                 }
             }
         };
@@ -315,10 +315,13 @@ public class ByPriority extends AbstractGroupingFactory
 
     };
 
+    private final FragmentActivity mActivity;
 
-    public ByPriority(String authority)
+
+    public ByPriority(String authority, FragmentActivity activity)
     {
         super(authority);
+        mActivity = activity;
     }
 
 

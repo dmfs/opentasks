@@ -252,8 +252,8 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         }
 
         mGroupingFactories = new AbstractGroupingFactory[] {
-                new ByList(mAuthority), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
-                new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
+                new ByList(mAuthority, this), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
+                new ByPriority(mAuthority, this), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
 
         // set up pager adapter
         try
