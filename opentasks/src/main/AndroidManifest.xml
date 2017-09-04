@@ -348,6 +348,11 @@
                         android:scheme="content"/>
             </intent-filter>
         </activity>
+        <!-- App Settings -->
+        <activity
+                android:name=".AppSettingsActivity"
+                android:theme="@style/AppTheme"
+                android:label="@string/title_activity_settings"/>
 
         <!-- Notification -->
         <receiver

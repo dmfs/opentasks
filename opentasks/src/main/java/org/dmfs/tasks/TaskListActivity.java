@@ -61,7 +61,6 @@ import org.dmfs.tasks.groupings.ByProgress;
 import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
 import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
@@ -597,13 +596,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             addItem.setVisible(false);
         }
 
-        // restore menu state
-        MenuItem item = menu.findItem(R.id.menu_alarms);
-        if (item != null)
-        {
-            item.setChecked(AlarmBroadcastReceiver.getAlarmPreference(this));
-        }
-
         // search
         setupSearch(menu);
 
@@ -626,12 +618,9 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             startActivity(settingsIntent);
             return true;
         }
-        else if (item.getItemId() == R.id.menu_alarms)
+        else if (item.getItemId() == R.id.opentasks_menu_app_settings)
         {
-            // set and save state
-            boolean activatedAlarms = !item.isChecked();
-            item.setChecked(activatedAlarms);
-            AlarmBroadcastReceiver.setAlarmPreference(this, activatedAlarms);
+            startActivity(new Intent(this, AppSettingsActivity.class));
             return true;
         }
         else
