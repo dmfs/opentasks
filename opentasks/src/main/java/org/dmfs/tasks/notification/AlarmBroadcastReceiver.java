@@ -22,7 +22,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
+import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -34,10 +36,6 @@ import org.dmfs.tasks.contract.TaskContract;
 public class AlarmBroadcastReceiver extends BroadcastReceiver
 {
 
-    private static String PREFS_NAME = "alarm_preferences";
-    private static String PREF_ALARM_ACTIVATED = "preference_alarm_activated";
-
-
     /**
      * Is called on an incoming alarm broadcast. Creates a notifications for this alarm.
      */
@@ -47,7 +45,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
         // continue if alarms where enabled
         if (intent.getAction().equals(TaskContract.ACTION_BROADCAST_TASK_STARTING))
         {
-            if (getAlarmPreference(context))
+            if (isNotificationEnabled(context))
             {
                 Uri taskUri = intent.getData();
 
@@ -72,7 +70,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
         }
         else if (intent.getAction().equals(TaskContract.ACTION_BROADCAST_TASK_DUE))
         {
-            if (getAlarmPreference(context))
+            if (isNotificationEnabled(context))
             {
                 Uri taskUri = intent.getData();
 
@@ -100,20 +98,10 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
     }
 
 
-    public static void setAlarmPreference(Context context, boolean value)
+    public boolean isNotificationEnabled(Context context)
     {
-        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(PREF_ALARM_ACTIVATED, value);
-        editor.commit();
-
-    }
-
-
-    public static boolean getAlarmPreference(Context context)
-    {
-        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-        return settings.getBoolean(PREF_ALARM_ACTIVATED, true);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        return settings.getBoolean(context.getString(R.string.schedjoules_pref_notification_enabled), true);
 
     }
 }
