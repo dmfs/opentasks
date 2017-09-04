@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="org.dmfs.tasks"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="org.dmfs.tasks">
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS"/>
     <uses-permission android:name="org.dmfs.permission.WRITE_TASKS"/>
@@ -347,6 +347,11 @@
                         android:scheme="content"/>
             </intent-filter>
         </activity>
+        <!-- App Settings -->
+        <activity
+                android:name=".AppSettingsActivity"
+                android:theme="@style/AppTheme"
+                android:label="@string/title_activity_settings"/>
 
         <!-- Notification -->
         <receiver
