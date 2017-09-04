@@ -20,10 +20,10 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.homescreen.TaskListSelectionFragment.OnSelectionListener;
+import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import java.util.ArrayList;
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class TaskListWidgetSettingsActivity extends FragmentActivity implements OnSelectionListener
+public class TaskListWidgetSettingsActivity extends BaseActivity implements OnSelectionListener
 {
     private int mAppWidgetId;
     private Intent mResultIntent;

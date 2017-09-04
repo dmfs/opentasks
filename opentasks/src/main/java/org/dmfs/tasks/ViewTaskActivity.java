@@ -29,7 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import org.dmfs.tasks.model.ContentSet;
-import org.dmfs.tasks.utils.AppCompatActivity;
+import org.dmfs.tasks.utils.BaseActivity;
 
 
 /**
@@ -39,7 +39,7 @@ import org.dmfs.tasks.utils.AppCompatActivity;
  * This activity is mostly just a 'shell' activity containing nothing more than a {@link ViewTaskFragment}.
  * </p>
  */
-public class ViewTaskActivity extends AppCompatActivity implements ViewTaskFragment.Callback
+public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.Callback
 {
 
     @Override

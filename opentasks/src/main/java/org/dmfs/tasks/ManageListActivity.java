@@ -38,7 +38,7 @@ import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.tasks.InputTextDialogFragment.InputTextListener;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
-import org.dmfs.tasks.utils.ActionBarActivity;
+import org.dmfs.tasks.utils.BaseActivity;
 
 
 /**
@@ -46,7 +46,7 @@ import org.dmfs.tasks.utils.ActionBarActivity;
  *
  * @author Tristan Heinig <tristan@dmfs.org>
  */
-public class ManageListActivity extends ActionBarActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener
+public class ManageListActivity extends BaseActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener
 {
     /**
      * Action to call the ColorPicker activity.

@@ -20,16 +20,17 @@ import android.content.SharedPreferences;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import org.dmfs.android.retentionmagic.RetentionMagic;
 
 
 /**
- * Wrapper class to provide {@link RetentionMagic} functionality for the ActionBarActivity.
+ * Base class for all Activities in the app.
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class ActionBarActivity extends android.support.v7.app.ActionBarActivity
+public abstract class BaseActivity extends AppCompatActivity
 {
     private SharedPreferences mPrefs;
 

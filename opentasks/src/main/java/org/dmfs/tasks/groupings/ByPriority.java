@@ -265,7 +265,8 @@ public class ByPriority extends AbstractGroupingFactory
                 {
                     ContentSet content = new ContentSet(Tasks.getContentUri(AuthorityUtil.taskAuthority(v.getContext())));
                     TaskFieldAdapters.PRIORITY.set(content, tag);
-                    QuickAddDialogFragment.newInstance(content).show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), null);
+                    QuickAddDialogFragment.newInstance(content)
+                            .show(mActivity.getSupportFragmentManager(), null);
                 }
             }
         };
@@ -314,10 +315,13 @@ public class ByPriority extends AbstractGroupingFactory
 
     };
 
+    private final FragmentActivity mActivity;
 
-    public ByPriority(String authority)
+
+    public ByPriority(String authority, FragmentActivity activity)
     {
         super(authority);
+        mActivity = activity;
     }
 
 

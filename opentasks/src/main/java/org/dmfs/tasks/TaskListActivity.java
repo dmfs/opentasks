@@ -62,7 +62,7 @@ import org.dmfs.tasks.groupings.BySearch;
 import org.dmfs.tasks.groupings.ByStartDate;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.notification.AlarmBroadcastReceiver;
-import org.dmfs.tasks.utils.AppCompatActivity;
+import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
@@ -86,7 +86,7 @@ import java.io.IOException;
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class TaskListActivity extends AppCompatActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
+public class TaskListActivity extends BaseActivity implements TaskListFragment.Callbacks, ViewTaskFragment.Callback
 {
 
     /**
@@ -252,8 +252,8 @@ public class TaskListActivity extends AppCompatActivity implements TaskListFragm
         }
 
         mGroupingFactories = new AbstractGroupingFactory[] {
-                new ByList(mAuthority), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
-                new ByPriority(mAuthority), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
+                new ByList(mAuthority, this), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
+                new ByPriority(mAuthority, this), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
 
         // set up pager adapter
         try

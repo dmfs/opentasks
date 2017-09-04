@@ -278,7 +278,8 @@ public class ByList extends AbstractGroupingFactory
                 Long tag = (Long) v.getTag();
                 if (tag != null)
                 {
-                    QuickAddDialogFragment.newInstance(tag).show(((FragmentActivity) v.getContext()).getSupportFragmentManager(), null);
+                    QuickAddDialogFragment.newInstance(tag)
+                            .show(mActivity.getSupportFragmentManager(), null);
                 }
             }
         };
@@ -327,10 +328,13 @@ public class ByList extends AbstractGroupingFactory
 
     };
 
+    private final FragmentActivity mActivity;
 
-    public ByList(String authority)
+
+    public ByList(String authority, FragmentActivity activity)
     {
         super(authority);
+        mActivity = activity;
     }
 
 

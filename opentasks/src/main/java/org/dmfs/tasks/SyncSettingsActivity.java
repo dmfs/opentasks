@@ -20,11 +20,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 
 import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.utils.BaseActivity;
 
 
 /**
@@ -32,7 +32,7 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
-public class SyncSettingsActivity extends ActionBarActivity
+public class SyncSettingsActivity extends BaseActivity
 {
     private FragmentManager mManager;
     private SettingsListFragment mCurrentFrag;
