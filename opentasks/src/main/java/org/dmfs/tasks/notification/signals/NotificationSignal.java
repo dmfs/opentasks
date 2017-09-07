@@ -32,5 +32,5 @@ public interface NotificationSignal
      * <p>
      * (<code>0</code> means no signal.)
      */
-    int defaultsValue();
+    int value();
 }

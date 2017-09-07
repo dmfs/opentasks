@@ -16,16 +16,32 @@
 
 package org.dmfs.tasks.notification.signals;
 
+import android.app.Notification;
+
+
 /**
- * {@link NotificationSignal} for no signal, i.e. sound, vibration, lights disabled.
+ * {@link NotificationSignal} for representing, adding, or toggling {@link Notification#DEFAULT_SOUND}
+ * value.
  *
  * @author Gabor Keszthelyi
  */
-public final class NoSignal implements NotificationSignal
+public final class Sound extends DelegatingNotificationSignal
 {
-    @Override
-    public int value()
+    public Sound(boolean enable, NotificationSignal original)
     {
-        return 0;
+        super(new Toggled(Notification.DEFAULT_SOUND, enable, original));
     }
+
+
+    public Sound(NotificationSignal original)
+    {
+        super(new Toggled(Notification.DEFAULT_SOUND, true, original));
+    }
+
+
+    public Sound()
+    {
+        super(new Toggled(Notification.DEFAULT_SOUND, true, new NoSignal()));
+    }
+
 }

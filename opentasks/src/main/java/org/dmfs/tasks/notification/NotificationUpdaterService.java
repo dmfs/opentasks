@@ -392,7 +392,7 @@ public class NotificationUpdaterService extends Service
         // unpin action
         builder.addAction(NotificationUpdaterService.getUnpinAction(context, TaskFieldAdapters.TASK_ID.get(task), task.getUri()));
 
-        builder.setDefaults(new SwitchableSignal(context, noSignal).defaultsValue());
+        builder.setDefaults(new SwitchableSignal(context, noSignal).value());
 
         return builder.build();
     }

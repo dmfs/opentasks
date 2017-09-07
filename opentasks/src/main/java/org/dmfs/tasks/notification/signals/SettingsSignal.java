@@ -40,13 +40,13 @@ public final class SettingsSignal implements NotificationSignal
 
 
     @Override
-    public int defaultsValue()
+    public int value()
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
         boolean sound = settings.getBoolean(mContext.getString(R.string.opentasks_pref_notification_sound), true);
         boolean vibrate = settings.getBoolean(mContext.getString(R.string.opentasks_pref_notification_vibrate), true);
         boolean lights = settings.getBoolean(mContext.getString(R.string.opentasks_pref_notification_lights), true);
 
-        return new CustomizableSignal(sound, vibrate, lights).defaultsValue();
+        return new Lights(lights, new Vibrate(vibrate, new Sound(sound, new AllSignal()))).value();
     }
 }

@@ -112,7 +112,7 @@ public class NotificationActionUtils
         mBuilder.setTicker(title);
 
         // enable light, sound and vibration
-        mBuilder.setDefaults(new SwitchableSignal(context, silent).defaultsValue());
+        mBuilder.setDefaults(new SwitchableSignal(context, silent).value());
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(Intent.ACTION_VIEW);
@@ -194,7 +194,7 @@ public class NotificationActionUtils
         mBuilder.setTicker(title);
 
         // enable light, sound and vibration
-        mBuilder.setDefaults(new SwitchableSignal(context, silent).defaultsValue());
+        mBuilder.setDefaults(new SwitchableSignal(context, silent).value());
 
         // set notification time
         // set displayed time
@@ -265,7 +265,7 @@ public class NotificationActionUtils
         builder.setSmallIcon(R.drawable.ic_notification);
         builder.setWhen(action.getWhen());
 
-        builder.setDefaults(new NoSignal().defaultsValue());
+        builder.setDefaults(new NoSignal().value());
 
         final RemoteViews undoView = new RemoteViews(context.getPackageName(), R.layout.undo_notification);
         undoView.setTextViewText(R.id.description_text, context.getString(action.mActionTextResId));

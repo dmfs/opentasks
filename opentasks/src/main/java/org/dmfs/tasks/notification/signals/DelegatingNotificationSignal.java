@@ -17,15 +17,24 @@
 package org.dmfs.tasks.notification.signals;
 
 /**
- * {@link NotificationSignal} for no signal, i.e. sound, vibration, lights disabled.
+ * Abstract base class for {@link NotificationSignal}s that simply delegate to another instance, composed in the constructor.
  *
  * @author Gabor Keszthelyi
  */
-public final class NoSignal implements NotificationSignal
+public abstract class DelegatingNotificationSignal implements NotificationSignal
 {
-    @Override
-    public int value()
+    private final NotificationSignal mDelegate;
+
+
+    public DelegatingNotificationSignal(NotificationSignal delegate)
     {
-        return 0;
+        mDelegate = delegate;
+    }
+
+
+    @Override
+    public final int value()
+    {
+        return mDelegate.value();
     }
 }

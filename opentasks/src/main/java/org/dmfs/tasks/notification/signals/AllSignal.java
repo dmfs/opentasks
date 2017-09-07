@@ -16,16 +16,19 @@
 
 package org.dmfs.tasks.notification.signals;
 
+import android.app.Notification;
+
+
 /**
- * {@link NotificationSignal} for no signal, i.e. sound, vibration, lights disabled.
+ * Represents {@link NotificationSignal} for {@link Notification#DEFAULT_ALL}.
  *
  * @author Gabor Keszthelyi
  */
-public final class NoSignal implements NotificationSignal
+public final class AllSignal implements NotificationSignal
 {
     @Override
     public int value()
     {
-        return 0;
+        return Notification.DEFAULT_ALL;
     }
 }
