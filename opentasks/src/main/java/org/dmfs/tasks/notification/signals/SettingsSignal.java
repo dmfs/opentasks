@@ -47,6 +47,6 @@ public final class SettingsSignal implements NotificationSignal
         boolean vibrate = settings.getBoolean(mContext.getString(R.string.opentasks_pref_notification_vibrate), true);
         boolean lights = settings.getBoolean(mContext.getString(R.string.opentasks_pref_notification_lights), true);
 
-        return new Lights(lights, new Vibrate(vibrate, new Sound(sound, new AllSignal()))).value();
+        return new Lights(lights, new Vibration(vibrate, new Sound(sound, new NoSignal()))).value();
     }
 }

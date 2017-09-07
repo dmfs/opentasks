@@ -55,6 +55,6 @@ final class Toggled implements NotificationSignal
     @Override
     public int value()
     {
-        return mEnable ? BitFlagUtils.addFlag(mOriginal.value(), mFlag) : mOriginal.value();
+        return mEnable ? BitFlagUtils.addFlag(mOriginal.value(), mFlag) : BitFlagUtils.removeFlag(mOriginal.value(), mFlag);
     }
 }

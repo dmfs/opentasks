@@ -25,21 +25,21 @@ import android.app.Notification;
  *
  * @author Gabor Keszthelyi
  */
-public final class Vibrate extends DelegatingNotificationSignal
+public final class Vibration extends DelegatingNotificationSignal
 {
-    public Vibrate(boolean enable, NotificationSignal original)
+    public Vibration(boolean enable, NotificationSignal original)
     {
         super(new Toggled(Notification.DEFAULT_VIBRATE, enable, original));
     }
 
 
-    public Vibrate(NotificationSignal original)
+    public Vibration(NotificationSignal original)
     {
         super(new Toggled(Notification.DEFAULT_VIBRATE, true, original));
     }
 
 
-    public Vibrate()
+    public Vibration()
     {
         super(new Toggled(Notification.DEFAULT_VIBRATE, true, new NoSignal()));
     }
