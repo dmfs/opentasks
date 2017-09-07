@@ -141,7 +141,7 @@
     <string name="action_settings">Поставке</string>
     <string name="action_add_local_list">Додај листу</string>
     <string name="visible_task_lists">Приказане листе</string>
-    <string name="enable_alarms">Обавештења</string>
+    <string name="opentasks_settings_notification_enable">Обавештења</string>
     <string name="synced_task_lists">Синхронизоване листе</string>
 
     <!-- dialogs -->

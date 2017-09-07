@@ -3,7 +3,7 @@
 
     <SwitchPreference
             android:key="@string/opentasks_pref_notification_enabled"
-            android:title="@string/enable_alarms"
+            android:title="@string/opentasks_settings_notification_enable"
             android:defaultValue="true"/>
 
     <PreferenceCategory

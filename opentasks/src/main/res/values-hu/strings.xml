@@ -150,7 +150,7 @@
     <string name="action_settings">Beállítások</string>
     <string name="action_add_local_list">Lista létrehozása</string>
     <string name="visible_task_lists">Megjelenített listák</string>
-    <string name="enable_alarms">Értesítések</string>
+    <string name="opentasks_settings_notification_enable">Értesítések</string>
     <string name="synced_task_lists">Szinkronizált listák</string>
 
     <!-- dialogs -->
