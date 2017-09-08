@@ -20,9 +20,8 @@ import android.app.Notification;
 
 import org.junit.Test;
 
-import static org.dmfs.tasks.utils.BitFlagUtils.containsFlag;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 /**
@@ -33,30 +32,25 @@ import static org.junit.Assert.assertTrue;
 public final class ToggledTest
 {
     @Test
-    public void testValidFlags()
+    public void testValidFlags_dontThrowException()
     {
-        new Toggled(Notification.DEFAULT_SOUND, true, new NoSignal());
-        new Toggled(Notification.DEFAULT_VIBRATE, true, new NoSignal());
-        new Toggled(Notification.DEFAULT_LIGHTS, true, new NoSignal());
+        new Toggled(Notification.DEFAULT_SOUND, true, new NoSignal()).value();
+        new Toggled(Notification.DEFAULT_VIBRATE, true, new NoSignal()).value();
+        new Toggled(Notification.DEFAULT_LIGHTS, true, new NoSignal()).value();
     }
 
 
     @Test(expected = IllegalArgumentException.class)
-    public void testInValidFlag()
+    public void testInValidFlag_throwsException()
     {
-        new Toggled(15, true, new NoSignal());
+        new Toggled(15, true, new NoSignal()).value();
     }
 
 
     @Test
     public void testAddingFlag()
     {
-        assertTrue(containsFlag(
-                new Toggled(Notification.DEFAULT_SOUND, true, new NoSignal()).value(),
-                Notification.DEFAULT_SOUND));
-
-        assertFalse(containsFlag(
-                new Toggled(Notification.DEFAULT_SOUND, false, new NoSignal()).value(),
-                Notification.DEFAULT_SOUND));
+        assertThat(new Toggled(Notification.DEFAULT_SOUND, true, new NoSignal()).value(), is(new NoSignal().value() | Notification.DEFAULT_SOUND));
+        assertThat(new Toggled(Notification.DEFAULT_SOUND, false, new NoSignal()).value(), is(new NoSignal().value()));
     }
 }

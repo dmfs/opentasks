@@ -18,8 +18,6 @@ package org.dmfs.tasks.notification.signals;
 
 import android.app.Notification;
 
-import org.dmfs.tasks.utils.BitFlagUtils;
-
 
 /**
  * Decorator for {@link NotificationSignal} that toggles a flag value. Flag must be one of
@@ -42,10 +40,6 @@ final class Toggled implements NotificationSignal
      */
     Toggled(int flag, boolean enable, NotificationSignal original)
     {
-        if (flag != Notification.DEFAULT_VIBRATE && flag != Notification.DEFAULT_SOUND && flag != Notification.DEFAULT_LIGHTS)
-        {
-            throw new IllegalArgumentException("Notification signal flag is not valid: " + flag);
-        }
         mFlag = flag;
         mEnable = enable;
         mOriginal = original;
@@ -55,6 +49,22 @@ final class Toggled implements NotificationSignal
     @Override
     public int value()
     {
-        return mEnable ? BitFlagUtils.addFlag(mOriginal.value(), mFlag) : BitFlagUtils.removeFlag(mOriginal.value(), mFlag);
+        if (mFlag != Notification.DEFAULT_VIBRATE && mFlag != Notification.DEFAULT_SOUND && mFlag != Notification.DEFAULT_LIGHTS)
+        {
+            throw new IllegalArgumentException("Notification signal flag is not valid: " + mFlag);
+        }
+        return mEnable ? addFlag(mOriginal.value(), mFlag) : removeFlag(mOriginal.value(), mFlag);
+    }
+
+
+    private int addFlag(int flagSet, int flag)
+    {
+        return flagSet | flag;
+    }
+
+
+    private int removeFlag(int flagSet, int flag)
+    {
+        return flagSet & (~flag);
     }
 }
