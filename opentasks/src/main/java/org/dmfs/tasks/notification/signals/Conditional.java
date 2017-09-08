@@ -20,26 +20,33 @@ import android.content.Context;
 
 
 /**
- * {@link NotificationSignal} that evaluates to either {@link NoSignal} or {@link SettingsSignal} based on the received boolean.
+ * {@link NotificationSignal} that conditionally delegates to either {@link NoSignal} or to the given {@link NotificationSignal}
+ * based on the provided boolean.
  *
  * @author Gabor Keszthelyi
  */
-public final class SwitchableSignal implements NotificationSignal
+public final class Conditional implements NotificationSignal
 {
-    private final Context mContext;
-    private final boolean mWithoutSignal;
+    private final boolean mUseSignal;
+    private final NotificationSignal mDelegate;
 
 
-    public SwitchableSignal(Context context, boolean withoutSignal)
+    public Conditional(boolean useSignal, NotificationSignal delegate)
     {
-        mContext = context;
-        mWithoutSignal = withoutSignal;
+        mUseSignal = useSignal;
+        mDelegate = delegate;
+    }
+
+
+    public Conditional(boolean useSignal, Context context)
+    {
+        this(useSignal, new SettingsSignal(context));
     }
 
 
     @Override
     public int value()
     {
-        return (mWithoutSignal ? new NoSignal() : new SettingsSignal(mContext)).value();
+        return (mUseSignal ? mDelegate : new NoSignal()).value();
     }
 }

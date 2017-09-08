@@ -55,7 +55,7 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.NotificationActionUtils.NotificationAction;
-import org.dmfs.tasks.notification.signals.SwitchableSignal;
+import org.dmfs.tasks.notification.signals.Conditional;
 
 import java.util.ArrayList;
 import java.util.TimeZone;
@@ -392,7 +392,7 @@ public class NotificationUpdaterService extends Service
         // unpin action
         builder.addAction(NotificationUpdaterService.getUnpinAction(context, TaskFieldAdapters.TASK_ID.get(task), task.getUri()));
 
-        builder.setDefaults(new SwitchableSignal(context, noSignal).value());
+        builder.setDefaults(new Conditional(!noSignal, context).value());
 
         return builder.build();
     }

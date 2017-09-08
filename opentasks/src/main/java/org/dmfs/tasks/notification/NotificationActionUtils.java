@@ -37,8 +37,8 @@ import android.text.format.Time;
 import android.widget.RemoteViews;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.notification.signals.Conditional;
 import org.dmfs.tasks.notification.signals.NoSignal;
-import org.dmfs.tasks.notification.signals.SwitchableSignal;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
@@ -112,7 +112,7 @@ public class NotificationActionUtils
         mBuilder.setTicker(title);
 
         // enable light, sound and vibration
-        mBuilder.setDefaults(new SwitchableSignal(context, silent).value());
+        mBuilder.setDefaults(new Conditional(!silent, context).value());
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(Intent.ACTION_VIEW);
@@ -194,7 +194,7 @@ public class NotificationActionUtils
         mBuilder.setTicker(title);
 
         // enable light, sound and vibration
-        mBuilder.setDefaults(new SwitchableSignal(context, silent).value());
+        mBuilder.setDefaults(new Conditional(!silent, context).value());
 
         // set notification time
         // set displayed time
