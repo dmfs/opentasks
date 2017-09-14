@@ -151,7 +151,7 @@
     <string name="action_settings">Nastavení</string>
     <string name="action_add_local_list">Přidat seznam</string>
     <string name="visible_task_lists">Zobrazené seznamy</string>
-    <string name="enable_alarms">Upozornění</string>
+    <string name="opentasks_settings_notification_enable">Upozornění</string>
     <string name="synced_task_lists">Synchronizované seznamy</string>
 
     <!-- dialogs -->

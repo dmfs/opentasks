@@ -147,7 +147,7 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="action_settings">Настройки</string>
     <string name="visible_task_lists">Используемые списки</string>
-    <string name="enable_alarms">Напоминания</string>
+    <string name="opentasks_settings_notification_enable">Напоминания</string>
     <string name="synced_task_lists">Все доступные списки</string>
 
     <!-- Label for Expandable Group Descriptors -->

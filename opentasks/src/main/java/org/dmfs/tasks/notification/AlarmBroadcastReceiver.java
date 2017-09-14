@@ -49,11 +49,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
             {
                 Uri taskUri = intent.getData();
 
-                boolean silent = intent.getBooleanExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, false);
+                boolean noSignal = intent.getBooleanExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, false);
                 // check for pinned task
                 if (TaskNotificationHandler.isTaskPinned(context, taskUri))
                 {
-                    TaskNotificationHandler.sendPinnedTaskStartNotification(context, taskUri, silent);
+                    TaskNotificationHandler.sendPinnedTaskStartNotification(context, taskUri, noSignal);
                     return;
                 }
 
@@ -64,7 +64,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
                 String timezone = intent.getStringExtra(TaskContract.EXTRA_TASK_TIMEZONE);
                 int notificationId = (int) ContentUris.parseId(taskUri);
 
-                NotificationActionUtils.sendStartNotification(context, title, taskUri, notificationId, startDate, startAllDay, timezone, silent);
+                NotificationActionUtils.sendStartNotification(context, title, taskUri, notificationId, startDate, startAllDay, timezone, noSignal);
 
             }
         }
@@ -74,12 +74,12 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
             {
                 Uri taskUri = intent.getData();
 
-                boolean silent = intent.getBooleanExtra(NotificationActionUtils.EXTRA_SILENT_NOTIFICATION, false);
+                boolean noSignal = intent.getBooleanExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, false);
 
                 // check for pinned task
                 if (TaskNotificationHandler.isTaskPinned(context, taskUri))
                 {
-                    TaskNotificationHandler.sendPinnedTaskDueNotification(context, taskUri, silent);
+                    TaskNotificationHandler.sendPinnedTaskDueNotification(context, taskUri, noSignal);
                     return;
                 }
 
@@ -91,7 +91,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
                 String timezone = intent.getStringExtra(TaskContract.EXTRA_TASK_TIMEZONE);
                 int notificationId = (int) ContentUris.parseId(taskUri);
 
-                NotificationActionUtils.sendDueAlarmNotification(context, title, taskUri, notificationId, dueDate, dueAllDay, timezone, silent);
+                NotificationActionUtils.sendDueAlarmNotification(context, title, taskUri, notificationId, dueDate, dueAllDay, timezone, noSignal);
             }
         }
 
@@ -101,7 +101,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
     public boolean isNotificationEnabled(Context context)
     {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getBoolean(context.getString(R.string.schedjoules_pref_notification_enabled), true);
+        return settings.getBoolean(context.getString(R.string.opentasks_pref_notification_enabled), true);
 
     }
 }

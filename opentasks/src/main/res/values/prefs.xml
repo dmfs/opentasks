@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="schedjoules_pref_notification_enabled"
-            translatable="false">schedjoules_pref_notification_enabled</string>
+    <string name="opentasks_pref_notification_enabled"
+            translatable="false">opentasks_pref_notification_enabled</string>
+
+    <string name="opentasks_pref_notification_sound"
+            translatable="false">opentasks_pref_notification_sound</string>
+
+    <string name="opentasks_pref_notification_vibrate"
+            translatable="false">opentasks_pref_notification_vibrate</string>
+
+    <string name="opentasks_pref_notification_lights"
+            translatable="false">opentasks_pref_notification_lights</string>
 
 </resources>

@@ -151,7 +151,6 @@
     <string name="action_settings">Settings</string>
     <string name="action_add_local_list">Add List</string>
     <string name="visible_task_lists">Displayed Lists</string>
-    <string name="enable_alarms">Notifications</string>
     <string name="synced_task_lists">Synchronized Lists</string>
 
     <!-- dialogs -->
@@ -249,5 +248,18 @@
 
     <!-- Sharing intent -->
     <string name="share_as_task">Create Task</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Notifications</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Notification signals</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Sound</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibrate</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Pulse light</string>
+
 
 </resources>
