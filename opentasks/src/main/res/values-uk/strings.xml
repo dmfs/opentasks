@@ -143,7 +143,7 @@
     <string name="action_settings">Налаштування</string>
     <string name="action_add_local_list">Додати список</string>
     <string name="visible_task_lists">Списки, що використовуються</string>
-    <string name="enable_alarms">Нагадування</string>
+    <string name="opentasks_settings_notification_enable">Нагадування</string>
     <string name="synced_task_lists">Всі доступні списки</string>
 
     <!-- dialogs -->

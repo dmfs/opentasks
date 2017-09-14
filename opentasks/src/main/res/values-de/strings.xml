@@ -147,7 +147,6 @@
     <string name="action_settings">Einstellungen</string>
     <string name="action_add_local_list">Liste anlegen</string>
     <string name="visible_task_lists">Sichtbare Listen</string>
-    <string name="enable_alarms">Benachrichtigungen</string>
     <string name="synced_task_lists">Synchronisierte Listen</string>
 
     <!-- dialogs -->
@@ -245,5 +244,11 @@
 
     <!-- Sharing intent -->
     <string name="share_as_task">Aufgabe erstellen</string>
+
+    <string name="opentasks_settings_notification_enable">Benachrichtigungen</string>
+    <string name="opentasks_settings_notification_signals_section_title">Benachrichtungseinstellungen</string>
+    <string name="opentasks_settings_notification_sound">Ton</string>
+    <string name="opentasks_settings_notification_vibrate">Vibration</string>
+    <string name="opentasks_settings_notification_lights">LED</string>
 
 </resources>

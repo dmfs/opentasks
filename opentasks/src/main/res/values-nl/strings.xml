@@ -148,7 +148,7 @@
     <string name="action_settings">Instellingen</string>
     <string name="action_add_local_list">Lijst toevoegen</string>
     <string name="visible_task_lists">Getoonde taakLijsten</string>
-    <string name="enable_alarms">Notificaties</string>
+    <string name="opentasks_settings_notification_enable">Notificaties</string>
     <string name="synced_task_lists">Gesynchroniseerde Lijsten</string>
 
     <!-- dialogs -->

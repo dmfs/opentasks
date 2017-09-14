@@ -142,7 +142,7 @@
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_local_list">Dodaj listę</string>
     <string name="visible_task_lists">Wyświetlane listy</string>
-    <string name="enable_alarms">Powiadomienia</string>
+    <string name="opentasks_settings_notification_enable">Powiadomienia</string>
     <string name="synced_task_lists">Synchronizowane listy</string>
 
     <!-- dialogs -->
