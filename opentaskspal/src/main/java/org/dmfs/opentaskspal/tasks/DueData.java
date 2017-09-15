@@ -16,11 +16,12 @@
 
 package org.dmfs.opentaskspal.tasks;
 
+import android.content.ContentProviderOperation;
 import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
-import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
-import org.dmfs.android.contentpal.rowdata.SimpleRowData;
+import org.dmfs.android.contentpal.TransactionContext;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -29,11 +30,30 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class DueData extends DelegatingRowData<TaskContract.Tasks>
+public final class DueData implements RowData<TaskContract.Tasks>
 {
-    public DueData(@NonNull Long dueTimeStamp)
+    private final DateTime mDue;
+
+
+    public DueData(@NonNull DateTime due)
     {
-        super(new SimpleRowData<TaskContract.Tasks>(TaskContract.Tasks.DUE, dueTimeStamp));
+        mDue = due;
+    }
+
+
+    @NonNull
+    @Override
+    public ContentProviderOperation.Builder updatedBuilder(@NonNull TransactionContext transactionContext, @NonNull ContentProviderOperation.Builder builder)
+    {
+        return builder
+                .withValue(TaskContract.Tasks.DUE, mDue.getTimestamp())
+                .withValue(TaskContract.Tasks.DTSTART, null)
+                .withValue(TaskContract.Tasks.DURATION, null)
+
+                // A task without times is currently not allowed to recur:
+                .withValue(TaskContract.Tasks.RDATE, null)
+                .withValue(TaskContract.Tasks.RRULE, null)
+                .withValue(TaskContract.Tasks.EXDATE, null);
     }
 
 }
