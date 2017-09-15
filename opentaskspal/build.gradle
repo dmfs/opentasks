@@ -12,8 +12,6 @@ android {
 
 dependencies {
     compile project(':opentasks-contract')
-    compile 'org.hamcrest:hamcrest-library:1.3'
+    compile 'com.github.dmfs.contentpal:contentpal:93cbc67'
     compile "org.dmfs:rfc5545-datetime:0.2.4"
-    // TODO Update to contentpal master version once all pending PRs have been merged there:
-    compile 'com.github.dmfs.contentpal:contentpal:07319b058155c0d6703f3c3725540bb85ca9700a'
 }
