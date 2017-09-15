@@ -114,7 +114,7 @@ public final class TimeData implements RowData<TaskContract.Tasks>
         return builder
                 .withValue(TaskContract.Tasks.DTSTART, start.getTimestamp())
                 .withValue(TaskContract.Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
-                .withValue(TaskContract.Tasks.IS_ALLDAY, start.isAllDay())
+                .withValue(TaskContract.Tasks.IS_ALLDAY, start.isAllDay() ? 1 : 0)
 
                 .withValue(TaskContract.Tasks.DUE, due == null ? null : due.getTimestamp())
 
