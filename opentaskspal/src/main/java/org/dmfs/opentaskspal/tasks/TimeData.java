@@ -22,10 +22,9 @@ import android.support.annotation.Nullable;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
+import org.dmfs.opentaskspal.utils.TimeZoneEqualator;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
-
-import java.util.TimeZone;
 
 
 /**
@@ -80,29 +79,12 @@ public final class TimeData implements RowData<TaskContract.Tasks>
         }
 
         DateTime start = mStart;
-        if (mDue != null && !haveSameTimeZones(mStart, mDue))
+        if (mDue != null && !TimeZoneEqualator.INSTANCE.areEqual(mStart, mDue))
         {
             start = mStart.shiftTimeZone(mDue.getTimeZone());
         }
 
         return doUpdateBuilder(start, mDue, mDuration, builder);
-    }
-
-
-    // TODO Could be a TimeZoneIdEqualator implements Equalator<DateTime>
-    private boolean haveSameTimeZones(@NonNull DateTime d1, @NonNull DateTime d2)
-    {
-        TimeZone tz1 = d1.getTimeZone();
-        TimeZone tz2 = d2.getTimeZone();
-        if (tz1 == null && tz2 == null)
-        {
-            return true;
-        }
-        if (tz1 == null || tz2 == null)
-        {
-            return false;
-        }
-        return tz1.getID().equals(tz2.getID());
     }
 
 
