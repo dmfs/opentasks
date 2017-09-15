@@ -66,7 +66,7 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
     @Override
     public Operation<TaskContract.Tasks> updateOperation(@NonNull UriParams uriParams, @NonNull Predicate predicate)
     {
-        // TODO Potential issue here with the predicate: https://github.com/dmfs/ContentPal/pull/47#issuecomment-329470827
+        // TODO See todo in TaskOnList
         return mDelegate.updateOperation(uriParams, new TaskOnList(mTaskListRow, predicate));
     }
 
@@ -75,7 +75,7 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
     @Override
     public Operation<TaskContract.Tasks> deleteOperation(@NonNull UriParams uriParams, @NonNull Predicate predicate)
     {
-        // TODO Potential issue here with the predicate: https://github.com/dmfs/ContentPal/pull/47#issuecomment-329470827
+        // TODO See todo in TaskOnList
         return mDelegate.deleteOperation(uriParams, new TaskOnList(mTaskListRow, predicate));
     }
 
@@ -84,7 +84,7 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
     @Override
     public Operation<TaskContract.Tasks> assertOperation(@NonNull UriParams uriParams, @NonNull Predicate predicate)
     {
-        // TODO ? Potential issue here with the predicate: https://github.com/dmfs/ContentPal/pull/47#issuecomment-329470827
+        // TODO See todo in TaskOnList
         return mDelegate.assertOperation(uriParams, new TaskOnList(mTaskListRow, predicate));
     }
 
@@ -95,4 +95,5 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
     {
         return new org.dmfs.opentaskspal.views.TaskListScoped(mTaskListRow, mDelegate.view(client, projection));
     }
+
 }

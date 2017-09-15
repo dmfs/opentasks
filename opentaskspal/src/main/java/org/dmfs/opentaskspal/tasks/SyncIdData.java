@@ -20,7 +20,7 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
-import org.dmfs.android.contentpal.rowdata.SimpleRowData;
+import org.dmfs.android.contentpal.rowdata.RawRowData;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -34,6 +34,6 @@ public final class SyncIdData extends DelegatingRowData<TaskContract.Tasks>
     // TODO Should this be @Nullable?
     public SyncIdData(@NonNull String syncId)
     {
-        super(new SimpleRowData<TaskContract.Tasks>(TaskContract.Tasks._SYNC_ID, syncId));
+        super(new RawRowData<TaskContract.Tasks>(TaskContract.Tasks._SYNC_ID, syncId));
     }
 }
