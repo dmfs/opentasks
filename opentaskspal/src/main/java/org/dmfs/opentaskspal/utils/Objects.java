@@ -16,18 +16,18 @@
 
 package org.dmfs.opentaskspal.utils;
 
-import android.support.annotation.NonNull;
-
-
 /**
- * Type for 'equality' checking between two objects of type <code>T</code> based on implementation defined contract.
+ * Backport of Java 8 {@link java.util.Objects}.
  *
  * @author Gabor Keszthelyi
  */
-public interface Equalator<T>
+public class Objects
 {
     /**
-     * Checks whether the two objects are considered equal based on the implementation's definition of it.
+     * @see java.util.Objects#equals(Object, Object)
      */
-    boolean areEqual(@NonNull T value1, @NonNull T value2);
+    public static boolean equals(Object o1, Object o2)
+    {
+        return o1 == o2 || o1 != null && o1.equals(o2);
+    }
 }
