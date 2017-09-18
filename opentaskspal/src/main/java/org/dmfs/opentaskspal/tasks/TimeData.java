@@ -22,7 +22,6 @@ import android.support.annotation.Nullable;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
-import org.dmfs.opentaskspal.utils.Objects;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -79,11 +78,7 @@ public final class TimeData implements RowData<TaskContract.Tasks>
         }
 
         DateTime start = mStart;
-        /*
-         * Note: {@link DateTime} returns the same instance of {@link TimeZone} object for the same time zone,
-         * therefore we can use equals() on it for comparison.
-         */
-        if (mDue != null && !Objects.equals(mStart.getTimeZone(), mDue.getTimeZone()))
+        if (mDue != null && !mDue.isAllDay())
         {
             start = mStart.shiftTimeZone(mDue.getTimeZone());
         }
