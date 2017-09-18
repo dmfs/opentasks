@@ -14,4 +14,6 @@ dependencies {
     compile project(':opentasks-contract')
     compile 'com.github.dmfs.contentpal:contentpal:93cbc67'
     compile "org.dmfs:rfc5545-datetime:0.2.4"
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.10.0'
 }
