@@ -38,6 +38,13 @@ public final class NoTimeData implements RowData<TaskContract.Tasks>
         return builder
                 .withValue(TaskContract.Tasks.DTSTART, null)
                 .withValue(TaskContract.Tasks.DUE, null)
-                .withValue(TaskContract.Tasks.DURATION, null);
+                .withValue(TaskContract.Tasks.DURATION, null)
+
+                .withValue(TaskContract.Tasks.TZ, null)
+                .withValue(TaskContract.Tasks.IS_ALLDAY, null)
+
+                .withValue(TaskContract.Tasks.RDATE, null)
+                .withValue(TaskContract.Tasks.RRULE, null)
+                .withValue(TaskContract.Tasks.EXDATE, null);
     }
 }
