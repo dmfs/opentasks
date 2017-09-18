@@ -22,7 +22,7 @@ import android.support.annotation.Nullable;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
-import org.dmfs.opentaskspal.utils.TimeZoneEqualator;
+import org.dmfs.opentaskspal.utils.Objects;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -79,7 +79,11 @@ public final class TimeData implements RowData<TaskContract.Tasks>
         }
 
         DateTime start = mStart;
-        if (mDue != null && !TimeZoneEqualator.INSTANCE.areEqual(mStart, mDue))
+        /*
+         * Note: {@link DateTime} returns the same instance of {@link TimeZone} object for the same time zone,
+         * therefore we can use equals() on it for comparison.
+         */
+        if (mDue != null && !Objects.equals(mStart.getTimeZone(), mDue.getTimeZone()))
         {
             start = mStart.shiftTimeZone(mDue.getTimeZone());
         }
