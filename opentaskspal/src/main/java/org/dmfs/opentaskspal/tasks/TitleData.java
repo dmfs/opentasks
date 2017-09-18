@@ -16,7 +16,7 @@
 
 package org.dmfs.opentaskspal.tasks;
 
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
@@ -31,7 +31,7 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class TitleData extends DelegatingRowData<TaskContract.Tasks>
 {
-    public TitleData(@Nullable CharSequence title)
+    public TitleData(@NonNull CharSequence title)
     {
         super(new CharSequenceRowData<TaskContract.Tasks>(TaskContract.Tasks.TITLE, title));
     }

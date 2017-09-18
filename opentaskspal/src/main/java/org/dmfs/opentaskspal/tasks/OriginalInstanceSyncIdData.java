@@ -31,7 +31,6 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class OriginalInstanceSyncIdData extends DelegatingRowData<TaskContract.Tasks>
 {
-    // TODO Should this be @Nullable?
     public OriginalInstanceSyncIdData(@NonNull String originalInstanceSyncId)
     {
         super(new RawRowData<TaskContract.Tasks>(TaskContract.Tasks.ORIGINAL_INSTANCE_SYNC_ID, originalInstanceSyncId));

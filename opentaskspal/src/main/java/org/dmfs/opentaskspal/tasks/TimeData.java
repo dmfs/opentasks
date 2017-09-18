@@ -106,7 +106,6 @@ public final class TimeData implements RowData<TaskContract.Tasks>
 
                 .withValue(TaskContract.Tasks.DURATION, duration)
 
-                // A task without times is currently not allowed to recur:
                 .withValue(TaskContract.Tasks.RDATE, null)
                 .withValue(TaskContract.Tasks.RRULE, null)
                 .withValue(TaskContract.Tasks.EXDATE, null);
