@@ -36,8 +36,8 @@
     <string name="activity_task_details_edit_task">Editar tarefa</string>
     <string name="activity_task_details_delete">Eliminar</string>
     <string name="activity_task_details_delete_task">Eliminar tarefa</string>
-    <string name="activity_task_details_complete">Concluír</string>
-    <string name="activity_task_details_complete_task">Concluír tarefa</string>
+    <string name="activity_task_details_complete">Concluir</string>
+    <string name="activity_task_details_complete_task">Concluir tarefa</string>
     <string name="activity_task_details_pin">Fixar</string>
     <string name="activity_task_details_pin_task">Fixar tarefa</string>
     <string name="opentasks_details_no_task_selected">Nenhuma tarefa selecionada</string>
@@ -151,7 +151,6 @@
     <string name="action_settings">Definições</string>
     <string name="action_add_local_list">Adicionar lista</string>
     <string name="visible_task_lists">Listas visíveis</string>
-    <string name="enable_alarms">Notificações</string>
     <string name="synced_task_lists">Listas sincronizadas</string>
 
     <!-- dialogs -->
@@ -199,7 +198,7 @@
     <string name="task_list_widget_title_4x4">Tarefas atuais 4x4</string>
 
     <!-- Strings for fling actions -->
-    <string name="fling_task_complete">Concluír</string>
+    <string name="fling_task_complete">Concluir</string>
     <string name="fling_task_edit">Editar</string>
     <string name="fling_task_delete">Eliminar</string>
     <string name="fling_task_uncomplete">Não concluído</string>
@@ -218,7 +217,7 @@
     <string name="notification_action_delay_1h">+1 hora</string>
     <string name="notification_action_delay_1d">+1 dia</string>
     <string name="notification_action_delay_toast">Data limite atualizada</string>
-    <string name="notification_undo">Desfazer</string>
+    <string name="notification_undo">Anular</string>
     <string name="notification_action_unpin">desafixar</string>
     <string name="notification_task_pin_ticker">%1$s foi fixada</string>
 
@@ -248,6 +247,19 @@
     <string name="now">agora</string>
 
     <!-- Sharing intent -->
-    <string name="share_as_task">Adicionar tarefa</string>
+    <string name="share_as_task">Criar tarefa</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Notificações</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Aviso de notificações</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Som</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibração</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Luz</string>
+
 
 </resources>
