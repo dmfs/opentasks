@@ -22,6 +22,8 @@ import android.support.annotation.Nullable;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
+import org.dmfs.optional.NullSafe;
+import org.dmfs.optional.Optional;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;
@@ -35,19 +37,16 @@ import org.dmfs.tasks.contract.TaskContract;
 // TODO Unit test
 public final class TimeData implements RowData<TaskContract.Tasks>
 {
-    @NonNull
     private final DateTime mStart;
-    @Nullable
-    private final DateTime mDue;
-    @Nullable
-    private final Duration mDuration;
+    private final Optional<DateTime> mDue;
+    private final Optional<Duration> mDuration;
 
 
     private TimeData(@NonNull DateTime start, @Nullable DateTime due, @Nullable Duration duration)
     {
         mStart = start;
-        mDue = due;
-        mDuration = duration;
+        mDue = new NullSafe<>(due);
+        mDuration = new NullSafe<>(duration);
     }
 
 
@@ -73,24 +72,24 @@ public final class TimeData implements RowData<TaskContract.Tasks>
     @Override
     public ContentProviderOperation.Builder updatedBuilder(@NonNull TransactionContext transactionContext, @NonNull ContentProviderOperation.Builder builder)
     {
-        if (mDue != null && mStart.isAllDay() != mDue.isAllDay())
+        if (mDue.isPresent() && mStart.isAllDay() != mDue.value().isAllDay())
         {
             throw new IllegalArgumentException("'start' and 'due' must have the same all-day flag");
         }
 
         DateTime start = mStart;
-        if (mDue != null && !mDue.isAllDay())
+        if (mDue.isPresent() && !mDue.value().isAllDay())
         {
-            start = mStart.shiftTimeZone(mDue.getTimeZone());
+            start = mStart.shiftTimeZone(mDue.value().getTimeZone());
         }
 
         return doUpdateBuilder(start, mDue, mDuration, builder);
     }
 
 
-    private static ContentProviderOperation.Builder doUpdateBuilder(@NonNull DateTime start,
-                                                                    @Nullable DateTime due,
-                                                                    @Nullable Duration duration,
+    private static ContentProviderOperation.Builder doUpdateBuilder(DateTime start,
+                                                                    Optional<DateTime> due,
+                                                                    Optional<Duration> duration,
                                                                     ContentProviderOperation.Builder builder)
     {
         return builder
@@ -98,9 +97,9 @@ public final class TimeData implements RowData<TaskContract.Tasks>
                 .withValue(TaskContract.Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 .withValue(TaskContract.Tasks.IS_ALLDAY, start.isAllDay() ? 1 : 0)
 
-                .withValue(TaskContract.Tasks.DUE, due == null ? null : due.getTimestamp())
+                .withValue(TaskContract.Tasks.DUE, due.isPresent() ? due.value().getTimestamp() : null)
 
-                .withValue(TaskContract.Tasks.DURATION, duration == null ? null : duration.toString())
+                .withValue(TaskContract.Tasks.DURATION, duration.isPresent() ? duration.value().toString() : null)
 
                 .withValue(TaskContract.Tasks.RDATE, null)
                 .withValue(TaskContract.Tasks.RRULE, null)
