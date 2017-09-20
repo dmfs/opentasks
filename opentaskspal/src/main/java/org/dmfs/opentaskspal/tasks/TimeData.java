@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -39,10 +40,10 @@ public final class TimeData implements RowData<TaskContract.Tasks>
     @Nullable
     private final DateTime mDue;
     @Nullable
-    private final String mDuration;
+    private final Duration mDuration;
 
 
-    private TimeData(@NonNull DateTime start, @Nullable DateTime due, @Nullable String duration)
+    private TimeData(@NonNull DateTime start, @Nullable DateTime due, @Nullable Duration duration)
     {
         mStart = start;
         mDue = due;
@@ -56,7 +57,7 @@ public final class TimeData implements RowData<TaskContract.Tasks>
     }
 
 
-    public TimeData(@NonNull DateTime start, @NonNull String duration)
+    public TimeData(@NonNull DateTime start, @NonNull Duration duration)
     {
         this(start, null, duration);
     }
@@ -89,7 +90,7 @@ public final class TimeData implements RowData<TaskContract.Tasks>
 
     private static ContentProviderOperation.Builder doUpdateBuilder(@NonNull DateTime start,
                                                                     @Nullable DateTime due,
-                                                                    @Nullable String duration,
+                                                                    @Nullable Duration duration,
                                                                     ContentProviderOperation.Builder builder)
     {
         return builder
@@ -99,7 +100,7 @@ public final class TimeData implements RowData<TaskContract.Tasks>
 
                 .withValue(TaskContract.Tasks.DUE, due == null ? null : due.getTimestamp())
 
-                .withValue(TaskContract.Tasks.DURATION, duration)
+                .withValue(TaskContract.Tasks.DURATION, duration == null ? null : duration.toString())
 
                 .withValue(TaskContract.Tasks.RDATE, null)
                 .withValue(TaskContract.Tasks.RRULE, null)
