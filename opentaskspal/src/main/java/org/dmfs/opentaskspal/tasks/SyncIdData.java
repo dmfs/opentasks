@@ -19,8 +19,8 @@ package org.dmfs.opentaskspal.tasks;
 import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
+import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
-import org.dmfs.android.contentpal.rowdata.RawRowData;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -31,8 +31,9 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class SyncIdData extends DelegatingRowData<TaskContract.Tasks>
 {
-    public SyncIdData(@NonNull String syncId)
+    public SyncIdData(@NonNull CharSequence syncId)
     {
-        super(new RawRowData<TaskContract.Tasks>(TaskContract.Tasks._SYNC_ID, syncId));
+        // TODO CharSequenceRowData allows null so this class wouldn't fail with that but erase the value
+        super(new CharSequenceRowData<TaskContract.Tasks>(TaskContract.Tasks._SYNC_ID, syncId));
     }
 }
