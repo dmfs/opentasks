@@ -16,11 +16,11 @@
 
 package org.dmfs.opentaskspal.tasklists;
 
-import android.content.ContentProviderOperation;
 import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
-import org.dmfs.android.contentpal.TransactionContext;
+import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
+import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -29,21 +29,13 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class NameData implements RowData<TaskContract.TaskLists>
+public final class NameData extends DelegatingRowData<TaskContract.TaskLists>
 {
-    private final CharSequence mName;
-
 
     public NameData(@NonNull CharSequence name)
     {
-        mName = name;
+        // TODO CharSequenceRowData allows null so this class wouldn't fail with that but erase the value
+        super(new CharSequenceRowData<TaskContract.TaskLists>(TaskContract.TaskLists.LIST_NAME, name));
     }
 
-
-    @NonNull
-    @Override
-    public ContentProviderOperation.Builder updatedBuilder(@NonNull TransactionContext transactionContext, @NonNull ContentProviderOperation.Builder builder)
-    {
-        return builder.withValue(TaskContract.TaskLists.LIST_NAME, mName.toString());
-    }
 }
