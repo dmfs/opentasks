@@ -18,12 +18,12 @@ package org.dmfs.opentaskspal.tasks;
 
 import android.content.ContentProviderOperation;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
-import org.dmfs.optional.NullSafe;
+import org.dmfs.optional.Absent;
 import org.dmfs.optional.Optional;
+import org.dmfs.optional.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;
@@ -42,29 +42,29 @@ public final class TimeData implements RowData<TaskContract.Tasks>
     private final Optional<Duration> mDuration;
 
 
-    private TimeData(@NonNull DateTime start, @Nullable DateTime due, @Nullable Duration duration)
+    private TimeData(@NonNull DateTime start, @NonNull Optional<DateTime> due, @NonNull Optional<Duration> duration)
     {
         mStart = start;
-        mDue = new NullSafe<>(due);
-        mDuration = new NullSafe<>(duration);
+        mDue = due;
+        mDuration = duration;
     }
 
 
     public TimeData(@NonNull DateTime start, @NonNull DateTime due)
     {
-        this(start, due, null);
+        this(start, new Present<>(due), Absent.<Duration>absent());
     }
 
 
     public TimeData(@NonNull DateTime start, @NonNull Duration duration)
     {
-        this(start, null, duration);
+        this(start, Absent.<DateTime>absent(), new Present<>(duration));
     }
 
 
     public TimeData(@NonNull DateTime start)
     {
-        this(start, null, null);
+        this(start, Absent.<DateTime>absent(), Absent.<Duration>absent());
     }
 
 
