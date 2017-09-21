@@ -36,10 +36,11 @@
     <string name="activity_task_details_edit_task">Editar tarefa</string>
     <string name="activity_task_details_delete">Eliminar</string>
     <string name="activity_task_details_delete_task">Eliminar tarefa</string>
-    <string name="activity_task_details_complete">Concluír</string>
-    <string name="activity_task_details_complete_task">Concluír tarefa</string>
+    <string name="activity_task_details_complete">Concluir</string>
+    <string name="activity_task_details_complete_task">Concluir tarefa</string>
     <string name="activity_task_details_pin">Fixar</string>
     <string name="activity_task_details_pin_task">Fixar tarefa</string>
+    <string name="opentasks_details_no_task_selected">Nenhuma tarefa selecionada</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Adicionar item</string>
@@ -150,7 +151,6 @@
     <string name="action_settings">Definições</string>
     <string name="action_add_local_list">Adicionar lista</string>
     <string name="visible_task_lists">Listas visíveis</string>
-    <string name="opentasks_settings_notification_enable">Notificações</string>
     <string name="synced_task_lists">Listas sincronizadas</string>
 
     <!-- dialogs -->
@@ -198,7 +198,7 @@
     <string name="task_list_widget_title_4x4">Tarefas atuais 4x4</string>
 
     <!-- Strings for fling actions -->
-    <string name="fling_task_complete">Concluír</string>
+    <string name="fling_task_complete">Concluir</string>
     <string name="fling_task_edit">Editar</string>
     <string name="fling_task_delete">Eliminar</string>
     <string name="fling_task_uncomplete">Não concluído</string>
@@ -217,7 +217,7 @@
     <string name="notification_action_delay_1h">+1 hora</string>
     <string name="notification_action_delay_1d">+1 dia</string>
     <string name="notification_action_delay_toast">Data limite atualizada</string>
-    <string name="notification_undo">Desfazer</string>
+    <string name="notification_undo">Anular</string>
     <string name="notification_action_unpin">desafixar</string>
     <string name="notification_task_pin_ticker">%1$s foi fixada</string>
 
@@ -227,13 +227,13 @@
 
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Tarefas</string>
-    <string name="dashclock_extension_description">Mostra informação sobre as tarefas recentes.</string>
+    <string name="dashclock_extension_description">Exibe informação sobre as tarefas recentes.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s termina - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s termina hoje</string>
     <string name="dashclock_widget_title_start_expanded">%1$s inicia - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s inicia hoje</string>
     <string name="dashclock_pref_displayed_task_title">Eventos a exibir</string>
-    <string name="dashclock_pref_displayed_task_summary">Selecione quais os eventos das tarefas serão exibidos no DashClock Widget</string>
+    <string name="dashclock_pref_displayed_task_summary">Selecionar quais os eventos das tarefas serão exibidos no DashClock Widget</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Eventos a exibir</string>
     <string name="dashclock_display_type_due">tarefas a terminar</string>
     <string name="dashclock_display_type_start">tarefas a iniciar</string>
@@ -247,6 +247,18 @@
     <string name="now">agora</string>
 
     <!-- Incoming share -->
-    <string name="share_as_task">Adicionar tarefa</string>
+    <string name="share_as_task">Criar tarefa</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Notificações</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Aviso de notificações</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Som</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibração</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Luz</string>
 
 </resources>
