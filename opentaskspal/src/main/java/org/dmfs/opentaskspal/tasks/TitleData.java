@@ -33,6 +33,7 @@ public final class TitleData extends DelegatingRowData<TaskContract.Tasks>
 {
     public TitleData(@NonNull CharSequence title)
     {
+        // TODO CharSequenceRowData allows null so this class wouldn't fail with that but erase the value
         super(new CharSequenceRowData<TaskContract.Tasks>(TaskContract.Tasks.TITLE, title));
     }
 

@@ -44,7 +44,7 @@ import static org.mockito.Mockito.mock;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class TimeDataTest
+public final class TimeDataTest
 {
     @Test
     public void test_whenStartAndDueAreProvided_setsThemAndNullsDuration()

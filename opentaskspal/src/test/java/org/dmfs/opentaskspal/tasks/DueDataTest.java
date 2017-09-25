@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class DueDataTest
+public final class DueDataTest
 {
 
     @Test
