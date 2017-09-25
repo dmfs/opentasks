@@ -56,7 +56,6 @@ public final class TaskListScoped implements View<TaskContract.Tasks>
     @Override
     public Cursor rows(@NonNull UriParams uriParams, @NonNull Predicate predicate, @NonNull Optional<String> sorting) throws RemoteException
     {
-        // TODO See todo in TaskOnList
         return mDelegate.rows(uriParams, new TaskOnList(mTaskListRow, predicate), sorting);
     }
 

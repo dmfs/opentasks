@@ -16,13 +16,11 @@
 
 package org.dmfs.opentaskspal.predicates;
 
-import android.provider.BaseColumns;
-
 import org.dmfs.android.contentpal.Predicate;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.predicates.AllOf;
 import org.dmfs.android.contentpal.predicates.DelegatingPredicate;
-import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -35,16 +33,7 @@ public final class TaskOnList extends DelegatingPredicate
 {
     public TaskOnList(RowSnapshot<TaskContract.TaskLists> taskListRow, Predicate predicate)
     {
-        super(new AllOf(predicate,
-
-                /*
-                TODO Potential issue here with the predicate for update, delete and assert operations
-                See https://github.com/dmfs/ContentPal/pull/47#issuecomment-329470827
-                One of these 2 pull requests may allow to solve this problem:
-                https://github.com/dmfs/ContentPal/pull/51
-                https://github.com/dmfs/ContentPal/pull/52
-                */
-                new EqArg(TaskContract.Tasks.LIST_ID, taskListRow.values().charData(BaseColumns._ID).value("-1"))));
+        super(new AllOf(predicate, new ReferringTo<>(TaskContract.Tasks.LIST_ID, taskListRow)));
     }
 
 }
