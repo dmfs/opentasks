@@ -24,7 +24,7 @@ import org.dmfs.android.contentpal.Operation;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.SoftRowReference;
 import org.dmfs.android.contentpal.TransactionContext;
-import org.dmfs.android.contentpal.operations.Related;
+import org.dmfs.android.contentpal.operations.Referring;
 import org.dmfs.optional.Optional;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -41,7 +41,7 @@ public final class TaskListTask implements InsertOperation<TaskContract.Tasks>
 
     public TaskListTask(@NonNull RowSnapshot<TaskContract.TaskLists> taskList, @NonNull InsertOperation<TaskContract.Tasks> original)
     {
-        mDelegate = new Related<>(taskList, TaskContract.Tasks.LIST_ID, original);
+        mDelegate = new Referring<>(taskList, TaskContract.Tasks.LIST_ID, original);
     }
 
 
