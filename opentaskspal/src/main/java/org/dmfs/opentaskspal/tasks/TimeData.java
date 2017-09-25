@@ -34,7 +34,6 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-// TODO Unit test
 public final class TimeData implements RowData<TaskContract.Tasks>
 {
     private final DateTime mStart;
