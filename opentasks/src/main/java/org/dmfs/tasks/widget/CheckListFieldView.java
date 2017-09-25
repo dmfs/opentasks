@@ -249,13 +249,6 @@ public class CheckListFieldView extends AbstractFieldView implements OnCheckedCh
             {
                 itemView.findViewById(R.id.drag_handle).setVisibility(hasFocus ? View.INVISIBLE : View.VISIBLE);
                 itemView.findViewById(R.id.remove_item).setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-
-                String newText = text.getText().toString();
-                if (!hasFocus && !newText.equals(item.text) && mValues != null && !mCurrentValue.equals(mAdapter.get(mValues)))
-                {
-                    item.text = newText;
-                    mAdapter.validateAndSet(mValues, mCurrentValue);
-                }
             }
         });
         text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -297,7 +290,14 @@ public class CheckListFieldView extends AbstractFieldView implements OnCheckedCh
             @Override
             public void afterTextChanged(Editable s)
             {
-                item.text = s.toString();
+                // Saving after each edit.
+                // (Reason to not have it in onFocusChange(): that may be called after mValues had been nulled, eg: when tapping on edit menu.)
+                String newText = s.toString();
+                if (!newText.equals(item.text) && mValues != null)
+                {
+                    item.text = newText;
+                    mAdapter.validateAndSet(mValues, mCurrentValue);
+                }
             }
         });
 
