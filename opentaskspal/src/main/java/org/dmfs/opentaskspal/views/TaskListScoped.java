@@ -34,8 +34,6 @@ import org.dmfs.tasks.contract.TaskContract;
 /**
  * A view onto {@link TaskContract.Tasks} which contains only events from a specific task list.
  * `{@link InsertOperation}`s returned by the result of {@link #table()} will insert with the given task list by default.
- * <p>
- * Note, if you pass a virtual {@link RowSnapshot}, the {@link View} will always be empty, even after adding and committing rows.
  *
  * @author Gabor Keszthelyi
  */
