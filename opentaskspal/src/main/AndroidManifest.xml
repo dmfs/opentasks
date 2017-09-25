@@ -2,7 +2,7 @@
         package="org.dmfs.opentaskspal">
 
     <!--TODO Remove after https://github.com/dmfs/opentasks/issues/392-->
-    <uses-sdk tools:overrideLibrary="org.dmfs.android.contentpal"/>
+    <uses-sdk tools:overrideLibrary="org.dmfs.android.contentpal, org.dmfs.android.contentpal.api"/>
 
     <application/>
 
