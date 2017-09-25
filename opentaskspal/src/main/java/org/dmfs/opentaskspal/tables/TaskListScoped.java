@@ -34,9 +34,6 @@ import org.dmfs.tasks.contract.TaskContract;
 /**
  * A view onto the {@link TaskContract.Tasks} table which contains only tasks from a specific task list.
  * Tasks created with {@link #insertOperation(UriParams)} will automatically be added to this task list.
- * <p>
- * Note, if you create a {@link View} (using {@link #view(ContentProviderClient, String...)}) with a virtual {@link RowSnapshot}, the {@link View} will always
- * be empty, even after adding and committing rows.
  *
  * @author Marten Gajda
  * @author Gabor Keszthelyi

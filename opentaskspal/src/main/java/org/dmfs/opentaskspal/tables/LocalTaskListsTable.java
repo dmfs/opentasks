@@ -19,6 +19,7 @@ package org.dmfs.opentaskspal.tables;
 import android.accounts.Account;
 import android.support.annotation.NonNull;
 
+import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.tables.AccountScoped;
 import org.dmfs.android.contentpal.tables.DelegatingTable;
 import org.dmfs.android.contentpal.tables.Synced;
@@ -26,6 +27,8 @@ import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
+ *{@link Table} for {@link TaskContract.TaskLists} scoped on local lists, i.e. lists with 'the local account'.
+ *
  * @author Gabor Keszthelyi
  */
 public final class LocalTaskListsTable extends DelegatingTable<TaskContract.TaskLists>
