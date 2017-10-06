@@ -21,11 +21,10 @@ import android.util.Log;
 
 import org.dmfs.android.carrot.bindings.AndroidBindings;
 import org.dmfs.android.carrot.locaters.RawResourceLocator;
+import org.dmfs.jems.single.Single;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
-import org.dmfs.tasks.utils.charsequence.LazyCharSequence;
-import org.dmfs.tasks.utils.ondemand.OnDemand;
 
 import au.com.codeka.carrot.CarrotEngine;
 import au.com.codeka.carrot.CarrotException;
@@ -57,37 +56,45 @@ import au.com.codeka.carrot.bindings.SingletonBindings;
 
 
 /**
- * {@link CharSequence} for sharing task information, uses <code>carrot</code> template engine.
+ * {@link CharSequence} detailing information about the task, used when sharing.
+ * <p>
+ * Implementation uses <code>carrot</code> template engine.
  *
  * @author Gabor Keszthelyi
  */
-public final class ShareTaskText extends LazyCharSequence
+public final class TaskShareDetails implements Single<CharSequence>
 {
-    public ShareTaskText(final ContentSet contentSet, final Model model, final Context context)
-    {
-        super(new OnDemand<CharSequence>()
-        {
-            @Override
-            public CharSequence get()
-            {
-                CarrotEngine engine = new CarrotEngine(new Configuration.Builder().setResourceLocator(new RawResourceLocator.Builder(context)).build());
-                try
-                {
-                    String output = engine.process(String.valueOf(R.raw.sharetask),
-                            new Composite(
-                                    new AndroidBindings(context),
-                                    new SingletonBindings("$task", new TaskBindings(contentSet, model)),
-                                    new SingletonBindings("tformat", new TimeFormatter(context, contentSet))));
+    private final ContentSet mContentSet;
+    private final Model mModel;
+    private final Context mContext;
 
-                    Log.v("ShareTaskText", output);
-                    return output;
-                }
-                catch (CarrotException e)
-                {
-                    throw new RuntimeException("Failed to process template with carrot", e);
-                }
-            }
-        });
+
+    public TaskShareDetails(ContentSet contentSet, Model model, Context context)
+    {
+        mContentSet = contentSet;
+        mModel = model;
+        mContext = context.getApplicationContext();
     }
 
+
+    @Override
+    public CharSequence value()
+    {
+        CarrotEngine engine = new CarrotEngine(new Configuration.Builder().setResourceLocator(new RawResourceLocator.Builder(mContext)).build());
+        try
+        {
+            String output = engine.process(String.valueOf(R.raw.sharetask),
+                    new Composite(
+                            new AndroidBindings(mContext),
+                            new SingletonBindings("$task", new TaskBindings(mContentSet, mModel)),
+                            new SingletonBindings("tformat", new TimeFormatter(mContext, mContentSet))));
+
+            Log.v("TaskShareDetails", output);
+            return output;
+        }
+        catch (CarrotException e)
+        {
+            throw new RuntimeException("Failed to process template with carrot", e);
+        }
+    }
 }

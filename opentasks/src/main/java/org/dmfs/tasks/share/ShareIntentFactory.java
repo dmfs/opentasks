@@ -20,6 +20,7 @@ package org.dmfs.tasks.share;
 import android.content.Context;
 import android.content.Intent;
 
+import org.dmfs.jems.single.Single;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.utils.TaskIntentFactory;
@@ -46,13 +47,13 @@ public final class ShareIntentFactory implements TaskIntentFactory
     @Override
     public Intent create(ContentSet contentSet, Model model, Context context)
     {
-        CharSequence title = new TitleText(contentSet);
-        CharSequence body = new ShareTaskText(contentSet, model, context);
+        Single<CharSequence> title = new TaskShareTitle(contentSet);
+        Single<CharSequence> body = new TaskShareDetails(contentSet, model, context);
 
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title.toString());
-        sendIntent.putExtra(Intent.EXTRA_TEXT, body.toString());
+        sendIntent.putExtra(Intent.EXTRA_SUBJECT, title.value().toString());
+        sendIntent.putExtra(Intent.EXTRA_TEXT, body.value().toString());
         sendIntent.setType("text/plain");
 
         return sendIntent;
