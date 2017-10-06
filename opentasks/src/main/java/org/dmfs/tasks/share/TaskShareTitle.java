@@ -1,5 +1,6 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2016 Marten Gajda <marten@dmfs.org>
+ *
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +15,32 @@
  * limitations under the License.
  */
 
-package org.dmfs.tasks.utils.ondemand;
+package org.dmfs.tasks.share;
+
+import org.dmfs.jems.single.Single;
+import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.TaskFieldAdapters;
+
 
 /**
- * An {@link OnDemand} that caches an {@link OnDemand}'s {@link OnDemand#get()} value.
+ * {@link Single} for the title of the shared information of a task.
  *
  * @author Gabor Keszthelyi
  */
-public final class Cached<T> implements OnDemand<T>
+public final class TaskShareTitle implements Single<CharSequence>
 {
-    private final OnDemand<T> mDelegate;
-
-    private T mCachedValue;
+    private final ContentSet mContentSet;
 
 
-    public Cached(OnDemand<T> delegate)
+    public TaskShareTitle(ContentSet contentSet)
     {
-        mDelegate = delegate;
+        mContentSet = contentSet;
     }
 
 
     @Override
-    public T get()
+    public CharSequence value()
     {
-        if (mCachedValue == null)
-        {
-            mCachedValue = mDelegate.get();
-        }
-        return mCachedValue;
+        return TaskFieldAdapters.TITLE.get(mContentSet);
     }
 }
