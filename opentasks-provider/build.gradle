@@ -21,11 +21,21 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+    packagingOptions {
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 dependencies {
     compile('org.dmfs:rfc5545-datetime:0.2.4')
     compile('org.dmfs:lib-recur:0.9.6')
     compile project(':opentasks-contract')
-    testCompile 'junit:junit:4.12'
+
+    androidTestCompile project(':opentaskspal')
+    androidTestCompile 'com.github.dmfs.contentpal:contenttestpal:' + CONTENTPAL_VERSION
+    androidTestCompile 'com.android.support:support-annotations:' + SUPPORT_LIBRARY_VERSION
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
 }
