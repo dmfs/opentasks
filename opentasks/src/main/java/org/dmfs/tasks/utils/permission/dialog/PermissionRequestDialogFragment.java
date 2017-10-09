@@ -43,7 +43,9 @@ public final class PermissionRequestDialogFragment extends DialogFragment
 
     public static DialogFragment newInstance()
     {
-        return new PermissionRequestDialogFragment();
+        PermissionRequestDialogFragment dialogFragment = new PermissionRequestDialogFragment();
+        dialogFragment.setCancelable(false);
+        return dialogFragment;
     }
 
 
