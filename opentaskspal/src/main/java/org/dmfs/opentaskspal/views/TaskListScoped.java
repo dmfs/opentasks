@@ -64,4 +64,12 @@ public final class TaskListScoped implements View<TaskContract.Tasks>
     {
         return new org.dmfs.opentaskspal.tables.TaskListScoped(mTaskListRow, mDelegate.table());
     }
+
+
+    @NonNull
+    @Override
+    public View<TaskContract.Tasks> withProjection(@NonNull String... strings)
+    {
+        return mDelegate.withProjection(strings);
+    }
 }
