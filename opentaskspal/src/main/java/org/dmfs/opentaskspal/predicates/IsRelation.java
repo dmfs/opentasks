@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.tasks;
+package org.dmfs.opentaskspal.predicates;
 
-import org.dmfs.android.contentpal.RowSnapshot;
-import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
-import org.dmfs.android.contentpal.rowdata.Referring;
+import org.dmfs.android.contentpal.Predicate;
+import org.dmfs.android.contentpal.predicates.DelegatingPredicate;
 import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
+ * {@link Predicate} for selecting {@link TaskContract.Property.Relation} properties from {@link TaskContract.Properties} table.
+ *
  * @author Gabor Keszthelyi
  */
-public final class Parent extends DelegatingRowData<TaskContract.Tasks>
+public final class IsRelation extends DelegatingPredicate
 {
-    public Parent(RowSnapshot<TaskContract.Tasks> parentTask)
+    public IsRelation()
     {
-        super(new Referring<TaskContract.Tasks>(TaskContract.Tasks.PARENT_ID, parentTask));
+        super(new IsProperty(TaskContract.Property.Relation.CONTENT_ITEM_TYPE));
     }
 }

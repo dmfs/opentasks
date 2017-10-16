@@ -18,18 +18,21 @@ package org.dmfs.opentaskspal.views;
 
 import android.content.ContentProviderClient;
 
+import org.dmfs.android.contentpal.View;
 import org.dmfs.android.contentpal.views.BaseView;
 import org.dmfs.android.contentpal.views.DelegatingView;
 import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
+ * {@link View} for the {@link TaskContract.Tasks} table.
+ *
  * @author Gabor Keszthelyi
  */
 public final class TasksView extends DelegatingView<TaskContract.Tasks>
 {
     public TasksView(String authority, ContentProviderClient client)
     {
-        super(new BaseView<TaskContract.Tasks>(client, TaskContract.Properties.getContentUri(authority)));
+        super(new BaseView<TaskContract.Tasks>(client, TaskContract.Tasks.getContentUri(authority)));
     }
 }

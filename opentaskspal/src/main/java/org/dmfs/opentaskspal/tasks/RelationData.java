@@ -16,6 +16,7 @@
 
 package org.dmfs.opentaskspal.tasks;
 
+import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
@@ -25,11 +26,13 @@ import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
+ * {@link RowData} for adding a {@link TaskContract.Property.Relation} property.
+ *
  * @author Gabor Keszthelyi
  */
-public final class Relation extends DelegatingRowData<TaskContract.Properties>
+public final class RelationData extends DelegatingRowData<TaskContract.Properties>
 {
-    public Relation(RowSnapshot<TaskContract.Tasks> relatingRow, TaskContract.Property.Relation.RelType relType, RowSnapshot<TaskContract.Tasks> relatedRow)
+    public RelationData(RowSnapshot<TaskContract.Tasks> relatingRow, TaskContract.Property.Relation.RelType relType, RowSnapshot<TaskContract.Tasks> relatedRow)
     {
         super(new Composite<>(
                 new Referring<TaskContract.Properties>(TaskContract.Property.Relation.TASK_ID, relatingRow),

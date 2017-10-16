@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.tables;
+package org.dmfs.opentaskspal.tasks;
 
-import org.dmfs.android.contentpal.Table;
-import org.dmfs.android.contentpal.tables.DelegatingTable;
-import org.dmfs.opentaskspal.contentpal.tables.Filtered;
-import org.dmfs.opentaskspal.predicates.Relation;
+import org.dmfs.android.contentpal.RowData;
+import org.dmfs.android.contentpal.RowSnapshot;
+import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
- * {@link Table} for {@link TaskContract.Property.Relation}.
+ * {@link RowData} to add the 'subtask relation' data about the 2 given tasks, to the {@link TaskContract.Properties} table.
  *
  * @author Gabor Keszthelyi
  */
-public final class RelationsTable extends DelegatingTable<TaskContract.Properties>
+public final class SubtaskRelationData extends DelegatingRowData<TaskContract.Properties>
 {
-    public RelationsTable(String authority)
+    public SubtaskRelationData(RowSnapshot<TaskContract.Tasks> subTask, RowSnapshot<TaskContract.Tasks> parentTask)
     {
-        super(new Filtered<>(new Relation(), new PropertiesTable(authority)));
+        super(new RelationData(subTask, TaskContract.Property.Relation.RelType.PARENT, parentTask));
     }
 }

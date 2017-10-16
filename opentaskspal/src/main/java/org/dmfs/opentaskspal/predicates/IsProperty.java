@@ -14,33 +14,23 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.contentpal.rowsets;
+package org.dmfs.opentaskspal.predicates;
 
-import android.support.annotation.NonNull;
-
-import org.dmfs.android.contentpal.ClosableIterator;
-import org.dmfs.android.contentpal.RowSet;
-import org.dmfs.android.contentpal.RowSnapshot;
+import org.dmfs.android.contentpal.Predicate;
+import org.dmfs.android.contentpal.predicates.DelegatingPredicate;
+import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
+ * {@link Predicate} for selecting rows from {@link TaskContract.Properties} table representing a certain property identified by its mimeType.
+ *
  * @author Gabor Keszthelyi
  */
-public abstract class DelegatingRowSet<T> implements RowSet<T>
+public final class IsProperty extends DelegatingPredicate
 {
-    private final RowSet<T> mDelegate;
-
-
-    public DelegatingRowSet(RowSet<T> delegate)
+    public IsProperty(String mimeType)
     {
-        mDelegate = delegate;
-    }
-
-
-    @NonNull
-    @Override
-    public final ClosableIterator<RowSnapshot<T>> iterator()
-    {
-        return mDelegate.iterator();
+        super(new EqArg(TaskContract.PropertyColumns.MIMETYPE, mimeType));
     }
 }
