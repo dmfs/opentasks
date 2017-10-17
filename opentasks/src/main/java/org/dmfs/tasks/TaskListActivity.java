@@ -50,6 +50,7 @@ import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+import org.dmfs.tasks.detailsscreen.TaskDetailsUi;
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
 import org.dmfs.tasks.groupings.ByDueDate;
 import org.dmfs.tasks.groupings.ByList;
@@ -189,9 +190,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         {
             if (mShouldShowDetails && mShouldSwitchToDetail)
             {
-                Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
-                viewTaskIntent.setData(mSelectedTaskUri);
-                startActivity(viewTaskIntent);
+                new TaskDetailsUi(mSelectedTaskUri).show(this);
                 mShouldSwitchToDetail = false;
                 mTransientState = true;
             }
@@ -396,9 +395,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
 
                 // In single-pane mode, simply start the detail activity
                 // for the selected item ID.
-                Intent detailIntent = new Intent(Intent.ACTION_VIEW);
-                detailIntent.setData(uri);
-                startActivity(detailIntent);
+                new TaskDetailsUi(uri).show(this);
                 mShouldSwitchToDetail = false;
             }
         }
