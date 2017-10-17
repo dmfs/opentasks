@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <org.dmfs.tasks.detailsscreen.SubtaskView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <FrameLayout
+                android:id="@+id/opentasks_task_details_subtask_progress_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        <LinearLayout
+                style="@style/tasks_expandable_list_item"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:duplicateParentState="true"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="8dp">
+
+            <View
+                    android:id="@+id/opentasks_task_details_subtask_list_ribbon"
+                    android:layout_width="4dp"
+                    android:paddingRight="4dp"
+                    android:layout_height="match_parent"/>
+
+            <TextView
+                    android:id="@+id/opentasks_task_details_subtask_title"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="8dp"
+                    android:layout_weight="1"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:layout_gravity="center_vertical|start"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/task_list_title_text"
+                    android:textIsSelectable="false"/>
+
+
+            <TextView
+                    android:id="@+id/opentasks_task_details_subtask_due"
+                    style="@style/task_list_item_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginRight="2dp"
+                    android:gravity="center_vertical|end"
+                    android:paddingRight="2dp"
+                    android:textIsSelectable="false"
+                    android:textSize="12sp"/>
+
+        </LinearLayout>
+
+    </org.dmfs.tasks.detailsscreen.SubtaskView>
+</layout>

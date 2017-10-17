@@ -57,6 +57,10 @@ import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+import org.dmfs.tasks.detailsscreen.RowDataSubtaskViewParams;
+import org.dmfs.tasks.detailsscreen.RowDataSubtasksViewParams;
+import org.dmfs.tasks.detailsscreen.SubtasksSource;
+import org.dmfs.tasks.detailsscreen.SubtasksView;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -73,6 +77,8 @@ import org.dmfs.tasks.widget.TaskView;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 
 /**
@@ -134,6 +140,8 @@ public class ViewTaskFragment extends SupportFragment
      * The actual detail view. We store this direct reference to be able to clear it when the fragment gets detached.
      */
     private TaskView mDetailView;
+
+    private CompositeDisposable mDisposables;
 
     private int mListColor;
     private int mOldStatus = -1;
@@ -252,12 +260,14 @@ public class ViewTaskFragment extends SupportFragment
             mDetailView.setValues(null);
         }
 
+        mDisposables.dispose();
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        mDisposables = new CompositeDisposable();
         mShowFloatingActionButton = !getResources().getBoolean(R.bool.has_two_panes);
 
         mRootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
@@ -442,6 +452,12 @@ public class ViewTaskFragment extends SupportFragment
                 ((TextView) mToolBar.findViewById(R.id.toolbar_title)).setText(TaskFieldAdapters.TITLE.get(mContentSet));
             }
         }
+
+        mDisposables.add(new SubtasksSource(mAppContext, mTaskUri, RowDataSubtaskViewParams.SUBTASK_PROJECTION)
+                .subscribe(subtasks ->
+                {
+                    new SubtasksView(mContent).update(new RowDataSubtasksViewParams(new ValueColor(mListColor), subtasks));
+                }));
     }
 
 
