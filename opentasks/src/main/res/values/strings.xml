@@ -46,6 +46,10 @@
     <string name="opentasks_details_no_task_selected">No task selected</string>
     <string name="opentasks_task_details_menu_send_short">Send</string>
     <string name="opentasks_task_details_menu_send">Send to</string>
+    <!-- The title displayed for a subtask that has no title -->
+    <string name="opentasks_task_details_subtask_untitled">Untitled</string>
+    <!-- The header title of the subtasks section on the task details screen -->
+    <string name="opentasks_task_details_subtasks_section_title">Subtasks</string>
 
     <!-- Label of button to hide a tick box -->
     <string name="opentasks_hide_tick_box">Text</string>
