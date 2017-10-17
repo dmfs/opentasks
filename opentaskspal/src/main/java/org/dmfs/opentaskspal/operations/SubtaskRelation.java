@@ -26,7 +26,7 @@ import org.dmfs.android.contentpal.SoftRowReference;
 import org.dmfs.android.contentpal.TransactionContext;
 import org.dmfs.android.contentpal.operations.Insert;
 import org.dmfs.opentaskspal.tables.PropertiesTable;
-import org.dmfs.opentaskspal.tasks.SubtaskRelationData;
+import org.dmfs.opentaskspal.tasks.ParentTaskRelationData;
 import org.dmfs.optional.Optional;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -44,7 +44,7 @@ public final class SubtaskRelation implements InsertOperation<TaskContract.Prope
 
     public SubtaskRelation(String authority, RowSnapshot<TaskContract.Tasks> subtask, RowSnapshot<TaskContract.Tasks> parentTask)
     {
-        mDelegate = new Insert<>(new PropertiesTable(authority), new SubtaskRelationData(subtask, parentTask));
+        mDelegate = new Insert<>(new PropertiesTable(authority), new ParentTaskRelationData(parentTask, subtask));
     }
 
 

@@ -16,13 +16,17 @@
 
 package org.dmfs.opentaskspal.tasks;
 
+import android.support.annotation.NonNull;
+
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.RowSnapshot;
+import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
 import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.android.contentpal.rowdata.RawRowData;
 import org.dmfs.android.contentpal.rowdata.Referring;
 import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.contract.TaskContract.Property.Relation.RelType;
 
 
 /**
@@ -32,12 +36,24 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class RelationData extends DelegatingRowData<TaskContract.Properties>
 {
-    public RelationData(RowSnapshot<TaskContract.Tasks> relatingRow, TaskContract.Property.Relation.RelType relType, RowSnapshot<TaskContract.Tasks> relatedRow)
+    public RelationData(@NonNull RowSnapshot<TaskContract.Tasks> relatingTask,
+                        @NonNull RelType relType,
+                        @NonNull RowSnapshot<TaskContract.Tasks> relatedTask)
     {
         super(new Composite<>(
-                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.TASK_ID, relatingRow),
-                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_ID, relatedRow),
-                new RawRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_TYPE, relType.ordinal())
-        ));
+                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.TASK_ID, relatingTask),
+                new RawRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_TYPE, relType.ordinal()),
+                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_ID, relatedTask)));
+    }
+
+
+    public RelationData(@NonNull RowSnapshot<TaskContract.Tasks> relatingTask,
+                        @NonNull RelType relType,
+                        @NonNull CharSequence relatedTaskUid)
+    {
+        super(new Composite<>(
+                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.TASK_ID, relatingTask),
+                new RawRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_TYPE, relType.ordinal()),
+                new CharSequenceRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_UID, relatedTaskUid)));
     }
 }
