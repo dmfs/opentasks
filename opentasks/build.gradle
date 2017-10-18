@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 def gitCommitNo = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'rev-list', '--count', 'master'
+        commandLine 'git', 'rev-list', '--count', 'HEAD'
         standardOutput = stdout
     }
     return Integer.parseInt(stdout.toString().trim())
@@ -17,7 +17,7 @@ android {
         applicationId "org.dmfs.tasks"
         minSdkVersion MIN_SDK_VERSION.toInteger()
         targetSdkVersion TARGET_SDK_VERSION.toInteger()
-        versionCode gitCommitNo()
+        versionCode gitCommitNo() * 10 // spread version code to allow inserting versions if necessary
         versionName version
     }
     buildTypes {
