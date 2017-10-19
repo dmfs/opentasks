@@ -1,0 +1,24 @@
+language: android
+sudo: false
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+    - build-tools-25.0.3
+    - android-24
+    - android-25
+    - extra-android-m2repository
+    - sys-img-armeabi-v7a-android-24
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test --target android-24 --abi armeabi-v7a
+  - QEMU_AUDIO_DRV=none emulator -avd test -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script:
+  - android list target
+  - ./gradlew connectedAndroidTest
