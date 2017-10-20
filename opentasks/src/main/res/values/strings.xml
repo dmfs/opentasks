@@ -269,7 +269,7 @@
     <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
     <string name="opentasks_permission_request_dialog_getaccounts_title">Permission needed</string>
     <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[In order to read the list of accounts on your device which support task synchronization, %s needs the GET_ACCOUNTS permission.<br/><br/>
-    Please note that (due to the great wisdom of the Android developers) the permission request will be labeled as "access your contacts" instead of "read your accounts". See <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> for further information.]]></string>
+    Please note that (due to an unfortunate choice by Google) the permission request will be labeled as &quot;access your contacts&quot; instead of &quot;read your accounts&quot;. See <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> for further information.]]></string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_negative">I don\'t use sync, don\'t show it again</string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_positive">Continue to grant the permission</string>
 

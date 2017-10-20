@@ -20,16 +20,13 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 
 import org.dmfs.jems.single.Single;
-import org.dmfs.optional.Absent;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.Present;
 
 
 /**
  * @author Gabor Keszthelyi
  */
 // TODO Use it from bolts lib when available
-public final class ManifestAppName implements Single<Optional<CharSequence>>
+public final class ManifestAppName implements Single<CharSequence>
 {
     private final Context mAppContext;
 
@@ -41,20 +38,20 @@ public final class ManifestAppName implements Single<Optional<CharSequence>>
 
 
     @Override
-    public Optional<CharSequence> value()
+    public CharSequence value()
     {
         ApplicationInfo applicationInfo = mAppContext.getApplicationInfo();
 
         if (applicationInfo.labelRes != 0)
         {
-            return new Present<CharSequence>(mAppContext.getString(applicationInfo.labelRes));
+            return mAppContext.getString(applicationInfo.labelRes);
         }
 
         if (applicationInfo.nonLocalizedLabel != null)
         {
-            return new Present<>(applicationInfo.nonLocalizedLabel);
+            return applicationInfo.nonLocalizedLabel;
         }
 
-        return Absent.absent();
+        throw new RuntimeException("Application name not found in the manifest");
     }
 }
