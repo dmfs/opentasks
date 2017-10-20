@@ -25,8 +25,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.Html;
+import android.text.Spanned;
 
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.utils.ManifestAppName;
 import org.dmfs.tasks.utils.permission.BasicAppPermissions;
 
 
@@ -53,9 +56,17 @@ public final class PermissionRequestDialogFragment extends DialogFragment
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
+        // TODO Make the link in the message clickable
+        Spanned message = Html.fromHtml(
+                getString(R.string.opentasks_permission_request_dialog_getaccounts_message,
+
+                        // TODO Improve with localized default app name value?
+                        // ('app' is not perfect but probably meaningful on most languages)
+                        new ManifestAppName(getContext()).value().value("app")));
+
         return new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.opentasks_permission_request_dialog_getaccounts_title)
-                .setMessage(R.string.opentasks_permission_request_dialog_getaccounts_message)
+                .setMessage(message)
                 .setPositiveButton(R.string.opentasks_permission_request_dialog_getaccounts_button_positive,
                         new DialogInterface.OnClickListener()
                         {
