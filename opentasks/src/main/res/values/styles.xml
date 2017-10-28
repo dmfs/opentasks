@@ -272,7 +272,10 @@
     </style>
 
     <style name="Theme.MaterialDialog"
-            parent="@android:style/Theme.Dialog"></style>
+            parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
     <style name="details_label_icon"
             parent="field_view_text_value">
