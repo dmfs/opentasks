@@ -323,7 +323,14 @@ public class NotificationActionUtils
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final long triggerAtMills = SystemClock.elapsedRealtime() + sUndoTimeoutMillis;
         final PendingIntent pendingIntent = createUndoTimeoutPendingIntent(context, notificationAction);
-        alarmManager.set(AlarmManager.ELAPSED_REALTIME, triggerAtMills, pendingIntent);
+        if (VERSION.SDK_INT >= VERSION_CODES.KITKAT)
+        {
+            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME, triggerAtMills, pendingIntent);
+        }
+        else
+        {
+            alarmManager.set(AlarmManager.ELAPSED_REALTIME, triggerAtMills, pendingIntent);
+        }
     }
 
 
