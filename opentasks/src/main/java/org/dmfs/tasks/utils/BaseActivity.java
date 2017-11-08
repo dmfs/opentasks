@@ -38,21 +38,15 @@ public abstract class BaseActivity extends AppCompatActivity
 {
     private SharedPreferences mPrefs;
 
+    private Permission mGetAccountsPermission;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        // TODO Maybe DismissiblePermission extends Permission?
-        Permission getAccountsPermission = new BasicAppPermissions(this).forName(Manifest.permission.GET_ACCOUNTS);
-        if (!getAccountsPermission.isGranted()
-                && savedInstanceState == null
-                && !getSharedPreferences(PermissionRequestDialogFragment.PREFS_STORE_IGNORED_PERMISSIONS, MODE_PRIVATE)
-                .getBoolean(Manifest.permission.GET_ACCOUNTS, false))
-        {
-            PermissionRequestDialogFragment.newInstance().show(getSupportFragmentManager(), "permission-dialog");
-        }
+        mGetAccountsPermission = new BasicAppPermissions(this).forName(Manifest.permission.GET_ACCOUNTS);
 
         mPrefs = getSharedPreferences(getPackageName() + ".sharedPrefences", 0);
 
@@ -66,6 +60,14 @@ public abstract class BaseActivity extends AppCompatActivity
         {
             RetentionMagic.restore(this, savedInstanceState);
         }
+    }
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        requestMissingGetAccountsPermission();
     }
 
 
@@ -98,6 +100,15 @@ public abstract class BaseActivity extends AppCompatActivity
         if (VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB)
         {
             RetentionMagic.persist(this, mPrefs);
+        }
+    }
+
+
+    private void requestMissingGetAccountsPermission()
+    {
+        if (!mGetAccountsPermission.isGranted())
+        {
+            PermissionRequestDialogFragment.newInstance(mGetAccountsPermission.isRequestable(this)).show(getSupportFragmentManager(), "permission-dialog");
         }
     }
 

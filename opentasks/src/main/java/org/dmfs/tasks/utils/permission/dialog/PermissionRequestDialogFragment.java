@@ -17,11 +17,10 @@
 package org.dmfs.tasks.utils.permission.dialog;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -33,6 +32,7 @@ import android.widget.TextView;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.utils.ManifestAppName;
 import org.dmfs.tasks.utils.permission.BasicAppPermissions;
+import org.dmfs.tasks.utils.permission.utils.AppSettingsIntent;
 
 
 /**
@@ -42,13 +42,15 @@ import org.dmfs.tasks.utils.permission.BasicAppPermissions;
 public final class PermissionRequestDialogFragment extends DialogFragment
 {
 
-    // TODO Figure out better way when Permission lib is available
-    public static final String PREFS_STORE_IGNORED_PERMISSIONS = "opentasks.prefs.permissions.userignored";
+    private static final String KEY_IS_NORMALLY_REQUESTABLE = "org.dmfs.tasks.permission.isRequestable";
 
 
-    public static DialogFragment newInstance()
+    public static DialogFragment newInstance(boolean isNormallyRequestable)
     {
         PermissionRequestDialogFragment dialogFragment = new PermissionRequestDialogFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(KEY_IS_NORMALLY_REQUESTABLE, isNormallyRequestable);
+        dialogFragment.setArguments(args);
         dialogFragment.setCancelable(false);
         return dialogFragment;
     }
@@ -65,30 +67,41 @@ public final class PermissionRequestDialogFragment extends DialogFragment
                                 new ManifestAppName(getContext()).value())));
         messageView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        return new AlertDialog.Builder(getActivity())
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(R.string.opentasks_permission_request_dialog_getaccounts_title)
-                .setView(messageView)
-                .setPositiveButton(R.string.opentasks_permission_request_dialog_getaccounts_button_positive,
-                        new DialogInterface.OnClickListener()
+                .setView(messageView);
+
+        if (getArguments().getBoolean(KEY_IS_NORMALLY_REQUESTABLE, true))
+        {
+            builder.setPositiveButton(R.string.opentasks_permission_request_dialog_getaccounts_button_continue,
+                    new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
                         {
-                            public void onClick(DialogInterface dialog, int whichButton)
+                            new BasicAppPermissions(getContext()).forName(Manifest.permission.GET_ACCOUNTS)
+                                    .request().send(getActivity());
+                        }
+                    });
+        }
+        else
+        {
+            builder.setPositiveButton(R.string.opentasks_permission_request_dialog_getaccounts_button_settings,
+                    new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            Activity activity = getActivity();
+                            if (activity != null)
                             {
-                                new BasicAppPermissions(getContext()).forName(Manifest.permission.GET_ACCOUNTS)
-                                        .request().send(getActivity());
+                                getActivity().startActivity(new AppSettingsIntent(getContext()).value());
                             }
                         }
-                )
-                .setNegativeButton(R.string.opentasks_permission_request_dialog_getaccounts_button_negative,
-                        new DialogInterface.OnClickListener()
-                        {
-                            public void onClick(DialogInterface dialog, int whichButton)
-                            {
-                                SharedPreferences prefs = getContext().getSharedPreferences(PREFS_STORE_IGNORED_PERMISSIONS, Context.MODE_PRIVATE);
-                                prefs.edit().putBoolean(Manifest.permission.GET_ACCOUNTS, true).apply();
-                            }
-                        }
-                )
-                .create();
+                    });
+        }
+
+        return builder.create();
     }
 
 }
