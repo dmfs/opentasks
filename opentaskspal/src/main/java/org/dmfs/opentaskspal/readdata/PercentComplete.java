@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.rowsets;
+package org.dmfs.opentaskspal.readdata;
 
 import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.Projection;
-import org.dmfs.android.contentpal.RowReference;
-import org.dmfs.android.contentpal.RowSet;
-import org.dmfs.android.contentpal.View;
-import org.dmfs.android.contentpal.predicates.ReferringTo;
-import org.dmfs.android.contentpal.rowsets.DelegatingRowSet;
-import org.dmfs.android.contentpal.rowsets.QueryRowSet;
+import org.dmfs.android.contentpal.RowDataSnapshot;
+import org.dmfs.android.contentpal.projections.SingleColProjection;
+import org.dmfs.opentaskspal.readdata.functions.IntegerFunction;
+import org.dmfs.optional.Optional;
+import org.dmfs.optional.decorators.DelegatingOptional;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**
- * {@link RowSet} for the subtasks of a given task.
+ * {@link Optional} for the {@link Tasks#PERCENT_COMPLETE} value of a task.
  *
  * @author Gabor Keszthelyi
  */
-public final class Subtasks extends DelegatingRowSet<Tasks>
+public final class PercentComplete extends DelegatingOptional<Integer>
 {
+    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.PERCENT_COMPLETE);
 
-    public Subtasks(@NonNull View<Tasks> view,
-                    @NonNull Projection projection,
-                    @NonNull RowReference<Tasks> parentTask)
+
+    public PercentComplete(@NonNull RowDataSnapshot<Tasks> rowData)
     {
-        super(new QueryRowSet<>(view, projection, new ReferringTo<>(Tasks.PARENT_ID, parentTask)));
+        super(new OptionalRowCharData<>(rowData, Tasks.PERCENT_COMPLETE, new IntegerFunction()));
     }
-
 }
