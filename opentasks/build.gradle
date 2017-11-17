@@ -53,12 +53,16 @@ dependencies {
     compile project(':opentasks-provider')
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     compile 'com.github.dmfs:color-picker:1.0'
-    compile 'au.com.codeka:carrot:2.4.0'
-    compile('com.github.dmfs.androidcarrot:androidcarrot:5a4baa0222') {
+    compile ('au.com.codeka:carrot:2.4.0'){
+        exclude module: 'iterators' // TODO Remove when iterators have been removed from codeka:carrot
+    }
+    compile('com.github.dmfs.androidcarrot:androidcarrot:13edc04') {
         exclude module: 'carrot'
         exclude group: 'com.android.support'
+        exclude module: 'iterators'
+        exclude module: 'jems'
     }
-    compile 'org.dmfs:essentials:1.9'
+    compile 'org.dmfs:jems:' + JEMS_VERSION
 
     testCompile 'junit:junit:4.12'
 }
