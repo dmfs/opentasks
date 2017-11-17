@@ -263,12 +263,19 @@ public class BySearch extends AbstractGroupingFactory
             // TODO: swap styles instead of modifying the font style
             boolean isHistoric = cursor.getInt(cursor.getColumnIndex(SearchHistoryColumns.HISTORIC)) > 0;
             Typeface oldtypeface = title.getTypeface();
-            title.setTypeface(oldtypeface, isHistoric ? oldtypeface.getStyle() & ~Typeface.ITALIC : oldtypeface.getStyle() | Typeface.ITALIC);
+            title.setTypeface(oldtypeface, swapStyle(isHistoric, oldtypeface));
 
             // set history icon
             ImageView icon = (ImageView) view.findViewById(android.R.id.icon);
             icon.setImageResource(R.drawable.ic_history);
             icon.setVisibility(isHistoric ? View.VISIBLE : View.INVISIBLE);
+        }
+
+
+        @SuppressLint("WrongConstant")
+        private int swapStyle(boolean isHistoric, Typeface oldtypeface)
+        {
+            return isHistoric ? oldtypeface.getStyle() & ~Typeface.ITALIC : oldtypeface.getStyle() | Typeface.ITALIC;
         }
 
 
