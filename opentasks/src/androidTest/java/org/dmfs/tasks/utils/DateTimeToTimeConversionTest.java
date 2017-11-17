@@ -95,18 +95,30 @@ public class DateTimeToTimeConversionTest
                         ==
                         time.toMillis(false) / 1000;
 
+        boolean yearMatch = dateTime.getYear() == time.year;
+        boolean monthMatch = dateTime.getMonth() == time.month;
+        boolean dayMatch = dateTime.getDayOfMonth() == time.monthDay;
+        boolean hourMatch = dateTime.getHours() == time.hour;
+        boolean minuteMatch = dateTime.getMinutes() == time.minute;
+        boolean secondsMatch = dateTime.getSeconds() == time.second;
+
         boolean allDaysMatch = time.allDay == dateTime.isAllDay();
 
         boolean timeZoneMatch =
-                // If DateTime is floating, all-day then if the all-day flag is matched with Time (checked earlier)
-                // then we consider the Time's timezone matching, we ignore that basically,
-                // because Time always has a time zone, and there is no other way to represent all-day date-times with Time.
-                (dateTime.isFloating() && dateTime.isAllDay())
+                (dateTime.isFloating() && dateTime.isAllDay() && time.timezone.equals("UTC"))
                         ||
                         // This is the regular case with non-floating DateTime
                         (dateTime.getTimeZone() != null && time.timezone.equals(dateTime.getTimeZone().getID()));
 
-        return millisMatch && allDaysMatch && timeZoneMatch;
+        return millisMatch
+                && yearMatch
+                && monthMatch
+                && dayMatch
+                && hourMatch
+                && minuteMatch
+                && secondsMatch
+                && allDaysMatch
+                && timeZoneMatch;
     }
 
 }

@@ -354,7 +354,7 @@ public class DateFormatter
         }
 
         // Time always needs a TimeZone (default ctor falls back to TimeZone.getDefault())
-        String timeZoneId = dateTime.getTimeZone() == null ? TimeZone.getDefault().getID() : dateTime.getTimeZone().getID();
+        String timeZoneId = dateTime.getTimeZone() == null ? "UTC" : dateTime.getTimeZone().getID();
         Time time = new Time(timeZoneId);
 
         time.set(dateTime.getTimestamp());
