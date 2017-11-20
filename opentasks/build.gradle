@@ -19,6 +19,7 @@ android {
         targetSdkVersion TARGET_SDK_VERSION.toInteger()
         versionCode gitCommitNo() * 10 // spread version code to allow inserting versions if necessary
         versionName version
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -65,4 +66,11 @@ dependencies {
     compile 'org.dmfs:jems:' + JEMS_VERSION
 
     testCompile 'junit:junit:4.12'
+
+    androidTestCompile ('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestCompile ('com.android.support.test:rules:' + ANDROID_TEST_RUNNER_VERSION) {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
 }

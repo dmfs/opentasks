@@ -400,7 +400,7 @@ public class ViewTaskFragment extends SupportFragment
 
         if ((oldUri == null) != (uri == null))
         {
-			/*
+            /*
 			 * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
 			 */
             ActivityCompat.invalidateOptionsMenu(getActivity());
@@ -491,7 +491,7 @@ public class ViewTaskFragment extends SupportFragment
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-		/*
+        /*
 		 * Don't show any options if we don't have a task to show.
 		 */
         if (mTaskUri != null)
