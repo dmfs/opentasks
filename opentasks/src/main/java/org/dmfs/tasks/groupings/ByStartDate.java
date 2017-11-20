@@ -22,13 +22,13 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.os.Build;
-import android.os.Build.VERSION;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.dmfs.optional.NullSafe;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
@@ -41,6 +41,7 @@ import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
+import org.dmfs.tasks.widget.ProgressBackgroundView;
 
 
 /**
@@ -138,23 +139,9 @@ public class ByStartDate extends AbstractGroupingFactory
                 priorityView.setBackgroundResource(R.color.priority_green);
             }
 
-            if (VERSION.SDK_INT >= 11)
-            {
-                // update percentage background
-                View background = getView(view, R.id.percentage_background_view);
-                background.setPivotX(0);
-                Integer percentComplete = TaskFieldAdapters.PERCENT_COMPLETE.get(cursor);
-                if (percentComplete < 100)
-                {
-                    background.setScaleX(percentComplete == null ? 0 : percentComplete / 100f);
-                    background.setBackgroundResource(R.drawable.task_progress_background_shade);
-                }
-                else
-                {
-                    background.setScaleX(1);
-                    background.setBackgroundResource(R.drawable.complete_task_background_overlay);
-                }
-            }
+            new ProgressBackgroundView(getView(view, R.id.percentage_background_view))
+                    .update(new NullSafe<>(TaskFieldAdapters.PERCENT_COMPLETE.get(cursor)));
+
             setColorBar(view, cursor);
             setDescription(view, cursor);
             setOverlay(view, cursor.getPosition(), cursor.getCount());
