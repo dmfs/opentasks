@@ -16,6 +16,7 @@
 
 package org.dmfs.tasks.utils;
 
+import android.Manifest;
 import android.content.SharedPreferences;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -23,6 +24,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import org.dmfs.android.retentionmagic.RetentionMagic;
+import org.dmfs.tasks.utils.permission.BasicAppPermissions;
+import org.dmfs.tasks.utils.permission.Permission;
+import org.dmfs.tasks.utils.permission.dialog.PermissionRequestDialogFragment;
 
 
 /**
@@ -34,11 +38,15 @@ public abstract class BaseActivity extends AppCompatActivity
 {
     private SharedPreferences mPrefs;
 
+    private Permission mGetAccountsPermission;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        mGetAccountsPermission = new BasicAppPermissions(this).forName(Manifest.permission.GET_ACCOUNTS);
 
         mPrefs = getSharedPreferences(getPackageName() + ".sharedPrefences", 0);
 
@@ -52,6 +60,14 @@ public abstract class BaseActivity extends AppCompatActivity
         {
             RetentionMagic.restore(this, savedInstanceState);
         }
+    }
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        requestMissingGetAccountsPermission();
     }
 
 
@@ -84,6 +100,15 @@ public abstract class BaseActivity extends AppCompatActivity
         if (VERSION.SDK_INT >= VERSION_CODES.HONEYCOMB)
         {
             RetentionMagic.persist(this, mPrefs);
+        }
+    }
+
+
+    private void requestMissingGetAccountsPermission()
+    {
+        if (!mGetAccountsPermission.isGranted())
+        {
+            PermissionRequestDialogFragment.newInstance(mGetAccountsPermission.isRequestable(this)).show(getSupportFragmentManager(), "permission-dialog");
         }
     }
 
