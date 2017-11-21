@@ -64,6 +64,7 @@ dependencies {
         exclude module: 'jems'
     }
     compile 'org.dmfs:jems:' + JEMS_VERSION
+    compile 'com.github.dmfs.bolts:color-bolts:' + BOLTS_VERSION
 
     testCompile 'junit:junit:4.12'
 

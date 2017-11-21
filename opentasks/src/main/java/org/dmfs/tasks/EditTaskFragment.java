@@ -61,6 +61,7 @@ import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ContentValueMapper;
+import org.dmfs.tasks.utils.Darkened;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
@@ -629,16 +630,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     }
 
 
-    private static int darkenColor(int color)
-    {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * 0.75f;
-        color = Color.HSVToColor(hsv);
-        return color;
-    }
-
-
     public int mixColors(int col1, int col2)
     {
         int r1, g1, b1, r2, g2, b2;
@@ -704,7 +695,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
             }
 
-            int newColor = getBlendColor(mListColor, darkenColor(mListColor), (int) ((0.5 + 0.5 * percentage) * 255));
+            int newColor = getBlendColor(mListColor, new Darkened(mListColor).argb(), (int) ((0.5 + 0.5 * percentage) * 255));
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
 
