@@ -18,7 +18,6 @@ package org.dmfs.tasks;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
@@ -30,6 +29,7 @@ import android.view.WindowManager;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
+import org.dmfs.tasks.utils.Darkened;
 
 
 /**
@@ -132,16 +132,6 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
     }
 
 
-    private int darkenColor(int color)
-    {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * 0.75f;
-        color = Color.HSVToColor(hsv);
-        return color;
-    }
-
-
     @SuppressLint("NewApi")
     @Override
     public void updateColor(int color)
@@ -151,7 +141,7 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
         {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(darkenColor(color));
+            window.setStatusBarColor(new Darkened(color).argb());
         }
     }
 

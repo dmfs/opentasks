@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         package="org.dmfs.tasks">
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS"/>
@@ -10,6 +11,9 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!--TODO Remove after https://github.com/dmfs/opentasks/issues/392-->
+    <uses-sdk tools:overrideLibrary="org.dmfs.android.bolts"/>
 
     <application
             android:icon="@drawable/ic_launcher"
