@@ -2,16 +2,17 @@
 buildscript {
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }
 
 def gitVersion = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'describe', '--tags'
+        commandLine 'git', 'describe', '--tags', '--always'
         standardOutput = stdout
     }
     return stdout.toString().trim()
@@ -23,5 +24,10 @@ allprojects {
     repositories {
         jcenter()
         maven { url "https://jitpack.io" }
+        google()
     }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
