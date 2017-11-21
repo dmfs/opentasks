@@ -19,7 +19,7 @@ dependencies {
     implementation('com.github.dmfs.contentpal:contentpal:' + CONTENTPAL_VERSION) {
         exclude module: 'jems'
     }
-    implementation "org.dmfs:rfc5545-datetime:0.2.4"
+    implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
     implementation 'org.dmfs:jems:' + JEMS_VERSION
 
     testImplementation('com.github.dmfs.contentpal:contentpal-testing:' + CONTENTPAL_VERSION) {
