@@ -45,32 +45,33 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:' + SUPPORT_LIBRARY_VERSION
-    compile 'com.android.support:design:' + SUPPORT_LIBRARY_VERSION
-    compile('org.dmfs:android-xml-magic:0.1.1') {
+    implementation project(':opentasks-provider')
+    implementation 'com.android.support:appcompat-v7:' + SUPPORT_LIBRARY_VERSION
+    implementation 'com.android.support:design:' + SUPPORT_LIBRARY_VERSION
+    implementation('org.dmfs:android-xml-magic:0.1.1') {
         // xmlpull is part of the runtime, so don't pull it in here
         exclude group: 'xmlpull', module: 'xmlpull'
     }
-    compile project(':opentasks-provider')
-    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    compile 'com.github.dmfs:color-picker:1.0'
-    compile ('au.com.codeka:carrot:2.4.0'){
+    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    implementation 'com.github.dmfs:color-picker:1.0'
+    implementation('au.com.codeka:carrot:2.4.0') {
         exclude module: 'iterators' // TODO Remove when iterators have been removed from codeka:carrot
     }
-    compile('com.github.dmfs.androidcarrot:androidcarrot:13edc04') {
+    implementation('com.github.dmfs.androidcarrot:androidcarrot:13edc04') {
         exclude module: 'carrot'
         exclude group: 'com.android.support'
         exclude module: 'iterators'
         exclude module: 'jems'
     }
-    compile 'org.dmfs:jems:' + JEMS_VERSION
+    implementation 'org.dmfs:jems:' + JEMS_VERSION
+    implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
-    androidTestCompile ('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
+    androidTestCompile('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile ('com.android.support.test:rules:' + ANDROID_TEST_RUNNER_VERSION) {
+    androidTestCompile('com.android.support.test:rules:' + ANDROID_TEST_RUNNER_VERSION) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 }

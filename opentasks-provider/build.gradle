@@ -28,17 +28,18 @@ android {
 }
 
 dependencies {
-    compile('org.dmfs:rfc5545-datetime:0.2.4')
-    compile('org.dmfs:lib-recur:0.9.6')
-    compile project(':opentasks-contract')
+    api project(':opentasks-contract')
 
-    androidTestCompile project(':opentaskspal')
-    androidTestCompile('com.github.dmfs.contentpal:contenttestpal:' + CONTENTPAL_VERSION) {
+    implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
+    implementation 'org.dmfs:lib-recur:0.9.6'
+    implementation 'org.dmfs:jems:' + JEMS_VERSION
+
+    androidTestImplementation project(':opentaskspal')
+    androidTestImplementation('com.github.dmfs.contentpal:contenttestpal:' + CONTENTPAL_VERSION) {
         exclude module: 'jems'
     }
-    compile 'org.dmfs:jems:' + JEMS_VERSION
-    androidTestCompile 'com.android.support:support-annotations:' + SUPPORT_LIBRARY_VERSION
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
+    androidTestImplementation 'com.android.support:support-annotations:' + SUPPORT_LIBRARY_VERSION
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test:rules:0.5'
+    androidTestImplementation 'org.hamcrest:hamcrest-library:1.3'
 }

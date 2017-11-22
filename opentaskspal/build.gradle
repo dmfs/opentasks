@@ -15,16 +15,17 @@ android {
 }
 
 dependencies {
-    compile project(':opentasks-contract')
-    compile('com.github.dmfs.contentpal:contentpal:' + CONTENTPAL_VERSION) {
+    implementation project(':opentasks-contract')
+    implementation('com.github.dmfs.contentpal:contentpal:' + CONTENTPAL_VERSION) {
         exclude module: 'jems'
     }
-    compile "org.dmfs:rfc5545-datetime:0.2.4"
-    testCompile('com.github.dmfs.contentpal:contentpal-testing:' + CONTENTPAL_VERSION) {
+    implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
+    implementation 'org.dmfs:jems:' + JEMS_VERSION
+
+    testImplementation('com.github.dmfs.contentpal:contentpal-testing:' + CONTENTPAL_VERSION) {
         exclude module: 'jems'
     }
-    compile 'org.dmfs:jems:' + JEMS_VERSION
-    testCompile 'org.robolectric:robolectric:' + ROBOLECTRIC_VERSION
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.10.0'
+    testImplementation 'org.robolectric:robolectric:' + ROBOLECTRIC_VERSION
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.10.0'
 }
