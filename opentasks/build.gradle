@@ -68,10 +68,10 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    androidTestCompile('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
+    androidTestImplementation('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestCompile('com.android.support.test:rules:' + ANDROID_TEST_RUNNER_VERSION) {
+    androidTestImplementation('com.android.support.test:rules:' + ANDROID_TEST_RUNNER_VERSION) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 }
