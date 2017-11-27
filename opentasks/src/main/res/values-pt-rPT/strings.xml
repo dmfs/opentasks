@@ -261,4 +261,6 @@
     <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_lights">Luz</string>
 
+    <string name="opentasks_date_time">%1$s %2$s</string>
+
 </resources>

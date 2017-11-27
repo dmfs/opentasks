@@ -249,4 +249,6 @@
     <!-- Incoming share -->
     <string name="share_as_task">Ajouter une tâche</string>
 
+    <string name="opentasks_date_time">%1$s à %2$s</string>
+
 </resources>

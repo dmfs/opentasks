@@ -273,4 +273,9 @@
     <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Continue</string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Open Settings</string>
 
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
+    <string name="opentasks_date_time">%1$s, %2$s</string>
+
 </resources>
