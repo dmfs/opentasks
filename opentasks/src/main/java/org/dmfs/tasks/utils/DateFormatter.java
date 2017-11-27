@@ -25,6 +25,8 @@ import android.support.annotation.VisibleForTesting;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 
+import org.dmfs.jems.pair.Pair;
+import org.dmfs.jems.pair.elementary.ValuePair;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 
@@ -220,6 +222,8 @@ public class DateFormatter
      */
     private Time mNow;
 
+    private static Pair<Locale, Boolean> sIs12hourFormatCache;
+
 
     public DateFormatter(Context context)
     {
@@ -299,7 +303,7 @@ public class DateFormatter
             {
                 // time is within 24 hours, show relative string with time
                 // FIXME: instead of using a fixed 24 hour interval this should be aligned to midnight tomorrow and yesterday
-                return oldGetRelativeDateTimeString(mContext, date.toMillis(false), DAY_IN_MILLIS, WEEK_IN_MILLIS,
+                return routingGetRelativeDateTimeString(mContext, date.toMillis(false), DAY_IN_MILLIS, WEEK_IN_MILLIS,
                         dateContext.getDateUtilsFlags(now, date)).toString();
             }
             else
@@ -378,14 +382,32 @@ public class DateFormatter
 
 
     /**
+     * Routes between old and current version of {@link DateUtils#getRelativeDateTimeString(Context, long, long, long, int)}
+     * in order to work around the framework bug introduced in Android 6 for this method:
+     * not using the user's 12/24 hours settings for the time format.
+     * <p>
+     * The reported bugs:
+     * <p>
+     * <a href="https://github.com/dmfs/opentasks/issues/396">opentasks/396</a>
+     * <p>
+     * <a href="https://issuetracker.google.com/issues/37127319">google/37127319</a>
+     */
+    private CharSequence routingGetRelativeDateTimeString(Context c, long time, long minResolution,
+                                                          long transitionResolution, int flags)
+    {
+        return isDefaultLocale12HourFormat() ?
+                oldGetRelativeDateTimeString(c, time, minResolution, transitionResolution, flags)
+                : DateUtils.getRelativeDateTimeString(c, time, minResolution, transitionResolution, flags);
+    }
+
+
+    /**
      * This method is copied from Android 5.1.1 source for {@link DateUtils#getRelativeDateTimeString(Context, long, long, long, int)}
      * <p>
      * <a href="https://android.googlesource.com/platform/frameworks/base/+/android-5.1.1_r29/core/java/android/text/format/DateUtils.java">DateUtils 5.1.1
      * source</a>
      * <p>
      * because newer versions don't respect the 12/24h settings of the user, they use the locale's default instead.
-     * <p>
-     * See reported bug: https://github.com/dmfs/opentasks/issues/396
      * <p>
      * Be aware of the original note inside the method, too.
      * <p>
@@ -440,6 +462,37 @@ public class DateFormatter
             CharSequence dateClause = DateUtils.getRelativeTimeSpanString(c, time, false);
             result = r.getString(R.string.opentasks_date_time, dateClause, timeClause);
         }
+        return result;
+    }
+
+
+    /**
+     * Returns whether the default locale uses 12 hour format (am/pm).
+     * <p>
+     * Based on the implementation in {@link android.text.format.DateFormat#is24HourFormat(Context)}.
+     */
+    private boolean isDefaultLocale12HourFormat()
+    {
+        if (sIs12hourFormatCache != null && sIs12hourFormatCache.left().equals(Locale.getDefault()))
+        {
+            return sIs12hourFormatCache.right();
+        }
+
+        Locale locale = Locale.getDefault();
+        java.text.DateFormat natural = java.text.DateFormat.getTimeInstance(java.text.DateFormat.LONG, locale);
+
+        boolean result;
+        if (natural instanceof SimpleDateFormat)
+        {
+            result = ((SimpleDateFormat) natural).toPattern().indexOf('H') < 0;
+        }
+        else
+        {
+            // We don't know, so we fall back to true. (Same as in {@link DateFormat#is24HourFormat})
+            result = true;
+        }
+
+        sIs12hourFormatCache = new ValuePair<>(locale, result);
         return result;
     }
 }
