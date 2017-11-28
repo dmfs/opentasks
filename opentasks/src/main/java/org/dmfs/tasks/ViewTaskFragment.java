@@ -543,6 +543,8 @@ public class ViewTaskFragment extends SupportFragment
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        mDetailView.updateValues();
+
         int itemId = item.getItemId();
         if (itemId == R.id.edit_task)
         {
