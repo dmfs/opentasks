@@ -173,10 +173,6 @@ public class EditTaskActivity extends BaseActivity
         {
             mEditFragment = (EditTaskFragment) fragment;
         }
-        else
-        {
-            throw new IllegalArgumentException("Invalid fragment attached: " + fragment.getClass().getCanonicalName());
-        }
     }
 
 
