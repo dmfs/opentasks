@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.InsertOperation;
 import org.dmfs.android.contentpal.Predicate;
+import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.UriParams;
@@ -52,9 +53,9 @@ public final class TaskListScoped implements View<TaskContract.Tasks>
 
     @NonNull
     @Override
-    public Cursor rows(@NonNull UriParams uriParams, @NonNull Predicate predicate, @NonNull Optional<String> sorting) throws RemoteException
+    public Cursor rows(@NonNull UriParams uriParams, @NonNull Projection<TaskContract.Tasks> projection, @NonNull Predicate predicate, @NonNull Optional<String> sorting) throws RemoteException
     {
-        return mDelegate.rows(uriParams, new TaskOnList(mTaskListRow, predicate), sorting);
+        return mDelegate.rows(uriParams, projection, new TaskOnList(mTaskListRow, predicate), sorting);
     }
 
 
@@ -65,11 +66,4 @@ public final class TaskListScoped implements View<TaskContract.Tasks>
         return new org.dmfs.opentaskspal.tables.TaskListScoped(mTaskListRow, mDelegate.table());
     }
 
-
-    @NonNull
-    @Override
-    public View<TaskContract.Tasks> withProjection(@NonNull String... strings)
-    {
-        return mDelegate.withProjection(strings);
-    }
 }
