@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
 import android.support.design.widget.CoordinatorLayout;
@@ -175,7 +176,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param data
          *         The task data that belongs to the {@link Uri}. This is purely an optimization and may be <code>null</code>.
          */
-        public void onEditTask(Uri taskUri, ContentSet data);
+        void onEditTask(Uri taskUri, ContentSet data);
 
         /**
          * This is called to inform the Activity that a task has been deleted.
@@ -183,7 +184,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param taskUri
          *         The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
          */
-        public void onDelete(Uri taskUri);
+        void onDelete(Uri taskUri);
 
         /**
          * Notifies the listener about the list color of the current task.
@@ -191,7 +192,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param color
          *         The color.
          */
-        public void updateColor(int color);
+        void updateColor(@ColorInt int color);
     }
 
 
