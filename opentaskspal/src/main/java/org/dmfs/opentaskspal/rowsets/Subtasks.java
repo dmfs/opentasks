@@ -19,6 +19,7 @@ package org.dmfs.opentaskspal.rowsets;
 import android.content.ContentProviderClient;
 import android.support.annotation.NonNull;
 
+import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowSet;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.predicates.ReferringTo;
@@ -36,9 +37,12 @@ import org.dmfs.tasks.contract.TaskContract;
 public final class Subtasks extends DelegatingRowSet<TaskContract.Tasks>
 {
 
-    public Subtasks(String authority, ContentProviderClient client, @NonNull RowSnapshot<TaskContract.Tasks> parentTask)
+    public Subtasks(@NonNull String authority,
+                    @NonNull ContentProviderClient client,
+                    @NonNull Projection<TaskContract.Tasks> projection,
+                    @NonNull RowSnapshot<TaskContract.Tasks> parentTask)
     {
-        super(new QueryRowSet<>(new TasksView(authority, client), new ReferringTo<>(TaskContract.Tasks.PARENT_ID, parentTask)));
+        super(new QueryRowSet<>(new TasksView(authority, client), projection, new ReferringTo<>(TaskContract.Tasks.PARENT_ID, parentTask)));
     }
 
 }

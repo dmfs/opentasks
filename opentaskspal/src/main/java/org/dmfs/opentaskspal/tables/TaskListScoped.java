@@ -83,11 +83,9 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
     }
 
 
-    @NonNull
-    @Override
-    public View<TaskContract.Tasks> view(@NonNull ContentProviderClient client, @NonNull String... projection)
+    public View<TaskContract.Tasks> view(@NonNull ContentProviderClient client)
     {
-        return new org.dmfs.opentaskspal.views.TaskListScoped(mTaskListRow, mDelegate.view(client, projection));
+        return new org.dmfs.opentaskspal.views.TaskListScoped(mTaskListRow, mDelegate.view(client));
     }
 
 }
