@@ -18,11 +18,11 @@ package org.dmfs.tasks;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 
 
@@ -48,8 +48,8 @@ public class EmptyTaskFragment extends SupportFragment
         super.onAttach(activity);
         if (activity instanceof ViewTaskFragment.Callback)
         {
-            ((ViewTaskFragment.Callback) activity).updateColor(
-                    ContextCompat.getColor(getContext(), R.color.primary));
+            ((ViewTaskFragment.Callback) activity)
+                    .updateColor(new AttributeColor(getContext(), R.attr.colorPrimary).argb());
         }
     }
 }
