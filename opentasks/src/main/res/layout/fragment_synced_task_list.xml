@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        tools:context=".SettingsListFragment">
+        tools:context=".SyncSettingsActivity">
 
     <ListView
             android:id="@android:id/list"
@@ -17,26 +17,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:gravity="center_horizontal"
             android:orientation="horizontal">
 
         <Button
-                android:layout_width="0dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:hint="@android:string/ok"
                 android:onClick="onCancelUpdated"
-                android:paddingLeft="24dip"
-                android:paddingRight="24dip"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="4dp"
                 android:text="@android:string/cancel"/> <!-- setting the hint to the opposite ensures both buttons have the same width -->
 
         <Button
-                android:layout_width="0dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:hint="@android:string/cancel"
                 android:onClick="onSaveUpdated"
-                android:paddingLeft="24dip"
-                android:paddingRight="24dip"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="16dp"
                 android:text="@android:string/ok"/> <!-- setting the hint to the opposite ensures both buttons have the same width -->
 
     </LinearLayout>
