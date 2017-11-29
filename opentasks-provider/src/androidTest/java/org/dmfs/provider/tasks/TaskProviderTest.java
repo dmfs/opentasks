@@ -24,11 +24,10 @@ import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.dmfs.android.contentpal.Operation;
 import org.dmfs.android.contentpal.OperationsQueue;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.Table;
-import org.dmfs.android.contentpal.batches.MultiBatch;
-import org.dmfs.android.contentpal.batches.SingletonBatch;
 import org.dmfs.android.contentpal.operations.Assert;
 import org.dmfs.android.contentpal.operations.BulkDelete;
 import org.dmfs.android.contentpal.operations.Delete;
@@ -42,6 +41,8 @@ import org.dmfs.android.contentpal.rowdata.EmptyRowData;
 import org.dmfs.android.contentpal.rowsnapshots.VirtualRowSnapshot;
 import org.dmfs.android.contenttestpal.operations.AssertEmptyTable;
 import org.dmfs.android.contenttestpal.operations.AssertRelated;
+import org.dmfs.iterables.SingletonIterable;
+import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.opentaskspal.tables.InstanceTable;
 import org.dmfs.opentaskspal.tables.LocalTaskListsTable;
 import org.dmfs.opentaskspal.tables.TaskListScoped;
@@ -91,7 +92,7 @@ public class TaskProviderTest
 
         // Assert that tables are empty:
         OperationsQueue queue = new BasicOperationsQueue(mClient);
-        queue.enqueue(new MultiBatch(
+        queue.enqueue(new Seq<Operation<?>>(
                 new AssertEmptyTable<>(new TasksTable(mAuthority)),
                 new AssertEmptyTable<>(new TaskListsTable(mAuthority)),
                 new AssertEmptyTable<>(new InstanceTable(mAuthority))));
@@ -110,7 +111,7 @@ public class TaskProviderTest
 
         // Clear the DB:
         BasicOperationsQueue queue = new BasicOperationsQueue(mClient);
-        queue.enqueue(new SingletonBatch(new BulkDelete<>(new LocalTaskListsTable(mAuthority))));
+        queue.enqueue(new SingletonIterable<Operation<?>>(new BulkDelete<>(new LocalTaskListsTable(mAuthority))));
         queue.flush();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -133,7 +134,7 @@ public class TaskProviderTest
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
 
-        assertThat(new MultiBatch(
+        assertThat(new Seq<>(
                 new Put<>(taskList, new NameData("list1")),
                 new Put<>(task, new TitleData("task1"))
 
@@ -158,7 +159,7 @@ public class TaskProviderTest
         RowSnapshot<Tasks> task2 = new VirtualRowSnapshot<>(new TaskListScoped(taskList1, new TasksTable(mAuthority)));
         RowSnapshot<Tasks> task3 = new VirtualRowSnapshot<>(new TaskListScoped(taskList2, new TasksTable(mAuthority)));
 
-        assertThat(new MultiBatch(
+        assertThat(new Seq<>(
                 new Put<>(taskList1, new NameData("list1")),
                 new Put<>(taskList2, new NameData("list2")),
                 new Put<>(task1, new TitleData("task1")),
@@ -190,7 +191,7 @@ public class TaskProviderTest
         DateTime start = DateTime.now();
         DateTime due = start.addDuration(new Duration(1, 1, 0));
 
-        assertThat(new MultiBatch(
+        assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
                 new Put<>(task, new TimeData(start, due))
 
@@ -219,7 +220,7 @@ public class TaskProviderTest
         Duration duration = Duration.parse("PT1H");
         long durationMillis = duration.toMillis();
 
-        assertThat(new MultiBatch(
+        assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
                 new Put<>(task, new TimeData(start, duration))
 
@@ -249,7 +250,7 @@ public class TaskProviderTest
         DateTime start = DateTime.now();
         DateTime due = start.addDuration(new Duration(1, 0, 1));
 
-        queue.enqueue(new MultiBatch(
+        queue.enqueue(new Seq<>(
                 new Put<>(taskList, new NameData("list1")),
                 new Put<>(task, new TimeData(start, due))
         ));
@@ -257,7 +258,7 @@ public class TaskProviderTest
 
         DateTime due2 = due.addDuration(new Duration(1, 0, 2));
 
-        assertThat(new SingletonBatch(
+        assertThat(new SingletonIterable<>(
                 new Put<>(task, new TimeData(start, due2))
 
         ), resultsIn(queue,
@@ -284,13 +285,13 @@ public class TaskProviderTest
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(taskTable);
         OperationsQueue queue = new BasicOperationsQueue(mClient);
 
-        queue.enqueue(new MultiBatch(
+        queue.enqueue(new Seq<>(
                 new Put<>(taskList, new NameData("list1")),
                 new Put<>(task, new TitleData("task1"))
         ));
         queue.flush();
 
-        assertThat(new SingletonBatch(
+        assertThat(new SingletonIterable<>(
                 new Delete<>(task)
 
         ), resultsIn(queue,
@@ -310,7 +311,7 @@ public class TaskProviderTest
     {
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TasksTable(mAuthority));
         OperationsQueue queue = new BasicOperationsQueue(mClient);
-        queue.enqueue(new SingletonBatch(new Put<>(task, new TitleData("task1"))));
+        queue.enqueue(new SingletonIterable<Operation<?>>(new Put<>(task, new TitleData("task1"))));
         queue.flush();
     }
 
@@ -343,7 +344,7 @@ public class TaskProviderTest
 
         OperationsQueue queue = new BasicOperationsQueue(mClient);
 
-        queue.enqueue(new MultiBatch(
+        queue.enqueue(new Seq<Operation<?>>(
                 new Put<>(taskList, new NameData("list1")),
                 new Put<>(task, new Composite<>(
                         new TitleData("task1"),
@@ -352,7 +353,7 @@ public class TaskProviderTest
         ));
         queue.flush();
 
-        assertThat(new SingletonBatch(
+        assertThat(new SingletonIterable<>(
                 new Put<>(exceptionTask, new Composite<>(
                         new TitleData("task1exception"),
                         new OriginalInstanceSyncIdData("syncId1"))
@@ -378,7 +379,7 @@ public class TaskProviderTest
 
         OperationsQueue queue = new BasicOperationsQueue(mClient);
 
-        queue.enqueue(new MultiBatch(
+        queue.enqueue(new Seq<Operation<?>>(
                 new Put<>(taskList, new NameData("list1")),
                 new Put<>(task, new Composite<>(
                         new TitleData("task1"),
@@ -387,7 +388,7 @@ public class TaskProviderTest
         ));
         queue.flush();
 
-        assertThat(new SingletonBatch(
+        assertThat(new SingletonIterable<>(
                 new Referring<>(task, Tasks.ORIGINAL_INSTANCE_ID,
                         new Put<>(exceptionTask, new TitleData("task1exception")))
 
