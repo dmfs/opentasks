@@ -533,7 +533,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         {
             buffer.append(" UNIQUE ");
         }
-        buffer.append("INDEX ");
+        buffer.append("INDEX IF NOT EXISTS ");
         buffer.append(table).append("_").append(fields[0]).append("_idx ON ");
         buffer.append(table).append(" (");
         buffer.append(fields[0]);
