@@ -52,6 +52,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
+import org.dmfs.android.bolts.color.colors.ValueColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -175,7 +176,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param data
          *         The task data that belongs to the {@link Uri}. This is purely an optimization and may be <code>null</code>.
          */
-        public void onEditTask(Uri taskUri, ContentSet data);
+        void onEditTask(Uri taskUri, ContentSet data);
 
         /**
          * This is called to inform the Activity that a task has been deleted.
@@ -183,7 +184,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param taskUri
          *         The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
          */
-        public void onDelete(Uri taskUri);
+        void onDelete(Uri taskUri);
 
         /**
          * Notifies the listener about the list color of the current task.
@@ -191,7 +192,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param color
          *         The color.
          */
-        public void updateColor(int color);
+        void updateColor(org.dmfs.android.bolts.color.Color color);
     }
 
 
@@ -401,7 +402,7 @@ public class ViewTaskFragment extends SupportFragment
         if ((oldUri == null) != (uri == null))
         {
             /*
-			 * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
+             * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
 			 */
             ActivityCompat.invalidateOptionsMenu(getActivity());
         }
@@ -492,7 +493,7 @@ public class ViewTaskFragment extends SupportFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         /*
-		 * Don't show any options if we don't have a task to show.
+         * Don't show any options if we don't have a task to show.
 		 */
         if (mTaskUri != null)
         {
@@ -674,7 +675,7 @@ public class ViewTaskFragment extends SupportFragment
         if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
         {
             mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
-            ((Callback) getActivity()).updateColor(mListColor);
+            ((Callback) getActivity()).updateColor(new ValueColor(mListColor));
 
             if (VERSION.SDK_INT >= 11)
             {
