@@ -49,7 +49,7 @@ public class EmptyTaskFragment extends SupportFragment
         if (activity instanceof ViewTaskFragment.Callback)
         {
             ((ViewTaskFragment.Callback) activity)
-                    .updateColor(new AttributeColor(getContext(), R.attr.colorPrimary).argb());
+                    .updateColor(new AttributeColor(getContext(), R.attr.colorPrimary));
         }
     }
 }

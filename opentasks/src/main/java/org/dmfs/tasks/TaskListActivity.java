@@ -21,13 +21,13 @@ import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -50,6 +50,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 
+import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -754,35 +755,36 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     };
 
 
-    private int darkenColor(int color)
+    private int darkenColor(@ColorInt int color)
     {
         float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
+        android.graphics.Color.colorToHSV(color, hsv);
         hsv[2] = hsv[2] * 0.75f;
-        color = Color.HSVToColor(hsv);
+        color = android.graphics.Color.HSVToColor(hsv);
         return color;
     }
 
 
     @SuppressLint("NewApi")
     @Override
-    public void updateColor(int color)
+    public void updateColor(Color color)
     {
         if (mTwoPane)
         {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(color));
-            mTabs.setBackgroundColor(color);
+            int colorInt = color.argb();
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(colorInt));
+            mTabs.setBackgroundColor(colorInt);
 
             if (mAppBarLayout != null)
             {
-                mAppBarLayout.setBackgroundColor(color);
+                mAppBarLayout.setBackgroundColor(colorInt);
             }
 
             if (VERSION.SDK_INT >= 21)
             {
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(darkenColor(color));
+                window.setStatusBarColor(darkenColor(colorInt));
             }
         }
     }

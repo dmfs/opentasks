@@ -31,7 +31,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
 import android.support.design.widget.CoordinatorLayout;
@@ -53,6 +52,7 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
+import org.dmfs.android.bolts.color.colors.ValueColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -192,7 +192,7 @@ public class ViewTaskFragment extends SupportFragment
          * @param color
          *         The color.
          */
-        void updateColor(@ColorInt int color);
+        void updateColor(org.dmfs.android.bolts.color.Color color);
     }
 
 
@@ -402,7 +402,7 @@ public class ViewTaskFragment extends SupportFragment
         if ((oldUri == null) != (uri == null))
         {
             /*
-			 * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
+             * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
 			 */
             ActivityCompat.invalidateOptionsMenu(getActivity());
         }
@@ -493,7 +493,7 @@ public class ViewTaskFragment extends SupportFragment
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
         /*
-		 * Don't show any options if we don't have a task to show.
+         * Don't show any options if we don't have a task to show.
 		 */
         if (mTaskUri != null)
         {
@@ -675,7 +675,7 @@ public class ViewTaskFragment extends SupportFragment
         if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
         {
             mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
-            ((Callback) getActivity()).updateColor(mListColor);
+            ((Callback) getActivity()).updateColor(new ValueColor(mListColor));
 
             if (VERSION.SDK_INT >= 11)
             {
