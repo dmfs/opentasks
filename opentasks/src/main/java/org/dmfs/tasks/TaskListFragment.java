@@ -613,6 +613,7 @@ public class TaskListFragment extends SupportFragment
                 // TODO: remove the task in a background task
                 mAppContext.getContentResolver().delete(taskUri, null, null);
                 Snackbar.make(mExpandableListView, getString(R.string.toast_task_deleted, taskTitle), Snackbar.LENGTH_SHORT).show();
+                mCallbacks.onItemSelected(null, false, -1);
             }
         }).setMessage(getString(R.string.confirm_delete_message_with_title, taskTitle)).create().show();
     }
