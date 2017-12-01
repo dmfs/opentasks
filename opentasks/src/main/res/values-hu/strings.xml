@@ -254,4 +254,6 @@
     <!-- Outgoing share -->
     <string name="opentasks_share_footer">OpenTasks-al küldve</string>
 
+    <string name="opentasks_date_time">%1$s %2$s</string>
+
 </resources>

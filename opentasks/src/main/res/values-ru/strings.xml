@@ -219,4 +219,6 @@
     <!-- Incoming share -->
     <string name="share_as_task">Добавить задачу</string>
 
+    <string name="opentasks_date_time">%2$s, %1$s</string>
+
 </resources>

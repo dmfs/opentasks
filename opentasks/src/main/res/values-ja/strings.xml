@@ -249,4 +249,7 @@
     <!-- Incoming share -->
     <string name="share_as_task">タスクを作成</string>
 
+    <string name="opentasks_relative_time">%1$s %2$s</string>
+    <string name="opentasks_date_time">%1$s %2$s</string>
+
 </resources>

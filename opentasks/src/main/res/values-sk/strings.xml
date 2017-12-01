@@ -251,4 +251,6 @@
     <!-- Sharing intent -->
     <string name="share_as_task">Vytvoriť úlohu</string>
 
+    <string name="opentasks_date_time">%2$s %1$s</string>
+
 </resources>
