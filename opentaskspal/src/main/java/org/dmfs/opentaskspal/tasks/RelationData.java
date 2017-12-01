@@ -36,7 +36,7 @@ import org.dmfs.tasks.contract.TaskContract;
 public final class RelationData extends DelegatingRowData<TaskContract.Properties>
 {
     public RelationData(@NonNull RowSnapshot<TaskContract.Tasks> relatingTask,
-                        @NonNull int relType,
+                        int relType,
                         @NonNull RowSnapshot<TaskContract.Tasks> relatedTask)
     {
         super(new Composite<>(
@@ -47,7 +47,7 @@ public final class RelationData extends DelegatingRowData<TaskContract.Propertie
 
 
     public RelationData(@NonNull RowSnapshot<TaskContract.Tasks> relatingTask,
-                        @NonNull int relType,
+                        int relType,
                         @NonNull CharSequence relatedTaskUid)
     {
         super(new Composite<>(

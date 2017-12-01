@@ -1491,8 +1491,8 @@ public final class TaskContract
         /**
          * Relations of a task.
          * <p>
-         * When writing a relation, exactly one of {@link #RELATED_ID} or {@link #RELATED_UID}. {@link #RELATED_CONTENT_URI} will be
-         * populated automatically if possible.
+         * When writing a relation, exactly one of {@link #RELATED_ID} or {@link #RELATED_UID} must be present. The missing value and {@link
+         * #RELATED_CONTENT_URI} will be populated automatically if possible.
          */
         interface Relation extends PropertyColumns
         {
@@ -1511,7 +1511,7 @@ public final class TaskContract
             String RELATED_ID = DATA1;
 
             /**
-             * The relation type. This must be the one of the {@code RELTYPE_*} values.
+             * The relation type. This must be one of the {@code RELTYPE_*} values.
              * <p>
              * Value: int
              * </p>
