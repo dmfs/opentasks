@@ -29,6 +29,7 @@ import android.net.Uri;
 
 import org.dmfs.iterables.SingletonIterable;
 import org.dmfs.iterables.decorators.Flattened;
+import org.dmfs.provider.tasks.transactionendtasks.TransactionEndTask;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -48,12 +49,6 @@ import java.util.Set;
  */
 abstract class SQLiteContentProvider extends ContentProvider
 {
-
-    interface TransactionEndTask
-    {
-        void execute(SQLiteDatabase database);
-    }
-
 
     @SuppressWarnings("unused")
     private static final String TAG = "SQLiteContentProvider";

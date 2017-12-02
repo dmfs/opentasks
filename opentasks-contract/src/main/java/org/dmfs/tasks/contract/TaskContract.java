@@ -781,6 +781,15 @@ public final class TaskContract
         String ORIGINAL_INSTANCE_ALLDAY = "original_instance_allday";
 
         /**
+         * A flag indicating that the instances of this task may have to be recalculated because either date-time, recurrence or status have been updated.
+         * <p>
+         * Value: Integer (0 or 1)
+         * <p>
+         * Read-only
+         */
+        String INSTANCES_STALE = "instances_stale";
+
+        /**
          * The row id of the parent task. <code>null</code> if the task has no parent task.
          * <p>
          * Value: Long
