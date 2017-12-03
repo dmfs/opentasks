@@ -18,44 +18,44 @@ package org.dmfs.provider.tasks.processors.tasks;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
+import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.tasks.contract.TaskContract;
-import org.dmfs.tasks.contract.TaskContract.TaskColumns;
 
 
 /**
- * A processor that perfomrs the actual operations on tasks.
+ * A processor that performs the actual operations on tasks.
  *
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Marten Gajda
  */
-public class TaskExecutionProcessor extends AbstractEntityProcessor<TaskAdapter>
+public final class TaskCommitProcessor implements EntityProcessor<TaskAdapter>
 {
-
     @Override
-    public void beforeInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         task.commit(db);
+        return task;
     }
 
 
     @Override
-    public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter update(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         task.commit(db);
+        return task;
     }
 
 
     @Override
-    public void beforeDelete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public void delete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         String accountType = task.valueOf(TaskAdapter.ACCOUNT_TYPE);
 
         if (isSyncAdapter || TaskContract.LOCAL_ACCOUNT_TYPE.equals(accountType))
         {
-            // this is a local task or it' removed by a sync adapter, in either case we delete it right away
-            db.delete(Tables.TASKS, TaskColumns._ID + "=" + task.id(), null);
+            // this is a local task or it's removed by a sync adapter, in either case we delete it right away
+            db.delete(TaskDatabaseHelper.Tables.TASKS, TaskContract.TaskColumns._ID + "=" + task.id(), null);
         }
         else
         {

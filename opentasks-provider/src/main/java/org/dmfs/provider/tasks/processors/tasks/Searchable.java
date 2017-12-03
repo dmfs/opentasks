@@ -20,27 +20,46 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.provider.tasks.FTSDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.provider.tasks.processors.EntityProcessor;
 
 
 /**
- * A {@link TaskProcessor} to update the fast text search table when inserting or updating a task.
+ * An {@link EntityProcessor} to update the fast text search table when inserting or updating a task.
  *
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Marten Gajda
  */
-public class FtsProcessor extends AbstractEntityProcessor<TaskAdapter>
+public final class Searchable implements EntityProcessor<TaskAdapter>
 {
+    private final EntityProcessor<TaskAdapter> mDelegate;
 
-    @Override
-    public void afterInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+
+    public Searchable(EntityProcessor<TaskAdapter> delegate)
     {
-        FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+        mDelegate = delegate;
     }
 
 
     @Override
-    public void afterUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
+        TaskAdapter result = mDelegate.insert(db, task, isSyncAdapter);
         FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+        return result;
+    }
+
+
+    @Override
+    public TaskAdapter update(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
+        FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+        return result;
+    }
+
+
+    @Override
+    public void delete(SQLiteDatabase db, TaskAdapter entityAdapter, boolean isSyncAdapter)
+    {
+        mDelegate.delete(db, entityAdapter, isSyncAdapter);
     }
 }

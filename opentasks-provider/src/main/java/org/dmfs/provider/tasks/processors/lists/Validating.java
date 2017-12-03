@@ -20,18 +20,27 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import org.dmfs.provider.tasks.model.ListAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.provider.tasks.processors.EntityProcessor;
 
 
 /**
  * A processor to validate the values of a task list.
  *
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Marten Gajda
  */
-public class ListValidatorProcessor extends AbstractEntityProcessor<ListAdapter>
+public final class Validating implements EntityProcessor<ListAdapter>
 {
+    private final EntityProcessor<ListAdapter> mDelegate;
+
+
+    public Validating(EntityProcessor<ListAdapter> delegate)
+    {
+        mDelegate = delegate;
+    }
+
+
     @Override
-    public void beforeInsert(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
+    public ListAdapter insert(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
     {
         if (!isSyncAdapter)
         {
@@ -49,11 +58,12 @@ public class ListValidatorProcessor extends AbstractEntityProcessor<ListAdapter>
         }
 
         verifyCommon(list, isSyncAdapter);
+        return mDelegate.insert(db, list, isSyncAdapter);
     }
 
 
     @Override
-    public void beforeUpdate(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
+    public ListAdapter update(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
     {
         if (list.isUpdated(ListAdapter.ACCOUNT_NAME))
         {
@@ -66,16 +76,18 @@ public class ListValidatorProcessor extends AbstractEntityProcessor<ListAdapter>
         }
 
         verifyCommon(list, isSyncAdapter);
+        return mDelegate.update(db, list, isSyncAdapter);
     }
 
 
     @Override
-    public void beforeDelete(SQLiteDatabase db, ListAdapter list, boolean isSyncAdapter)
+    public void delete(SQLiteDatabase db, ListAdapter entityAdapter, boolean isSyncAdapter)
     {
         if (!isSyncAdapter)
         {
             throw new UnsupportedOperationException("Caller must be a sync adapter to delete task lists");
         }
+        mDelegate.delete(db, entityAdapter, isSyncAdapter);
     }
 
 

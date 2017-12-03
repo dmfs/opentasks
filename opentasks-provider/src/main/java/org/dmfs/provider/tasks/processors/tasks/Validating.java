@@ -19,28 +19,34 @@ package org.dmfs.provider.tasks.processors.tasks;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
+import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.rfc5545.Duration;
-import org.dmfs.tasks.contract.TaskContract.TaskLists;
-import org.dmfs.tasks.contract.TaskContract.Tasks;
+import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
  * A processor that validates the values of a task.
  *
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Marten Gajda
  */
-public class TaskValidatorProcessor extends AbstractEntityProcessor<TaskAdapter>
+public final class Validating implements EntityProcessor<TaskAdapter>
 {
+    private static final String[] TASKLIST_ID_PROJECTION = { TaskContract.TaskLists._ID };
+    private static final String TASKLISTS_ID_SELECTION = TaskContract.TaskLists._ID + "=";
 
-    private static final String[] TASKLIST_ID_PROJECTION = { TaskLists._ID };
-    private static final String TASKLISTS_ID_SELECTION = TaskLists._ID + "=";
+    private final EntityProcessor<TaskAdapter> mDelegate;
+
+
+    public Validating(EntityProcessor<TaskAdapter> delegate)
+    {
+        mDelegate = delegate;
+    }
 
 
     @Override
-    public void beforeInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         verifyCommon(task, isSyncAdapter);
 
@@ -53,7 +59,7 @@ public class TaskValidatorProcessor extends AbstractEntityProcessor<TaskAdapter>
 
         // TODO: get rid of this query and use a cache instead
         // TODO: ensure that the list is writable unless the caller is a sync adapter
-        Cursor cursor = db.query(Tables.LISTS, TASKLIST_ID_PROJECTION, TASKLISTS_ID_SELECTION + listId, null, null, null, null);
+        Cursor cursor = db.query(TaskDatabaseHelper.Tables.LISTS, TASKLIST_ID_PROJECTION, TASKLISTS_ID_SELECTION + listId, null, null, null, null);
         try
         {
             if (cursor == null || cursor.getCount() != 1)
@@ -68,12 +74,12 @@ public class TaskValidatorProcessor extends AbstractEntityProcessor<TaskAdapter>
                 cursor.close();
             }
         }
-
+        return mDelegate.insert(db, task, isSyncAdapter);
     }
 
 
     @Override
-    public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter update(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         verifyCommon(task, isSyncAdapter);
 
@@ -82,6 +88,14 @@ public class TaskValidatorProcessor extends AbstractEntityProcessor<TaskAdapter>
         {
             throw new IllegalArgumentException("ORIGINAL_INSTANCE_SYNC_ID and ORIGINAL_INSTANCE_ID can be modified by sync adapters only");
         }
+        return mDelegate.update(db, task, isSyncAdapter);
+    }
+
+
+    @Override
+    public void delete(SQLiteDatabase db, TaskAdapter entityAdapter, boolean isSyncAdapter)
+    {
+        mDelegate.delete(db, entityAdapter, isSyncAdapter);
     }
 
 
@@ -212,7 +226,7 @@ public class TaskValidatorProcessor extends AbstractEntityProcessor<TaskAdapter>
         if (task.isUpdated(TaskAdapter.STATUS))
         {
             Integer status = task.valueOf(TaskAdapter.STATUS);
-            if (status != null && (status < Tasks.STATUS_NEEDS_ACTION || status > Tasks.STATUS_CANCELLED))
+            if (status != null && (status < TaskContract.Tasks.STATUS_NEEDS_ACTION || status > TaskContract.Tasks.STATUS_CANCELLED))
             {
                 throw new IllegalArgumentException("invalid STATUS: " + status);
             }

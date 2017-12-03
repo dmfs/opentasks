@@ -31,7 +31,7 @@ import android.util.Log;
 
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
-import org.dmfs.provider.tasks.processors.tasks.TaskInstancesProcessor;
+import org.dmfs.provider.tasks.processors.tasks.Instantiating;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Instances;
@@ -55,7 +55,7 @@ public enum ContentOperation
 
             // request an update of all instance values
             ContentValues vals = new ContentValues(1);
-            TaskInstancesProcessor.addUpdateRequest(vals);
+            Instantiating.addUpdateRequest(vals);
 
             // execute update that triggers a recalculation of all due and start sorting values
             int count = context.getContentResolver().update(
