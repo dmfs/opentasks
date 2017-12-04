@@ -22,7 +22,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.tasks.contract.TaskContract.Property.Relation;
-import org.dmfs.tasks.contract.TaskContract.Property.Relation.RelType;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -44,21 +43,13 @@ public class RelationHandler extends PropertyHandler
 
         Long id = values.getAsLong(Relation.RELATED_ID);
         String uid = values.getAsString(Relation.RELATED_UID);
-        String uri = values.getAsString(Relation.RELATED_URI);
 
-        if (id == null && uri == null && uid != null)
+        if (id == null && uid != null)
         {
             values.putNull(Relation.RELATED_ID);
-            values.putNull(Relation.RELATED_URI);
         }
-        else if (id == null && uid == null && uri != null)
+        else if (id != null && uid == null)
         {
-            values.putNull(Relation.RELATED_ID);
-            values.putNull(Relation.RELATED_UID);
-        }
-        else if (id != null && uid == null && uri == null)
-        {
-            values.putNull(Relation.RELATED_URI);
             values.putNull(Relation.RELATED_UID);
         }
         else
@@ -99,8 +90,7 @@ public class RelationHandler extends PropertyHandler
 
 
     /**
-     * Resolve <code>_id</code> or <code>_uid</code>, depending of which value is given. We can't resolve anything if only {@link Relation#RELATED_URI} is
-     * given. The given values are update in-place.
+     * Resolve <code>_id</code> or <code>_uid</code>, depending of which value is given.
      * <p>
      * TODO: store links into the calendar provider if we find an event that matches the UID.
      * </p>
@@ -179,7 +169,7 @@ public class RelationHandler extends PropertyHandler
             type = oldValues.getInt(oldValues.getColumnIndex(Relation.RELATED_TYPE));
         }
 
-        if (type == RelType.PARENT.ordinal())
+        if (type == Relation.RELTYPE_PARENT)
         {
             // this is a link to the parent, we need to update the PARENT_ID of this task, if we can
 
@@ -191,7 +181,7 @@ public class RelationHandler extends PropertyHandler
             }
             // else: the parent task is probably not synced yet, we have to fix this in RelationUpdaterHook
         }
-        else if (type == RelType.CHILD.ordinal())
+        else if (type == Relation.RELTYPE_CHILD)
         {
             // this is a link to a child, we need to update the PARENT_ID of the linked task
 
@@ -203,7 +193,7 @@ public class RelationHandler extends PropertyHandler
             }
             // else: the child task is probably not synced yet, we have to fix this in RelationUpdaterHook
         }
-        else if (type == RelType.SIBLING.ordinal())
+        else if (type == Relation.RELTYPE_SIBLING)
         {
             // this is a link to a sibling, we need to copy the PARENT_ID of the linked task to this task
             if (values.getAsLong(Relation.RELATED_ID) != null)
@@ -238,7 +228,7 @@ public class RelationHandler extends PropertyHandler
 		 * FIXME: For now we ignore that fact. But we should fix it.
 		 */
 
-        if (type == RelType.PARENT.ordinal())
+        if (type == Relation.RELTYPE_PARENT)
         {
             // this was a link to the parent, we're orphaned now, so clear PARENT_ID of this task
 
@@ -246,7 +236,7 @@ public class RelationHandler extends PropertyHandler
             taskValues.putNull(Tasks.PARENT_ID);
             db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
         }
-        else if (type == RelType.CHILD.ordinal())
+        else if (type == Relation.RELTYPE_CHILD)
         {
             // this was a link to a child, the child is orphaned now, clear its PARENT_ID
 
@@ -258,10 +248,10 @@ public class RelationHandler extends PropertyHandler
                 db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + oldValues.getLong(relIdCol), null);
             }
         }
-        else if (type == RelType.SIBLING.ordinal())
+        else if (type == Relation.RELTYPE_SIBLING)
         {
             /*
-			 * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
+             * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
 			 * 
 			 * FIXME: properly handle this case
 			 */

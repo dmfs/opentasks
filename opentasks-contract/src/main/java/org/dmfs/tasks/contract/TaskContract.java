@@ -207,7 +207,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String _SYNC_ID = "_sync_id";
+        String _SYNC_ID = "_sync_id";
 
         /**
          * Sync version as set by the sync adapter.
@@ -215,7 +215,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC_VERSION = "sync_version";
+        String SYNC_VERSION = "sync_version";
 
         /**
          * Indicates that a task or a task list has been changed.
@@ -223,7 +223,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String _DIRTY = "_dirty";
+        String _DIRTY = "_dirty";
 
         /**
          * A general purpose column for the sync adapter.
@@ -231,7 +231,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC1 = "sync1";
+        String SYNC1 = "sync1";
 
         /**
          * A general purpose column for the sync adapter.
@@ -239,7 +239,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC2 = "sync2";
+        String SYNC2 = "sync2";
 
         /**
          * A general purpose column for the sync adapter.
@@ -247,7 +247,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC3 = "sync3";
+        String SYNC3 = "sync3";
 
         /**
          * A general purpose column for the sync adapter.
@@ -255,7 +255,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC4 = "sync4";
+        String SYNC4 = "sync4";
 
         /**
          * A general purpose column for the sync adapter.
@@ -263,7 +263,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC5 = "sync5";
+        String SYNC5 = "sync5";
 
         /**
          * A general purpose column for the sync adapter.
@@ -271,7 +271,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC6 = "sync6";
+        String SYNC6 = "sync6";
 
         /**
          * A general purpose column for the sync adapter.
@@ -279,7 +279,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC7 = "sync7";
+        String SYNC7 = "sync7";
 
         /**
          * A general purpose column for the sync adapter.
@@ -287,7 +287,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SYNC8 = "sync8";
+        String SYNC8 = "sync8";
 
     }
 
@@ -306,7 +306,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String ACCOUNT_NAME = "account_name";
+        String ACCOUNT_NAME = "account_name";
 
         /**
          * The type of the account this list belongs to. This field is write-once.
@@ -314,7 +314,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String ACCOUNT_TYPE = "account_type";
+        String ACCOUNT_TYPE = "account_type";
     }
 
 
@@ -331,7 +331,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String _UID = "_uid";
+        String _UID = "_uid";
 
         /**
          * Deleted flag of a task. This is set to <code>1</code> by the content provider when a task app deletes a task. The sync adapter has to remove the task
@@ -343,7 +343,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String _DELETED = "_deleted";
+        String _DELETED = "_deleted";
     }
 
 
@@ -364,7 +364,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String _ID = "_id";
+        String _ID = "_id";
 
         /**
          * The name of the task list.
@@ -372,7 +372,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String LIST_NAME = "list_name";
+        String LIST_NAME = "list_name";
 
         /**
          * The color of this list as integer (0xaarrggbb). Only the sync adapter can change this.
@@ -380,7 +380,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String LIST_COLOR = "list_color";
+        String LIST_COLOR = "list_color";
 
         /**
          * The access level a user has on this list. <strong>This value is not used yet, sync adapters should set it to <code>0</code></strong>.
@@ -388,7 +388,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String ACCESS_LEVEL = "list_access_level";
+        String ACCESS_LEVEL = "list_access_level";
 
         /**
          * Indicates that a task list is set to be visible.
@@ -396,7 +396,7 @@ public final class TaskContract
          * Value: Integer (0 or 1)
          * </p>
          */
-        public static final String VISIBLE = "visible";
+        String VISIBLE = "visible";
 
         /**
          * Indicates that a task list is set to be synced.
@@ -404,7 +404,7 @@ public final class TaskContract
          * Value: Integer (0 or 1)
          * </p>
          */
-        public static final String SYNC_ENABLED = "sync_enabled";
+        String SYNC_ENABLED = "sync_enabled";
 
         /**
          * The email address of the list owner.
@@ -412,7 +412,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String OWNER = "list_owner";
+        String OWNER = "list_owner";
 
     }
 
@@ -469,7 +469,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String _ID = "_id";
+        String _ID = "_id";
 
         /**
          * The id of the list this task belongs to. This value is <strong>write-once</strong> and must not be <code>null</code>.
@@ -477,7 +477,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String LIST_ID = "list_id";
+        String LIST_ID = "list_id";
 
         /**
          * The title of the task.
@@ -485,7 +485,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String TITLE = "title";
+        String TITLE = "title";
 
         /**
          * The location of the task.
@@ -493,7 +493,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String LOCATION = "location";
+        String LOCATION = "location";
 
         /**
          * A geographic location related to the task. The should be a string in the format "longitude,latitude".
@@ -501,7 +501,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String GEO = "geo";
+        String GEO = "geo";
 
         /**
          * The description of a task.
@@ -509,7 +509,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String DESCRIPTION = "description";
+        String DESCRIPTION = "description";
 
         /**
          * An URL for this task. Must be a valid URL if not <code>null</code>-
@@ -517,7 +517,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String URL = "url";
+        String URL = "url";
 
         /**
          * The email address of the organizer if any, {@code null} otherwise.
@@ -525,7 +525,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String ORGANIZER = "organizer";
+        String ORGANIZER = "organizer";
 
         /**
          * The priority of a task. This is an Integer between zero and 9. Zero means there is no priority set. 1 is the highest priority and 9 the lowest.
@@ -533,12 +533,12 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String PRIORITY = "priority";
+        String PRIORITY = "priority";
 
         /**
          * The default value of {@link #PRIORITY}.
          */
-        public static final int PRIORITY_DEFAULT = 0;
+        int PRIORITY_DEFAULT = 0;
 
         /**
          * The classification of a task. This value must be either <code>null</code> or one of {@link #CLASSIFICATION_PUBLIC}, {@link #CLASSIFICATION_PRIVATE},
@@ -547,27 +547,27 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String CLASSIFICATION = "class";
+        String CLASSIFICATION = "class";
 
         /**
          * Classification value for public tasks.
          */
-        public static final int CLASSIFICATION_PUBLIC = 0;
+        int CLASSIFICATION_PUBLIC = 0;
 
         /**
          * Classification value for private tasks.
          */
-        public static final int CLASSIFICATION_PRIVATE = 1;
+        int CLASSIFICATION_PRIVATE = 1;
 
         /**
          * Classification value for confidential tasks.
          */
-        public static final int CLASSIFICATION_CONFIDENTIAL = 2;
+        int CLASSIFICATION_CONFIDENTIAL = 2;
 
         /**
          * Default value of {@link #CLASSIFICATION}.
          */
-        public static final Integer CLASSIFICATION_DEFAULT = null;
+        Integer CLASSIFICATION_DEFAULT = null;
 
         /**
          * Date of completion of this task in milliseconds since the epoch or {@code null} if this task has not been completed yet.
@@ -575,7 +575,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String COMPLETED = "completed";
+        String COMPLETED = "completed";
 
         /**
          * Indicates that the date of completion is an all-day date.
@@ -583,7 +583,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String COMPLETED_IS_ALLDAY = "completed_is_allday";
+        String COMPLETED_IS_ALLDAY = "completed_is_allday";
 
         /**
          * A number between 0 and 100 that indicates the progress of the task or <code>null</code>.
@@ -591,7 +591,7 @@ public final class TaskContract
          * Value: Integer (0-100)
          * </p>
          */
-        public static final String PERCENT_COMPLETE = "percent_complete";
+        String PERCENT_COMPLETE = "percent_complete";
 
         /**
          * The status of this task. One of {@link #STATUS_NEEDS_ACTION},{@link #STATUS_IN_PROCESS}, {@link #STATUS_COMPLETED}, {@link #STATUS_CANCELLED}.
@@ -599,32 +599,32 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String STATUS = "status";
+        String STATUS = "status";
 
         /**
          * A specific status indicating that nothing has been done yet.
          */
-        public static final int STATUS_NEEDS_ACTION = 0;
+        int STATUS_NEEDS_ACTION = 0;
 
         /**
          * A specific status indicating that some work has been done.
          */
-        public static final int STATUS_IN_PROCESS = 1;
+        int STATUS_IN_PROCESS = 1;
 
         /**
          * A specific status indicating that the task is completed.
          */
-        public static final int STATUS_COMPLETED = 2;
+        int STATUS_COMPLETED = 2;
 
         /**
          * A specific status indicating that the task has been cancelled.
          */
-        public static final int STATUS_CANCELLED = 3;
+        int STATUS_CANCELLED = 3;
 
         /**
          * The default status is "needs action".
          */
-        public static final int STATUS_DEFAULT = STATUS_NEEDS_ACTION;
+        int STATUS_DEFAULT = STATUS_NEEDS_ACTION;
 
         /**
          * A flag that indicates a task is new (i.e. not work has been done yet). This flag is <strong>read-only</strong>. Its value is <code>1</code> when
@@ -636,7 +636,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String IS_NEW = "is_new";
+        String IS_NEW = "is_new";
 
         /**
          * A flag that indicates a task is closed (no more work has to be done). This flag is <strong>read-only</strong>. Its value is <code>1</code> when
@@ -648,7 +648,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String IS_CLOSED = "is_closed";
+        String IS_CLOSED = "is_closed";
 
         /**
          * An individual color for this task in the format 0xaarrggbb or {@code null} to use {@link TaskListColumns#LIST_COLOR} instead.
@@ -656,7 +656,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String TASK_COLOR = "task_color";
+        String TASK_COLOR = "task_color";
 
         /**
          * When this task starts in milliseconds since the epoch.
@@ -664,12 +664,12 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String DTSTART = "dtstart";
+        String DTSTART = "dtstart";
 
         /**
          * Boolean: flag that indicates that this is an all-day task.
          */
-        public static final String IS_ALLDAY = "is_allday";
+        String IS_ALLDAY = "is_allday";
 
         /**
          * When this task has been created in milliseconds since the epoch.
@@ -677,7 +677,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String CREATED = "created";
+        String CREATED = "created";
 
         /**
          * When this task had been modified the last time in milliseconds since the epoch.
@@ -685,12 +685,12 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String LAST_MODIFIED = "last_modified";
+        String LAST_MODIFIED = "last_modified";
 
         /**
          * String: An Olson Id of the time zone of this task. If this value is <code>null</code>, it's automatically replaced by the local time zone.
          */
-        public static final String TZ = "tz";
+        String TZ = "tz";
 
         /**
          * When this task is due in milliseconds since the epoch. Only one of {@link #DUE} or {@link #DURATION} must be supplied (or none of both if the task
@@ -699,7 +699,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String DUE = "due";
+        String DUE = "due";
 
         /**
          * The duration of this task. Only one of {@link #DUE} or {@link #DURATION} must be supplied (or none of both if the task has no due date). Setting a
@@ -709,7 +709,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String DURATION = "duration";
+        String DURATION = "duration";
 
         /**
          * A comma separated list of time Strings in RFC 5545 format (see <a href="http://tools.ietf.org/html/rfc5545#section-3.3.4">RFC 5545 Section 3.3.4</a>
@@ -721,7 +721,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String RDATE = "rdate";
+        String RDATE = "rdate";
 
         /**
          * A comma separated list of time Strings in RFC 5545 format (see <a href="http://tools.ietf.org/html/rfc5545#section-3.3.4">RFC 5545 Section 3.3.4</a>
@@ -733,7 +733,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String EXDATE = "exdate";
+        String EXDATE = "exdate";
 
         /**
          * A recurrence rule as specified in <a href="http://tools.ietf.org/html/rfc5545#section-3.3.10">RFC 5545 Section 3.3.10</a>.
@@ -743,7 +743,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String RRULE = "rrule";
+        String RRULE = "rrule";
 
         /**
          * The _sync_id of the original event if this is an exception, <code>null</code> otherwise. Only one of {@link #ORIGINAL_INSTANCE_SYNC_ID} or
@@ -752,7 +752,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String ORIGINAL_INSTANCE_SYNC_ID = "original_instance_sync_id";
+        String ORIGINAL_INSTANCE_SYNC_ID = "original_instance_sync_id";
 
         /**
          * The row id of the original event if this is an exception, <code>null</code> otherwise. Only one of {@link #ORIGINAL_INSTANCE_SYNC_ID} or
@@ -761,7 +761,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String ORIGINAL_INSTANCE_ID = "original_instance_id";
+        String ORIGINAL_INSTANCE_ID = "original_instance_id";
 
         /**
          * The time in milliseconds since the Epoch of the original instance that is overridden by this instance or <code>null</code> if this task is not an
@@ -770,7 +770,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String ORIGINAL_INSTANCE_TIME = "original_instance_time";
+        String ORIGINAL_INSTANCE_TIME = "original_instance_time";
 
         /**
          * A flag indicating that the original instance was an all-day task.
@@ -778,7 +778,7 @@ public final class TaskContract
          * Value: Integer
          * </p>
          */
-        public static final String ORIGINAL_INSTANCE_ALLDAY = "original_instance_allday";
+        String ORIGINAL_INSTANCE_ALLDAY = "original_instance_allday";
 
         /**
          * The row id of the parent task. <code>null</code> if the task has no parent task.
@@ -786,7 +786,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String PARENT_ID = "parent_id";
+        String PARENT_ID = "parent_id";
 
         /**
          * The sorting of this task under it's parent task.
@@ -794,7 +794,7 @@ public final class TaskContract
          * Value: String
          * </p>
          */
-        public static final String SORTING = "sorting";
+        String SORTING = "sorting";
 
         /**
          * Indicates how many alarms a task has. <code>0</code> means the task has no alarms. This field is read only as it's set automatically.
@@ -803,7 +803,7 @@ public final class TaskContract
          * </p>
          * Read-only
          */
-        public static final String HAS_ALARMS = "has_alarms";
+        String HAS_ALARMS = "has_alarms";
 
         /**
          * Indicates that this task has extended properties like attachments, alarms or relations. This field is read only as it's set automatically.
@@ -814,7 +814,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String HAS_PROPERTIES = "has_properties";
+        String HAS_PROPERTIES = "has_properties";
 
         /**
          * Indicates that this task has been pinned to the notification area. This flag is moved to the exception when an exception for the first instance of a
@@ -827,7 +827,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String PINNED = "pinned";
+        String PINNED = "pinned";
     }
 
 
@@ -845,7 +845,7 @@ public final class TaskContract
          * Value: Float
          * </p>
          */
-        public final static String SCORE = "score";
+        String SCORE = "score";
     }
 
 
@@ -984,7 +984,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String TASK_ID = "task_id";
+        String TASK_ID = "task_id";
 
         /**
          * The start date of an instance in milliseconds since the epoch or <code>null</code> if the instance has no start date. At present this is read only.
@@ -992,7 +992,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String INSTANCE_START = "instance_start";
+        String INSTANCE_START = "instance_start";
 
         /**
          * The due date of an instance in milliseconds since the epoch or <code>null</code> if the instance has no due date. At present this is read only.
@@ -1000,7 +1000,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String INSTANCE_DUE = "instance_due";
+        String INSTANCE_DUE = "instance_due";
 
         /**
          * This column should be used in an order clause to sort instances by start date. The only guarantee about the values in this column is the sort order.
@@ -1012,7 +1012,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String INSTANCE_START_SORTING = "instance_start_sorting";
+        String INSTANCE_START_SORTING = "instance_start_sorting";
 
         /**
          * This column should be used in an order clause to sort instances by due date. The only guarantee about the values in this column is the sort order.
@@ -1024,7 +1024,7 @@ public final class TaskContract
          * read-only
          * </p>
          */
-        public static final String INSTANCE_DUE_SORTING = "instance_due_sorting";
+        String INSTANCE_DUE_SORTING = "instance_due_sorting";
 
         /**
          * The duration of an instance in milliseconds or <code>null</code> if the instance has only one of start or due date or none of both. At present this
@@ -1033,7 +1033,7 @@ public final class TaskContract
          * Value: Long
          * </p>
          */
-        public static final String INSTANCE_DURATION = "instance_duration";
+        String INSTANCE_DURATION = "instance_duration";
 
     }
 
@@ -1162,15 +1162,15 @@ public final class TaskContract
     public interface CategoriesColumns
     {
 
-        public static final String _ID = "_id";
+        String _ID = "_id";
 
-        public static final String ACCOUNT_NAME = "account_name";
+        String ACCOUNT_NAME = "account_name";
 
-        public static final String ACCOUNT_TYPE = "account_type";
+        String ACCOUNT_TYPE = "account_type";
 
-        public static final String NAME = "name";
+        String NAME = "name";
 
-        public static final String COLOR = "color";
+        String COLOR = "color";
     }
 
 
@@ -1200,11 +1200,11 @@ public final class TaskContract
 
     public interface AlarmsColumns
     {
-        public static final String ALARM_ID = "alarm_id";
+        String ALARM_ID = "alarm_id";
 
-        public static final String LAST_TRIGGER = "last_trigger";
+        String LAST_TRIGGER = "last_trigger";
 
-        public static final String NEXT_TRIGGER = "next_trigger";
+        String NEXT_TRIGGER = "next_trigger";
     }
 
 
@@ -1232,66 +1232,66 @@ public final class TaskContract
 
     public interface PropertySyncColumns
     {
-        public static final String SYNC1 = "prop_sync1";
+        String SYNC1 = "prop_sync1";
 
-        public static final String SYNC2 = "prop_sync2";
+        String SYNC2 = "prop_sync2";
 
-        public static final String SYNC3 = "prop_sync3";
+        String SYNC3 = "prop_sync3";
 
-        public static final String SYNC4 = "prop_sync4";
+        String SYNC4 = "prop_sync4";
 
-        public static final String SYNC5 = "prop_sync5";
+        String SYNC5 = "prop_sync5";
 
-        public static final String SYNC6 = "prop_sync6";
+        String SYNC6 = "prop_sync6";
 
-        public static final String SYNC7 = "prop_sync7";
+        String SYNC7 = "prop_sync7";
 
-        public static final String SYNC8 = "prop_sync8";
+        String SYNC8 = "prop_sync8";
     }
 
 
     public interface PropertyColumns
     {
 
-        public static final String PROPERTY_ID = "property_id";
+        String PROPERTY_ID = "property_id";
 
-        public static final String TASK_ID = "task_id";
+        String TASK_ID = "task_id";
 
-        public static final String MIMETYPE = "mimetype";
+        String MIMETYPE = "mimetype";
 
-        public static final String VERSION = "prop_version";
+        String VERSION = "prop_version";
 
-        public static final String DATA0 = "data0";
+        String DATA0 = "data0";
 
-        public static final String DATA1 = "data1";
+        String DATA1 = "data1";
 
-        public static final String DATA2 = "data2";
+        String DATA2 = "data2";
 
-        public static final String DATA3 = "data3";
+        String DATA3 = "data3";
 
-        public static final String DATA4 = "data4";
+        String DATA4 = "data4";
 
-        public static final String DATA5 = "data5";
+        String DATA5 = "data5";
 
-        public static final String DATA6 = "data6";
+        String DATA6 = "data6";
 
-        public static final String DATA7 = "data7";
+        String DATA7 = "data7";
 
-        public static final String DATA8 = "data8";
+        String DATA8 = "data8";
 
-        public static final String DATA9 = "data9";
+        String DATA9 = "data9";
 
-        public static final String DATA10 = "data10";
+        String DATA10 = "data10";
 
-        public static final String DATA11 = "data11";
+        String DATA11 = "data11";
 
-        public static final String DATA12 = "data12";
+        String DATA12 = "data12";
 
-        public static final String DATA13 = "data13";
+        String DATA13 = "data13";
 
-        public static final String DATA14 = "data14";
+        String DATA14 = "data14";
 
-        public static final String DATA15 = "data15";
+        String DATA15 = "data15";
     }
 
 
@@ -1329,12 +1329,12 @@ public final class TaskContract
          *
          * @author Marten Gajda <marten@dmfs.org>
          */
-        public static interface Attachment extends PropertyColumns
+        interface Attachment extends PropertyColumns
         {
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/attachment";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/attachment";
 
             /**
              * URL of the attachment. This is the link that points to the attached resource.
@@ -1342,7 +1342,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String URL = DATA1;
+            String URL = DATA1;
 
             /**
              * The display name of the attachment, if any.
@@ -1350,7 +1350,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String DISPLAY_NAME = DATA2;
+            String DISPLAY_NAME = DATA2;
 
             /**
              * Content-type of the attachment.
@@ -1358,7 +1358,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String FORMAT = DATA3;
+            String FORMAT = DATA3;
 
             /**
              * File size of the attachment or <code>-1</code> if unknown.
@@ -1366,7 +1366,7 @@ public final class TaskContract
              * Value: Long
              * </p>
              */
-            public final static String SIZE = DATA4;
+            String SIZE = DATA4;
 
             /**
              * A content {@link Uri} that can be used to retrieve the attachment. Sync adapters can set this field if they know how to download the attachment
@@ -1375,17 +1375,17 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String CONTENT_URI = DATA5;
+            String CONTENT_URI = DATA5;
 
         }
 
 
-        public static interface Attendee extends PropertyColumns
+        interface Attendee extends PropertyColumns
         {
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/attendee";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/attendee";
 
             /**
              * Name of the contact, if known.
@@ -1393,7 +1393,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String NAME = DATA0;
+            String NAME = DATA0;
 
             /**
              * Email address of the contact.
@@ -1401,25 +1401,25 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String EMAIL = DATA1;
+            String EMAIL = DATA1;
 
-            public final static String ROLE = DATA2;
+            String ROLE = DATA2;
 
-            public final static String STATUS = DATA3;
+            String STATUS = DATA3;
 
-            public final static String RSVP = DATA4;
+            String RSVP = DATA4;
         }
 
 
         /**
          * Categories are immutable. For creation is either the category id or name necessary
          */
-        public static interface Category extends PropertyColumns
+        interface Category extends PropertyColumns
         {
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/category";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/category";
 
             /**
              * Row id of the category.
@@ -1427,7 +1427,7 @@ public final class TaskContract
              * Value: Long
              * </p>
              */
-            public final static String CATEGORY_ID = DATA0;
+            String CATEGORY_ID = DATA0;
 
             /**
              * The name of the category
@@ -1435,7 +1435,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String CATEGORY_NAME = DATA1;
+            String CATEGORY_NAME = DATA1;
 
             /**
              * The decimal coded color of the category
@@ -1446,16 +1446,16 @@ public final class TaskContract
              * read-only
              * </p>
              */
-            public final static String CATEGORY_COLOR = DATA2;
+            String CATEGORY_COLOR = DATA2;
         }
 
 
-        public static interface Comment extends PropertyColumns
+        interface Comment extends PropertyColumns
         {
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/comment";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/comment";
 
             /**
              * Comment text.
@@ -1463,7 +1463,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String COMMENT = DATA0;
+            String COMMENT = DATA0;
 
             /**
              * Language code of the comment as defined in <a href="https://tools.ietf.org/html/rfc5646">RFC5646</a> or <code>null</code>.
@@ -1471,36 +1471,35 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String LANGUAGE = DATA1;
+            String LANGUAGE = DATA1;
         }
 
 
-        public static interface Contact extends PropertyColumns
+        interface Contact extends PropertyColumns
         {
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/contact";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/contact";
 
-            public final static String NAME = DATA0;
+            String NAME = DATA0;
 
-            public final static String LANGUAGE = DATA1;
+            String LANGUAGE = DATA1;
         }
 
 
         /**
          * Relations of a task.
          * <p>
-         * When writing a relation, exactly one of {@link #RELATED_ID}, {@link #RELATED_UID} or {@link #RELATED_URI} must be given. {@link #RELATED_CONTENT_URI}
-         * will be populated automatically if possible.
-         * </p>
+         * When writing a relation, exactly one of {@link #RELATED_ID} or {@link #RELATED_UID} must be present. The missing value and {@link
+         * #RELATED_CONTENT_URI} will be populated automatically if possible.
          */
-        public static interface Relation extends PropertyColumns
+        interface Relation extends PropertyColumns
         {
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/relation";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/relation";
 
             /**
              * The row id of the related task. May be <code>-1</code> if the property doesn't refer to a task in this database or if it doesn't refer to a task
@@ -1509,15 +1508,15 @@ public final class TaskContract
              * Value: long
              * </p>
              */
-            public final static String RELATED_ID = DATA1;
+            String RELATED_ID = DATA1;
 
             /**
-             * The relation type. This must be the ordinal value of a {@link RelType}.
+             * The relation type. This must be one of the {@code RELTYPE_*} values.
              * <p>
              * Value: int
              * </p>
              */
-            public final static String RELATED_TYPE = DATA2;
+            String RELATED_TYPE = DATA2;
 
             /**
              * The UID of the related object.
@@ -1525,19 +1524,10 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String RELATED_UID = DATA3;
+            String RELATED_UID = DATA3;
 
             /**
-             * The URI of a related object.
-             * <p>
-             * Value: String (URI)
-             * </p>
-             */
-            public final static String RELATED_URI = DATA4;
-
-            /**
-             * The URI of a related object in another Android content provider. If the object is a task in this database, this is <code>null</code>. If the
-             * related object is an event or note this field may contain the content URI to the object.
+             * The content Uri of a related object in another Android content provider, if found.
              * <p>
              * Value: String (URI)
              * </p>
@@ -1545,75 +1535,47 @@ public final class TaskContract
              * This field is read-only.
              * </p>
              */
-            public final static String RELATED_CONTENT_URI = DATA5;
+            String RELATED_CONTENT_URI = DATA5;
 
             /**
-             * An optional gap value for temporal relationships.
-             * <p>
-             * Value: duration string
-             * </p>
+             * The related object is the parent of the object owning this relation.
              */
-            public final static String GAP = DATA6;
-
+            int RELTYPE_PARENT = 0;
 
             /**
-             * Valid values for the {@link Relation#RELATED_TYPE} field. Note that the field actually takes the ordinal value of these.
+             * The related object is the child of the object owning this relation.
              */
-            public enum RelType
-            {
-                /**
-                 * The related object is the parent of the object owning this relation.
-                 */
-                PARENT,
+            int RELTYPE_CHILD = 1;
 
-                /**
-                 * The related object is the child of the object owning this relation.
-                 */
-                CHILD,
+            /**
+             * The related object is a sibling of the object owning this relation.
+             */
+            int RELTYPE_SIBLING = 2;
 
-                /**
-                 * The related object is a sibling of the object owning this relation.
-                 */
-                SIBLING,
-
-                DEPENDS_ON,
-
-                REFID,
-
-                STRUCTURED_CATEGORY,
-
-                FINISHTOSTART,
-
-                FINISHTOFINISH,
-
-                STARTTOFINISH,
-
-                STARTTOSTART;
-            }
         }
 
 
-        public static interface Alarm extends PropertyColumns
+        interface Alarm extends PropertyColumns
         {
 
-            public static final int ALARM_TYPE_NOTHING = 0;
+            int ALARM_TYPE_NOTHING = 0;
 
-            public static final int ALARM_TYPE_MESSAGE = 1;
+            int ALARM_TYPE_MESSAGE = 1;
 
-            public static final int ALARM_TYPE_EMAIL = 2;
+            int ALARM_TYPE_EMAIL = 2;
 
-            public static final int ALARM_TYPE_SMS = 3;
+            int ALARM_TYPE_SMS = 3;
 
-            public static final int ALARM_TYPE_SOUND = 4;
+            int ALARM_TYPE_SOUND = 4;
 
-            public static final int ALARM_REFERENCE_DUE_DATE = 1;
+            int ALARM_REFERENCE_DUE_DATE = 1;
 
-            public static final int ALARM_REFERENCE_START_DATE = 2;
+            int ALARM_REFERENCE_START_DATE = 2;
 
             /**
              * The mime-type of this property.
              */
-            public final static String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/alarm";
+            String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/alarm";
 
             /**
              * Number of minutes from the reference date when the alarm goes off. If the value is < 0 the alarm will go off after the reference date.
@@ -1621,7 +1583,7 @@ public final class TaskContract
              * Value: Integer
              * </p>
              */
-            public final static String MINUTES_BEFORE = DATA0;
+            String MINUTES_BEFORE = DATA0;
 
             /**
              * The reference date for the alarm. Either {@link #ALARM_REFERENCE_DUE_DATE} or {@link #ALARM_REFERENCE_START_DATE}.
@@ -1629,7 +1591,7 @@ public final class TaskContract
              * Value: Integer
              * </p>
              */
-            public final static String REFERENCE = DATA1;
+            String REFERENCE = DATA1;
 
             /**
              * A message that appears with the alarm.
@@ -1637,7 +1599,7 @@ public final class TaskContract
              * Value: String
              * </p>
              */
-            public final static String MESSAGE = DATA2;
+            String MESSAGE = DATA2;
 
             /**
              * The type of the alarm. Use the provided alarm types {@link #ALARM_TYPE_MESSAGE}, {@link #ALARM_TYPE_SOUND}, {@link #ALARM_TYPE_NOTHING},
@@ -1646,7 +1608,7 @@ public final class TaskContract
              * Value: Integer
              * </p>
              */
-            public final static String ALARM_TYPE = DATA3;
+            String ALARM_TYPE = DATA3;
         }
 
     }

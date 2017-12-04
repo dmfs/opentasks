@@ -20,11 +20,11 @@ import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.tasks.contract.TaskContract;
-import org.dmfs.tasks.contract.TaskContract.Property.Relation.RelType;
 
 
 /**
- * {@link RowData} to add the {@link RelType#CHILD} relation between the 2 given tasks, to the {@link TaskContract.Properties} table.
+ * {@link RowData} to add the {@link TaskContract.Property.Relation#RELTYPE_CHILD} relation between the 2 given tasks, to the {@link TaskContract.Properties}
+ * table.
  *
  * @author Gabor Keszthelyi
  */
@@ -32,13 +32,13 @@ public final class ChildTaskRelationData extends DelegatingRowData<TaskContract.
 {
     public ChildTaskRelationData(RowSnapshot<TaskContract.Tasks> childTask, RowSnapshot<TaskContract.Tasks> parentTask)
     {
-        super(new RelationData(parentTask, RelType.CHILD, childTask));
+        super(new RelationData(parentTask, TaskContract.Property.Relation.RELTYPE_CHILD, childTask));
     }
 
 
     public ChildTaskRelationData(CharSequence childTaskUid, RowSnapshot<TaskContract.Tasks> parentTask)
     {
-        super(new RelationData(parentTask, RelType.CHILD, childTaskUid));
+        super(new RelationData(parentTask, TaskContract.Property.Relation.RELTYPE_CHILD, childTaskUid));
     }
 
 }
