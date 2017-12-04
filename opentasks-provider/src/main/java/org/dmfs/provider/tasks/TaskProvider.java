@@ -38,6 +38,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
 
+import org.dmfs.iterables.EmptyIterable;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.OnDatabaseOperationListener;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.handler.PropertyHandler;
@@ -146,6 +147,13 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
      * An {@link ProviderOperationsLog} to track all changes within a transaction.
      */
     private ProviderOperationsLog mOperationsLog = new ProviderOperationsLog();
+
+
+    public TaskProvider()
+    {
+        // for now we don't have anything specific to execute before the transaction ends.
+        super(EmptyIterable.<TransactionEndTask>instance());
+    }
 
 
     @Override

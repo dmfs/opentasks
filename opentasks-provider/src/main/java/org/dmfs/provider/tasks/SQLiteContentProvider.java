@@ -27,6 +27,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+import org.dmfs.iterables.SingletonIterable;
+import org.dmfs.iterables.decorators.Flattened;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,11 +49,17 @@ import java.util.Set;
 abstract class SQLiteContentProvider extends ContentProvider
 {
 
+    interface TransactionEndTask
+    {
+        void execute(SQLiteDatabase database);
+    }
+
+
     @SuppressWarnings("unused")
     private static final String TAG = "SQLiteContentProvider";
 
     private SQLiteOpenHelper mOpenHelper;
-    private Set<Uri> mChangedUris;
+    private final Set<Uri> mChangedUris = new HashSet<>();
 
     private final ThreadLocal<Boolean> mApplyingBatch = new ThreadLocal<Boolean>();
     private static final int SLEEP_AFTER_YIELD_DELAY = 4000;
@@ -60,13 +69,20 @@ abstract class SQLiteContentProvider extends ContentProvider
      */
     private static final int MAX_OPERATIONS_PER_YIELD_POINT = 500;
 
+    private final Iterable<TransactionEndTask> mTransactionEndTasks;
+
+
+    protected SQLiteContentProvider(Iterable<TransactionEndTask> transactionEndTasks)
+    {
+        // append a task to set the transaction to successful
+        mTransactionEndTasks = new Flattened<>(transactionEndTasks, new SingletonIterable<TransactionEndTask>(new SuccessfulTransactionEndTask()));
+    }
+
 
     @Override
     public boolean onCreate()
     {
-        Context context = getContext();
-        mOpenHelper = getDatabaseHelper(context);
-        mChangedUris = new HashSet<Uri>();
+        mOpenHelper = getDatabaseHelper(getContext());
         return true;
     }
 
@@ -136,7 +152,7 @@ abstract class SQLiteContentProvider extends ContentProvider
             try
             {
                 result = insertInTransaction(db, uri, values, callerIsSyncAdapter);
-                db.setTransactionSuccessful();
+                endTransaction(db);
             }
             finally
             {
@@ -167,7 +183,7 @@ abstract class SQLiteContentProvider extends ContentProvider
                 insertInTransaction(db, uri, values[i], callerIsSyncAdapter);
                 db.yieldIfContendedSafely();
             }
-            db.setTransactionSuccessful();
+            endTransaction(db);
         }
         finally
         {
@@ -192,7 +208,7 @@ abstract class SQLiteContentProvider extends ContentProvider
             try
             {
                 count = updateInTransaction(db, uri, values, selection, selectionArgs, callerIsSyncAdapter);
-                db.setTransactionSuccessful();
+                endTransaction(db);
             }
             finally
             {
@@ -223,7 +239,7 @@ abstract class SQLiteContentProvider extends ContentProvider
             try
             {
                 count = deleteInTransaction(db, uri, selection, selectionArgs, callerIsSyncAdapter);
-                db.setTransactionSuccessful();
+                endTransaction(db);
             }
             finally
             {
@@ -275,7 +291,7 @@ abstract class SQLiteContentProvider extends ContentProvider
                 }
                 results[i] = operation.apply(this, results, i);
             }
-            db.setTransactionSuccessful();
+            endTransaction(db);
             return results;
         }
         finally
@@ -309,4 +325,25 @@ abstract class SQLiteContentProvider extends ContentProvider
         return false;
     }
 
+
+    private void endTransaction(SQLiteDatabase database)
+    {
+        for (TransactionEndTask task : mTransactionEndTasks)
+        {
+            task.execute(database);
+        }
+    }
+
+
+    /**
+     * A {@link TransactionEndTask} which sets the transaction to be successful.
+     */
+    private static class SuccessfulTransactionEndTask implements TransactionEndTask
+    {
+        @Override
+        public void execute(SQLiteDatabase database)
+        {
+            database.setTransactionSuccessful();
+        }
+    }
 }
