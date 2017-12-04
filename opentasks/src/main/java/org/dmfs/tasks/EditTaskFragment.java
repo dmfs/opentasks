@@ -296,9 +296,13 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                         // ensure we're using the latest values
                         mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
                     }
-                    mListColor = TaskFieldAdapters.LIST_COLOR.get(mValues);
-                    // update the color of the action bar as soon as possible
-                    updateColor(0);
+
+                    if (mValues != null)
+                    {
+                        mListColor = TaskFieldAdapters.LIST_COLOR.get(mValues);
+                        // update the color of the action bar as soon as possible
+                        updateColor(0);
+                    }
                     setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
                 }
             }
