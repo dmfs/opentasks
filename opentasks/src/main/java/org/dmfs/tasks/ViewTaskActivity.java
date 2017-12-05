@@ -128,7 +128,7 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
     {
         /*
          * The task we're showing has been deleted, just finish.
-		 */
+         */
         finish();
     }
 

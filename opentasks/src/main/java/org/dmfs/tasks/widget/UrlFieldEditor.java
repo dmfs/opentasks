@@ -82,9 +82,9 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
         {
             mText.addTextChangedListener(this);
 
-			/*
+            /*
              * enable memory leak workaround on android < 4.3: disable spell checker
-			 */
+             */
             int inputType = mText.getInputType();
             if (VERSION.SDK_INT < 18)
             {

@@ -244,7 +244,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
                         mFlinging = false;
                         /*
                          * don't set handled = true, that would stop the touch event making it impossible to select a flingable list element
-						 */
+                         */
 
                         // start vibration detection
                         mHandler.postDelayed(mVibrateRunnable, ViewConfiguration.getTapTimeout());

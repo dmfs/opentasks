@@ -181,13 +181,13 @@ public final class NGramGenerator
         {
             /*
              * Add another String with a space and the first n-1 characters of the word.
-			 * 
-			 * We could just call
-			 * 
-			 * ngrams.add(" " + word.substring(0, Math.min(len, n - 1));
-			 * 
-			 * But it's probably way more efficient like this:
-			 */
+             *
+             * We could just call
+             *
+             * ngrams.add(" " + word.substring(0, Math.min(len, n - 1));
+             *
+             * But it's probably way more efficient like this:
+             */
             char[] tempArray = mTempArray;
 
             int count = Math.min(len, n - 1);

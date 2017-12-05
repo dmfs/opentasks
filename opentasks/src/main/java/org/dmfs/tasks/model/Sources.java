@@ -309,9 +309,9 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
     {
         // the account list has changed, rebuild model map
 
-		/*
+        /*
          * FIXME: Do we have to rebuild the model map? An account was added not a new model. Instead we could cache the existing accounts and update it here.
-		 */
+         */
         getAccounts();
     }
 

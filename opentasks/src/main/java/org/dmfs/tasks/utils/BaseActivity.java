@@ -85,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity
         super.onPause();
         /*
          * On older SDK version we have to store permanent data in onPause(), because there is no guarantee that onStop() will be called.
-		 */
+         */
         if (VERSION.SDK_INT < VERSION_CODES.HONEYCOMB)
         {
             RetentionMagic.persist(this, mPrefs);

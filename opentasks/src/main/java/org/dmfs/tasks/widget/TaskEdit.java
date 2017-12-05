@@ -61,9 +61,9 @@ public class TaskEdit extends BaseTaskView
         Model mModel = model;
         final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		/*
+        /*
          * Add an editor for every field that is supported by this model.
-		 */
+         */
         for (FieldDescriptor field : mModel.getFields())
         {
             if (field.autoAdd())

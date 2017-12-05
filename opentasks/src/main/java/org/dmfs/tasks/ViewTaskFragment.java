@@ -370,7 +370,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             /*
              * Unregister the observer for any previously shown task first.
-			 */
+             */
             mAppContext.getContentResolver().unregisterContentObserver(mObserver);
             persistTask();
         }
@@ -381,7 +381,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             /*
              * Create a new ContentSet and load the values for the given Uri. Also register listener and observer for changes in the ContentSet and the Uri.
-			 */
+             */
             mContentSet = new ContentSet(uri);
             mContentSet.addOnChangeListener(this, null, true);
             mAppContext.getContentResolver().registerContentObserver(uri, false, mObserver);
@@ -391,7 +391,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             /*
              * Immediately update the view with the empty task uri, i.e. clear the view.
-			 */
+             */
             mContentSet = null;
             if (mContent != null)
             {
@@ -403,7 +403,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             /*
              * getActivity().invalidateOptionsMenu() doesn't work in Android 2.x so use the compat lib
-			 */
+             */
             ActivityCompat.invalidateOptionsMenu(getActivity());
         }
 
@@ -494,7 +494,7 @@ public class ViewTaskFragment extends SupportFragment
     {
         /*
          * Don't show any options if we don't have a task to show.
-		 */
+         */
         if (mTaskUri != null)
         {
             menu = mToolBar.getMenu();

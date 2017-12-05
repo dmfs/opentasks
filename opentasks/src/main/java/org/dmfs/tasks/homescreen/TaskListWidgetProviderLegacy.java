@@ -137,9 +137,9 @@ public class TaskListWidgetProviderLegacy extends AppWidgetProvider
                 }
             }
 
-			/*
+            /*
              * Create and set a {@link PendingIntent} to view the task when the list is clicked.
-			 */
+             */
             Intent itemClickIntent = new Intent();
             itemClickIntent.setAction(Intent.ACTION_VIEW);
             itemClickIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);

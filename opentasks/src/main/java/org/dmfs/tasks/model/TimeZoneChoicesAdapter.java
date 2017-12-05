@@ -62,9 +62,9 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
         String[] titles = resources.getStringArray(R.array.timezone_labels);
         String[] ids = resources.getStringArray(R.array.timezone_values);
 
-		/*
+        /*
          * Build time zone lists and maps.
-		 */
+         */
         for (int i = 0; i < ids.length; ++i)
         {
             String id = ids[i];

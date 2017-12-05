@@ -304,12 +304,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         ContentValues tempValues = new ContentValues(mBeforeContentValues);
         /*
          * Remove all values from tempValues that already are in mAfterContentValues or that are not required to be updated.
-		 * 
-		 * This is tricky because we can't rely on ContentValues.keySet(). That's why we have to iterate all keys and remove the ones we don't have to update.
-		 * Since we can't modify tempValues while iterating over its keys we have to create a temporary Set.
-		 * 
-		 * TODO: find a better way to solve this
-		 */
+         *
+         * This is tricky because we can't rely on ContentValues.keySet(). That's why we have to iterate all keys and remove the ones we don't have to update.
+         * Since we can't modify tempValues while iterating over its keys we have to create a temporary Set.
+         *
+         * TODO: find a better way to solve this
+         */
         for (Entry<String, Object> entry : new HashSet<Entry<String, Object>>(tempValues.valueSet()))
         {
             String key = entry.getKey();

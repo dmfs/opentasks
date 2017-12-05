@@ -522,7 +522,7 @@ public class XmlModel extends Model
     {
         /*
          * Add definitions for all supported fields:
-		 */
+         */
 
         FIELD_INFLATER_MAP.put("title", new FieldInflater(TaskFieldAdapters.TITLE, R.id.task_field_title, R.string.task_title, -1, R.layout.text_field_editor,
                 R.drawable.ic_detail_description).addEditLayoutOption(LayoutDescriptor.OPTION_MULTILINE, false));
