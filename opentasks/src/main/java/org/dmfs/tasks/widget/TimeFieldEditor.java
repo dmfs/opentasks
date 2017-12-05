@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks.widget;
 
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
@@ -425,7 +424,6 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
      *
      * @see http://stackoverflow.com/questions/28345413/datepicker-crash-in-samsung-with-android-5-0
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private Dialog getDatePickerWithSamsungWorkaround()
     {
         // The datepicker on Samsung Android 5.0 devices crashes for certain languages, e.g. french and polish

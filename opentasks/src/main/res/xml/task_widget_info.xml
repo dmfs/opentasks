@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+        android:configure="org.dmfs.tasks.homescreen.TaskListWidgetSettingsActivity"
         android:initialLayout="@layout/task_list_widget"
-        android:minHeight="130dp"
-        android:minWidth="180dp"
-        android:previewImage="@drawable/ic_launcher"
+        android:minHeight="40dp"
+        android:minWidth="110dp"
+        android:previewImage="@drawable/task_list_widget_screenshot"
         android:resizeMode="horizontal|vertical"
-        android:updatePeriodMillis="7200000"
-        android:widgetCategory="keyguard|home_screen">
+        android:updatePeriodMillis="43200000">
 
 </appwidget-provider>

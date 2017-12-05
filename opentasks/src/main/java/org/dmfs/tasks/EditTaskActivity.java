@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -55,7 +54,6 @@ public class EditTaskActivity extends BaseActivity
     private String mAuthority;
 
 
-    @TargetApi(11)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -64,15 +62,12 @@ public class EditTaskActivity extends BaseActivity
 
         mAuthority = AuthorityUtil.taskAuthority(this);
 
-        if (android.os.Build.VERSION.SDK_INT >= 11)
-        {
-            // hide up button in action bar
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowHomeEnabled(false);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.content_remove_light);
-            // actionBar.setDisplayShowTitleEnabled(false);
-        }
+        // hide up button in action bar
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.content_remove_light);
+        // actionBar.setDisplayShowTitleEnabled(false);
 
         if (savedInstanceState == null)
         {

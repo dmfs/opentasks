@@ -16,11 +16,9 @@
 
 package org.dmfs.tasks;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 
 
 /**
@@ -28,7 +26,6 @@ import android.support.annotation.RequiresApi;
  *
  * @author Gabor Keszthelyi
  */
-@RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
 public final class AppSettingsFragment extends PreferenceFragment
 {
 

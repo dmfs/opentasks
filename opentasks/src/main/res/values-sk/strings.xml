@@ -8,7 +8,6 @@
     <string name="menu_add_task">Pridať úlohu</string>
     <string name="menu_add_task_condensed">Pridať</string>
     <string name="menu_show_completed">Ukázať splnené úlohy</string>
-    <string name="menu_hide_completed">Skryť splnené úlohy</string>
     <string name="menu_show_completed_condensed">Ukázať splnené úlohy</string>
     <string name="menu_sync_now">Obnoviť</string>
     <string name="menu_sync_now_condensed">Obnoviť</string>

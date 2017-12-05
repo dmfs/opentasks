@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks.homescreen;
 
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -26,7 +25,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -51,7 +49,6 @@ import java.util.ArrayList;
  * @author Arjun Naik <arjun@arjunnaik.in>
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProvider extends AppWidgetProvider
 {
     private final static String TAG = "TaskListWidgetProvider";
@@ -140,7 +137,6 @@ public class TaskListWidgetProvider extends AppWidgetProvider
      *
      * @see android.appwidget.AppWidgetProvider#onUpdate(android.content.Context, android.appwidget.AppWidgetManager, int[])
      */
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
     {
         /*
@@ -171,14 +167,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
             widget.setOnClickPendingIntent(android.R.id.button2, newTaskPI);
 
             /** Set the {@link RemoteViewsService } subclass as the adapter for the {@link ListView} in the widget. */
-            if (android.os.Build.VERSION.SDK_INT < 14)
-            {
-                widget.setRemoteAdapter(appWidgetIds[i], R.id.task_list_widget_lv, remoteServiceIntent);
-            }
-            else
-            {
-                widget.setRemoteAdapter(R.id.task_list_widget_lv, remoteServiceIntent);
-            }
+            widget.setRemoteAdapter(R.id.task_list_widget_lv, remoteServiceIntent);
 
             Intent detailIntent = new Intent(Intent.ACTION_VIEW);
             detailIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);

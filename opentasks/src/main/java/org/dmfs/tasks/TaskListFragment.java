@@ -18,7 +18,6 @@ package org.dmfs.tasks;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -32,7 +31,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -151,13 +149,10 @@ public class TaskListFragment extends SupportFragment
         {
             selectChildView(parent, groupPosition, childPosition, true);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+            if (mExpandableListView.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
             {
-                if (mExpandableListView.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
-                {
-                    mActivatedPositionGroup = groupPosition;
-                    mActivatedPositionChild = childPosition;
-                }
+                mActivatedPositionGroup = groupPosition;
+                mActivatedPositionChild = childPosition;
             }
             /*
              * In contrast to a ListView an ExpandableListView does not set the activated item on it's own. So we have to do that here.
@@ -369,7 +364,6 @@ public class TaskListFragment extends SupportFragment
     }
 
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
@@ -381,18 +375,6 @@ public class TaskListFragment extends SupportFragment
         if (item != null)
         {
             item.setChecked(mSavedCompletedFilter);
-
-            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-            {
-                if (mSavedCompletedFilter)
-                {
-                    item.setTitle(R.string.menu_hide_completed);
-                }
-                else
-                {
-                    item.setTitle(R.string.menu_show_completed);
-                }
-            }
         }
     }
 
@@ -838,27 +820,20 @@ public class TaskListFragment extends SupportFragment
      */
     public void setActivateOnItemClick(boolean activateOnItemClick)
     {
-        if (android.os.Build.VERSION.SDK_INT >= 11)
-        {
-            mExpandableListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
-        }
+        mExpandableListView.setChoiceMode(activateOnItemClick ? ListView.CHOICE_MODE_SINGLE : ListView.CHOICE_MODE_NONE);
     }
 
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void setListViewScrollbarPositionLeft(boolean left)
     {
-        if (android.os.Build.VERSION.SDK_INT >= 11)
+        if (left)
         {
-            if (left)
-            {
-                mExpandableListView.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
-                // expandLV.setScrollBarStyle(style);
-            }
-            else
-            {
-                mExpandableListView.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
-            }
+            mExpandableListView.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_LEFT);
+            // expandLV.setScrollBarStyle(style);
+        }
+        else
+        {
+            mExpandableListView.setVerticalScrollbarPosition(View.SCROLLBAR_POSITION_RIGHT);
         }
     }
 
@@ -945,12 +920,9 @@ public class TaskListFragment extends SupportFragment
         {
             try
             {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-                {
-                    mExpandableListView
-                            .setItemChecked(mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)),
-                                    true);
-                }
+                mExpandableListView
+                        .setItemChecked(mExpandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForChild(groupPosition, childPosition)),
+                                true);
             }
             catch (NullPointerException e)
             {

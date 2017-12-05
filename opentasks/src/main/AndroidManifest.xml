@@ -141,72 +141,10 @@
         </activity>
         <service
                 android:name="org.dmfs.tasks.homescreen.TaskListWidgetUpdaterService"
-                android:permission="android.permission.BIND_REMOTEVIEWS"></service>
-
-        <receiver
-                android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLegacy"
-                android:enabled="@bool/preHoneycomb"
-                android:label="@string/task_list_widget_title">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
-
-                <data
-                        android:host="@string/opentasks_authority"
-                        android:scheme="content"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_START"/>
-
-                <data
-                        android:scheme="content"
-                        android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/task_widget_info"/>
-        </receiver>
-        <receiver
-                android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLargeLegacy"
-                android:enabled="@bool/preHoneycomb"
-                android:label="@string/task_list_widget_title_4x4">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
-
-                <data
-                        android:host="@string/opentasks_authority"
-                        android:scheme="content"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_START"/>
-
-                <data
-                        android:scheme="content"
-                        android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
-            </intent-filter>
-
-            <meta-data
-                    android:name="android.appwidget.provider"
-                    android:resource="@xml/task_widget_info_large"/>
-        </receiver>
+                android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
         <receiver
                 android:name="org.dmfs.tasks.homescreen.TaskListWidgetProvider"
-                android:enabled="@bool/postHoneycomb"
                 android:label="@string/task_list_widget_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -236,7 +174,7 @@
         </receiver>
         <receiver
                 android:name="org.dmfs.tasks.homescreen.TaskListWidgetProviderLarge"
-                android:enabled="@bool/postHoneycomb"
+                android:enabled="true"
                 android:label="@string/task_list_widget_title_4x4">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -314,7 +252,7 @@
                 android:name="org.dmfs.tasks.dashclock.DashClockPreferenceActivity"
                 android:exported="true"
                 android:label="@string/title_task_list"
-                android:theme="@style/AppTheme"></activity>
+                android:theme="@style/AppTheme"/>
         <!-- Color Picker -->
         <activity
                 android:name="org.dmfs.android.colorpicker.ColorPickerActivity"

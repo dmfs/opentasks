@@ -8,7 +8,6 @@
     <string name="menu_add_task">Feladat hozzáadása</string>
     <string name="menu_add_task_condensed">Hozzáadás</string>
     <string name="menu_show_completed">Befejezett feladatok megjelenítése</string>
-    <string name="menu_hide_completed">Befejezett feladatok elrejtése</string>
     <string name="menu_show_completed_condensed">Befejezett feladatok megjelenítése</string>
     <string name="menu_sync_now">Frissítés</string>
     <string name="menu_sync_now_condensed">Frissítés</string>

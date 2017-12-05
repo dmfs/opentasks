@@ -8,7 +8,6 @@
     <string name="menu_add_task">Neue Aufgabe</string>
     <string name="menu_add_task_condensed">Neu</string>
     <string name="menu_show_completed">Fertige Aufgaben zeigen</string>
-    <string name="menu_hide_completed">Fertige Aufgaben verbergen</string>
     <string name="menu_show_completed_condensed">Fertige Aufgaben zeigen</string>
     <string name="menu_sync_now">Aktualisieren</string>
     <string name="menu_sync_now_condensed">Aktualisieren</string>

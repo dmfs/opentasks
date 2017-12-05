@@ -8,7 +8,6 @@
     <string name="menu_add_task">Додај задатак</string>
     <string name="menu_add_task_condensed">Додај</string>
     <string name="menu_show_completed">Прикажи завршене</string>
-    <string name="menu_hide_completed">Сакриј завршене</string>
     <string name="menu_show_completed_condensed">Прикажи завршене</string>
     <string name="menu_sync_now">Освежи</string>
     <string name="menu_sync_now_condensed">Освежи</string>

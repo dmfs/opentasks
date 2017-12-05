@@ -16,12 +16,10 @@
 
 package org.dmfs.tasks.groupings;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.os.Build;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
@@ -62,7 +60,6 @@ public class ByStartDate extends AbstractGroupingFactory
         private int mFlingRevealRightViewId = R.id.fling_reveal_right;
 
 
-        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         @Override
         public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
         {

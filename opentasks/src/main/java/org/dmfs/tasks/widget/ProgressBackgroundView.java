@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks.widget;
 
-import android.os.Build;
 import android.view.View;
 
 import org.dmfs.optional.Optional;
@@ -43,7 +42,7 @@ public final class ProgressBackgroundView implements SmartView<Optional<Integer>
     @Override
     public void update(Optional<Integer> percentComplete)
     {
-        if (Build.VERSION.SDK_INT >= 11 && percentComplete.isPresent())
+        if (percentComplete.isPresent())
         {
             mBackgroundView.setPivotX(0);
             if (percentComplete.value() < 100)

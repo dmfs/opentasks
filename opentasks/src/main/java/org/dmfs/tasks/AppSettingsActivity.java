@@ -16,10 +16,7 @@
 
 package org.dmfs.tasks;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.view.MenuItem;
 
 import org.dmfs.tasks.utils.BaseActivity;
@@ -30,7 +27,6 @@ import org.dmfs.tasks.utils.BaseActivity;
  *
  * @author Gabor Keszthelyi
  */
-@RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
 public final class AppSettingsActivity extends BaseActivity
 {
 
@@ -43,7 +39,7 @@ public final class AppSettingsActivity extends BaseActivity
                 .replace(android.R.id.content, new AppSettingsFragment())
                 .commit();
 
-        setupActionBar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -58,13 +54,4 @@ public final class AppSettingsActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar()
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
-        {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
 }

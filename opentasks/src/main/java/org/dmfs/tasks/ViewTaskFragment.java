@@ -28,8 +28,6 @@ import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
@@ -677,10 +675,7 @@ public class ViewTaskFragment extends SupportFragment
             mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
             ((Callback) getActivity()).updateColor(new ValueColor(mListColor));
 
-            if (VERSION.SDK_INT >= 11)
-            {
-                updateColor();
-            }
+            updateColor();
 
             Activity activity = getActivity();
             int newStatus = TaskFieldAdapters.STATUS.get(contentSet);
@@ -768,7 +763,7 @@ public class ViewTaskFragment extends SupportFragment
 
         handleAlphaOnTitle(percentage);
 
-        if (mIsTheTitleContainerVisible && Build.VERSION.SDK_INT >= 11)
+        if (mIsTheTitleContainerVisible)
         {
             mAppBar.findViewById(R.id.toolbar_content).setAlpha(1 - percentage);
         }
@@ -821,10 +816,7 @@ public class ViewTaskFragment extends SupportFragment
         }
 
         activty.setSupportActionBar(mToolBar);
-        if (android.os.Build.VERSION.SDK_INT >= 11)
-        {
-            activty.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        activty.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
