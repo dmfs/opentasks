@@ -16,11 +16,8 @@
 
 package org.dmfs.tasks.utils;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.support.annotation.VisibleForTesting;
 import android.text.format.DateUtils;
 import android.text.format.Time;
@@ -32,7 +29,6 @@ import org.dmfs.tasks.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -96,13 +92,7 @@ public class DateFormatter
                     @Override
                     public boolean useRelative(Time now, Time date)
                     {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-                        {
-                            return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
-                        }
-                        // The DateUtils implementation of pre ICS android calculates the relative date times in fixed 24h slots and therefore is unusable for us.
-                        return false;
-
+                        return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
                     }
                 },
 
@@ -242,7 +232,6 @@ public class DateFormatter
      *
      * @return A string with the formatted due date.
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public String format(Time date, DateFormatContext dateContext)
     {
         mNow.clear(TimeZone.getDefault().getID());
@@ -255,7 +244,6 @@ public class DateFormatter
      * Same as {@link #format(Time, DateFormatContext)} just with {@link DateTime}s.
      * ({@link Time} will eventually be replaced with {@link DateTime} in the project)
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public String format(DateTime date, DateFormatContext dateContext)
     {
         return format(toTime(date), dateContext);
@@ -272,7 +260,6 @@ public class DateFormatter
      *
      * @return A string with the formatted due date.
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public String format(Time date, Time now, DateFormatContext dateContext)
     {
 
@@ -320,27 +307,17 @@ public class DateFormatter
      * Same as {@link #format(Time, Time, DateFormatContext)} just with {@link DateTime}s.
      * ({@link Time} will eventually be replaced with {@link DateTime} in the project)
      */
-    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     public String format(DateTime date, DateTime now, DateFormatContext dateContext)
     {
         return format(toTime(date), toTime(now), dateContext);
     }
 
 
-    @SuppressLint("NewApi")
     private String formatAllDay(Time date, Time now, DateFormatContext dateContext)
     {
         // use DataRange in order to set the correct timezone
-        if (Build.VERSION.SDK_INT > 8)
-        {
-            return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), date.toMillis(false), date.toMillis(false),
-                    dateContext.getDateUtilsFlags(now, date), "UTC").toString();
-        }
-        else
-        {
-            mDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-            return mDateFormat.format(new Date(date.toMillis(false)));
-        }
+        return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), date.toMillis(false), date.toMillis(false),
+                dateContext.getDateUtilsFlags(now, date), "UTC").toString();
     }
 
 

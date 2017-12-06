@@ -16,11 +16,9 @@
 
 package org.dmfs.tasks.homescreen;
 
-import android.annotation.TargetApi;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 
 /**
@@ -28,7 +26,6 @@ import android.os.Build;
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class TaskListWidgetProviderLarge extends TaskListWidgetProvider
 {
 

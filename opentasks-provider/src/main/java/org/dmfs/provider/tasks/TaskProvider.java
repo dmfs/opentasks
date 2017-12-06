@@ -19,7 +19,6 @@ package org.dmfs.provider.tasks;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.OnAccountsUpdateListener;
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -33,7 +32,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
@@ -77,7 +75,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 
@@ -948,7 +945,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     }
 
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public int updateInTransaction(final SQLiteDatabase db, Uri uri, final ContentValues values, String selection, String[] selectionArgs,
                                    final boolean isSyncAdapter)
@@ -1120,22 +1116,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 operation.run(getContext(), mAsyncHandler, uri, db, values);
         }
 
-        // get the keys in values
-        Set<String> keys;
-        if (android.os.Build.VERSION.SDK_INT < 11)
-        {
-            keys = new HashSet<String>();
-            for (Entry<String, Object> entry : values.valueSet())
-            {
-                keys.add(entry.getKey());
-            }
-        }
-        else
-        {
-            keys = values.keySet();
-        }
-
-        if (!TASK_LIST_SYNC_COLUMNS.containsAll(keys))
+        if (!TASK_LIST_SYNC_COLUMNS.containsAll(values.keySet()))
         {
             // send notifications, because non-sync columns have been updated
             postNotifyUri(uri);

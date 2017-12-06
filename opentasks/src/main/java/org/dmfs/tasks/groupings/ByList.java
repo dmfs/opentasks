@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks.groupings;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -59,7 +58,6 @@ import org.dmfs.tasks.widget.ProgressBackgroundView;
  *
  * @author Marten Gajda <marten@dmfs.org>
  */
-@TargetApi(11)
 public class ByList extends AbstractGroupingFactory
 {
     /**

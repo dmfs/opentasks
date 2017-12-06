@@ -8,7 +8,6 @@
     <string name="menu_add_task">Dodaj zadanie</string>
     <string name="menu_add_task_condensed">Dodaj</string>
     <string name="menu_show_completed">Pokazuj zakończone</string>
-    <string name="menu_hide_completed">Ukryj zakończone</string>
     <string name="menu_show_completed_condensed">Pokaż zakończone</string>
     <string name="menu_sync_now">Odśwież</string>
     <string name="menu_sync_now_condensed">Odśwież</string>

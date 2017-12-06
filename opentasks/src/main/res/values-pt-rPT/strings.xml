@@ -8,7 +8,6 @@
     <string name="menu_add_task">Adicionar tarefa</string>
     <string name="menu_add_task_condensed">Adicionar</string>
     <string name="menu_show_completed">Mostrar tarefas concluídas</string>
-    <string name="menu_hide_completed">Ocultar tarefas concluídas</string>
     <string name="menu_show_completed_condensed">Mostrar tarefas concluídas</string>
     <string name="menu_sync_now">Atualizar</string>
     <string name="menu_sync_now_condensed">Atualizar</string>

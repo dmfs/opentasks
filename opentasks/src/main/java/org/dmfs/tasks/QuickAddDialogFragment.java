@@ -16,15 +16,12 @@
 
 package org.dmfs.tasks;
 
-import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -391,7 +388,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     }
 
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onClick(View v)
     {
@@ -442,21 +438,12 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     }
 
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void notifyUser(boolean close)
     {
-        if (VERSION.SDK_INT >= 14)
-        {
-            mContent.animate().alpha(0).setDuration(250).start();
-            mConfirmation.setAlpha(0);
-            mConfirmation.setVisibility(View.VISIBLE);
-            mConfirmation.animate().alpha(1).setDuration(250).start();
-        }
-        else
-        {
-            mContent.setVisibility(View.INVISIBLE);
-            mConfirmation.setVisibility(View.VISIBLE);
-        }
+        mContent.animate().alpha(0).setDuration(250).start();
+        mConfirmation.setAlpha(0);
+        mConfirmation.setVisibility(View.VISIBLE);
+        mConfirmation.animate().alpha(1).setDuration(250).start();
 
         if (close)
         {
@@ -509,20 +496,11 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     private final Runnable mReset = new Runnable()
     {
 
-        @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
         @Override
         public void run()
         {
-            if (VERSION.SDK_INT >= 14)
-            {
-                mContent.animate().alpha(1).setDuration(250).start();
-                mConfirmation.animate().alpha(0).setDuration(250).start();
-            }
-            else
-            {
-                mContent.setVisibility(View.VISIBLE);
-                mConfirmation.setVisibility(View.INVISIBLE);
-            }
+            mContent.animate().alpha(1).setDuration(250).start();
+            mConfirmation.animate().alpha(0).setDuration(250).start();
             mSaveButton.setEnabled(true);
             mSaveAndNextButton.setEnabled(true);
 

@@ -8,7 +8,6 @@
     <string name="menu_add_task">Taak toevoegen</string>
     <string name="menu_add_task_condensed">Toevoegen</string>
     <string name="menu_show_completed">Afgeronde taken weergeven</string>
-    <string name="menu_hide_completed">Afgeronde taken verbergen</string>
     <string name="menu_show_completed_condensed">Afgeronde taken weergeven</string>
     <string name="menu_sync_now">Ververs</string>
     <string name="menu_sync_now_condensed">Ververs</string>

@@ -51,7 +51,6 @@ import java.util.TimeZone;
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 public class NotificationActionUtils
 {
 
@@ -128,17 +127,15 @@ public class NotificationActionUtils
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // add actions
-        if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
-        {
-            // delay action
-            mBuilder.addAction(NotificationUpdaterService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
 
-            // complete action
-            NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, title,
-                    R.string.notification_action_completed, notificationId, taskUri, dueDate);
-            mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
-                    NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
-        }
+        // delay action
+        mBuilder.addAction(NotificationUpdaterService.getDelay1dAction(context, notificationId, taskUri, dueDate, timezone, dueAllDay));
+
+        // complete action
+        NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, title,
+                R.string.notification_action_completed, notificationId, taskUri, dueDate);
+        mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
+                NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
         // set displayed time
         if (dueAllDay)
@@ -211,14 +208,10 @@ public class NotificationActionUtils
         }
 
         // add actions
-        if (android.os.Build.VERSION.SDK_INT >= VERSION_CODES.ICE_CREAM_SANDWICH)
-        {
-            NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, title,
-                    R.string.notification_action_completed, notificationId, taskUri, startDate);
-            mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
-                    NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
-
-        }
+        NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, title,
+                R.string.notification_action_completed, notificationId, taskUri, startDate);
+        mBuilder.addAction(NotificationUpdaterService.getCompleteAction(context,
+                NotificationActionUtils.getNotificationActionPendingIntent(context, completeAction)));
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(Intent.ACTION_VIEW);

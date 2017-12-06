@@ -26,7 +26,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -148,14 +147,7 @@ public enum ContentOperation
             SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
             Editor editor = prefs.edit();
             editor.putLong(PREFS_KEY_LAST_ALARM_TIMESTAMP, time.getTimestamp());
-            if (Build.VERSION.SDK_INT >= 9)
-            {
-                editor.apply();
-            }
-            else
-            {
-                editor.commit();
-            }
+            editor.apply();
         }
 
 
@@ -285,14 +277,7 @@ public enum ContentOperation
             SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
             Editor editor = prefs.edit();
             editor.putLong(PREFS_KEY_LAST_ALARM_TIMESTAMP, time.getTimestamp());
-            if (Build.VERSION.SDK_INT >= 9)
-            {
-                editor.apply();
-            }
-            else
-            {
-                editor.commit();
-            }
+            editor.apply();
         }
 
 

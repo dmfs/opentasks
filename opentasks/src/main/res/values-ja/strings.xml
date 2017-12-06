@@ -8,7 +8,6 @@
     <string name="menu_add_task">すべてのタスク</string>
     <string name="menu_add_task_condensed">追加</string>
     <string name="menu_show_completed">完了したタスクを表示</string>
-    <string name="menu_hide_completed">完了したタスクを非表示</string>
     <string name="menu_show_completed_condensed">完了したタスクを表示</string>
     <string name="menu_sync_now">更新</string>
     <string name="menu_sync_now_condensed">更新</string>

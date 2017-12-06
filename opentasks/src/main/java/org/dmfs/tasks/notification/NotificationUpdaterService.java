@@ -514,7 +514,6 @@ public class NotificationUpdaterService extends Service
     }
 
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void resolveUndoAction(Intent intent)
     {
         if (!intent.hasExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION))

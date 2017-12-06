@@ -267,11 +267,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
         mListSpinner.setOnItemSelectedListener(this);
 
-        if (android.os.Build.VERSION.SDK_INT < 11)
-        {
-            mListSpinner.setBackgroundDrawable(null);
-        }
-
         if (mAppForEdit)
         {
             if (mTaskUri != null)
@@ -539,17 +534,9 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        final int menuId = item.getItemId();
-        Activity activity = getActivity();
-        if (menuId == R.id.editor_action_save)
+        if (item.getItemId() == R.id.editor_action_save)
         {
             saveAndExit();
-            return true;
-        }
-        else if (menuId == R.id.editor_action_cancel)
-        {
-            activity.setResult(Activity.RESULT_CANCELED);
-            activity.finish();
             return true;
         }
         return false;
@@ -693,32 +680,29 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     @SuppressLint("NewApi")
     private void updateColor(float percentage)
     {
-        if (VERSION.SDK_INT >= 11)
+        if (mColorBar == null)
         {
-            if (mColorBar == null)
-            {
-                percentage = 1;
-            }
-            else
-            {
-                percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
-            }
+            percentage = 1;
+        }
+        else
+        {
+            percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
+        }
 
-            int newColor = getBlendColor(mListColor, darkenColor(mListColor), (int) ((0.5 + 0.5 * percentage) * 255));
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-            actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
+        int newColor = getBlendColor(mListColor, darkenColor(mListColor), (int) ((0.5 + 0.5 * percentage) * 255));
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
 
-            // this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowTitleEnabled(true);
+        // this is a workaround to ensure the new color is applied on all devices, some devices show a transparent ActionBar if we don't do that.
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(true);
 
-            if (VERSION.SDK_INT >= 21)
-            {
-                Window window = getActivity().getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(mixColors(newColor, mListColor));
-                // window.setNavigationBarColor(mixColors(newColor, mListColor));
-            }
+        if (VERSION.SDK_INT >= 21)
+        {
+            Window window = getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(mixColors(newColor, mListColor));
+            // window.setNavigationBarColor(mixColors(newColor, mListColor));
         }
         mTaskListBar.setBackgroundColor(mListColor);
         if (mColorBar != null)

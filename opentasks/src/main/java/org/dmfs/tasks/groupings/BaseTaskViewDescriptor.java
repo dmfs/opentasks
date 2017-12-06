@@ -22,7 +22,6 @@ import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -156,22 +155,10 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
             flingContentView = view;
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= 14)
+        if (flingContentView.getTranslationX() != 0)
         {
-            if (flingContentView.getTranslationX() != 0)
-            {
-                flingContentView.setTranslationX(0);
-                flingContentView.setAlpha(1);
-            }
-        }
-        else
-        {
-            LayoutParams layoutParams = (LayoutParams) flingContentView.getLayoutParams();
-            if (layoutParams.leftMargin != 0 || layoutParams.rightMargin != 0)
-            {
-                layoutParams.setMargins(0, layoutParams.topMargin, 0, layoutParams.bottomMargin);
-                flingContentView.setLayoutParams(layoutParams);
-            }
+            flingContentView.setTranslationX(0);
+            flingContentView.setAlpha(1);
         }
     }
 

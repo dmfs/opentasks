@@ -16,7 +16,6 @@
 
 package org.dmfs.tasks.model;
 
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,7 +27,6 @@ import android.util.Log;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
-import org.dmfs.tasks.utils.SetFromMap;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -546,22 +544,13 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    @TargetApi(9)
     public void addOnChangeListener(OnContentChangeListener listener, String key, boolean notify)
     {
         Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
         if (listenerSet == null)
         {
             // using a "WeakHashSet" ensures that we don't prevent listeners from getting garbage-collected.
-
-            if (android.os.Build.VERSION.SDK_INT > 8)
-            {
-                listenerSet = Collections.newSetFromMap(new WeakHashMap<OnContentChangeListener, Boolean>());
-            }
-            else
-            {
-                listenerSet = new SetFromMap<OnContentChangeListener>(new WeakHashMap<OnContentChangeListener, Boolean>());
-            }
+            listenerSet = Collections.newSetFromMap(new WeakHashMap<OnContentChangeListener, Boolean>());
             mOnChangeListeners.put(key, listenerSet);
         }
 

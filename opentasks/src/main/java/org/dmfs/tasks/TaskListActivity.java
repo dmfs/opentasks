@@ -17,13 +17,11 @@
 package org.dmfs.tasks;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
@@ -190,8 +188,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     private FloatingActionButton mFloatingActionButton;
 
 
-    @SuppressLint("NewApi")
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -287,7 +283,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         {
             mCurrentPagePosition = currentPageIndex;
             mViewPager.setCurrentItem(currentPageIndex);
-            if (VERSION.SDK_INT >= 14 && mCurrentPageId == R.id.task_group_search)
+            if (mCurrentPageId == R.id.task_group_search)
             {
                 if (mSearchItem != null)
                 {
@@ -631,22 +627,14 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     }
 
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void hideSearchActionView()
     {
         MenuItemCompat.collapseActionView(mSearchItem);
     }
 
 
-    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void setupSearch(Menu menu)
     {
-        // bail early on unsupported devices
-        if (Build.VERSION.SDK_INT < 11)
-        {
-            return;
-        }
-
         mSearchItem = menu.findItem(R.id.search);
         MenuItemCompat.setOnActionExpandListener(mSearchItem, new OnActionExpandListener()
         {

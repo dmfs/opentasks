@@ -14,7 +14,6 @@
             android:icon="@drawable/ic_pin_off_white_24dp"
             android:title="@string/activity_task_details_pin_task"
             android:titleCondensed="@string/activity_task_details_pin"
-            android:visible="@bool/postHoneycomb"
             app:showAsAction="always"/>
     <item
             android:id="@+id/opentasks_send_task"
