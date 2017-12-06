@@ -97,9 +97,9 @@ public class ExpandableChildDescriptor
         {
             /*
              * The columns in cursor may be null, but the selection arguments for the CursorLoader must be non-null.
-			 * 
-			 * To fix that we scan the selection string for question marks and replace them by "null" if the corresponding selection argument is null.
-			 */
+             *
+             * To fix that we scan the selection string for question marks and replace them by "null" if the corresponding selection argument is null.
+             */
 
             int pos = 0;
             int newPos;

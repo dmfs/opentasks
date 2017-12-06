@@ -186,7 +186,7 @@ public class TimeZoneWrapper extends TimeZone
     {
         /*
          * Return the raw offset as hash code. It satisfies the requirements of a hash values: Time zones that are equal have the same raw offset.
-		 */
+         */
         return getRawOffset();
     }
 
@@ -201,14 +201,14 @@ public class TimeZoneWrapper extends TimeZone
 
         TimeZone otherTimeZone = (TimeZone) object;
 
-		/*
-		 * This is a very simple check for equality of two time zones. It returns the wrong result if two time zones have the same UTC offset, but use different
-		 * dates to switch to summer time.
-		 * 
-		 * Are there such cases? How can we improve it? Maybe by testing a few more days in March and October?
-		 * 
-		 * TODO: improve the check
-		 */
+        /*
+         * This is a very simple check for equality of two time zones. It returns the wrong result if two time zones have the same UTC offset, but use different
+         * dates to switch to summer time.
+         *
+         * Are there such cases? How can we improve it? Maybe by testing a few more days in March and October?
+         *
+         * TODO: improve the check
+         */
         return (mTimeZone.getID().equals(otherTimeZone.getID()))
                 || (mTimeZone.useDaylightTime() == otherTimeZone.useDaylightTime() && mTimeZone.getRawOffset() == otherTimeZone.getRawOffset()
                 && mTimeZone.getDSTSavings() == otherTimeZone.getDSTSavings() && mTimeZone.inDaylightTime(TEST_DATE) == otherTimeZone.inDaylightTime(

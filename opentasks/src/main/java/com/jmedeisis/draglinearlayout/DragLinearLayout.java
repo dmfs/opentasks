@@ -251,12 +251,12 @@ public class DragLinearLayout extends LinearLayout
     /**
      * The shadow to be drawn above the {@link #draggedItem}.
      */
-//	private final Drawable dragTopShadowDrawable;
+//    private final Drawable dragTopShadowDrawable;
     /**
      * The shadow to be drawn below the {@link #draggedItem}.
      */
-//	private final Drawable dragBottomShadowDrawable;
-//	private final int dragShadowHeight;
+//    private final Drawable dragBottomShadowDrawable;
+//    private final int dragShadowHeight;
 
     /**
      * See {@link #setContainerScrollView(android.widget.ScrollView)}.
@@ -287,24 +287,24 @@ public class DragLinearLayout extends LinearLayout
 
         final Resources resources = getResources();
         // changed by dmfs: don't use shadows
-//		dragTopShadowDrawable = ContextCompat.getDrawable(context, R.drawable.ab_solid_shadow_holo_flipped);
-//		dragBottomShadowDrawable = ContextCompat.getDrawable(context, R.drawable.ab_solid_shadow_holo);
-//		dragShadowHeight = resources.getDimensionPixelSize(R.dimen.downwards_drop_shadow_height);
+//        dragTopShadowDrawable = ContextCompat.getDrawable(context, R.drawable.ab_solid_shadow_holo_flipped);
+//        dragBottomShadowDrawable = ContextCompat.getDrawable(context, R.drawable.ab_solid_shadow_holo);
+//        dragShadowHeight = resources.getDimensionPixelSize(R.dimen.downwards_drop_shadow_height);
 
         // changed by dmfs: don't use DragLinearLayout_scrollSensitiveHeight from resources, use default
         scrollSensitiveAreaHeight =
                 (int) (DEFAULT_SCROLL_SENSITIVE_AREA_HEIGHT_DP * resources.getDisplayMetrics().density + 0.5f);
 
-//		TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.DragLinearLayout, 0, 0);
-//		try
-//		{
-//			scrollSensitiveAreaHeight = a.getDimensionPixelSize(R.styleable.DragLinearLayout_scrollSensitiveHeight,
-//				(int) (DEFAULT_SCROLL_SENSITIVE_AREA_HEIGHT_DP * resources.getDisplayMetrics().density + 0.5f));
-//		}
-//		finally
-//		{
-//			a.recycle();
-//		}
+//        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.DragLinearLayout, 0, 0);
+//        try
+//        {
+//            scrollSensitiveAreaHeight = a.getDimensionPixelSize(R.styleable.DragLinearLayout_scrollSensitiveHeight,
+//                (int) (DEFAULT_SCROLL_SENSITIVE_AREA_HEIGHT_DP * resources.getDisplayMetrics().density + 0.5f));
+//        }
+//        finally
+//        {
+//            a.recycle();
+//        }
 
         nominalDistanceScaled = (int) (NOMINAL_DISTANCE * resources.getDisplayMetrics().density + 0.5f);
     }
@@ -527,9 +527,9 @@ public class DragLinearLayout extends LinearLayout
                 draggedItem.setTotalOffset(((Float) animation.getAnimatedValue()).intValue());
 
                 final int shadowAlpha = (int) ((1 - animation.getAnimatedFraction()) * 255);
-//				if (null != dragTopShadowDrawable)
-//					dragTopShadowDrawable.setAlpha(shadowAlpha);
-//				dragBottomShadowDrawable.setAlpha(shadowAlpha);
+//                if (null != dragTopShadowDrawable)
+//                    dragTopShadowDrawable.setAlpha(shadowAlpha);
+//                dragBottomShadowDrawable.setAlpha(shadowAlpha);
                 invalidate();
             }
         });
@@ -553,9 +553,9 @@ public class DragLinearLayout extends LinearLayout
                 draggedItem.settleAnimation = null;
                 draggedItem.stopDetecting();
 
-//				if (null != dragTopShadowDrawable)
-//					dragTopShadowDrawable.setAlpha(255);
-//				dragBottomShadowDrawable.setAlpha(255);
+//                if (null != dragTopShadowDrawable)
+//                    dragTopShadowDrawable.setAlpha(255);
+//                dragBottomShadowDrawable.setAlpha(255);
 
                 // restore layout transition
                 if (layoutTransition != null && getLayoutTransition() == null)
@@ -773,33 +773,33 @@ public class DragLinearLayout extends LinearLayout
             final int top = draggedItem.viewDrawable.getBounds().top;
             final int bottom = draggedItem.viewDrawable.getBounds().bottom;
 
-//			dragBottomShadowDrawable.setBounds(left, bottom, right, bottom + dragShadowHeight);
-//			dragBottomShadowDrawable.draw(canvas);
+//            dragBottomShadowDrawable.setBounds(left, bottom, right, bottom + dragShadowHeight);
+//            dragBottomShadowDrawable.draw(canvas);
 //
-//			if (null != dragTopShadowDrawable)
-//			{
-//				dragTopShadowDrawable.setBounds(left, top - dragShadowHeight, right, top);
-//				dragTopShadowDrawable.draw(canvas);
-//			}
+//            if (null != dragTopShadowDrawable)
+//            {
+//                dragTopShadowDrawable.setBounds(left, top - dragShadowHeight, right, top);
+//                dragTopShadowDrawable.draw(canvas);
+//            }
 
             canvas.restore();
         }
     }
 
 
-	/*
+    /*
      * Note regarding touch handling: In general, we have three cases - 1) User taps outside any children. #onInterceptTouchEvent receives DOWN #onTouchEvent
-	 * receives DOWN draggedItem.detecting == false, we return false and no further events are received 2) User taps on non-interactive drag handle / child,
-	 * e.g. TextView or ImageView. #onInterceptTouchEvent receives DOWN DragHandleOnTouchListener (attached to each draggable child) #onTouch receives DOWN
-	 * #startDetectingDrag is called, draggedItem is now detecting view does not handle touch, so our #onTouchEvent receives DOWN draggedItem.detecting == true,
-	 * we #startDrag() and proceed to handle the drag 3) User taps on interactive drag handle / child, e.g. Button. #onInterceptTouchEvent receives DOWN
-	 * DragHandleOnTouchListener (attached to each draggable child) #onTouch receives DOWN #startDetectingDrag is called, draggedItem is now detecting view
-	 * handles touch, so our #onTouchEvent is not called yet #onInterceptTouchEvent receives ACTION_MOVE if dy > touch slop, we assume user wants to drag and
-	 * intercept the event #onTouchEvent receives further ACTION_MOVE events, proceed to handle the drag
-	 * 
-	 * For cases 2) and 3), lifting the active pointer at any point in the sequence of events triggers #onTouchEnd and the draggedItem, if detecting, is
-	 * #stopDetecting.
-	 */
+     * receives DOWN draggedItem.detecting == false, we return false and no further events are received 2) User taps on non-interactive drag handle / child,
+     * e.g. TextView or ImageView. #onInterceptTouchEvent receives DOWN DragHandleOnTouchListener (attached to each draggable child) #onTouch receives DOWN
+     * #startDetectingDrag is called, draggedItem is now detecting view does not handle touch, so our #onTouchEvent receives DOWN draggedItem.detecting == true,
+     * we #startDrag() and proceed to handle the drag 3) User taps on interactive drag handle / child, e.g. Button. #onInterceptTouchEvent receives DOWN
+     * DragHandleOnTouchListener (attached to each draggable child) #onTouch receives DOWN #startDetectingDrag is called, draggedItem is now detecting view
+     * handles touch, so our #onTouchEvent is not called yet #onInterceptTouchEvent receives ACTION_MOVE if dy > touch slop, we assume user wants to drag and
+     * intercept the event #onTouchEvent receives further ACTION_MOVE events, proceed to handle the drag
+     *
+     * For cases 2) and 3), lifting the active pointer at any point in the sequence of events triggers #onTouchEnd and the draggedItem, if detecting, is
+     * #stopDetecting.
+     */
 
 
     @Override

@@ -79,7 +79,7 @@ public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChang
         {
             /*
              * enable memory leak workaround on android < 4.3: disable spell checker
-			 */
+             */
 
             int inputType = mText.getInputType();
             if (Build.VERSION.SDK_INT < 18)

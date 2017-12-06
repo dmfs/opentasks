@@ -145,7 +145,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
     {
         /*
          * Iterate over all the widgets of this type and update them individually.
-		 */
+         */
         for (int i = 0; i < appWidgetIds.length; i++)
         {
             Log.d(TAG, "updating widget " + i);
@@ -186,7 +186,7 @@ public class TaskListWidgetProvider extends AppWidgetProvider
 
             widget.setPendingIntentTemplate(R.id.task_list_widget_lv, clickPI);
 
-			/* Finally update the widget */
+            /* Finally update the widget */
             appWidgetManager.updateAppWidget(appWidgetIds[i], widget);
         }
     }

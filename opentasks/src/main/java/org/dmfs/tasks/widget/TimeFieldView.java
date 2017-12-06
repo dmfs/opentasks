@@ -157,7 +157,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
                 {
                     /*
                      * The date has a time zone that is different from the default time zone, so show the original time too.
-					 */
+                     */
                     mDefaultDateFormat.setTimeZone(taskTimeZone);
                     mDefaultTimeFormat.setTimeZone(taskTimeZone);
 

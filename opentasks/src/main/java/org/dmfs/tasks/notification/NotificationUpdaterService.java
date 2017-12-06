@@ -522,10 +522,10 @@ public class NotificationUpdaterService extends Service
             return;
         }
 
-		/*
+        /*
          * Grab the alarm from the intent. Since the remote AlarmManagerService fills in the Intent to add some extra data, it must unparcel the
-		 * NotificationAction object. It throws a ClassNotFoundException when unparcelling. To avoid this, do the marshalling ourselves.
-		 */
+         * NotificationAction object. It throws a ClassNotFoundException when unparcelling. To avoid this, do the marshalling ourselves.
+         */
         final NotificationAction notificationAction;
         final String action = intent.getAction();
         final byte[] data = intent.getByteArrayExtra(NotificationActionUtils.EXTRA_NOTIFICATION_ACTION);

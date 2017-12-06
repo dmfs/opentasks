@@ -242,7 +242,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
         {
             /*
              * Switch to timeZone and reset back to original time zone. That updates date & time to the values in timeZone but keeps the original time zone.
-			 */
+             */
             String originalTimeZone = time.timezone;
             time.switchTimezone(timeZone);
             time.timezone = originalTimeZone;
@@ -298,23 +298,23 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
             if (mDateTime != null && mDateTime.timezone != null && !TextUtils.equals(mDateTime.timezone, newTime.timezone) && !newTime.allDay)
             {
                 /*
-				 * Time zone has been changed.
-				 * 
-				 * We don't want to change date and hour in the editor, so apply the old time zone.
-				 */
+                 * Time zone has been changed.
+                 *
+                 * We don't want to change date and hour in the editor, so apply the old time zone.
+                 */
                 applyTimeInTimeZone(newTime, mDateTime.timezone);
             }
 
             if (mDateTime != null && mDateTime.allDay != newTime.allDay)
             {
                 /*
-				 * The all-day flag has been changed, we may have to restore time and time zone for the UI.
-				 */
+                 * The all-day flag has been changed, we may have to restore time and time zone for the UI.
+                 */
                 if (!newTime.allDay)
                 {
                     /*
-					 * Try to restore the time or set a reasonable time if we didn't have any before.
-					 */
+                     * Try to restore the time or set a reasonable time if we didn't have any before.
+                     */
                     if (mOldHour >= 0 && mOldMinutes >= 0)
                     {
                         newTime.hour = mOldHour;
@@ -328,10 +328,10 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
                         newTime.minute = defaultDate.minute;
                     }
                     /*
-					 * All-day events are floating and have no time zone (though it might be set to UTC).
-					 * 
-					 * Restore previous time zone if possible, otherwise pick a reasonable default value.
-					 */
+                     * All-day events are floating and have no time zone (though it might be set to UTC).
+                     *
+                     * Restore previous time zone if possible, otherwise pick a reasonable default value.
+                     */
                     newTime.timezone = mTimezone == null ? TimeZone.getDefault().getID() : mTimezone;
                     newTime.normalize(true);
                 }
@@ -349,9 +349,9 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
                 mTimezone = newTime.timezone;
             }
 
-			/*
-			 * Update UI. Ensure we show the time in the correct time zone.
-			 */
+            /*
+             * Update UI. Ensure we show the time in the correct time zone.
+             */
             Date currentDate = new Date(newTime.toMillis(false));
             TimeZone timeZone = TimeZone.getTimeZone(newTime.timezone);
 

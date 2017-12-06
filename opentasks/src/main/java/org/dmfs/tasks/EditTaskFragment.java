@@ -384,8 +384,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     {
         /*
          * If the model loads very slowly then this function may be called after onDetach. In this case check if Activity is <code>null</code> and return if
-		 * <code>true</code>. Also return if we don't have values or the values are still loading.
-		 */
+         * <code>true</code>. Also return if we don't have values or the values are still loading.
+         */
         Activity activity = getActivity();
         if (activity == null || mValues == null || mValues.isLoading())
         {
@@ -569,9 +569,9 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 Sources.loadModelAsync(mAppContext, contentSet.getAsString(Tasks.ACCOUNT_TYPE), EditTaskFragment.this);
             }
 
-			/*
+            /*
              * Don't start the model loader here, let onItemSelected do that.
-			 */
+             */
             setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
         }
 

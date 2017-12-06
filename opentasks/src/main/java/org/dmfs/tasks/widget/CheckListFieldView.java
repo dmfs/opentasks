@@ -301,9 +301,9 @@ public class CheckListFieldView extends AbstractFieldView implements OnCheckedCh
             }
         });
 
-		/*
+        /*
          * enable memory leak workaround on android < 4.3: disable spell checker
-		 */
+         */
         if (VERSION.SDK_INT < 18)
         {
             int inputType = text.getInputType();

@@ -75,17 +75,17 @@ public class WidgetConfigurationDatabaseHelper extends SQLiteOpenHelper
     static final String WIDGET_CONFIGURATION_TABLE = "widget_config";
 
     // @formatter:off
-	private final static String SQL_CREATE_WIDGET_CONFIGURATION_TABLE =
-		"CREATE TABLE " + WIDGET_CONFIGURATION_TABLE + " ( "
-			+ WidgetConfigurationColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ WidgetConfigurationColumns.WIDGET_ID + " INTEGER, "
-			+ WidgetConfigurationColumns.LIST_ID + " INTEGER,  UNIQUE ( " + WidgetConfigurationColumns.WIDGET_ID + ", " + WidgetConfigurationColumns.LIST_ID + " ) ON CONFLICT IGNORE )";
-	// @formatter:on
+    private final static String SQL_CREATE_WIDGET_CONFIGURATION_TABLE =
+        "CREATE TABLE " + WIDGET_CONFIGURATION_TABLE + " ( "
+            + WidgetConfigurationColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + WidgetConfigurationColumns.WIDGET_ID + " INTEGER, "
+            + WidgetConfigurationColumns.LIST_ID + " INTEGER,  UNIQUE ( " + WidgetConfigurationColumns.WIDGET_ID + ", " + WidgetConfigurationColumns.LIST_ID + " ) ON CONFLICT IGNORE )";
+    // @formatter:on
 
     // @formatter:off
-	private static final String SQL_DELETE_CONFIGURATION_TABLE =
-	    "DROP TABLE IF EXISTS " + WIDGET_CONFIGURATION_TABLE;
-	// @formatter:on
+    private static final String SQL_DELETE_CONFIGURATION_TABLE =
+        "DROP TABLE IF EXISTS " + WIDGET_CONFIGURATION_TABLE;
+    // @formatter:on
 
 
     public WidgetConfigurationDatabaseHelper(Context context)

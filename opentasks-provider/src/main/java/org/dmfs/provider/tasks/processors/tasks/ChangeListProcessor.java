@@ -124,12 +124,12 @@ public class ChangeListProcessor extends AbstractEntityProcessor<TaskAdapter>
     {
         /*
          * The task has been moved to a different list. Sync adapters are not expected to support this (especially since the new list may belong to a completely
-		 * different account or even account-type), so we emulate a copy & delete operation.
-		 * 
-		 * All sync adapter fields of the task are cleared, so it looks like a new task. In addition we create a new deleted task in the old list having the old
-		 * sync adapter field values. This means that the _ID field of the "deleted" task will not equal the _ID field f the original task. Sync adapters should
-		 * handle that correctly.
-		 */
+         * different account or even account-type), so we emulate a copy & delete operation.
+         *
+         * All sync adapter fields of the task are cleared, so it looks like a new task. In addition we create a new deleted task in the old list having the old
+         * sync adapter field values. This means that the _ID field of the "deleted" task will not equal the _ID field f the original task. Sync adapters should
+         * handle that correctly.
+         */
 
         Long result = null;
 

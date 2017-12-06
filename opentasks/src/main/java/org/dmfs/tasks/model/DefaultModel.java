@@ -73,9 +73,9 @@ public class DefaultModel extends Model
 
         Context context = getContext();
 
-		/*
+        /*
          * Add a couple of fields to the model.
-		 */
+         */
         // task list color
         addField(new FieldDescriptor(context, R.id.task_field_list_color, R.string.task_list, null, TaskFieldAdapters.LIST_COLOR)
                 .setViewLayout(LIST_COLOR_VIEW).setEditorLayout(LIST_COLOR_VIEW).setNoAutoAdd(true));

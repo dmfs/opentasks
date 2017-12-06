@@ -723,7 +723,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
             }
             /*
              * Deleting task lists is only allowed to sync adapters. They must provide ACCOUNT_NAME and ACCOUNT_TYPE.
-			 */
+             */
             case LIST_ID:
                 // add _id to selection and fall through
                 selection = updateSelection(selectId(uri), selection);
@@ -760,7 +760,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
             }
             /*
              * Task won't be removed, just marked as deleted if the caller isn't a sync adapter. Sync adapters can remove tasks immediately.
-			 */
+             */
             case TASK_ID:
                 // add id to selection and fall through
                 selection = updateSelection(selectId(uri), selection);

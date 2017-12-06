@@ -221,12 +221,12 @@ public class RelationHandler extends PropertyHandler
     {
         int type = oldValues.getInt(oldValues.getColumnIndex(Relation.RELATED_TYPE));
 
-		/*
+        /*
          * This is more complicated than it may sound. We don't know the order in which relations are created, updated or removed. So it's possible that a new
-		 * parent relationship has been created and the old one is removed afterwards. In that case we can not simply clear the PARENT_ID.
-		 * 
-		 * FIXME: For now we ignore that fact. But we should fix it.
-		 */
+         * parent relationship has been created and the old one is removed afterwards. In that case we can not simply clear the PARENT_ID.
+         *
+         * FIXME: For now we ignore that fact. But we should fix it.
+         */
 
         if (type == Relation.RELTYPE_PARENT)
         {
@@ -252,9 +252,9 @@ public class RelationHandler extends PropertyHandler
         {
             /*
              * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
-			 * 
-			 * FIXME: properly handle this case
-			 */
+             *
+             * FIXME: properly handle this case
+             */
         }
     }
 }

@@ -78,28 +78,28 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
     static final String SEARCH_HISTORY_TABLE = "search_history";
 
     // @formatter:off
-	private final static String SQL_CREATE_SEARCH_HISTORY_TABLE =
-		"CREATE TABLE " + SEARCH_HISTORY_TABLE + " ( "
-			+ SearchHistoryColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-			+ SearchHistoryColumns.SEARCH_QUERY + " TEXT, "
-			+ SearchHistoryColumns.HISTORIC + " INTEGER DEFAULT 0,"
-			+ SearchHistoryColumns.TIMESTAMP + " INTEGER DEFAULT 0"
-			+ " )";
-	// @formatter:on
+    private final static String SQL_CREATE_SEARCH_HISTORY_TABLE =
+        "CREATE TABLE " + SEARCH_HISTORY_TABLE + " ( "
+            + SearchHistoryColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + SearchHistoryColumns.SEARCH_QUERY + " TEXT, "
+            + SearchHistoryColumns.HISTORIC + " INTEGER DEFAULT 0,"
+            + SearchHistoryColumns.TIMESTAMP + " INTEGER DEFAULT 0"
+            + " )";
+    // @formatter:on
 
     // @formatter:off
-	private final static String SQL_CREATE_SEARCH_HISTORY_ADD_TRIGGER =
-		"CREATE TRIGGER search_history_add_trigger AFTER INSERT ON " + SEARCH_HISTORY_TABLE + " BEGIN "
-			// remove old entries
-			+ " DELETE FROM " + SEARCH_HISTORY_TABLE + " WHERE " + SearchHistoryColumns._ID + " not in"
-				+ "("
-					+ " select " + SearchHistoryColumns._ID + " from " + SEARCH_HISTORY_TABLE + " order by " + SearchHistoryColumns._ID + " desc limit " + SEARCH_HISTORY_SIZE
-				+ ");"
-			// mark all existing entries as historic
-			+ " UPDATE " + SEARCH_HISTORY_TABLE + " SET " + SearchHistoryColumns.HISTORIC + "=1 " +  " WHERE "
-				+ SearchHistoryColumns._ID + " <  new." + SearchHistoryColumns._ID + " AND " + SearchHistoryColumns.HISTORIC + "=0 ;"
-			+ " END";
-	// @formatter:on
+    private final static String SQL_CREATE_SEARCH_HISTORY_ADD_TRIGGER =
+        "CREATE TRIGGER search_history_add_trigger AFTER INSERT ON " + SEARCH_HISTORY_TABLE + " BEGIN "
+            // remove old entries
+            + " DELETE FROM " + SEARCH_HISTORY_TABLE + " WHERE " + SearchHistoryColumns._ID + " not in"
+                + "("
+                    + " select " + SearchHistoryColumns._ID + " from " + SEARCH_HISTORY_TABLE + " order by " + SearchHistoryColumns._ID + " desc limit " + SEARCH_HISTORY_SIZE
+                + ");"
+            // mark all existing entries as historic
+            + " UPDATE " + SEARCH_HISTORY_TABLE + " SET " + SearchHistoryColumns.HISTORIC + "=1 " +  " WHERE "
+                + SearchHistoryColumns._ID + " <  new." + SearchHistoryColumns._ID + " AND " + SearchHistoryColumns.HISTORIC + "=0 ;"
+            + " END";
+    // @formatter:on
 
 
     public SearchHistoryDatabaseHelper(Context context)

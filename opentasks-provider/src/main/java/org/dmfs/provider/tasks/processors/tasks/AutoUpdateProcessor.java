@@ -198,10 +198,10 @@ public class AutoUpdateProcessor extends AbstractEntityProcessor<TaskAdapter>
             task.set(TaskAdapter.IS_NEW, status == null || status == Tasks.STATUS_NEEDS_ACTION);
             task.set(TaskAdapter.IS_CLOSED, status != null && (status == Tasks.STATUS_COMPLETED || status == Tasks.STATUS_CANCELLED));
 
-			/*
+            /*
              * Update PERCENT_COMPLETE and COMPLETED (if not given). Sync adapters should know what they're doing, so don't update anything if caller is a sync
-			 * adapter.
-			 */
+             * adapter.
+             */
             if (status == Tasks.STATUS_COMPLETED && !isSyncAdapter)
             {
                 task.set(TaskAdapter.PERCENT_COMPLETE, 100);

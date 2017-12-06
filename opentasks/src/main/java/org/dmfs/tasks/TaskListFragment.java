@@ -161,7 +161,7 @@ public class TaskListFragment extends SupportFragment
             }
             /*
              * In contrast to a ListView an ExpandableListView does not set the activated item on it's own. So we have to do that here.
-			 */
+             */
             setActivatedItem(groupPosition, childPosition);
             return true;
         }
