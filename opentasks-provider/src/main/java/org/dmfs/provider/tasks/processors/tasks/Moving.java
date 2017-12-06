@@ -23,7 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -34,24 +34,39 @@ import org.dmfs.tasks.contract.TaskContract;
  * TODO: at present we only move recurrence exceptions based on the original row id. We should consider to move exceptions based on the original SYNC_ID as well
  * to support moving exception sets of tasks without known master instance.
  *
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Marten Gajda
  */
-public class ChangeListProcessor extends AbstractEntityProcessor<TaskAdapter>
+public final class Moving implements EntityProcessor<TaskAdapter>
 {
+    private final EntityProcessor<TaskAdapter> mDelegate;
+
+
+    public Moving(EntityProcessor<TaskAdapter> delegate)
+    {
+        mDelegate = delegate;
+    }
+
 
     @Override
-    public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        return mDelegate.insert(db, task, isSyncAdapter);
+    }
+
+
+    @Override
+    public TaskAdapter update(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         if (isSyncAdapter)
         {
             // sync-adapters have to implement the move logic themselves
-            return;
+            return mDelegate.update(db, task, isSyncAdapter);
         }
 
         if (!task.isUpdated(TaskAdapter.LIST_ID))
         {
             // list has not been changed
-            return;
+            return mDelegate.update(db, task, isSyncAdapter);
         }
 
         long oldList = task.oldValueOf(TaskAdapter.LIST_ID);
@@ -60,7 +75,7 @@ public class ChangeListProcessor extends AbstractEntityProcessor<TaskAdapter>
         if (oldList == newList)
         {
             // list has not been changed
-            return;
+            return mDelegate.update(db, task, isSyncAdapter);
         }
 
         Long newMasterId;
@@ -117,6 +132,14 @@ public class ChangeListProcessor extends AbstractEntityProcessor<TaskAdapter>
             }
         }
 
+        return mDelegate.update(db, task, isSyncAdapter);
+    }
+
+
+    @Override
+    public void delete(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
+        mDelegate.delete(db, task, isSyncAdapter);
     }
 
 

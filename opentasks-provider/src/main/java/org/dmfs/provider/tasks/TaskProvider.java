@@ -48,15 +48,14 @@ import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.ListAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
-import org.dmfs.provider.tasks.processors.lists.ListExecutionProcessor;
-import org.dmfs.provider.tasks.processors.lists.ListValidatorProcessor;
-import org.dmfs.provider.tasks.processors.tasks.AutoUpdateProcessor;
-import org.dmfs.provider.tasks.processors.tasks.ChangeListProcessor;
-import org.dmfs.provider.tasks.processors.tasks.FtsProcessor;
-import org.dmfs.provider.tasks.processors.tasks.RelationProcessor;
-import org.dmfs.provider.tasks.processors.tasks.TaskExecutionProcessor;
-import org.dmfs.provider.tasks.processors.tasks.TaskInstancesProcessor;
-import org.dmfs.provider.tasks.processors.tasks.TaskValidatorProcessor;
+import org.dmfs.provider.tasks.processors.lists.ListCommitProcessor;
+import org.dmfs.provider.tasks.processors.tasks.AutoCompleting;
+import org.dmfs.provider.tasks.processors.tasks.Instantiating;
+import org.dmfs.provider.tasks.processors.tasks.Moving;
+import org.dmfs.provider.tasks.processors.tasks.Relating;
+import org.dmfs.provider.tasks.processors.tasks.Searchable;
+import org.dmfs.provider.tasks.processors.tasks.TaskCommitProcessor;
+import org.dmfs.provider.tasks.processors.tasks.Validating;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Alarms;
 import org.dmfs.tasks.contract.TaskContract.Categories;
@@ -71,10 +70,8 @@ import org.dmfs.tasks.contract.TaskContract.TaskListSyncColumns;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -116,14 +113,14 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     private final static Set<String> TASK_LIST_SYNC_COLUMNS = new HashSet<String>(Arrays.asList(TaskLists.SYNC_ADAPTER_COLUMNS));
 
     /**
-     * A list of {@link TaskProcessor}s to execute when doing operations on the tasks table.
+     * A list of {@link EntityProcessor}s to execute when doing operations on the tasks table.
      */
-    private List<EntityProcessor<TaskAdapter>> mTaskProcessors = new ArrayList<EntityProcessor<TaskAdapter>>(16);
+    private EntityProcessor<TaskAdapter> mTaskProcessorChain;
 
     /**
-     * A list of {@link ListProcessor}s to execute when doing operations on the task lists table.
+     * A list of {@link EntityProcessor}s to execute when doing operations on the task lists table.
      */
-    private List<EntityProcessor<ListAdapter>> mListProcessors = new ArrayList<EntityProcessor<ListAdapter>>(8);
+    private EntityProcessor<ListAdapter> mListProcessorChain;
 
     /**
      * Our authority.
@@ -158,16 +155,9 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     {
         mAuthority = AuthorityUtil.taskAuthority(getContext());
 
-        mTaskProcessors.add(new TaskValidatorProcessor());
-        mTaskProcessors.add(new AutoUpdateProcessor());
-        mTaskProcessors.add(new RelationProcessor());
-        mTaskProcessors.add(new TaskInstancesProcessor());
-        mTaskProcessors.add(new FtsProcessor());
-        mTaskProcessors.add(new ChangeListProcessor());
-        mTaskProcessors.add(new TaskExecutionProcessor());
+        mTaskProcessorChain = new Validating(new AutoCompleting(new Relating(new Instantiating(new Searchable(new Moving(new TaskCommitProcessor()))))));
 
-        mListProcessors.add(new ListValidatorProcessor());
-        mListProcessors.add(new ListExecutionProcessor());
+        mListProcessorChain = new org.dmfs.provider.tasks.processors.lists.Validating(new ListCommitProcessor());
 
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(mAuthority, TaskContract.TaskLists.CONTENT_URI_PATH, LISTS);
@@ -743,7 +733,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     {
                         final ListAdapter list = new CursorContentValuesListAdapter(ListAdapter._ID.getFrom(cursor), cursor, new ContentValues());
 
-                        ProviderOperation.DELETE.execute(db, mListProcessors, list, isSyncAdapter, mOperationsLog, mAuthority);
+                        mListProcessorChain.delete(db, list, isSyncAdapter);
+                        mOperationsLog.log(ProviderOperation.DELETE, list.uri(mAuthority));
                         count++;
                     }
                 }
@@ -783,7 +774,9 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     {
                         final TaskAdapter task = new CursorContentValuesTaskAdapter(cursor, new ContentValues());
 
-                        ProviderOperation.DELETE.execute(db, mTaskProcessors, task, isSyncAdapter, mOperationsLog, mAuthority);
+                        mTaskProcessorChain.delete(db, task, isSyncAdapter);
+
+                        mOperationsLog.log(ProviderOperation.DELETE, task.uri(mAuthority));
                         count++;
                     }
                 }
@@ -881,7 +874,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 list.set(ListAdapter.ACCOUNT_NAME, accountName);
                 list.set(ListAdapter.ACCOUNT_TYPE, accountType);
 
-                ProviderOperation.INSERT.execute(db, mListProcessors, list, isSyncAdapter, mOperationsLog, mAuthority);
+                mListProcessorChain.insert(db, list, isSyncAdapter);
+                mOperationsLog.log(ProviderOperation.INSERT, list.uri(mAuthority));
 
                 rowId = list.id();
                 result_uri = TaskContract.TaskLists.getContentUri(mAuthority);
@@ -891,7 +885,9 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
             case TASKS:
                 final TaskAdapter task = new ContentValuesTaskAdapter(values);
 
-                ProviderOperation.INSERT.execute(db, mTaskProcessors, task, isSyncAdapter, mOperationsLog, mAuthority);
+                mTaskProcessorChain.insert(db, task, isSyncAdapter);
+
+                mOperationsLog.log(ProviderOperation.INSERT, task.uri(mAuthority));
 
                 rowId = task.id();
                 result_uri = TaskContract.Tasks.getContentUri(mAuthority);
@@ -1005,7 +1001,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         // we need this, because the processors may change the values
                         final ListAdapter list = new CursorContentValuesListAdapter(listId, cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
-                        ProviderOperation.UPDATE.execute(db, mListProcessors, list, isSyncAdapter, mOperationsLog, mAuthority);
+                        mListProcessorChain.update(db, list, isSyncAdapter);
+                        mOperationsLog.log(ProviderOperation.UPDATE, list.uri(mAuthority));
                         count++;
                     }
                 }
@@ -1032,7 +1029,11 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         // we need this, because the processors may change the values
                         final TaskAdapter task = new CursorContentValuesTaskAdapter(cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
-                        ProviderOperation.UPDATE.execute(db, mTaskProcessors, task, isSyncAdapter, mOperationsLog, mAuthority);
+                        mTaskProcessorChain.update(db, task, isSyncAdapter);
+                        if (task.hasUpdates())
+                        {
+                            mOperationsLog.log(ProviderOperation.UPDATE, task.uri(mAuthority));
+                        }
                         count++;
                     }
                 }

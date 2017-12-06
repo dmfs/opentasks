@@ -20,14 +20,13 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
+import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
-import org.dmfs.provider.tasks.processors.AbstractEntityProcessor;
+import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;
-import org.dmfs.tasks.contract.TaskContract.Instances;
 
 import java.sql.RowId;
 import java.util.TimeZone;
@@ -38,9 +37,9 @@ import java.util.TimeZone;
  * <p/>
  * TODO: At present this does not support recurrence.
  *
- * @author Marten Gajda <marten@dmfs.org>
+ * @author Marten Gajda
  */
-public class TaskInstancesProcessor extends AbstractEntityProcessor<TaskAdapter>
+public final class Instantiating implements EntityProcessor<TaskAdapter>
 {
 
     /**
@@ -63,35 +62,49 @@ public class TaskInstancesProcessor extends AbstractEntityProcessor<TaskAdapter>
     }
 
 
-    @Override
-    public void afterInsert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    private final EntityProcessor<TaskAdapter> mDelegate;
+
+
+    public Instantiating(EntityProcessor<TaskAdapter> delegate)
     {
-        createInstances(db, task);
+        mDelegate = delegate;
     }
 
 
     @Override
-    public void beforeUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
-        // move the UPDATE requested value to the state
+        TaskAdapter result = mDelegate.insert(db, task, isSyncAdapter);
+        createInstances(db, result);
+        return result;
+    }
+
+
+    @Override
+    public TaskAdapter update(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    {
         if (task.isUpdated(UPDATE_REQUESTED))
         {
             task.setState(UPDATE_REQUESTED, task.valueOf(UPDATE_REQUESTED));
             task.unset(UPDATE_REQUESTED);
         }
+        TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
+
+        if (!result.isUpdated(TaskAdapter.DTSTART) && !result.isUpdated(TaskAdapter.DUE) && !result.isUpdated(TaskAdapter.DURATION)
+                && !result.getState(UPDATE_REQUESTED))
+        {
+            // date values didn't change and update not requested
+            return result;
+        }
+        updateInstances(db, result);
+        return result;
     }
 
 
     @Override
-    public void afterUpdate(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
+    public void delete(SQLiteDatabase db, TaskAdapter entityAdapter, boolean isSyncAdapter)
     {
-        if (!task.isUpdated(TaskAdapter.DTSTART) && !task.isUpdated(TaskAdapter.DUE) && !task.isUpdated(TaskAdapter.DURATION)
-                && !task.getState(UPDATE_REQUESTED))
-        {
-            // date values didn't change and update not requested
-            return;
-        }
-        updateInstances(db, task);
+        mDelegate.delete(db, entityAdapter, isSyncAdapter);
     }
 
 
@@ -117,27 +130,28 @@ public class TaskInstancesProcessor extends AbstractEntityProcessor<TaskAdapter>
         if (dtstart != null)
         {
             // copy dtstart as is
-            instanceValues.put(Instances.INSTANCE_START, dtstart.getTimestamp());
-            instanceValues.put(Instances.INSTANCE_START_SORTING, dtstart.isAllDay() ? dtstart.getInstance() : dtstart.shiftTimeZone(localTz).getInstance());
+            instanceValues.put(TaskContract.Instances.INSTANCE_START, dtstart.getTimestamp());
+            instanceValues.put(TaskContract.Instances.INSTANCE_START_SORTING,
+                    dtstart.isAllDay() ? dtstart.getInstance() : dtstart.shiftTimeZone(localTz).getInstance());
         }
         else
         {
-            instanceValues.putNull(Instances.INSTANCE_START);
-            instanceValues.putNull(Instances.INSTANCE_START_SORTING);
+            instanceValues.putNull(TaskContract.Instances.INSTANCE_START);
+            instanceValues.putNull(TaskContract.Instances.INSTANCE_START_SORTING);
         }
 
         if (due != null)
         {
             // copy due and calculate the actual duration, if any
-            instanceValues.put(Instances.INSTANCE_DUE, due.getTimestamp());
-            instanceValues.put(Instances.INSTANCE_DUE_SORTING, due.isAllDay() ? due.getInstance() : due.shiftTimeZone(localTz).getInstance());
+            instanceValues.put(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp());
+            instanceValues.put(TaskContract.Instances.INSTANCE_DUE_SORTING, due.isAllDay() ? due.getInstance() : due.shiftTimeZone(localTz).getInstance());
             if (dtstart != null)
             {
-                instanceValues.put(Instances.INSTANCE_DURATION, due.getTimestamp() - dtstart.getTimestamp());
+                instanceValues.put(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - dtstart.getTimestamp());
             }
             else
             {
-                instanceValues.putNull(Instances.INSTANCE_DURATION);
+                instanceValues.putNull(TaskContract.Instances.INSTANCE_DURATION);
             }
         }
         else if (duration != null)
@@ -146,23 +160,23 @@ public class TaskInstancesProcessor extends AbstractEntityProcessor<TaskAdapter>
             {
                 // calculate the actual due value from dtstart and the duration string
                 due = dtstart.addDuration(duration);
-                instanceValues.put(Instances.INSTANCE_DUE, due.getTimestamp());
-                instanceValues.put(Instances.INSTANCE_DUE_SORTING, due.isAllDay() ? due.getInstance() : due.shiftTimeZone(localTz).getInstance());
-                instanceValues.put(Instances.INSTANCE_DURATION, due.getTimestamp() - dtstart.getTimestamp());
+                instanceValues.put(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp());
+                instanceValues.put(TaskContract.Instances.INSTANCE_DUE_SORTING, due.isAllDay() ? due.getInstance() : due.shiftTimeZone(localTz).getInstance());
+                instanceValues.put(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - dtstart.getTimestamp());
             }
             else
             {
                 // this case should be filtered by TaskValidatorProcessor, since setting a DURATION without DTSTART is invalid
-                instanceValues.putNull(Instances.INSTANCE_DURATION);
-                instanceValues.putNull(Instances.INSTANCE_DUE);
-                instanceValues.putNull(Instances.INSTANCE_DUE_SORTING);
+                instanceValues.putNull(TaskContract.Instances.INSTANCE_DURATION);
+                instanceValues.putNull(TaskContract.Instances.INSTANCE_DUE);
+                instanceValues.putNull(TaskContract.Instances.INSTANCE_DUE_SORTING);
             }
         }
         else
         {
-            instanceValues.putNull(Instances.INSTANCE_DURATION);
-            instanceValues.putNull(Instances.INSTANCE_DUE);
-            instanceValues.putNull(Instances.INSTANCE_DUE_SORTING);
+            instanceValues.putNull(TaskContract.Instances.INSTANCE_DURATION);
+            instanceValues.putNull(TaskContract.Instances.INSTANCE_DUE);
+            instanceValues.putNull(TaskContract.Instances.INSTANCE_DUE_SORTING);
         }
         return instanceValues;
     }
@@ -186,9 +200,9 @@ public class TaskInstancesProcessor extends AbstractEntityProcessor<TaskAdapter>
         ContentValues instanceValues = generateInstanceValues(task);
 
         // set rowID of current Task
-        instanceValues.put(Instances.TASK_ID, task.id());
+        instanceValues.put(TaskContract.Instances.TASK_ID, task.id());
 
-        db.insert(Tables.INSTANCES, null, instanceValues);
+        db.insert(TaskDatabaseHelper.Tables.INSTANCES, null, instanceValues);
     }
 
 
@@ -196,6 +210,6 @@ public class TaskInstancesProcessor extends AbstractEntityProcessor<TaskAdapter>
     {
         ContentValues instanceValues = generateInstanceValues(task);
 
-        db.update(Tables.INSTANCES, instanceValues, TaskContract.Instances.TASK_ID + " = " + task.id(), null);
+        db.update(TaskDatabaseHelper.Tables.INSTANCES, instanceValues, TaskContract.Instances.TASK_ID + " = " + task.id(), null);
     }
 }
