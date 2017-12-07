@@ -46,8 +46,6 @@ public final class NGramGenerator
     private boolean mAddSpaceInFront = false;
     private Locale mLocale = Locale.getDefault();
 
-    private char[] mTempArray;
-
 
     public NGramGenerator(int n)
     {
@@ -59,8 +57,6 @@ public final class NGramGenerator
     {
         mN = n;
         mMinWordLen = minWordLen;
-        mTempArray = new char[n];
-        mTempArray[0] = ' ';
     }
 
 
@@ -159,12 +155,11 @@ public final class NGramGenerator
     }
 
 
-    public void getNgrams(String word, Set<String> ngrams)
+    private void getNgrams(String word, Set<String> ngrams)
     {
         final int len = word.length();
-        final int minWordLen = mMinWordLen;
 
-        if (len < minWordLen)
+        if (len < mMinWordLen)
         {
             return;
         }
@@ -181,21 +176,8 @@ public final class NGramGenerator
         {
             /*
              * Add another String with a space and the first n-1 characters of the word.
-             *
-             * We could just call
-             *
-             * ngrams.add(" " + word.substring(0, Math.min(len, n - 1));
-             *
-             * But it's probably way more efficient like this:
              */
-            char[] tempArray = mTempArray;
-
-            int count = Math.min(len, n - 1);
-            for (int i = 0; i < count; ++i)
-            {
-                tempArray[i + 1] = word.charAt(i);
-            }
-            ngrams.add(new String(tempArray));
+            ngrams.add(" " + word.substring(0, Math.min(len, n - 1)));
         }
     }
 }
