@@ -36,7 +36,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
 
-import org.dmfs.iterables.EmptyIterable;
+import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.OnDatabaseOperationListener;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.handler.PropertyHandler;
@@ -56,6 +56,8 @@ import org.dmfs.provider.tasks.processors.tasks.Relating;
 import org.dmfs.provider.tasks.processors.tasks.Searchable;
 import org.dmfs.provider.tasks.processors.tasks.TaskCommitProcessor;
 import org.dmfs.provider.tasks.processors.tasks.Validating;
+import org.dmfs.provider.tasks.transactionendtasks.TransactionEndTask;
+import org.dmfs.provider.tasks.transactionendtasks.UpdateInstancesTask;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Alarms;
 import org.dmfs.tasks.contract.TaskContract.Categories;
@@ -145,8 +147,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
     public TaskProvider()
     {
-        // for now we don't have anything specific to execute before the transaction ends.
-        super(EmptyIterable.<TransactionEndTask>instance());
+        super(new Seq<TransactionEndTask>(new UpdateInstancesTask()));
     }
 
 

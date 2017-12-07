@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Properties;
 import org.dmfs.tasks.contract.TaskContract.Property.Alarm;
@@ -60,7 +61,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    static final int DATABASE_VERSION = 16;
+    static final int DATABASE_VERSION = 17;
 
 
     /**
@@ -109,6 +110,22 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
 
         public static final String PROPERTY_ID = "property_id";
 
+    }
+
+
+    /**
+     * Public and non public columns of the Tasks Table
+     */
+    public interface TaskTableColumns extends TaskContract.TaskColumns
+    {
+        /**
+         * A flag indicating that the instances of this task may have to be recalculated because either date-time, recurrence or status have been updated.
+         * <p>
+         * Value: Integer (0 or 1)
+         * <p>
+         * Read-only
+         */
+        String INSTANCES_STALE = "instances_stale";
     }
 
     // @formatter:off
@@ -406,6 +423,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
             + TaskContract.Tasks.RDATE + " TEXT,"
             + TaskContract.Tasks.EXDATE + " TEXT,"
             + TaskContract.Tasks.RRULE + " TEXT,"
+            + TaskTableColumns.INSTANCES_STALE + " INTEGER DEFAULT 1," // the instances of new tasks need to be generated
             + TaskContract.Tasks.PARENT_ID + " INTEGER,"
             + TaskContract.Tasks.SORTING + " TEXT,"
             + TaskContract.Tasks.HAS_ALARMS + " INTEGER,"
@@ -644,6 +662,8 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         // add cleanup trigger for orphaned properties
         db.execSQL(SQL_CREATE_TASK_PROPERTY_CLEANUP_TRIGGER);
 
+        db.execSQL(createIndexString(Tables.TASKS, false, TaskTableColumns.INSTANCES_STALE));
+
         // initialize FTS
         FTSDatabaseHelper.onCreate(db);
 
@@ -782,6 +802,17 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         {
             db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
             db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
+        }
+        if (oldVersion < 17)
+        {
+            // Note: in general only a small fraction of all rows will have this flag set, so an index can improve performance on large tables
+            db.execSQL("alter table " + Tables.TASKS + " add column " + TaskTableColumns.INSTANCES_STALE + " INTEGER DEFAULT 1;");
+            db.execSQL(createIndexString(Tables.TASKS, false, TaskTableColumns.INSTANCES_STALE));
+
+            // set INSTANCES_STALE to false for all existing tasks. We can safely assume that all existing tasks have valid instances.
+            ContentValues cv = new ContentValues(1);
+            TaskAdapter.INSTANCES_STALE.setIn(cv, false);
+            db.update(Tables.TASKS, cv, null, null);
         }
 
         // upgrade FTS

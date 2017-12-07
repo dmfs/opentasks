@@ -181,6 +181,12 @@ public final class Validating implements EntityProcessor<TaskAdapter>
             throw new IllegalArgumentException("modification of HAS_ALARMS is not allowed");
         }
 
+        // INSTANCES_STALE is for internal purposes and not meant to be modified
+        if (task.isUpdated(TaskAdapter.INSTANCES_STALE))
+        {
+            throw new IllegalArgumentException("modification of INSTANCES_VOID is not allowed");
+        }
+
         // only sync adapters are allowed to set modification time
         if (!isSyncAdapter && task.isUpdated(TaskAdapter.LAST_MODIFIED))
         {
