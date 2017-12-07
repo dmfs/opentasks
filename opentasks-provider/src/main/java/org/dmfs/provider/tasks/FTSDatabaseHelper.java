@@ -34,7 +34,7 @@ import java.util.Set;
 
 
 /**
- * Supports the {@link TaskDatabaseHelper} in the manner of full-text-search.
+ * Supports the {@link TaskDatabaseHelper} in the matter of full-text-search.
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  * @author Marten Gajda <marten@dmfs.org>
@@ -42,7 +42,7 @@ import java.util.Set;
 public class FTSDatabaseHelper
 {
 
-    private final static float SEARCH_RESULTS_MIN_SCORE = 0.4f;
+    private final static float SEARCH_RESULTS_MIN_SCORE = 0.33f;
 
     /**
      * A Generator for 3-grams.
@@ -127,7 +127,7 @@ public class FTSDatabaseHelper
             + " Integer PRIMARY KEY AUTOINCREMENT, " + NGramColumns.TEXT + " Text)";
 
     // FIXME: at present the minimum score is hard coded can we leave that decision to the caller?
-    private final static String SQL_RAW_QUERY_SEARCH_TASK = "SELECT %s " + ", min(1.0*count(*)/?, 1.0) as " + TaskContract.Tasks.SCORE + " from "
+    private final static String SQL_RAW_QUERY_SEARCH_TASK = "SELECT %s " + ", (1.0*count(DISTINCT " + NGramColumns.NGRAM_ID + ")/?) as " + TaskContract.Tasks.SCORE + " from "
             + FTS_NGRAM_TABLE + " join " + FTS_CONTENT_TABLE + " on (" + FTS_NGRAM_TABLE + "." + NGramColumns.NGRAM_ID + "=" + FTS_CONTENT_TABLE + "."
             + FTSContentColumns.NGRAM_ID + ") join " + Tables.INSTANCE_VIEW + " on (" + Tables.INSTANCE_VIEW + "." + TaskContract.Instances.TASK_ID + " = " + FTS_CONTENT_TABLE + "."
             + FTSContentColumns.TASK_ID + ") where %s group by " + TaskContract.Instances.TASK_ID + " having " + TaskContract.Tasks.SCORE + " >= " + SEARCH_RESULTS_MIN_SCORE
