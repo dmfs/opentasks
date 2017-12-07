@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
@@ -141,7 +142,29 @@ public class EditTaskActivity extends BaseActivity
                     ContentSet data = extraBundle.getParcelable(EXTRA_DATA_CONTENT_SET);
                     if (data != null)
                     {
-                        arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, data);
+                        // passing default data will always create a new task
+                        ContentSet newData = data.asNew();
+                        // remove read-only and sync-adapter columns
+                        newData.remove(TaskContract.Tasks._ID);
+                        newData.remove(TaskContract.Tasks._DELETED);
+                        newData.remove(TaskContract.Tasks._UID);
+                        newData.remove(TaskContract.Tasks._DIRTY);
+                        newData.remove(TaskContract.Tasks._SYNC_ID);
+                        newData.remove(Tasks.ORIGINAL_INSTANCE_ALLDAY);
+                        newData.remove(Tasks.ORIGINAL_INSTANCE_ID);
+                        newData.remove(Tasks.ORIGINAL_INSTANCE_SYNC_ID);
+                        newData.remove(Tasks.ORIGINAL_INSTANCE_TIME);
+                        newData.remove(Tasks.LIST_OWNER);
+                        newData.remove(Tasks.LIST_ACCESS_LEVEL);
+                        newData.remove(Tasks.LIST_COLOR);
+                        newData.remove(Tasks.LIST_NAME);
+                        newData.remove(Tasks.ACCOUNT_NAME);
+                        newData.remove(Tasks.ACCOUNT_TYPE);
+                        newData.remove(Tasks.VISIBLE);
+                        newData.remove(Tasks.IS_CLOSED);
+                        newData.remove(Tasks.IS_NEW);
+                        arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, newData);
+                        arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, Tasks.getContentUri(getIntent().getData().getAuthority()));
                     }
                 }
                 String accountType = getIntent().getStringExtra(EXTRA_DATA_ACCOUNT_TYPE);

@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="org.dmfs.opentasks.plugins">
+
+    <application>
+        <receiver android:name="org.dmfs.opentasks.plugins.detailsview.clonetask.Plugin">
+            <intent-filter>
+                <action android:name="org.dmfs.opentasks.action.PLUGIN_PROBE"/>
+                <category android:name="org.dmfs.opentasks.category.DETAILS_MENU"/>
+                <data android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
+

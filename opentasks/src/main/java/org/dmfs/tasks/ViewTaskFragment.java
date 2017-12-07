@@ -19,11 +19,14 @@ package org.dmfs.tasks;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -41,6 +44,7 @@ import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,8 +70,10 @@ import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.widget.TaskView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -81,6 +87,10 @@ import java.util.Set;
 public class ViewTaskFragment extends SupportFragment
         implements OnModelLoadedListener, OnContentChangeListener, OnMenuItemClickListener, OnOffsetChangedListener
 {
+    public final static String MENU_PLUGIN_PROBE_ACTION = "org.dmfs.opentasks.action.PLUGIN_PROBE";
+    public final static String MENU_PLUGIN_RESPONSE_ACTION = "org.dmfs.opentasks.action.PLUGIN_RESPONSE";
+    public final static String MENU_PLUGIN_CATEGORY = "org.dmfs.opentasks.category.DETAILS_MENU";
+
     private final static String ARG_URI = "uri";
 
     /**
@@ -162,6 +172,8 @@ public class ViewTaskFragment extends SupportFragment
             updateView();
         }
     };
+
+    private final List<Bundle> mPlugins = new ArrayList<>(10);
 
 
     public interface Callback
@@ -264,7 +276,7 @@ public class ViewTaskFragment extends SupportFragment
             // remove values, to ensure all listeners get released
             mDetailView.setValues(null);
         }
-
+        getActivity().unregisterReceiver(mBroadcastReceiver);
     }
 
 
@@ -318,6 +330,16 @@ public class ViewTaskFragment extends SupportFragment
             mTaskUri = null;
             loadUri(uri);
         }
+
+        IntentFilter filter = new IntentFilter(MENU_PLUGIN_RESPONSE_ACTION);
+        filter.addCategory(MENU_PLUGIN_CATEGORY);
+//        filter.addDataAuthority(getString(R.string.opentasks_authority), null);
+//        filter.addDataScheme("content");
+//        filter.addDataPath(mTaskUri.getEncodedPath(), PatternMatcher.PATTERN_LITERAL);
+        getActivity().registerReceiver(mBroadcastReceiver, filter);
+        Intent intent = new Intent(MENU_PLUGIN_PROBE_ACTION).addCategory(MENU_PLUGIN_CATEGORY).setData(mTaskUri);
+        getActivity().sendBroadcast(intent);
+        Log.v("TASKPLUGIN---------", "probe sent " + System.currentTimeMillis() % 10000);
 
         return mRootView;
     }
@@ -488,7 +510,7 @@ public class ViewTaskFragment extends SupportFragment
 
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    public void onCreateOptionsMenu(Menu menu, final MenuInflater inflater)
     {
         /*
          * Don't show any options if we don't have a task to show.
@@ -528,6 +550,30 @@ public class ViewTaskFragment extends SupportFragment
                     item.setIcon(R.drawable.ic_pin_white_24dp);
                 }
             }
+        }
+        for (final Bundle bundle : mPlugins)
+        {
+            MenuItem item = menu.add(bundle.getString("title"));
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener()
+            {
+                @Override
+                public boolean onMenuItemClick(MenuItem item)
+                {
+                    Log.v("TASKPLUGIN---------", "Menu clicked");
+                    PendingIntent intent = bundle.getParcelable("action");
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putParcelable(EditTaskActivity.EXTRA_DATA_CONTENT_SET, mContentSet);
+                    try
+                    {
+                        intent.send(getActivity(), 0, new Intent().putExtra(EditTaskActivity.EXTRA_DATA_BUNDLE, bundle1));
+                    }
+                    catch (PendingIntent.CanceledException e)
+                    {
+                        e.printStackTrace();
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -845,4 +891,17 @@ public class ViewTaskFragment extends SupportFragment
             mFloatingActionButton.setVisibility(View.GONE);
         }
     }
+
+
+    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            mPlugins.add(intent.getExtras());
+            Log.v("TASKPLUGIN---------", "response received " + System.currentTimeMillis() % 10000);
+            // rebuild the options menu
+            getActivity().invalidateOptionsMenu();
+        }
+    };
 }
