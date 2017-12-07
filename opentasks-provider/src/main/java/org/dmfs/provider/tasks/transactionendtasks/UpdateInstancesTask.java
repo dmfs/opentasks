@@ -33,7 +33,7 @@ import java.util.TimeZone;
 
 /**
  * A {@link TransactionEndTask} which creates/updates the instances of all tasks which have been flagged as stale.
- *
+ * <p>
  * TODO: handle recurrence
  *
  * @author Marten Gajda
@@ -47,7 +47,7 @@ public final class UpdateInstancesTask implements TransactionEndTask
         Cursor staleInstances = database.query(
                 TaskDatabaseHelper.Tables.TASKS,
                 null,
-                String.format(Locale.ENGLISH, "%s = 1 ", TaskContract.Tasks.INSTANCES_STALE),
+                String.format(Locale.ENGLISH, "%s = 1 ", TaskDatabaseHelper.TaskTableColumns.INSTANCES_STALE),
                 null,
                 null,
                 null,
@@ -56,7 +56,7 @@ public final class UpdateInstancesTask implements TransactionEndTask
         try
         {
             ContentValues clearInstanceVoid = new ContentValues(1);
-            clearInstanceVoid.put(TaskContract.Tasks.INSTANCES_STALE, 0);
+            TaskAdapter.INSTANCES_STALE.setIn(clearInstanceVoid, false);
             while (staleInstances.moveToNext())
             {
                 TaskAdapter task = new CursorContentValuesTaskAdapter(staleInstances, new ContentValues());

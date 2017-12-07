@@ -19,6 +19,7 @@ package org.dmfs.provider.tasks.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.BinaryFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.DateTimeArrayFieldAdapter;
@@ -232,9 +233,9 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
     BooleanFieldAdapter<TaskAdapter> HAS_ALARMS = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.HAS_ALARMS);
 
     /**
-     * Adapter for the {@link TaskContract.Tasks#INSTANCES_STALE} flag of a task.
+     * Adapter for the {@link TaskDatabaseHelper.TaskTableColumns#INSTANCES_STALE} flag of a task.
      */
-    BooleanFieldAdapter<TaskAdapter> INSTANCES_STALE = new BooleanFieldAdapter<>(Tasks.INSTANCES_STALE);
+    BooleanFieldAdapter<TaskAdapter> INSTANCES_STALE = new BooleanFieldAdapter<>(TaskDatabaseHelper.TaskTableColumns.INSTANCES_STALE);
 
     /**
      * Adapter for the HAS_PROPERTIES flag of a task.

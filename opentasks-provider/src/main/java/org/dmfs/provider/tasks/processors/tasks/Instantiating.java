@@ -21,9 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
-import org.dmfs.provider.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
-import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
@@ -80,7 +78,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         {
             task.unset(UPDATE_REQUESTED);
             // mark this task as "stale"
-            task.set(new IntegerFieldAdapter<TaskAdapter>(TaskContract.Tasks.INSTANCES_STALE), 1);
+            task.set(TaskAdapter.INSTANCES_STALE, true);
         }
         return mDelegate.update(db, task, isSyncAdapter);
     }
