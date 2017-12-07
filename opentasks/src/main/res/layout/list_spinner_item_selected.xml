@@ -12,7 +12,8 @@
             android:layout_height="match_parent"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textAppearance="@android:style/TextAppearance.Medium"></TextView>
+            android:textColor="@android:color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <TextView
             android:id="@+id/task_list_account_name"
@@ -20,6 +21,6 @@
             android:layout_height="match_parent"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textColor="#a0ffffff"></TextView>
+            android:textColor="#a0ffffff"/>
 
 </LinearLayout>
