@@ -132,6 +132,12 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
     public final static DateTimeFieldAdapter<TaskAdapter> DTSTART = new DateTimeFieldAdapter<TaskAdapter>(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
 
     /**
+     * Adapter for the original date of a task.
+     */
+    public final static DateTimeFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_TIME = new DateTimeFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_TIME, Tasks.TZ,
+            Tasks.ORIGINAL_INSTANCE_ALLDAY);
+
+    /**
      * Adapter for the raw start date timestamp of a task.
      */
     public final static LongFieldAdapter<TaskAdapter> DTSTART_RAW = new LongFieldAdapter<TaskAdapter>(Tasks.DTSTART);
