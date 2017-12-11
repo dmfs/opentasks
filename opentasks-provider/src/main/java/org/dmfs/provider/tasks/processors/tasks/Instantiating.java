@@ -20,17 +20,23 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.jems.function.BiFunction;
+import org.dmfs.jems.iterable.composite.Diff;
+import org.dmfs.jems.iterable.decorators.Mapped;
+import org.dmfs.jems.pair.Pair;
 import org.dmfs.jems.single.Single;
+import org.dmfs.optional.Optional;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.provider.tasks.utils.InstanceValuesIterable;
 import org.dmfs.provider.tasks.utils.Limited;
+import org.dmfs.provider.tasks.utils.Range;
+import org.dmfs.provider.tasks.utils.SingleValueFunction;
 import org.dmfs.provider.tasks.utils.WithTaskId;
 import org.dmfs.tasks.contract.TaskContract;
 
-import java.util.Iterator;
 import java.util.Locale;
 
 
@@ -150,7 +156,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     private void updateInstances(SQLiteDatabase db, TaskAdapter taskAdapter, long id)
     {
         // get a cursor of all existing instances
-        Cursor existingInstances = db.query(
+        final Cursor existingInstances = db.query(
                 TaskDatabaseHelper.Tables.INSTANCE_VIEW,
                 new String[] { TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME },
                 String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances.TASK_ID, id),
@@ -159,10 +165,6 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                 null,
                 TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
 
-        // get an Iterator of all expected instances
-        // for very long or even infinite series we need to stop iterating at some point.
-        // TODO: once we actually support recurrence we should only count future instances
-        Iterator<Single<ContentValues>> newInstanceData = new Limited<>(INSTANCE_COUNT_LIMIT, new InstanceValuesIterable(taskAdapter)).iterator();
 
         /*
          * The goal of the code below is to update existing instances in place (as opposed to delete and recreate all instances). We do this for two reasons:
@@ -172,47 +174,50 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         try
         {
             int idIdx = existingInstances.getColumnIndex(TaskContract.Instances._ID);
-            int startIdx = existingInstances.getColumnIndex(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+            final int startIdx = existingInstances.getColumnIndex(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
 
-            while (newInstanceData.hasNext())
+            // get an Iterator of all expected instances
+            // for very long or even infinite series we need to stop iterating at some point.
+            // TODO: once we actually support recurrence we should only count future instances
+
+            Iterable<Pair<Optional<ContentValues>, Optional<Integer>>> diff = new Diff<>(
+                    new Mapped<>(new SingleValueFunction<ContentValues>(), new Limited<>(INSTANCE_COUNT_LIMIT, new InstanceValuesIterable(taskAdapter))),
+                    new Range(existingInstances.getCount()),
+                    new BiFunction<ContentValues, Integer, Integer>()
+                    {
+                        @Override
+                        public Integer value(ContentValues newInstanceValues, Integer cursorRow)
+                        {
+                            existingInstances.moveToPosition(cursorRow);
+                            return (int) (existingInstances.getLong(startIdx) - newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
+                        }
+                    });
+
+            // sync the instances table with the new instances
+            for (Pair<Optional<ContentValues>, Optional<Integer>> next : diff)
             {
-                ContentValues instance = newInstanceData.next().value();
-
-                // first remove all instances between the last and the current one
-                while (existingInstances.moveToNext() &&
-                        instance.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME) > existingInstances.getLong(startIdx))
+                if (!next.left().isPresent())
                 {
+                    // there is no new instance for this old one, remove it
+                    existingInstances.moveToPosition(next.right().value());
                     db.delete(TaskDatabaseHelper.Tables.INSTANCES,
                             String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
                 }
-
-                // update existing instance if it matches the current one
-                if (!existingInstances.isAfterLast() &&
-                        instance.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME) == existingInstances.getLong(startIdx))
+                else if (!next.right().isPresent())
                 {
+                    // there is no old instance for this new one, add it
+                    ContentValues values = next.left().value();
+                    values.put(TaskContract.Instances.TASK_ID, taskAdapter.id());
+                    db.insert(TaskDatabaseHelper.Tables.INSTANCES, "", values);
+                }
+                else // both sides are present
+                {
+                    // update this instance
+                    existingInstances.moveToPosition(next.right().value());
                     // TODO: only update if something has changed
-                    db.update(TaskDatabaseHelper.Tables.INSTANCES, instance,
+                    db.update(TaskDatabaseHelper.Tables.INSTANCES, next.left().value(),
                             String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
-                    if (!newInstanceData.hasNext())
-                    {
-                        // if this was the last instance, we need to advance the cursor
-                        existingInstances.moveToNext();
-                    }
                 }
-                else
-                {
-                    // this is a new instance, create it
-                    instance.put(TaskContract.Instances.TASK_ID, taskAdapter.id());
-                    db.insert(TaskDatabaseHelper.Tables.INSTANCES, "", instance);
-                }
-            }
-
-            while (!existingInstances.isAfterLast())
-            {
-                // remove all instances which no longer exist
-                db.delete(TaskDatabaseHelper.Tables.INSTANCES,
-                        String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
-                existingInstances.moveToNext();
             }
         }
         finally
@@ -220,4 +225,5 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
             existingInstances.close();
         }
     }
+
 }
