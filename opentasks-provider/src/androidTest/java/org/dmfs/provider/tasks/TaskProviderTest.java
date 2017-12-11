@@ -64,6 +64,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.TimeZone;
+
 import static org.dmfs.android.contenttestpal.ContentMatcher.resultsIn;
 import static org.junit.Assert.assertThat;
 
@@ -234,8 +236,8 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.getInstance()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 ))
@@ -269,8 +271,8 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, startNew.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.getInstance()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 ))
@@ -304,8 +306,8 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, startNew.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.getInstance()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 ))
@@ -335,8 +337,8 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.getInstance()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 ))
@@ -367,10 +369,46 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, start.addDuration(duration).getTimestamp()),
                         new EqArg(Instances.INSTANCE_DURATION, durationMillis),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).getInstance()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Tasks.TZ, "UTC")
+                ))
+        ));
+    }
+
+
+    /**
+     * Create task with start and duration, check datetime values including generated due.
+     */
+    @Test
+    public void testInsertWithStartAndDurationChangeTimeZone()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        Duration duration = Duration.parse("PT1H");
+        long durationMillis = duration.toMillis();
+        DateTime startNew = start.shiftTimeZone(TimeZone.getTimeZone("America/New_York"));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(task, new TimeData(start, duration)),
+                // update the task with a the same start in a different time zone
+                new Put<>(task, new TimeData(startNew, duration))
+
+        ), resultsIn(mClient,
+                new Assert<>(task, new TimeData(startNew, duration)),
+                // note that, apart from the time zone, all values stay the same
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
+                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DUE, start.addDuration(duration).getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DURATION, durationMillis),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Tasks.TZ, "America/New_York")
                 ))
         ));
     }
@@ -407,8 +445,8 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, due2.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DURATION, due2.getTimestamp() - start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due2.getInstance()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, due2.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Tasks.TZ, "UTC")
                 ))
