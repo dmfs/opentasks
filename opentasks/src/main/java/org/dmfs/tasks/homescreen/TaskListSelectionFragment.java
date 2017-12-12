@@ -27,7 +27,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -88,29 +87,21 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
         mButtonOk = (TextView) rootView.findViewById(android.R.id.button1);
         mButtonCancel = (TextView) rootView.findViewById(android.R.id.button2);
 
-        mButtonOk.setOnClickListener(new OnClickListener()
+        mButtonOk.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            if (mListener != null)
             {
-                if (mListener != null)
-                {
-                    mListener.onSelection(mTaskListAdapter.getSelectedLists());
-                }
-
+                mListener.onSelection(mTaskListAdapter.getSelectedLists());
             }
+
         });
-        mButtonCancel.setOnClickListener(new OnClickListener()
+        mButtonCancel.setOnClickListener(v ->
         {
-            @Override
-            public void onClick(View v)
+            if (mListener != null)
             {
-                if (mListener != null)
-                {
-                    mListener.onSelectionCancel();
-                }
-
+                mListener.onSelectionCancel();
             }
+
         });
 
         return rootView;
