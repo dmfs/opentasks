@@ -21,7 +21,6 @@ import android.support.annotation.NonNull;
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
-import org.dmfs.opentaskspal.readdata.functions.DurationFunction;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.decorators.DelegatingOptional;
 import org.dmfs.rfc5545.Duration;
@@ -40,6 +39,6 @@ public final class TaskDuration extends DelegatingOptional<Duration>
 
     public TaskDuration(@NonNull RowDataSnapshot<Tasks> rowData)
     {
-        super(new OptionalRowCharData<>(rowData, Tasks.DURATION, new DurationFunction()));
+        super(rowData.data(Tasks.DURATION, Duration::parse));
     }
 }

@@ -23,7 +23,7 @@ import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
-import org.dmfs.opentaskspal.readdata.functions.TimeZoneFunction;
+import org.dmfs.jems.single.elementary.ValueSingle;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 import java.util.TimeZone;
@@ -40,9 +40,9 @@ public final class EffectiveTimezone extends DelegatingSingle<TimeZone>
     public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.TZ);
 
 
-    public EffectiveTimezone(@NonNull RowDataSnapshot<Tasks> taskData)
+    public EffectiveTimezone(@NonNull RowDataSnapshot<Tasks> rowData)
     {
-        super(new RowCharData<>(taskData, Tasks.TZ, new TimeZoneFunction()));
+        super(new ValueSingle<>(rowData.data(Tasks.TZ, TimeZone::getTimeZone).value()));
     }
 
 }

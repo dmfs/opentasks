@@ -38,6 +38,6 @@ public final class TaskTitle extends DelegatingOptional<CharSequence>
 
     public TaskTitle(@NonNull RowDataSnapshot<Tasks> rowDataSnapshot)
     {
-        super(rowDataSnapshot.charData(Tasks.TITLE));
+        super(rowDataSnapshot.data(Tasks.TITLE, s -> s));
     }
 }

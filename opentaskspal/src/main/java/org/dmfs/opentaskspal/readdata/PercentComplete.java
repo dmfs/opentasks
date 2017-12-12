@@ -21,7 +21,6 @@ import android.support.annotation.NonNull;
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
-import org.dmfs.opentaskspal.readdata.functions.IntegerFunction;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.decorators.DelegatingOptional;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -39,6 +38,6 @@ public final class PercentComplete extends DelegatingOptional<Integer>
 
     public PercentComplete(@NonNull RowDataSnapshot<Tasks> rowData)
     {
-        super(new OptionalRowCharData<>(rowData, Tasks.PERCENT_COMPLETE, new IntegerFunction()));
+        super(rowData.data(Tasks.PERCENT_COMPLETE, Integer::valueOf));
     }
 }

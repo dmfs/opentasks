@@ -23,7 +23,6 @@ import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.Composite;
 import org.dmfs.android.contentpal.projections.MultiProjection;
 import org.dmfs.iterables.elementary.Seq;
-import org.dmfs.opentaskspal.readdata.functions.AddDurationBiFunction;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.adapters.FirstPresent;
 import org.dmfs.optional.composite.Zipped;
@@ -41,7 +40,7 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
 public final class EffectiveDueDate extends DelegatingOptional<DateTime>
 {
     public static final Projection<Tasks> PROJECTION = new Composite<>(
-            new MultiProjection<Tasks>(Tasks.DUE, Tasks.DTSTART),
+            new MultiProjection<>(Tasks.DUE, Tasks.DTSTART),
             TaskDateTime.PROJECTION,
             TaskDuration.PROJECTION);
 
@@ -54,6 +53,6 @@ public final class EffectiveDueDate extends DelegatingOptional<DateTime>
                         new Zipped<>(
                                 new TaskDateTime(Tasks.DTSTART, rowDataSnapshot),
                                 new TaskDuration(rowDataSnapshot),
-                                new AddDurationBiFunction()))));
+                                DateTime::addDuration))));
     }
 }

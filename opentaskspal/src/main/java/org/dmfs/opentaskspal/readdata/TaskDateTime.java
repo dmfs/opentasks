@@ -22,9 +22,6 @@ import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.Composite;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
-import org.dmfs.iterators.Function;
-import org.dmfs.opentaskspal.readdata.functions.BooleanFunction;
-import org.dmfs.opentaskspal.readdata.functions.LongFunction;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.decorators.DelegatingOptional;
 import org.dmfs.optional.decorators.Mapped;
@@ -41,23 +38,18 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
 public final class TaskDateTime extends DelegatingOptional<DateTime>
 {
     public static final Projection<Tasks> PROJECTION = new Composite<>(
-            new SingleColProjection<Tasks>(Tasks.IS_ALLDAY),
+            new SingleColProjection<>(Tasks.IS_ALLDAY),
             EffectiveTimezone.PROJECTION);
 
 
-    public TaskDateTime(@NonNull String columnName, @NonNull final RowDataSnapshot<Tasks> data)
+    public TaskDateTime(@NonNull String columnName, @NonNull final RowDataSnapshot<Tasks> rowData)
     {
         super(new Mapped<>(
-                new Function<Long, DateTime>()
-                {
-                    @Override
-                    public DateTime apply(Long timeStamp)
-                    {
-                        return new OptionalRowCharData<>(data, Tasks.IS_ALLDAY, new BooleanFunction()).value(false) ?
-                                new DateTime(timeStamp).toAllDay() :
-                                new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(data).value());
-                    }
-                },
-                new OptionalRowCharData<>(data, columnName, new LongFunction())));
+
+                (Long timeStamp) -> rowData.data(Tasks.IS_ALLDAY, "1"::equals).value(false) ?
+                        new DateTime(timeStamp).toAllDay() :
+                        new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(rowData).value()),
+
+                rowData.data(columnName, Long::valueOf)));
     }
 }

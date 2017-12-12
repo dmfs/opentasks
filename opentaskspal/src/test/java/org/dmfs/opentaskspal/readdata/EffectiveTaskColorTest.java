@@ -16,6 +16,7 @@
 
 package org.dmfs.opentaskspal.readdata;
 
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.optional.Present;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -25,6 +26,8 @@ import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
 import static org.dmfs.optional.Absent.absent;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 
@@ -35,11 +38,13 @@ import static org.mockito.Mockito.doReturn;
  */
 public final class EffectiveTaskColorTest
 {
+
     @Test
     public void test_whenTaskColorIsPresent_shouldReturnThat()
     {
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(new Present<CharSequence>("123")).when(mockData).charData(Tasks.TASK_COLOR);
+        doReturn(new Present<>(new ValueColor(123))).when(mockData).data(eq(Tasks.TASK_COLOR), any());
+        doReturn(absent()).when(mockData).data(eq(Tasks.LIST_COLOR), any());
 
         assertThat(new EffectiveTaskColor(mockData).argb(), is(123));
     }
@@ -49,8 +54,8 @@ public final class EffectiveTaskColorTest
     public void test_whenTaskColorIsAbsent_shouldReturnTaskListColor()
     {
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(absent()).when(mockData).charData(Tasks.TASK_COLOR);
-        doReturn(new Present<CharSequence>("567")).when(mockData).charData(Tasks.LIST_COLOR);
+        doReturn(absent()).when(mockData).data(eq(Tasks.TASK_COLOR), any());
+        doReturn(new Present<>(new ValueColor(567))).when(mockData).data(eq(Tasks.LIST_COLOR), any());
 
         assertThat(new EffectiveTaskColor(mockData).argb(), is(567));
     }
@@ -60,9 +65,10 @@ public final class EffectiveTaskColorTest
     public void test_whenTaskColorAndListColorAreAbsent_shouldThrow()
     {
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(absent()).when(mockData).charData(Tasks.TASK_COLOR);
-        doReturn(absent()).when(mockData).charData(Tasks.LIST_COLOR);
+        doReturn(absent()).when(mockData).data(eq(Tasks.TASK_COLOR), any());
+        doReturn(absent()).when(mockData).data(eq(Tasks.LIST_COLOR), any());
 
         new EffectiveTaskColor(mockData).argb();
     }
+
 }

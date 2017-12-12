@@ -24,7 +24,7 @@ import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
-import org.dmfs.opentaskspal.readdata.functions.LongFunction;
+import org.dmfs.jems.single.elementary.ValueSingle;
 
 
 /**
@@ -39,7 +39,7 @@ public final class Id extends DelegatingSingle<Long>
 
     public Id(@NonNull RowDataSnapshot<?> rowDataSnapshot)
     {
-        super(new RowCharData<>(rowDataSnapshot, BaseColumns._ID, new LongFunction()));
+        super(new ValueSingle<>(rowDataSnapshot.data(BaseColumns._ID, Long::valueOf).value()));
     }
 
 }

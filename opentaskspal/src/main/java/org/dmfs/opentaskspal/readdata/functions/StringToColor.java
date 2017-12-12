@@ -16,21 +16,29 @@
 
 package org.dmfs.opentaskspal.readdata.functions;
 
-import org.dmfs.iterators.Function;
+import org.dmfs.android.bolts.color.Color;
+import org.dmfs.android.bolts.color.colors.ValueColor;
+import org.dmfs.jems.function.Function;
 
 
 /**
- * {@link Function} that converts a {@link CharSequence} to an {@link Long}
+ * Pure {@link Function} that converts a String to a {@link Color}
  *
  * @author Gabor Keszthelyi
- * @deprecated use it from contentpal when available or use solution from ContentPal/issues/136
  */
-@Deprecated
-public final class LongFunction implements Function<CharSequence, Long>
+public final class StringToColor implements Function<String, Color>
 {
-    @Override
-    public Long apply(CharSequence charSequence)
+    public static final Function<String, Color> FUNCTION = new StringToColor();
+
+
+    private StringToColor()
     {
-        return Long.valueOf(charSequence.toString());
+    }
+
+
+    @Override
+    public Color value(String stringValue)
+    {
+        return new ValueColor(Integer.valueOf(stringValue));
     }
 }

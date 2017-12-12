@@ -23,17 +23,21 @@ import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.junit.Test;
 
+import java.util.TimeZone;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
 import static org.dmfs.optional.Absent.absent;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 
 
 /**
- * Unit test for TaskDateTime.
+ * Unit test for {@link TaskDateTime}.
  *
  * @author Gabor Keszthelyi
  */
@@ -44,7 +48,7 @@ public final class TaskDateTimeTest
     public void test_whenColumnValueIsAbsent_shouldBeAbsent()
     {
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(absent()).when(mockData).charData(Tasks.DTSTART);
+        doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
 
         assertThat(new TaskDateTime(Tasks.DTSTART, mockData), AbsentMatcher.<DateTime>isAbsent());
     }
@@ -56,8 +60,8 @@ public final class TaskDateTimeTest
         long timeStamp = System.currentTimeMillis();
 
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(new Present<CharSequence>(String.valueOf(timeStamp))).when(mockData).charData(Tasks.DTSTART);
-        doReturn(new Present<CharSequence>("1")).when(mockData).charData(Tasks.IS_ALLDAY);
+        doReturn(new Present<>(timeStamp)).when(mockData).data(eq(Tasks.DTSTART), any());
+        doReturn(new Present<>(true)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
 
         DateTime actual = new TaskDateTime(Tasks.DTSTART, mockData).value();
         assertTrue(actual.isAllDay());
@@ -71,9 +75,9 @@ public final class TaskDateTimeTest
         long timeStamp = System.currentTimeMillis();
 
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(new Present<CharSequence>(String.valueOf(timeStamp))).when(mockData).charData(Tasks.DTSTART);
-        doReturn(new Present<CharSequence>("0")).when(mockData).charData(Tasks.IS_ALLDAY);
-        doReturn(new Present<CharSequence>("UTC")).when(mockData).charData(Tasks.TZ);
+        doReturn(new Present<>(timeStamp)).when(mockData).data(eq(Tasks.DTSTART), any());
+        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new TaskDateTime(Tasks.DTSTART, mockData).value();
         assertFalse(actual.isAllDay());
@@ -87,9 +91,9 @@ public final class TaskDateTimeTest
         long timeStamp = System.currentTimeMillis();
 
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
-        doReturn(new Present<CharSequence>(String.valueOf(timeStamp))).when(mockData).charData(Tasks.DTSTART);
-        doReturn(new Present<CharSequence>("0")).when(mockData).charData(Tasks.IS_ALLDAY);
-        doReturn(new Present<CharSequence>("Europe/Berlin")).when(mockData).charData(Tasks.TZ);
+        doReturn(new Present<>(timeStamp)).when(mockData).data(eq(Tasks.DTSTART), any());
+        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(TimeZone.getTimeZone("Europe/Berlin"))).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new TaskDateTime(Tasks.DTSTART, mockData).value();
         assertFalse(actual.isAllDay());
