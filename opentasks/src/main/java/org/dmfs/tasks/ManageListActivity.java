@@ -32,7 +32,7 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.dmfs.android.colorpicker.ColorPickerActivity;
+import org.dmfs.android.colorpicker.activity.ColorPickerActivity;
 import org.dmfs.android.colorpicker.palettes.RandomPalette;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.tasks.InputTextDialogFragment.InputTextListener;

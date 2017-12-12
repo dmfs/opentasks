@@ -253,17 +253,6 @@
                 android:exported="true"
                 android:label="@string/title_task_list"
                 android:theme="@style/AppTheme"/>
-        <!-- Color Picker -->
-        <activity
-                android:name="org.dmfs.android.colorpicker.ColorPickerActivity"
-                android:exported="false"
-                android:theme="@style/Theme.AppCompat.Light.Dialog">
-            <intent-filter>
-                <action android:name="org.openintents.action.PICK_COLOR"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
         <!-- Manage List -->
         <activity
                 android:name="org.dmfs.tasks.ManageListActivity"
