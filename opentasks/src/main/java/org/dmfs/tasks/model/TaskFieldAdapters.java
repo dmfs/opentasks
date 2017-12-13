@@ -32,7 +32,7 @@ import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
-import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.model.adapters.UriFieldAdapter;
 import org.dmfs.tasks.model.constraints.AdjustPercentComplete;
 import org.dmfs.tasks.model.constraints.After;
 import org.dmfs.tasks.model.constraints.BeforeOrShiftTime;
@@ -140,7 +140,7 @@ public final class TaskFieldAdapters
     /**
      * Adapter for the URL of a task.
      */
-    public final static UrlFieldAdapter URL = new UrlFieldAdapter(TaskContract.Tasks.URL);
+    public final static UriFieldAdapter URL = new UriFieldAdapter(TaskContract.Tasks.URL);
 
     /**
      * Adapter for the Color of the task.

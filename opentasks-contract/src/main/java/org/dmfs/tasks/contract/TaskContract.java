@@ -512,7 +512,7 @@ public final class TaskContract
         String DESCRIPTION = "description";
 
         /**
-         * An URL for this task. Must be a valid URL if not <code>null</code>-
+         * The URL iCalendar field for this task. Must be a valid URI if not <code>null</code>-
          * <p>
          * Value: String
          * </p>
