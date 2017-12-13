@@ -20,15 +20,18 @@ import android.content.ContentValues;
 
 import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.iterators.SingletonIterator;
-import org.dmfs.jems.function.BiFunction;
 import org.dmfs.jems.single.Single;
 import org.dmfs.optional.NullSafe;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.adapters.FirstPresent;
 import org.dmfs.optional.composite.Zipped;
 import org.dmfs.provider.tasks.model.TaskAdapter;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.DueDated;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.Enduring;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.Overridden;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.StartDated;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.VanillaInstanceData;
 import org.dmfs.rfc5545.DateTime;
-import org.dmfs.rfc5545.Duration;
 
 import java.util.Iterator;
 
@@ -53,28 +56,18 @@ public final class InstanceValuesIterable implements Iterable<Single<ContentValu
     public Iterator<Single<ContentValues>> iterator()
     {
         Optional<DateTime> start = new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DTSTART));
-        Optional<DateTime> due = new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DUE));
-
-        Optional<Duration> effectiveDuration = new FirstPresent<>(
+        // effective due is either the actual due, start + duration or absent
+        Optional<DateTime> effectiveDue = new FirstPresent<>(
                 new Seq<>(
-                        new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DURATION)),
-                        new Zipped<>(start, due, new DateTimeDurationBiFunction())));
+                        new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DUE)),
+                        new Zipped<>(start, new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DURATION)), DateTime::addDuration)));
+
+        Single<ContentValues> baseData = new Enduring(new DueDated(effectiveDue, new StartDated(start, new VanillaInstanceData())));
 
         // TODO: implement support for recurrence, for now we only return the first instance
-        return new SingletonIterator<Single<ContentValues>>(
-                new InstanceDateTimeData(start, due, effectiveDuration, new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME))));
-    }
-
-
-    /**
-     * A {@link BiFunction} returning the duration between two {@link DateTime} values.
-     */
-    private final static class DateTimeDurationBiFunction implements BiFunction<DateTime, DateTime, Duration>
-    {
-        @Override
-        public Duration value(DateTime start, DateTime due)
-        {
-            return new Duration(1, 0, (int) ((due.getTimestamp() - start.getTimestamp()) / 1000));
-        }
+        return new SingletonIterator<>(mTaskAdapter.isRecurring() ?
+                new Overridden(new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME)), baseData)
+                :
+                baseData);
     }
 }

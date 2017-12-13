@@ -234,7 +234,7 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(start, due)),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
                         new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
@@ -269,7 +269,7 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(startNew, dueNew)),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
                         new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, startNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
                         new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
@@ -304,7 +304,7 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(startNew, dueNew)),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
                         new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, startNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
                         new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
@@ -335,7 +335,7 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(start, due)),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
                         new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
@@ -371,7 +371,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DURATION, durationMillis),
                         new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Tasks.TZ, "UTC")
                 ))
         ));
@@ -407,7 +407,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DURATION, durationMillis),
                         new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Tasks.TZ, "America/New_York")
                 ))
         ));
@@ -447,7 +447,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DURATION, due2.getTimestamp() - start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due2.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Tasks.TZ, "UTC")
                 ))
         ));

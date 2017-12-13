@@ -14,22 +14,26 @@
  * limitations under the License.
  */
 
-package org.dmfs.provider.tasks.utils;
+package org.dmfs.provider.tasks.processors.tasks.instancedata;
 
-import org.dmfs.jems.function.Function;
+import android.content.ContentValues;
+
 import org.dmfs.jems.single.Single;
+import org.dmfs.jems.single.decorators.DelegatingSingle;
+import org.dmfs.optional.Optional;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
- * A {@link Function} returning the value of a {@link Single}.
+ * A decorator to a {@link Single} of {@link ContentValues} adding start data.
  *
  * @author Marten Gajda
  */
-public final class SingleValueFunction<T> implements Function<Single<T>, T>
+public final class StartDated extends DelegatingSingle<ContentValues>
 {
-    @Override
-    public T value(Single<T> single)
+    public StartDated(Optional<DateTime> start, Single<ContentValues> delegate)
     {
-        return single.value();
+        super(new Dated(start, TaskContract.Instances.INSTANCE_START, TaskContract.Instances.INSTANCE_START_SORTING, delegate));
     }
 }

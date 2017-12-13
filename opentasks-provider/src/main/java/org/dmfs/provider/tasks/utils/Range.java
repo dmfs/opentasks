@@ -23,9 +23,12 @@ import java.util.Iterator;
 
 /**
  * An {@link Iterable} which iterates a range of numbers.
+ * <p>
+ * TODO: implement in jems
  *
  * @author Marten Gajda
  */
+@Deprecated
 public final class Range implements Iterable<Integer>
 {
     private final int mStart;
