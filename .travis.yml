@@ -1,6 +1,9 @@
 language: android
 sudo: false
 
+env:
+  - TZ=Europe/Berlin
+
 android:
   components:
     - tools
