@@ -35,6 +35,7 @@ import org.dmfs.android.contentpal.operations.Put;
 import org.dmfs.android.contentpal.operations.Referring;
 import org.dmfs.android.contentpal.predicates.AllOf;
 import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.android.contentpal.predicates.IsNull;
 import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
 import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.EmptyRowData;
@@ -62,6 +63,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.TimeZone;
 
 import static org.dmfs.android.contenttestpal.ContentMatcher.resultsIn;
 import static org.junit.Assert.assertThat;
@@ -141,7 +144,15 @@ public class TaskProviderTest
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
                 new Assert<>(task, new TitleData("task1")),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task)
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
+                        new IsNull(Instances.INSTANCE_START),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
+                        new IsNull(Instances.INSTANCE_DUE),
+                        new IsNull(Instances.INSTANCE_START_SORTING),
+                        new IsNull(Instances.INSTANCE_DUE_SORTING),
+                        new IsNull(Instances.INSTANCE_DURATION),
+                        new IsNull(Tasks.TZ)
+                ))
         ));
     }
 
@@ -172,9 +183,33 @@ public class TaskProviderTest
                 new Assert<>(task1, new TitleData("task1")),
                 new Assert<>(task2, new TitleData("task2")),
                 new Assert<>(task3, new TitleData("task3")),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task1),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task2),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task3)
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task1, new AllOf(
+                        new IsNull(Instances.INSTANCE_START),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
+                        new IsNull(Instances.INSTANCE_DUE),
+                        new IsNull(Instances.INSTANCE_START_SORTING),
+                        new IsNull(Instances.INSTANCE_DUE_SORTING),
+                        new IsNull(Instances.INSTANCE_DURATION),
+                        new IsNull(Tasks.TZ)
+                )),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task2, new AllOf(
+                        new IsNull(Instances.INSTANCE_START),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
+                        new IsNull(Instances.INSTANCE_DUE),
+                        new IsNull(Instances.INSTANCE_START_SORTING),
+                        new IsNull(Instances.INSTANCE_DUE_SORTING),
+                        new IsNull(Instances.INSTANCE_DURATION),
+                        new IsNull(Tasks.TZ)
+                )),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task3, new AllOf(
+                        new IsNull(Instances.INSTANCE_START),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
+                        new IsNull(Instances.INSTANCE_DUE),
+                        new IsNull(Instances.INSTANCE_START_SORTING),
+                        new IsNull(Instances.INSTANCE_DUE_SORTING),
+                        new IsNull(Instances.INSTANCE_DURATION),
+                        new IsNull(Tasks.TZ)
+                ))
         ));
     }
 
@@ -199,7 +234,111 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(start, due)),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
+                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
+                ))
+        ));
+    }
+
+
+    /**
+     * Create task with start and due and update it with new values, check datetime values including generated duration.
+     */
+    @Test
+    public void testInsertTaskWithStartAndDueMovedForward()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(new Duration(1, 1, 0));
+        Duration duration = new Duration(1, 2, 0);
+
+        DateTime startNew = start.addDuration(duration);
+        DateTime dueNew = due.addDuration(duration);
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(task, new TimeData(start, due)),
+                new Put<>(task, new TimeData(startNew, dueNew))
+        ), resultsIn(mClient,
+                new Assert<>(task, new TimeData(startNew, dueNew)),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
+                        new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, startNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
+                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
+                ))
+        ));
+    }
+
+
+    /**
+     * Create task with start and due and update it with new values, check datetime values including generated duration.
+     */
+    @Test
+    public void testInsertTaskWithStartAndDueMovedBackwards()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(new Duration(1, 1, 0));
+        Duration duration = new Duration(-1, 2, 0);
+
+        DateTime startNew = start.addDuration(duration);
+        DateTime dueNew = due.addDuration(duration);
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(task, new TimeData(start, due)),
+                new Put<>(task, new TimeData(startNew, dueNew))
+        ), resultsIn(mClient,
+                new Assert<>(task, new TimeData(startNew, dueNew)),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
+                        new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, startNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
+                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
+                ))
+        ));
+    }
+
+
+    /**
+     * Create task without dates and set start and due afterwards, check datetime values including generated duration.
+     */
+    @Test
+    public void testInsertTaskWithStartAndDueAddedAfterwards()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(new Duration(1, 1, 0));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(task, new TitleData("Test")),
+                new Put<>(task, new TimeData(start, due))
+        ), resultsIn(mClient,
+                new Assert<>(task, new TimeData(start, due)),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
+                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 ))
@@ -230,7 +369,46 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, start.addDuration(duration).getTimestamp()),
                         new EqArg(Instances.INSTANCE_DURATION, durationMillis),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Tasks.TZ, "UTC")
+                ))
+        ));
+    }
+
+
+    /**
+     * Create task with start and duration, check datetime values including generated due.
+     */
+    @Test
+    public void testInsertWithStartAndDurationChangeTimeZone()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        Duration duration = Duration.parse("PT1H");
+        long durationMillis = duration.toMillis();
+        DateTime startNew = start.shiftTimeZone(TimeZone.getTimeZone("America/New_York"));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(task, new TimeData(start, duration)),
+                // update the task with a the same start in a different time zone
+                new Put<>(task, new TimeData(startNew, duration))
+
+        ), resultsIn(mClient,
+                new Assert<>(task, new TimeData(startNew, duration)),
+                // note that, apart from the time zone, all values stay the same
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
+                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DUE, start.addDuration(duration).getTimestamp()),
+                        new EqArg(Instances.INSTANCE_DURATION, durationMillis),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                        new EqArg(Tasks.TZ, "America/New_York")
                 ))
         ));
     }
@@ -267,6 +445,9 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DUE, due2.getTimestamp()),
                         new EqArg(Instances.INSTANCE_DURATION, due2.getTimestamp() - start.getTimestamp()),
+                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_DUE_SORTING, due2.shiftTimeZone(TimeZone.getDefault()).getInstance()),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
                         new EqArg(Tasks.TZ, "UTC")
                 ))
         ));

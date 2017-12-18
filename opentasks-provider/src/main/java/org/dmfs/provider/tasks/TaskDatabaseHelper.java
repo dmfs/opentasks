@@ -60,7 +60,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
 
 
     /**
@@ -111,110 +111,103 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
 
     }
 
-    // @formatter:off
 
     /**
      * SQL command to create a view that combines tasks with some data from the list they belong to.
      */
     private final static String SQL_CREATE_TASK_VIEW = "create view " + Tables.TASKS_VIEW + " as select " +
-        Tables.TASKS + ".*, " +
-        Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", " +
-        Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", " +
-        Tables.LISTS + "." + Tasks.LIST_OWNER + ", " +
-        Tables.LISTS + "." + Tasks.LIST_NAME + ", " +
-        Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", " +
-        Tables.LISTS + "." + Tasks.LIST_COLOR + ", " +
-        Tables.LISTS + "." + Tasks.VISIBLE +
-        " from " + Tables.TASKS + " join " + Tables.LISTS +
-        " on (" + Tables.TASKS + "." + Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskLists._ID + ");";
+            Tables.TASKS + ".*, " +
+            Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", " +
+            Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", " +
+            Tables.LISTS + "." + Tasks.LIST_OWNER + ", " +
+            Tables.LISTS + "." + Tasks.LIST_NAME + ", " +
+            Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", " +
+            Tables.LISTS + "." + Tasks.LIST_COLOR + ", " +
+            Tables.LISTS + "." + Tasks.VISIBLE +
+            " from " + Tables.TASKS + " join " + Tables.LISTS +
+            " on (" + Tables.TASKS + "." + Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskLists._ID + ");";
 
     /**
      * SQL command to create a view that combines tasks with some data from the list they belong to.
      */
     private final static String SQL_CREATE_TASK_PROPERTY_VIEW = "create view " + Tables.TASKS_PROPERTY_VIEW + " as select " +
-        Tables.TASKS + ".*, " +
-        Tables.PROPERTIES + ".*, "+
-        Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", " +
-        Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", " +
-        Tables.LISTS + "." + Tasks.LIST_OWNER + ", " +
-        Tables.LISTS + "." + Tasks.LIST_NAME + ", " +
-        Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", " +
-        Tables.LISTS + "." + Tasks.LIST_COLOR + ", " +
-        Tables.LISTS + "." + Tasks.VISIBLE +
-        " from " + Tables.TASKS + " join " + Tables.LISTS +
-        " on (" + Tables.TASKS + "." + Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskLists._ID + ") "+
-        "left join "+ Tables.PROPERTIES + " on (" + Tables.TASKS + "." + Tasks._ID + "=" + Tables.PROPERTIES + "." + Properties.TASK_ID +");";
-
+            Tables.TASKS + ".*, " +
+            Tables.PROPERTIES + ".*, " +
+            Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", " +
+            Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", " +
+            Tables.LISTS + "." + Tasks.LIST_OWNER + ", " +
+            Tables.LISTS + "." + Tasks.LIST_NAME + ", " +
+            Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", " +
+            Tables.LISTS + "." + Tasks.LIST_COLOR + ", " +
+            Tables.LISTS + "." + Tasks.VISIBLE +
+            " from " + Tables.TASKS + " join " + Tables.LISTS +
+            " on (" + Tables.TASKS + "." + Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskLists._ID + ") " +
+            "left join " + Tables.PROPERTIES + " on (" + Tables.TASKS + "." + Tasks._ID + "=" + Tables.PROPERTIES + "." + Properties.TASK_ID + ");";
 
     /**
      * SQL command to drop the task view.
      */
     private final static String SQL_DROP_TASK_VIEW = "DROP VIEW " + Tables.TASKS_VIEW + ";";
 
-
     /**
      * SQL command to create a view that combines task instances with some data from the list they belong to.
      */
     private final static String SQL_CREATE_INSTANCE_VIEW = "CREATE VIEW " + Tables.INSTANCE_VIEW + " AS SELECT "
-        + Tables.INSTANCES + ".*, "
-        + Tables.TASKS + ".*, "
-        + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
-        + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
-        + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
-        + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
-        + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
-        + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
-        + Tables.LISTS + "." + Tasks.VISIBLE
-        + " FROM " + Tables.TASKS
-        + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "."+ TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "."+TaskContract.Tasks._ID + ")"
-        + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "."+TaskContract.Instances.TASK_ID+ ");";
-
+            + Tables.INSTANCES + ".*, "
+            + Tables.TASKS + ".*, "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
+            + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
+            + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
+            + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
+            + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
+            + Tables.LISTS + "." + Tasks.VISIBLE
+            + " FROM " + Tables.TASKS
+            + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "." + TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskContract.Tasks._ID + ")"
+            + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "." + TaskContract.Instances.TASK_ID + ");";
 
     /**
      * SQL command to create a view that combines task instances view with the belonging properties.
      */
     private final static String SQL_CREATE_INSTANCE_PROPERTY_VIEW = "CREATE VIEW " + Tables.INSTANCE_PROPERTY_VIEW + " AS SELECT "
-        + Tables.INSTANCES + ".*, "
-        + Tables.PROPERTIES + ".*, "
-        + Tables.TASKS + ".*, "
-        + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
-        + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
-        + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
-        + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
-        + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
-        + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
-        + Tables.LISTS + "." + Tasks.VISIBLE
-        + " FROM " + Tables.TASKS
-        + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "."+ TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "."+TaskContract.Tasks._ID + ")"
-        + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "."+TaskContract.Instances.TASK_ID+ ")"
-        + " LEFT JOIN "+ Tables.PROPERTIES + " ON (" + Tables.TASKS + "." + Tasks._ID + "=" + Tables.PROPERTIES + "." + Properties.TASK_ID +");";
-
+            + Tables.INSTANCES + ".*, "
+            + Tables.PROPERTIES + ".*, "
+            + Tables.TASKS + ".*, "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
+            + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
+            + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
+            + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
+            + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
+            + Tables.LISTS + "." + Tasks.VISIBLE
+            + " FROM " + Tables.TASKS
+            + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "." + TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskContract.Tasks._ID + ")"
+            + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "." + TaskContract.Instances.TASK_ID + ")"
+            + " LEFT JOIN " + Tables.PROPERTIES + " ON (" + Tables.TASKS + "." + Tasks._ID + "=" + Tables.PROPERTIES + "." + Properties.TASK_ID + ");";
 
     /**
      * SQL command to create a view that combines task instances with some data from the list they belong to.
      */
     private final static String SQL_CREATE_INSTANCE_CATEGORY_VIEW = "CREATE VIEW " + Tables.INSTANCE_CATEGORY_VIEW + " AS SELECT "
-        + Tables.INSTANCES + ".*, "
-        + Tables.CATEGORIES_MAPPING + "." + CategoriesMapping.CATEGORY_ID + ", "
-        + Tables.TASKS + ".*, "
-        + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
-        + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
-        + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
-        + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
-        + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
-        + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
-        + Tables.LISTS + "." + Tasks.VISIBLE
-        + " FROM " + Tables.TASKS
-        + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "."+ TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "."+TaskContract.Tasks._ID + ")"
-        + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "."+TaskContract.Instances.TASK_ID+ ")"
-        + " LEFT JOIN " + Tables.CATEGORIES_MAPPING + " ON (" + Tables.CATEGORIES_MAPPING + "." + CategoriesMapping.TASK_ID + "=" + Tables.INSTANCES + "."+TaskContract.Instances.TASK_ID+ ");";
-
+            + Tables.INSTANCES + ".*, "
+            + Tables.CATEGORIES_MAPPING + "." + CategoriesMapping.CATEGORY_ID + ", "
+            + Tables.TASKS + ".*, "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
+            + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
+            + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
+            + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
+            + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
+            + Tables.LISTS + "." + Tasks.VISIBLE
+            + " FROM " + Tables.TASKS
+            + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "." + TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskContract.Tasks._ID + ")"
+            + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "." + TaskContract.Instances.TASK_ID + ")"
+            + " LEFT JOIN " + Tables.CATEGORIES_MAPPING + " ON (" + Tables.CATEGORIES_MAPPING + "." + CategoriesMapping.TASK_ID + "=" + Tables.INSTANCES + "." + TaskContract.Instances.TASK_ID + ");";
 
     /**
      * SQL command to drop the instance view.
      */
     private final static String SQL_DROP_INSTANCE_VIEW = "DROP VIEW " + Tables.INSTANCE_VIEW + ";";
-
 
     /**
      * SQL command to drop the instance property view.
@@ -225,287 +218,270 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      * SQL command to create the instances table.
      */
     private final static String SQL_CREATE_SYNCSTATE_TABLE =
-        "CREATE TABLE " + Tables.SYNCSTATE + " ( " +
-            TaskContract.SyncState._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-          + TaskContract.SyncState.ACCOUNT_NAME + " TEXT, "
-          + TaskContract.SyncState.ACCOUNT_TYPE + " TEXT, "
-          + TaskContract.SyncState.DATA + " TEXT "
-          + ");";
-
+            "CREATE TABLE " + Tables.SYNCSTATE + " ( " +
+                    TaskContract.SyncState._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TaskContract.SyncState.ACCOUNT_NAME + " TEXT, "
+                    + TaskContract.SyncState.ACCOUNT_TYPE + " TEXT, "
+                    + TaskContract.SyncState.DATA + " TEXT "
+                    + ");";
 
     /**
      * SQL command to create the instances table.
      */
     private final static String SQL_CREATE_INSTANCES_TABLE =
-        "CREATE TABLE " + Tables.INSTANCES + " ( " +
-            TaskContract.Instances._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-          + TaskContract.Instances.TASK_ID + " INTEGER NOT NULL, " // NOT NULL
-          + TaskContract.Instances.INSTANCE_START + " INTEGER, "
-          + TaskContract.Instances.INSTANCE_DUE + " INTEGER, "
-          + TaskContract.Instances.INSTANCE_START_SORTING + " INTEGER, "
-          + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER, "
-          + TaskContract.Instances.INSTANCE_DURATION + " INTEGER);";
-
+            "CREATE TABLE " + Tables.INSTANCES + " ( " +
+                    TaskContract.Instances._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                    + TaskContract.Instances.TASK_ID + " INTEGER NOT NULL, " // NOT NULL
+                    + TaskContract.Instances.INSTANCE_START + " INTEGER, "
+                    + TaskContract.Instances.INSTANCE_DUE + " INTEGER, "
+                    + TaskContract.Instances.INSTANCE_START_SORTING + " INTEGER, "
+                    + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER, "
+                    + TaskContract.Instances.INSTANCE_DURATION + " INTEGER, "
+                    + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " INTEGER DEFAULT 0);";
 
     /**
      * SQL command to create a trigger to clean up data of removed tasks.
      */
     private final static String SQL_CREATE_TASKS_CLEANUP_TRIGGER =
-        "CREATE TRIGGER task_cleanup_trigger AFTER DELETE ON " + Tables.TASKS
-        + " BEGIN "
-        + " DELETE FROM " + Tables.PROPERTIES + " WHERE " + TaskContract.Properties.TASK_ID + "= old." + TaskContract.Tasks._ID + ";"
-        + " DELETE FROM " + Tables.INSTANCES + " WHERE " + TaskContract.Instances.TASK_ID + "=old." + TaskContract.Tasks._ID + ";"
-        + " END;";
+            "CREATE TRIGGER task_cleanup_trigger AFTER DELETE ON " + Tables.TASKS
+                    + " BEGIN "
+                    + " DELETE FROM " + Tables.PROPERTIES + " WHERE " + TaskContract.Properties.TASK_ID + "= old." + TaskContract.Tasks._ID + ";"
+                    + " DELETE FROM " + Tables.INSTANCES + " WHERE " + TaskContract.Instances.TASK_ID + "=old." + TaskContract.Tasks._ID + ";"
+                    + " END;";
 
     /**
      * SQL command to create a trigger to clean up data of removed lists.
      */
     private final static String SQL_CREATE_LISTS_CLEANUP_TRIGGER =
-        "CREATE TRIGGER list_cleanup_trigger AFTER DELETE ON " + Tables.LISTS
-        + " BEGIN "
-        + " DELETE FROM " + Tables.TASKS + " WHERE " + Tasks.LIST_ID + "= old." + TaskLists._ID + ";"
-        + " END;";
+            "CREATE TRIGGER list_cleanup_trigger AFTER DELETE ON " + Tables.LISTS
+                    + " BEGIN "
+                    + " DELETE FROM " + Tables.TASKS + " WHERE " + Tasks.LIST_ID + "= old." + TaskLists._ID + ";"
+                    + " END;";
 
     /**
      * SQL command to drop the clean up trigger.
      */
     private final static String SQL_DROP_TASKS_CLEANUP_TRIGGER =
-        "DROP TRIGGER task_cleanup_trigger;";
-
+            "DROP TRIGGER task_cleanup_trigger;";
 
     /**
      * SQL command that counts and sets the alarm on deletion
      */
     private final static String SQL_COUNT_ALARMS_ON_DELETE =
-        " BEGIN UPDATE "+ Tables.TASKS  + " SET " + Tasks.HAS_ALARMS
-        + " = (SELECT COUNT (*) FROM " + Tables.PROPERTIES
-        + " WHERE " + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "' AND " + Alarm.ALARM_TYPE + " <> " + Alarm.ALARM_TYPE_NOTHING + " AND " + Properties.TASK_ID + " = OLD."  + Properties.TASK_ID
-        + ") WHERE " + Tasks._ID + " = OLD." + Properties.TASK_ID
-        + "; END;";
+            " BEGIN UPDATE " + Tables.TASKS + " SET " + Tasks.HAS_ALARMS
+                    + " = (SELECT COUNT (*) FROM " + Tables.PROPERTIES
+                    + " WHERE " + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "' AND " + Alarm.ALARM_TYPE + " <> " + Alarm.ALARM_TYPE_NOTHING + " AND " + Properties.TASK_ID + " = OLD." + Properties.TASK_ID
+                    + ") WHERE " + Tasks._ID + " = OLD." + Properties.TASK_ID
+                    + "; END;";
 
     /**
      * SQL command that counts and sets the alarm on insert and update
      */
     private final static String SQL_COUNT_ALARMS =
-        " BEGIN UPDATE "+ Tables.TASKS  + " SET " + Tasks.HAS_ALARMS
-        + " = (SELECT COUNT (*) FROM " + Tables.PROPERTIES
-        + " WHERE " + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "' AND " + Alarm.ALARM_TYPE + " <> " + Alarm.ALARM_TYPE_NOTHING + " AND " + Properties.TASK_ID + " = NEW."  + Properties.TASK_ID
-        + ") WHERE " + Tasks._ID + " = NEW." + Properties.TASK_ID
-        + "; END;";
+            " BEGIN UPDATE " + Tables.TASKS + " SET " + Tasks.HAS_ALARMS
+                    + " = (SELECT COUNT (*) FROM " + Tables.PROPERTIES
+                    + " WHERE " + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "' AND " + Alarm.ALARM_TYPE + " <> " + Alarm.ALARM_TYPE_NOTHING + " AND " + Properties.TASK_ID + " = NEW." + Properties.TASK_ID
+                    + ") WHERE " + Tasks._ID + " = NEW." + Properties.TASK_ID
+                    + "; END;";
 
     /**
      * SQL command to create a trigger that counts the alarms for a task on create
      */
     private final static String SQL_CREATE_ALARM_COUNT_CREATE_TRIGGER =
-        "CREATE TRIGGER alarm_count_create_trigger AFTER INSERT ON " + Tables.PROPERTIES  + " WHEN NEW." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
-        + SQL_COUNT_ALARMS;
+            "CREATE TRIGGER alarm_count_create_trigger AFTER INSERT ON " + Tables.PROPERTIES + " WHEN NEW." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
+                    + SQL_COUNT_ALARMS;
 
     /**
      * SQL command to create a trigger that counts the alarms for a task on update
      */
     private final static String SQL_CREATE_ALARM_COUNT_UPDATE_TRIGGER =
-        "CREATE TRIGGER alarm_count_update_trigger AFTER UPDATE ON " + Tables.PROPERTIES  + " WHEN NEW." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
-            + SQL_COUNT_ALARMS;
+            "CREATE TRIGGER alarm_count_update_trigger AFTER UPDATE ON " + Tables.PROPERTIES + " WHEN NEW." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
+                    + SQL_COUNT_ALARMS;
 
     /**
      * SQL command to create a trigger that counts the alarms for a task on delete
      */
     private final static String SQL_CREATE_ALARM_COUNT_DELETE_TRIGGER =
-        "CREATE TRIGGER alarm_count_delete_trigger AFTER DELETE ON " + Tables.PROPERTIES  + " WHEN OLD." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
-            + SQL_COUNT_ALARMS_ON_DELETE;
-
-
+            "CREATE TRIGGER alarm_count_delete_trigger AFTER DELETE ON " + Tables.PROPERTIES + " WHEN OLD." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
+                    + SQL_COUNT_ALARMS_ON_DELETE;
 
     /**
      * SQL command to create a trigger to clean up data of removed property.
      */
     private final static String SQL_CREATE_ALARM_PROPERTY_CLEANUP_TRIGGER =
-        "CREATE TRIGGER alarm_property_cleanup_trigger AFTER DELETE ON " + Tables.PROPERTIES + " WHEN OLD." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
-        + " BEGIN "
-        + " DELETE FROM " + Tables.ALARMS + " WHERE " + TaskContract.Alarms.ALARM_ID + "= OLD." + TaskContract.Properties.PROPERTY_ID + ";"
-        + " END;";
-
+            "CREATE TRIGGER alarm_property_cleanup_trigger AFTER DELETE ON " + Tables.PROPERTIES + " WHEN OLD." + Properties.MIMETYPE + " = '" + Alarm.CONTENT_ITEM_TYPE + "'"
+                    + " BEGIN "
+                    + " DELETE FROM " + Tables.ALARMS + " WHERE " + TaskContract.Alarms.ALARM_ID + "= OLD." + TaskContract.Properties.PROPERTY_ID + ";"
+                    + " END;";
 
     /**
      * SQL command to create a trigger to clean up data of removed property.
      */
     private final static String SQL_CREATE_CATEGORY_PROPERTY_CLEANUP_TRIGGER =
-        "CREATE TRIGGER category_property_cleanup_trigger AFTER DELETE ON " + Tables.PROPERTIES + " WHEN OLD." + Properties.MIMETYPE + " = '" + Category.CONTENT_ITEM_TYPE + "'"
-        + " BEGIN "
-        + " DELETE FROM " + Tables.CATEGORIES_MAPPING + " WHERE " + CategoriesMapping.PROPERTY_ID + "= OLD." + TaskContract.Properties.PROPERTY_ID + ";"
-        + " END;";
-
-
+            "CREATE TRIGGER category_property_cleanup_trigger AFTER DELETE ON " + Tables.PROPERTIES + " WHEN OLD." + Properties.MIMETYPE + " = '" + Category.CONTENT_ITEM_TYPE + "'"
+                    + " BEGIN "
+                    + " DELETE FROM " + Tables.CATEGORIES_MAPPING + " WHERE " + CategoriesMapping.PROPERTY_ID + "= OLD." + TaskContract.Properties.PROPERTY_ID + ";"
+                    + " END;";
 
     /**
      * SQL command to create a trigger to clean up property data of removed task.
      */
     private final static String SQL_CREATE_TASK_PROPERTY_CLEANUP_TRIGGER =
-        "CREATE TRIGGER task_property_cleanup_trigger AFTER DELETE ON " + Tables.TASKS + " BEGIN "
-        + " DELETE FROM " + Tables.PROPERTIES + " WHERE " + Properties.TASK_ID + "= OLD." + Tasks._ID + ";"
-        + " END;";
-
-
+            "CREATE TRIGGER task_property_cleanup_trigger AFTER DELETE ON " + Tables.TASKS + " BEGIN "
+                    + " DELETE FROM " + Tables.PROPERTIES + " WHERE " + Properties.TASK_ID + "= OLD." + Tasks._ID + ";"
+                    + " END;";
 
     /**
      * SQL command to create the task list table.
      */
     private final static String SQL_CREATE_LISTS_TABLE =
-        "CREATE TABLE " + Tables.LISTS + " ( "
-            + TaskContract.TaskLists._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + TaskContract.TaskLists.ACCOUNT_NAME + " TEXT,"
-            + TaskContract.TaskLists.ACCOUNT_TYPE + " TEXT,"
-            + TaskContract.TaskLists.LIST_NAME + " TEXT,"
-            + TaskContract.TaskLists.LIST_COLOR + " INTEGER,"
-            + TaskContract.TaskLists.ACCESS_LEVEL + " INTEGER,"
-            + TaskContract.TaskLists.VISIBLE + " INTEGER,"
-            + TaskContract.TaskLists.SYNC_ENABLED + " INTEGER,"
-            + TaskContract.TaskLists.OWNER + " TEXT,"
-            + TaskContract.TaskLists._DIRTY + " INTEGER DEFAULT 0,"
-            + TaskContract.TaskLists._SYNC_ID + " TEXT,"
-            + TaskContract.TaskLists.SYNC_VERSION + " TEXT,"
-            + TaskContract.TaskLists.SYNC1 + " TEXT,"
-            + TaskContract.TaskLists.SYNC2 + " TEXT,"
-            + TaskContract.TaskLists.SYNC3 + " TEXT,"
-            + TaskContract.TaskLists.SYNC4 + " TEXT,"
-            + TaskContract.TaskLists.SYNC5 + " TEXT,"
-            + TaskContract.TaskLists.SYNC6 + " TEXT,"
-            + TaskContract.TaskLists.SYNC7 + " TEXT,"
-            + TaskContract.TaskLists.SYNC8 + " TEXT);";
-
+            "CREATE TABLE " + Tables.LISTS + " ( "
+                    + TaskContract.TaskLists._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + TaskContract.TaskLists.ACCOUNT_NAME + " TEXT,"
+                    + TaskContract.TaskLists.ACCOUNT_TYPE + " TEXT,"
+                    + TaskContract.TaskLists.LIST_NAME + " TEXT,"
+                    + TaskContract.TaskLists.LIST_COLOR + " INTEGER,"
+                    + TaskContract.TaskLists.ACCESS_LEVEL + " INTEGER,"
+                    + TaskContract.TaskLists.VISIBLE + " INTEGER,"
+                    + TaskContract.TaskLists.SYNC_ENABLED + " INTEGER,"
+                    + TaskContract.TaskLists.OWNER + " TEXT,"
+                    + TaskContract.TaskLists._DIRTY + " INTEGER DEFAULT 0,"
+                    + TaskContract.TaskLists._SYNC_ID + " TEXT,"
+                    + TaskContract.TaskLists.SYNC_VERSION + " TEXT,"
+                    + TaskContract.TaskLists.SYNC1 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC2 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC3 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC4 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC5 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC6 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC7 + " TEXT,"
+                    + TaskContract.TaskLists.SYNC8 + " TEXT);";
 
     /**
      * SQL command to create the task table.
      */
     private final static String SQL_CREATE_TASKS_TABLE =
-        "CREATE TABLE " + Tables.TASKS + " ( "
-            + TaskContract.Tasks._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + TaskContract.Tasks.LIST_ID + " INTEGER NOT NULL, "
-            + TaskContract.Tasks.TITLE + " TEXT,"
-            + TaskContract.Tasks.LOCATION + " TEXT,"
-            + TaskContract.Tasks.GEO + " TEXT,"
-            + TaskContract.Tasks.DESCRIPTION + " TEXT,"
-            + TaskContract.Tasks.URL + " TEXT,"
-            + TaskContract.Tasks.ORGANIZER + " TEXT,"
-            + TaskContract.Tasks.PRIORITY + " INTEGER, "
-            + TaskContract.Tasks.TASK_COLOR + " INTEGER,"
-            + TaskContract.Tasks.CLASSIFICATION + " INTEGER,"
-            + TaskContract.Tasks.COMPLETED + " INTEGER,"
-            + TaskContract.Tasks.COMPLETED_IS_ALLDAY + " INTEGER,"
-            + TaskContract.Tasks.PERCENT_COMPLETE + " INTEGER,"
-            + TaskContract.Tasks.STATUS + " INTEGER DEFAULT " + TaskContract.Tasks.STATUS_DEFAULT  + ","
-            + TaskContract.Tasks.IS_NEW + " INTEGER,"
-            + TaskContract.Tasks.IS_CLOSED + " INTEGER,"
-            + TaskContract.Tasks.DTSTART + " INTEGER,"
-            + TaskContract.Tasks.CREATED + " INTEGER,"
-            + TaskContract.Tasks.LAST_MODIFIED + " INTEGER,"
-            + TaskContract.Tasks.IS_ALLDAY + " INTEGER,"
-            + TaskContract.Tasks.TZ + " TEXT,"
-            + TaskContract.Tasks.DUE + " INTEGER,"
-            + TaskContract.Tasks.DURATION + " TEXT,"
-            + TaskContract.Tasks.RDATE + " TEXT,"
-            + TaskContract.Tasks.EXDATE + " TEXT,"
-            + TaskContract.Tasks.RRULE + " TEXT,"
-            + TaskContract.Tasks.PARENT_ID + " INTEGER,"
-            + TaskContract.Tasks.SORTING + " TEXT,"
-            + TaskContract.Tasks.HAS_ALARMS + " INTEGER,"
-            + TaskContract.Tasks.HAS_PROPERTIES + " INTEGER,"
-            + TaskContract.Tasks.PINNED + " INTEGER,"
-            + TaskContract.Tasks.ORIGINAL_INSTANCE_SYNC_ID + " TEXT,"
-            + TaskContract.Tasks.ORIGINAL_INSTANCE_ID + " INTEGER,"
-            + TaskContract.Tasks.ORIGINAL_INSTANCE_TIME + " INTEGER,"
-            + TaskContract.Tasks.ORIGINAL_INSTANCE_ALLDAY + " INTEGER,"
-            + TaskContract.Tasks._DIRTY + " INTEGER DEFAULT 1," // a new task is always dirty
-            + TaskContract.Tasks._DELETED + " INTEGER DEFAULT 0," // new tasks are not deleted by default
-            + TaskContract.Tasks._SYNC_ID + " TEXT,"
-            + TaskContract.Tasks._UID + " TEXT,"
-            + TaskContract.Tasks.SYNC_VERSION + " TEXT,"
-            + TaskContract.Tasks.SYNC1 + " TEXT,"
-            + TaskContract.Tasks.SYNC2 + " TEXT,"
-            + TaskContract.Tasks.SYNC3 + " TEXT,"
-            + TaskContract.Tasks.SYNC4 + " TEXT,"
-            + TaskContract.Tasks.SYNC5 + " TEXT,"
-            + TaskContract.Tasks.SYNC6 + " TEXT,"
-            + TaskContract.Tasks.SYNC7 + " TEXT,"
-            + TaskContract.Tasks.SYNC8 + " TEXT);";
-
+            "CREATE TABLE " + Tables.TASKS + " ( "
+                    + TaskContract.Tasks._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + TaskContract.Tasks.LIST_ID + " INTEGER NOT NULL, "
+                    + TaskContract.Tasks.TITLE + " TEXT,"
+                    + TaskContract.Tasks.LOCATION + " TEXT,"
+                    + TaskContract.Tasks.GEO + " TEXT,"
+                    + TaskContract.Tasks.DESCRIPTION + " TEXT,"
+                    + TaskContract.Tasks.URL + " TEXT,"
+                    + TaskContract.Tasks.ORGANIZER + " TEXT,"
+                    + TaskContract.Tasks.PRIORITY + " INTEGER, "
+                    + TaskContract.Tasks.TASK_COLOR + " INTEGER,"
+                    + TaskContract.Tasks.CLASSIFICATION + " INTEGER,"
+                    + TaskContract.Tasks.COMPLETED + " INTEGER,"
+                    + TaskContract.Tasks.COMPLETED_IS_ALLDAY + " INTEGER,"
+                    + TaskContract.Tasks.PERCENT_COMPLETE + " INTEGER,"
+                    + TaskContract.Tasks.STATUS + " INTEGER DEFAULT " + TaskContract.Tasks.STATUS_DEFAULT + ","
+                    + TaskContract.Tasks.IS_NEW + " INTEGER,"
+                    + TaskContract.Tasks.IS_CLOSED + " INTEGER,"
+                    + TaskContract.Tasks.DTSTART + " INTEGER,"
+                    + TaskContract.Tasks.CREATED + " INTEGER,"
+                    + TaskContract.Tasks.LAST_MODIFIED + " INTEGER,"
+                    + TaskContract.Tasks.IS_ALLDAY + " INTEGER,"
+                    + TaskContract.Tasks.TZ + " TEXT,"
+                    + TaskContract.Tasks.DUE + " INTEGER,"
+                    + TaskContract.Tasks.DURATION + " TEXT,"
+                    + TaskContract.Tasks.RDATE + " TEXT,"
+                    + TaskContract.Tasks.EXDATE + " TEXT,"
+                    + TaskContract.Tasks.RRULE + " TEXT,"
+                    + TaskContract.Tasks.PARENT_ID + " INTEGER,"
+                    + TaskContract.Tasks.SORTING + " TEXT,"
+                    + TaskContract.Tasks.HAS_ALARMS + " INTEGER,"
+                    + TaskContract.Tasks.HAS_PROPERTIES + " INTEGER,"
+                    + TaskContract.Tasks.PINNED + " INTEGER,"
+                    + TaskContract.Tasks.ORIGINAL_INSTANCE_SYNC_ID + " TEXT,"
+                    + TaskContract.Tasks.ORIGINAL_INSTANCE_ID + " INTEGER,"
+                    + TaskContract.Tasks.ORIGINAL_INSTANCE_TIME + " INTEGER,"
+                    + TaskContract.Tasks.ORIGINAL_INSTANCE_ALLDAY + " INTEGER,"
+                    + TaskContract.Tasks._DIRTY + " INTEGER DEFAULT 1," // a new task is always dirty
+                    + TaskContract.Tasks._DELETED + " INTEGER DEFAULT 0," // new tasks are not deleted by default
+                    + TaskContract.Tasks._SYNC_ID + " TEXT,"
+                    + TaskContract.Tasks._UID + " TEXT,"
+                    + TaskContract.Tasks.SYNC_VERSION + " TEXT,"
+                    + TaskContract.Tasks.SYNC1 + " TEXT,"
+                    + TaskContract.Tasks.SYNC2 + " TEXT,"
+                    + TaskContract.Tasks.SYNC3 + " TEXT,"
+                    + TaskContract.Tasks.SYNC4 + " TEXT,"
+                    + TaskContract.Tasks.SYNC5 + " TEXT,"
+                    + TaskContract.Tasks.SYNC6 + " TEXT,"
+                    + TaskContract.Tasks.SYNC7 + " TEXT,"
+                    + TaskContract.Tasks.SYNC8 + " TEXT);";
 
     /**
      * SQL command to create the categories table.
      */
     private final static String SQL_CREATE_CATEGORIES_TABLE =
-        "CREATE TABLE " + Tables.CATEGORIES
-        + " ( " + TaskContract.Categories._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + TaskContract.Categories.ACCOUNT_NAME + " TEXT,"
-        + TaskContract.Categories.ACCOUNT_TYPE + " TEXT,"
-        + TaskContract.Categories.NAME + " TEXT,"
-        + TaskContract.Categories.COLOR + " INTEGER);";
+            "CREATE TABLE " + Tables.CATEGORIES
+                    + " ( " + TaskContract.Categories._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + TaskContract.Categories.ACCOUNT_NAME + " TEXT,"
+                    + TaskContract.Categories.ACCOUNT_TYPE + " TEXT,"
+                    + TaskContract.Categories.NAME + " TEXT,"
+                    + TaskContract.Categories.COLOR + " INTEGER);";
 
     /**
      * SQL command to create the categories table.
      */
     private final static String SQL_CREATE_CATEGORIES_MAPPING_TABLE =
-        "CREATE TABLE " + Tables.CATEGORIES_MAPPING
-        + " ( " + CategoriesMapping.TASK_ID + " INTEGER,"
-        + CategoriesMapping.CATEGORY_ID + " INTEGER,"
-        + CategoriesMapping.PROPERTY_ID + " INTEGER,"
-        + "FOREIGN KEY (" + CategoriesMapping.TASK_ID +") REFERENCES "+ Tables.TASKS + "(" + TaskContract.Tasks._ID + "),"
-        + "FOREIGN KEY (" + CategoriesMapping.PROPERTY_ID +") REFERENCES "+ Tables.PROPERTIES + "(" + TaskContract.Properties.PROPERTY_ID + "),"
-        + "FOREIGN KEY (" + CategoriesMapping.CATEGORY_ID + ") REFERENCES " + Tables.CATEGORIES + "(" + TaskContract.Categories._ID + "));";
-
+            "CREATE TABLE " + Tables.CATEGORIES_MAPPING
+                    + " ( " + CategoriesMapping.TASK_ID + " INTEGER,"
+                    + CategoriesMapping.CATEGORY_ID + " INTEGER,"
+                    + CategoriesMapping.PROPERTY_ID + " INTEGER,"
+                    + "FOREIGN KEY (" + CategoriesMapping.TASK_ID + ") REFERENCES " + Tables.TASKS + "(" + TaskContract.Tasks._ID + "),"
+                    + "FOREIGN KEY (" + CategoriesMapping.PROPERTY_ID + ") REFERENCES " + Tables.PROPERTIES + "(" + TaskContract.Properties.PROPERTY_ID + "),"
+                    + "FOREIGN KEY (" + CategoriesMapping.CATEGORY_ID + ") REFERENCES " + Tables.CATEGORIES + "(" + TaskContract.Categories._ID + "));";
 
     /**
      * SQL command to create the alarms table the stores the already triggered alarms.
      */
     private final static String SQL_CREATE_ALARMS_TABLE =
-        "CREATE TABLE " + Tables.ALARMS
-        + " ( " + TaskContract.Alarms.ALARM_ID + " INTEGER,"
-        + TaskContract.Alarms.LAST_TRIGGER + " TEXT,"
-        + TaskContract.Alarms.NEXT_TRIGGER + " TEXT);";
-
+            "CREATE TABLE " + Tables.ALARMS
+                    + " ( " + TaskContract.Alarms.ALARM_ID + " INTEGER,"
+                    + TaskContract.Alarms.LAST_TRIGGER + " TEXT,"
+                    + TaskContract.Alarms.NEXT_TRIGGER + " TEXT);";
 
     /**
      * SQL command to create the table for extended properties.
      */
     private final static String SQL_CREATE_PROPERTIES_TABLE =
-        "CREATE TABLE " + Tables.PROPERTIES + " ( "
-            + TaskContract.Properties.PROPERTY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + TaskContract.Properties.TASK_ID + " INTEGER,"
-            + TaskContract.Properties.MIMETYPE + " INTEGER,"
-            + TaskContract.Properties.VERSION + " INTEGER,"
-            + TaskContract.Properties.DATA0 + " TEXT,"
-            + TaskContract.Properties.DATA1 + " TEXT,"
-            + TaskContract.Properties.DATA2 + " TEXT,"
-            + TaskContract.Properties.DATA3 + " TEXT,"
-            + TaskContract.Properties.DATA4 + " TEXT,"
-            + TaskContract.Properties.DATA5 + " TEXT,"
-            + TaskContract.Properties.DATA6 + " TEXT,"
-            + TaskContract.Properties.DATA7 + " TEXT,"
-            + TaskContract.Properties.DATA8 + " TEXT,"
-            + TaskContract.Properties.DATA9 + " TEXT,"
-            + TaskContract.Properties.DATA10 + " TEXT,"
-            + TaskContract.Properties.DATA11 + " TEXT,"
-            + TaskContract.Properties.DATA12 + " TEXT,"
-            + TaskContract.Properties.DATA13 + " TEXT,"
-            + TaskContract.Properties.DATA14 + " TEXT,"
-            + TaskContract.Properties.DATA15 + " TEXT,"
-            + TaskContract.Properties.SYNC1 + " TEXT,"
-            + TaskContract.Properties.SYNC2 + " TEXT,"
-            + TaskContract.Properties.SYNC3 + " TEXT,"
-            + TaskContract.Properties.SYNC4 + " TEXT,"
-            + TaskContract.Properties.SYNC5 + " TEXT,"
-            + TaskContract.Properties.SYNC6 + " TEXT,"
-            + TaskContract.Properties.SYNC7 + " TEXT,"
-            + TaskContract.Properties.SYNC8 + " TEXT);";
-
+            "CREATE TABLE " + Tables.PROPERTIES + " ( "
+                    + TaskContract.Properties.PROPERTY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + TaskContract.Properties.TASK_ID + " INTEGER,"
+                    + TaskContract.Properties.MIMETYPE + " INTEGER,"
+                    + TaskContract.Properties.VERSION + " INTEGER,"
+                    + TaskContract.Properties.DATA0 + " TEXT,"
+                    + TaskContract.Properties.DATA1 + " TEXT,"
+                    + TaskContract.Properties.DATA2 + " TEXT,"
+                    + TaskContract.Properties.DATA3 + " TEXT,"
+                    + TaskContract.Properties.DATA4 + " TEXT,"
+                    + TaskContract.Properties.DATA5 + " TEXT,"
+                    + TaskContract.Properties.DATA6 + " TEXT,"
+                    + TaskContract.Properties.DATA7 + " TEXT,"
+                    + TaskContract.Properties.DATA8 + " TEXT,"
+                    + TaskContract.Properties.DATA9 + " TEXT,"
+                    + TaskContract.Properties.DATA10 + " TEXT,"
+                    + TaskContract.Properties.DATA11 + " TEXT,"
+                    + TaskContract.Properties.DATA12 + " TEXT,"
+                    + TaskContract.Properties.DATA13 + " TEXT,"
+                    + TaskContract.Properties.DATA14 + " TEXT,"
+                    + TaskContract.Properties.DATA15 + " TEXT,"
+                    + TaskContract.Properties.SYNC1 + " TEXT,"
+                    + TaskContract.Properties.SYNC2 + " TEXT,"
+                    + TaskContract.Properties.SYNC3 + " TEXT,"
+                    + TaskContract.Properties.SYNC4 + " TEXT,"
+                    + TaskContract.Properties.SYNC5 + " TEXT,"
+                    + TaskContract.Properties.SYNC6 + " TEXT,"
+                    + TaskContract.Properties.SYNC7 + " TEXT,"
+                    + TaskContract.Properties.SYNC8 + " TEXT);";
 
     /**
      * SQL command to drop the task view.
      */
     private final static String SQL_DROP_PROPERTIES_TABLE = "DROP TABLE " + Tables.PROPERTIES + ";";
-
-
-    // @formatter:on
 
 
     /**
@@ -617,6 +593,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
                 TaskContract.Instances.INSTANCE_DUE));
         db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
         db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
+        db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
         db.execSQL(createIndexString(Tables.LISTS, false, TaskContract.TaskLists.ACCOUNT_NAME, // not sure if necessary
                 TaskContract.TaskLists.ACCOUNT_TYPE));
         db.execSQL(createIndexString(Tables.TASKS, false, TaskContract.Tasks.STATUS, TaskContract.Tasks.LIST_ID, TaskContract.Tasks._SYNC_ID));
@@ -782,6 +759,12 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         {
             db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_START_SORTING));
             db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_DUE_SORTING));
+        }
+
+        if (oldVersion < 17)
+        {
+            db.execSQL("alter table " + Tables.INSTANCES + " add column " + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " integer default 0;");
+            db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
         }
 
         // upgrade FTS

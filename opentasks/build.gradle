@@ -39,8 +39,8 @@ android {
         disable 'MissingTranslation' // TODO
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -53,7 +53,7 @@ dependencies {
         exclude group: 'xmlpull', module: 'xmlpull'
     }
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    implementation 'com.github.dmfs:color-picker:1.0'
+    implementation 'com.github.dmfs.color-picker:colorpicker-activity:1.1'
     implementation('au.com.codeka:carrot:2.4.0') {
         exclude module: 'iterators' // TODO Remove when iterators have been removed from codeka:carrot
     }
