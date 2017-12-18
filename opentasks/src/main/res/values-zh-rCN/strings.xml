@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2017 dmfs GmbH
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <resources>
+
+    <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
+
+    <!-- Task list -->
     <string name="menu_add_task">添加任务</string>
     <string name="menu_add_task_condensed">添加</string>
     <string name="menu_show_completed">显示已完成任务</string>
@@ -36,6 +24,13 @@
     <string name="task_group_title_default">任务</string>
     <string name="quick_add_task_created">已创建任务</string>
     <string name="initial_local_task_list_name">我的任务</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d 任务</item>
+        <item quantity="other">%d 任务</item>
+    </plurals>
+
+    <!-- Task detail view -->
     <string name="activity_task_details_edit">编辑</string>
     <string name="activity_task_details_edit_task">编辑任务</string>
     <string name="activity_task_details_delete">删除</string>
@@ -44,15 +39,28 @@
     <string name="activity_task_details_complete_task">完成任务</string>
     <string name="activity_task_details_pin">置顶</string>
     <string name="activity_task_details_pin_task">置顶任务</string>
+    <string name="opentasks_details_no_task_selected">没有选中的任务</string>
     <string name="opentasks_task_details_menu_send_short">发送</string>
     <string name="opentasks_task_details_menu_send">发送到</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">添加子项</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
     <string name="opentasks_checklist_empty_item_hint">子项标题</string>
+
+    <!-- Task editor -->
     <string name="activity_edit_task_title">编辑</string>
     <string name="activity_add_task_title">新建</string>
     <string name="activity_edit_task_error_invalid_url">无效的URL链接</string>
     <string name="activity_edit_task_task_saved">任务已保存.</string>
     <string name="activity_edit_task_empty_task_not_saved">未保存空白任务.</string>
+
+    <!-- Names of task attributes -->
+
     <string name="task_list">列表</string>
     <string name="task_title">标题</string>
     <string name="task_location">位置</string>
@@ -71,18 +79,22 @@
     <string name="task_priority">优先度</string>
     <string name="task_timezone">时区</string>
     <string name="task_all_day">全天</string>
+
+    <!-- Task list due group titles -->
     <string name="task_group_no_due">无截止日期</string>
     <string name="task_group_overdue">过期</string>
     <string name="task_group_due_today">今天</string>
     <string name="task_group_due_tomorrow">明天</string>
-    <string name="task_group_due_within_7_days">未来</string>
+    <string name="task_group_due_within_7_days">一周内</string>
     <string name="task_group_due_in_month">截止于 %s</string>
     <string name="task_group_due_in_year">截止于 %d</string>
-    <string name="task_group_due_in_future">无特定</string>
+    <string name="task_group_due_in_future">未来</string>
+
+    <!-- Task list start group titles -->
     <string name="task_group_start_started">过去</string>
     <string name="task_group_start_today">今天</string>
     <string name="task_group_start_tomorrow">明天</string>
-    <string name="task_group_start_within_7_days">无特定</string>
+    <string name="task_group_start_within_7_days">一周内</string>
     <string name="task_group_start_in_future">未来</string>
     <string name="task_group_due_title">截止</string>
     <string name="task_group_all_title">列表</string>
@@ -91,38 +103,62 @@
     <string name="task_group_search_title">搜索</string>
     <string name="task_group_priority_title">优先度</string>
     <string name="task_group_progress_title">进度</string>
+
+    <!-- Task list progress group titles -->
     <string name="task_group_progress_0">未有成果</string>
     <string name="task_group_progress_40">继续努力</string>
     <string name="task_group_progress_60">完成过半</string>
     <string name="task_group_progress_80">准备完成</string>
     <string name="task_group_progress_100">完成</string>
+
+    <!-- Task list priority group titles -->
     <string name="task_group_priority_high">高</string>
     <string name="task_group_priority_medium">中</string>
     <string name="task_group_priority_low">低</string>
     <string name="task_group_priority_none">无</string>
+
+    <!-- Task editor labels -->
+
     <string name="action_save">保存</string>
     <string name="action_cancel">取消</string>
     <string name="action_save_and_continue">保存并继续</string>
+
+    <!-- Status labels -->
+
     <string name="status_needs_action">未指定</string>
     <string name="status_in_process">进行中</string>
     <string name="status_completed">已完成</string>
     <string name="status_cancelled">已取消</string>
     <string name="status_incomplete">未全部完成</string>
+
+    <!-- Classification labels -->
+
     <string name="classification_not_specified">默认</string>
     <string name="classification_public">公开</string>
     <string name="classification_private">私人</string>
     <string name="classification_confidential">保密</string>
+
+    <!-- Priority labels -->
+
     <string name="priority_undefined">无</string>
     <string name="priority_low">低</string>
     <string name="priority_medium">中</string>
     <string name="priority_high">高</string>
     <string name="priority_urgent">紧急</string>
+
+    <!-- Label for Settings -->
+
     <string name="title_activity_settings">设置</string>
     <string name="action_settings">设置</string>
     <string name="action_add_local_list">添加列表</string>
     <string name="visible_task_lists">显示列表</string>
     <string name="synced_task_lists">同步列表</string>
+
+    <!-- dialogs -->
     <string name="task_list_settings_dialog_account_title">选择一个账号</string>
+
+    <!-- manage task list activity -->
+
     <string name="activity_manage_list_btn_save">保存</string>
     <string name="activity_manage_list_btn_delete">删除列表</string>
     <string name="activity_add_list_title">新建本地列表</string>
@@ -130,45 +166,67 @@
     <string name="task_list_name_caption">名称</string>
     <string name="task_list_no_sync">注: 将生成本地列表.该列表不可同步</string>
     <string name="task_list_color_caption">列表颜色</string>
+
+    <!-- input dialog -->
     <string name="task_list_name_dialog_hint">列表名称</string>
     <string name="task_list_name_dialog_title">输入列表名称</string>
     <string name="task_list_name_dialog_error">输入名称.</string>
+
+    <!-- delete dialog -->
     <string name="task_list_delete_dialog_title">删除 %s</string>
     <string name="task_list_delete_dialog_message">是否删除列表并清除里面所有任务?</string>
     <string name="task_list_delete_toast">%s 已删除</string>
+
+    <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">按截止日期</string>
     <string name="gd_by_completed">按已完成</string>
     <string name="gd_by_list">按列表</string>
+
+    <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">确认删除</string>
     <string name="confirm_delete_message">删除这个任务?</string>
     <string name="confirm_delete_message_with_title">删除 %1s?</string>
     <string name="toast_task_deleted">%1s 已经移除.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
     <string name="task_list_selection_empty">没有可用任务列表</string>
     <string name="task_list_selection_title">选择要显示的列表</string>
     <string name="task_list_selection_ok">OK</string>
     <string name="task_list_selection_cancel">取消</string>
+
+    <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">当前任务</string>
     <string name="task_list_widget_title_4x4">当前任务 4x4</string>
+
+    <!-- Strings for fling actions -->
     <string name="fling_task_complete">已完成</string>
     <string name="fling_task_edit">编辑</string>
     <string name="fling_task_delete">删除</string>
     <string name="fling_task_uncomplete">未完成</string>
+
+    <!-- Accessibility content description -->
     <string name="cd_start_date">开始日期的图标</string>
     <string name="cd_due_date">截止日期的图标</string>
+
+    <!-- Strings for notification -->
     <string name="notification_task_due_date">任务截止, %1s</string>
     <string name="notification_task_start_date">任务开始, %1s</string>
     <string name="notification_task_due_today">任务今天截止</string>
     <string name="notification_task_start_today">任务今天开始</string>
     <string name="notification_action_complete">完成</string>
     <string name="notification_action_completed">已完成</string>
-    <string name="notification_action_delay_1h">+1 小时</string>
-    <string name="notification_action_delay_1d">+1 天</string>
+    <string name="notification_action_delay_1h">延迟1小时</string>
+    <string name="notification_action_delay_1d">延迟1天</string>
     <string name="notification_action_delay_toast">更新截止日期</string>
     <string name="notification_undo">撤销</string>
     <string name="notification_action_unpin">取消置顶</string>
     <string name="notification_task_pin_ticker">%1$s 已经置顶</string>
-    <string name="button_add_one_hour">+1 小时</string>
-    <string name="button_add_one_day">+1 天</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">延迟1小时</string>
+    <string name="button_add_one_day">延迟1天</string>
+
+    <!-- Dashclock -->
     <string name="dashclock_extension_title">任务</string>
     <string name="dashclock_extension_description">显示最近任务信息</string>
     <string name="dashclock_widget_title_due_expanded">%1$s 截止 - %2$s</string>
@@ -184,19 +242,39 @@
     <string name="dashclock_display_type_all">全部</string>
     <string name="dashclock_display_type_pinned">置顶的任务</string>
     <string name="dashclock_preference_title">Task DashClock设置</string>
+
+    <!-- General -->
     <string name="accept">同意</string>
     <string name="now">现在</string>
+
+    <!-- Incoming share -->
     <string name="share_as_task">创建任务</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
     <string name="opentasks_settings_notification_enable">通知</string>
-    <string name="opentasks_settings_notification_signals_section_title">通知信号</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">通知方式</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_sound">声音</string>
-    <string name="opentasks_settings_notification_vibrate">震动</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">振动</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_lights">呼吸灯</string>
+
+    <!-- Outgoing share -->
     <string name="opentasks_share_footer">通过OpenTasks共享</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
     <string name="opentasks_permission_request_dialog_getaccounts_title">没有权限</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[同步任务必须要读取您设备上的账号,因此 %s 需要获得读取用户账号的权限.<br/><br/>
+    请注意，因为Google一个令人遗憾的抉择, 该权限的标注从 &quot;读取用户账号&quot; 变为 &quot;读取通讯录&quot; . 参看<a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> 以获得更详细信息.]]></string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_continue">继续</string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_settings">打开设置</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
     <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
     <string name="opentasks_date_time">%1$s, %2$s</string>
-    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[同步任务必须要读取您设备上的账号,因此 %s 需要获得读取用户账号的权限.<br/><br/>     请注意，因为Google一个令人遗憾的改变, 该权限的标注从 &quot;读取用户账号&quot; 变为 &quot;读取通讯录&quot; . 参看<a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> 以获得更详细信息.]]></string>
+
 </resources>
