@@ -20,7 +20,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.jems.function.BiFunction;
 import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
 import org.dmfs.jems.pair.Pair;
@@ -33,8 +32,7 @@ import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.provider.tasks.utils.InstanceValuesIterable;
 import org.dmfs.provider.tasks.utils.Limited;
 import org.dmfs.provider.tasks.utils.Range;
-import org.dmfs.provider.tasks.utils.SingleValueFunction;
-import org.dmfs.provider.tasks.utils.WithTaskId;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.TaskRelated;
 import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.Locale;
@@ -136,7 +134,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         // TODO: only limit future instances
         for (Single<ContentValues> values : new Limited<>(INSTANCE_COUNT_LIMIT, new InstanceValuesIterable(taskAdapter)))
         {
-            db.insert(TaskDatabaseHelper.Tables.INSTANCES, "", new WithTaskId(id, values).value());
+            db.insert(TaskDatabaseHelper.Tables.INSTANCES, "", new TaskRelated(id, values).value());
         }
     }
 
@@ -181,16 +179,12 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
             // TODO: once we actually support recurrence we should only count future instances
 
             Iterable<Pair<Optional<ContentValues>, Optional<Integer>>> diff = new Diff<>(
-                    new Mapped<>(new SingleValueFunction<ContentValues>(), new Limited<>(INSTANCE_COUNT_LIMIT, new InstanceValuesIterable(taskAdapter))),
+                    new Mapped<>(Single::value, new Limited<>(INSTANCE_COUNT_LIMIT, new InstanceValuesIterable(taskAdapter))),
                     new Range(existingInstances.getCount()),
-                    new BiFunction<ContentValues, Integer, Integer>()
+                    (newInstanceValues, cursorRow) ->
                     {
-                        @Override
-                        public Integer value(ContentValues newInstanceValues, Integer cursorRow)
-                        {
-                            existingInstances.moveToPosition(cursorRow);
-                            return (int) (existingInstances.getLong(startIdx) - newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
-                        }
+                        existingInstances.moveToPosition(cursorRow);
+                        return (int) (existingInstances.getLong(startIdx) - newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
                     });
 
             // sync the instances table with the new instances

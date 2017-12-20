@@ -16,35 +16,28 @@
 
 package org.dmfs.provider.tasks.utils;
 
-import android.content.ContentValues;
-
+import org.dmfs.jems.function.BiFunction;
+import org.dmfs.jems.optional.decorators.Mapped;
 import org.dmfs.jems.single.Single;
-import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.jems.single.combined.Backed;
+import org.dmfs.jems.single.decorators.DelegatingSingle;
+import org.dmfs.optional.Optional;
 
 
 /**
- * A decorator to {@link Single}s of {@link ContentValues} adding a {@link TaskContract.Instances#TASK_ID} to the data.
+ * Experimental {@link Single} which applies a {@link BiFunction} based on the presence of an {@link Optional}.
+ * <p>
+ * TODO: maybe a more appropriate name?
+ * <p>
+ * TODO: move to jems
  *
  * @author Marten Gajda
  */
-public final class WithTaskId implements Single<ContentValues>
+@Deprecated
+public final class Zipped<T> extends DelegatingSingle<T>
 {
-    private final long mTaskId;
-    private final Single<ContentValues> mDelegate;
-
-
-    public WithTaskId(long taskId, Single<ContentValues> delegate)
+    public <V> Zipped(Optional<V> optionalValue, Single<T> delegate, BiFunction<V, T, T> function)
     {
-        mTaskId = taskId;
-        mDelegate = delegate;
-    }
-
-
-    @Override
-    public ContentValues value()
-    {
-        ContentValues values = mDelegate.value();
-        values.put(TaskContract.Instances.TASK_ID, mTaskId);
-        return values;
+        super(new Backed<T>(new Mapped<>(from -> function.value(from, delegate.value()), optionalValue), delegate));
     }
 }
