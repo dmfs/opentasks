@@ -14,33 +14,31 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.rowsets;
+package org.dmfs.opentaskspal.readdata;
 
 import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.Projection;
-import org.dmfs.android.contentpal.RowReference;
-import org.dmfs.android.contentpal.RowSet;
-import org.dmfs.android.contentpal.View;
-import org.dmfs.android.contentpal.predicates.ReferringTo;
-import org.dmfs.android.contentpal.rowsets.DelegatingRowSet;
-import org.dmfs.android.contentpal.rowsets.QueryRowSet;
+import org.dmfs.android.contentpal.RowDataSnapshot;
+import org.dmfs.android.contentpal.projections.SingleColProjection;
+import org.dmfs.optional.Optional;
+import org.dmfs.optional.decorators.DelegatingOptional;
+import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**
- * {@link RowSet} for the subtasks of a given task.
+ * The {@link Optional} {@link Duration} of a task {@link RowDataSnapshot}.
  *
- * @author Gabor Keszthelyi
+ * @author Marten Gajda
  */
-public final class Subtasks extends DelegatingRowSet<Tasks>
+public final class TaskDuration extends DelegatingOptional<Duration>
 {
+    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.DURATION);
 
-    public Subtasks(@NonNull View<Tasks> view,
-                    @NonNull Projection projection,
-                    @NonNull RowReference<Tasks> parentTask)
+
+    public TaskDuration(@NonNull RowDataSnapshot<Tasks> rowData)
     {
-        super(new QueryRowSet<>(view, projection, new ReferringTo<>(Tasks.PARENT_ID, parentTask)));
+        super(rowData.data(Tasks.DURATION, Duration::parse));
     }
-
 }

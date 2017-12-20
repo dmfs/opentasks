@@ -25,6 +25,7 @@ dependencies {
     }
     implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
     implementation 'org.dmfs:jems:' + JEMS_VERSION
+    implementation 'com.github.dmfs.bolts:color-bolts:' + BOLTS_VERSION
 
     testImplementation('com.github.dmfs.contentpal:contentpal-testing:' + CONTENTPAL_VERSION) {
         exclude module: 'jems'
