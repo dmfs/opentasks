@@ -19,6 +19,11 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import org.dmfs.iterables.Split;
+import org.dmfs.iterables.decorators.Fluent;
+import org.dmfs.optional.NullSafe;
+import org.dmfs.optional.Optional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +33,7 @@ import java.util.List;
  */
 public class RecentlyUsedLists
 {
-    public static final String PREFERENCE_KEY = "RecentlyUsedLists";
+    private static final String PREFERENCE_KEY = "RecentlyUsedLists";
 
 
     /**
@@ -39,19 +44,33 @@ public class RecentlyUsedLists
      *
      * @return List of TaskLists where the most recently used list is on position 0.
      */
-    public static List<Long> getList(Context context)
+    private static List<Long> getList(Context context)
     {
-        String strLists = PreferenceManager.getDefaultSharedPreferences(context).getString(PREFERENCE_KEY, "");
-        Log.v(RecentlyUsedLists.class.getSimpleName(), "getList:  " + strLists);
-        List<Long> lists = new ArrayList<>();
-        if (strLists.length() > 0)
+        Optional<String> listStrOpt = new NullSafe<>(PreferenceManager.getDefaultSharedPreferences(context).getString(PREFERENCE_KEY, null));
+        Log.v(RecentlyUsedLists.class.getSimpleName(), "getList:  " + listStrOpt.value("empty"));
+        if (!listStrOpt.isPresent())
         {
-            for (String lid : strLists.split(","))
-            {
-                lists.add(Long.parseLong(lid));
-            }
+            return new ArrayList<>(0);
         }
-        return lists;
+
+        String listStr = listStrOpt.value();
+
+        // Handling known bug https://github.com/dmfs/opentasks/issues/562
+        // See also {@link RecentlyUsedListsNullHandlingTest}
+        if (listStr.contains("null"))
+        {
+            setList(context, toList(new Fluent<>(new Split(listStr, ','))
+                    .mapped(Object::toString)
+                    .filtered(s -> !s.isEmpty())
+                    .filtered(s -> !s.equals("null"))
+                    .mapped(Long::valueOf)));
+            return getList(context);
+        }
+
+        return toList(new Fluent<>(new Split(listStr, ','))
+                .mapped(Object::toString)
+                .filtered(s -> !s.isEmpty())
+                .mapped(Long::valueOf));
     }
 
 
@@ -67,7 +86,7 @@ public class RecentlyUsedLists
     {
         String strLists = TextUtils.join(",", lists);
         Log.v(RecentlyUsedLists.class.getSimpleName(), "setList:  " + strLists);
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREFERENCE_KEY, strLists).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(PREFERENCE_KEY, strLists).apply();
     }
 
 
@@ -83,6 +102,16 @@ public class RecentlyUsedLists
      */
     public static Long getRecentFromList(Context context, List<Long> allowedLists)
     {
+        /*
+         * It should not happen that the List contains <code>null</code>, but since there was this bug:
+         * https://github.com/dmfs/opentasks/issues/562, see also {@link RecentlyUsedListsNullHandlingTest}
+         * this check is added to catch any bug which causes <code>null</code>s in place of list ids.
+         */
+        if (allowedLists.contains(null))
+        {
+            throw new IllegalArgumentException("allowedLists cannot contain 'null'");
+        }
+
         List<Long> recentlyLists = getList(context);
         for (Long listId : recentlyLists)
         {
@@ -103,11 +132,23 @@ public class RecentlyUsedLists
      * @param listId
      *         Id of the TaskList, where a task was just created.
      */
-    public static void use(Context context, Long listId)
+    public static void use(Context context, long listId)
     {
         List<Long> lists = getList(context);
         lists.remove(listId); // does nothing, if "listId" is not in "lists"
         lists.add(0, listId);
         setList(context, lists);
+    }
+
+
+    private static <T> List<T> toList(Iterable<T> iterable)
+    {
+        List<T> list = new ArrayList<>();
+        for (T t : iterable)
+        {
+            list.add(t);
+        }
+        return list;
+
     }
 }

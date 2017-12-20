@@ -68,6 +68,7 @@ dependencies {
     implementation 'com.github.dmfs.bolts:color-bolts:' + BOLTS_VERSION
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.5.1'
 
     androidTestImplementation('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
         exclude group: 'com.android.support', module: 'support-annotations'
