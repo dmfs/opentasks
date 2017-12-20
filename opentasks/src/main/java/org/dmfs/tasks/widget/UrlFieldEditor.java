@@ -17,6 +17,7 @@
 package org.dmfs.tasks.widget;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.InputType;
@@ -29,11 +30,11 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
-import org.dmfs.tasks.model.adapters.UrlFieldAdapter;
+import org.dmfs.tasks.model.adapters.UriFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
+import org.dmfs.tasks.utils.ValidatingUri;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URISyntaxException;
 
 
 /**
@@ -47,7 +48,7 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
     /**
      * The {@link FieldAdapter} of the field for this view.
      */
-    private UrlFieldAdapter mAdapter;
+    private UriFieldAdapter mAdapter;
 
     /**
      * The {@link EditText} to edit the URL.
@@ -100,15 +101,15 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
     {
         if (mValues != null)
         {
-            URL newUrl = mAdapter.get(mValues);
-            if (newUrl == null)
+            Uri newUri = mAdapter.get(mValues);
+            if (newUri == null)
             {
                 mText.setText(null);
             }
             else
             {
                 String oldValue = mText.getText().toString();
-                String newValue = newUrl.toString();
+                String newValue = newUri.toString();
                 if (!TextUtils.equals(oldValue, newValue)) // don't trigger unnecessary updates
                 {
                     mText.setText(newValue);
@@ -122,7 +123,7 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
     public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
     {
         super.setFieldDescription(descriptor, layoutOptions);
-        mAdapter = (UrlFieldAdapter) descriptor.getFieldAdapter();
+        mAdapter = (UriFieldAdapter) descriptor.getFieldAdapter();
         mText.setHint(descriptor.getHint());
     }
 
@@ -137,7 +138,7 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
                 String text = mText.getText().toString();
                 if (!TextUtils.isEmpty(text))
                 {
-                    mAdapter.set(mValues, new URL(text));
+                    mAdapter.set(mValues, new ValidatingUri(text).value());
                 }
                 else
                 {
@@ -145,10 +146,9 @@ public final class UrlFieldEditor extends AbstractFieldEditor implements TextWat
                 }
                 mText.setError(null);
             }
-            catch (MalformedURLException e)
+            catch (URISyntaxException e)
             {
                 mText.setError(getContext().getString(R.string.activity_edit_task_error_invalid_url));
-                e.printStackTrace();
             }
         }
     }
