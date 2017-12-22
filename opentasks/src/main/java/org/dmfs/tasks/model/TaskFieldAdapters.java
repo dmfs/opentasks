@@ -145,7 +145,7 @@ public final class TaskFieldAdapters
     /**
      * Adapter for the Color of the task.
      */
-    public final static IntegerFieldAdapter LIST_COLOR = new ColorFieldAdapter(TaskContract.Tasks.LIST_COLOR, 0.8f);
+    public final static ColorFieldAdapter LIST_COLOR = new ColorFieldAdapter(TaskContract.Tasks.LIST_COLOR, 0.8f);
 
     /**
      * Adpater for the ID of the task.

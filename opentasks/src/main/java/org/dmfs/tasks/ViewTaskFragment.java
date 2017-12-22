@@ -672,7 +672,7 @@ public class ViewTaskFragment extends SupportFragment
     {
         if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
         {
-            mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
+            mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet).argb();
             ((Callback) getActivity()).updateColor(new ValueColor(mListColor));
 
             updateColor();

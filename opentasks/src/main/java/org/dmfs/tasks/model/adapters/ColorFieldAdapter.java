@@ -16,10 +16,13 @@
 
 package org.dmfs.tasks.model.adapters;
 
+import android.content.ContentValues;
 import android.database.Cursor;
-import android.graphics.Color;
 
+import org.dmfs.android.bolts.color.Color;
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.model.OnContentChangeListener;
 
 
 /**
@@ -27,94 +30,104 @@ import org.dmfs.tasks.model.ContentSet;
  *
  * @author Marten Gajda <marten@dmfs.org>
  */
-public final class ColorFieldAdapter extends IntegerFieldAdapter
+// TODO Check if darkening can be made a decorator, using a function. Could be general Mapped FieldAdapter as well.
+// TODO Carefully review the null/0/-1 possibilities, at usage site as well. How to handle them now. TextView.setTextColor for example allows -1, no crash.
+public final class ColorFieldAdapter extends FieldAdapter<Color>
 {
 
+    private final String mFieldName;
     private final Float mDarkenThreshold;
 
 
-    /**
-     * Constructor for a new IntegerFieldAdapter without default value.
-     *
-     * @param fieldName
-     *         The name of the field to use when loading or storing the value.
-     */
     public ColorFieldAdapter(String fieldName)
     {
         this(fieldName, 1f);
     }
 
 
-    /**
-     * Constructor for a new IntegerFieldAdapter without default value.
-     *
-     * @param fieldName
-     *         The name of the field to use when loading or storing the value.
-     */
     public ColorFieldAdapter(String fieldName, float darkenThreshold)
     {
-        super(fieldName);
-        mDarkenThreshold = darkenThreshold;
-    }
-
-
-    /**
-     * Constructor for a new IntegerFieldAdapter with default value.
-     *
-     * @param fieldName
-     *         The name of the field to use when loading or storing the value.
-     * @param defaultValue
-     *         The default value.
-     */
-    public ColorFieldAdapter(String fieldName, Integer defaultValue)
-    {
-        this(fieldName, defaultValue, 1f);
-    }
-
-
-    /**
-     * Constructor for a new IntegerFieldAdapter with default value.
-     *
-     * @param fieldName
-     *         The name of the field to use when loading or storing the value.
-     * @param defaultValue
-     *         The default value.
-     */
-    public ColorFieldAdapter(String fieldName, Integer defaultValue, float darkenThreshold)
-    {
-        super(fieldName, defaultValue);
+        mFieldName = fieldName;
         mDarkenThreshold = darkenThreshold;
     }
 
 
     @Override
-    public Integer get(ContentSet values)
+    public Color get(ContentSet values)
     {
-        return darkenColor(super.get(values), mDarkenThreshold);
+        return new Darkened(mDarkenThreshold, new ValueColor(values.getAsInteger(mFieldName)));
     }
 
 
     @Override
-    public Integer get(Cursor cursor)
+    public Color get(Cursor cursor)
     {
-        return darkenColor(super.get(cursor), mDarkenThreshold);
+        int columnIdx = cursor.getColumnIndex(mFieldName);
+        if (columnIdx < 0)
+        {
+            throw new IllegalArgumentException("Column is missing in the cursor: " + mFieldName);
+        }
+        return new Darkened(mDarkenThreshold, new ValueColor(cursor.getInt(columnIdx)));
     }
 
 
     @Override
-    public Integer getDefault(ContentSet values)
+    public Color getDefault(ContentSet values)
     {
-        return darkenColor(super.getDefault(values), mDarkenThreshold);
+        throw new UnsupportedOperationException("Default value is not defined for " + getClass().getName());
     }
 
 
-    private static int darkenColor(int color, float maxLuminance)
+    @Override
+    public void set(ContentSet values, Color value)
     {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * hsv[2] * hsv[2] * hsv[2] * hsv[2] * (maxLuminance - 1) + hsv[2];
-        color = Color.HSVToColor(hsv);
-        return color;
+        values.put(mFieldName, value.argb());
+    }
+
+
+    @Override
+    public void set(ContentValues values, Color value)
+    {
+        values.put(mFieldName, value.argb());
+    }
+
+
+    @Override
+    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification)
+    {
+        values.addOnChangeListener(listener, mFieldName, initialNotification);
+    }
+
+
+    @Override
+    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    {
+        values.removeOnChangeListener(listener, mFieldName);
+    }
+
+
+    // TODO When #522 is merged, use version added there
+    private static final class Darkened implements Color
+    {
+        private final float mMaxLuminance;
+        private final Color mOriginal;
+
+
+        private Darkened(float maxLuminance, Color original)
+        {
+            mMaxLuminance = maxLuminance;
+            mOriginal = original;
+        }
+
+
+        @Override
+        public int argb()
+        {
+            float[] hsv = new float[3];
+            android.graphics.Color.colorToHSV(mOriginal.argb(), hsv);
+            hsv[2] = hsv[2] * hsv[2] * hsv[2] * hsv[2] * hsv[2] * (mMaxLuminance - 1) + hsv[2];
+            return android.graphics.Color.HSVToColor(hsv);
+        }
     }
 
 }

@@ -334,7 +334,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
         Cursor c = (Cursor) parent.getItemAtPosition(position);
-        mLastColor = TaskFieldAdapters.LIST_COLOR.get(c);
+        mLastColor = TaskFieldAdapters.LIST_COLOR.get(c).argb();
         mColorBackground.setBackgroundColor(mLastColor);
         mSelectedListId = id;
     }

@@ -134,7 +134,7 @@ public class TasksListCursorSpinnerAdapter extends android.support.v4.widget.Cur
         TextView accountName = (TextView) convertView.findViewById(R.id.task_list_account_name);
         Cursor cursor = (Cursor) getItem(position);
 
-        listColor.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+        listColor.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor).argb());
         listName.setText(cursor.getString(mTaskNameColumn));
         accountName.setText(cursor.getString(mAccountNameColumn));
         return convertView;

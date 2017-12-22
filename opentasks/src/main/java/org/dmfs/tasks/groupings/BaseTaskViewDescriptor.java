@@ -141,7 +141,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         View colorbar = getView(view, R.id.colorbar);
         if (colorbar != null)
         {
-            colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+            colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor).argb());
         }
     }
 

@@ -364,7 +364,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
                 while (mTasksCursor.moveToNext())
                 {
                     items[itemIndex] = new TaskListWidgetItem(TaskFieldAdapters.INSTANCE_TASK_ID.get(mTasksCursor), TaskFieldAdapters.TITLE.get(mTasksCursor),
-                            TaskFieldAdapters.DUE.get(mTasksCursor), TaskFieldAdapters.LIST_COLOR.get(mTasksCursor),
+                            TaskFieldAdapters.DUE.get(mTasksCursor), TaskFieldAdapters.LIST_COLOR.get(mTasksCursor).argb(),
                             TaskFieldAdapters.IS_CLOSED.get(mTasksCursor));
                     itemIndex++;
                 }

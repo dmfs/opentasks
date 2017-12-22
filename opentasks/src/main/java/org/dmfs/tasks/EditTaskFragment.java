@@ -291,7 +291,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                         // ensure we're using the latest values
                         mValues.update(mAppContext, CONTENT_VALUE_MAPPER);
                     }
-                    mListColor = TaskFieldAdapters.LIST_COLOR.get(mValues);
+                    mListColor = TaskFieldAdapters.LIST_COLOR.get(mValues).argb();
                     // update the color of the action bar as soon as possible
                     updateColor(0);
                     setListUri(TaskLists.getContentUri(mAuthority), LIST_LOADER_VISIBLE_LISTS_FILTER);
@@ -548,7 +548,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     {
         if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
         {
-            mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
+            mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet).argb();
             updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 
             if (mAppForEdit)
@@ -591,7 +591,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
         Cursor c = (Cursor) arg0.getItemAtPosition(pos);
 
         String accountType = c.getString(TASK_LIST_PROJECTION_VALUES.account_type);
-        mListColor = TaskFieldAdapters.LIST_COLOR.get(c);
+        mListColor = TaskFieldAdapters.LIST_COLOR.get(c).argb();
         updateColor((float) mRootView.getScrollY() / mTaskListBar.getMeasuredHeight());
 
         if (mEditor != null)

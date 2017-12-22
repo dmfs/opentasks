@@ -211,7 +211,7 @@ public class ByList extends AbstractGroupingFactory
             {
                 if (colorbar1 != null)
                 {
-                    colorbar1.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+                    colorbar1.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor).argb());
                     colorbar1.setVisibility(View.VISIBLE);
                 }
                 if (colorbar2 != null)
@@ -237,7 +237,7 @@ public class ByList extends AbstractGroupingFactory
                 }
                 if (colorbar2 != null)
                 {
-                    colorbar2.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+                    colorbar2.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor).argb());
                     colorbar2.setVisibility(View.VISIBLE);
                 }
 

@@ -162,6 +162,13 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
 
 
     @Override
+    public void updateValues()
+    {
+        mAdapter.validateAndSet(mValues, mCurrentValue);
+    }
+
+
+    @Override
     public void onContentChanged(ContentSet contentSet)
     {
         if (mValues != null)
@@ -173,13 +180,6 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
                 mCurrentValue = newValue;
             }
         }
-    }
-
-
-    @Override
-    public void updateValues()
-    {
-        mAdapter.validateAndSet(mValues, mCurrentValue);
     }
 
 
