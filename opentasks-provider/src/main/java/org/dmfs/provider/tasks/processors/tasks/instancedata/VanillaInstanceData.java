@@ -39,6 +39,7 @@ public final class VanillaInstanceData implements Single<ContentValues>
         values.putNull(TaskContract.Instances.INSTANCE_DUE);
         values.putNull(TaskContract.Instances.INSTANCE_DUE_SORTING);
         values.putNull(TaskContract.Instances.INSTANCE_DURATION);
+        values.put(TaskContract.Instances.INSTANCE_STATUS, TaskContract.Instances.INSTANCE_STATUS_NEXT);
         values.put(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0);
         return values;
     }

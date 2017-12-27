@@ -29,10 +29,10 @@ import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.TaskRelated;
 import org.dmfs.provider.tasks.utils.InstanceValuesIterable;
 import org.dmfs.provider.tasks.utils.Limited;
 import org.dmfs.provider.tasks.utils.Range;
-import org.dmfs.provider.tasks.processors.tasks.instancedata.TaskRelated;
 import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.Locale;
@@ -99,7 +99,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
 
         TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
 
-        if (!result.isUpdated(TaskAdapter.DTSTART) && !result.isUpdated(TaskAdapter.DUE) && !result.isUpdated(TaskAdapter.DURATION) && !updateRequested)
+        if (!result.isUpdated(TaskAdapter.DTSTART) && !result.isUpdated(TaskAdapter.DUE) && !result.isUpdated(TaskAdapter.DURATION)
+                && !result.isUpdated(TaskAdapter.STATUS) && !updateRequested)
         {
             // date values didn't change and update not requested -> no need to update the instances table
             return result;
