@@ -17,18 +17,17 @@
 package org.dmfs.opentaskspal.readdata;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.jems.hamcrest.matchers.AbsentMatcher;
 import org.dmfs.optional.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.junit.Test;
 
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static org.dmfs.jems.hamcrest.matchers.AbsentMatcher.isAbsent;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
 import static org.dmfs.optional.Absent.absent;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -54,8 +53,8 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(timestamp)).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
-        doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
+        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new EffectiveDueDate(mockData).value();
         assertEquals(timestamp, actual.getTimestamp());
@@ -69,10 +68,10 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
-        doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
+        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new EffectiveDueDate(mockData), isAbsent());
     }
 
 
@@ -81,12 +80,12 @@ public final class EffectiveDueDateTest
     {
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
-        doReturn(new Present<>(234234)).when(mockData).data(eq(Tasks.DTSTART), any());
+        doReturn(new Present<>(234234L)).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
-        doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
+        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new EffectiveDueDate(mockData), isAbsent());
     }
 
 
@@ -97,10 +96,10 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(new Present<>(Duration.parse("P7W"))).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
-        doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
+        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new EffectiveDueDate(mockData), isAbsent());
     }
 
 
@@ -113,8 +112,8 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(new Present<>(timestamp)).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(new Present<>(Duration.parse("PT2H"))).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
-        doReturn(new Present<>(TimeZone.getTimeZone("Europe/Berlin"))).when(mockData).data(eq(Tasks.TZ), any());
+        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>("Europe/Berlin")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new EffectiveDueDate(mockData).value();
         assertEquals(timestamp + TimeUnit.HOURS.toMillis(2), actual.getTimestamp());

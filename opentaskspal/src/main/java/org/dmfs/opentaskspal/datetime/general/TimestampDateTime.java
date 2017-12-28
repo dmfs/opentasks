@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2018 dmfs GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,35 +14,33 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.readdata;
+package org.dmfs.opentaskspal.datetime.general;
 
 import android.support.annotation.NonNull;
 
-import org.dmfs.android.contentpal.Projection;
-import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
 import org.dmfs.jems.single.elementary.ValueSingle;
-import org.dmfs.tasks.contract.TaskContract.Tasks;
-
-import java.util.TimeZone;
+import org.dmfs.rfc5545.DateTime;
 
 
 /**
- * The {@link Single} effective {@link TimeZone} of a task. If the task has no TimeZone, i.e. is floating, this will return the local {@link TimeZone}.
+ * {@link Single} for {@link DateTime} created from a timestamp.
+ * <p>
+ * UTC is used to interpret pure timestamp date-times. Formatter for UI can convert to local time zone before displaying.
  *
- * @author Marten Gajda
  * @author Gabor Keszthelyi
  */
-public final class EffectiveTimezone extends DelegatingSingle<TimeZone>
+public final class TimestampDateTime extends DelegatingSingle<DateTime>
 {
-    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.TZ);
-
-
-    public EffectiveTimezone(@NonNull RowDataSnapshot<Tasks> rowData)
+    public TimestampDateTime(@NonNull Single<Long> timestamp)
     {
-        super(new ValueSingle<>(rowData.data(Tasks.TZ, TimeZone::getTimeZone).value()));
+        super(() -> new DateTime(timestamp.value()));
     }
 
+
+    public TimestampDateTime(@NonNull Long timestamp)
+    {
+        this(new ValueSingle<>(timestamp));
+    }
 }

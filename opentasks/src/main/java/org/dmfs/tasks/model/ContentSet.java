@@ -24,6 +24,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import org.dmfs.opentaskspal.jems.procedure.Procedure;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
@@ -520,6 +521,28 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
             }
         }
         --mBulkUpdates;
+    }
+
+
+    /**
+     * Execute a bulk update for this {@link ContentSet}.
+     * <p>
+     * Shortcut for using {@link #startBulkUpdate()} and {@link #finishBulkUpdate()}.
+     *
+     * @param body
+     *         do the changes to {@link ContentSet} here
+     */
+    public void bulkUpdate(Procedure<ContentSet> body)
+    {
+        startBulkUpdate();
+        try
+        {
+            body.process(this);
+        }
+        finally
+        {
+            finishBulkUpdate();
+        }
     }
 
 
