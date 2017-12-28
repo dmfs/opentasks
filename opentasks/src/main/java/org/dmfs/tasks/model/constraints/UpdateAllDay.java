@@ -16,8 +16,7 @@
 
 package org.dmfs.tasks.model.constraints;
 
-import android.text.format.Time;
-
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
@@ -30,10 +29,10 @@ import org.dmfs.tasks.model.adapters.FieldAdapter;
  */
 public class UpdateAllDay extends AbstractConstraint<Boolean>
 {
-    private final FieldAdapter<Time> mTimeAdapter;
+    private final FieldAdapter<DateTime> mTimeAdapter;
 
 
-    public UpdateAllDay(FieldAdapter<Time> adapter)
+    public UpdateAllDay(FieldAdapter<DateTime> adapter)
     {
         mTimeAdapter = adapter;
     }
@@ -42,19 +41,15 @@ public class UpdateAllDay extends AbstractConstraint<Boolean>
     @Override
     public Boolean apply(ContentSet currentValues, Boolean oldValue, Boolean newValue)
     {
-        Time time = mTimeAdapter.get(currentValues);
+        DateTime time = mTimeAdapter.get(currentValues);
         if (time != null)
         {
             if ((oldValue == null || !oldValue) && newValue != null && newValue)
             {
                 // all-day has been enabled, ensure the given time is all-day
-
-                if (time.toMillis(false) % (24L * 60 * 60 * 1000L) != 0)
+                if (time.isAllDay())
                 {
-                    // not at 00:00:00 UTC yet
-                    time.timezone = "UTC";
-                    time.set(time.monthDay, time.month, time.year);
-                    mTimeAdapter.set(currentValues, time);
+                    mTimeAdapter.set(currentValues, time.toAllDay());
                 }
 
             }

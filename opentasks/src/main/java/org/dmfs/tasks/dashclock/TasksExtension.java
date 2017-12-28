@@ -21,19 +21,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
-import android.text.format.Time;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
 import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.CombinedDateTimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
@@ -243,8 +244,8 @@ public class TasksExtension extends DashClockExtension
         }
         else
         {
-            TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DUE, Instances.TZ, Instances.IS_ALLDAY);
-            Time dueTime = timeFieldAdapter.get(c);
+            FieldAdapter<DateTime> dateTimeFieldAdapter = new CombinedDateTimeFieldAdapter(Instances.DUE, Instances.TZ, Instances.IS_ALLDAY);
+            DateTime dueTime = dateTimeFieldAdapter.get(c);
             if (dueTime == null)
             {
                 return null;
@@ -263,8 +264,8 @@ public class TasksExtension extends DashClockExtension
         }
         else
         {
-            TimeFieldAdapter timeFieldAdapter = new TimeFieldAdapter(Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY);
-            Time startTime = timeFieldAdapter.get(c);
+            FieldAdapter<DateTime> dateTimeFieldAdapter = new CombinedDateTimeFieldAdapter(Instances.DTSTART, Instances.TZ, Instances.IS_ALLDAY);
+            DateTime startTime = dateTimeFieldAdapter.get(c);
             if (startTime == null)
             {
                 return null;

@@ -19,9 +19,9 @@ package org.dmfs.tasks.share;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.format.Time;
 
 import org.dmfs.iterators.Function;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.model.adapters.TimeZoneWrapper;
@@ -31,11 +31,11 @@ import java.util.TimeZone;
 
 
 /**
- * Function to convert a {@link Time} to a {@link String} also adding timezone.
+ * Function to convert a {@link DateTime} to a {@link String} also adding timezone.
  *
  * @author Gabor Keszthelyi
  */
-public final class TimeFormatter implements Function<Time, String>
+public final class DateTimeFormatterFunction implements Function<DateTime, String>
 {
 
     private final DateFormatter mDateFormatter;
@@ -43,9 +43,9 @@ public final class TimeFormatter implements Function<Time, String>
     private final TimeZone mTimeZone;
 
 
-    public TimeFormatter(@NonNull DateFormatter dateFormatter,
-                         @NonNull DateFormatter.DateFormatContext dateFormatContext,
-                         @Nullable TimeZone timeZone)
+    public DateTimeFormatterFunction(@NonNull DateFormatter dateFormatter,
+                                     @NonNull DateFormatter.DateFormatContext dateFormatContext,
+                                     @Nullable TimeZone timeZone)
     {
         mDateFormatter = dateFormatter;
         mDateFormatContext = dateFormatContext;
@@ -53,16 +53,16 @@ public final class TimeFormatter implements Function<Time, String>
     }
 
 
-    public TimeFormatter(Context context, ContentSet contentSet)
+    public DateTimeFormatterFunction(Context context, ContentSet contentSet)
     {
         this(new DateFormatter(context), DateFormatter.DateFormatContext.DETAILS_VIEW, TaskFieldAdapters.TIMEZONE.get(contentSet));
     }
 
 
     @Override
-    public String apply(Time time)
+    public String apply(DateTime dateTime)
     {
-        String dateTimeText = mDateFormatter.format(time, mDateFormatContext);
+        String dateTimeText = mDateFormatter.format(dateTime, mDateFormatContext);
         if (mTimeZone == null)
         {
             return dateTimeText;
@@ -70,7 +70,7 @@ public final class TimeFormatter implements Function<Time, String>
         else
         {
             TimeZoneWrapper tzw = new TimeZoneWrapper(mTimeZone);
-            String timeZoneText = tzw.getDisplayName(tzw.inDaylightTime(time.toMillis(false)), TimeZone.SHORT);
+            String timeZoneText = tzw.getDisplayName(tzw.inDaylightTime(dateTime.getTimestamp()), TimeZone.SHORT);
             return dateTimeText + " " + timeZoneText;
         }
     }

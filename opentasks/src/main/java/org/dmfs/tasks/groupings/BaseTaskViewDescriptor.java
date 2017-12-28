@@ -20,18 +20,16 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.support.v4.util.SparseArrayCompat;
 import android.text.TextUtils;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.ViewDescriptor;
-
-import java.util.TimeZone;
 
 
 /**
@@ -42,53 +40,32 @@ import java.util.TimeZone;
 public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 {
 
-    /**
-     * We use this to get the current time.
-     */
-    protected Time mNow;
-
-
-    protected void setDueDate(TextView view, ImageView dueIcon, Time dueDate, boolean isClosed)
+    // TODO Add Nullable, NonNull annotations
+    protected void setDueDate(TextView view, ImageView dueIcon, DateTime dueDate, boolean isClosed)
     {
-        if (view != null && dueDate != null)
+        if (view == null)
         {
-            Time now = mNow;
-            if (now == null)
-            {
-                now = mNow = new Time();
-            }
-            if (!now.timezone.equals(TimeZone.getDefault().getID()))
-            {
-                now.clear(TimeZone.getDefault().getID());
-            }
+            // TODO can this happen?
+            return;
+        }
 
-            if (Math.abs(now.toMillis(false) - System.currentTimeMillis()) > 5000)
-            {
-                now.setToNow();
-                now.normalize(true);
-            }
+        if (dueDate != null)
+        {
+            // TODO cache nowAndHere of some time (it was 5 secs before)
+            DateTime nowAndHere = DateTime.nowAndHere();
 
-            dueDate.normalize(true);
-
-            view.setText(new DateFormatter(view.getContext()).format(dueDate, now, DateFormatContext.LIST_VIEW));
+            view.setText(new DateFormatter(view.getContext()).format(dueDate, nowAndHere, DateFormatContext.LIST_VIEW));
             if (dueIcon != null)
             {
                 dueIcon.setVisibility(View.VISIBLE);
             }
 
-            // highlight overdue dates & times, handle allDay tasks separately
-            if ((!dueDate.allDay && dueDate.before(now) || dueDate.allDay
-                    && (dueDate.year < now.year || dueDate.yearDay <= now.yearDay && dueDate.year == now.year))
-                    && !isClosed)
-            {
-                view.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
-            }
-            else
-            {
-                view.setTextAppearance(view.getContext(), R.style.task_list_due_text);
-            }
+            // overdue tasks are highlighted
+            int textStyle = dueDate.after(nowAndHere) && !isClosed ? R.style.task_list_overdue_text : R.style.task_list_due_text;
+            view.setTextAppearance(view.getContext(), textStyle);
+
         }
-        else if (view != null)
+        else
         {
             view.setText("");
             if (dueIcon != null)

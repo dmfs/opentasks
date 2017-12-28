@@ -18,12 +18,14 @@ package org.dmfs.tasks.widget;
 
 import android.content.Context;
 import android.text.format.DateFormat;
-import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import org.dmfs.opentaskspal.datetime.general.TimeZones;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
@@ -48,14 +50,9 @@ import java.util.TimeZone;
 public final class TimeFieldView extends AbstractFieldView implements OnClickListener
 {
     /**
-     * {@link TimeZone} UTC, we use it when showing all-day dates.
-     */
-    private final static TimeZone UTC = TimeZone.getTimeZone(Time.TIMEZONE_UTC);
-
-    /**
      * The {@link FieldAdapter} of the field for this view.
      */
-    private FieldAdapter<Time> mAdapter;
+    private FieldAdapter<DateTime> mAdapter;
 
     /**
      * The text view that shows the time in the local time zone.
@@ -131,7 +128,7 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
     public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
     {
         super.setFieldDescription(descriptor, layoutOptions);
-        mAdapter = (FieldAdapter<Time>) descriptor.getFieldAdapter();
+        mAdapter = (FieldAdapter<DateTime>) descriptor.getFieldAdapter();
         mText.setHint(descriptor.getHint());
         findViewById(R.id.buttons).setVisibility(layoutOptions.getBoolean(LayoutDescriptor.OPTION_TIME_FIELD_SHOW_ADD_BUTTONS, false) ? VISIBLE : GONE);
     }
@@ -140,20 +137,20 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
     @Override
     public void onContentChanged(ContentSet contentSet)
     {
-        Time newValue = mAdapter.get(mValues);
+        DateTime newValue = mAdapter.get(mValues);
         if (mValues != null && newValue != null)
         {
-            Date fullDate = new Date(newValue.toMillis(false));
+            Date fullDate = new Date(newValue.getTimestamp());
             String formattedTime;
-            if (!newValue.allDay)
+            if (!newValue.isAllDay())
             {
                 mDefaultDateFormat.setTimeZone(mDefaultTimeZone);
                 mDefaultTimeFormat.setTimeZone(mDefaultTimeZone);
-                TimeZoneWrapper taskTimeZone = new TimeZoneWrapper(newValue.timezone);
+                TimeZoneWrapper taskTimeZone = new TimeZoneWrapper(newValue.getTimeZone());
 
                 formattedTime = mDateFormatter.format(newValue, DateFormatContext.DETAILS_VIEW);
 
-                if (!taskTimeZone.equals(mDefaultTimeZone) && !Time.TIMEZONE_UTC.equals(newValue.timezone) && mTimeZoneText != null)
+                if (!taskTimeZone.equals(mDefaultTimeZone) && !TimeZones.UTC.equals(newValue.getTimeZone()) && mTimeZoneText != null)
                 {
                     /*
                      * The date has a time zone that is different from the default time zone, so show the original time too.
@@ -196,17 +193,15 @@ public final class TimeFieldView extends AbstractFieldView implements OnClickLis
     public void onClick(View v)
     {
         int id = v.getId();
-        Time time = mAdapter.get(mValues);
+        DateTime dateTime = mAdapter.get(mValues);
         if (id == R.id.button_add_one_day)
         {
-            time.monthDay++;
-            time.normalize(true);
+            dateTime = dateTime.addDuration(new Duration(1, 1, 0));
         }
         else if (id == R.id.button_add_one_hour)
         {
-            time.hour++;
-            time.normalize(false);
+            dateTime = dateTime.addDuration(new Duration(1, 0, 1, 0, 0));
         }
-        mAdapter.validateAndSet(mValues, time);
+        mAdapter.validateAndSet(mValues, dateTime);
     }
 }

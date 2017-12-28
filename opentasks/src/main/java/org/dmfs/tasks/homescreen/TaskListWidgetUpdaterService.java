@@ -27,11 +27,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
-import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Instances;
@@ -44,7 +44,6 @@ import org.dmfs.tasks.utils.TimeChangeObserver;
 import org.dmfs.tasks.utils.WidgetConfigurationDatabaseHelper;
 
 import java.util.ArrayList;
-import java.util.TimeZone;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -101,7 +100,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
         /**
          * This variable is used to store the current time for reference.
          */
-        private Time mNow;
+        private DateTime mNow;
 
         /**
          * The resource from the {@link Application}.
@@ -219,23 +218,18 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
             row.setTextViewText(android.R.id.title, taskTitle);
             row.setInt(R.id.task_list_color, "setBackgroundColor", items[position].getTaskColor());
 
-            Time dueDate = items[position].getDueDate();
+            DateTime dueDate = items[position].getDueDate();
             if (dueDate != null)
             {
                 if (mNow == null)
                 {
-                    mNow = new Time();
+                    mNow = DateTime.nowAndHere();
                 }
-                mNow.clear(TimeZone.getDefault().getID());
-                mNow.setToNow();
-                dueDate.normalize(true);
-                mNow.normalize(true);
 
                 row.setTextViewText(android.R.id.text1, mDueDateFormatter.format(dueDate, DateFormatContext.WIDGET_VIEW));
 
                 // highlight overdue dates & times
-                if ((!dueDate.allDay && dueDate.before(mNow) || dueDate.allDay
-                        && (dueDate.year < mNow.year || dueDate.yearDay <= mNow.yearDay && dueDate.year == mNow.year))
+                if (dueDate.before(mNow)
                         && !items[position].getIsClosed())
                 {
                     row.setTextColor(android.R.id.text1, mResources.getColor(R.color.holo_red_light));

@@ -46,6 +46,7 @@ android {
 
 dependencies {
     implementation project(':opentasks-provider')
+    implementation project(':opentaskspal')
     implementation 'com.android.support:appcompat-v7:' + SUPPORT_LIBRARY_VERSION
     implementation 'com.android.support:design:' + SUPPORT_LIBRARY_VERSION
     implementation('org.dmfs:android-xml-magic:0.1.1') {

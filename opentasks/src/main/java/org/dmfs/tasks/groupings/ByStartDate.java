@@ -20,13 +20,13 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
-import android.text.format.Time;
 import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.dmfs.optional.NullSafe;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.groupings.cursorloaders.TimeRangeCursorFactory;
@@ -88,7 +88,7 @@ public class ByStartDate extends AbstractGroupingFactory
             TextView startDateField = getView(view, R.id.task_start_date);
             if (startDateField != null)
             {
-                Time startDate = INSTANCE_START_ADAPTER.get(cursor);
+                DateTime startDate = INSTANCE_START_ADAPTER.get(cursor);
 
                 if (startDate != null)
                 {

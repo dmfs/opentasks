@@ -26,8 +26,6 @@ import android.content.res.Resources.NotFoundException;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
-import android.text.TextUtils;
-import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +36,11 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
+import org.dmfs.opentaskspal.datetime.general.MovedToDate;
+import org.dmfs.opentaskspal.datetime.general.MovedToTimeOfDay;
+import org.dmfs.opentaskspal.datetime.general.ShiftedWithTimeZoneDifference;
+import org.dmfs.optional.NullSafe;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.FieldDescriptor;
@@ -64,7 +67,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     /**
      * The adapter to load the values from a {@link ContentSet}.
      */
-    private FieldAdapter<Time> mAdapter;
+    private FieldAdapter<DateTime> mAdapter;
 
     /**
      * The buttons to show the current date and time and to launch the date & time pickers.
@@ -84,12 +87,12 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     /**
      * The current time this editor represents.
      */
-    private Time mDateTime;
+    private DateTime mDateTime;
 
     /**
      * The last time zone used. This is used to restore the time zone when the date is switched to all-day and back.
      */
-    private String mTimezone;
+    private TimeZone mTimezone;
 
     /**
      * Indicates that the date has been changed and we have to update the UI.
@@ -157,7 +160,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     {
         super.setFieldDescription(descriptor, layoutOptions);
         Context context = getContext();
-        mAdapter = (FieldAdapter<Time>) descriptor.getFieldAdapter();
+        mAdapter = (FieldAdapter<DateTime>) descriptor.getFieldAdapter();
         mDefaultDateFormat = android.text.format.DateFormat.getDateFormat(context);
         mDefaultTimeFormat = android.text.format.DateFormat.getTimeFormat(context);
         mIs24hour = android.text.format.DateFormat.is24HourFormat(context);
@@ -187,7 +190,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
             {
                 // initialize date and time
                 mDateTime = mAdapter.getDefault(mValues);
-                applyTimeInTimeZone(mDateTime, TimeZone.getDefault().getID());
+                mDateTime = new ShiftedWithTimeZoneDifference(TimeZone.getDefault(), mDateTime).value();
             }
 
             // show the correct dialog
@@ -198,7 +201,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
             }
             else
             {
-                dialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.hour, mDateTime.minute, mIs24hour);
+                dialog = new TimePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.getHours(), mDateTime.getMinutes(), mIs24hour);
             }
             dialog.show();
         }
@@ -211,59 +214,16 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     }
 
 
-    /**
-     * Updates a {@link Time} instance to date and time of the given time zone, but in the original time zone.
-     * <p>
-     * Example:
-     * </p>
-     * <p>
-     * <pre>
-     * input time: 2013-04-02 16:00 Europe/Berlin (GMT+02:00)
-     * input timeZone: America/New_York (GMT-04:00)
-     * </pre>
-     * <p>
-     * will result in
-     * <p>
-     * <pre>
-     * 2013-04-02 10:00 Europe/Berlin (because the original time is equivalent to 2013-04-02 10:00 America/New_York)
-     * </pre>
-     * <p>
-     * All-day times are not modified.
-     *
-     * @param time
-     *         The {@link Time} to update.
-     * @param timeZone
-     *         A time zone id.
-     */
-    private void applyTimeInTimeZone(Time time, String timeZone)
-    {
-        if (!time.allDay)
-        {
-            /*
-             * Switch to timeZone and reset back to original time zone. That updates date & time to the values in timeZone but keeps the original time zone.
-             */
-            String originalTimeZone = time.timezone;
-            time.switchTimezone(timeZone);
-            time.timezone = originalTimeZone;
-            time.set(time.second, time.minute, time.hour, time.monthDay, time.month, time.year);
-        }
-    }
-
-
     @Override
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
     {
         if (ALLDAY.get(mValues))
         {
-            mDateTime.timezone = Time.TIMEZONE_UTC;
-            mDateTime.set(dayOfMonth, monthOfYear, year);
+            mDateTime = new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0);
         }
         else
         {
-            mDateTime.year = year;
-            mDateTime.month = monthOfYear;
-            mDateTime.monthDay = dayOfMonth;
-            mDateTime.normalize(true);
+            mDateTime = new MovedToDate(year, monthOfYear, dayOfMonth, mDateTime).value();
         }
         mUpdated = true;
         mAdapter.validateAndSet(mValues, mDateTime);
@@ -273,8 +233,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute)
     {
-        mDateTime.hour = hourOfDay;
-        mDateTime.minute = minute;
+        mDateTime = new MovedToTimeOfDay(hourOfDay, minute, mDateTime).value();
         mUpdated = true;
         mAdapter.validateAndSet(mValues, mDateTime);
     }
@@ -283,9 +242,8 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     @Override
     public void onContentChanged(ContentSet contentSet)
     {
-        Time newTime = mAdapter.get(mValues);
-        if (!mUpdated && newTime != null && mDateTime != null && Time.compare(newTime, mDateTime) == 0
-                && TextUtils.equals(newTime.timezone, mDateTime.timezone) && newTime.allDay == mDateTime.allDay)
+        DateTime newTime = mAdapter.get(mValues);
+        if (!mUpdated && newTime != null && mDateTime != null && mDateTime.equals(newTime))
         {
             // nothing has changed
             return;
@@ -294,65 +252,73 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 
         if (newTime != null)
         {
-            if (mDateTime != null && mDateTime.timezone != null && !TextUtils.equals(mDateTime.timezone, newTime.timezone) && !newTime.allDay)
+            if (mDateTime != null && mDateTime.getTimeZone() != null
+                    && mDateTime.getTimeZone().equals(newTime.getTimeZone())
+                    && !newTime.isAllDay())
             {
                 /*
                  * Time zone has been changed.
                  *
                  * We don't want to change date and hour in the editor, so apply the old time zone.
                  */
-                applyTimeInTimeZone(newTime, mDateTime.timezone);
+                newTime = new ShiftedWithTimeZoneDifference(mDateTime.getTimeZone(), newTime).value();
             }
 
-            if (mDateTime != null && mDateTime.allDay != newTime.allDay)
+            if (mDateTime != null && mDateTime.isAllDay() != newTime.isAllDay())
             {
                 /*
                  * The all-day flag has been changed, we may have to restore time and time zone for the UI.
                  */
-                if (!newTime.allDay)
+                if (!newTime.isAllDay())
                 {
                     /*
                      * Try to restore the time or set a reasonable time if we didn't have any before.
                      */
+                    int hour;
+                    int minute;
                     if (mOldHour >= 0 && mOldMinutes >= 0)
                     {
-                        newTime.hour = mOldHour;
-                        newTime.minute = mOldMinutes;
+                        hour = mOldHour;
+                        minute = mOldMinutes;
                     }
                     else
                     {
-                        Time defaultDate = mAdapter.getDefault(contentSet);
-                        applyTimeInTimeZone(defaultDate, TimeZone.getDefault().getID());
-                        newTime.hour = defaultDate.hour;
-                        newTime.minute = defaultDate.minute;
+                        DateTime defaultDate = mAdapter.getDefault(contentSet);
+                        defaultDate = new ShiftedWithTimeZoneDifference(TimeZone.getDefault(), defaultDate).value();
+                        hour = defaultDate.getHours();
+                        minute = defaultDate.getMinutes();
                     }
                     /*
                      * All-day events are floating and have no time zone (though it might be set to UTC).
                      *
                      * Restore previous time zone if possible, otherwise pick a reasonable default value.
                      */
-                    newTime.timezone = mTimezone == null ? TimeZone.getDefault().getID() : mTimezone;
-                    newTime.normalize(true);
+                    TimeZone timeZone = mTimezone == null ? TimeZone.getDefault() : mTimezone;
+
+                    // TODO Could we use ShiftedWithTimeZoneDifference here? (TimeZone is not from the original here)
+                    newTime = new DateTime(timeZone,
+                            newTime.getYear(), newTime.getMonth(), newTime.getDayOfMonth(),
+                            hour, minute, 0);
                 }
                 else
                 {
                     // apply time zone shift to end up with the right day
-                    newTime.set(mDateTime.toMillis(false) + TimeZone.getTimeZone(mDateTime.timezone).getOffset(mDateTime.toMillis(false)));
-                    newTime.set(newTime.monthDay, newTime.month, newTime.year);
+                    // TODO Is this correct?:
+                    newTime = newTime.shiftTimeZone(mDateTime.getTimeZone());
                 }
             }
 
-            if (!newTime.allDay)
+            if (!newTime.isAllDay())
             {
                 // preserve current time zone
-                mTimezone = newTime.timezone;
+                mTimezone = newTime.getTimeZone();
             }
 
             /*
              * Update UI. Ensure we show the time in the correct time zone.
              */
-            Date currentDate = new Date(newTime.toMillis(false));
-            TimeZone timeZone = TimeZone.getTimeZone(newTime.timezone);
+            Date currentDate = new Date(newTime.getTimestamp());
+            TimeZone timeZone = new NullSafe<>(newTime.getTimeZone()).value(TimeZone.getDefault());
 
             if (mDatePickerButton != null)
             {
@@ -363,7 +329,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
 
             if (mTimePickerButton != null)
             {
-                if (!newTime.allDay)
+                if (!newTime.isAllDay())
                 {
                     mDefaultTimeFormat.setTimeZone(timeZone);
                     String formattedTime = mDefaultTimeFormat.format(currentDate);
@@ -376,10 +342,10 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
                 }
             }
 
-            if (!newTime.allDay)
+            if (!newTime.isAllDay())
             {
-                mOldHour = newTime.hour;
-                mOldMinutes = newTime.minute;
+                mOldHour = newTime.getHours();
+                mOldMinutes = newTime.getMinutes();
             }
 
             if (mClearDateButton != null)
@@ -387,8 +353,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
                 mClearDateButton.setEnabled(true);
             }
 
-            if (mDateTime == null || Time.compare(newTime, mDateTime) != 0 || !TextUtils.equals(newTime.timezone, mDateTime.timezone)
-                    || newTime.allDay != mDateTime.allDay)
+            if (mDateTime == null || !mDateTime.equals(newTime))
             {
                 // We have modified the time, so update contentSet.
                 mDateTime = newTime;
@@ -422,18 +387,19 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
     /**
      * A workaround method to display DatePicker while avoiding crashed on Samsung Android 5.0 devices
      *
-     * @see http://stackoverflow.com/questions/28345413/datepicker-crash-in-samsung-with-android-5-0
+     * @see <a href="http://stackoverflow.com/questions/28345413/datepicker-crash-in-samsung-with-android-5-0">DatePicker crash in samsung with android 5.0</a>
      */
     private Dialog getDatePickerWithSamsungWorkaround()
     {
         // The datepicker on Samsung Android 5.0 devices crashes for certain languages, e.g. french and polish
         // We fall back to the holo datepicker in this case. German and English are confirmed to work.
         if (Build.VERSION.SDK_INT == VERSION_CODES.LOLLIPOP && Build.MANUFACTURER.equalsIgnoreCase("samsung")
-                && !("en".equals(Locale.getDefault().getLanguage().toString())))
+                && !("en".equals(Locale.getDefault().getLanguage())))
         {
             // get holo picker
-            DatePickerDialog dialog = new DatePickerDialog(getContext(), R.style.DatePickerHolo, TimeFieldEditor.this, mDateTime.year, mDateTime.month,
-                    mDateTime.monthDay);
+            DatePickerDialog dialog = new DatePickerDialog(getContext(), R.style.DatePickerHolo, TimeFieldEditor.this, mDateTime.getYear(),
+                    mDateTime.getMonth(),
+                    mDateTime.getDayOfMonth());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
 
             // change divider color
@@ -474,7 +440,7 @@ public final class TimeFieldEditor extends AbstractFieldEditor implements OnDate
         }
         else
         {
-            return new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.year, mDateTime.month, mDateTime.monthDay);
+            return new DatePickerDialog(getContext(), TimeFieldEditor.this, mDateTime.getYear(), mDateTime.getMonth(), mDateTime.getDayOfMonth());
         }
     }
 }

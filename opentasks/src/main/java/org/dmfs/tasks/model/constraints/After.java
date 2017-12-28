@@ -15,8 +15,7 @@
 
 package org.dmfs.tasks.model.constraints;
 
-import android.text.format.Time;
-
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.defaults.Default;
@@ -26,13 +25,13 @@ import org.dmfs.tasks.model.defaults.DefaultAfter;
 /**
  * Ensure a time is after a specific reference time. The new value will be set using {@link DefaultAfter} otherwise.
  */
-public class After extends AbstractConstraint<Time>
+public class After extends AbstractConstraint<DateTime>
 {
-    private final FieldAdapter<Time> mReferenceAdapter;
-    private final Default<Time> mDefault;
+    private final FieldAdapter<DateTime> mReferenceAdapter;
+    private final Default<DateTime> mDefault;
 
 
-    public After(FieldAdapter<Time> referenceAdapter)
+    public After(FieldAdapter<DateTime> referenceAdapter)
     {
         mReferenceAdapter = referenceAdapter;
         mDefault = new DefaultAfter(referenceAdapter);
@@ -40,12 +39,12 @@ public class After extends AbstractConstraint<Time>
 
 
     @Override
-    public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
+    public DateTime apply(ContentSet currentValues, DateTime oldValue, DateTime newValue)
     {
-        Time reference = mReferenceAdapter.get(currentValues);
+        DateTime reference = mReferenceAdapter.get(currentValues);
         if (reference != null && newValue != null && !newValue.after(reference))
         {
-            newValue.set(mDefault.getCustomDefault(currentValues, reference));
+            newValue = mDefault.getCustomDefault(currentValues, reference);
         }
         return newValue;
     }
