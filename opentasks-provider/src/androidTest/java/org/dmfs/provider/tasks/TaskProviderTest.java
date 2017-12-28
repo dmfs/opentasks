@@ -252,7 +252,7 @@ public class TaskProviderTest
 
 
     /**
-     * Create task with start and due, check datetime values including generated duration.
+     * Create task with start and due, check datetime and INSTANCE_STATUS values after updating the status.
      */
     @Test
     public void testInsertTaskWithStartAndDueUpdateStatus()
@@ -264,7 +264,7 @@ public class TaskProviderTest
         DateTime due = start.addDuration(new Duration(1, 1, 0));
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TimeData(start, due)),
                 // update the status of the new task
                 new Put<>(task, new StatusData(Tasks.STATUS_COMPLETED))

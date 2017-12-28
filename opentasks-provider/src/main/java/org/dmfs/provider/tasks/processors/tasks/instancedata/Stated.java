@@ -24,7 +24,7 @@ import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
- * A {@link Single} of date and time {@link ContentValues} of an instance.
+ * A {@link Single} of the instance status {@link ContentValues} of an instance.
  *
  * @author Marten Gajda
  */
@@ -33,16 +33,12 @@ public final class Stated extends DelegatingSingle<ContentValues>
 
     public Stated(boolean closed, Single<ContentValues> delegate)
     {
-        super(new Single<ContentValues>()
+        super(() ->
         {
-            @Override
-            public ContentValues value()
-            {
-                ContentValues values = delegate.value();
-                values.put(TaskContract.Instances.INSTANCE_STATUS,
-                        closed ? TaskContract.Instances.INSTANCE_STATUS_CLOSED : TaskContract.Instances.INSTANCE_STATUS_NEXT);
-                return values;
-            }
+            ContentValues values = delegate.value();
+            values.put(TaskContract.Instances.INSTANCE_STATUS,
+                    closed ? TaskContract.Instances.INSTANCE_STATUS_CLOSED : TaskContract.Instances.INSTANCE_STATUS_NEXT);
+            return values;
         });
     }
 }

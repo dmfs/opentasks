@@ -237,7 +237,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
                     + TaskContract.Instances.INSTANCE_START_SORTING + " INTEGER, "
                     + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER, "
                     + TaskContract.Instances.INSTANCE_DURATION + " INTEGER, "
-                    + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " INTEGER DEFAULT 0,"
+                    + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " INTEGER DEFAULT 0, "
                     + TaskContract.Instances.INSTANCE_STATUS + " INTEGER DEFAULT " + TaskContract.Instances.INSTANCE_STATUS_NEXT + ");";
 
     /**
