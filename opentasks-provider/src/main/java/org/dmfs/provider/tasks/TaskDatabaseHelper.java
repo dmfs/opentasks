@@ -60,7 +60,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
 
 
     /**
@@ -237,7 +237,8 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
                     + TaskContract.Instances.INSTANCE_START_SORTING + " INTEGER, "
                     + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER, "
                     + TaskContract.Instances.INSTANCE_DURATION + " INTEGER, "
-                    + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " INTEGER DEFAULT 0);";
+                    + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " INTEGER DEFAULT 0, "
+                    + TaskContract.Instances.INSTANCE_STATUS + " INTEGER DEFAULT " + TaskContract.Instances.INSTANCE_STATUS_NEXT + ");";
 
     /**
      * SQL command to create a trigger to clean up data of removed tasks.
@@ -765,6 +766,12 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         {
             db.execSQL("alter table " + Tables.INSTANCES + " add column " + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " integer default 0;");
             db.execSQL(createIndexString(Tables.INSTANCES, false, TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
+        }
+
+        if (oldVersion < 18)
+        {
+            db.execSQL(
+                    "alter table " + Tables.INSTANCES + " add column " + TaskContract.Instances.INSTANCE_STATUS + " integer default " + TaskContract.Instances.INSTANCE_STATUS_NEXT + ";");
         }
 
         // upgrade FTS

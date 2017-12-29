@@ -30,6 +30,7 @@ import org.dmfs.provider.tasks.processors.tasks.instancedata.DueDated;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.Enduring;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.Overridden;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.StartDated;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.Stated;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.VanillaInstanceData;
 import org.dmfs.rfc5545.DateTime;
 
@@ -62,7 +63,8 @@ public final class InstanceValuesIterable implements Iterable<Single<ContentValu
                         new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DUE)),
                         new Zipped<>(start, new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DURATION)), DateTime::addDuration)));
 
-        Single<ContentValues> baseData = new Enduring(new DueDated(effectiveDue, new StartDated(start, new VanillaInstanceData())));
+        Single<ContentValues> baseData = new Stated(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED),
+                new Enduring(new DueDated(effectiveDue, new StartDated(start, new VanillaInstanceData()))));
 
         // TODO: implement support for recurrence, for now we only return the first instance
         return new SingletonIterator<>(mTaskAdapter.isRecurring() ?
