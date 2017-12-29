@@ -60,7 +60,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
 
 
     /**
@@ -809,6 +809,11 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         if (oldVersion < 19)
         {
             db.execSQL(SQL_CREATE_INSTANCE_CLIENT_VIEW);
+        }
+
+        if (oldVersion < 20)
+        {
+            db.execSQL("UPDATE " + Tables.TASKS + " SET " + Tasks.TZ + " = NULL WHERE " + Tasks.IS_ALLDAY + " = 1");
         }
 
         // upgrade FTS

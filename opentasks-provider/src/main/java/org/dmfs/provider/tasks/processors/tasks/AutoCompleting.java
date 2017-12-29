@@ -222,5 +222,11 @@ public final class AutoCompleting implements EntityProcessor<TaskAdapter>
                 task.set(TaskAdapter.COMPLETED, null);
             }
         }
+
+        // Set timezone to null for all-day date-times
+        if (task.isUpdated(TaskAdapter.IS_ALLDAY) && task.valueOf(TaskAdapter.IS_ALLDAY))
+        {
+            task.set(TaskAdapter.TIMEZONE_RAW, null);
+        }
     }
 }
