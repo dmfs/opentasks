@@ -26,11 +26,11 @@ import org.dmfs.optional.Optional;
 import org.dmfs.optional.adapters.FirstPresent;
 import org.dmfs.optional.composite.Zipped;
 import org.dmfs.provider.tasks.model.TaskAdapter;
+import org.dmfs.provider.tasks.processors.tasks.instancedata.Distant;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.DueDated;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.Enduring;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.Overridden;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.StartDated;
-import org.dmfs.provider.tasks.processors.tasks.instancedata.Stated;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.VanillaInstanceData;
 import org.dmfs.rfc5545.DateTime;
 
@@ -63,7 +63,7 @@ public final class InstanceValuesIterable implements Iterable<Single<ContentValu
                         new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DUE)),
                         new Zipped<>(start, new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DURATION)), DateTime::addDuration)));
 
-        Single<ContentValues> baseData = new Stated(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED),
+        Single<ContentValues> baseData = new Distant(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED) ? -1 : 0,
                 new Enduring(new DueDated(effectiveDue, new StartDated(start, new VanillaInstanceData()))));
 
         // TODO: implement support for recurrence, for now we only return the first instance
