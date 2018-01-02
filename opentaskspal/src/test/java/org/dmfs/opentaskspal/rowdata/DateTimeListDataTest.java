@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.tasks;
+package org.dmfs.opentaskspal.rowdata;
 
 import org.dmfs.iterables.SingletonIterable;
 import org.dmfs.iterables.elementary.Seq;
@@ -37,12 +37,12 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)
-public class DateTimeListTaskDataTest
+public class DateTimeListDataTest
 {
     @Test
     public void testEmpty() throws Exception
     {
-        assertThat(new DateTimeListTaskData("somefieldname", instance()),
+        assertThat(new DateTimeListData<>("somefieldname", instance()),
                 builds(
                         withValuesOnly(
                                 withNullValue("somefieldname"))));
@@ -52,7 +52,7 @@ public class DateTimeListTaskDataTest
     @Test
     public void testSingle() throws Exception
     {
-        assertThat(new DateTimeListTaskData("somefieldname", new SingletonIterable<>(DateTime.parse("Europe/Berlin", "20171212T123456"))),
+        assertThat(new DateTimeListData<>("somefieldname", new SingletonIterable<>(DateTime.parse("Europe/Berlin", "20171212T123456"))),
                 builds(
                         withValuesOnly(
                                 containing("somefieldname", "20171212T113456Z"))));
@@ -62,7 +62,7 @@ public class DateTimeListTaskDataTest
     @Test
     public void testSingleFloating() throws Exception
     {
-        assertThat(new DateTimeListTaskData("somefieldname", new SingletonIterable<>(DateTime.parse("20171212T123456"))),
+        assertThat(new DateTimeListData<>("somefieldname", new SingletonIterable<>(DateTime.parse("20171212T123456"))),
                 builds(
                         withValuesOnly(
                                 containing("somefieldname", "20171212T123456"))));
@@ -72,7 +72,7 @@ public class DateTimeListTaskDataTest
     @Test
     public void testSingleAllDay() throws Exception
     {
-        assertThat(new DateTimeListTaskData("somefieldname", new SingletonIterable<>(DateTime.parse("20171212"))),
+        assertThat(new DateTimeListData<>("somefieldname", new SingletonIterable<>(DateTime.parse("20171212"))),
                 builds(
                         withValuesOnly(
                                 containing("somefieldname", "20171212"))));
@@ -82,7 +82,7 @@ public class DateTimeListTaskDataTest
     @Test
     public void testMulti1() throws Exception
     {
-        assertThat(new DateTimeListTaskData("somefieldname",
+        assertThat(new DateTimeListData<>("somefieldname",
                         new Seq<>(
                                 DateTime.parse("Europe/Berlin", "20171212T123456"),
                                 DateTime.parse("UTC", "20171213T123456"))),
@@ -95,7 +95,7 @@ public class DateTimeListTaskDataTest
     @Test
     public void testMulti2() throws Exception
     {
-        assertThat(new DateTimeListTaskData("somefieldname",
+        assertThat(new DateTimeListData<>("somefieldname",
                         new Seq<>(
                                 DateTime.parse("Europe/Berlin", "20171212T123456"),
                                 DateTime.parse("UTC", "20171213T123456"),

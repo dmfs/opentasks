@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.tasks;
+package org.dmfs.opentaskspal.rowdata;
 
 import android.content.ContentProviderOperation;
 import android.support.annotation.NonNull;
@@ -24,21 +24,23 @@ import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
 import org.dmfs.jems.iterable.decorators.Mapped;
 import org.dmfs.rfc5545.DateTime;
-import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
  * {@link RowData} for a field of {@link DateTime}s.
  *
+ * @param <Contract>
+ *         The contract of the table this row data goes to.
+ *
  * @author Marten Gajda
  */
-public final class DateTimeListTaskData implements RowData<TaskContract.Tasks>
+public final class DateTimeListData<Contract> implements RowData<Contract>
 {
     private final String mField;
     private final Iterable<DateTime> mDateTimes;
 
 
-    public DateTimeListTaskData(String field, @NonNull Iterable<DateTime> dateTimes)
+    public DateTimeListData(String field, @NonNull Iterable<DateTime> dateTimes)
     {
         mField = field;
         mDateTimes = dateTimes;

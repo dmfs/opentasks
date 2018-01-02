@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
+import org.dmfs.opentaskspal.rowdata.DateTimeListData;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -35,6 +36,6 @@ public final class ExDatesTaskData extends DelegatingRowData<TaskContract.Tasks>
 {
     public ExDatesTaskData(@NonNull Iterable<DateTime> exdates)
     {
-        super(new DateTimeListTaskData(TaskContract.Tasks.EXDATE, exdates));
+        super(new DateTimeListData<>(TaskContract.Tasks.EXDATE, exdates));
     }
 }
