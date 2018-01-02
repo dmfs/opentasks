@@ -153,7 +153,7 @@ public class TaskProviderTest
                         new IsNull(Instances.INSTANCE_DUE_SORTING),
                         new IsNull(Instances.INSTANCE_DURATION),
                         new IsNull(Tasks.TZ),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -193,7 +193,7 @@ public class TaskProviderTest
                         new IsNull(Instances.INSTANCE_DUE_SORTING),
                         new IsNull(Instances.INSTANCE_DURATION),
                         new IsNull(Tasks.TZ),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 )),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task2, new AllOf(
                         new IsNull(Instances.INSTANCE_START),
@@ -203,7 +203,7 @@ public class TaskProviderTest
                         new IsNull(Instances.INSTANCE_DUE_SORTING),
                         new IsNull(Instances.INSTANCE_DURATION),
                         new IsNull(Tasks.TZ),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 )),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task3, new AllOf(
                         new IsNull(Instances.INSTANCE_START),
@@ -213,7 +213,7 @@ public class TaskProviderTest
                         new IsNull(Instances.INSTANCE_DUE_SORTING),
                         new IsNull(Instances.INSTANCE_DURATION),
                         new IsNull(Tasks.TZ),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -245,7 +245,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -278,7 +278,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_CLOSED)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, -1)
                 ))
         ));
     }
@@ -314,7 +314,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -350,7 +350,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -382,7 +382,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                         new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -415,7 +415,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Tasks.TZ, "UTC"),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -452,7 +452,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Tasks.TZ, "America/New_York"),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }
@@ -493,7 +493,7 @@ public class TaskProviderTest
                         new EqArg(Instances.INSTANCE_DUE_SORTING, due2.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
                         new EqArg(Tasks.TZ, "UTC"),
-                        new EqArg(Instances.INSTANCE_STATUS, Instances.INSTANCE_STATUS_NEXT)
+                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
                 ))
         ));
     }

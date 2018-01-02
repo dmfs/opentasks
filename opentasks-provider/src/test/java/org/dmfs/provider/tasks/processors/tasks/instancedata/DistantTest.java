@@ -18,27 +18,29 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 
 import android.content.ContentValues;
 
-import org.dmfs.jems.single.Single;
-import org.dmfs.jems.single.decorators.DelegatingSingle;
 import org.dmfs.tasks.contract.TaskContract;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 
 /**
- * A {@link Single} of the instance status {@link ContentValues} of an instance.
- *
  * @author Marten Gajda
  */
-public final class Stated extends DelegatingSingle<ContentValues>
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
+public class DistantTest
 {
 
-    public Stated(boolean closed, Single<ContentValues> delegate)
+    @Test
+    public void test() throws Exception
     {
-        super(() ->
-        {
-            ContentValues values = delegate.value();
-            values.put(TaskContract.Instances.INSTANCE_STATUS,
-                    closed ? TaskContract.Instances.INSTANCE_STATUS_CLOSED : TaskContract.Instances.INSTANCE_STATUS_NEXT);
-            return values;
-        });
+        ContentValues instanceData = new Distant(100, ContentValues::new).value();
+        assertThat(instanceData.get(TaskContract.Instances.DISTANCE_FROM_CURRENT), is(100));
+        assertThat(instanceData.size(), is(1));
     }
 }

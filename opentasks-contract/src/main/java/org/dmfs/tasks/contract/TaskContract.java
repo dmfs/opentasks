@@ -1044,30 +1044,14 @@ public final class TaskContract
         String INSTANCE_ORIGINAL_TIME = "instance_original_time";
 
         /**
-         * A flag indicating the completion status of an instance. This is one of {@link #INSTANCE_STATUS_CLOSED}, {@link #INSTANCE_STATUS_NEXT} or {@link
-         * #INSTANCE_STATUS_UPCOMING}.
+         * The distance of the instance from the current one. For closed instances this is always {@code -1}, for the current instance this is {@code 0}. For
+         * the instance after the current one this is {@code 1}, for the instance after that one it's {@code 2}, etc..
          * <p>
          * Value: Integer
          * <p>
          * read-only
          */
-        String INSTANCE_STATUS = "instance_status";
-
-        /**
-         * Status of an instance which is completed or cancelled.
-         */
-        int INSTANCE_STATUS_CLOSED = -1;
-
-        /**
-         * Status of the next instance to complete.
-         */
-        int INSTANCE_STATUS_NEXT = 0;
-
-        /**
-         * Status of all instances after the next one.
-         */
-        int INSTANCE_STATUS_UPCOMING = 1;
-
+        String DISTANCE_FROM_CURRENT = "distance_from_current";
     }
 
 

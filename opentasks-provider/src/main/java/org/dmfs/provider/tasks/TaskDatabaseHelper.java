@@ -238,7 +238,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
                     + TaskContract.Instances.INSTANCE_DUE_SORTING + " INTEGER, "
                     + TaskContract.Instances.INSTANCE_DURATION + " INTEGER, "
                     + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " INTEGER DEFAULT 0, "
-                    + TaskContract.Instances.INSTANCE_STATUS + " INTEGER DEFAULT " + TaskContract.Instances.INSTANCE_STATUS_NEXT + ");";
+                    + TaskContract.Instances.DISTANCE_FROM_CURRENT + " INTEGER DEFAULT 0);";
 
     /**
      * SQL command to create a trigger to clean up data of removed tasks.
@@ -770,8 +770,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
 
         if (oldVersion < 18)
         {
-            db.execSQL(
-                    "alter table " + Tables.INSTANCES + " add column " + TaskContract.Instances.INSTANCE_STATUS + " integer default " + TaskContract.Instances.INSTANCE_STATUS_NEXT + ";");
+            db.execSQL("alter table " + Tables.INSTANCES + " add column " + TaskContract.Instances.DISTANCE_FROM_CURRENT + " integer default 0;");
         }
 
         // upgrade FTS
