@@ -20,9 +20,12 @@ import android.content.ContentValues;
 
 import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.iterators.SingletonIterator;
+import org.dmfs.jems.iterator.decorators.Mapped;
 import org.dmfs.jems.single.Single;
+import org.dmfs.jems.single.elementary.ValueSingle;
 import org.dmfs.optional.NullSafe;
 import org.dmfs.optional.Optional;
+import org.dmfs.optional.Present;
 import org.dmfs.optional.adapters.FirstPresent;
 import org.dmfs.optional.composite.Zipped;
 import org.dmfs.provider.tasks.model.TaskAdapter;
@@ -33,6 +36,7 @@ import org.dmfs.provider.tasks.processors.tasks.instancedata.Overridden;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.StartDated;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.VanillaInstanceData;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 
 import java.util.Iterator;
 
@@ -66,10 +70,37 @@ public final class InstanceValuesIterable implements Iterable<Single<ContentValu
         Single<ContentValues> baseData = new Distant(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED) ? -1 : 0,
                 new Enduring(new DueDated(effectiveDue, new StartDated(start, new VanillaInstanceData()))));
 
-        // TODO: implement support for recurrence, for now we only return the first instance
-        return new SingletonIterator<>(mTaskAdapter.isRecurring() ?
-                new Overridden(new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME)), baseData)
-                :
-                baseData);
+        if (!mTaskAdapter.isRecurring())
+        {
+            return new SingletonIterator<>(
+                    // apply the Overridden decorator only if this task has an ORIGINAL_INSTANCE_TIME
+                    new org.dmfs.provider.tasks.utils.Zipped<>(
+                            new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME)),
+                            baseData,
+                            (DateTime time, ContentValues data) -> new Overridden(new Present<>(time), new ValueSingle<>(data)).value()));
+        }
+
+        if (start.isPresent())
+        {
+            Optional<Duration> effectiveDuration = new FirstPresent<>(
+                    new Seq<>(
+                            new NullSafe<>(mTaskAdapter.valueOf(TaskAdapter.DURATION)),
+                            new Zipped<>(start, effectiveDue,
+                                    (dtStart, due) -> new Duration(1, 0, (int) ((due.getTimestamp() - dtStart.getTimestamp()) / 1000)))));
+
+            return new Mapped<>(dateTime -> new Distant(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED) ? -1 : 0,
+                    new Overridden(new Present<>(dateTime),
+                            new Enduring(new DueDated(new Zipped<>(new Present<>(dateTime), effectiveDuration, DateTime::addDuration),
+                                    new StartDated(new Present<>(dateTime), new VanillaInstanceData()))))),
+                    new TaskInstanceIterable(mTaskAdapter).iterator());
+        }
+
+        // special treatment for recurring tasks without a DTSTART:
+        return new Mapped<>(dateTime -> new Distant(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED) ? -1 : 0,
+                new Overridden(new Present<>(dateTime),
+                        new DueDated(new Present<>(dateTime), new VanillaInstanceData()))),
+                new TaskInstanceIterable(mTaskAdapter).iterator());
+
     }
+
 }

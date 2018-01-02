@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.is;
  * A {@link Matcher} to test if {@link ContentValues} contain a specific Long value.
  * <p>
  * TODO: can we convert that into a more generic {@link ContentValues} matcher? It might be useful in other places.
- *
+ * <p>
  * TODO: also consider moving this to "Test-Bolts"
  */
 public final class ContentValuesWithLong extends FeatureMatcher<ContentValues, Long>

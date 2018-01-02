@@ -58,7 +58,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     private final static BooleanFieldAdapter<TaskAdapter> UPDATE_REQUESTED = new BooleanFieldAdapter<TaskAdapter>(
             "org.dmfs.tasks.TaskInstanceProcessor.UPDATE_REQUESTED");
 
-    private final static int INSTANCE_COUNT_LIMIT = 1000;
+    // TODO: determine a reasonable number
+    private final static int INSTANCE_COUNT_LIMIT = 10;
 
 
     /**
@@ -86,6 +87,15 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         TaskAdapter result = mDelegate.insert(db, task, isSyncAdapter);
+        if (task.isUpdated(TaskAdapter.ORIGINAL_INSTANCE_ID))
+        {
+            // this task has a master, there already might be an instance, just in case try to delete it first
+            db.delete(TaskDatabaseHelper.Tables.INSTANCES,
+                    String.format(Locale.ENGLISH, "%s = ? and %s = ?", TaskContract.Instances.TASK_ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME),
+                    new String[] {
+                            task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID).toString(),
+                            Long.toString(task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME).getTimestamp()) });
+        }
         createInstances(db, result, task.id());
         return result;
     }
@@ -101,7 +111,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
 
         if (!result.isUpdated(TaskAdapter.DTSTART) && !result.isUpdated(TaskAdapter.DUE) && !result.isUpdated(TaskAdapter.DURATION)
-                && !result.isUpdated(TaskAdapter.STATUS) && !updateRequested)
+                && !result.isUpdated(TaskAdapter.STATUS) && !result.isUpdated(TaskAdapter.RDATE) && !result.isUpdated(TaskAdapter.RRULE) && !result.isUpdated(
+                TaskAdapter.EXDATE) && !updateRequested)
         {
             // date values didn't change and update not requested -> no need to update the instances table
             return result;
@@ -158,8 +169,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         // get a cursor of all existing instances
         final Cursor existingInstances = db.query(
                 TaskDatabaseHelper.Tables.INSTANCE_VIEW,
-                new String[] { TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME },
-                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances.TASK_ID, id),
+                new String[] { TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME, TaskContract.Instances.TASK_ID },
+                String.format(Locale.ENGLISH, "%s = %d or %s = %d", TaskContract.Instances.TASK_ID, id, TaskContract.Instances.ORIGINAL_INSTANCE_ID, id),
                 null,
                 null,
                 null,
@@ -175,6 +186,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         {
             int idIdx = existingInstances.getColumnIndex(TaskContract.Instances._ID);
             final int startIdx = existingInstances.getColumnIndex(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+            final int taskIdIdx = existingInstances.getColumnIndex(TaskContract.Instances.TASK_ID);
 
             // get an Iterator of all expected instances
             // for very long or even infinite series we need to stop iterating at some point.
@@ -211,9 +223,13 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                 {
                     // update this instance
                     existingInstances.moveToPosition(next.right().value());
-                    // TODO: only update if something has changed
-                    db.update(TaskDatabaseHelper.Tables.INSTANCES, next.left().value(),
-                            String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
+                    // only update if the instance belongs to this task
+                    if (existingInstances.getLong(taskIdIdx) == id)
+                    {
+                        // TODO: only update if something actually changed
+                        db.update(TaskDatabaseHelper.Tables.INSTANCES, next.left().value(),
+                                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
+                    }
                 }
             }
         }

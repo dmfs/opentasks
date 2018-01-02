@@ -1277,6 +1277,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 return ContentResolver.CURSOR_ITEM_BASE_TYPE + "/org.dmfs.tasks." + Tasks.CONTENT_URI_PATH;
             case INSTANCES:
                 return ContentResolver.CURSOR_DIR_BASE_TYPE + "/org.dmfs.tasks." + Instances.CONTENT_URI_PATH;
+            case INSTANCE_ID:
+                return ContentResolver.CURSOR_ITEM_BASE_TYPE + "/org.dmfs.tasks." + Instances.CONTENT_URI_PATH;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
