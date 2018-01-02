@@ -16,13 +16,10 @@
 
 package org.dmfs.opentaskspal.tasks;
 
-import android.content.ContentProviderOperation;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import org.dmfs.android.contentpal.RowData;
-import org.dmfs.android.contentpal.TransactionContext;
-import org.dmfs.jems.iterable.decorators.Mapped;
+import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -34,23 +31,10 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Marten Gajda
  */
-public final class ExDatesTaskData implements RowData<TaskContract.Tasks>
+public final class ExDatesTaskData extends DelegatingRowData<TaskContract.Tasks>
 {
-    private final Iterable<DateTime> mExDates;
-
-
     public ExDatesTaskData(@NonNull Iterable<DateTime> exdates)
     {
-        mExDates = exdates;
-    }
-
-
-    @NonNull
-    @Override
-    public ContentProviderOperation.Builder updatedBuilder(@NonNull TransactionContext transactionContext, @NonNull ContentProviderOperation.Builder builder)
-    {
-        String value = TextUtils.join(",",
-                new Mapped<>(DateTime::toString, new Mapped<>(dt -> dt.isFloating() ? dt : dt.shiftTimeZone(DateTime.UTC), mExDates)));
-        return builder.withValue(TaskContract.Tasks.EXDATE, value.isEmpty() ? null : value);
+        super(new DateTimeListTaskData(TaskContract.Tasks.EXDATE, exdates));
     }
 }
