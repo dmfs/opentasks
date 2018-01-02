@@ -51,6 +51,7 @@ import org.dmfs.opentaskspal.tables.TaskListsTable;
 import org.dmfs.opentaskspal.tables.TasksTable;
 import org.dmfs.opentaskspal.tasklists.NameData;
 import org.dmfs.opentaskspal.tasks.OriginalInstanceSyncIdData;
+import org.dmfs.opentaskspal.tasks.RRuleTaskData;
 import org.dmfs.opentaskspal.tasks.StatusData;
 import org.dmfs.opentaskspal.tasks.SyncIdData;
 import org.dmfs.opentaskspal.tasks.TimeData;
@@ -58,6 +59,8 @@ import org.dmfs.opentaskspal.tasks.TitleData;
 import org.dmfs.opentaskstestpal.InstanceTestData;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
+import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
+import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -280,6 +283,30 @@ public class TaskProviderTest
                                         0),
                                 new CharSequenceRowData<>(Tasks.TZ, "UTC"))
                 )));
+    }
+
+
+    /**
+     * Create task with start and due, check datetime values including generated duration.
+     */
+    @Test
+    public void testInsertRecurringTaskWithStartAndDue() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(new Duration(1, 1, 0));
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                        new Put<>(task, new Composite<>(new TimeData(start, due),
+                                new RRuleTaskData(new RecurrenceRule("FREQ=DAILY;COUNT=20", RecurrenceRule.RfcMode.RFC2445_LAX))))
+
+                ), resultsIn(mClient,
+                new Assert<>(task, new Composite<Tasks>(new TimeData(start, due),  new CharSequenceRowData<>(Tasks.RRULE, "FREQ=DAILY;COUNT=20"))),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task))
+        );
     }
 
 
