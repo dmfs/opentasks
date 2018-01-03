@@ -24,6 +24,7 @@ dependencies {
         exclude module: 'jems'
     }
     implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
+    implementation 'org.dmfs:lib-recur:' + LIB_RECUR_VERSION
     implementation 'org.dmfs:jems:' + JEMS_VERSION
     implementation 'com.github.dmfs.bolts:color-bolts:' + BOLTS_VERSION
 
