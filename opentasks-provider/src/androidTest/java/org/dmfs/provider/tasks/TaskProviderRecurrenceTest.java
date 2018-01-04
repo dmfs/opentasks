@@ -143,15 +143,15 @@ public class TaskProviderRecurrenceTest
         Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
         DateTime start = DateTime.parse("20180104T123456Z");
         DateTime due = start.addDuration(hour);
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = start.addDuration(day);
+        DateTime second = localStart.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
 
-        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
         DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
@@ -206,12 +206,12 @@ public class TaskProviderRecurrenceTest
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = due.addDuration(day);
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localDue.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
-
-        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
                         new Put<>(taskList, new EmptyRowData<>()),
@@ -265,12 +265,12 @@ public class TaskProviderRecurrenceTest
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = start.addDuration(day);
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
-
-        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
                         new Put<>(taskList, new EmptyRowData<>()),
@@ -325,13 +325,13 @@ public class TaskProviderRecurrenceTest
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = start.addDuration(day);
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
-
-        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
-        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
                         new Put<>(taskList, new EmptyRowData<>()),
@@ -387,13 +387,13 @@ public class TaskProviderRecurrenceTest
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = start.addDuration(day);
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
-
-        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
-        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
                         new Put<>(taskList, new EmptyRowData<>()),
@@ -460,13 +460,13 @@ public class TaskProviderRecurrenceTest
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = start.addDuration(day);
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
-
-        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
-        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
                         new Put<>(taskList, new EmptyRowData<>()),
@@ -515,13 +515,13 @@ public class TaskProviderRecurrenceTest
 
         Duration day = new Duration(1, 1, 0);
 
-        DateTime second = start.addDuration(day);
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
         DateTime third = second.addDuration(day);
         DateTime fourth = third.addDuration(day);
         DateTime fifth = fourth.addDuration(day);
-
-        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
-        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
 
         assertThat(new Seq<>(
                         new Put<>(taskList, new EmptyRowData<>()),
