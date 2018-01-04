@@ -86,6 +86,15 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         TaskAdapter result = mDelegate.insert(db, task, isSyncAdapter);
+        if (task.isUpdated(TaskAdapter.ORIGINAL_INSTANCE_ID))
+        {
+            // this task has a master, there already might be an instance, just in case try to delete it first
+            db.delete(TaskDatabaseHelper.Tables.INSTANCES,
+                    String.format(Locale.ENGLISH, "%s = ? and %s = ?", TaskContract.Instances.TASK_ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME),
+                    new String[] {
+                            task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID).toString(),
+                            Long.toString(task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME).getTimestamp()) });
+        }
         createInstances(db, result, task.id());
         return result;
     }
@@ -101,7 +110,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
 
         if (!result.isUpdated(TaskAdapter.DTSTART) && !result.isUpdated(TaskAdapter.DUE) && !result.isUpdated(TaskAdapter.DURATION)
-                && !result.isUpdated(TaskAdapter.STATUS) && !updateRequested)
+                && !result.isUpdated(TaskAdapter.STATUS) && !result.isUpdated(TaskAdapter.RDATE) && !result.isUpdated(TaskAdapter.RRULE) && !result.isUpdated(
+                TaskAdapter.EXDATE) && !updateRequested)
         {
             // date values didn't change and update not requested -> no need to update the instances table
             return result;

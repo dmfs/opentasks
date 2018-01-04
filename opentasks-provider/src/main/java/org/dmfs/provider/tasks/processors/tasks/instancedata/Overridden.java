@@ -56,7 +56,7 @@ public final class Overridden implements Single<ContentValues>
                 new Mapped<>(DateTime::getTimestamp, mOriginalTime),
                 new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
                 new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE))))
-                .value(null));
+                .value(0L /* for tasks without any date we store 0 */));
         return values;
     }
 }

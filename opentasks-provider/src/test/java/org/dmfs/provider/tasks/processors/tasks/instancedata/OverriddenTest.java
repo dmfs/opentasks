@@ -29,7 +29,6 @@ import org.robolectric.annotation.Config;
 
 import static org.dmfs.optional.Absent.absent;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 
@@ -44,7 +43,7 @@ public class OverriddenTest
     public void testAbsent() throws Exception
     {
         ContentValues instanceData = new Overridden(absent(), ContentValues::new).value();
-        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, nullValue(Long.class)));
+        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0));
         assertThat(instanceData.size(), is(1));
     }
 
