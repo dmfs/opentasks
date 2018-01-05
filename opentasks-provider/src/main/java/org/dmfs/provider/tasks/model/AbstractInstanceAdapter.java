@@ -32,6 +32,6 @@ public abstract class AbstractInstanceAdapter implements InstanceAdapter
     @Override
     public final Uri uri(String authority)
     {
-        return ContentUris.withAppendedId(TaskContract.Tasks.getContentUri(authority), id());
+        return ContentUris.withAppendedId(TaskContract.Instances.getContentUri(authority), id());
     }
 }
