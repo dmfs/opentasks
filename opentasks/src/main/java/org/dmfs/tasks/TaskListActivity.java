@@ -27,11 +27,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.support.v4.view.ViewPager;
@@ -39,7 +37,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -63,10 +60,7 @@ import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
-import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
+import org.dmfs.tasks.utils.Unchecked;
 
 
 /**
@@ -143,12 +137,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     private boolean mAutoExpandSearchView = false;
 
     /**
-     * Indicates that the activity switched to detail view due to rotation.
-     **/
-    @Retain
-    private boolean mSwitchedToDetail = false;
-
-    /**
      * The Uri of the task to display/highlight in the list view.
      **/
     @Retain
@@ -181,8 +169,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
      **/
     private boolean mTransientState = false;
 
-    private CollapsingToolbarLayout mToolbarLayout;
-
     private AppBarLayout mAppBarLayout;
 
     private FloatingActionButton mFloatingActionButton;
@@ -191,7 +177,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.d(TAG, "onCreate called again");
         super.onCreate(savedInstanceState);
 
         // check for single pane activity change
@@ -206,7 +191,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
                 Intent viewTaskIntent = new Intent(Intent.ACTION_VIEW);
                 viewTaskIntent.setData(mSelectedTaskUri);
                 startActivity(viewTaskIntent);
-                mSwitchedToDetail = true;
                 mShouldSwitchToDetail = false;
                 mTransientState = true;
             }
@@ -224,53 +208,17 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         mAuthority = AuthorityUtil.taskAuthority(this);
         mSearchHistoryHelper = new SearchHistoryHelper(this);
 
-        if (findViewById(R.id.task_detail_container) != null)
+        if (findViewById(R.id.task_detail_container) != null  // should be the same as mTwoPane
+                && savedInstanceState == null)
         {
-            // In two-pane mode, list items should be given the
-            // 'activated' state when touched.
-
-            // get list fragment
-            // mTaskListFrag = (TaskListFragment) getSupportFragmentManager().findFragmentById(R.id.task_list);
-            // mTaskListFrag.setListViewScrollbarPositionLeft(true);
-
-            // mTaskListFrag.setActivateOnItemClick(true);
-
             loadTaskDetailFragment(mSelectedTaskUri);
-        }
-        else
-        {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment detailFragment = fragmentManager.findFragmentByTag(DETAIL_FRAGMENT_TAG);
-            if (detailFragment != null)
-            {
-                fragmentManager.beginTransaction().remove(detailFragment).commit();
-            }
         }
 
         mGroupingFactories = new AbstractGroupingFactory[] {
                 new ByList(mAuthority, this), new ByDueDate(mAuthority), new ByStartDate(mAuthority),
                 new ByPriority(mAuthority, this), new ByProgress(mAuthority), new BySearch(mAuthority, mSearchHistoryHelper) };
 
-        // set up pager adapter
-        try
-        {
-            mPagerAdapter = new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.xml.listview_tabs);
-        }
-        catch (XmlPullParserException e)
-        {
-            // TODO Automatisch generierter Erfassungsblock
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            // TODO Automatisch generierter Erfassungsblock
-            e.printStackTrace();
-        }
-        catch (XmlObjectPullParserException e)
-        {
-            // TODO Automatisch generierter Erfassungsblock
-            e.printStackTrace();
-        }
+        mPagerAdapter = new Unchecked<>(() -> new TaskGroupPagerAdapter(getSupportFragmentManager(), mGroupingFactories, this, R.xml.listview_tabs)).value();
 
         // Setup ViewPager
         mPagerAdapter.setTwoPaneLayout(mTwoPane);
@@ -433,7 +381,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
                 Intent detailIntent = new Intent(Intent.ACTION_VIEW);
                 detailIntent.setData(uri);
                 startActivity(detailIntent);
-                mSwitchedToDetail = true;
                 mShouldSwitchToDetail = false;
             }
         }
