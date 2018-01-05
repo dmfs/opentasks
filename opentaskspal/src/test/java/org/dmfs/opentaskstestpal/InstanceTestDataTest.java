@@ -1,0 +1,142 @@
+/*
+ * Copyright 2018 dmfs GmbH
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.dmfs.opentaskstestpal;
+
+import org.dmfs.optional.Present;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
+import org.dmfs.tasks.contract.TaskContract;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import java.util.TimeZone;
+
+import static org.dmfs.android.contentpal.testing.contentoperationbuilder.WithValues.withValuesOnly;
+import static org.dmfs.android.contentpal.testing.contentvalues.Containing.containing;
+import static org.dmfs.android.contentpal.testing.contentvalues.NullValue.withNullValue;
+import static org.dmfs.android.contentpal.testing.rowdata.RowDataMatcher.builds;
+import static org.dmfs.optional.Absent.absent;
+import static org.junit.Assert.assertThat;
+
+
+/**
+ * @author Marten Gajda
+ */
+@RunWith(RobolectricTestRunner.class)
+@Config(manifest = Config.NONE)
+public class InstanceTestDataTest
+{
+    @Test
+    public void testNoDate() throws Exception
+    {
+        assertThat(new InstanceTestData(5),
+                builds(
+                        withValuesOnly(
+                                withNullValue(TaskContract.Instances.INSTANCE_START),
+                                withNullValue(TaskContract.Instances.INSTANCE_START_SORTING),
+                                withNullValue(TaskContract.Instances.INSTANCE_DUE),
+                                withNullValue(TaskContract.Instances.INSTANCE_DUE_SORTING),
+                                withNullValue(TaskContract.Instances.INSTANCE_DURATION),
+                                containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0L),
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                        )
+                ));
+    }
+
+
+    @Test
+    public void testWithDate() throws Exception
+    {
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(Duration.parse("P1DT1H"));
+        assertThat(new InstanceTestData(start, due, absent(), 5),
+                builds(
+                        withValuesOnly(
+                                containing(TaskContract.Instances.INSTANCE_START, start.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0L),
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                        )
+                ));
+    }
+
+
+    @Test
+    public void testWithDateAndOriginalTime() throws Exception
+    {
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(Duration.parse("P1DT1H"));
+        DateTime original = start.addDuration(Duration.parse("P2DT2H"));
+        assertThat(new InstanceTestData(start, due, new Present<>(original), 5),
+                builds(
+                        withValuesOnly(
+                                containing(TaskContract.Instances.INSTANCE_START, start.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                        )
+                ));
+    }
+
+
+    @Test
+    public void testWithStartDateAndOriginalTime() throws Exception
+    {
+        DateTime start = DateTime.now();
+        DateTime original = start.addDuration(Duration.parse("P2DT2H"));
+        assertThat(new InstanceTestData(new Present<>(start), absent(), new Present<>(original), 5),
+                builds(
+                        withValuesOnly(
+                                containing(TaskContract.Instances.INSTANCE_START, start.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                withNullValue(TaskContract.Instances.INSTANCE_DUE),
+                                withNullValue(TaskContract.Instances.INSTANCE_DUE_SORTING),
+                                withNullValue(TaskContract.Instances.INSTANCE_DURATION),
+                                containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                        )
+                ));
+    }
+
+
+    @Test
+    public void testWithDueDateAndOriginalTime() throws Exception
+    {
+        DateTime due = DateTime.now();
+        DateTime original = due.addDuration(Duration.parse("P2DT2H"));
+        assertThat(new InstanceTestData(absent(), new Present<>(due), new Present<>(original), 5),
+                builds(
+                        withValuesOnly(
+                                withNullValue(TaskContract.Instances.INSTANCE_START),
+                                withNullValue(TaskContract.Instances.INSTANCE_START_SORTING),
+                                containing(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp()),
+                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                withNullValue(TaskContract.Instances.INSTANCE_DURATION),
+                                containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                        )
+                ));
+    }
+}

@@ -41,13 +41,17 @@ import org.dmfs.provider.tasks.TaskDatabaseHelper.OnDatabaseOperationListener;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.handler.PropertyHandler;
 import org.dmfs.provider.tasks.handler.PropertyHandlerFactory;
+import org.dmfs.provider.tasks.model.ContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.ContentValuesListAdapter;
 import org.dmfs.provider.tasks.model.ContentValuesTaskAdapter;
+import org.dmfs.provider.tasks.model.CursorContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesListAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
+import org.dmfs.provider.tasks.model.InstanceAdapter;
 import org.dmfs.provider.tasks.model.ListAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
+import org.dmfs.provider.tasks.processors.instances.TaskValueDelegate;
 import org.dmfs.provider.tasks.processors.lists.ListCommitProcessor;
 import org.dmfs.provider.tasks.processors.tasks.AutoCompleting;
 import org.dmfs.provider.tasks.processors.tasks.Instantiating;
@@ -113,6 +117,11 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     private final static Set<String> TASK_LIST_SYNC_COLUMNS = new HashSet<String>(Arrays.asList(TaskLists.SYNC_ADAPTER_COLUMNS));
 
     /**
+     * A list of {@link EntityProcessor}s to execute when doing operations on the instances table.
+     */
+    private EntityProcessor<InstanceAdapter> mInstanceProcessorChain;
+
+    /**
      * A list of {@link EntityProcessor}s to execute when doing operations on the tasks table.
      */
     private EntityProcessor<TaskAdapter> mTaskProcessorChain;
@@ -158,6 +167,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         mTaskProcessorChain = new Validating(new AutoCompleting(new Relating(new Instantiating(new Searchable(new Moving(new TaskCommitProcessor()))))));
 
         mListProcessorChain = new org.dmfs.provider.tasks.processors.lists.Validating(new ListCommitProcessor());
+
+        mInstanceProcessorChain = new org.dmfs.provider.tasks.processors.instances.Validating(new TaskValueDelegate(mTaskProcessorChain));
 
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(mAuthority, TaskContract.TaskLists.CONTENT_URI_PATH, LISTS);
@@ -724,7 +735,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     }
                 }
 
-                // iterate over all lists that match the selection. We iterate "manually" to execute any processors before or after deletion.
+                // iterate over all lists that match the selection
                 final Cursor cursor = db.query(Tables.LISTS, null, selection, selectionArgs, null, null, null, null);
 
                 try
@@ -765,7 +776,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     }
                 }
 
-                // iterate over all tasks that match the selection. We iterate "manually" to execute any processors before or after deletion.
+                // iterate over all tasks that match the selection
                 final Cursor cursor = db.query(Tables.TASKS_VIEW, null, selection, selectionArgs, null, null, null, null);
 
                 try
@@ -787,6 +798,26 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
                 break;
             }
+
+            case INSTANCE_ID:
+                // add id to selection and fall through
+                selection = updateSelection(selectId(uri), selection);
+
+            case INSTANCES:
+            {
+                // iterate over all instances that match the selection
+                try (Cursor cursor = db.query(Tables.INSTANCE_VIEW, null, selection, selectionArgs, null, null, null, null))
+                {
+                    while (cursor.moveToNext())
+                    {
+                        mInstanceProcessorChain.delete(db, new CursorContentValuesInstanceAdapter(cursor, new ContentValues()), isSyncAdapter);
+                        count++;
+                    }
+                }
+
+                break;
+            }
+
             case ALARM_ID:
                 // add id to selection and fall through
                 selection = updateSelection(selectId(uri), selection);
@@ -897,6 +928,17 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
                 break;
 
+            case INSTANCES:
+            {
+                InstanceAdapter instance = mInstanceProcessorChain.insert(db, new ContentValuesInstanceAdapter(values), isSyncAdapter);
+                rowId = instance.id();
+                result_uri = TaskContract.Instances.getContentUri(mAuthority);
+
+                postNotifyUri(Instances.getContentUri(mAuthority));
+                postNotifyUri(Tasks.getContentUri(mAuthority));
+
+                break;
+            }
             case PROPERTIES:
                 String mimetype = values.getAsString(Properties.MIMETYPE);
 
@@ -986,7 +1028,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
             case LISTS:
             {
-                // iterate over all task lists that match the selection. We iterate "manually" to execute any processors before or after insert.
+                // iterate over all task lists that match the selection
                 final Cursor cursor = db.query(Tables.LISTS, null, selection, selectionArgs, null, null, null, null);
 
                 int idCol = cursor.getColumnIndex(TaskContract.TaskLists._ID);
@@ -1018,7 +1060,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
             case TASKS:
             {
-                // iterate over all tasks that match the selection. We iterate "manually" to execute any processors before or after insert.
+                // iterate over all tasks that match the selection
                 final Cursor cursor = db.query(Tables.TASKS_VIEW, null, selection, selectionArgs, null, null, null, null);
 
                 try
@@ -1050,6 +1092,35 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 break;
             }
 
+            case INSTANCE_ID:
+                // update selection and fall through
+                selection = updateSelection(selectId(uri), selection);
+
+            case INSTANCES:
+            {
+                // iterate over all instances that match the selection
+
+                try (Cursor cursor = db.query(Tables.INSTANCE_VIEW, null, selection, selectionArgs, null, null, null, null))
+                {
+                    while (cursor.moveToNext())
+                    {
+                        // clone task values if we have more than one task to update
+                        // we need this, because the processors may change the values
+                        final InstanceAdapter instance = new CursorContentValuesInstanceAdapter(cursor,
+                                cursor.getCount() > 1 ? new ContentValues(values) : values);
+
+                        mInstanceProcessorChain.update(db, instance, isSyncAdapter);
+                        count++;
+                    }
+                }
+
+                if (count > 0)
+                {
+                    postNotifyUri(Instances.getContentUri(mAuthority));
+                    postNotifyUri(Tasks.getContentUri(mAuthority));
+                }
+                break;
+            }
             case PROPERTY_ID:
                 selection = updateSelection(selectPropertyId(uri), selection);
 

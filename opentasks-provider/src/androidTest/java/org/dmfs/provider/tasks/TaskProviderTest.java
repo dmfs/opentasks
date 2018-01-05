@@ -30,13 +30,13 @@ import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.operations.Assert;
 import org.dmfs.android.contentpal.operations.BulkDelete;
+import org.dmfs.android.contentpal.operations.BulkUpdate;
 import org.dmfs.android.contentpal.operations.Delete;
 import org.dmfs.android.contentpal.operations.Put;
 import org.dmfs.android.contentpal.operations.Referring;
-import org.dmfs.android.contentpal.predicates.AllOf;
-import org.dmfs.android.contentpal.predicates.EqArg;
-import org.dmfs.android.contentpal.predicates.IsNull;
+import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
+import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
 import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.EmptyRowData;
 import org.dmfs.android.contentpal.rowsnapshots.VirtualRowSnapshot;
@@ -55,6 +55,7 @@ import org.dmfs.opentaskspal.tasks.StatusData;
 import org.dmfs.opentaskspal.tasks.SyncIdData;
 import org.dmfs.opentaskspal.tasks.TimeData;
 import org.dmfs.opentaskspal.tasks.TitleData;
+import org.dmfs.opentaskstestpal.InstanceTestData;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract.Instances;
@@ -68,6 +69,7 @@ import org.junit.runner.RunWith;
 import java.util.TimeZone;
 
 import static org.dmfs.android.contenttestpal.ContentMatcher.resultsIn;
+import static org.dmfs.optional.Absent.absent;
 import static org.junit.Assert.assertThat;
 
 
@@ -76,6 +78,7 @@ import static org.junit.Assert.assertThat;
  *
  * @author Yannic Ahrens
  * @author Gabor Keszthelyi
+ * @author Marten Gajda
  */
 @RunWith(AndroidJUnit4.class)
 public class TaskProviderTest
@@ -130,7 +133,7 @@ public class TaskProviderTest
 
 
     /**
-     * Create 1 local task list and 1 task, check values in TaskLists, TaskList, Instances tables.
+     * Create 1 local task list and 1 task, check values in TaskLists, Tasks, Instances tables.
      */
     @Test
     public void testSingleInsert()
@@ -145,17 +148,62 @@ public class TaskProviderTest
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
                 new Assert<>(task, new TitleData("task1")),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new IsNull(Instances.INSTANCE_START),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new IsNull(Instances.INSTANCE_DUE),
-                        new IsNull(Instances.INSTANCE_START_SORTING),
-                        new IsNull(Instances.INSTANCE_DUE_SORTING),
-                        new IsNull(Instances.INSTANCE_DURATION),
-                        new IsNull(Tasks.TZ),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))
+                )));
+    }
+
+
+    /**
+     * Create 1 local task list and 1 task (via the instances table), check values in TaskLists, Tasks, Instances tables.
+     */
+    @Test
+    public void testInsertSingleInstance()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Instances> instance = new VirtualRowSnapshot<>(new InstanceTable(mAuthority));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new NameData("list1")),
+                // insert a new task straight into the instances table
+                new Referring<>(taskList, Tasks.LIST_ID, new Put<>(instance, new CharSequenceRowData<>(Tasks.TITLE, "task1")))
+
+        ), resultsIn(mClient,
+                new Assert<>(taskList, new NameData("list1")),
+                new AssertRelated<>(new InstanceTable(mAuthority), Tasks.LIST_ID, taskList,
+                        new Composite<>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TITLE, "task1"),
+                                new CharSequenceRowData<>(Tasks.TZ, null))
+                )));
+    }
+
+
+    /**
+     * Create 1 local task list and 1 task, update task via instances table and check values in TaskLists, Tasks, Instances tables.
+     */
+    @Test
+    public void testSingleInsertUpdateInstance()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new NameData("list1")),
+                new Put<>(task, new TitleData("task1")),
+                new BulkUpdate<>(instancesTable, new CharSequenceRowData<>(Tasks.TITLE, "task updated"), new ReferringTo<>(Instances.TASK_ID, task))
+
+        ), resultsIn(mClient,
+                new Assert<>(taskList, new NameData("list1")),
+                new Assert<>(task, new TitleData("task updated")),
+                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))
+                )));
     }
 
 
@@ -185,37 +233,22 @@ public class TaskProviderTest
                 new Assert<>(task1, new TitleData("task1")),
                 new Assert<>(task2, new TitleData("task2")),
                 new Assert<>(task3, new TitleData("task3")),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task1, new AllOf(
-                        new IsNull(Instances.INSTANCE_START),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new IsNull(Instances.INSTANCE_DUE),
-                        new IsNull(Instances.INSTANCE_START_SORTING),
-                        new IsNull(Instances.INSTANCE_DUE_SORTING),
-                        new IsNull(Instances.INSTANCE_DURATION),
-                        new IsNull(Tasks.TZ),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                )),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task2, new AllOf(
-                        new IsNull(Instances.INSTANCE_START),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new IsNull(Instances.INSTANCE_DUE),
-                        new IsNull(Instances.INSTANCE_START_SORTING),
-                        new IsNull(Instances.INSTANCE_DUE_SORTING),
-                        new IsNull(Instances.INSTANCE_DURATION),
-                        new IsNull(Tasks.TZ),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                )),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task3, new AllOf(
-                        new IsNull(Instances.INSTANCE_START),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new IsNull(Instances.INSTANCE_DUE),
-                        new IsNull(Instances.INSTANCE_START_SORTING),
-                        new IsNull(Instances.INSTANCE_DUE_SORTING),
-                        new IsNull(Instances.INSTANCE_DURATION),
-                        new IsNull(Tasks.TZ),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task1,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))),
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task2,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))),
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task3,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))
+                )));
     }
 
 
@@ -237,17 +270,16 @@ public class TaskProviderTest
 
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, due)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
-                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        due.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -270,17 +302,16 @@ public class TaskProviderTest
                 new Put<>(task, new StatusData(Tasks.STATUS_COMPLETED))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, due)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
-                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, -1)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        due.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        -1),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -306,17 +337,16 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(startNew, dueNew))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(startNew, dueNew)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
-                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        startNew.shiftTimeZone(TimeZone.getDefault()),
+                                        dueNew.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -342,17 +372,16 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(startNew, dueNew))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(startNew, dueNew)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, startNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Instances.INSTANCE_DUE, dueNew.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, startNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, dueNew.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DURATION, dueNew.getTimestamp() - startNew.getTimestamp()),
-                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        startNew.shiftTimeZone(TimeZone.getDefault()),
+                                        dueNew.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -374,17 +403,16 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(start, due))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, due)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Instances.INSTANCE_DUE, due.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
-                        new EqArg(Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID()),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        due.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -407,17 +435,16 @@ public class TaskProviderTest
 
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, duration)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_DUE, start.addDuration(duration).getTimestamp()),
-                        new EqArg(Instances.INSTANCE_DURATION, durationMillis),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Tasks.TZ, "UTC"),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        start.shiftTimeZone(TimeZone.getDefault()).addDuration(duration),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -444,17 +471,16 @@ public class TaskProviderTest
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(startNew, duration)),
                 // note that, apart from the time zone, all values stay the same
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_DUE, start.addDuration(duration).getTimestamp()),
-                        new EqArg(Instances.INSTANCE_DURATION, durationMillis),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, start.addDuration(duration).shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Tasks.TZ, "America/New_York"),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        start.shiftTimeZone(TimeZone.getDefault()).addDuration(duration),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "America/New_York"))
+                )));
     }
 
 
@@ -485,17 +511,16 @@ public class TaskProviderTest
 
         ), resultsIn(queue,
                 new Assert<>(task, new TimeData(start, due2)),
-                new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task, new AllOf(
-                        new EqArg(Instances.INSTANCE_START, start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_DUE, due2.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_DURATION, due2.getTimestamp() - start.getTimestamp()),
-                        new EqArg(Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_DUE_SORTING, due2.shiftTimeZone(TimeZone.getDefault()).getInstance()),
-                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, 0),
-                        new EqArg(Tasks.TZ, "UTC"),
-                        new EqArg(Instances.DISTANCE_FROM_CURRENT, 0)
-                ))
-        ));
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        due2.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
     }
 
 
@@ -519,6 +544,36 @@ public class TaskProviderTest
 
         assertThat(new SingletonIterable<>(
                 new Delete<>(task)
+
+        ), resultsIn(queue,
+                new AssertEmptyTable<>(new TasksTable(mAuthority)),
+                new AssertEmptyTable<>(new InstanceTable(mAuthority))
+        ));
+    }
+
+
+    /**
+     * Having a single task.
+     * Delete the instance of that task, check that it is removed from Tasks and Instances tables.
+     */
+    @Test
+    public void testDeleteInstance() throws Exception
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Tasks> taskTable = new TaskListScoped(taskList, new TasksTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(taskTable);
+        OperationsQueue queue = new BasicOperationsQueue(mClient);
+
+        queue.enqueue(new Seq<>(
+                new Put<>(taskList, new NameData("list1")),
+                new Put<>(task, new TitleData("task1"))
+        ));
+        queue.flush();
+
+        // check that removing the instance removes task and instance
+        assertThat(new SingletonIterable<>(
+                new BulkDelete<>(instancesTable, new ReferringTo<>(Instances.TASK_ID, task))
 
         ), resultsIn(queue,
                 new AssertEmptyTable<>(new TasksTable(mAuthority)),
@@ -626,5 +681,4 @@ public class TaskProviderTest
                         ))
         ));
     }
-
 }

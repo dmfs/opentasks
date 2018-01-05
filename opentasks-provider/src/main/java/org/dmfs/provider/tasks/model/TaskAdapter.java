@@ -72,6 +72,11 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
     public final static StringFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_SYNC_ID = new StringFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_SYNC_ID);
 
     /**
+     * Adapter for the original instance all day flag of a task.
+     */
+    public final static BooleanFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_ALLDAY = new BooleanFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_ALLDAY);
+
+    /**
      * Adapter for the all day flag of a task.
      */
     public final static BooleanFieldAdapter<TaskAdapter> IS_ALLDAY = new BooleanFieldAdapter<TaskAdapter>(Tasks.IS_ALLDAY);
