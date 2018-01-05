@@ -202,7 +202,6 @@ public class TaskProviderRecurrenceTest
         Table<Instances> instancesTable = new InstanceTable(mAuthority);
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
 
-        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
         DateTime due = DateTime.parse("20180104T123456Z");
 
         Duration day = new Duration(1, 1, 0);
@@ -261,7 +260,6 @@ public class TaskProviderRecurrenceTest
         Table<Instances> instancesTable = new InstanceTable(mAuthority);
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
 
-        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
         DateTime start = DateTime.parse("20180104T123456Z");
 
         Duration day = new Duration(1, 1, 0);
