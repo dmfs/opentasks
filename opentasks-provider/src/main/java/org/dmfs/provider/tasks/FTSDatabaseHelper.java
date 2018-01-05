@@ -131,7 +131,7 @@ public class FTSDatabaseHelper
             + FTS_NGRAM_TABLE + " join " + FTS_CONTENT_TABLE + " on (" + FTS_NGRAM_TABLE + "." + NGramColumns.NGRAM_ID + "=" + FTS_CONTENT_TABLE + "."
             + FTSContentColumns.NGRAM_ID + ") join " + Tables.INSTANCE_VIEW + " on (" + Tables.INSTANCE_VIEW + "." + TaskContract.Instances.TASK_ID + " = " + FTS_CONTENT_TABLE + "."
             + FTSContentColumns.TASK_ID + ") where %s group by " + TaskContract.Instances.TASK_ID + " having " + TaskContract.Tasks.SCORE + " >= " + SEARCH_RESULTS_MIN_SCORE
-            + " order by %s;";
+            + " and " + Tasks.VISIBLE + " = 1 order by %s;";
 
     private final static String SQL_RAW_QUERY_SEARCH_TASK_DEFAULT_PROJECTION = Tables.INSTANCE_VIEW + ".* ," + FTS_NGRAM_TABLE + "." + NGramColumns.TEXT;
 
