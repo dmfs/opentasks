@@ -51,6 +51,10 @@
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
             </intent-filter>
         </activity>
 
@@ -74,6 +78,10 @@
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
             </intent-filter>
 
             <!-- Voice command "note to self" in google search -->

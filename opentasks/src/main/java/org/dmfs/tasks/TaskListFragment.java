@@ -497,18 +497,12 @@ public class TaskListFragment extends SupportFragment
             {
                 return;
             }
-            // TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-            Long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
+            long selectInstanceId = cursor.getLong(cursor.getColumnIndex(Instances._ID));
 
-            if (selectTaskId != null)
-            {
-                // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+            // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
+            Uri instanceUri = ContentUris.withAppendedId(Instances.getContentUri(mAuthority), selectInstanceId);
 
-                // TODO: use the instance URI one we support recurrence
-                Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), selectTaskId);
-
-                mCallbacks.onItemSelected(taskUri, force, mInstancePosition);
-            }
+            mCallbacks.onItemSelected(instanceUri, force, mInstancePosition);
         }
     }
 
