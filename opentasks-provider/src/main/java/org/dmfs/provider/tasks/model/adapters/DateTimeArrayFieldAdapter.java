@@ -161,7 +161,7 @@ public final class DateTimeArrayFieldAdapter<EntityType> extends SimpleFieldAdap
 
         if (values != null && values.containsKey(mDateTimeListFieldName))
         {
-            if (values.getAsLong(mDateTimeListFieldName) == null)
+            if (values.getAsString(mDateTimeListFieldName) == null)
             {
                 // the date times are null, so we return null
                 return null;

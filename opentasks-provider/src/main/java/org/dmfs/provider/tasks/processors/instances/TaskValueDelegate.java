@@ -188,7 +188,8 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
 
     private void addExDate(TaskAdapter taskAdapter, DateTime exdate)
     {
-        List<DateTime> exdates = new Mapped<>(Arrays::asList, new NullSafe<>(taskAdapter.valueOf(TaskAdapter.EXDATE))).value(new ArrayList<>(1));
+        List<DateTime> exdates = new ArrayList<>(
+                new Mapped<>(Arrays::asList, new NullSafe<>(taskAdapter.valueOf(TaskAdapter.EXDATE))).value(new ArrayList<>(1)));
         exdates.add(exdate);
         taskAdapter.set(TaskAdapter.EXDATE, exdates.toArray(new DateTime[exdates.size()]));
     }
