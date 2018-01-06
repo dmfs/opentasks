@@ -65,6 +65,7 @@ dependencies {
     }
     implementation 'org.dmfs:jems:' + JEMS_VERSION
     implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
+    implementation 'org.dmfs:lib-recur:' + LIB_RECUR_VERSION
     implementation 'com.github.dmfs.bolts:color-bolts:' + BOLTS_VERSION
 
     testImplementation 'junit:junit:4.12'

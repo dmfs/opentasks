@@ -18,6 +18,7 @@ package org.dmfs.tasks.model;
 
 import android.text.format.Time;
 
+import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
@@ -29,6 +30,7 @@ import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
 import org.dmfs.tasks.model.adapters.FormattedStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.adapters.RRuleFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
@@ -126,6 +128,8 @@ public final class TaskFieldAdapters
      */
     public final static FieldAdapter<Time> DTSTART = new CustomizedDefaultFieldAdapter<Time>(_DTSTART, new DefaultBefore(DUE)).addContraint(
             new BeforeOrShiftTime(DUE));
+
+    public final static FieldAdapter<RecurrenceRule> RRULE = new RRuleFieldAdapter(Tasks.RRULE);
 
     /**
      * Adapter for the completed date of a task.

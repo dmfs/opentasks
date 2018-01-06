@@ -28,6 +28,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.Time;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -49,6 +50,8 @@ import org.dmfs.android.retentionmagic.SupportDialogFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
+import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -384,6 +387,18 @@ public class QuickAddDialogFragment extends SupportDialogFragment
         }
         task.put(Tasks.LIST_ID, mListSpinner.getSelectedItemId());
         TaskFieldAdapters.TITLE.set(task, mEditText.getText().toString());
+        Time t = new Time();
+        t.set(System.currentTimeMillis());
+        t.switchTimezone("Europe/Berlin");
+        TaskFieldAdapters.DUE.set(task, t);
+        try
+        {
+            TaskFieldAdapters.RRULE.set(task, new RecurrenceRule("FREQ=DAILY;COUNT=5"));
+        }
+        catch (InvalidRecurrenceRuleException e)
+        {
+            e.printStackTrace();
+        }
         return task;
     }
 
