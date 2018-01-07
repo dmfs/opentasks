@@ -162,6 +162,11 @@ public final class TaskFieldAdapters
     public static final IntegerFieldAdapter INSTANCE_TASK_ID = new IntegerFieldAdapter(TaskContract.Instances.TASK_ID);
 
     /**
+     * Adpater for the _ID of an instance of a task.
+     */
+    public static final IntegerFieldAdapter INSTANCE_ID = new IntegerFieldAdapter(TaskContract.Instances._ID);
+
+    /**
      * Adapter for the IS_CLOSED flag of a task.
      */
     public static final BooleanFieldAdapter IS_CLOSED = new BooleanFieldAdapter(TaskContract.Tasks.IS_CLOSED);

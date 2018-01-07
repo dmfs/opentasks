@@ -35,7 +35,6 @@ import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Instances;
-import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
@@ -84,9 +83,9 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
     public static class TaskListViewsFactory implements RemoteViewsService.RemoteViewsFactory, TimeChangeListener
     {
         /**
-         * The {@link TaskListWidgetItem} array which stores the tasks to be displayed. When the cursor loads it is updated.
+         * The {@link InstanceListWidgetItem} array which stores the tasks to be displayed. When the cursor loads it is updated.
          */
-        private TaskListWidgetItem[] mItems = null;
+        private InstanceListWidgetItem[] mItems = null;
 
         /**
          * The {@link Context} of the {@link Application} to which this widget belongs.
@@ -206,7 +205,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
         @Override
         public RemoteViews getViewAt(int position)
         {
-            TaskListWidgetItem[] items = mItems;
+            InstanceListWidgetItem[] items = mItems;
 
             /** We use this check because there is a small gap between when the database is updated and the widget is notified */
             if (items == null || position < 0 || position >= items.length)
@@ -250,9 +249,9 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
                 row.setTextViewText(android.R.id.text1, null);
             }
 
-            Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), items[position].getTaskId());
+            Uri instanceUri = ContentUris.withAppendedId(Instances.getContentUri(mAuthority), items[position].getInstanceId());
             Intent i = new Intent();
-            i.setData(taskUri);
+            i.setData(instanceUri);
             row.setOnClickFillInIntent(R.id.widget_list_item, i);
 
             return (row);
@@ -350,20 +349,20 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
 
 
         /**
-         * Gets the array of {@link TaskListWidgetItem}s.
+         * Gets the array of {@link InstanceListWidgetItem}s.
          *
          * @return the widget items
          */
-        public static TaskListWidgetItem[] getWidgetItems(Cursor mTasksCursor)
+        public static InstanceListWidgetItem[] getWidgetItems(Cursor mTasksCursor)
         {
             if (mTasksCursor.getCount() > 0)
             {
-                TaskListWidgetItem[] items = new TaskListWidgetItem[mTasksCursor.getCount()];
+                InstanceListWidgetItem[] items = new InstanceListWidgetItem[mTasksCursor.getCount()];
                 int itemIndex = 0;
 
                 while (mTasksCursor.moveToNext())
                 {
-                    items[itemIndex] = new TaskListWidgetItem(TaskFieldAdapters.INSTANCE_TASK_ID.get(mTasksCursor), TaskFieldAdapters.TITLE.get(mTasksCursor),
+                    items[itemIndex] = new InstanceListWidgetItem(TaskFieldAdapters.INSTANCE_ID.get(mTasksCursor), TaskFieldAdapters.TITLE.get(mTasksCursor),
                             TaskFieldAdapters.DUE.get(mTasksCursor), TaskFieldAdapters.LIST_COLOR.get(mTasksCursor),
                             TaskFieldAdapters.IS_CLOSED.get(mTasksCursor));
                     itemIndex++;
@@ -438,7 +437,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
                 }
                 else
                 {
-                    mItems = new TaskListWidgetItem[0];
+                    mItems = new InstanceListWidgetItem[0];
                 }
 
                 // tell to only update the view in the next onDataSetChanged();

@@ -25,7 +25,7 @@ import android.text.format.Time;
  * @author Arjun Naik<arjun@arjunnaik.in>
  * @author Marten Gajda<marten@dmfs.org>
  */
-public class TaskListWidgetItem
+public class InstanceListWidgetItem
 {
 
     /**
@@ -46,7 +46,7 @@ public class TaskListWidgetItem
     /**
      * The task ID.
      */
-    private final int mTaskId;
+    private final int mInstanceId;
 
     /**
      * The flag to indicate if task is closed.
@@ -58,7 +58,7 @@ public class TaskListWidgetItem
      * Instantiates a new task list widget item.
      *
      * @param id
-     *         the id of the task
+     *         the id of the instance
      * @param title
      *         the title of the task
      * @param due
@@ -68,9 +68,9 @@ public class TaskListWidgetItem
      * @param isClosed
      *         the flag to indicate if closed
      */
-    public TaskListWidgetItem(int id, String title, Time due, int color, boolean isClosed)
+    public InstanceListWidgetItem(int id, String title, Time due, int color, boolean isClosed)
     {
-        mTaskId = id;
+        mInstanceId = id;
         mTaskTitle = title;
         mDueDate = due;
         mTaskColor = color;
@@ -112,13 +112,13 @@ public class TaskListWidgetItem
 
 
     /**
-     * Gets the task id.
+     * Gets the instance id.
      *
-     * @return the task id
+     * @return the instance id
      */
-    public long getTaskId()
+    public long getInstanceId()
     {
-        return mTaskId;
+        return mInstanceId;
     }
 
 
