@@ -602,7 +602,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 }
                 else
                 {
-                    sqlBuilder.setTables(Tables.INSTANCE_VIEW);
+                    sqlBuilder.setTables(Tables.INSTANCE_CLIENT_VIEW);
                 }
                 if (!isSyncAdapter)
                 {
@@ -625,7 +625,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 }
                 else
                 {
-                    sqlBuilder.setTables(Tables.INSTANCE_VIEW);
+                    sqlBuilder.setTables(Tables.INSTANCE_CLIENT_VIEW);
                 }
                 selectId(sqlBuilder, Instances._ID, uri);
                 if (!isSyncAdapter)
