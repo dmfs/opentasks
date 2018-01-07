@@ -168,8 +168,8 @@ public class TasksExtension extends DashClockExtension
 
                 // intent
                 String accountType = c.getString(c.getColumnIndex(Instances.ACCOUNT_TYPE));
-                Long taskId = c.getLong(c.getColumnIndex(Instances.TASK_ID));
-                Intent clickIntent = buildClickIntent(taskId, accountType);
+                Long instanceId = c.getLong(c.getColumnIndex(Instances._ID));
+                Intent clickIntent = buildClickIntent(instanceId, accountType);
 
                 // Publish the extension data update.
                 publishUpdate(new ExtensionData().visible(true).icon(R.drawable.ic_dashboard)
@@ -324,10 +324,10 @@ public class TasksExtension extends DashClockExtension
     }
 
 
-    protected Intent buildClickIntent(long taskId, String accountType)
+    protected Intent buildClickIntent(long instanceId, String accountType)
     {
         Intent clickIntent = new Intent(Intent.ACTION_VIEW);
-        clickIntent.setData(ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), taskId));
+        clickIntent.setData(ContentUris.withAppendedId(Instances.getContentUri(mAuthority), instanceId));
         clickIntent.putExtra(EditTaskActivity.EXTRA_DATA_ACCOUNT_TYPE, accountType);
 
         return clickIntent;
