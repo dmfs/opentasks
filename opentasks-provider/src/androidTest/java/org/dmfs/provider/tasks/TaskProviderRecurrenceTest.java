@@ -348,7 +348,7 @@ public class TaskProviderRecurrenceTest
                                 new TimeData(start, due),
                                 new CharSequenceRowData<>(Tasks.RRULE, "FREQ=DAILY;COUNT=5"),
                                 new CharSequenceRowData<>(Tasks.EXDATE, "20180106T123456Z"))),
-                new Counted<>(5, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                new Counted<>(4, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
                 // 1st instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
                         new InstanceTestData(localStart, localDue, new Present<>(start), 0),
