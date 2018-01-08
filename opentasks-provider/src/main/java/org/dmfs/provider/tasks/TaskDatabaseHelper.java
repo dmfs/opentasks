@@ -176,9 +176,10 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      */
     private final static String SQL_CREATE_INSTANCE_CLIENT_VIEW = "CREATE VIEW " + Tables.INSTANCE_CLIENT_VIEW + " AS SELECT "
             + Tables.INSTANCES + ".*, "
-            // override task due and start with the instance values
+            // override task due, start and original time with the instance values
             + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_START + " as " + Tasks.DTSTART + ", "
             + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_DUE + " as " + Tasks.DUE + ", "
+            + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " as " + Tasks.ORIGINAL_INSTANCE_TIME + ", "
             // override task duration with null, we already have a due
             + "null as " + Tasks.DURATION + ", "
             // override recurrence values with null, instances themselves are not recurring
