@@ -50,7 +50,7 @@ public final class CancelNotificationAction implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri)
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri)
     {
         NotificationManagerCompat.from(context).cancel(mNotificationTag, (int) ContentUris.parseId(taskUri));
     }

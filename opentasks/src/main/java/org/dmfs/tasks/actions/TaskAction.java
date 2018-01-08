@@ -35,5 +35,5 @@ public interface TaskAction
 {
     // TODO: consider returning an Iterable of Operations or providing a Transaction so multiple changes can be executed in a single transation
     // TODO: if we return the operation, also provide a way of executing something in case of a successful execution
-    void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException;
+    void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException;
 }

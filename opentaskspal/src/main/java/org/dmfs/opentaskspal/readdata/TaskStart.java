@@ -25,6 +25,7 @@ import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -35,10 +36,11 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskStart extends DelegatingOptional<DateTime>
 {
-    public static final Projection<Tasks> PROJECTION = new Composite<>(new SingleColProjection<>(Tasks.DTSTART), TaskDateTime.PROJECTION);
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION =
+            new Composite<>(new SingleColProjection<>(Tasks.DTSTART), TaskDateTime.PROJECTION);
 
 
-    public TaskStart(@NonNull RowDataSnapshot<Tasks> rowDataSnapshot)
+    public TaskStart(@NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowDataSnapshot)
     {
         super(new TaskDateTime(Tasks.DTSTART, rowDataSnapshot));
     }

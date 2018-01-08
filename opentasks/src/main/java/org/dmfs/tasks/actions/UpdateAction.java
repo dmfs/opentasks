@@ -39,17 +39,17 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class UpdateAction implements TaskAction
 {
-    private final Function<RowDataSnapshot<TaskContract.Tasks>, RowData<TaskContract.Tasks>> mDataFunction;
+    private final Function<RowDataSnapshot<TaskContract.Instances>, RowData<TaskContract.Instances>> mDataFunction;
 
 
-    public UpdateAction(Function<RowDataSnapshot<TaskContract.Tasks>, RowData<TaskContract.Tasks>> dataFunction)
+    public UpdateAction(Function<RowDataSnapshot<TaskContract.Instances>, RowData<TaskContract.Instances>> dataFunction)
     {
         mDataFunction = dataFunction;
     }
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         new BaseTransaction().with(new Seq<>(new Update<>(new RowUriReference<>(taskUri), mDataFunction.value(rowSnapshot)))).commit(contentProviderClient);
     }

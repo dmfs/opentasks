@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
-import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.predicates.EqArg;
 import org.dmfs.android.contentpal.rowsets.QueryRowSet;
@@ -37,7 +36,7 @@ import org.dmfs.opentaskspal.readdata.TaskPin;
 import org.dmfs.opentaskspal.readdata.TaskStart;
 import org.dmfs.opentaskspal.readdata.TaskTitle;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
-import org.dmfs.opentaskspal.views.TasksView;
+import org.dmfs.opentaskspal.views.InstancesView;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.JobIds;
@@ -107,15 +106,15 @@ public final class ActionService extends JobIntentService
     {
         try
         {
-            Uri taskUri = intent.getData();
-            if (taskUri == null || taskUri.getAuthority() == null)
+            Uri instanceUri = intent.getData();
+            if (instanceUri == null || instanceUri.getAuthority() == null)
             {
-                throw new RuntimeException(String.format("Invalid task Uri %s", taskUri));
+                throw new RuntimeException(String.format("Invalid task instance Uri %s", instanceUri));
             }
 
-            ContentProviderClient contentProviderClient = getContentResolver().acquireContentProviderClient(taskUri);
-            for (RowSnapshot<TaskContract.Tasks> snapshot : new QueryRowSet<>(
-                    new TasksView(taskUri.getAuthority(), contentProviderClient),
+            ContentProviderClient contentProviderClient = getContentResolver().acquireContentProviderClient(instanceUri);
+            for (RowSnapshot<TaskContract.Instances> snapshot : new QueryRowSet<>(
+                    new InstancesView<>(instanceUri.getAuthority(), contentProviderClient),
                     new org.dmfs.android.contentpal.projections.Composite<>(
                             Id.PROJECTION,
                             EffectiveDueDate.PROJECTION,
@@ -125,9 +124,9 @@ public final class ActionService extends JobIntentService
                             TaskTitle.PROJECTION,
                             TaskVersion.PROJECTION,
                             TaskIsClosed.PROJECTION),
-                    new EqArg(TaskContract.Tasks._ID, ContentUris.parseId(taskUri))))
+                    new EqArg(TaskContract.Instances._ID, ContentUris.parseId(instanceUri))))
             {
-                resolveAction(intent.getAction()).execute(this, contentProviderClient, snapshot.values(), taskUri);
+                resolveAction(intent.getAction()).execute(this, contentProviderClient, snapshot.values(), instanceUri);
             }
         }
         catch (RuntimeException | RemoteException | OperationApplicationException e)

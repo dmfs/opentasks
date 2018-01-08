@@ -22,6 +22,7 @@ import android.database.Cursor;
 import org.dmfs.provider.tasks.model.adapters.DateTimeFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.LongFieldAdapter;
+import org.dmfs.provider.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
@@ -67,6 +68,11 @@ public interface InstanceAdapter extends EntityAdapter<InstanceAdapter>
      * Adapter for the distance of a task instance from the current instance.
      */
     IntegerFieldAdapter<InstanceAdapter> DISTANCE_FROM_CURRENT = new IntegerFieldAdapter<>(Instances.DISTANCE_FROM_CURRENT);
+
+    /**
+     * Adapter for the title of a task instance.
+     */
+    StringFieldAdapter<InstanceAdapter> TITLE = new StringFieldAdapter<>(Tasks.TITLE);
 
     /**
      * Adapter for the row id of the task.

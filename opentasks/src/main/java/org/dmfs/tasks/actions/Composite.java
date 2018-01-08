@@ -50,7 +50,7 @@ public final class Composite implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         for (TaskAction action : mDelegates)
         {

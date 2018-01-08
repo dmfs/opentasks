@@ -39,11 +39,11 @@ public final class DeferDueAction extends DelegatingTaskAction
             Optional<DateTime> start = new TaskDateTime(TaskContract.Tasks.DTSTART, data);
             if (start.isPresent())
             {
-                return new TimeData(start.value(), new EffectiveDueDate(data).value().addDuration(duration));
+                return new TimeData<>(start.value(), new EffectiveDueDate(data).value().addDuration(duration));
             }
             else
             {
-                return new DueData(new EffectiveDueDate(data).value().addDuration(duration));
+                return new DueData<>(new EffectiveDueDate(data).value().addDuration(duration));
             }
         }));
     }

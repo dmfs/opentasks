@@ -48,7 +48,7 @@ public final class PrefState implements TaskNotificationState
 
     @NonNull
     @Override
-    public Uri task()
+    public Uri instance()
     {
         return Uri.parse(mEntry.getKey());
     }

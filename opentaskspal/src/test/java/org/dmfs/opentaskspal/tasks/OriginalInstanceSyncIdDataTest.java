@@ -16,6 +16,7 @@
 
 package org.dmfs.opentaskspal.tasks;
 
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,10 +41,11 @@ public final class OriginalInstanceSyncIdDataTest
     @Test
     public void test_thatOriginalSyncIdIsAdded()
     {
-        assertThat(new OriginalInstanceSyncIdData("test"),
+        assertThat(new OriginalInstanceSyncIdData("test", DateTime.parse("20180103")),
                 builds(
                         withValuesOnly(
-                                containing(Tasks.ORIGINAL_INSTANCE_SYNC_ID, "test")
+                                containing(Tasks.ORIGINAL_INSTANCE_SYNC_ID, "test"),
+                                containing(Tasks.ORIGINAL_INSTANCE_TIME, DateTime.parse("20180103").getTimestamp())
                         )));
     }
 

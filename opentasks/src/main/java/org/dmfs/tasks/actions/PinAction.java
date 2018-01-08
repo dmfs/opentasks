@@ -28,6 +28,6 @@ public final class PinAction extends DelegatingTaskAction
 {
     public PinAction(boolean pin)
     {
-        super(new UpdateAction((snapshot) -> new PinnedData(pin)));
+        super(new UpdateAction((snapshot) -> new PinnedData<>(pin)));
     }
 }

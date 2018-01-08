@@ -30,7 +30,7 @@ import org.dmfs.tasks.contract.TaskContract;
 public final class NotifyStickyAction extends DelegatingTaskAction
 {
 
-    public NotifyStickyAction(Function<RowDataSnapshot<TaskContract.Tasks>, String> channelFunction, boolean repost)
+    public NotifyStickyAction(Function<RowDataSnapshot<? extends TaskContract.TaskColumns>, String> channelFunction, boolean repost)
     {
         super(new Conditional(
                 new NotificationEnabled(),

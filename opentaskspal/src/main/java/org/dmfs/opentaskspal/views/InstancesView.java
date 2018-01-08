@@ -14,29 +14,25 @@
  * limitations under the License.
  */
 
-package org.dmfs.tasks.actions;
+package org.dmfs.opentaskspal.views;
 
 import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.OperationApplicationException;
-import android.net.Uri;
-import android.os.RemoteException;
 
-import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.tasks.actions.utils.NotificationPrefs;
+import org.dmfs.android.contentpal.View;
+import org.dmfs.android.contentpal.views.BaseView;
+import org.dmfs.android.contentpal.views.DelegatingView;
 import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
- * A {@link TaskAction} which removes a notification from the preferences.
+ * {@link View} for the {@link TaskContract.Instances} table.
  *
  * @author Marten Gajda
  */
-public final class RemoveNotificationAction implements TaskAction
+public final class InstancesView<T extends TaskContract.Instances> extends DelegatingView<T>
 {
-    @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
+    public InstancesView(String authority, ContentProviderClient client)
     {
-        new NotificationPrefs(context).next().edit().remove(taskUri.toString()).apply();
+        super(new BaseView<>(client, TaskContract.Instances.getContentUri(authority)));
     }
 }

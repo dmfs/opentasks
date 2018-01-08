@@ -18,12 +18,15 @@ package org.dmfs.opentaskspal.readdata;
 
 import android.content.ContentUris;
 import android.net.Uri;
-import androidx.annotation.NonNull;
+import android.provider.BaseColumns;
 
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.jems.single.Single;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -33,13 +36,13 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskUri implements Single<Uri>
 {
-    public static final Projection<?> PROJECTION = Id.PROJECTION;
+    public static final Projection<? super BaseColumns> PROJECTION = Id.PROJECTION;
 
-    private final RowDataSnapshot<Tasks> mRowDataSnapshot;
+    private final RowDataSnapshot<? extends TaskContract.TaskColumns> mRowDataSnapshot;
     private final String mAuthority;
 
 
-    public TaskUri(@NonNull String authority, @NonNull RowDataSnapshot<Tasks> rowDataSnapshot)
+    public TaskUri(@NonNull String authority, @NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowDataSnapshot)
     {
         mAuthority = authority;
         mRowDataSnapshot = rowDataSnapshot;

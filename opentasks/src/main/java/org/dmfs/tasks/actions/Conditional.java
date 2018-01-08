@@ -34,11 +34,11 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class Conditional implements TaskAction
 {
-    private final BiFunction<Context, RowDataSnapshot<TaskContract.Tasks>, Boolean> mTestFunction;
+    private final BiFunction<Context, RowDataSnapshot<? extends TaskContract.TaskColumns>, Boolean> mTestFunction;
     private final TaskAction mDelegate;
 
 
-    public Conditional(BiFunction<Context, RowDataSnapshot<TaskContract.Tasks>, Boolean> testFunction, TaskAction delegate)
+    public Conditional(BiFunction<Context, RowDataSnapshot<? extends TaskContract.TaskColumns>, Boolean> testFunction, TaskAction delegate)
     {
         mTestFunction = testFunction;
         mDelegate = delegate;
@@ -46,7 +46,7 @@ public final class Conditional implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> data, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> data, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         if (mTestFunction.value(context, data))
         {

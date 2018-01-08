@@ -43,7 +43,6 @@ import org.dmfs.provider.tasks.TaskDatabaseHelper.OnDatabaseOperationListener;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
 import org.dmfs.provider.tasks.handler.PropertyHandler;
 import org.dmfs.provider.tasks.handler.PropertyHandlerFactory;
-import org.dmfs.provider.tasks.model.ContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.ContentValuesListAdapter;
 import org.dmfs.provider.tasks.model.ContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesInstanceAdapter;
@@ -58,6 +57,7 @@ import org.dmfs.provider.tasks.processors.lists.ListCommitProcessor;
 import org.dmfs.provider.tasks.processors.tasks.AutoCompleting;
 import org.dmfs.provider.tasks.processors.tasks.Instantiating;
 import org.dmfs.provider.tasks.processors.tasks.Moving;
+import org.dmfs.provider.tasks.processors.tasks.Originating;
 import org.dmfs.provider.tasks.processors.tasks.Relating;
 import org.dmfs.provider.tasks.processors.tasks.Searchable;
 import org.dmfs.provider.tasks.processors.tasks.TaskCommitProcessor;
@@ -183,7 +183,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     {
         mAuthority = AuthorityUtil.taskAuthority(getContext());
 
-        mTaskProcessorChain = new Validating(new AutoCompleting(new Relating(new Instantiating(new Searchable(new Moving(new TaskCommitProcessor()))))));
+        mTaskProcessorChain = new Validating(
+                new AutoCompleting(new Relating(new Instantiating(new Searchable(new Moving(new Originating(new TaskCommitProcessor())))))));
 
         mListProcessorChain = new org.dmfs.provider.tasks.processors.lists.Validating(new ListCommitProcessor());
 
@@ -830,6 +831,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     while (cursor.moveToNext())
                     {
                         mInstanceProcessorChain.delete(db, new CursorContentValuesInstanceAdapter(cursor, new ContentValues()), isSyncAdapter);
+                        mChanged.set(true);
                         count++;
                     }
                 }
@@ -955,17 +957,20 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
                 break;
 
-            case INSTANCES:
-            {
-                InstanceAdapter instance = mInstanceProcessorChain.insert(db, new ContentValuesInstanceAdapter(values), isSyncAdapter);
-                rowId = instance.id();
-                result_uri = TaskContract.Instances.getContentUri(mAuthority);
-
-                postNotifyUri(Instances.getContentUri(mAuthority));
-                postNotifyUri(Tasks.getContentUri(mAuthority));
-
-                break;
-            }
+            // inserting instances is currently disabled because we only expand one instance,
+            // so even though a new task (exception) would be created, no instance might show up
+            // we need to resolve this discrepancy. Until then this feature remains disabled.
+//            case INSTANCES:
+//            {
+//                InstanceAdapter instance = mInstanceProcessorChain.insert(db, new ContentValuesInstanceAdapter(values), isSyncAdapter);
+//                rowId = instance.id();
+//                result_uri = TaskContract.Instances.getContentUri(mAuthority);
+//
+//                postNotifyUri(Instances.getContentUri(mAuthority));
+//                postNotifyUri(Tasks.getContentUri(mAuthority));
+//
+//                break;
+//            }
             case PROPERTIES:
                 String mimetype = values.getAsString(Properties.MIMETYPE);
 
@@ -1138,6 +1143,10 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                                 cursor.getCount() > 1 ? new ContentValues(values) : values);
 
                         mInstanceProcessorChain.update(db, instance, isSyncAdapter);
+                        if (dataChanged && instance.hasUpdates())
+                        {
+                            mChanged.set(true);
+                        }
                         count++;
                     }
                 }
@@ -1305,6 +1314,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 return ContentResolver.CURSOR_ITEM_BASE_TYPE + "/org.dmfs.tasks." + Tasks.CONTENT_URI_PATH;
             case INSTANCES:
                 return ContentResolver.CURSOR_DIR_BASE_TYPE + "/org.dmfs.tasks." + Instances.CONTENT_URI_PATH;
+            case INSTANCE_ID:
+                return ContentResolver.CURSOR_ITEM_BASE_TYPE + "/org.dmfs.tasks." + Instances.CONTENT_URI_PATH;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }

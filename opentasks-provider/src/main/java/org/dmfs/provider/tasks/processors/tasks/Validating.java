@@ -145,6 +145,7 @@ public final class Validating implements EntityProcessor<TaskAdapter>
         }
 
         // only sync adapters are allowed to change the UID
+        // TODO: we probably should allow clients to set a UID on inserts
         if (!isSyncAdapter && task.isUpdated(TaskAdapter._UID))
         {
             throw new IllegalArgumentException("modification of _UID is not allowed");

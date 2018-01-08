@@ -66,11 +66,11 @@ public final class NotifyAction implements TaskAction
     private final String GROUP_ALERTS = "org.dmfs.tasks.ALERTS";
     private final String GROUP_PINS = "org.dmfs.tasks.PINS";
 
-    private final Function<RowDataSnapshot<TaskContract.Tasks>, String> mChannelFunction;
+    private final Function<RowDataSnapshot<? extends TaskContract.TaskColumns>, String> mChannelFunction;
     private final boolean mRepost;
 
 
-    public NotifyAction(Function<RowDataSnapshot<TaskContract.Tasks>, String> channelFunction, boolean repost)
+    public NotifyAction(Function<RowDataSnapshot<? extends TaskContract.TaskColumns>, String> channelFunction, boolean repost)
     {
         mChannelFunction = channelFunction;
         mRepost = repost;
@@ -104,7 +104,7 @@ public final class NotifyAction implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> data, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> data, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         // TODO: move to central place, for now we keep it here to be sure we have created the channels
         createChannels(context);
@@ -189,7 +189,7 @@ public final class NotifyAction implements TaskAction
     }
 
 
-    private CharSequence contentText(Context context, RowDataSnapshot<TaskContract.Tasks> data)
+    private CharSequence contentText(Context context, RowDataSnapshot<TaskContract.Instances> data)
     {
         Optional<DateTime> start = new TaskStart(data);
         Optional<DateTime> due = new EffectiveDueDate(data);

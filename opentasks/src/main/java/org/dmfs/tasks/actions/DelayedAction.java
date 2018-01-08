@@ -51,7 +51,7 @@ public final class DelayedAction implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         AlarmManagerCompat.setExactAndAllowWhileIdle(
                 (AlarmManager) context.getSystemService(Context.ALARM_SERVICE),

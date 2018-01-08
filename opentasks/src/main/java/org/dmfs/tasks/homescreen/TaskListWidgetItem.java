@@ -44,9 +44,9 @@ public class TaskListWidgetItem
     private final int mTaskColor;
 
     /**
-     * The task ID.
+     * The instance ID.
      */
-    private final int mTaskId;
+    private final int mInstanceId;
 
     /**
      * The flag to indicate if task is closed.
@@ -70,7 +70,7 @@ public class TaskListWidgetItem
      */
     public TaskListWidgetItem(int id, String title, Time due, int color, boolean isClosed)
     {
-        mTaskId = id;
+        mInstanceId = id;
         mTaskTitle = title;
         mDueDate = due;
         mTaskColor = color;
@@ -116,9 +116,9 @@ public class TaskListWidgetItem
      *
      * @return the task id
      */
-    public long getTaskId()
+    public long getInstanceId()
     {
-        return mTaskId;
+        return mInstanceId;
     }
 
 

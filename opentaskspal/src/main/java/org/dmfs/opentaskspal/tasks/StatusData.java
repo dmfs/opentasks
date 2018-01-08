@@ -29,7 +29,7 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Marten Gajda
  */
-public final class StatusData implements RowData<TaskContract.Tasks>
+public final class StatusData<T extends TaskContract.TaskColumns> implements RowData<T>
 {
     private final int mStatus;
 
