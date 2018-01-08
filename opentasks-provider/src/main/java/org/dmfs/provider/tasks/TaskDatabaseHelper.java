@@ -176,14 +176,10 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      */
     private final static String SQL_CREATE_INSTANCE_CLIENT_VIEW = "CREATE VIEW " + Tables.INSTANCE_CLIENT_VIEW + " AS SELECT "
             + Tables.INSTANCES + ".*, "
-            // override task due and start times with the instance values
+            // override task due, start and original times with the instance values
             + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_START + " as " + Tasks.DTSTART + ", "
             + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_DUE + " as " + Tasks.DUE + ", "
-            // also replace ORIGINAL_INSTANCE_TIME.
-            // Note, the instance table contains `0` for absent values. We need to map it back to the original value in such case
-            // in very very rare cases this can be wrong, in particular when a recurring task has an instance (without override) on Jan 1st, 1970 at 00:00:00 UTC.
-            // Since this is an extremely rare edge case with very low impact, we take the risk of returning null instead of 0 in this case
-            + "CASE " + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " WHEN 0 THEN " + Tables.TASKS + "." + Tasks.ORIGINAL_INSTANCE_TIME + " ELSE " + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " END as " + Tasks.ORIGINAL_INSTANCE_TIME + ", "
+            + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " as " + Tasks.ORIGINAL_INSTANCE_TIME + ", "
             // override task duration with null, we already have a due
             + "null as " + Tasks.DURATION + ", "
             // override recurrence values with null, instances themselves are not recurring

@@ -79,7 +79,7 @@ public final class InstanceTestData implements RowData<TaskContract.Instances>
                 .withValue(TaskContract.Instances.INSTANCE_DUE_SORTING, new Mapped<>(DateTime::getInstance, mInstanceDue).value(null))
                 .withValue(TaskContract.Instances.INSTANCE_DURATION,
                         new Zipped<>(mInstanceStart, mInstanceDue, (start, due) -> (due.getTimestamp() - start.getTimestamp())).value(null))
-                .withValue(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, mOriginalTime.value(new DateTime(0)).getTimestamp())
+                .withValue(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, new Mapped<>(DateTime::getTimestamp, mOriginalTime).value(null))
                 .withValue(TaskContract.Instances.DISTANCE_FROM_CURRENT, mDistanceFromCurrent)
                 // the instances view overrides some of the task values. Since they are closely tied to the instance data we test them here as well.
                 .withValue(TaskContract.Instances.DTSTART, new Mapped<>(DateTime::getTimestamp, mInstanceStart).value(null))

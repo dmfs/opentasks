@@ -1063,7 +1063,50 @@ public final class TaskContract
      * <p>
      * Also, none of the instances are recurring themselves, so {@link #RRULE}, {@link #RDATE} and {@link #EXDATE} are always {@code null}.
      * <p>
-     * TODO: Insert all instances of recurring the tasks.
+     * TODO: Insert all instances of recurring tasks.
+     * <p>
+     * The following operations are supported:
+     * <p>
+     * <h2>Insert</h2>
+     * <p>
+     * Note, the data of an insert must not contain the fields {@link #RRULE}, {@link #RDATE} or {@link #EXDATE}. If the new instance belongs to an existing
+     * task the data must contain the fields {@link #ORIGINAL_INSTANCE_ID} and {@link #ORIGINAL_INSTANCE_TIME}. Also note, this table supports writing {@link
+     * #DURATION} (if the instance has a {@link #DTSTART}), but reading it back will always return a {@code null} {@link #DURATION} and a non-{@code null}
+     * {@link #DUE} date. Reading the task in the tasks table will, however, return the original {@link #DURATION}.
+     * <p>
+     * If there already is an instance (with or without override) for the given {@link #ORIGINAL_INSTANCE_ID} and {@link #ORIGINAL_INSTANCE_TIME} an exception
+     * is thrown.
+     * <p>
+     * <table> <tr><th>ORIGINAL_INSTANCE_ID value</th><th>Result</th></tr> <tr><td>absent or empty</td><td>A new non-recurring task is created with the given
+     * values.</td></tr> <tr><td>a valid {@link Tasks} row {@code _ID}</td><td>An {@link #RDATE} for the given {@link #ORIGINAL_INSTANCE_TIME} time is added to
+     * the given master task, any {@link #EXDATE} for this time is removed. The task is inserted as an override to the given master. No fields are inherited
+     * though. {@link #ORIGINAL_INSTANCE_ALLDAY} will be set to {@link #IS_ALLDAY} of the master.
+     * <p>
+     * Note, if the given master is non-recurring, this operation will turn it into a recurring task. </td></tr> <tr><td>invalid {@link Tasks} row {@code
+     * _ID}</td><td>An exception is thrown.</td></tr></table>
+     * <p>
+     * <h2>Update</h2>
+     * <p>
+     * Note, the data of an update must not contain any fields related to recurrence ({@link #RRULE}, {@link #RDATE}, {@link #EXDATE}, {@link
+     * #ORIGINAL_INSTANCE_ID}, {@link #ORIGINAL_INSTANCE_TIME} and {@link #ORIGINAL_INSTANCE_ALLDAY}). Also note, this table supports writing {@link #DURATION}
+     * (if the instance has a {@link #DTSTART}), but reading it back will always return a {@code null} {@link #DURATION} and a non-{@code null} {@link #DUE}
+     * date. Reading the task in the tasks table will, however, return the original {@link #DURATION}.
+     * <p>
+     * <table> <tr><th>Target task type</th><th>Result</th></tr> <tr><td>Recurring master task</td><td>A new override is created with the given data.<p> Note,
+     * any fields which are not provided are inherited from the master, except for {@link #DTSTART} and {@link #DUE} which will be inherited from the instance
+     * and {@link #DURATION}, {@link #RRULE}, {@link #RDATE} and {@link #EXDATE} which are set to {@code null}. {@link #ORIGINAL_INSTANCE_ID}, {@link
+     * #ORIGINAL_INSTANCE_TIME} and {@link #ORIGINAL_INSTANCE_ALLDAY} will be set accordingly.</td></tr> <tr><td>Single instance task</td><td>The task is
+     * updated with the given values.</td></tr> <tr><td>Recurrence override with existing master</td><td>The task is updated with the given values.</td></tr>
+     * <tr><td>Recurrence override without existing master</td><td>The task is updated with the given values.</td></tr> </table>
+     * <p>
+     * <h2>Delete</h2>
+     * <p>
+     * <table> <tr><th>Target task type</th><th>Result</th></tr> <tr><td>Recurring master task</td><td>An {@link #EXDATE} for this instance is added, any {@link
+     * #RDATE} for this instance is removed. The instance row is removed.<p> TODO: mark the task deleted if the remaining recurrence set is empty </td></tr>
+     * <tr><td>Single instance task</td><td>The {@link Tasks#_DELETED} flag of the task is set.</td></tr> <tr><td>Recurrence override with existing
+     * master</td><td>The {@link Tasks#_DELETED} flag of the override is set, an {@link #EXDATE} for this instance is added to the master, any {@link #RDATE}
+     * for this instance is removed from the master. TODO: mark the master deleted if the remaining recurrence set of the master is empty </td></tr>
+     * <tr><td>Recurrence override without existing master</td><td>The {@link Tasks#_DELETED} flag of the task is set.</td></tr> </table>
      *
      * @author Yannic Ahrens
      * @author Marten Gajda
