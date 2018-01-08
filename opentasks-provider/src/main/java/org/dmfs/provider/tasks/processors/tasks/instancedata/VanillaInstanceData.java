@@ -24,8 +24,7 @@ import org.dmfs.tasks.contract.TaskContract;
 
 /**
  * A {@link Single} of instance data {@link ContentValues}. It initializes most columns with {@code null} values, except for {@link
- * TaskContract.Instances#TASK_ID} which is left out, {@link TaskContract.Instances#INSTANCE_ORIGINAL_TIME} which is initialized with {@code 0} and {@link
- * TaskContract.Instances#DISTANCE_FROM_CURRENT} which is initialized with {@code 0} as well.
+ * TaskContract.Instances#TASK_ID} which is left out and {@link TaskContract.Instances#DISTANCE_FROM_CURRENT} which is initialized with {@code 0} as well.
  *
  * @author Marten Gajda
  */
@@ -41,7 +40,7 @@ public final class VanillaInstanceData implements Single<ContentValues>
         values.putNull(TaskContract.Instances.INSTANCE_DUE_SORTING);
         values.putNull(TaskContract.Instances.INSTANCE_DURATION);
         values.put(TaskContract.Instances.DISTANCE_FROM_CURRENT, 0);
-        values.put(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0);
+        values.putNull(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
         return values;
     }
 }
