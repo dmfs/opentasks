@@ -169,17 +169,16 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
             + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "." + TaskContract.Instances.TASK_ID + ");";
 
     /**
-     * SQL command to create a view that combines task instances with some data from the list they belong to. This replaces the task DTSTART, DUE and
-     * ORIGINAL_INSTANCE_TIME values with respective values of the instance.
+     * SQL command to create a view that combines task instances with some data from the list they belong to. This replaces the task DTSTART and DUE
+     * values with respective values of the instance.
      * <p>
      * This is the instances view as seen by the content provider clients.
      */
     private final static String SQL_CREATE_INSTANCE_CLIENT_VIEW = "CREATE VIEW " + Tables.INSTANCE_CLIENT_VIEW + " AS SELECT "
             + Tables.INSTANCES + ".*, "
-            // override task due, start and original times with the instance values
+            // override task due and start with the instance values
             + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_START + " as " + Tasks.DTSTART + ", "
             + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_DUE + " as " + Tasks.DUE + ", "
-            + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_ORIGINAL_TIME + " as " + Tasks.ORIGINAL_INSTANCE_TIME + ", "
             // override task duration with null, we already have a due
             + "null as " + Tasks.DURATION + ", "
             // override recurrence values with null, instances themselves are not recurring
