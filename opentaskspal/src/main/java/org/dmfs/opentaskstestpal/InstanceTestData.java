@@ -84,6 +84,7 @@ public final class InstanceTestData implements RowData<TaskContract.Instances>
                 // the instances view overrides some of the task values. Since they are closely tied to the instance data we test them here as well.
                 .withValue(TaskContract.Instances.DTSTART, new Mapped<>(DateTime::getTimestamp, mInstanceStart).value(null))
                 .withValue(TaskContract.Instances.DUE, new Mapped<>(DateTime::getTimestamp, mInstanceDue).value(null))
+                .withValue(TaskContract.Instances.ORIGINAL_INSTANCE_TIME, new Mapped<>(DateTime::getTimestamp, mOriginalTime).value(null))
                 .withValue(TaskContract.Instances.DURATION, null)
                 .withValue(TaskContract.Instances.RRULE, null)
                 .withValue(TaskContract.Instances.RDATE, null)
