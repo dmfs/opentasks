@@ -54,7 +54,13 @@ public class InstanceTestDataTest
                                 withNullValue(TaskContract.Instances.INSTANCE_DUE_SORTING),
                                 withNullValue(TaskContract.Instances.INSTANCE_DURATION),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0L),
-                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
+                                withNullValue(TaskContract.Instances.DTSTART),
+                                withNullValue(TaskContract.Instances.DUE),
+                                withNullValue(TaskContract.Instances.DURATION),
+                                withNullValue(TaskContract.Instances.RRULE),
+                                withNullValue(TaskContract.Instances.RDATE),
+                                withNullValue(TaskContract.Instances.EXDATE)
                         )
                 ));
     }
@@ -74,7 +80,13 @@ public class InstanceTestDataTest
                                 containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
                                 containing(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 0L),
-                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
+                                containing(TaskContract.Instances.DTSTART, start.getTimestamp()),
+                                containing(TaskContract.Instances.DUE, due.getTimestamp()),
+                                withNullValue(TaskContract.Instances.DURATION),
+                                withNullValue(TaskContract.Instances.RRULE),
+                                withNullValue(TaskContract.Instances.RDATE),
+                                withNullValue(TaskContract.Instances.EXDATE)
                         )
                 ));
     }
@@ -95,7 +107,13 @@ public class InstanceTestDataTest
                                 containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
                                 containing(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
-                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
+                                containing(TaskContract.Instances.DTSTART, start.getTimestamp()),
+                                containing(TaskContract.Instances.DUE, due.getTimestamp()),
+                                withNullValue(TaskContract.Instances.DURATION),
+                                withNullValue(TaskContract.Instances.RRULE),
+                                withNullValue(TaskContract.Instances.RDATE),
+                                withNullValue(TaskContract.Instances.EXDATE)
                         )
                 ));
     }
@@ -115,7 +133,13 @@ public class InstanceTestDataTest
                                 withNullValue(TaskContract.Instances.INSTANCE_DUE_SORTING),
                                 withNullValue(TaskContract.Instances.INSTANCE_DURATION),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
-                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
+                                containing(TaskContract.Instances.DTSTART, start.getTimestamp()),
+                                withNullValue(TaskContract.Instances.DUE),
+                                withNullValue(TaskContract.Instances.DURATION),
+                                withNullValue(TaskContract.Instances.RRULE),
+                                withNullValue(TaskContract.Instances.RDATE),
+                                withNullValue(TaskContract.Instances.EXDATE)
                         )
                 ));
     }
@@ -135,7 +159,13 @@ public class InstanceTestDataTest
                                 containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
                                 withNullValue(TaskContract.Instances.INSTANCE_DURATION),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
-                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5)
+                                containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
+                                withNullValue(TaskContract.Instances.DTSTART),
+                                containing(TaskContract.Instances.DUE, due.getTimestamp()),
+                                withNullValue(TaskContract.Instances.DURATION),
+                                withNullValue(TaskContract.Instances.RRULE),
+                                withNullValue(TaskContract.Instances.RDATE),
+                                withNullValue(TaskContract.Instances.EXDATE)
                         )
                 ));
     }
