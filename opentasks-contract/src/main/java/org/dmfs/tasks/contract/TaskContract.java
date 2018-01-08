@@ -1056,14 +1056,15 @@ public final class TaskContract
 
 
     /**
-     * Instances of a task. At present this table is read only. Currently it contains exactly one entry per task (and task exception), so it's merely a copy of
-     * {@link Tasks}.
+     * A table containing one entry per task instance. This table is writable in order to allow modification of single instances of a task. Write operations to
+     * this table will be converted into operations on overrides and forwarded to the task table.
+     * <p>
+     * Note: The {@link #DTSTART}, {@link #DUE} values of instances of recurring tasks represent the actual instance values, i.e. they are different for each
+     * instance ({@link #DURATION} is always {@code null}).
+     * <p>
+     * Also, none of the instances are recurring themselves, so {@link #RRULE}, {@link #RDATE} and {@link #EXDATE} are always {@code null}.
      * <p>
      * TODO: Insert all instances of recurring the tasks.
-     * </p>
-     * <p>
-     * TODO: In later releases it's planned to provide a convenient interface to add, change or delete task instances via this URI.
-     * </p>
      *
      * @author Yannic Ahrens <yannic@dmfs.org>
      */

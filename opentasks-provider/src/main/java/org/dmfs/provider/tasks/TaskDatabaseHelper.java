@@ -60,7 +60,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    private static final int DATABASE_VERSION = 18;
+    private static final int DATABASE_VERSION = 19;
 
 
     /**
@@ -81,6 +81,8 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         public static final String INSTANCES = "Instances";
 
         public static final String INSTANCE_VIEW = "Instance_View";
+
+        public static final String INSTANCE_CLIENT_VIEW = "Instance_Client_View";
 
         public static final String INSTANCE_PROPERTY_VIEW = "Instance_Property_View";
 
@@ -154,6 +156,35 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      */
     private final static String SQL_CREATE_INSTANCE_VIEW = "CREATE VIEW " + Tables.INSTANCE_VIEW + " AS SELECT "
             + Tables.INSTANCES + ".*, "
+            + Tables.TASKS + ".*, "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
+            + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
+            + Tables.LISTS + "." + Tasks.LIST_OWNER + ", "
+            + Tables.LISTS + "." + Tasks.LIST_NAME + ", "
+            + Tables.LISTS + "." + Tasks.LIST_ACCESS_LEVEL + ", "
+            + Tables.LISTS + "." + Tasks.LIST_COLOR + ", "
+            + Tables.LISTS + "." + Tasks.VISIBLE
+            + " FROM " + Tables.TASKS
+            + " JOIN " + Tables.LISTS + " ON (" + Tables.TASKS + "." + TaskContract.Tasks.LIST_ID + "=" + Tables.LISTS + "." + TaskContract.Tasks._ID + ")"
+            + " JOIN " + Tables.INSTANCES + " ON (" + Tables.TASKS + "." + TaskContract.Tasks._ID + "=" + Tables.INSTANCES + "." + TaskContract.Instances.TASK_ID + ");";
+
+    /**
+     * SQL command to create a view that combines task instances with some data from the list they belong to. This replaces the task DTSTART and DUE
+     * values with respective values of the instance.
+     * <p>
+     * This is the instances view as seen by the content provider clients.
+     */
+    private final static String SQL_CREATE_INSTANCE_CLIENT_VIEW = "CREATE VIEW " + Tables.INSTANCE_CLIENT_VIEW + " AS SELECT "
+            + Tables.INSTANCES + ".*, "
+            // override task due and start with the instance values
+            + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_START + " as " + Tasks.DTSTART + ", "
+            + Tables.INSTANCES + "." + TaskContract.Instances.INSTANCE_DUE + " as " + Tasks.DUE + ", "
+            // override task duration with null, we already have a due
+            + "null as " + Tasks.DURATION + ", "
+            // override recurrence values with null, instances themselves are not recurring
+            + "null as " + Tasks.RRULE + ", "
+            + "null as " + Tasks.RDATE + ", "
+            + "null as " + Tasks.EXDATE + ", "
             + Tables.TASKS + ".*, "
             + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
             + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
@@ -586,6 +617,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         db.execSQL(SQL_CREATE_TASK_VIEW);
         db.execSQL(SQL_CREATE_TASK_PROPERTY_VIEW);
         db.execSQL(SQL_CREATE_INSTANCE_VIEW);
+        db.execSQL(SQL_CREATE_INSTANCE_CLIENT_VIEW);
         db.execSQL(SQL_CREATE_INSTANCE_PROPERTY_VIEW);
         db.execSQL(SQL_CREATE_INSTANCE_CATEGORY_VIEW);
 
@@ -771,6 +803,11 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         if (oldVersion < 18)
         {
             db.execSQL("alter table " + Tables.INSTANCES + " add column " + TaskContract.Instances.DISTANCE_FROM_CURRENT + " integer default 0;");
+        }
+
+        if (oldVersion < 19)
+        {
+            db.execSQL(SQL_CREATE_INSTANCE_CLIENT_VIEW);
         }
 
         // upgrade FTS
