@@ -789,7 +789,9 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 activity.finish();
                 if (isNewTask)
                 {
-                    activity.startActivity(new Intent("android.intent.action.VIEW", mTaskUri));
+                    activity.startActivity(
+                            new Intent(Intent.ACTION_VIEW, mTaskUri)
+                                    .putExtra(ViewTaskActivity.EXTRA_COLOR, mListColor));
                 }
             }
             else

@@ -23,12 +23,15 @@ import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
 import org.dmfs.android.bolts.color.Color;
+import org.dmfs.android.bolts.color.colors.PrimaryColor;
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
 
@@ -42,6 +45,13 @@ import org.dmfs.tasks.utils.BaseActivity;
  */
 public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.Callback
 {
+
+    /**
+     * The {@link ColorInt} the toolbars should take while loading the task. Optional parameter.
+     * {@link android.graphics.Color#TRANSPARENT} also means absent.
+     */
+    public static final String EXTRA_COLOR = "color";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,7 +75,9 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
 
         if (savedInstanceState == null)
         {
-            ViewTaskFragment fragment = ViewTaskFragment.newInstance(getIntent().getData());
+            int color = getIntent().getIntExtra(EXTRA_COLOR, 0);
+            ViewTaskFragment fragment = ViewTaskFragment.newInstance(
+                    getIntent().getData(), color != 0 ? new ValueColor(color) : new PrimaryColor(this));
             getSupportFragmentManager().beginTransaction().add(R.id.task_detail_container, fragment).commit();
         }
     }
@@ -109,7 +121,7 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
 
 
     @Override
-    public void onEditTask(Uri taskUri, ContentSet data)
+    public void onTaskEditRequested(@NonNull Uri taskUri, ContentSet data)
     {
         Intent editTaskIntent = new Intent(Intent.ACTION_EDIT);
         editTaskIntent.setData(taskUri);
@@ -124,11 +136,17 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
 
 
     @Override
-    public void onDelete(Uri taskUri)
+    public void onTaskDeleted(@NonNull Uri taskUri)
     {
-        /*
-         * The task we're showing has been deleted, just finish.
-         */
+        // The task we're showing has been deleted, just finish.
+        finish();
+    }
+
+
+    @Override
+    public void onTaskCompleted(@NonNull Uri taskUri)
+    {
+        // The task we're showing has been completed, just finish.
         finish();
     }
 
@@ -145,7 +163,7 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
 
     @SuppressLint("NewApi")
     @Override
-    public void updateColor(Color color)
+    public void onListColorLoaded(@NonNull Color color)
     {
 
         if (VERSION.SDK_INT >= 21)

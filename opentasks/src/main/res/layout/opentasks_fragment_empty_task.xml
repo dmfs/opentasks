@@ -3,6 +3,7 @@
         android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
+            android:id="@+id/empty_task_fragment_appbar"
             style="@style/opentasks_details_appbar"
             android:layout_height="?attr/actionBarSize"/>
 

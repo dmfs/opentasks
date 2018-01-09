@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -49,6 +50,8 @@ import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.dmfs.android.bolts.color.Color;
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -62,6 +65,7 @@ import org.dmfs.tasks.groupings.filters.AbstractFilter;
 import org.dmfs.tasks.groupings.filters.ConstantFilter;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.Sources;
+import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.FlingDetector;
@@ -89,7 +93,6 @@ public class TaskListFragment extends SupportFragment
     private static final String TAG = "org.dmfs.tasks.TaskListFragment";
 
     private final static String ARG_INSTANCE_ID = "instance_id";
-    private final static String ARG_TWO_PANE_LAYOUT = "two_pane_layout";
 
     private static final long INTERVAL_LISTVIEW_REDRAW = 60000;
 
@@ -126,13 +129,12 @@ public class TaskListFragment extends SupportFragment
     @Parameter(key = ARG_INSTANCE_ID)
     private int mInstancePosition;
 
-    @Parameter(key = ARG_TWO_PANE_LAYOUT)
-    private boolean mTwoPaneLayout;
-
     private Loader<Cursor> mCursorLoader;
     private String mAuthority;
 
     private Uri mSelectedTaskUri;
+
+    private boolean mTwoPaneLayout;
 
     /**
      * The child position to open when the fragment is displayed.
@@ -150,11 +152,8 @@ public class TaskListFragment extends SupportFragment
         {
             selectChildView(parent, groupPosition, childPosition, true);
 
-            if (mExpandableListView.getChoiceMode() == ExpandableListView.CHOICE_MODE_SINGLE)
-            {
-                mActivatedPositionGroup = groupPosition;
-                mActivatedPositionChild = childPosition;
-            }
+            mActivatedPositionGroup = groupPosition;
+            mActivatedPositionChild = childPosition;
             /*
              * In contrast to a ListView an ExpandableListView does not set the activated item on it's own. So we have to do that here.
              */
@@ -190,16 +189,27 @@ public class TaskListFragment extends SupportFragment
          *
          * @param taskUri
          *         The {@link Uri} of the selected task.
+         * @param taskListColor
+         *         the color of the task list (used for toolbars)
          * @param forceReload
          *         Whether to reload the task or not.
-         * @param sender
-         *         The sender of the callback.
          */
-        void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
+        void onItemSelected(@NonNull Uri taskUri, @NonNull Color taskListColor, boolean forceReload, int pagePosition);
 
-        ExpandableGroupDescriptor getGroupDescriptor(int position);
+        /**
+         * Called when a task has been removed from the list.
+         * <p>
+         * TODO It's only called when task is deleted by the swipe out, and not when it is completed.
+         * It should probably be called that time, too. See https://github.com/dmfs/opentasks/issues/641.
+         *
+         * @param taskUri
+         *         the content uri of the task that has been removed
+         */
+        void onItemRemoved(@NonNull Uri taskUri);
 
         void onAddNewTask();
+
+        ExpandableGroupDescriptor getGroupDescriptor(int position);
     }
 
 
@@ -219,12 +229,11 @@ public class TaskListFragment extends SupportFragment
     });
 
 
-    public static TaskListFragment newInstance(int instancePosition, boolean twoPaneLayout)
+    public static TaskListFragment newInstance(int instancePosition)
     {
         TaskListFragment result = new TaskListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_INSTANCE_ID, instancePosition);
-        args.putBoolean(ARG_TWO_PANE_LAYOUT, twoPaneLayout);
         result.setArguments(args);
         return result;
     }
@@ -242,6 +251,9 @@ public class TaskListFragment extends SupportFragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
+
+        mTwoPaneLayout = activity.getResources().getBoolean(R.bool.has_two_panes);
+
         mAuthority = AuthorityUtil.taskAuthority(activity);
 
         mAppContext = activity.getBaseContext();
@@ -490,18 +502,11 @@ public class TaskListFragment extends SupportFragment
             {
                 return;
             }
-            // TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-            Long selectTaskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
 
-            if (selectTaskId != null)
-            {
-                // Notify the active callbacks interface (the activity, if the fragment is attached to one) that an item has been selected.
-
-                // TODO: use the instance URI one we support recurrence
-                Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), selectTaskId);
-
-                mCallbacks.onItemSelected(taskUri, force, mInstancePosition);
-            }
+            // TODO For now we get the id of the task, not the instance, once we support recurrence we'll have to change that, use instance URI that time
+            Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), (long) TaskFieldAdapters.TASK_ID.get(cursor));
+            Color taskListColor = new ValueColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+            mCallbacks.onItemSelected(taskUri, taskListColor, force, mInstancePosition);
         }
     }
 
@@ -588,7 +593,7 @@ public class TaskListFragment extends SupportFragment
                 // TODO: remove the task in a background task
                 mAppContext.getContentResolver().delete(taskUri, null, null);
                 Snackbar.make(mExpandableListView, getString(R.string.toast_task_deleted, taskTitle), Snackbar.LENGTH_SHORT).show();
-                mCallbacks.onItemSelected(null, false, -1);
+                mCallbacks.onItemRemoved(taskUri);
             }
         }).setMessage(getString(R.string.confirm_delete_message_with_title, taskTitle)).create().show();
     }
