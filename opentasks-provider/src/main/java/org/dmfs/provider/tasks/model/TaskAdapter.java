@@ -21,7 +21,7 @@ import android.database.Cursor;
 
 import org.dmfs.provider.tasks.model.adapters.BinaryFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
-import org.dmfs.provider.tasks.model.adapters.DateTimeArrayFieldAdapter;
+import org.dmfs.provider.tasks.model.adapters.DateTimeIterableFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.DateTimeFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.DurationFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.IntegerFieldAdapter;
@@ -255,13 +255,13 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
     /**
      * Adapter for the RDATE of a task.
      */
-    public static final DateTimeArrayFieldAdapter<TaskAdapter> RDATE = new DateTimeArrayFieldAdapter<TaskAdapter>(TaskContract.Tasks.RDATE,
+    public static final DateTimeIterableFieldAdapter<TaskAdapter> RDATE = new DateTimeIterableFieldAdapter<TaskAdapter>(TaskContract.Tasks.RDATE,
             TaskContract.Tasks.TZ);
 
     /**
      * Adapter for the EXDATE of a task.
      */
-    public static final DateTimeArrayFieldAdapter<TaskAdapter> EXDATE = new DateTimeArrayFieldAdapter<TaskAdapter>(TaskContract.Tasks.EXDATE,
+    public static final DateTimeIterableFieldAdapter<TaskAdapter> EXDATE = new DateTimeIterableFieldAdapter<TaskAdapter>(TaskContract.Tasks.EXDATE,
             TaskContract.Tasks.TZ);
 
     /**

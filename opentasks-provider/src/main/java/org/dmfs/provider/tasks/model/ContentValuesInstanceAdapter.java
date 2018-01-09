@@ -70,7 +70,7 @@ public class ContentValuesInstanceAdapter extends AbstractInstanceAdapter
 
 
     @Override
-    public <T> boolean isUpdated(FieldAdapter<T, InstanceAdapter> fieldAdapter)
+    public boolean isUpdated(FieldAdapter<?, InstanceAdapter> fieldAdapter)
     {
         return fieldAdapter.isSetIn(mValues);
     }
@@ -98,7 +98,7 @@ public class ContentValuesInstanceAdapter extends AbstractInstanceAdapter
 
 
     @Override
-    public <T> void unset(FieldAdapter<T, InstanceAdapter> fieldAdapter) throws IllegalStateException
+    public void unset(FieldAdapter<?, InstanceAdapter> fieldAdapter) throws IllegalStateException
     {
         fieldAdapter.removeFrom(mValues);
     }
