@@ -489,18 +489,17 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     private void resolveIntentAction(Intent intent)
     {
         // check which task should be selected
-        if (intent.hasExtra(EXTRA_DISPLAY_TASK))
+        if (intent.getBooleanExtra(EXTRA_DISPLAY_TASK, false))
 
         {
             mShouldSwitchToDetail = true;
             mSelectedTaskUri = intent.getData();
         }
 
-        if (intent != null && intent.hasExtra(EXTRA_DISPLAY_TASK) && intent.getBooleanExtra(EXTRA_FORCE_LIST_SELECTION, true) && mTwoPane)
+        if (intent.getBooleanExtra(EXTRA_DISPLAY_TASK, false) && intent.getBooleanExtra(EXTRA_FORCE_LIST_SELECTION, true) && mTwoPane)
         {
             mShouldSwitchToDetail = true;
-            Uri newSelection = intent.getData();
-            mSelectedTaskUriOnLaunch = newSelection;
+            mSelectedTaskUriOnLaunch = intent.getData();
             mShouldSelectTaskListItem = true;
             if (mPagerAdapter != null)
             {
@@ -522,7 +521,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         {
             // Use the same flow to display the new task as if it was opened from the widget
             Intent displayIntent = new Intent(this, TaskListActivity.class);
-            displayIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, true);
+            displayIntent.putExtra(TaskListActivity.EXTRA_DISPLAY_TASK, !intent.getBooleanExtra(EditTaskFragment.KEY_NEW_TASK, false));
             displayIntent.putExtra(TaskListActivity.EXTRA_FORCE_LIST_SELECTION, true);
             Uri newTaskUri = intent.getData();
             displayIntent.setData(newTaskUri);

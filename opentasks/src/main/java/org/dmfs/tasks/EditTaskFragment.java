@@ -100,6 +100,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     public static final String PREFERENCE_LAST_LIST = "pref_last_list_used_for_new_event";
     public static final String PREFERENCE_LAST_ACCOUNT_TYPE = "pref_last_account_type_used_for_new_event";
 
+    public static final String KEY_NEW_TASK = "new_event";
+
     /**
      * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
      */
@@ -784,7 +786,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
                 mTaskUri = mValues.persist(activity);
 
-                activity.setResult(Activity.RESULT_OK, new Intent().setData(mTaskUri));
+                activity.setResult(Activity.RESULT_OK, new Intent().setData(mTaskUri).putExtra(KEY_NEW_TASK, isNewTask));
                 Toast.makeText(activity, R.string.activity_edit_task_task_saved, Toast.LENGTH_SHORT).show();
                 activity.finish();
                 if (isNewTask)
