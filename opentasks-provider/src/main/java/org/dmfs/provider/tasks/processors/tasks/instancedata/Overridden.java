@@ -52,11 +52,13 @@ public final class Overridden implements Single<ContentValues>
     public ContentValues value()
     {
         ContentValues values = mDelegate.value();
-        values.put(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, new FirstPresent<>(new Seq<>(
-                new Mapped<>(DateTime::getTimestamp, mOriginalTime),
-                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
-                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE))))
-                .value(null));
+        values.put(TaskContract.Instances.INSTANCE_ORIGINAL_TIME,
+                new FirstPresent<>(
+                        new Seq<>(
+                                new Mapped<>(DateTime::getTimestamp, mOriginalTime),
+                                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
+                                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE))))
+                        .value(null));
         return values;
     }
 }

@@ -46,7 +46,7 @@ public class VanillaInstanceDataTest
         assertThat(values.get(TaskContract.Instances.INSTANCE_DUE_SORTING), nullValue());
         assertThat(values.get(TaskContract.Instances.INSTANCE_DURATION), nullValue());
         assertThat(values.get(TaskContract.Instances.DISTANCE_FROM_CURRENT), is(0));
-        assertThat(values.get(TaskContract.Instances.INSTANCE_ORIGINAL_TIME), is(0));
+        assertThat(values.get(TaskContract.Instances.INSTANCE_ORIGINAL_TIME), nullValue());
         assertThat(values.size(), is(7));
     }
 

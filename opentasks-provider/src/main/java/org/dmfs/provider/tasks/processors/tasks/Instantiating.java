@@ -24,6 +24,7 @@ import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
 import org.dmfs.jems.pair.Pair;
 import org.dmfs.jems.single.Single;
+import org.dmfs.optional.NullSafe;
 import org.dmfs.optional.Optional;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
@@ -185,7 +186,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                     (newInstanceValues, cursorRow) ->
                     {
                         existingInstances.moveToPosition(cursorRow);
-                        return (int) (existingInstances.getLong(startIdx) - newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME));
+                        return (int) (existingInstances.getLong(startIdx) -
+                                new NullSafe<>(newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME)).value(0L));
                     });
 
             // sync the instances table with the new instances
