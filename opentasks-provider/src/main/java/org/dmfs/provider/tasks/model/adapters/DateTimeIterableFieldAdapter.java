@@ -18,14 +18,12 @@ package org.dmfs.provider.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.text.TextUtils;
 
 import org.dmfs.iterables.EmptyIterable;
 import org.dmfs.iterables.Split;
 import org.dmfs.iterables.decorators.DelegatingIterable;
 import org.dmfs.jems.iterable.decorators.Mapped;
-import org.dmfs.jems.iterable.generators.ConstantGenerator;
-import org.dmfs.jems.single.elementary.Reduced;
-import org.dmfs.provider.tasks.utils.iterable.Alternating;
 import org.dmfs.rfc5545.DateTime;
 
 import java.util.TimeZone;
@@ -175,14 +173,7 @@ public final class DateTimeIterableFieldAdapter<EntityType> extends SimpleFieldA
     {
         if (value != null)
         {
-            String stringValue = new Reduced<>(
-                    new StringBuilder(256),
-                    StringBuilder::append,
-                    new Alternating<>(
-                            new Mapped<>(
-                                    DateTime::toString,
-                                    new Mapped<>(dt -> dt.isFloating() ? dt : dt.shiftTimeZone(DateTime.UTC), value)),
-                            new ConstantGenerator<>(","))).value().toString();
+            String stringValue = TextUtils.join(",", new Mapped<>(dt -> dt.isFloating() ? dt : dt.shiftTimeZone(DateTime.UTC), value));
             values.put(mDateTimeListFieldName, stringValue.isEmpty() ? null : stringValue);
         }
         else

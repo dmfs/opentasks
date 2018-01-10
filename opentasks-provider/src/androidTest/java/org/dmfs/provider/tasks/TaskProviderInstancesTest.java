@@ -243,7 +243,7 @@ public class TaskProviderInstancesTest
     /**
      * Create a single instance and insert an override for exactly the same instance.
      */
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testInsertSingleInstanceTwice() throws RemoteException, OperationApplicationException
     {
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
