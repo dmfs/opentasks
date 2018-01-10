@@ -180,7 +180,7 @@ public final class Validating implements EntityProcessor<InstanceAdapter>
         // Updates of ORIGINAL_INSTANCE_* fields are not allowed
         if (new First<>(new Sieved<>(taskAdapter::isUpdated, ORIGINAL_INSTANCE_FIELD_ADAPTERS)).isPresent())
         {
-            throw new IllegalArgumentException("Recurrence values can not be modified through the instances table.");
+            throw new IllegalArgumentException("ORIGINAL_INSTANCE_* fields can not be updated through the instances table.");
         }
     }
 }
