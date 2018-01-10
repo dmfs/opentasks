@@ -77,7 +77,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return <code>true</code> if the field has been overridden, <code>false</code> otherwise.
      */
-    public <T> boolean isUpdated(FieldAdapter<T, EntityType> fieldAdapter);
+    public boolean isUpdated(FieldAdapter<?, EntityType> fieldAdapter);
 
     /**
      * Returns whether this adapter supports modifying values.
@@ -109,7 +109,7 @@ public interface EntityAdapter<EntityType>
      * @param fieldAdapter
      *         The {@link FieldAdapter} of the field to un-set.
      */
-    public <T> void unset(FieldAdapter<T, EntityType> fieldAdapter);
+    public void unset(FieldAdapter<?, EntityType> fieldAdapter);
 
     /**
      * Commit all changes to the database.

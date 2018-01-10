@@ -157,31 +157,6 @@ public class TaskProviderTest
 
 
     /**
-     * Create 1 local task list and 1 task (via the instances table), check values in TaskLists, Tasks, Instances tables.
-     */
-    @Test
-    public void testInsertSingleInstance()
-    {
-        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
-        RowSnapshot<Instances> instance = new VirtualRowSnapshot<>(new InstanceTable(mAuthority));
-
-        assertThat(new Seq<>(
-                new Put<>(taskList, new NameData("list1")),
-                // insert a new task straight into the instances table
-                new Referring<>(taskList, Tasks.LIST_ID, new Put<>(instance, new CharSequenceRowData<>(Tasks.TITLE, "task1")))
-
-        ), resultsIn(mClient,
-                new Assert<>(taskList, new NameData("list1")),
-                new AssertRelated<>(new InstanceTable(mAuthority), Tasks.LIST_ID, taskList,
-                        new Composite<>(
-                                new InstanceTestData(0),
-                                new CharSequenceRowData<>(Tasks.TITLE, "task1"),
-                                new CharSequenceRowData<>(Tasks.TZ, null))
-                )));
-    }
-
-
-    /**
      * Create 1 local task list and 1 task, update task via instances table and check values in TaskLists, Tasks, Instances tables.
      */
     @Test

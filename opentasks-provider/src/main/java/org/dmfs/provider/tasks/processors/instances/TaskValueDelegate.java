@@ -20,20 +20,23 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.dmfs.jems.optional.decorators.Mapped;
+import org.dmfs.iterables.decorators.Filtered;
+import org.dmfs.iterables.elementary.Seq;
+import org.dmfs.iterators.filters.NoneOf;
+import org.dmfs.jems.iterable.composite.Joined;
 import org.dmfs.optional.NullSafe;
+import org.dmfs.optional.adapters.FirstPresent;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.ContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.InstanceAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
+import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -43,6 +46,37 @@ import java.util.List;
  */
 public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
 {
+    private final static Iterable<FieldAdapter<?, TaskAdapter>> SPECIAL_FIELD_ADAPTERS = new Seq<>(
+            TaskAdapter.SYNC1,
+            TaskAdapter.SYNC2,
+            TaskAdapter.SYNC3,
+            TaskAdapter.SYNC4,
+            TaskAdapter.SYNC5,
+            TaskAdapter.SYNC6,
+            TaskAdapter.SYNC7,
+            TaskAdapter.SYNC8,
+            TaskAdapter.SYNC_ID,
+            TaskAdapter.SYNC_VERSION,
+            // unset any list and read-only fields
+            TaskAdapter.ACCOUNT_NAME,
+            TaskAdapter.ACCOUNT_TYPE,
+            TaskAdapter.LIST_VISIBLE,
+            TaskAdapter.LIST_COLOR,
+            TaskAdapter.LIST_NAME,
+            TaskAdapter.LIST_ACCESS_LEVEL,
+            TaskAdapter.LIST_OWNER,
+            TaskAdapter._DELETED,
+            TaskAdapter._DIRTY,
+            TaskAdapter.IS_NEW,
+            TaskAdapter.IS_CLOSED,
+            TaskAdapter.HAS_PROPERTIES,
+            TaskAdapter.HAS_ALARMS,
+            TaskAdapter.ORIGINAL_INSTANCE_SYNC_ID, /* this will be resolved automatically */
+            // also unset any recurrence fields
+            TaskAdapter.RRULE,
+            TaskAdapter.RDATE,
+            TaskAdapter.EXDATE
+    );
 
     private final EntityProcessor<TaskAdapter> mDelegate;
 
@@ -56,10 +90,45 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
     @Override
     public InstanceAdapter insert(SQLiteDatabase db, InstanceAdapter entityAdapter, boolean isSyncAdapter)
     {
-        // for now inserts are just forwarded, but we have to make sure we return an InstanceAdapter which contains the current instance row _ID.
-        // TODO: in case ORIGINAL_INSTANCE_ID refers to a master tasks and ORIGINAL_INSTANCE_TIME is valid we should add an RDATE to it and remove any EXDATE for this
-        // TODO: handle when inserting an instance that already exists, either update the existing override or fail
+        TaskAdapter taskAdapter = entityAdapter.taskAdapter();
+        if (taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID) != null)
+        {
+            // this is going to be an override to an existing task - make sure we add an RDATE first
+            long masterTaskId = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID);
+            DateTime originalTime = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME);
+            // get the master and add an rdate
+            try (Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null /* all */, TaskContract.Tasks._ID + "=" + masterTaskId, null, null, null, null))
+            {
+                if (c.moveToFirst())
+                {
+                    TaskAdapter masterTaskAdapter = new CursorContentValuesTaskAdapter(masterTaskId, c, new ContentValues());
+                    if (masterTaskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID) != null)
+                    {
+                        throw new IllegalArgumentException("Can't add an instance to an override instance");
+                    }
+                    DateTime masterDate = new FirstPresent<>(new Seq<>(
+                            new NullSafe<>(masterTaskAdapter.valueOf(TaskAdapter.DTSTART)),
+                            new NullSafe<>(masterTaskAdapter.valueOf(TaskAdapter.DUE)))).value(null);
+                    if (!masterTaskAdapter.isRecurring() && masterDate != null)
+                    {
+                        // master is not recurring yet, also add its start as an RDATE
+                        appendDate(masterTaskAdapter, TaskAdapter.RDATE, TaskAdapter.EXDATE, masterDate);
+                    }
+                    // TODO: should we throw if the new master has no DTSTART?
+                    appendDate(masterTaskAdapter, TaskAdapter.RDATE, TaskAdapter.EXDATE, originalTime);
+                    mDelegate.update(db, masterTaskAdapter, false);
+
+                }
+                else
+                {
+                    throw new IllegalArgumentException(String.format(Locale.ENGLISH, "No task with _ID %d found", masterTaskId));
+                }
+            }
+        }
+
+        // move on with inserting the instance
         TaskAdapter taskResult = mDelegate.insert(db, entityAdapter.taskAdapter(), false);
+
         try (Cursor c = db.query(TaskDatabaseHelper.Tables.INSTANCES, new String[] { TaskContract.Instances._ID },
                 TaskContract.Instances.TASK_ID + "=" + taskResult.id(), null, null, null, null))
         {
@@ -82,36 +151,13 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
             TaskAdapter override = newInstanceAdapter.taskAdapter();
             override.set(TaskAdapter.ORIGINAL_INSTANCE_ID, entityAdapter.valueOf(InstanceAdapter.TASK_ID));
             override.set(TaskAdapter.ORIGINAL_INSTANCE_TIME, entityAdapter.valueOf(InstanceAdapter.INSTANCE_ORIGINAL_TIME));
-            override.unset(TaskAdapter.SYNC1);
-            override.unset(TaskAdapter.SYNC2);
-            override.unset(TaskAdapter.SYNC3);
-            override.unset(TaskAdapter.SYNC4);
-            override.unset(TaskAdapter.SYNC5);
-            override.unset(TaskAdapter.SYNC6);
-            override.unset(TaskAdapter.SYNC7);
-            override.unset(TaskAdapter.SYNC8);
-            override.unset(TaskAdapter.SYNC_ID);
-            override.unset(TaskAdapter.SYNC_VERSION);
-            // unset any list and read-only fields
-            override.unset(TaskAdapter.ACCOUNT_NAME);
-            override.unset(TaskAdapter.ACCOUNT_TYPE);
-            override.unset(TaskAdapter.LIST_VISIBLE);
-            override.unset(TaskAdapter.LIST_COLOR);
-            override.unset(TaskAdapter.LIST_NAME);
-            override.unset(TaskAdapter.LIST_ACCESS_LEVEL);
-            override.unset(TaskAdapter.LIST_OWNER);
-            override.unset(TaskAdapter._DELETED);
-            override.unset(TaskAdapter._DIRTY);
-            override.unset(TaskAdapter.IS_NEW);
-            override.unset(TaskAdapter.IS_CLOSED);
-            override.unset(TaskAdapter.HAS_PROPERTIES);
-            override.unset(TaskAdapter.HAS_ALARMS);
-            override.unset(TaskAdapter.ORIGINAL_INSTANCE_SYNC_ID); /* this will be resolved automatically */
-            // also unset any recurrence fields
-            override.unset(TaskAdapter.RRULE);
-            override.unset(TaskAdapter.RDATE);
-            override.unset(TaskAdapter.EXDATE);
-            // finally make sure we update DTSTART and DUE to match the instance values (unless they are set explicitly)
+            // unset all fields which have special meaning
+            for (FieldAdapter<?, TaskAdapter> specialFieldAdapter : SPECIAL_FIELD_ADAPTERS)
+            {
+                override.unset(specialFieldAdapter);
+            }
+
+            // make sure we update DTSTART and DUE to match the instance values (unless they are set explicitly)
             if (!taskAdapter.isUpdated(TaskAdapter.DTSTART))
             {
                 // set DTSTART to the instance start
@@ -123,7 +169,7 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
                 override.set(TaskAdapter.DUE, newInstanceAdapter.valueOf(InstanceAdapter.INSTANCE_DUE));
                 override.set(TaskAdapter.DURATION, null);
             }
-            // set the correct original instance allday flag
+            // copy original instance allday flag
             override.set(TaskAdapter.ORIGINAL_INSTANCE_ALLDAY, taskAdapter.valueOf(TaskAdapter.IS_ALLDAY));
 
             // TODO: if this is the first instance (and maybe no other overrides exist), don't create an override but split the series into two tasks
@@ -166,7 +212,7 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
                 if (c.moveToFirst())
                 {
                     TaskAdapter masterTaskAdapter = new CursorContentValuesTaskAdapter(masterTaskId, c, new ContentValues());
-                    addExDate(masterTaskAdapter, originalTime);
+                    appendDate(masterTaskAdapter, TaskAdapter.EXDATE, TaskAdapter.RDATE, originalTime);
                     mDelegate.update(db, masterTaskAdapter, false);
                 }
             }
@@ -175,7 +221,7 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
         {
             // TODO: if this is the first instance, consider moving the recurrence start instead of adding an exdate
             // TODO: if this is the last instance of a finite task, consider just setting a new recurrence end
-            addExDate(taskAdapter, entityAdapter.valueOf(InstanceAdapter.INSTANCE_ORIGINAL_TIME));
+            appendDate(taskAdapter, TaskAdapter.EXDATE, TaskAdapter.RDATE, entityAdapter.valueOf(InstanceAdapter.INSTANCE_ORIGINAL_TIME));
             mDelegate.update(db, taskAdapter, false);
         }
         else
@@ -186,10 +232,9 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
     }
 
 
-    private void addExDate(TaskAdapter taskAdapter, DateTime exdate)
+    private void appendDate(TaskAdapter taskAdapter, FieldAdapter<Iterable<DateTime>, TaskAdapter> addfieldAdapter, FieldAdapter<Iterable<DateTime>, TaskAdapter> removefieldAdapter, DateTime dateTime)
     {
-        List<DateTime> exdates = new Mapped<>(Arrays::asList, new NullSafe<>(taskAdapter.valueOf(TaskAdapter.EXDATE))).value(new ArrayList<>(1));
-        exdates.add(exdate);
-        taskAdapter.set(TaskAdapter.EXDATE, exdates.toArray(new DateTime[exdates.size()]));
+        taskAdapter.set(addfieldAdapter, new Joined<>(new Filtered<>(taskAdapter.valueOf(addfieldAdapter), new NoneOf<>(dateTime)), new Seq<>(dateTime)));
+        taskAdapter.set(removefieldAdapter, new Filtered<>(taskAdapter.valueOf(removefieldAdapter), new NoneOf<>(dateTime)));
     }
 }
