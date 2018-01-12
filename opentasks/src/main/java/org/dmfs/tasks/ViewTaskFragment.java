@@ -64,6 +64,7 @@ import org.dmfs.tasks.notification.TaskNotificationHandler;
 import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
+import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.widget.TaskView;
 
 import java.util.Arrays;
@@ -150,18 +151,6 @@ public class ViewTaskFragment extends SupportFragment
     private boolean mShowFloatingActionButton = false;
 
     private boolean mIsTheTitleContainerVisible = true;
-
-    /**
-     * A Runnable that updates the view.
-     */
-    private Runnable mUpdateViewRunnable = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            updateView();
-        }
-    };
 
 
     public interface Callback
@@ -455,7 +444,7 @@ public class ViewTaskFragment extends SupportFragment
     {
         if (mContent != null)
         {
-            mContent.post(mUpdateViewRunnable);
+            mContent.post(new SafeFragmentUiRunnable(this, this::updateView));
         }
     }
 
