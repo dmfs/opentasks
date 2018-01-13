@@ -69,6 +69,7 @@ import org.dmfs.tasks.utils.FlingDetector.OnFlingListener;
 import org.dmfs.tasks.utils.OnChildLoadedListener;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.RetainExpandableListView;
+import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.utils.SearchHistoryDatabaseHelper.SearchHistoryColumns;
 
 
@@ -206,16 +207,16 @@ public class TaskListFragment extends SupportFragment
      * A runnable that periodically updates the list. We need that to update relative dates & times. TODO: we probably should move that to the adapter to update
      * only the date & times fields, not the entire list.
      */
-    private Runnable mListRedrawRunnable = new Runnable()
+    private Runnable mListRedrawRunnable = new SafeFragmentUiRunnable(this, new Runnable()
     {
 
         @Override
         public void run()
         {
             mExpandableListView.invalidateViews();
-            mHandler.postDelayed(this, INTERVAL_LISTVIEW_REDRAW);
+            mHandler.postDelayed(mListRedrawRunnable, INTERVAL_LISTVIEW_REDRAW);
         }
-    };
+    });
 
 
     public static TaskListFragment newInstance(int instancePosition, boolean twoPaneLayout)
@@ -442,14 +443,7 @@ public class TaskListFragment extends SupportFragment
             }
         }
 
-        mHandler.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                mAdapter.reloadLoadedGroups();
-            }
-        });
+        mHandler.post(new SafeFragmentUiRunnable(this, () -> mAdapter.reloadLoadedGroups()));
     }
 
 
@@ -901,7 +895,7 @@ public class TaskListFragment extends SupportFragment
     }
 
 
-    Runnable setOpenHandler = new Runnable()
+    private Runnable setOpenHandler = new SafeFragmentUiRunnable(this, new Runnable()
     {
         @Override
         public void run()
@@ -910,7 +904,7 @@ public class TaskListFragment extends SupportFragment
             mExpandableListView.expandGroups(mSavedExpandedGroups);
             setActivatedItem(mActivatedPositionGroup, mActivatedPositionChild);
         }
-    };
+    });
 
 
     public void setActivatedItem(int groupPosition, int childPosition)
@@ -969,20 +963,16 @@ public class TaskListFragment extends SupportFragment
         if (mSelectedChildPosition != null)
         {
             // post delayed to allow the list view to finish creation
-            mExpandableListView.postDelayed(new Runnable()
+            mExpandableListView.postDelayed(new SafeFragmentUiRunnable(this, () ->
             {
-                @Override
-                public void run()
-                {
-                    mExpandableListView.expandGroup(mSelectedChildPosition.groupPosition);
-                    mSelectedChildPosition.flatListPosition = mExpandableListView.getFlatListPosition(
-                            RetainExpandableListView.getPackedPositionForChild(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition));
+                mExpandableListView.expandGroup(mSelectedChildPosition.groupPosition);
+                mSelectedChildPosition.flatListPosition = mExpandableListView.getFlatListPosition(
+                        RetainExpandableListView.getPackedPositionForChild(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition));
 
-                    setActivatedItem(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition);
-                    selectChildView(mExpandableListView, mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition, true);
-                    mExpandableListView.smoothScrollToPosition(mSelectedChildPosition.flatListPosition);
-                }
-            }, 0);
+                setActivatedItem(mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition);
+                selectChildView(mExpandableListView, mSelectedChildPosition.groupPosition, mSelectedChildPosition.childPosition, true);
+                mExpandableListView.smoothScrollToPosition(mSelectedChildPosition.flatListPosition);
+            }), 0);
         }
     }
 

@@ -55,6 +55,7 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.RecentlyUsedLists;
+import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
 
 
@@ -479,23 +480,15 @@ public class QuickAddDialogFragment extends SupportDialogFragment
 
 
     /**
-     * A runnable that closes the dialog.
+     * A {@link Runnable} that closes the dialog.
      */
-    private final Runnable mDismiss = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            dismiss();
-        }
-    };
+    private final Runnable mDismiss = new SafeFragmentUiRunnable(this, this::dismiss);
 
     /**
      * A {@link Runnable} that resets the editor view.
      */
-    private final Runnable mReset = new Runnable()
+    private final Runnable mReset = new SafeFragmentUiRunnable(this, new Runnable()
     {
-
         @Override
         public void run()
         {
@@ -512,5 +505,5 @@ public class QuickAddDialogFragment extends SupportDialogFragment
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(mEditText, 0);
         }
-    };
+    });
 }
