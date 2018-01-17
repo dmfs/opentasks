@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.diffplug.gradle.spotless' version '3.8.0'
+}
+
 def gitVersion = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
@@ -28,6 +32,13 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+apply plugin: 'com.diffplug.gradle.spotless'
+spotless {
+    freshmark {
+    }
+    java {
+        target '**/*.java'
+        trimTrailingWhitespace()
+        removeUnusedImports()
+    }
 }

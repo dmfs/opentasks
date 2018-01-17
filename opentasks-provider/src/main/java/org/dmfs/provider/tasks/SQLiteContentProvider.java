@@ -40,10 +40,10 @@ import java.util.Set;
  */
 /*
  * Changed by marten@dmfs.org:
- * 
+ *
  * removed protected mDb field and replaced it by local fields. There is no reason to store the database if we get a new one for every transaction. Instead we
  * also pass the database to the *InTransaction methods.
- * 
+ *
  * update visibility of class and methods
  */
 abstract class SQLiteContentProvider extends ContentProvider
