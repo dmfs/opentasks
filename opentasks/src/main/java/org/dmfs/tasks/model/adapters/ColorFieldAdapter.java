@@ -18,6 +18,9 @@ package org.dmfs.tasks.model.adapters;
 
 import android.database.Cursor;
 import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 
@@ -88,28 +91,34 @@ public final class ColorFieldAdapter extends IntegerFieldAdapter
 
 
     @Override
-    public Integer get(ContentSet values)
+    public Integer get(@NonNull ContentSet values)
     {
         return darkenColor(super.get(values), mDarkenThreshold);
     }
 
 
     @Override
-    public Integer get(Cursor cursor)
+    public Integer get(@NonNull Cursor cursor)
     {
         return darkenColor(super.get(cursor), mDarkenThreshold);
     }
 
 
     @Override
-    public Integer getDefault(ContentSet values)
+    public Integer getDefault(@NonNull ContentSet values)
     {
         return darkenColor(super.getDefault(values), mDarkenThreshold);
     }
 
 
-    private static int darkenColor(int color, float maxLuminance)
+    @ColorInt
+    private static Integer darkenColor(@Nullable Integer color, float maxLuminance)
     {
+        if (color == null)
+        {
+            return null;
+        }
+
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
         hsv[2] = hsv[2] * hsv[2] * hsv[2] * hsv[2] * hsv[2] * (maxLuminance - 1) + hsv[2];

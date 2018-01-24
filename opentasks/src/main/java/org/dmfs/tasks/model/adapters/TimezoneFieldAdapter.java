@@ -18,6 +18,8 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -86,8 +88,9 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
     }
 
 
+    @Nullable
     @Override
-    public TimeZone get(ContentSet values)
+    public TimeZone get(@NonNull ContentSet values)
     {
         String timezoneId = values.getAsString(mTzFieldName);
 
@@ -99,7 +102,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
             isAllDay = allday != null && allday > 0;
         }
 
-        TimeZoneWrapper timeZone = isAllDay ? null : timezoneId == null ? getDefault(null) : new TimeZoneWrapper(timezoneId);
+        TimeZoneWrapper timeZone = isAllDay ? null : timezoneId == null ? getDefault() : new TimeZoneWrapper(timezoneId);
         if (timeZone != null && mReferenceTimeFieldName != null)
         {
             timeZone.setReferenceTimeStamp(values.getAsLong(mReferenceTimeFieldName));
@@ -108,8 +111,9 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
     }
 
 
+    @Nullable
     @Override
-    public TimeZone get(Cursor cursor)
+    public TimeZone get(@NonNull Cursor cursor)
     {
         int tzColumnIdx = cursor.getColumnIndex(mTzFieldName);
 
@@ -133,7 +137,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
             isAllDay = !cursor.isNull(allDayColumnIdx) && cursor.getInt(allDayColumnIdx) > 0;
         }
 
-        TimeZoneWrapper timeZone = isAllDay ? null : timezoneId == null ? getDefault(null) : new TimeZoneWrapper(timezoneId);
+        TimeZoneWrapper timeZone = isAllDay ? null : timezoneId == null ? getDefault() : new TimeZoneWrapper(timezoneId);
         int refTimeCol;
         if (timeZone != null && mReferenceTimeFieldName != null && (refTimeCol = cursor.getColumnIndex(mReferenceTimeFieldName)) >= 0)
         {
@@ -147,12 +151,12 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
     /**
      * Returns whether this is an "all-day timezone".
      *
-     * @param cursor
-     *         The cursor to read from.
+     * @param values
+     *         The ContentSet to read from.
      *
      * @return <code>true</code> if the cursor points to an all-day date.
      */
-    public boolean isAllDay(ContentSet values)
+    private boolean isAllDay(ContentSet values)
     {
         if (mAllDayFieldName == null)
         {
@@ -167,12 +171,12 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
     /**
      * Returns whether this is an "all-day timezone".
      *
-     * @param cursor
-     *         The cursor to read from.
+     * @param values
+     *         The ContentValues to read from.
      *
      * @return <code>true</code> if the cursor points to an all-day date.
      */
-    public boolean isAllDay(ContentValues values)
+    private boolean isAllDay(ContentValues values)
     {
         if (mAllDayFieldName == null)
         {
@@ -181,30 +185,6 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 
         Integer allday = values.getAsInteger(mAllDayFieldName);
         return allday != null && allday > 0;
-    }
-
-
-    /**
-     * Returns whether this is an "all-day timezone".
-     *
-     * @param cursor
-     *         The cursor to read from.
-     *
-     * @return <code>true</code> if the cursor points to an all-day date.
-     */
-    public boolean isAllDay(Cursor cursor)
-    {
-        if (mAllDayFieldName == null)
-        {
-            return false;
-        }
-
-        int allDayColumnIdx = cursor.getColumnIndex(mAllDayFieldName);
-        if (allDayColumnIdx < 0)
-        {
-            throw new IllegalArgumentException("The allday column is missing in cursor.");
-        }
-        return !cursor.isNull(allDayColumnIdx) && cursor.getInt(allDayColumnIdx) > 0;
     }
 
 
@@ -214,14 +194,20 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
      * @return The current time zone.
      */
     @Override
-    public TimeZoneWrapper getDefault(ContentSet values)
+    public TimeZoneWrapper getDefault(@NonNull ContentSet values)
+    {
+        return getDefault();
+    }
+
+
+    private TimeZoneWrapper getDefault()
     {
         return new TimeZoneWrapper();
     }
 
 
     @Override
-    public void set(ContentSet values, TimeZone value)
+    public void set(@NonNull ContentSet values, @Nullable TimeZone value)
     {
         if (!isAllDay(values))
         {
@@ -238,7 +224,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 
 
     @Override
-    public void set(ContentValues values, TimeZone value)
+    public void set(@NonNull ContentValues values, TimeZone value)
     {
         if (!isAllDay(values))
         {
@@ -255,7 +241,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initalNotification)
     {
         values.addOnChangeListener(listener, mTzFieldName, initalNotification);
         if (mAllDayFieldName != null)
@@ -270,7 +256,7 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         values.removeOnChangeListener(listener, mTzFieldName);
         if (mAllDayFieldName != null)

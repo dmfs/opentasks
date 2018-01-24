@@ -18,6 +18,8 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -78,8 +80,9 @@ public class StringFieldAdapter extends FieldAdapter<String>
     }
 
 
+    @Nullable
     @Override
-    public String get(ContentSet values)
+    public String get(@NonNull ContentSet values)
     {
         // return the value as String
         return values.getAsString(mFieldName);
@@ -87,7 +90,7 @@ public class StringFieldAdapter extends FieldAdapter<String>
 
 
     @Override
-    public String get(Cursor cursor)
+    public String get(@NonNull Cursor cursor)
     {
         int columnIdx = cursor.getColumnIndex(mFieldName);
         if (columnIdx < 0)
@@ -99,35 +102,35 @@ public class StringFieldAdapter extends FieldAdapter<String>
 
 
     @Override
-    public String getDefault(ContentSet values)
+    public String getDefault(@NonNull ContentSet values)
     {
         return mDefaultValue;
     }
 
 
     @Override
-    public void set(ContentSet values, String value)
+    public void set(@NonNull ContentSet values, @Nullable String value)
     {
         values.put(mFieldName, value);
     }
 
 
     @Override
-    public void set(ContentValues values, String value)
+    public void set(@NonNull ContentValues values, @Nullable String value)
     {
         values.put(mFieldName, value);
     }
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initalNotification)
     {
         values.addOnChangeListener(listener, mFieldName, initalNotification);
     }
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         values.removeOnChangeListener(listener, mFieldName);
     }

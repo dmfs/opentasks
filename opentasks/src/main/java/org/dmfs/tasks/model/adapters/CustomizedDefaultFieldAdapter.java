@@ -17,6 +17,8 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -59,15 +61,17 @@ public class CustomizedDefaultFieldAdapter<Type> extends FieldAdapter<Type>
     }
 
 
+    @Nullable
     @Override
-    public Type get(ContentSet values)
+    public Type get(@NonNull ContentSet values)
     {
         return mFieldAdapter.get(values);
     }
 
 
+    @Nullable
     @Override
-    public Type get(Cursor cursor)
+    public Type get(@NonNull Cursor cursor)
     {
         return mFieldAdapter.get(cursor);
     }
@@ -81,8 +85,9 @@ public class CustomizedDefaultFieldAdapter<Type> extends FieldAdapter<Type>
      *
      * @return A default Value
      */
+    @Nullable
     @Override
-    public Type getDefault(ContentSet values)
+    public Type getDefault(@NonNull ContentSet values)
     {
         Type defaultValue = mFieldAdapter.getDefault(values);
         return mDefault.getCustomDefault(values, defaultValue);
@@ -90,28 +95,28 @@ public class CustomizedDefaultFieldAdapter<Type> extends FieldAdapter<Type>
 
 
     @Override
-    public void set(ContentSet values, Type value)
+    public void set(@NonNull ContentSet values, @Nullable Type value)
     {
         mFieldAdapter.set(values, value);
     }
 
 
     @Override
-    public void set(ContentValues values, Type value)
+    public void set(@NonNull ContentValues values, @Nullable Type value)
     {
         mFieldAdapter.set(values, value);
     }
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initialNotification)
     {
         mFieldAdapter.registerListener(values, listener, initialNotification);
     }
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         mFieldAdapter.unregisterListener(values, listener);
     }

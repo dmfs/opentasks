@@ -17,6 +17,8 @@
 package org.dmfs.tasks.model.adapters;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 
@@ -56,21 +58,21 @@ public final class DescriptionStringFieldAdapter extends StringFieldAdapter
 
 
     @Override
-    public String get(ContentSet values)
+    public String get(@NonNull ContentSet values)
     {
         return extractDescription(super.get(values));
     }
 
 
     @Override
-    public String get(Cursor cursor)
+    public String get(@NonNull Cursor cursor)
     {
         return extractDescription(super.get(cursor));
     }
 
 
     @Override
-    public void set(ContentSet values, String value)
+    public void set(@NonNull ContentSet values, @Nullable String value)
     {
         String oldValue = super.get(values);
         if (oldValue != null && oldValue.length() > 0)

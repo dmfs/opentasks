@@ -19,6 +19,8 @@ package org.dmfs.tasks.model.adapters;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -76,8 +78,9 @@ public final class UriFieldAdapter extends FieldAdapter<Uri>
     }
 
 
+    @Nullable
     @Override
-    public Uri get(ContentSet values)
+    public Uri get(@NonNull ContentSet values)
     {
         try
         {
@@ -90,8 +93,9 @@ public final class UriFieldAdapter extends FieldAdapter<Uri>
     }
 
 
+    @Nullable
     @Override
-    public Uri get(Cursor cursor)
+    public Uri get(@NonNull Cursor cursor)
     {
         int columnIdx = cursor.getColumnIndex(mFieldName);
         if (columnIdx < 0)
@@ -109,15 +113,16 @@ public final class UriFieldAdapter extends FieldAdapter<Uri>
     }
 
 
+    @Nullable
     @Override
-    public Uri getDefault(ContentSet values)
+    public Uri getDefault(@NonNull ContentSet values)
     {
         return mDefaultValue;
     }
 
 
     @Override
-    public void set(ContentSet values, Uri value)
+    public void set(@NonNull ContentSet values, @Nullable Uri value)
     {
         if (value == null)
         {
@@ -131,7 +136,7 @@ public final class UriFieldAdapter extends FieldAdapter<Uri>
 
 
     @Override
-    public void set(ContentValues values, Uri value)
+    public void set(@NonNull ContentValues values, @Nullable Uri value)
     {
         if (value == null)
         {
@@ -145,14 +150,14 @@ public final class UriFieldAdapter extends FieldAdapter<Uri>
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initalNotification)
     {
         values.addOnChangeListener(listener, mFieldName, initalNotification);
     }
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         values.removeOnChangeListener(listener, mFieldName);
     }

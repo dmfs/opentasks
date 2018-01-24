@@ -18,6 +18,8 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -52,7 +54,8 @@ public abstract class FieldAdapter<Type>
      *
      * @return The value.
      */
-    public abstract Type get(ContentSet values);
+    @Nullable
+    public abstract Type get(@NonNull ContentSet values);
 
     /**
      * Get the value from the given {@link Cursor}
@@ -62,7 +65,8 @@ public abstract class FieldAdapter<Type>
      *
      * @return The value.
      */
-    public abstract Type get(Cursor cursor);
+    @Nullable
+    public abstract Type get(@NonNull Cursor cursor);
 
     /**
      * Get a default value for this Adapter.
@@ -72,7 +76,8 @@ public abstract class FieldAdapter<Type>
      *
      * @return A default Value
      */
-    public abstract Type getDefault(ContentSet values);
+    @Nullable
+    public abstract Type getDefault(@NonNull ContentSet values);
 
     /**
      * Set a value in the given {@link ContentSet}.
@@ -82,7 +87,7 @@ public abstract class FieldAdapter<Type>
      * @param value
      *         The new value to store.
      */
-    public abstract void set(ContentSet values, Type value);
+    public abstract void set(@NonNull ContentSet values, @Nullable Type value);
 
     /**
      * Set a value in the given {@link ContentValues}.
@@ -92,7 +97,7 @@ public abstract class FieldAdapter<Type>
      * @param value
      *         The new value to store.
      */
-    public abstract void set(ContentValues values, Type value);
+    public abstract void set(@NonNull ContentValues values, @Nullable Type value);
 
 
     /**
@@ -103,7 +108,7 @@ public abstract class FieldAdapter<Type>
      * @param value
      *         The new value to store.
      */
-    public void validateAndSet(ContentSet values, Type value)
+    public final void validateAndSet(@NonNull ContentSet values, @Nullable Type value)
     {
         Type oldValue = get(values);
         value = checkConstraints(values, oldValue, value);
@@ -119,7 +124,7 @@ public abstract class FieldAdapter<Type>
      * @param listener
      *         The {@link OnContentChangeListener} to register.
      */
-    public abstract void registerListener(ContentSet values, OnContentChangeListener listener, boolean initialNotification);
+    public abstract void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initialNotification);
 
     /**
      * Unregister a listener for the fields that this adapter adapts.
@@ -129,7 +134,7 @@ public abstract class FieldAdapter<Type>
      * @param listener
      *         The {@link OnContentChangeListener} to unregister.
      */
-    public abstract void unregisterListener(ContentSet values, OnContentChangeListener listener);
+    public abstract void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener);
 
 
     /**
@@ -138,11 +143,11 @@ public abstract class FieldAdapter<Type>
      * @param constraint
      *         The new constraint.
      */
-    public final FieldAdapter<Type> addContraint(AbstractConstraint<Type> constraint)
+    public final FieldAdapter<Type> addConstraint(@NonNull AbstractConstraint<Type> constraint)
     {
         if (mConstraints == null)
         {
-            mConstraints = new LinkedList<AbstractConstraint<Type>>();
+            mConstraints = new LinkedList<>();
         }
         mConstraints.add(constraint);
         return this;
@@ -153,14 +158,13 @@ public abstract class FieldAdapter<Type>
      * Check all constraints and enforce them if possible.
      * <p>
      * TODO: Allow throwing an exception if any of the constraints could not be enforced. That requires some kind of transaction in {@link ContentSet}.
-     * </p>
      *
      * @param currentValues
      *         The current {@link ContentSet}.
      * @param newValue
      *         The new value to check.
      */
-    protected final Type checkConstraints(ContentSet currentValues, Type oldValue, Type newValue)
+    private Type checkConstraints(@NonNull ContentSet currentValues, @Nullable Type oldValue, @Nullable Type newValue)
     {
         if (mConstraints != null)
         {
