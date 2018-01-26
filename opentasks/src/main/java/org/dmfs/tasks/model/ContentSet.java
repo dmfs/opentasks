@@ -529,6 +529,10 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    /**
+     * @param key
+     *         the specific key in a {@link ContentSet} to listen the changes for, or <code>null</code> to be notified of full reloads.
+     */
     public void addOnChangeListener(@NonNull OnContentChangeListener listener, @Nullable String key, boolean notify)
     {
         Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
@@ -548,6 +552,11 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    /**
+     * @param key
+     *         The specific key in a {@link ContentSet} to remove the listening about, or <code>null</code> to remove listening from full reloads. See {@link
+     *         #addOnChangeListener(OnContentChangeListener, String, boolean)} as well.
+     */
     public void removeOnChangeListener(@NonNull OnContentChangeListener listener, @Nullable String key)
     {
         Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
