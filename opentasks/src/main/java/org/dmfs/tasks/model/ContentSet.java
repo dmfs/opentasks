@@ -84,16 +84,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     private final Set<OnContentChangeListener> mPendingNotifications = new HashSet<OnContentChangeListener>();
 
     /**
-     * Holds the name of the keys we've updated in {@link #mAfterContentValues}.
-     * <p>
-     * Before Android SDK level 11 there is no {@link ContentValues#keySet()} method. To be able to determine the keys in there we have to maintain the set
-     * ourselves.
-     * <p>
-     * Don't use this before calling {@link #ensureAfter()} at least once.
-     */
-    private Set<String> mAfterKeys;
-
-    /**
      * Indicates that loading is in process.
      */
     private boolean mLoading = false;
@@ -136,7 +126,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         if (other.mAfterContentValues != null)
         {
             mAfterContentValues = new ContentValues(other.mAfterContentValues);
-            mAfterKeys = new HashSet<String>(other.mAfterKeys);
         }
 
         mUri = other.mUri;
@@ -202,7 +191,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 context.getContentResolver().delete(mUri, null, null);
                 mBeforeContentValues = null;
                 mAfterContentValues = null;
-                mAfterKeys = null;
                 mUri = null;
             }
             else
@@ -285,7 +273,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
             return false;
         }
 
-        Set<String> keySet = new HashSet<>(mAfterKeys);
+        Set<String> keySet = new HashSet<>(mAfterContentValues.keySet());
 
         keySet.retainAll(keys);
 
@@ -296,7 +284,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
     public void ensureUpdates(@NonNull Set<String> keys)
     {
-        if (mBeforeContentValues == null || keys == null || keys.isEmpty())
+        if (mBeforeContentValues == null || keys.isEmpty())
         {
             // nothing to do
             return;
@@ -339,8 +327,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         {
             values = new ContentValues();
             mAfterContentValues = values;
-            // also create mAfterKeys
-            mAfterKeys = new HashSet<>();
         }
         return values;
     }
@@ -358,14 +344,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             // value has changed, update
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
@@ -395,13 +379,11 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
@@ -431,13 +413,11 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
@@ -467,13 +447,11 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
@@ -543,12 +521,10 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         if (mAfterContentValues != null)
         {
             mAfterContentValues.putNull(key);
-            mAfterKeys.add(key);
         }
         else if (mBeforeContentValues != null && mBeforeContentValues.get(key) != null)
         {
             ensureAfter().putNull(key);
-            mAfterKeys.add(key);
         }
     }
 
@@ -628,16 +604,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         dest.writeParcelable(mUri, flags);
         dest.writeParcelable(mBeforeContentValues, flags);
         dest.writeParcelable(mAfterContentValues, flags);
-
-        if (mAfterContentValues != null)
-        {
-            // It's not possible to write a Set to a parcel, so write the number of members and each member individually.
-            dest.writeInt(mAfterKeys.size());
-            for (String key : mAfterKeys)
-            {
-                dest.writeString(key);
-            }
-        }
     }
 
 
@@ -647,17 +613,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         mUri = source.readParcelable(loader);
         mBeforeContentValues = source.readParcelable(loader);
         mAfterContentValues = source.readParcelable(loader);
-
-        if (mAfterContentValues != null)
-        {
-            int count = source.readInt();
-            Set<String> keys = new HashSet<String>();
-            while (--count >= 0)
-            {
-                keys.add(source.readString());
-            }
-            mAfterKeys = keys;
-        }
     }
 
 
