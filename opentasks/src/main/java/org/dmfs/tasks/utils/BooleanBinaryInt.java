@@ -26,21 +26,21 @@ import org.dmfs.optional.Optional;
 
 
 /**
- * Adapter for a {@link Boolean} to a 0, 1 binary representation in {@link Long}.
+ * Adapter for a {@link Boolean} to a 0, 1 binary representation in {@link Integer}.
  * <p>
  * If the {@link Boolean} is absent/null the value is 0.
  *
  * @author Gabor Keszthelyi
  */
-public final class BooleanBinaryLong extends DelegatingSingle<Long>
+public final class BooleanBinaryInt extends DelegatingSingle<Integer>
 {
-    public BooleanBinaryLong(@NonNull Optional<Boolean> booleanOptional)
+    public BooleanBinaryInt(@NonNull Optional<Boolean> booleanOptional)
     {
-        super(() -> new Mapped<>(b -> b ? 1L : 0L, booleanOptional).value(0L));
+        super(() -> new Mapped<>(b -> b ? 1 : 0, booleanOptional).value(0));
     }
 
 
-    public BooleanBinaryLong(@Nullable Boolean booleanValue)
+    public BooleanBinaryInt(@Nullable Boolean booleanValue)
     {
         this(new NullSafe<>(booleanValue));
     }

@@ -23,7 +23,7 @@ import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
-import org.dmfs.tasks.utils.BooleanBinaryLong;
+import org.dmfs.tasks.utils.BooleanBinaryInt;
 
 
 /**
@@ -112,14 +112,14 @@ public final class BooleanFieldAdapter extends FieldAdapter<Boolean>
     @Override
     public void set(@NonNull ContentSet values, @Nullable Boolean value)
     {
-        values.put(mFieldName, new BooleanBinaryLong(value).value());
+        values.put(mFieldName, new BooleanBinaryInt(value).value());
     }
 
 
     @Override
     public void set(@NonNull ContentValues values, @Nullable Boolean value)
     {
-        values.put(mFieldName, new BooleanBinaryLong(value).value());
+        values.put(mFieldName, new BooleanBinaryInt(value).value());
     }
 
 
