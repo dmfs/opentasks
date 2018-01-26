@@ -1,0 +1,38 @@
+def support_lib_version = '25.4.0'
+def jems_version = '1.15'
+def contentpal_version = '9b087b2' // 9b087b2 -> 2017-12-12
+def support_test_runner_version = '0.5'
+
+ext.deps = [
+        // Support & Google libraries
+        support_appcompat  : "com.android.support:appcompat-v7:$support_lib_version",
+        support_annotations: "com.android.support:support-annotations:$support_lib_version",
+        support_design     : "com.android.support:design:$support_lib_version",
+        android_dashclock  : 'com.google.android.apps.dashclock:dashclock-api:2.0.0',
+
+        // dmfs
+        jems               : "org.dmfs:jems:$jems_version",
+        datetime           : 'org.dmfs:rfc5545-datetime:0.2.4',
+        lib_recur          : 'org.dmfs:lib-recur:0.10.1',
+        xml_magic          : 'org.dmfs:android-xml-magic:0.1.1',
+        color_picker       : 'com.github.dmfs.color-picker:colorpicker-activity:1.1',
+        android_carrot     : 'com.github.dmfs.androidcarrot:androidcarrot:13edc04',
+        bolts_color        : 'com.github.dmfs.bolts:color-bolts:27f34f7', // 27f34f7 -> 2017-12-04
+        contentpal         : "com.github.dmfs.contentpal:contentpal:$contentpal_version",
+
+        // 3rd party
+        codeka_carrot      : 'au.com.codeka:carrot:2.4.0',
+
+        // Testing
+        junit              : 'junit:junit:4.12',
+        hamcrest           : 'org.hamcrest:hamcrest-all:1.3',
+        mockito            : 'org.mockito:mockito-core:2.10.0',
+        robolectric        : 'org.robolectric:robolectric:3.5.1',
+        support_test_runner: "com.android.support.test:runner:$support_test_runner_version",
+        support_test_rules : "com.android.support.test:rules:$support_test_runner_version",
+
+        // dmfs testing
+        jems_testing       : "org.dmfs:jems-testing:$jems_version",
+        contenttestpal     : "com.github.dmfs.contentpal:contenttestpal:$contentpal_version",
+        contentpal_testing : "com.github.dmfs.contentpal:contentpal-testing:$contentpal_version"
+]
