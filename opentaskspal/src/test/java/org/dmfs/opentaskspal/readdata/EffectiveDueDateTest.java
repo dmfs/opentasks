@@ -53,7 +53,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(timestamp)).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new EffectiveDueDate(mockData).value();
@@ -68,7 +68,7 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         assertThat(new EffectiveDueDate(mockData), isAbsent());
@@ -82,7 +82,7 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(new Present<>(234234L)).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         assertThat(new EffectiveDueDate(mockData), isAbsent());
@@ -96,7 +96,7 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(new Present<>(Duration.parse("P7W"))).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         assertThat(new EffectiveDueDate(mockData), isAbsent());
@@ -112,7 +112,7 @@ public final class EffectiveDueDateTest
         doReturn(absent()).when(mockData).data(eq(Tasks.DUE), any());
         doReturn(new Present<>(timestamp)).when(mockData).data(eq(Tasks.DTSTART), any());
         doReturn(new Present<>(Duration.parse("PT2H"))).when(mockData).data(eq(Tasks.DURATION), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("Europe/Berlin")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new EffectiveDueDate(mockData).value();

@@ -17,7 +17,6 @@
 package org.dmfs.opentaskspal.readdata;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.jems.hamcrest.matchers.AbsentMatcher;
 import org.dmfs.optional.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -26,6 +25,7 @@ import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.dmfs.jems.hamcrest.matchers.AbsentMatcher.isAbsent;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
 import static org.dmfs.optional.Absent.absent;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -50,7 +50,7 @@ public final class RowSnapshotCombinedDateTimeTest
         doReturn(absent()).when(mockData).data(eq(Tasks.TZ), any());
         doReturn(absent()).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
 
-        assertThat(new RowDataSnapshotComposedDateTime(mockData, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new RowDataSnapshotComposedDateTime(mockData, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY), isAbsent());
     }
 
 
@@ -61,7 +61,7 @@ public final class RowSnapshotCombinedDateTimeTest
 
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
         doReturn(new Present<>(timeStamp)).when(mockData).data(eq(Tasks.DTSTART), any());
-        doReturn(new Present<>(1L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(1)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new RowDataSnapshotComposedDateTime(mockData, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY).value();
@@ -77,7 +77,7 @@ public final class RowSnapshotCombinedDateTimeTest
 
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
         doReturn(new Present<>(timeStamp)).when(mockData).data(eq(Tasks.DTSTART), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("UTC")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new RowDataSnapshotComposedDateTime(mockData, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY).value();
@@ -93,7 +93,7 @@ public final class RowSnapshotCombinedDateTimeTest
 
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
         doReturn(new Present<>(timeStamp)).when(mockData).data(eq(Tasks.DTSTART), any());
-        doReturn(new Present<>(0L)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
+        doReturn(new Present<>(0)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>("Europe/Berlin")).when(mockData).data(eq(Tasks.TZ), any());
 
         DateTime actual = new RowDataSnapshotComposedDateTime(mockData, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY).value();
