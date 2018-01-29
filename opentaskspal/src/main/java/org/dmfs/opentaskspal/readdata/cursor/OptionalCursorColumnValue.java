@@ -20,12 +20,11 @@ import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import org.dmfs.jems.function.BiFunction;
-import org.dmfs.opentaskspal.jems.optional.SingleOptional;
+import org.dmfs.jems.optional.decorators.Mapped;
+import org.dmfs.opentaskspal.jems.optional.Conditional;
+import org.dmfs.opentaskspal.jems.optional.Evaluated;
 import org.dmfs.optional.Optional;
-import org.dmfs.optional.Present;
 import org.dmfs.optional.decorators.DelegatingOptional;
-
-import static org.dmfs.optional.Absent.absent;
 
 
 /**
@@ -42,10 +41,13 @@ public final class OptionalCursorColumnValue<T> extends DelegatingOptional<T>
                                      @NonNull String columnName,
                                      @NonNull BiFunction<Cursor, Integer, T> getFunction)
     {
-        super(new SingleOptional<T>(() ->
-        {
-            int columnIndex = cursor.getColumnIndexOrThrow(columnName);
-            return cursor.isNull(columnIndex) ? absent() : new Present<>(getFunction.value(cursor, columnIndex));
-        }));
+        // Eager evaluation to avoid capturing Cursor
+        super(new Evaluated<>(
+                new Mapped<>(columnIndex -> getFunction.value(cursor, columnIndex),
+                        new Conditional<Integer>(cursor::isNull,
+                                cursor.getColumnIndexOrThrow(columnName))
+                ))
+        );
     }
 }
+

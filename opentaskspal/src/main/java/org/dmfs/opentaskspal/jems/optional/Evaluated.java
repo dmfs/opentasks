@@ -16,48 +16,52 @@
 
 package org.dmfs.opentaskspal.jems.optional;
 
-import org.dmfs.jems.single.Single;
-import org.dmfs.jems.single.elementary.Frozen;
 import org.dmfs.optional.Optional;
 
 import java.util.NoSuchElementException;
 
 
 /**
- * {@link Optional} that takes a {@link Single} of {@link Optional} and caches its value upon usage.
+ * Eagerly evaluation {@link Optional} decorator.
  *
  * @author Gabor Keszthelyi
  * @deprecated use it from jems when available
  */
 @Deprecated
-public final class SingleOptional<T> implements Optional<T>
+public final class Evaluated<T> implements Optional<T>
 {
-    private Single<Optional<T>> mSingleOptional;
+    private final boolean mIsPresent;
+    private final T mValue;
 
 
-    public SingleOptional(Single<Optional<T>> singleOptional)
+    public Evaluated(Optional<T> delegate)
     {
-        mSingleOptional = new Frozen<>(singleOptional);
+        mIsPresent = delegate.isPresent();
+        mValue = mIsPresent ? delegate.value() : null;
     }
 
 
     @Override
     public boolean isPresent()
     {
-        return mSingleOptional.value().isPresent();
+        return mIsPresent;
     }
 
 
     @Override
     public T value(T defaultValue)
     {
-        return mSingleOptional.value().value(defaultValue);
+        return mIsPresent ? mValue : defaultValue;
     }
 
 
     @Override
     public T value() throws NoSuchElementException
     {
-        return mSingleOptional.value().value();
+        if (!mIsPresent)
+        {
+            throw new NoSuchElementException("Value absent");
+        }
+        return mValue;
     }
 }
