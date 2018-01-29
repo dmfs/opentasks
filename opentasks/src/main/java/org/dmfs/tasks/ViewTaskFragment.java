@@ -260,7 +260,7 @@ public class ViewTaskFragment extends SupportFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        mShowFloatingActionButton = getResources().getBoolean(R.bool.opentasks_enabled_detail_view_fab);
+        mShowFloatingActionButton = !getResources().getBoolean(R.bool.has_two_panes);
 
         mRootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
         mContent = (ViewGroup) mRootView.findViewById(R.id.content);

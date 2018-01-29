@@ -2,6 +2,5 @@
 <resources>
 
     <bool name="has_two_panes">false</bool>
-    <bool name="opentasks_enabled_detail_view_fab">false</bool>
 
 </resources>
