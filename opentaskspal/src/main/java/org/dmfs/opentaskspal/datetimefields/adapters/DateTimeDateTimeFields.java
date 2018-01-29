@@ -58,8 +58,8 @@ public final class DateTimeDateTimeFields implements DateTimeFields
 
 
     @Override
-    public Long isAllDay()
+    public Integer isAllDay()
     {
-        return mDateTime.isAllDay() ? 1L : 0L;
+        return mDateTime.isAllDay() ? 1 : 0;
     }
 }

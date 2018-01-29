@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import org.dmfs.opentaskspal.datetimefields.DateTimeFields;
 import org.dmfs.opentaskspal.datetimefields.decorators.DelegatingDateTimeFields;
 import org.dmfs.opentaskspal.datetimefields.decorators.Evaluated;
+import org.dmfs.opentaskspal.readdata.cursor.IntCursorColumnValue;
 import org.dmfs.opentaskspal.readdata.cursor.LongCursorColumnValue;
 import org.dmfs.opentaskspal.readdata.cursor.StringCursorColumnValue;
 
@@ -82,9 +83,9 @@ public final class CursorDateTimeFields extends DelegatingDateTimeFields
 
         @Nullable
         @Override
-        public Long isAllDay()
+        public Integer isAllDay()
         {
-            return new LongCursorColumnValue(mCursor, mIsAllDayColumn).value(null);
+            return new IntCursorColumnValue(mCursor, mIsAllDayColumn).value(null);
         }
     }
 }

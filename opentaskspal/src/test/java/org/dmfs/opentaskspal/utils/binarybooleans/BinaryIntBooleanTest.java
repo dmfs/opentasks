@@ -16,35 +16,30 @@
 
 package org.dmfs.opentaskspal.utils.binarybooleans;
 
-import android.support.annotation.Nullable;
+import org.junit.Test;
 
-import org.dmfs.jems.single.Single;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 
 /**
- * Adapter from binary {@link Long} values 0 and 1 to {@link Boolean}.
- * {@code null} is considered as {@code false}.
- * <p>
- * (Also any other invalid value is considered as {@code false} as well.)
+ * Unit test for {@link BinaryIntBoolean}.
  *
  * @author Gabor Keszthelyi
  */
-public final class BinaryLongBoolean implements Single<Boolean>
+public final class BinaryIntBooleanTest
 {
-    private static final Long ONE = 1L;
 
-    private final Long mLongValue;
-
-
-    public BinaryLongBoolean(@Nullable Long longValue)
+    @Test
+    public void test()
     {
-        mLongValue = longValue;
+        assertThat(new BinaryIntBoolean(1).value(), is(true));
+        assertThat(new BinaryIntBoolean(0).value(), is(false));
+        assertThat(new BinaryIntBoolean(null).value(), is(false));
+
+        // Invalid values, considered as false to avoid validation code:
+        assertThat(new BinaryIntBoolean(-1).value(), is(false));
+        assertThat(new BinaryIntBoolean(2).value(), is(false));
     }
 
-
-    @Override
-    public Boolean value()
-    {
-        return ONE.equals(mLongValue);
-    }
 }

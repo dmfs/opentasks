@@ -66,8 +66,8 @@ public final class RowDataSnapshotDateTimeFields implements DateTimeFields
 
     @Nullable
     @Override
-    public Long isAllDay()
+    public Integer isAllDay()
     {
-        return mRowDataSnapshot.data(mIsAllDayKey, Long::valueOf).value(null);
+        return mRowDataSnapshot.data(mIsAllDayKey, Integer::valueOf).value(null);
     }
 }

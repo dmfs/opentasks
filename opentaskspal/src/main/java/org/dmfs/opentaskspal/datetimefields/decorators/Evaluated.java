@@ -30,7 +30,7 @@ public final class Evaluated implements DateTimeFields
 {
     private final Long mTimestamp;
     private final String mTimeZoneId;
-    private final Long mIsAllDay;
+    private final Integer mIsAllDay;
 
 
     public Evaluated(DateTimeFields delegate)
@@ -59,7 +59,7 @@ public final class Evaluated implements DateTimeFields
 
     @Nullable
     @Override
-    public Long isAllDay()
+    public Integer isAllDay()
     {
         return mIsAllDay;
     }

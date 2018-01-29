@@ -22,7 +22,7 @@ import org.dmfs.jems.optional.decorators.Mapped;
 import org.dmfs.jems.single.Single;
 import org.dmfs.opentaskspal.datetime.general.OptionalTimeZone;
 import org.dmfs.opentaskspal.datetimefields.DateTimeFields;
-import org.dmfs.opentaskspal.utils.binarybooleans.BinaryLongBoolean;
+import org.dmfs.opentaskspal.utils.binarybooleans.BinaryIntBoolean;
 import org.dmfs.optional.NullSafe;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.decorators.DelegatingOptional;
@@ -56,7 +56,7 @@ public final class OptionalCombinedDateTime extends DelegatingOptional<DateTime>
     {
         this(new NullSafe<>(fields.timestamp()),
                 new OptionalTimeZone(fields.timeZoneId()),
-                new BinaryLongBoolean(fields.isAllDay()));
+                new BinaryIntBoolean(fields.isAllDay()));
     }
 
 }

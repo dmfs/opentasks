@@ -55,7 +55,7 @@ public abstract class DelegatingDateTimeFields implements DateTimeFields
 
     @Nullable
     @Override
-    public final Long isAllDay()
+    public final Integer isAllDay()
     {
         return mDateTimeFields.isAllDay();
     }

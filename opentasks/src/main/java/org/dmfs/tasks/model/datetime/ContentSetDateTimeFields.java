@@ -81,9 +81,9 @@ public final class ContentSetDateTimeFields extends DelegatingDateTimeFields
 
         @Nullable
         @Override
-        public Long isAllDay()
+        public Integer isAllDay()
         {
-            return mContentSet.getAsLong(mIsAllDayKey);
+            return mContentSet.getAsInteger(mIsAllDayKey);
         }
     }
 }

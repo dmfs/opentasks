@@ -49,6 +49,6 @@ public interface DateTimeFields
      * ({@code null} if it's empty, which is always interpreted as 0-false)
      */
     @Nullable
-    Long isAllDay();
+    Integer isAllDay();
 
 }

@@ -26,7 +26,7 @@ import org.dmfs.opentaskspal.datetime.general.OptionalTimeZone;
 import org.dmfs.opentaskspal.datetimefields.DateTimeFields;
 import org.dmfs.opentaskspal.datetimefields.adapters.DateTimeDateTimeFields;
 import org.dmfs.opentaskspal.readdata.cursor.CursorCombinedDateTime;
-import org.dmfs.opentaskspal.utils.binarybooleans.BinaryLongBoolean;
+import org.dmfs.opentaskspal.utils.binarybooleans.BinaryIntBoolean;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -88,7 +88,7 @@ public final class CombinedDateTimeFieldAdapter extends FieldAdapter<DateTime>
         DateTimeFields fields = new ContentSetDateTimeFields(values, mTimestampField, mTimeZoneField, mIsAllDayField);
         return new CombinedDateTime(System.currentTimeMillis(),
                 new OptionalTimeZone(fields.timeZoneId()),
-                new BinaryLongBoolean(fields.isAllDay())).value();
+                new BinaryIntBoolean(fields.isAllDay())).value();
     }
 
 
