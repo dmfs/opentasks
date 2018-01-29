@@ -267,12 +267,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         // Bind the tabs to the ViewPager
         mTabs = (TabLayout) findViewById(R.id.tabs);
         mTabs.setupWithViewPager(mViewPager);
-
-        // set up the tab icons
-        for (int i = 0, count = mPagerAdapter.getCount(); i < count; ++i)
-        {
-            mTabs.getTabAt(i).setIcon(mPagerAdapter.getTabIcon(i));
-        }
+        setupTabIcons();
 
         mViewPager.addOnPageChangeListener(new OnPageChangeListener()
         {
@@ -343,6 +338,15 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
                     onAddNewTask();
                 }
             });
+        }
+    }
+
+
+    private void setupTabIcons()
+    {
+        for (int i = 0, count = mPagerAdapter.getCount(); i < count; ++i)
+        {
+            mTabs.getTabAt(i).setIcon(mPagerAdapter.getTabIcon(i));
         }
     }
 
@@ -528,6 +532,11 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             Uri newTaskUri = intent.getData();
             displayIntent.setData(newTaskUri);
             onNewIntent(displayIntent);
+
+            /* Icons have to be refreshed here because of some bug in ViewPager-TabLayout which causes them to disappear.
+            See https://github.com/dmfs/opentasks/issues/643
+            and https://stackoverflow.com/questions/42209046/tablayout-icons-disappear-after-viewpager-refresh */
+            setupTabIcons();
         }
     }
 
