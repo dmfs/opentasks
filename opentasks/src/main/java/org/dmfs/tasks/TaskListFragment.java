@@ -294,8 +294,7 @@ public class TaskListFragment extends SupportFragment
             mExpandableListView.expandGroups(mSavedExpandedGroups);
         }
 
-        FlingDetector swiper = new FlingDetector(mExpandableListView, mGroupDescriptor.getElementViewDescriptor().getFlingContentViewId(),
-                getActivity().getApplicationContext());
+        FlingDetector swiper = new FlingDetector(mExpandableListView, mGroupDescriptor.getElementViewDescriptor().getFlingContentViewId());
         swiper.setOnFlingListener(this);
 
         return rootView;

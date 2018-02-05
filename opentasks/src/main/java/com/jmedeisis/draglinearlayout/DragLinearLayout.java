@@ -36,12 +36,12 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -495,15 +495,7 @@ public class DragLinearLayout extends LinearLayout
         draggedItem.onDragStart();
         requestDisallowInterceptTouchEvent(true);
 
-        try
-        {
-            Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(VIBRATION_DURATION);
-        }
-        catch (Exception e)
-        {
-
-        }
+        performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
     }
 
 
