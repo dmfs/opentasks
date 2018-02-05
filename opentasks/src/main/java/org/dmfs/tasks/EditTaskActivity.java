@@ -69,14 +69,14 @@ public class EditTaskActivity extends BaseActivity
         actionBar.setHomeAsUpIndicator(R.drawable.content_remove_light);
         // actionBar.setDisplayShowTitleEnabled(false);
 
+        Intent intent = getIntent();
+        String action = intent.getAction();
+
+        setActivityTitle(action);
+
         if (savedInstanceState == null)
         {
-
             Bundle arguments = new Bundle();
-            Intent intent = getIntent();
-            String action = intent.getAction();
-
-            setActivityTitle(action);
 
             if (Intent.ACTION_SEND.equals(action))
             {
