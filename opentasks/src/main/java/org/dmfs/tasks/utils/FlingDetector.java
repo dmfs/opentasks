@@ -19,10 +19,9 @@ package org.dmfs.tasks.utils;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.os.Vibrator;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -57,7 +56,6 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
     private View mItemChildView;
     private VelocityTracker mVelocityTracker;
     private int mContentViewId;
-    private static Context mContext;
     private static Handler mHandler;
 
     private int mFlingDirection;
@@ -68,8 +66,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
         @Override
         public void run()
         {
-            Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(VIBRATION_DURATION);
+            mListView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
 
             // if we don't disallow that, fling doesn't work on some devices
             mListView.requestDisallowInterceptTouchEvent(true);
@@ -165,7 +162,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
      */
     public FlingDetector(ListView listview)
     {
-        this(listview, -1, null);
+        this(listview, -1);
     }
 
 
@@ -177,13 +174,12 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
      * @param flingContentViewId
      *         The layout id of the inner content view that is supposed to fling
      */
-    public FlingDetector(ListView listview, int flingContentViewId, Context context)
+    public FlingDetector(ListView listview, int flingContentViewId)
     {
         listview.setOnTouchListener(this);
         listview.setOnScrollListener(this);
         mListView = listview;
         mContentViewId = flingContentViewId;
-        mContext = context;
 
         ViewConfiguration vc = ViewConfiguration.get(listview.getContext());
 
