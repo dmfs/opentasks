@@ -36,5 +36,6 @@ local.properties
 .idea/vcs.xml
 .idea/runConfigurations.xml
 .idea/gradle.xml
+.idea/caches/
 *.iml
 
