@@ -15,8 +15,9 @@
 
 package org.dmfs.tasks.model.defaults;
 
-import android.text.format.Time;
-
+import org.dmfs.opentaskspal.datetime.general.StartOfHour;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
@@ -25,34 +26,34 @@ import org.dmfs.tasks.model.adapters.FieldAdapter;
  * Provides a value which defaults to NOW, but is always before a specific reference value.
  * All-day values are set to the previous day, date-time values are set to the start of the hour of the reference value.
  */
-public class DefaultBefore implements Default<Time>
+public class DefaultBefore implements Default<DateTime>
 {
 
-    private final FieldAdapter<Time> mReferenceAdapter;
+    private final FieldAdapter<DateTime> mReferenceAdapter;
 
 
-    public DefaultBefore(FieldAdapter<Time> referenceAdapter)
+    public DefaultBefore(FieldAdapter<DateTime> referenceAdapter)
     {
         mReferenceAdapter = referenceAdapter;
     }
 
 
     @Override
-    public Time getCustomDefault(ContentSet currentValues, Time genericDefault)
+    public DateTime getCustomDefault(ContentSet currentValues, DateTime genericDefault)
     {
-        Time reference = mReferenceAdapter != null ? mReferenceAdapter.get(currentValues) : null;
+        DateTime reference = mReferenceAdapter != null ? mReferenceAdapter.get(currentValues) : null;
         boolean useReference = reference != null && !genericDefault.before(reference);
-        Time value = new Time(useReference ? reference : genericDefault);
-        if (value.allDay)
+        DateTime value = useReference ? reference : genericDefault;
+        if (value.isAllDay())
         {
-            value.set(value.monthDay - (useReference ? 1 : 0), value.month, value.year);
+            if (useReference)
+            {
+                value = value.addDuration(new Duration(-1, 1, 0));
+            }
         }
         else
         {
-            value.minute--;
-            value.normalize(false);
-            value.second = 0;
-            value.minute = 0;
+            value = new StartOfHour(value).value();
         }
         return value;
     }

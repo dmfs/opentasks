@@ -20,36 +20,28 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.android.contentpal.projections.Composite;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.optional.Optional;
 import org.dmfs.optional.decorators.DelegatingOptional;
-import org.dmfs.optional.decorators.Mapped;
-import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+
+import java.util.TimeZone;
 
 
 /**
- * An {@link Optional} of a specific {@link DateTime} value of a task.
+ * {@link Optional} for the stored {@link TimeZone} of a task.
  *
  * @author Marten Gajda
  * @author Gabor Keszthelyi
  */
-public final class TaskDateTime extends DelegatingOptional<DateTime>
+public final class TaskTimezone extends DelegatingOptional<TimeZone>
 {
-    public static final Projection<Tasks> PROJECTION = new Composite<>(
-            new SingleColProjection<>(Tasks.IS_ALLDAY),
-            EffectiveTimezone.PROJECTION);
+    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.TZ);
 
 
-    public TaskDateTime(@NonNull String columnName, @NonNull final RowDataSnapshot<Tasks> rowData)
+    public TaskTimezone(@NonNull RowDataSnapshot<Tasks> rowData)
     {
-        super(new Mapped<>(
-
-                (Long timeStamp) -> rowData.data(Tasks.IS_ALLDAY, "1"::equals).value(false) ?
-                        new DateTime(timeStamp).toAllDay() :
-                        new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(rowData).value()),
-
-                rowData.data(columnName, Long::valueOf)));
+        super(rowData.data(Tasks.TZ, TimeZone::getTimeZone));
     }
+
 }

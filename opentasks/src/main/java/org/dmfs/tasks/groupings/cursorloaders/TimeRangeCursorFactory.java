@@ -18,7 +18,11 @@ package org.dmfs.tasks.groupings.cursorloaders;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.text.format.Time;
+
+import org.dmfs.opentaskspal.datetime.general.StartOfNextMonth;
+import org.dmfs.opentaskspal.datetime.general.StartOfNextYear;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 
 import java.util.Arrays;
 import java.util.List;
@@ -105,7 +109,7 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 
     protected final List<String> mProjectionList;
 
-    protected final Time mTime;
+    protected DateTime mTime;
     protected final TimeZone mTimezone;
 
 
@@ -114,19 +118,18 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
         super(projection);
         mProjectionList = Arrays.asList(projection);
         mTimezone = TimeZone.getDefault();
-        mTime = new Time(mTimezone.getID());
+        mTime = new DateTime(mTimezone, System.currentTimeMillis());
     }
 
 
     public Cursor getCursor()
     {
-        mTime.setToNow();
+        mTime = DateTime.now();
 
         MatrixCursor result = new MatrixCursor(mProjection);
 
         // get time of today 00:00:00
-        Time time = new Time(mTimezone.getID());
-        time.set(mTime.monthDay, mTime.month, mTime.year);
+        DateTime time = DateTime.now(mTimezone).startOfDay();
 
         // null row, for tasks without due date
         if (mProjectionList.contains(RANGE_NULL_ROW))
@@ -134,7 +137,7 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
             result.addRow(makeRow(1, 0, null, null));
         }
 
-        long t1 = time.toMillis(false);
+        long t1 = time.getTimestamp();
 
         // open past row for overdue tasks
         if (mProjectionList.contains(RANGE_OPEN_PAST))
@@ -142,40 +145,33 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
             result.addRow(makeRow(2, TYPE_END_OF_YESTERDAY, MIN_TIME, t1));
         }
 
-        time.monthDay += 1;
-        time.yearDay += 1;
-        time.normalize(true);
+        time = time.addDuration(new Duration(1, 1, 0));
 
         // today row
-        long t2 = time.toMillis(false);
+        long t2 = time.getTimestamp();
         result.addRow(makeRow(3, TYPE_END_OF_TODAY, t1, t2));
 
-        time.monthDay += 1;
-        time.yearDay += 1;
-        time.normalize(true);
+        time = time.addDuration(new Duration(1, 1, 0));
 
         // tomorrow row
-        long t3 = time.toMillis(false);
+        long t3 = time.getTimestamp();
         result.addRow(makeRow(4, TYPE_END_OF_TOMORROW, t2, t3));
 
-        time.monthDay += 5;
-        time.yearDay += 5;
-        time.normalize(true);
+        time = time.addDuration(new Duration(1, 5, 0));
 
         // next week row
-        long t4 = time.toMillis(false);
+        long t4 = time.getTimestamp();
         result.addRow(makeRow(5, TYPE_END_IN_7_DAYS, t3, t4));
 
-        time.set(1, time.month + 1, time.year);
-        time.normalize(true);
+        time = new StartOfNextMonth(time).value();
 
         // month row
-        long t5 = time.toMillis(false);
+        long t5 = time.getTimestamp();
         result.addRow(makeRow(6, TYPE_END_OF_A_MONTH, t4, t5));
 
-        time.set(1, 0, time.year + 1);
+        time = new StartOfNextYear(time).value();
         // rest of year row
-        long t6 = time.toMillis(false);
+        long t6 = time.getTimestamp();
         result.addRow(makeRow(7, TYPE_END_OF_A_YEAR, t5, t6));
 
         // open future for future tasks
@@ -199,9 +195,9 @@ public class TimeRangeCursorFactory extends AbstractCustomCursorFactory
 
         if (start != null && start > MIN_TIME && end != null && end < MAX_TIME)
         {
-            mTime.set((start + end) >> 1);
-            insertValue(result, RANGE_YEAR, mTime.year);
-            insertValue(result, RANGE_MONTH, mTime.month);
+            mTime = new DateTime((start + end) >> 1);
+            insertValue(result, RANGE_YEAR, mTime.getYear());
+            insertValue(result, RANGE_MONTH, mTime.getMonth());
         }
 
         if (start == null || start <= MIN_TIME)

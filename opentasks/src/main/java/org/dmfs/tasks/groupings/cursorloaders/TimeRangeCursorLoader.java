@@ -19,12 +19,10 @@ package org.dmfs.tasks.groupings.cursorloaders;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.Loader;
-import android.text.format.Time;
 
+import org.dmfs.opentaskspal.datetime.general.StartOfNextDay;
 import org.dmfs.tasks.utils.TimeChangeListener;
 import org.dmfs.tasks.utils.TimeChangeObserver;
-
-import java.util.TimeZone;
 
 
 /**
@@ -35,10 +33,6 @@ import java.util.TimeZone;
  */
 public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeChangeListener
 {
-    /**
-     * A helper to retrieve the timestamp for midnight.
-     */
-    private final Time mMidnight = new Time();
     private final TimeChangeObserver mTimeChangeObserver;
 
 
@@ -48,7 +42,7 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
 
         // set trigger at midnight
         mTimeChangeObserver = new TimeChangeObserver(context, this);
-        mTimeChangeObserver.setNextAlarm(getMidnightTimestamp());
+        mTimeChangeObserver.setNextAlarm(midnightTimestamp());
     }
 
 
@@ -56,7 +50,7 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
     public void onTimeUpdate(TimeChangeObserver observer)
     {
         // reset next alarm
-        observer.setNextAlarm(getMidnightTimestamp());
+        observer.setNextAlarm(midnightTimestamp());
 
         // notify LoaderManager
         onContentChanged();
@@ -67,7 +61,7 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
     public void onAlarm(TimeChangeObserver observer)
     {
         // set next alarm
-        observer.setNextAlarm(getMidnightTimestamp());
+        observer.setNextAlarm(midnightTimestamp());
 
         // notify LoaderManager
         onContentChanged();
@@ -82,14 +76,9 @@ public class TimeRangeCursorLoader extends CustomCursorLoader implements TimeCha
     }
 
 
-    private long getMidnightTimestamp()
+    private long midnightTimestamp()
     {
-        mMidnight.clear(TimeZone.getDefault().getID());
-        mMidnight.setToNow();
-        mMidnight.set(mMidnight.monthDay, mMidnight.month, mMidnight.year);
-        ++mMidnight.monthDay;
-        mMidnight.normalize(true);
-        return mMidnight.toMillis(false);
+        return new StartOfNextDay().value().getTimestamp();
     }
 
 }

@@ -21,7 +21,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
-import android.text.format.Time;
 import android.util.Log;
 
 
@@ -99,18 +98,6 @@ public class TimeChangeObserver extends BroadcastReceiver
         // set new callback at the specified alarm
         mHandler.removeCallbacks(mNotifier);
         mHandler.postAtTime(mNotifier, alarm - System.currentTimeMillis() + android.os.SystemClock.uptimeMillis());
-    }
-
-
-    /**
-     * Set an alarm time. Any previously set alarm will be discarded, that means only one alarm can be set at a time.
-     *
-     * @param alarm
-     *         The time when to trigger the alarm.
-     */
-    public void setNextAlarm(Time alarm)
-    {
-        setNextAlarm(alarm.toMillis(false));
     }
 
 

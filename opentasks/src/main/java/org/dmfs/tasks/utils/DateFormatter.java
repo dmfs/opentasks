@@ -18,20 +18,16 @@ package org.dmfs.tasks.utils;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.VisibleForTesting;
 import android.text.format.DateUtils;
-import android.text.format.Time;
 
 import org.dmfs.jems.pair.Pair;
 import org.dmfs.jems.pair.elementary.ValuePair;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Formatter;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import static android.text.format.DateUtils.DAY_IN_MILLIS;
 import static android.text.format.DateUtils.FORMAT_SHOW_TIME;
@@ -56,9 +52,9 @@ public class DateFormatter
         RELATIVE
                 {
                     @Override
-                    public boolean useRelative(Time now, Time date)
+                    public boolean useRelative(DateTime now, DateTime date)
                     {
-                        return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+                        return Math.abs(date.getTimestamp() - now.getTimestamp()) < 7 * 24 * 3600 * 1000;
                     }
                 },
 
@@ -68,9 +64,9 @@ public class DateFormatter
         DETAILS_VIEW
                 {
                     @Override
-                    public int getDateUtilsFlags(Time now, Time date)
+                    public int getDateUtilsFlags(DateTime now, DateTime date)
                     {
-                        if (date.allDay)
+                        if (date.isAllDay())
                         {
                             return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
                         }
@@ -90,9 +86,9 @@ public class DateFormatter
         LIST_VIEW
                 {
                     @Override
-                    public boolean useRelative(Time now, Time date)
+                    public boolean useRelative(DateTime now, DateTime date)
                     {
-                        return Math.abs(date.toMillis(false) - now.toMillis(false)) < 7 * 24 * 3600 * 1000;
+                        return Math.abs(date.getTimestamp() - now.getTimestamp()) < 7 * 24 * 3600 * 1000;
                     }
                 },
 
@@ -104,14 +100,14 @@ public class DateFormatter
         WIDGET_VIEW
                 {
                     @Override
-                    public int getDateUtilsFlags(Time now, Time date)
+                    public int getDateUtilsFlags(DateTime now, DateTime date)
                     {
                         int result = DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
-                        if (!date.allDay)
+                        if (!date.isAllDay())
                         {
                             result |= FORMAT_SHOW_TIME;
                         }
-                        if (now.year != date.year)
+                        if (now.getYear() != date.getYear())
                         {
                             result |= DateUtils.FORMAT_SHOW_YEAR;
                         }
@@ -125,7 +121,7 @@ public class DateFormatter
         DASHCLOCK_VIEW
                 {
                     @Override
-                    public int getDateUtilsFlags(Time now, Time date)
+                    public int getDateUtilsFlags(DateTime now, DateTime date)
                     {
                         return FORMAT_SHOW_TIME;
                     }
@@ -137,14 +133,14 @@ public class DateFormatter
         NOTIFICATION_VIEW_DATE
                 {
                     @Override
-                    public int getDateUtilsFlags(Time now, Time date)
+                    public int getDateUtilsFlags(DateTime now, DateTime date)
                     {
                         return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH;
                     }
 
 
                     @Override
-                    public boolean useRelative(Time now, Time date)
+                    public boolean useRelative(DateTime now, DateTime date)
                     {
                         return true;
                     }
@@ -156,28 +152,28 @@ public class DateFormatter
         NOTIFICATION_VIEW_TIME
                 {
                     @Override
-                    public int getDateUtilsFlags(Time now, Time date)
+                    public int getDateUtilsFlags(DateTime now, DateTime date)
                     {
                         return FORMAT_SHOW_TIME;
                     }
 
 
                     @Override
-                    public boolean useRelative(Time now, Time date)
+                    public boolean useRelative(DateTime now, DateTime date)
                     {
                         return false;
                     }
                 };
 
 
-        public int getDateUtilsFlags(Time now, Time date)
+        public int getDateUtilsFlags(DateTime now, DateTime date)
         {
-            if (now.year == date.year && now.yearDay == date.yearDay)
+            if (now.toAllDay().equals(date.toAllDay()))
             {
                 // today, show time only
                 return FORMAT_SHOW_TIME;
             }
-            else if (now.year == date.year)
+            else if (now.getYear() == date.getYear())
             {
                 // this year, don't include the year
                 return DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
@@ -190,7 +186,7 @@ public class DateFormatter
         }
 
 
-        public boolean useRelative(Time now, Time date)
+        public boolean useRelative(DateTime now, DateTime date)
         {
             return false;
         }
@@ -198,19 +194,9 @@ public class DateFormatter
 
 
     /**
-     * The format we use for due dates other than today.
-     */
-    private final DateFormat mDateFormat = DateFormat.getDateInstance(SimpleDateFormat.MEDIUM);
-
-    /**
      * A context to load resource string.
      */
     private Context mContext;
-
-    /**
-     * A helper to get the current date & time.
-     */
-    private Time mNow;
 
     private static Pair<Locale, Boolean> sIs12hourFormatCache;
 
@@ -218,35 +204,15 @@ public class DateFormatter
     public DateFormatter(Context context)
     {
         mContext = context;
-        mNow = new Time();
     }
 
 
     /**
      * Format the given due date. The result depends on the current date and on the all-day flag of the due date.
-     *
-     * @param date
-     *         The due date to format.
-     * @param useToday
-     *         <code>true</code> to write "today" instead of the date when the date is on the present day
-     *
-     * @return A string with the formatted due date.
-     */
-    public String format(Time date, DateFormatContext dateContext)
-    {
-        mNow.clear(TimeZone.getDefault().getID());
-        mNow.setToNow();
-        return format(date, mNow, dateContext);
-    }
-
-
-    /**
-     * Same as {@link #format(Time, DateFormatContext)} just with {@link DateTime}s.
-     * ({@link Time} will eventually be replaced with {@link DateTime} in the project)
      */
     public String format(DateTime date, DateFormatContext dateContext)
     {
-        return format(toTime(date), dateContext);
+        return format(date, DateTime.now(), dateContext);
     }
 
 
@@ -255,26 +221,19 @@ public class DateFormatter
      *
      * @param date
      *         The due date to format.
-     * @param useToday
-     *         <code>true</code> to write "today" instead of the date when the date is on the present day
      *
      * @return A string with the formatted due date.
      */
-    public String format(Time date, Time now, DateFormatContext dateContext)
+    public String format(DateTime date, DateTime now, DateFormatContext dateContext)
     {
-
-        // normalize time to ensure yearDay is set properly
-        date.normalize(false);
-
         if (dateContext.useRelative(now, date))
         {
-            long delta = Math.abs(now.toMillis(false) - date.toMillis(false));
+            long delta = Math.abs(now.getTimestamp() - date.getTimestamp());
 
-            if (date.allDay)
+            if (date.isAllDay())
             {
-                Time allDayNow = new Time("UTC");
-                allDayNow.set(now.monthDay, now.month, now.year);
-                return DateUtils.getRelativeTimeSpanString(date.toMillis(false), allDayNow.toMillis(false), DAY_IN_MILLIS).toString();
+                DateTime allDayNow = now.toAllDay();
+                return DateUtils.getRelativeTimeSpanString(date.getTimestamp(), allDayNow.getTimestamp(), DAY_IN_MILLIS).toString();
             }
             else if (delta < 60 * 1000)
             {
@@ -284,77 +243,36 @@ public class DateFormatter
             else if (delta < 60 * 60 * 1000)
             {
                 // time is within this hour, show number of minutes left
-                return DateUtils.getRelativeTimeSpanString(date.toMillis(false), now.toMillis(false), DateUtils.MINUTE_IN_MILLIS).toString();
+                return DateUtils.getRelativeTimeSpanString(date.getTimestamp(), now.getTimestamp(), DateUtils.MINUTE_IN_MILLIS).toString();
             }
             else if (delta < 24 * 60 * 60 * 1000)
             {
                 // time is within 24 hours, show relative string with time
                 // FIXME: instead of using a fixed 24 hour interval this should be aligned to midnight tomorrow and yesterday
-                return routingGetRelativeDateTimeString(mContext, date.toMillis(false), DAY_IN_MILLIS, WEEK_IN_MILLIS,
+                return routingGetRelativeDateTimeString(mContext, date.getTimestamp(), DAY_IN_MILLIS, WEEK_IN_MILLIS,
                         dateContext.getDateUtilsFlags(now, date)).toString();
             }
             else
             {
-                return DateUtils.getRelativeTimeSpanString(date.toMillis(false), now.toMillis(false), DAY_IN_MILLIS).toString();
+                return DateUtils.getRelativeTimeSpanString(date.getTimestamp(), now.getTimestamp(), DAY_IN_MILLIS).toString();
             }
         }
 
-        return date.allDay ? formatAllDay(date, now, dateContext) : formatNonAllDay(date, now, dateContext);
+        return date.isAllDay() ? formatAllDay(date, now, dateContext) : formatNonAllDay(date, now, dateContext);
     }
 
 
-    /**
-     * Same as {@link #format(Time, Time, DateFormatContext)} just with {@link DateTime}s.
-     * ({@link Time} will eventually be replaced with {@link DateTime} in the project)
-     */
-    public String format(DateTime date, DateTime now, DateFormatContext dateContext)
-    {
-        return format(toTime(date), toTime(now), dateContext);
-    }
-
-
-    private String formatAllDay(Time date, Time now, DateFormatContext dateContext)
+    private String formatAllDay(DateTime date, DateTime now, DateFormatContext dateContext)
     {
         // use DataRange in order to set the correct timezone
-        return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), date.toMillis(false), date.toMillis(false),
+        return DateUtils.formatDateRange(mContext, new Formatter(Locale.getDefault()), date.getTimestamp(), date.getTimestamp(),
                 dateContext.getDateUtilsFlags(now, date), "UTC").toString();
     }
 
 
-    private String formatNonAllDay(Time date, Time now, DateFormatContext dateContext)
+    private String formatNonAllDay(DateTime date, DateTime now, DateFormatContext dateContext)
     {
-        return DateUtils.formatDateTime(mContext, date.toMillis(false), dateContext.getDateUtilsFlags(now, date));
-    }
-
-
-    /**
-     * {@link Time} will eventually be replaced with {@link DateTime} in the project.
-     * This conversion function is only needed in the transition period.
-     */
-    @VisibleForTesting
-    Time toTime(DateTime dateTime)
-    {
-        if (dateTime.isFloating() && !dateTime.isAllDay())
-        {
-            throw new IllegalArgumentException("Cannot support floating DateTime that is not all-day, can't represent it with Time");
-        }
-
-        // Time always needs a TimeZone (default ctor falls back to TimeZone.getDefault())
-        String timeZoneId = dateTime.getTimeZone() == null ? "UTC" : dateTime.getTimeZone().getID();
-        Time time = new Time(timeZoneId);
-
-        time.set(dateTime.getTimestamp());
-
-        // TODO Would using time.set(monthDay, month, year) be better?
-        if (dateTime.isAllDay())
-        {
-            time.allDay = true;
-            // This is needed as per time.allDay docs:
-            time.hour = 0;
-            time.minute = 0;
-            time.second = 0;
-        }
-        return time;
+        return DateUtils.formatDateTime(mContext, date.getTimestamp(), dateContext.getDateUtilsFlags(now, date));
     }
 
 

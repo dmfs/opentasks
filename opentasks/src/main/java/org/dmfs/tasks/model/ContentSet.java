@@ -22,8 +22,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.dmfs.opentaskspal.jems.procedure.Procedure;
 import org.dmfs.tasks.utils.AsyncContentLoader;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnContentLoadedListener;
@@ -367,6 +369,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    @Nullable
     public Integer getAsInteger(String key)
     {
         final ContentValues after = mAfterContentValues;
@@ -402,6 +405,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    @Nullable
     public Long getAsLong(String key)
     {
         final ContentValues after = mAfterContentValues;
@@ -437,6 +441,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    @Nullable
     public String getAsString(String key)
     {
         final ContentValues after = mAfterContentValues;
@@ -472,6 +477,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    @Nullable
     public Float getAsFloat(String key)
     {
         final ContentValues after = mAfterContentValues;
@@ -520,6 +526,28 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
             }
         }
         --mBulkUpdates;
+    }
+
+
+    /**
+     * Execute a bulk update for this {@link ContentSet}.
+     * <p>
+     * Shortcut for using {@link #startBulkUpdate()} and {@link #finishBulkUpdate()}.
+     *
+     * @param body
+     *         do the changes to {@link ContentSet} here
+     */
+    public void bulkUpdate(Procedure<ContentSet> body)
+    {
+        startBulkUpdate();
+        try
+        {
+            body.process(this);
+        }
+        finally
+        {
+            finishBulkUpdate();
+        }
     }
 
 

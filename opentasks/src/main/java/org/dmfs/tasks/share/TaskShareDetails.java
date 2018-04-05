@@ -87,7 +87,7 @@ public final class TaskShareDetails implements Single<CharSequence>
                     new Composite(
                             new AndroidBindings(mContext),
                             new SingletonBindings("$task", new TaskBindings(mContentSet, mModel)),
-                            new SingletonBindings("tformat", new TimeFormatter(mContext, mContentSet))));
+                            new SingletonBindings("tformat", new DateTimeFormatterFunction(mContext, mContentSet))));
 
             Log.v("TaskShareDetails", output);
             return output;

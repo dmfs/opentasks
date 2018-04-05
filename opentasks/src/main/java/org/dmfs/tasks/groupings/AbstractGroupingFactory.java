@@ -16,8 +16,10 @@
 
 package org.dmfs.tasks.groupings;
 
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Instances;
-import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.CombinedDateTimeFieldAdapter;
+import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 
@@ -42,12 +44,14 @@ public abstract class AbstractGroupingFactory
     /**
      * An adapter to load the due date from the instances projection. This is used by most groupings
      */
-    public final static TimeFieldAdapter INSTANCE_DUE_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ, Instances.IS_ALLDAY);
+    public final static FieldAdapter<DateTime> INSTANCE_DUE_ADAPTER = new CombinedDateTimeFieldAdapter(Instances.INSTANCE_DUE, Instances.TZ,
+            Instances.IS_ALLDAY);
 
     /**
      * An adapter to load the start date from the instances projection. This is used by most groupings
      */
-    public final static TimeFieldAdapter INSTANCE_START_ADAPTER = new TimeFieldAdapter(Instances.INSTANCE_START, Instances.TZ, Instances.IS_ALLDAY);
+    public final static FieldAdapter<DateTime> INSTANCE_START_ADAPTER = new CombinedDateTimeFieldAdapter(Instances.INSTANCE_START, Instances.TZ,
+            Instances.IS_ALLDAY);
 
     /**
      * The authority of the content provider.

@@ -15,8 +15,8 @@
 
 package org.dmfs.tasks.model.constraints;
 
-import android.text.format.Time;
-
+import org.dmfs.opentaskspal.datetime.general.MillisDuration;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.defaults.Default;
@@ -28,13 +28,13 @@ import org.dmfs.tasks.model.defaults.DefaultAfter;
  * Otherwise, shift the reference time by the same amount that value has been shifted.
  * If this still violated the constraint, then set the reference value to its default value.
  */
-public class BeforeOrShiftTime extends AbstractConstraint<Time>
+public class BeforeOrShiftTime extends AbstractConstraint<DateTime>
 {
-    private final FieldAdapter<Time> mReferenceAdapter;
-    private final Default<Time> mDefault;
+    private final FieldAdapter<DateTime> mReferenceAdapter;
+    private final Default<DateTime> mDefault;
 
 
-    public BeforeOrShiftTime(FieldAdapter<Time> referenceAdapter)
+    public BeforeOrShiftTime(FieldAdapter<DateTime> referenceAdapter)
     {
         mReferenceAdapter = referenceAdapter;
         mDefault = new DefaultAfter(null);
@@ -42,24 +42,23 @@ public class BeforeOrShiftTime extends AbstractConstraint<Time>
 
 
     @Override
-    public Time apply(ContentSet currentValues, Time oldValue, Time newValue)
+    public DateTime apply(ContentSet currentValues, DateTime oldValue, DateTime newValue)
     {
-        Time reference = mReferenceAdapter.get(currentValues);
+        DateTime reference = mReferenceAdapter.get(currentValues);
         if (reference != null && newValue != null)
         {
             if (oldValue != null && !newValue.before(reference))
             {
                 // try to shift the reference value
-                long diff = newValue.toMillis(false) - oldValue.toMillis(false);
+                long diff = newValue.getTimestamp() - oldValue.getTimestamp();
                 if (diff > 0)
                 {
-                    boolean isAllDay = reference.allDay;
-                    reference.set(reference.toMillis(false) + diff);
-
+                    boolean isAllDay = reference.isAllDay();
+                    reference = reference.addDuration(new MillisDuration(diff).value());
                     // ensure the event is still allday if is was allday before.
                     if (isAllDay)
                     {
-                        reference.set(reference.monthDay, reference.month, reference.year);
+                        reference = reference.toAllDay();
                     }
                     mReferenceAdapter.set(currentValues, reference);
                 }
@@ -67,7 +66,7 @@ public class BeforeOrShiftTime extends AbstractConstraint<Time>
             if (!newValue.before(reference))
             {
                 // constraint is still violated, so set reference to its default value
-                reference.set(mDefault.getCustomDefault(currentValues, newValue));
+                reference = mDefault.getCustomDefault(currentValues, newValue);
                 mReferenceAdapter.set(currentValues, reference);
             }
         }

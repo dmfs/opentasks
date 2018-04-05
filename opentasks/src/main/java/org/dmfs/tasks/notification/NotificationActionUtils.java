@@ -33,9 +33,10 @@ import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.DateUtils;
-import android.text.format.Time;
 import android.widget.RemoteViews;
 
+import org.dmfs.opentaskspal.datetime.CombinedDateTime;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.notification.signals.Conditional;
 import org.dmfs.tasks.notification.signals.NoSignal;
@@ -43,7 +44,6 @@ import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 
 import java.util.HashMap;
-import java.util.TimeZone;
 
 
 /**
@@ -88,7 +88,7 @@ public class NotificationActionUtils
         }
         else
         {
-            dueString = context.getString(R.string.notification_task_due_date, formatTime(context, makeTime(dueDate, dueAllDay)));
+            dueString = context.getString(R.string.notification_task_due_date, formatTime(context, new CombinedDateTime(dueDate, timezone, false).value()));
         }
 
         // build notification
@@ -140,10 +140,7 @@ public class NotificationActionUtils
         // set displayed time
         if (dueAllDay)
         {
-            Time now = new Time();
-            now.setToNow();
-            now.set(0, 0, 0, now.monthDay, now.month, now.year);
-            mBuilder.setWhen(now.toMillis(true));
+            mBuilder.setWhen(DateTime.now().startOfDay().getTimestamp());
         }
         else
         {
@@ -166,7 +163,8 @@ public class NotificationActionUtils
         }
         else
         {
-            startString = context.getString(R.string.notification_task_start_date, formatTime(context, makeTime(startDate, startAllDay)));
+            startString = context.getString(R.string.notification_task_start_date,
+                    formatTime(context, new CombinedDateTime(startDate, timezone, false).value()));
         }
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -197,10 +195,7 @@ public class NotificationActionUtils
         // set displayed time
         if (startAllDay)
         {
-            Time now = new Time();
-            now.setToNow();
-            now.set(0, 0, 0, now.monthDay, now.month, now.year);
-            mBuilder.setWhen(now.toMillis(true));
+            mBuilder.setWhen(DateTime.now().startOfDay().getTimestamp());
         }
         else
         {
@@ -393,37 +388,20 @@ public class NotificationActionUtils
     }
 
 
-    private static Time makeTime(long timestamp, boolean allday)
-    {
-        Time result = new Time(allday ? Time.TIMEZONE_UTC : TimeZone.getDefault().getID());
-        result.set(timestamp);
-        result.allDay = allday;
-        return result;
-    }
-
-
     /**
      * Returns a string representation for the time, with a relative date and an absolute time
      */
-    public static String formatTime(Context context, Time time)
+    public static String formatTime(Context context, DateTime dateTime)
     {
-        Time now = new Time();
-        now.setToNow();
-        String dateString;
-        if (time.allDay)
-        {
-            Time allDayNow = new Time("UTC");
-            allDayNow.set(now.monthDay, now.month, now.year);
-            dateString = DateUtils.getRelativeTimeSpanString(time.toMillis(false), allDayNow.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
-        }
-        else
-        {
-            dateString = DateUtils.getRelativeTimeSpanString(time.toMillis(false), now.toMillis(false), DateUtils.DAY_IN_MILLIS).toString();
-        }
+        long nowForRelative = dateTime.isAllDay() ? dateTime.getTimestamp() : System.currentTimeMillis();
+        String dateString = DateUtils.getRelativeTimeSpanString(
+                dateTime.getTimestamp(),
+                nowForRelative,
+                DateUtils.DAY_IN_MILLIS).toString();
 
-        // return combined date and time
-        String timeString = new DateFormatter(context).format(time, DateFormatContext.NOTIFICATION_VIEW_TIME);
-        return new StringBuilder().append(dateString).append(", ").append(timeString).toString();
+        String timeString = new DateFormatter(context).format(dateTime, DateFormatContext.NOTIFICATION_VIEW_TIME);
+
+        return dateString + ", " + timeString;
     }
 
 

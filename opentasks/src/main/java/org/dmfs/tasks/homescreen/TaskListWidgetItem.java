@@ -16,7 +16,7 @@
 
 package org.dmfs.tasks.homescreen;
 
-import android.text.format.Time;
+import org.dmfs.rfc5545.DateTime;
 
 
 /**
@@ -36,7 +36,7 @@ public class TaskListWidgetItem
     /**
      * The due date.
      */
-    private final Time mDueDate;
+    private final DateTime mDueDate;
 
     /**
      * The task color.
@@ -68,7 +68,7 @@ public class TaskListWidgetItem
      * @param isClosed
      *         the flag to indicate if closed
      */
-    public TaskListWidgetItem(int id, String title, Time due, int color, boolean isClosed)
+    public TaskListWidgetItem(int id, String title, DateTime due, int color, boolean isClosed)
     {
         mTaskId = id;
         mTaskTitle = title;
@@ -94,7 +94,7 @@ public class TaskListWidgetItem
      *
      * @return the due date
      */
-    public Time getDueDate()
+    public DateTime getDueDate()
     {
         return mDueDate;
     }

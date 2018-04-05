@@ -41,7 +41,7 @@ public final class EffectiveDueDate extends DelegatingOptional<DateTime>
 {
     public static final Projection<Tasks> PROJECTION = new Composite<>(
             new MultiProjection<>(Tasks.DUE, Tasks.DTSTART),
-            TaskDateTime.PROJECTION,
+            RowSnapshotComposedTaskDateTime.PROJECTION,
             TaskDuration.PROJECTION);
 
 
@@ -49,9 +49,9 @@ public final class EffectiveDueDate extends DelegatingOptional<DateTime>
     {
         super(new FirstPresent<>(
                 new Seq<>(
-                        new TaskDateTime(Tasks.DUE, rowDataSnapshot),
+                        new RowSnapshotComposedTaskDateTime(Tasks.DUE, rowDataSnapshot),
                         new Zipped<>(
-                                new TaskDateTime(Tasks.DTSTART, rowDataSnapshot),
+                                new RowSnapshotComposedTaskDateTime(Tasks.DTSTART, rowDataSnapshot),
                                 new TaskDuration(rowDataSnapshot),
                                 DateTime::addDuration))));
     }

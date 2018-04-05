@@ -15,8 +15,9 @@
 
 package org.dmfs.tasks.model.defaults;
 
-import android.text.format.Time;
-
+import org.dmfs.opentaskspal.datetime.general.StartOfNextHour;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 
@@ -25,35 +26,32 @@ import org.dmfs.tasks.model.adapters.FieldAdapter;
  * Provides a value which defaults to NOW, but is always after a specific reference value.
  * All-day values are set to the next day, date-time values are set to the next hour of the reference value.
  */
-public class DefaultAfter implements Default<Time>
+public class DefaultAfter implements Default<DateTime>
 {
 
-    private final FieldAdapter<Time> mReferenceAdapter;
+    private final FieldAdapter<DateTime> mReferenceAdapter;
 
 
-    public DefaultAfter(FieldAdapter<Time> referenceAdapter)
+    public DefaultAfter(FieldAdapter<DateTime> referenceAdapter)
     {
         mReferenceAdapter = referenceAdapter;
     }
 
 
     @Override
-    public Time getCustomDefault(ContentSet currentValues, Time genericDefault)
+    public DateTime getCustomDefault(ContentSet currentValues, DateTime genericDefault)
     {
-        Time reference = mReferenceAdapter != null ? mReferenceAdapter.get(currentValues) : null;
+        DateTime reference = mReferenceAdapter != null ? mReferenceAdapter.get(currentValues) : null;
         boolean useReference = reference != null && !genericDefault.after(reference);
-        Time value = new Time(useReference ? reference : genericDefault);
-        if (value.allDay)
+        DateTime value = useReference ? reference : genericDefault;
+        if (value.isAllDay())
         {
-            value.monthDay++;
+            value = value.addDuration(new Duration(1, 1, 0));
         }
         else
         {
-            value.second = 0;
-            value.minute = 0;
-            value.hour++;
+            value = new StartOfNextHour(value).value();
         }
-        value.normalize(false);
         return value;
     }
 }

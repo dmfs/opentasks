@@ -43,9 +43,11 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
-import android.text.format.Time;
 import android.util.Log;
 
+import org.dmfs.opentaskspal.datetime.CombinedDateTime;
+import org.dmfs.opentaskspal.datetime.general.OptionalTimeZone;
+import org.dmfs.opentaskspal.datetime.general.TimeZones;
 import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
@@ -380,8 +382,8 @@ public class NotificationUpdaterService extends Service
         // complete action
         if (!closed)
         {
-            Time dueTime = TaskFieldAdapters.DUE.get(task);
-            long dueTimestamp = dueTime == null ? 0 : dueTime.toMillis(true);
+            DateTime due = TaskFieldAdapters.DUE.get(task);
+            long dueTimestamp = due == null ? 0 : due.getTimestamp();
 
             NotificationAction completeAction = new NotificationAction(NotificationUpdaterService.ACTION_COMPLETE, TaskFieldAdapters.TITLE.get(task),
                     R.string.notification_action_completed, TaskFieldAdapters.TASK_ID.get(task), task.getUri(), dueTimestamp);
@@ -406,22 +408,26 @@ public class NotificationUpdaterService extends Service
         }
 
         boolean isAllDay = TaskFieldAdapters.ALLDAY.get(task);
-        Time now = new Time();
-        now.setToNow();
-        now.minute--;
-        Time start = TaskFieldAdapters.DTSTART.get(task);
-        Time due = TaskFieldAdapters.DUE.get(task);
+        DateTime now = DateTime.now().addDuration(new Duration(-1, 0, 0, 1, 0));
+        DateTime start = TaskFieldAdapters.DTSTART.get(task);
+        DateTime due = TaskFieldAdapters.DUE.get(task);
 
-        if (start != null && start.toMillis(true) > 0 && (now.before(start) || due == null))
+        if (start != null && start.getTimestamp() > 0 && (now.before(start) || due == null))
         {
-            start.allDay = isAllDay;
+            if (isAllDay)
+            {
+                start = start.toAllDay();
+            }
             String startString = context.getString(R.string.notification_task_start_date, NotificationActionUtils.formatTime(context, start));
             return startString;
         }
 
-        if (due != null && due.toMillis(true) > 0)
+        if (due != null && due.getTimestamp() > 0)
         {
-            due.allDay = isAllDay;
+            if (isAllDay)
+            {
+                due = due.toAllDay();
+            }
             String dueString = context.getString(R.string.notification_task_due_date, NotificationActionUtils.formatTime(context, due));
             return dueString;
         }
@@ -574,7 +580,7 @@ public class NotificationUpdaterService extends Service
         final String action = intent.getAction();
         final Uri taskUri = intent.getData();
         long due = intent.getLongExtra(EXTRA_TASK_DUE, -1);
-        String tz = intent.getStringExtra(EXTRA_TIMEZONE);
+        TimeZone tz = new OptionalTimeZone(intent.getStringExtra(EXTRA_TIMEZONE)).value(TimeZones.UTC);
         boolean allDay = intent.getBooleanExtra(EXTRA_ALLDAY, false);
 
         int notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1);
@@ -584,25 +590,12 @@ public class NotificationUpdaterService extends Service
 
         if (ACTION_DELAY_1H.equals(action))
         {
-            Time time = new Time(tz);
-            time.set(due);
-            time.allDay = false;
-            time.hour++;
-            time.normalize(true);
-            delayTask(taskUri, time);
+            delayTask(taskUri,
+                    new DateTime(tz, due).addDuration(new Duration(1, 0, 1, 0, 0)));
         }
         else if (ACTION_DELAY_1D.equals(action))
         {
-            if (tz == null)
-            {
-                tz = "UTC";
-            }
-            Time time = new Time(tz);
-            time.set(due);
-            time.allDay = allDay;
-            time.monthDay++;
-            time.normalize(true);
-            delayTask(taskUri, time);
+            delayTask(taskUri, new CombinedDateTime(due, tz, allDay).value().addDuration(new Duration(1, 1, 0)));
         }
 
     }
@@ -649,7 +642,7 @@ public class NotificationUpdaterService extends Service
     }
 
 
-    private void delayTask(Uri taskUri, Time dueTime)
+    private void delayTask(Uri taskUri, DateTime dueTime)
     {
         ContentValues values = new ContentValues(4);
         TaskFieldAdapters.DUE.set(values, dueTime);

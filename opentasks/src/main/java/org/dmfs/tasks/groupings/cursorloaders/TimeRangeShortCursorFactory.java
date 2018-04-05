@@ -18,7 +18,9 @@ package org.dmfs.tasks.groupings.cursorloaders;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.text.format.Time;
+
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.Duration;
 
 
 /**
@@ -41,35 +43,29 @@ public class TimeRangeShortCursorFactory extends TimeRangeCursorFactory
     @Override
     public Cursor getCursor()
     {
-        mTime.setToNow();
+        mTime = DateTime.now();
 
         MatrixCursor result = new MatrixCursor(mProjection);
 
-        Time time = new Time(mTimezone.getID());
-        time.set(mTime.monthDay + 1, mTime.month, mTime.year);
+        DateTime time = DateTime.now(mTimezone).addDuration(new Duration(1, 1, 0));
 
         // today row (including overdue)
-        long t2 = time.toMillis(false);
+        long t2 = time.getTimestamp();
         result.addRow(makeRow(1, TYPE_END_OF_TODAY, MIN_TIME, t2));
 
-        time.monthDay += 1;
-        time.yearDay += 1;
-        time.normalize(true);
+        time = time.addDuration(new Duration(1, 1, 0));
 
         // tomorrow row
-        long t3 = time.toMillis(false);
+        long t3 = time.getTimestamp();
         result.addRow(makeRow(2, TYPE_END_OF_TOMORROW, t2, t3));
 
-        time.monthDay += 5;
-        time.yearDay += 5;
-        time.normalize(true);
+        time = time.addDuration(new Duration(1, 5, 0));
 
         // next week row
-        long t4 = time.toMillis(false);
+        long t4 = time.getTimestamp();
         result.addRow(makeRow(3, TYPE_END_IN_7_DAYS, t3, t4));
 
-        time.monthDay += 1;
-        time.normalize(true);
+        time = time.addDuration(new Duration(1, 1, 0));
 
         // open future for future tasks (including tasks without dates)
         if (mProjectionList.contains(RANGE_OPEN_FUTURE))
