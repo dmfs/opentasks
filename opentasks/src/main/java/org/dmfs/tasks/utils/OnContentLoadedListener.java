@@ -17,6 +17,7 @@
 package org.dmfs.tasks.utils;
 
 import android.content.ContentValues;
+import android.support.annotation.NonNull;
 
 
 /**
@@ -32,5 +33,5 @@ public interface OnContentLoadedListener
      * @param values
      *         The loaded {@link ContentValues}.
      */
-    public void onContentLoaded(ContentValues values);
+    void onContentLoaded(@NonNull ContentValues values);
 }

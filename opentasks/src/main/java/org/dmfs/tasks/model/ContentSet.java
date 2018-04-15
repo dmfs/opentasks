@@ -22,6 +22,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.dmfs.tasks.utils.AsyncContentLoader;
@@ -82,16 +84,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     private final Set<OnContentChangeListener> mPendingNotifications = new HashSet<OnContentChangeListener>();
 
     /**
-     * Holds the name of the keys we've updated in {@link #mAfterContentValues}.
-     * <p>
-     * Before Android SDK level 11 there is no {@link ContentValues#keySet()} method. To be able to determine the keys in there we have to maintain the set
-     * ourselves.
-     * <p>
-     * Don't use this before calling {@link #ensureAfter()} at least once.
-     */
-    private Set<String> mAfterKeys;
-
-    /**
      * Indicates that loading is in process.
      */
     private boolean mLoading = false;
@@ -112,13 +104,8 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      * @param uri
      *         A content URI, either a directory URI or an item URI.
      */
-    public ContentSet(Uri uri)
+    public ContentSet(@NonNull Uri uri)
     {
-        if (uri == null)
-        {
-            throw new IllegalArgumentException("uri must not be null");
-        }
-
         mUri = uri;
     }
 
@@ -129,13 +116,8 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      * @param other
      *         The {@link ContentSet} to clone.
      */
-    public ContentSet(ContentSet other)
+    public ContentSet(@NonNull ContentSet other)
     {
-        if (other == null)
-        {
-            throw new IllegalArgumentException("other must not be null");
-        }
-
         if (other.mBeforeContentValues != null)
         {
             mBeforeContentValues = new ContentValues(other.mBeforeContentValues);
@@ -144,7 +126,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         if (other.mAfterContentValues != null)
         {
             mAfterContentValues = new ContentValues(other.mAfterContentValues);
-            mAfterKeys = new HashSet<String>(other.mAfterKeys);
         }
 
         mUri = other.mUri;
@@ -159,7 +140,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      * @param mapper
      *         The {@link ContentValueMapper} to use when loading the values.
      */
-    public void update(Context context, ContentValueMapper mapper)
+    public void update(@NonNull Context context, @NonNull ContentValueMapper mapper)
     {
         String itemType = context.getContentResolver().getType(mUri);
         if (itemType != null && !itemType.startsWith(ContentResolver.CURSOR_DIR_BASE_TYPE))
@@ -175,7 +156,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
 
     @Override
-    public void onContentLoaded(ContentValues values)
+    public void onContentLoaded(@NonNull ContentValues values)
     {
         mBeforeContentValues = values;
         mLoading = false;
@@ -200,7 +181,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      * @param context
      *         A context.
      */
-    public void delete(Context context)
+    public void delete(@NonNull Context context)
     {
         if (mUri != null)
         {
@@ -210,7 +191,6 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 context.getContentResolver().delete(mUri, null, null);
                 mBeforeContentValues = null;
                 mAfterContentValues = null;
-                mAfterKeys = null;
                 mUri = null;
             }
             else
@@ -226,10 +206,16 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public Uri persist(Context context)
+    @NonNull
+    public Uri persist(@NonNull Context context)
     {
         if (mAfterContentValues == null || mAfterContentValues.size() == 0)
         {
+            if (mUri == null)
+            {
+                throw new IllegalStateException("Task uri is null, cannot persist(). (Called after delete()?)");
+            }
+
             // nothing to do here
             return mUri;
         }
@@ -247,6 +233,11 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
 
         mAfterContentValues = null;
 
+        if (mUri == null)
+        {
+            throw new IllegalStateException("Task uri is null, cannot persist(). (Called after delete()?)");
+        }
+
         return mUri;
     }
 
@@ -263,26 +254,26 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public boolean containsKey(String key)
+    public boolean containsKey(@NonNull String key)
     {
         return mAfterContentValues != null && mAfterContentValues.containsKey(key) || mBeforeContentValues != null && mBeforeContentValues.containsKey(key);
     }
 
 
-    public boolean persistsKey(String key)
+    private boolean persistsKey(@NonNull String key)
     {
         return mAfterContentValues != null && mAfterContentValues.containsKey(key);
     }
 
 
-    public boolean updatesAnyKey(Set<String> keys)
+    public boolean updatesAnyKey(@NonNull Set<String> keys)
     {
         if (mAfterContentValues == null)
         {
             return false;
         }
 
-        Set<String> keySet = new HashSet<String>(mAfterKeys);
+        Set<String> keySet = new HashSet<>(mAfterContentValues.keySet());
 
         keySet.retainAll(keys);
 
@@ -291,9 +282,9 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public void ensureUpdates(Set<String> keys)
+    public void ensureUpdates(@NonNull Set<String> keys)
     {
-        if (mBeforeContentValues == null || keys == null || keys.isEmpty())
+        if (mBeforeContentValues == null || keys.isEmpty())
         {
             // nothing to do
             return;
@@ -328,6 +319,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
+    @NonNull
     private ContentValues ensureAfter()
     {
         ContentValues values = mAfterContentValues;
@@ -335,14 +327,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         {
             values = new ContentValues();
             mAfterContentValues = values;
-            // also create mAfterKeys
-            mAfterKeys = new HashSet<String>();
         }
         return values;
     }
 
 
-    public void put(String key, Integer value)
+    public void put(@NonNull String key, @Nullable Integer value)
     {
         Integer oldValue = getAsInteger(key);
         if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
@@ -354,20 +344,19 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             // value has changed, update
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
 
 
-    public Integer getAsInteger(String key)
+    @Nullable
+    public Integer getAsInteger(@NonNull String key)
     {
         final ContentValues after = mAfterContentValues;
         if (after != null && after.containsKey(key))
@@ -378,7 +367,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public void put(String key, Long value)
+    public void put(@NonNull String key, @Nullable Long value)
     {
         Long oldValue = getAsLong(key);
         if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
@@ -390,19 +379,18 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
 
 
-    public Long getAsLong(String key)
+    @Nullable
+    public Long getAsLong(@NonNull String key)
     {
         final ContentValues after = mAfterContentValues;
         if (after != null && after.containsKey(key))
@@ -413,7 +401,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public void put(String key, String value)
+    public void put(@NonNull String key, @Nullable String value)
     {
         String oldValue = getAsString(key);
         if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
@@ -425,19 +413,18 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
 
 
-    public String getAsString(String key)
+    @Nullable
+    public String getAsString(@NonNull String key)
     {
         final ContentValues after = mAfterContentValues;
         if (after != null && after.containsKey(key))
@@ -448,7 +435,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public void put(String key, Float value)
+    public void put(@NonNull String key, @Nullable Float value)
     {
         Float oldValue = getAsFloat(key);
         if (value != null && !value.equals(oldValue) || value == null && oldValue != null)
@@ -460,19 +447,18 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
                 {
                     // value equals before value, so remove it from after values
                     mAfterContentValues.remove(key);
-                    mAfterKeys.remove(key);
                     notifyUpdateListeners(key);
                     return;
                 }
             }
             ensureAfter().put(key, value);
-            mAfterKeys.add(key);
             notifyUpdateListeners(key);
         }
     }
 
 
-    public Float getAsFloat(String key)
+    @Nullable
+    public Float getAsFloat(@Nullable String key)
     {
         final ContentValues after = mAfterContentValues;
         if (after != null && after.containsKey(key))
@@ -489,6 +475,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      *
      * @return The {@link Uri}.
      */
+    @Nullable
     public Uri getUri()
     {
         return mUri;
@@ -529,22 +516,24 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      * @param key
      *         The key of the value to remove.
      */
-    public void remove(String key)
+    public void remove(@NonNull String key)
     {
         if (mAfterContentValues != null)
         {
             mAfterContentValues.putNull(key);
-            mAfterKeys.add(key);
         }
         else if (mBeforeContentValues != null && mBeforeContentValues.get(key) != null)
         {
             ensureAfter().putNull(key);
-            mAfterKeys.add(key);
         }
     }
 
 
-    public void addOnChangeListener(OnContentChangeListener listener, String key, boolean notify)
+    /**
+     * @param key
+     *         the specific key in a {@link ContentSet} to listen the changes for, or <code>null</code> to be notified of full reloads.
+     */
+    public void addOnChangeListener(@NonNull OnContentChangeListener listener, @Nullable String key, boolean notify)
     {
         Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
         if (listenerSet == null)
@@ -563,7 +552,12 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    public void removeOnChangeListener(OnContentChangeListener listener, String key)
+    /**
+     * @param key
+     *         The specific key in a {@link ContentSet} to remove the listening about, or <code>null</code> to remove listening from full reloads. See {@link
+     *         #addOnChangeListener(OnContentChangeListener, String, boolean)} as well.
+     */
+    public void removeOnChangeListener(@NonNull OnContentChangeListener listener, @Nullable String key)
     {
         Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
         if (listenerSet != null)
@@ -573,7 +567,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     }
 
 
-    private void notifyUpdateListeners(String key)
+    private void notifyUpdateListeners(@NonNull String key)
     {
         Set<OnContentChangeListener> listenerSet = mOnChangeListeners.get(key);
         if (listenerSet != null)
@@ -619,36 +613,15 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         dest.writeParcelable(mUri, flags);
         dest.writeParcelable(mBeforeContentValues, flags);
         dest.writeParcelable(mAfterContentValues, flags);
-
-        if (mAfterContentValues != null)
-        {
-            // It's not possible to write a Set to a parcel, so write the number of members and each member individually.
-            dest.writeInt(mAfterKeys.size());
-            for (String key : mAfterKeys)
-            {
-                dest.writeString(key);
-            }
-        }
     }
 
 
-    public void readFromParcel(Parcel source)
+    private void readFromParcel(Parcel source)
     {
         ClassLoader loader = getClass().getClassLoader();
         mUri = source.readParcelable(loader);
         mBeforeContentValues = source.readParcelable(loader);
         mAfterContentValues = source.readParcelable(loader);
-
-        if (mAfterContentValues != null)
-        {
-            int count = source.readInt();
-            Set<String> keys = new HashSet<String>();
-            while (--count >= 0)
-            {
-                keys.add(source.readString());
-            }
-            mAfterKeys = keys;
-        }
     }
 
 
