@@ -1,3 +1,8 @@
+<!-- File "opentasks/src/main/res/values/dashclock.xml" -->
+
+<!-- File "opentasks/src/main/res/values/arrays.xml" -->
+
+<!-- File "opentasks/src/main/res/values/strings.xml" -->
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
@@ -25,10 +30,6 @@
     <string name="quick_add_task_created">Tâche créée</string>
     <string name="initial_local_task_list_name">Mes tâches</string>
 
-    <plurals name="number_of_tasks">
-        <item quantity="one">%d tâche</item>
-        <item quantity="other">%d tâches</item>
-    </plurals>
 
     <!-- Task detail view -->
     <string name="activity_task_details_edit">Éditer</string>
@@ -39,6 +40,9 @@
     <string name="activity_task_details_complete_task">Terminer tâche</string>
     <string name="activity_task_details_pin">Épingler</string>
     <string name="activity_task_details_pin_task">Tâche épinglée</string>
+    <string name="opentasks_details_no_task_selected">Aucune tâche sélectionnée</string>
+    <string name="opentasks_task_details_menu_send_short">Envoyer</string>
+    <string name="opentasks_task_details_menu_send">Envoyer à</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Ajouter un item</string>
@@ -149,7 +153,6 @@
     <string name="action_settings">Préférences</string>
     <string name="action_add_local_list">Ajouter une liste</string>
     <string name="visible_task_lists">Listes montrées</string>
-    <string name="opentasks_settings_notification_enable">Notifications</string>
     <string name="synced_task_lists">Listes synchronisées</string>
 
     <!-- dialogs -->
@@ -172,7 +175,8 @@
 
     <!-- delete dialog -->
     <string name="task_list_delete_dialog_title">Supprimer %s</string>
-    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu\'elle contient?\nNote: Les listes supprimées ne peuvent être récupérées. </string>
+    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu\'elle contient?\n
+  Note: Les listes supprimées ne peuvent être récupérées.</string>
     <string name="task_list_delete_toast">%s supprimée</string>
 
     <!-- Label for Expandable Group Descriptors -->
@@ -248,6 +252,47 @@
     <!-- Incoming share -->
     <string name="share_as_task">Ajouter une tâche</string>
 
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Notifications</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Signaux de notification</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Son</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibrer</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Clignotement LED</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Partagé via OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Permission requise</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message">Afin de lire la liste des comptes qui supportent la synchronisation des tâches sur votre appareil, %s a besoin de la permission GET_ACCOUNTS.<br/><br/>     Veuillez noter qu\'en raison d\'un choix malheureux de la part de Google, la demande de permission sera labelisée &quot;accéder à vos contacts&quot; à la place de &quot;lire vos comptes&quot;. Voir <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> pour toute information complémentaire.</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Poursuivre</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Ouvrir Paramètres</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
     <string name="opentasks_date_time">%1$s à %2$s</string>
 
 </resources>
+
+<!-- File "opentasks-provider/src/main/res/values/strings.xml" -->
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The name of the provider -->
+    <string name="opentasks_provider_label">Tâches</string>
+
+    <!-- Permissions -->
+
+    <string name="opentasks_permission_read_tasks">Lire tâches</string>
+    <string name="opentasks_permission_description_read_tasks">Autoriser une application à lire les tâches de la listes de tâches.</string>
+    <string name="opentasks_permission_write_tasks">Écrire tâches</string>
+    <string name="opentasks_permission_description_write_tasks">Autoriser une application à écrire des tâches dans la listes de tâches.</string>
+
+</resources>
+
