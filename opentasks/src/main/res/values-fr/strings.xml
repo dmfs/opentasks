@@ -28,9 +28,13 @@
     <string name="task_group_title_progress">Progression des tâches</string>
     <string name="task_group_title_default">Tâches</string>
     <string name="quick_add_task_created">Tâche créée</string>
+   
     <string name="initial_local_task_list_name">Mes tâches</string>
-
-
+    <plurals name="number_of_tasks">
+    <item quantity="one">%d tâche</item>
+    <item quantity="other">%d tâches</item>
+    </plurals>
+    
     <!-- Task detail view -->
     <string name="activity_task_details_edit">Éditer</string>
     <string name="activity_task_details_edit_task">Éditer tâche</string>
@@ -153,6 +157,7 @@
     <string name="action_settings">Préférences</string>
     <string name="action_add_local_list">Ajouter une liste</string>
     <string name="visible_task_lists">Listes montrées</string>
+    <string name="opentasks_settings_notification_enable">Notifications</string>
     <string name="synced_task_lists">Listes synchronisées</string>
 
     <!-- dialogs -->
