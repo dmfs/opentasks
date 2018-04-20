@@ -28,11 +28,10 @@
     <string name="task_group_title_progress">Progression des tâches</string>
     <string name="task_group_title_default">Tâches</string>
     <string name="quick_add_task_created">Tâche créée</string>
-   
     <string name="initial_local_task_list_name">Mes tâches</string>
     <plurals name="number_of_tasks">
-    <item quantity="one">%d tâche</item>
-    <item quantity="other">%d tâches</item>
+        <item quantity="one">%d tâche</item>
+        <item quantity="other">%d tâches</item>
     </plurals>
     
     <!-- Task detail view -->
@@ -180,8 +179,7 @@
 
     <!-- delete dialog -->
     <string name="task_list_delete_dialog_title">Supprimer %s</string>
-    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu\'elle contient?\n
-  Note: Les listes supprimées ne peuvent être récupérées.</string>
+    <string name="task_list_delete_dialog_message">Voulez-vous supprimer la liste et toutes les tâches qu\'elle contient?\nNote: Les listes supprimées ne peuvent être récupérées.</string>
     <string name="task_list_delete_toast">%s supprimée</string>
 
     <!-- Label for Expandable Group Descriptors -->
