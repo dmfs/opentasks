@@ -18,8 +18,8 @@
     <string name="task_group_title_list">Taken</string>
     <string name="task_group_title_start">Taken beginnen</string>
     <string name="task_group_title_due">Taken te doen</string>
-    <string name="task_group_title_priority">Taak prioriteit</string>
-    <string name="task_group_title_progress">Taak voortgang</string>
+    <string name="task_group_title_priority">Taakprioriteit</string>
+    <string name="task_group_title_progress">Taakvoortgang</string>
     <string name="task_group_title_default">Taken</string>
     <string name="quick_add_task_created">Taak toegevoegd</string>
     <string name="initial_local_task_list_name">Mijn taken</string>
@@ -34,7 +34,7 @@
     <string name="activity_task_details_edit_task">Taak wijzigen</string>
     <string name="activity_task_details_delete">Verwijder</string>
     <string name="activity_task_details_delete_task">Taak verwijderen</string>
-    <string name="activity_task_details_complete">Atronden</string>
+    <string name="activity_task_details_complete">Afronden</string>
     <string name="activity_task_details_complete_task">Taak afronden</string>
     <string name="activity_task_details_pin">Vastzetten</string>
 
@@ -64,32 +64,32 @@
     <string name="task_start">Start</string>
     <string name="task_due">Einde</string>
     <string name="task_completed">Afgerond</string>
-    <string name="task_percent_complete">Percentage af</string>
+    <string name="task_percent_complete">Voortgang</string>
     <string name="task_status">Status</string>
-    <string name="task_classification">Privacy</string>
+    <string name="task_classification">Samenwerking</string>
     <string name="task_url">URL</string>
     <string name="title_task_detail">Taakdetail</string>
     <string name="title_task_list">Takenlijst</string>
     <string name="task_detail_activity">Taakdetail</string>
     <string name="task_priority">Prioriteit</string>
     <string name="task_timezone">Tijdzone</string>
-    <string name="task_all_day">De hele Dag</string>
+    <string name="task_all_day">De hele dag</string>
 
     <!-- Task list due group titles -->
     <string name="task_group_no_due">Geen einddatum</string>
     <string name="task_group_overdue">Achterstallig</string>
     <string name="task_group_due_today">Vandaag</string>
     <string name="task_group_due_tomorrow">Morgen</string>
-    <string name="task_group_due_within_7_days">Komende dagen</string>
+    <string name="task_group_due_within_7_days">Binnen een week</string>
     <string name="task_group_due_in_month">Einde in %s</string>
     <string name="task_group_due_in_year">Einde in %d</string>
     <string name="task_group_due_in_future">In de toekomst</string>
 
     <!-- Task list start group titles -->
-    <string name="task_group_start_started">Al Gestart</string>
+    <string name="task_group_start_started">Al begonnen</string>
     <string name="task_group_start_today">Vandaag</string>
     <string name="task_group_start_tomorrow">Morgen</string>
-    <string name="task_group_start_within_7_days">Komende dagen</string>
+    <string name="task_group_start_within_7_days">Binnen een week</string>
     <string name="task_group_start_in_future">In de toekomst</string>
     <string name="task_group_due_title">Einde</string>
     <string name="task_group_all_title">Lijsten</string>
@@ -146,9 +146,8 @@
     <string name="title_activity_settings">Instellingen</string>
     <string name="action_settings">Instellingen</string>
     <string name="action_add_local_list">Lijst toevoegen</string>
-    <string name="visible_task_lists">Getoonde taakLijsten</string>
-    <string name="opentasks_settings_notification_enable">Notificaties</string>
-    <string name="synced_task_lists">Gesynchroniseerde Lijsten</string>
+    <string name="visible_task_lists">Getoonde taaklijsten</string>
+    <string name="synced_task_lists">Gesynchroniseerde lijsten</string>
 
     <!-- dialogs -->
     <string name="task_list_settings_dialog_account_title">Kies een account</string>
@@ -175,9 +174,9 @@
     <string name="task_list_delete_toast">%s verwijderd</string>
 
     <!-- Label for Expandable Group Descriptors -->
-    <string name="gd_by_due_date">Per Einddatum</string>
-    <string name="gd_by_completed">Per Status</string>
-    <string name="gd_by_list">Per Lijst</string>
+    <string name="gd_by_due_date">Per einddatum</string>
+    <string name="gd_by_completed">Per status</string>
+    <string name="gd_by_list">Per lijst</string>
 
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Bevestig verwijderen</string>
@@ -186,7 +185,7 @@
     <string name="toast_task_deleted">\"%1s\" verwijderd.</string>
 
     <!-- Strings in the Task List Selection Fragment -->
-    <string name="task_list_selection_empty">Er zijn geen taken lijsten beschikbaar</string>
+    <string name="task_list_selection_empty">Er zijn geen takenlijsten beschikbaar</string>
     <string name="task_list_selection_title">Kies je lijst</string>
     <string name="task_list_selection_ok">Ok</string>
     <string name="task_list_selection_cancel">Annuleren</string>
@@ -213,7 +212,7 @@
     <string name="notification_action_completed">Afgerond</string>
     <string name="notification_action_delay_1h">+1 uur</string>
     <string name="notification_action_delay_1d">+1 dag</string>
-    <string name="notification_action_delay_toast">Achterstallige datum bijgewerkt</string>
+    <string name="notification_action_delay_toast">Datum achterstallige taak bijgewerkt</string>
     <string name="notification_undo">Herstellen</string>
     <string name="notification_action_unpin">Losgezet</string>
     <string name="notification_task_pin_ticker">%1$s is vastgezet</string>
@@ -227,7 +226,7 @@
     <string name="dashclock_widget_title_due_expanded">%1$s moet worden gedaan - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s moet worden gedaan</string>
     <string name="dashclock_widget_title_start_expanded">%1$s begint - %2$s</string>
-    <string name="dashclock_widget_title_start_expanded_allday">%1$s starts vandaag</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s starten vandaag</string>
     <string name="dashclock_pref_displayed_task_summary">Selecteer taken en items om weer te geven in de dashclock widget</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Activiteiten om weer te geven</string>
     <string name="dashclock_display_type_due">Taken te doen</string>
