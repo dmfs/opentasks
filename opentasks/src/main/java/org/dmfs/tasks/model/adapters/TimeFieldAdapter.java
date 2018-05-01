@@ -18,6 +18,8 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.format.Time;
 
 import org.dmfs.tasks.model.ContentSet;
@@ -73,8 +75,9 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
     }
 
 
+    @Nullable
     @Override
-    public Time get(ContentSet values)
+    public Time get(@NonNull ContentSet values)
     {
         Long timestamp = values.getAsLong(mTimestampField);
         if (timestamp == null)
@@ -104,8 +107,9 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
     }
 
 
+    @Nullable
     @Override
-    public Time get(Cursor cursor)
+    public Time get(@NonNull Cursor cursor)
     {
         int tsIdx = cursor.getColumnIndex(mTimestampField);
         int tzIdx = mTzField == null ? -1 : cursor.getColumnIndex(mTzField);
@@ -142,7 +146,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
     @Override
-    public Time getDefault(ContentSet values)
+    public Time getDefault(@NonNull ContentSet values)
     {
         // create a new Time for the given time zone, falling back to the default time zone if none is given
         String timezone = mTzField == null ? Time.TIMEZONE_UTC : values.getAsString(mTzField);
@@ -163,7 +167,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
     @Override
-    public void set(ContentSet values, Time value)
+    public void set(@NonNull ContentSet values, @Nullable Time value)
     {
         values.startBulkUpdate();
         try
@@ -196,7 +200,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
     @Override
-    public void set(ContentValues values, Time value)
+    public void set(@NonNull ContentValues values, @Nullable Time value)
     {
         if (value != null)
         {
@@ -221,7 +225,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initalNotification)
     {
         values.addOnChangeListener(listener, mTimestampField, initalNotification);
         if (mTzField != null)
@@ -236,7 +240,7 @@ public final class TimeFieldAdapter extends FieldAdapter<Time>
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         values.removeOnChangeListener(listener, mTimestampField);
         if (mTzField != null)

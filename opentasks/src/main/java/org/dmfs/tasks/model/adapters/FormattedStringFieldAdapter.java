@@ -18,6 +18,8 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
@@ -63,8 +65,9 @@ public class FormattedStringFieldAdapter extends FieldAdapter<String>
     }
 
 
+    @Nullable
     @Override
-    public String get(ContentSet values)
+    public String get(@NonNull ContentSet values)
     {
         String[] params = new String[mParamFields.length];
         for (int i = 0, len = mParamFields.length; i < len; ++i)
@@ -75,8 +78,9 @@ public class FormattedStringFieldAdapter extends FieldAdapter<String>
     }
 
 
+    @Nullable
     @Override
-    public String get(Cursor cursor)
+    public String get(@NonNull Cursor cursor)
     {
         String[] params = new String[mParamFields.length];
         for (int i = 0, len = mParamFields.length; i < len; ++i)
@@ -87,8 +91,9 @@ public class FormattedStringFieldAdapter extends FieldAdapter<String>
     }
 
 
+    @Nullable
     @Override
-    public String getDefault(ContentSet values)
+    public String getDefault(@NonNull ContentSet values)
     {
         String[] params = new String[mParamFields.length];
         for (int i = 0, len = mParamFields.length; i < len; ++i)
@@ -100,21 +105,21 @@ public class FormattedStringFieldAdapter extends FieldAdapter<String>
 
 
     @Override
-    public void set(ContentSet values, String value)
+    public void set(@NonNull ContentSet values, @Nullable String value)
     {
         // setting values is not supported
     }
 
 
     @Override
-    public void set(ContentValues values, String value)
+    public void set(@NonNull ContentValues values, @Nullable String value)
     {
         // setting values is not supported
     }
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initalNotification)
     {
         for (FieldAdapter<?> adapter : mParamFields)
         {
@@ -124,7 +129,7 @@ public class FormattedStringFieldAdapter extends FieldAdapter<String>
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         for (FieldAdapter<?> adapter : mParamFields)
         {

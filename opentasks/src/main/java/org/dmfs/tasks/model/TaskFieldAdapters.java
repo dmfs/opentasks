@@ -62,7 +62,7 @@ public final class TaskFieldAdapters
      * Adapter for the status of a task.
      */
     public final static IntegerFieldAdapter STATUS = (IntegerFieldAdapter) new IntegerFieldAdapter(Tasks.STATUS, Tasks.STATUS_NEEDS_ACTION)
-            .addContraint(new AdjustPercentComplete(PERCENT_COMPLETE));
+            .addConstraint(new AdjustPercentComplete(PERCENT_COMPLETE));
 
     /**
      * Adapter for the priority value of a task.
@@ -108,7 +108,7 @@ public final class TaskFieldAdapters
      * Adapter for the checklist of a task.
      */
     public final static ChecklistFieldAdapter CHECKLIST = (ChecklistFieldAdapter) new ChecklistFieldAdapter(Tasks.DESCRIPTION)
-            .addContraint(new ChecklistConstraint(STATUS, PERCENT_COMPLETE));
+            .addConstraint(new ChecklistConstraint(STATUS, PERCENT_COMPLETE));
 
     /**
      * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.
@@ -119,12 +119,12 @@ public final class TaskFieldAdapters
     /**
      * Adapter for the due date of a task.
      */
-    public final static FieldAdapter<Time> DUE = new CustomizedDefaultFieldAdapter<Time>(_DUE, new DefaultAfter(_DTSTART)).addContraint(new After(_DTSTART));
+    public final static FieldAdapter<Time> DUE = new CustomizedDefaultFieldAdapter<Time>(_DUE, new DefaultAfter(_DTSTART)).addConstraint(new After(_DTSTART));
 
     /**
      * Adapter for the start date of a task.
      */
-    public final static FieldAdapter<Time> DTSTART = new CustomizedDefaultFieldAdapter<Time>(_DTSTART, new DefaultBefore(DUE)).addContraint(
+    public final static FieldAdapter<Time> DTSTART = new CustomizedDefaultFieldAdapter<Time>(_DTSTART, new DefaultBefore(DUE)).addConstraint(
             new BeforeOrShiftTime(DUE));
 
     /**

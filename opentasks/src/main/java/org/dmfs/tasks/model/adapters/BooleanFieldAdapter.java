@@ -18,9 +18,12 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.OnContentChangeListener;
+import org.dmfs.tasks.utils.BooleanBinaryInt;
 
 
 /**
@@ -79,7 +82,7 @@ public final class BooleanFieldAdapter extends FieldAdapter<Boolean>
 
 
     @Override
-    public Boolean get(ContentSet values)
+    public Boolean get(@NonNull ContentSet values)
     {
         Integer value = values.getAsInteger(mFieldName);
 
@@ -88,7 +91,7 @@ public final class BooleanFieldAdapter extends FieldAdapter<Boolean>
 
 
     @Override
-    public Boolean get(Cursor cursor)
+    public Boolean get(@NonNull Cursor cursor)
     {
         int columnIdx = cursor.getColumnIndex(mFieldName);
         if (columnIdx < 0)
@@ -100,35 +103,35 @@ public final class BooleanFieldAdapter extends FieldAdapter<Boolean>
 
 
     @Override
-    public Boolean getDefault(ContentSet values)
+    public Boolean getDefault(@NonNull ContentSet values)
     {
         return mDefaultValue;
     }
 
 
     @Override
-    public void set(ContentSet values, Boolean value)
+    public void set(@NonNull ContentSet values, @Nullable Boolean value)
     {
-        values.put(mFieldName, value ? 1 : 0);
+        values.put(mFieldName, new BooleanBinaryInt(value).value());
     }
 
 
     @Override
-    public void set(ContentValues values, Boolean value)
+    public void set(@NonNull ContentValues values, @Nullable Boolean value)
     {
-        values.put(mFieldName, value ? 1 : 0);
+        values.put(mFieldName, new BooleanBinaryInt(value).value());
     }
 
 
     @Override
-    public void registerListener(ContentSet values, OnContentChangeListener listener, boolean initalNotification)
+    public void registerListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener, boolean initalNotification)
     {
         values.addOnChangeListener(listener, mFieldName, initalNotification);
     }
 
 
     @Override
-    public void unregisterListener(ContentSet values, OnContentChangeListener listener)
+    public void unregisterListener(@NonNull ContentSet values, @NonNull OnContentChangeListener listener)
     {
         values.removeOnChangeListener(listener, mFieldName);
     }

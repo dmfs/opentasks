@@ -212,11 +212,11 @@ public class XmlModel extends Model
                         // add UpdateAllDay constraint of due or start fields are missing to keep the values in sync with the allday flag
                         if (!state.hasDue)
                         {
-                            ((FieldAdapter<Boolean>) state.alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DUE));
+                            ((FieldAdapter<Boolean>) state.alldayDescriptor.getFieldAdapter()).addConstraint(new UpdateAllDay(TaskFieldAdapters.DUE));
                         }
                         if (!state.hasStart)
                         {
-                            ((FieldAdapter<Boolean>) state.alldayDescriptor.getFieldAdapter()).addContraint(new UpdateAllDay(TaskFieldAdapters.DTSTART));
+                            ((FieldAdapter<Boolean>) state.alldayDescriptor.getFieldAdapter()).addConstraint(new UpdateAllDay(TaskFieldAdapters.DTSTART));
                         }
                     }
                     return object;
