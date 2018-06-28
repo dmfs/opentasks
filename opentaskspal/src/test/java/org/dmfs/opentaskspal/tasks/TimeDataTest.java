@@ -160,16 +160,16 @@ public final class TimeDataTest
 
 
     @Test
-    public void test_whenStartHasAllDayFlag_correspondingValueIsOne()
+    public void test_whenStartHasAllDayFlag_correspondingValueIsOne_timeZoneIsNull()
     {
-        DateTime start = DateTime.now().toAllDay();
+        DateTime start = DateTime.nowAndHere().toAllDay();
         DateTime due = start.addDuration(new Duration(1, 3, 0));
 
         assertThat(new TimeData(start, due),
                 builds(
                         withValuesOnly(
                                 containing(Tasks.DTSTART, start.getTimestamp()),
-                                containing(Tasks.TZ, "UTC"),
+                                withNullValue(Tasks.TZ),
                                 containing(Tasks.IS_ALLDAY, 1),
 
                                 containing(Tasks.DUE, due.getTimestamp()),

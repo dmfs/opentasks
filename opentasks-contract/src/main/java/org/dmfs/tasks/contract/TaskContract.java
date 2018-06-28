@@ -660,14 +660,15 @@ public final class TaskContract
 
         /**
          * When this task starts in milliseconds since the epoch.
+         * {@link #IS_ALLDAY} and {@link #TZ} have to be considered together with this timestamp create the date-time.
          * <p>
          * Value: Long
-         * </p>
          */
         String DTSTART = "dtstart";
 
         /**
          * Boolean: flag that indicates that this is an all-day task.
+         * This has to be considered to get the date-time for the {@link #DTSTART} or {@link #DUE} timestamps.
          */
         String IS_ALLDAY = "is_allday";
 
@@ -688,21 +689,25 @@ public final class TaskContract
         String LAST_MODIFIED = "last_modified";
 
         /**
-         * String: An Olson Id of the time zone of this task. If this value is <code>null</code>, it's automatically replaced by the local time zone.
+         * An Olson Id of the time zone of this task.
+         * This has to be considered together with {@link #IS_ALLDAY} to get the date-time for the {@link #DTSTART} or {@link #DUE} timestamps.
+         * It is {@code null} when {@link #IS_ALLDAY} is true, or when the date-time is a floating time (local time without timezone).
+         * <p>
+         * Value: String
          */
         String TZ = "tz";
 
         /**
-         * When this task is due in milliseconds since the epoch. Only one of {@link #DUE} or {@link #DURATION} must be supplied (or none of both if the task
+         * When this task is due in milliseconds since the epoch. Only one of {@link #DUE} or {@link #DURATION} must be supplied (or neither if the task
          * has no due date).
+         * {@link #IS_ALLDAY} and {@link #TZ} have to be considered together with this timestamp to create the date-time.
          * <p>
          * Value: Long
-         * </p>
          */
         String DUE = "due";
 
         /**
-         * The duration of this task. Only one of {@link #DUE} or {@link #DURATION} must be supplied (or none of both if the task has no due date). Setting a
+         * The duration of this task. Only one of {@link #DUE} or {@link #DURATION} must be supplied (or neither if the task has no due date). Setting a
          * {@link #DURATION} is not allowed when {@link #DTSTART} is <code>null</code>. The Value must be a duration string as in <a
          * href="http://tools.ietf.org/html/rfc5545#section-3.3.6">RFC 5545 Section 3.3.6</a>.
          * <p>
