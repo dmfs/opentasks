@@ -527,7 +527,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      *
      * @return An SQL command string.
      */
-    public final static String createIndexString(String table, boolean unique, String... fields)
+    public static String createIndexString(String table, boolean unique, String... fields)
     {
         if (fields == null || fields.length < 1)
         {
