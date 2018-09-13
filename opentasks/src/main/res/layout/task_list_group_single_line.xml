@@ -47,7 +47,8 @@
             android:clickable="true"
             android:padding="8dp"
             android:src="@drawable/ic_24_plus_black50"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:focusable="true"/>
 
     <View
             android:id="@+id/divider"
