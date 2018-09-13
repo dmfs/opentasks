@@ -9,6 +9,6 @@
             style="@style/field_editor_text_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textUri"></EditText>
+            android:inputType="textUri"/>
 
 </org.dmfs.tasks.widget.UrlFieldEditor>

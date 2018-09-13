@@ -81,7 +81,7 @@ public class NotificationActionUtils
     {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        String dueString = "";
+        String dueString;
         if (dueAllDay)
         {
             dueString = context.getString(R.string.notification_task_due_today);
@@ -159,7 +159,7 @@ public class NotificationActionUtils
     public static void sendStartNotification(Context context, String title, Uri taskUri, int notificationId, long startDate, boolean startAllDay,
                                              String timezone, boolean silent)
     {
-        String startString = "";
+        String startString;
         if (startAllDay)
         {
             startString = context.getString(R.string.notification_task_start_today);
@@ -423,7 +423,7 @@ public class NotificationActionUtils
 
         // return combined date and time
         String timeString = new DateFormatter(context).format(time, DateFormatContext.NOTIFICATION_VIEW_TIME);
-        return new StringBuilder().append(dateString).append(", ").append(timeString).toString();
+        return dateString + ", " + timeString;
     }
 
 

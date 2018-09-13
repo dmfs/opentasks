@@ -82,7 +82,7 @@ public class ByStartDate extends AbstractGroupingFactory
                 }
             }
 
-            setDueDate((TextView) getView(view, R.id.task_due_date), (ImageView) getView(view, R.id.task_due_image), INSTANCE_DUE_ADAPTER.get(cursor),
+            setDueDate(getView(view, R.id.task_due_date), getView(view, R.id.task_due_image), INSTANCE_DUE_ADAPTER.get(cursor),
                     isClosed);
 
             TextView startDateField = getView(view, R.id.task_start_date);

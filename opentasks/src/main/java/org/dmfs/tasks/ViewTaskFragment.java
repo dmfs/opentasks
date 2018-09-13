@@ -88,7 +88,7 @@ public class ViewTaskFragment extends SupportFragment
      * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
      */
     private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(
-            Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY, Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
+            Arrays.asList(Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY, Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE));
 
     /**
      * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.

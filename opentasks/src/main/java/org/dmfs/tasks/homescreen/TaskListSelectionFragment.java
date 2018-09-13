@@ -143,7 +143,7 @@ public class TaskListSelectionFragment extends ListFragment implements LoaderMan
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
     {
-        return new CursorLoader(mActivity, (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null, null);
+        return new CursorLoader(mActivity, bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null, null);
     }
 
 

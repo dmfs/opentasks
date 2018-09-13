@@ -196,10 +196,9 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
         long absmillis = (millis < 0) ? -millis : millis;
         int minutes = (int) ((absmillis / (1000 * 60)) % 60);
         int hours = (int) ((absmillis / (1000 * 60 * 60)) % 24);
-        StringBuilder builder = new StringBuilder("(GMT");
-        builder.append((millis >= 0) ? '+' : '-');
-        builder.append(String.format("%02d:%02d", hours, minutes)).append(") ");
-        return builder.toString();
+        String builder = "(GMT" + ((millis >= 0) ? '+' : '-') +
+                String.format("%02d:%02d", hours, minutes) + ") ";
+        return builder;
     }
 
 

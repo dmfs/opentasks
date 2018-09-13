@@ -153,11 +153,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     /**
      * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
      *
-     * @param titleId
-     *         The resource id of the title.
-     * @param initalText
-     *         The initial text in the input field.
-     *
      * @return A new {@link QuickAddDialogFragment}.
      */
     public static QuickAddDialogFragment newInstance(long listId)
@@ -172,11 +167,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment
 
     /**
      * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
-     *
-     * @param titleId
-     *         The resource id of the title.
-     * @param initalText
-     *         The initial text in the input field.
      *
      * @return A new {@link QuickAddDialogFragment}.
      */
@@ -266,7 +256,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
     {
-        return new CursorLoader(getActivity(), (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null,
+        return new CursorLoader(getActivity(), bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null,
                 null);
     }
 

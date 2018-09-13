@@ -2,8 +2,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:drawable="@drawable/rect_shape_corners_white_insert"
-            android:state_checked="false"></item>
+            android:state_checked="false"/>
     <item android:drawable="@android:color/transparent"
-            android:state_checked="true"></item>
+            android:state_checked="true"/>
 
 </selector>

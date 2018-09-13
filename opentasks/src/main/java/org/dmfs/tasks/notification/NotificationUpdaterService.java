@@ -740,7 +740,7 @@ public class NotificationUpdaterService extends Service
     private static PendingIntent getDelayActionIntent(Context context, int notificationId, Uri taskUri, long due, boolean delay1h, String timezone,
                                                       boolean allday)
     {
-        String action = null;
+        String action;
         if (delay1h)
         {
             action = ACTION_DELAY_1H;

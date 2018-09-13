@@ -73,7 +73,7 @@ public class ByList extends AbstractGroupingFactory
         @Override
         public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
         {
-            TextView title = (TextView) getView(view, android.R.id.title);
+            TextView title = getView(view, android.R.id.title);
             boolean isClosed = cursor.getInt(13) > 0;
 
             resetFlingView(view);
@@ -92,7 +92,7 @@ public class ByList extends AbstractGroupingFactory
                 }
             }
 
-            setDueDate((TextView) getView(view, R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
+            setDueDate(getView(view, R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
             View divider = getView(view, R.id.divider);
             if (divider != null)

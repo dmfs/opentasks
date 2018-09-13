@@ -16,7 +16,7 @@
             android:layout_gravity="center"
             android:layout_margin="0dp"
             android:padding="0dp"
-            android:duplicateParentState="true"></CheckBox>
+            android:duplicateParentState="true"/>
 
     <TextView
             android:id="@android:id/title"

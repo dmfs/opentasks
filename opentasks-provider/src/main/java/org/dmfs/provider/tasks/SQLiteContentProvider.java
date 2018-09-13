@@ -142,7 +142,7 @@ abstract class SQLiteContentProvider extends ContentProvider
     @Override
     public Uri insert(Uri uri, ContentValues values)
     {
-        Uri result = null;
+        Uri result;
         boolean callerIsSyncAdapter = isCallerSyncAdapter(uri);
         boolean applyingBatch = applyingBatch();
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -198,7 +198,7 @@ abstract class SQLiteContentProvider extends ContentProvider
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
     {
-        int count = 0;
+        int count;
         boolean callerIsSyncAdapter = isCallerSyncAdapter(uri);
         boolean applyingBatch = applyingBatch();
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -229,7 +229,7 @@ abstract class SQLiteContentProvider extends ContentProvider
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs)
     {
-        int count = 0;
+        int count;
         boolean callerIsSyncAdapter = isCallerSyncAdapter(uri);
         boolean applyingBatch = applyingBatch();
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();

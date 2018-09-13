@@ -90,7 +90,7 @@ public class BySearch extends AbstractGroupingFactory
                 }
             }
 
-            setDueDate((TextView) getView(view, R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
+            setDueDate(getView(view, R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
             View divider = getView(view, R.id.divider);
             if (divider != null)

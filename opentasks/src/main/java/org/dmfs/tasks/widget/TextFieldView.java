@@ -79,7 +79,7 @@ public class TextFieldView extends AbstractFieldView
     public void setFieldDescription(FieldDescriptor descriptor, LayoutOptions layoutOptions)
     {
         super.setFieldDescription(descriptor, layoutOptions);
-        mAdapter = (FieldAdapter<?>) descriptor.getFieldAdapter();
+        mAdapter = descriptor.getFieldAdapter();
         mText.setHint(descriptor.getHint());
         mText.setAutoLinkMask(layoutOptions.getInt(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL));
     }

@@ -12,6 +12,6 @@
             android:id="@android:id/text1"
             style="@style/field_view_text_value"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></TextView>
+            android:layout_height="wrap_content"/>
 
 </org.dmfs.tasks.widget.UrlFieldView>

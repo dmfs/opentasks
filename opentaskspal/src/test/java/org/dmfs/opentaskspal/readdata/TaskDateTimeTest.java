@@ -50,7 +50,7 @@ public final class TaskDateTimeTest
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
 
-        assertThat(new TaskDateTime(Tasks.DTSTART, mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new TaskDateTime(Tasks.DTSTART, mockData), AbsentMatcher.isAbsent());
     }
 
 
