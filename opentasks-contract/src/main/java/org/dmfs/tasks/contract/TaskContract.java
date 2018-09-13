@@ -48,7 +48,7 @@ import java.util.Map;
 public final class TaskContract
 {
 
-    private static Map<String, UriFactory> sUriFactories = new HashMap<String, UriFactory>(4);
+    private static Map<String, UriFactory> sUriFactories = new HashMap<>(4);
 
     /**
      * URI parameter to signal that the caller is a sync adapter.

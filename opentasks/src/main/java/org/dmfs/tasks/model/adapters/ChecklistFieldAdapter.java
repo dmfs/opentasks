@@ -186,13 +186,13 @@ public final class ChecklistFieldAdapter extends FieldAdapter<List<CheckListItem
                 }
             }
         }
-        return new ArrayList<CheckListItem>(4);
+        return new ArrayList<>(4);
     }
 
 
     private static List<CheckListItem> parseCheckList(String checklist)
     {
-        List<CheckListItem> result = new ArrayList<CheckListItem>(16);
+        List<CheckListItem> result = new ArrayList<>(16);
         String[] lines = checklist.split("\n");
 
         for (String line : lines)

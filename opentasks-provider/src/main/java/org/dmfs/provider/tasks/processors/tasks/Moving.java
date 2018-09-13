@@ -88,8 +88,7 @@ public final class Moving implements EntityProcessor<TaskAdapter>
             if (newMasterId != null)
             {
                 // find the master task
-                Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null, TaskContract.Tasks._ID + "=" + newMasterId, null, null, null, null);
-                try
+                try (Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null, TaskContract.Tasks._ID + "=" + newMasterId, null, null, null, null))
                 {
                     if (c.moveToFirst())
                     {
@@ -97,10 +96,6 @@ public final class Moving implements EntityProcessor<TaskAdapter>
                         deletedMasterId = moveTask(db, new CursorContentValuesTaskAdapter(c, new ContentValues(16)), oldList, newList, null, true);
                     }
 
-                }
-                finally
-                {
-                    c.close();
                 }
             }
 
@@ -117,18 +112,13 @@ public final class Moving implements EntityProcessor<TaskAdapter>
         if (task.isRecurring() || task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID) != null)
         {
             // This task is recurring and may have exceptions or it's an exception itself. Move all (other) exceptions to the new list.
-            Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null, TaskContract.Tasks.ORIGINAL_INSTANCE_ID + "=" + newMasterId + " and "
-                    + TaskContract.Tasks._ID + "!=" + task.id(), null, null, null, null);
-            try
+            try (Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null, TaskContract.Tasks.ORIGINAL_INSTANCE_ID + "=" + newMasterId + " and "
+                    + TaskContract.Tasks._ID + "!=" + task.id(), null, null, null, null))
             {
                 while (c.moveToNext())
                 {
                     moveTask(db, new CursorContentValuesTaskAdapter(c, new ContentValues(16)), oldList, newList, deletedMasterId, true);
                 }
-            }
-            finally
-            {
-                c.close();
             }
         }
 

@@ -45,7 +45,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
     private int mTaskNameColumn;
     private int mAccountNameColumn;
     private int mIdColumn;
-    private ArrayList<Long> mSelectedLists = new ArrayList<Long>(20);
+    private ArrayList<Long> mSelectedLists = new ArrayList<>(20);
 
     private SelectionEnabledListener mListener;
 
@@ -75,7 +75,7 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
             mAccountNameColumn = c.getColumnIndex(TaskContract.TaskListSyncColumns.ACCOUNT_NAME);
 
             c.moveToPosition(-1);
-            mSelectedLists = new ArrayList<Long>(c.getCount());
+            mSelectedLists = new ArrayList<>(c.getCount());
             while (c.moveToNext())
             {
                 mSelectedLists.add(c.getLong(mIdColumn));

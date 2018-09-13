@@ -149,7 +149,7 @@ public class TaskProviderTest
                 new Assert<>(taskList, new NameData("list1")),
                 new Assert<>(task, new TitleData("task1")),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(0),
                                 new CharSequenceRowData<>(Tasks.TZ, null))
                 )));
@@ -175,7 +175,7 @@ public class TaskProviderTest
                 new Assert<>(taskList, new NameData("list1")),
                 new Assert<>(task, new TitleData("task updated")),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(0),
                                 new CharSequenceRowData<>(Tasks.TZ, null))
                 )));
@@ -210,17 +210,17 @@ public class TaskProviderTest
                 new Assert<>(task3, new TitleData("task3")),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task1,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(0),
                                 new CharSequenceRowData<>(Tasks.TZ, null))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task2,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(0),
                                 new CharSequenceRowData<>(Tasks.TZ, null))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task3,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(0),
                                 new CharSequenceRowData<>(Tasks.TZ, null))
                 )));
@@ -240,14 +240,14 @@ public class TaskProviderTest
         DateTime due = start.addDuration(new Duration(1, 1, 0));
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TimeData(start, due))
 
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, due)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         start.shiftTimeZone(TimeZone.getDefault()),
                                         due.shiftTimeZone(TimeZone.getDefault()),
@@ -279,7 +279,7 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(start, due)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         start.shiftTimeZone(TimeZone.getDefault()),
                                         due.shiftTimeZone(TimeZone.getDefault()),
@@ -307,14 +307,14 @@ public class TaskProviderTest
         DateTime dueNew = due.addDuration(duration);
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TimeData(start, due)),
                 new Put<>(task, new TimeData(startNew, dueNew))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(startNew, dueNew)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         startNew.shiftTimeZone(TimeZone.getDefault()),
                                         dueNew.shiftTimeZone(TimeZone.getDefault()),
@@ -342,14 +342,14 @@ public class TaskProviderTest
         DateTime dueNew = due.addDuration(duration);
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TimeData(start, due)),
                 new Put<>(task, new TimeData(startNew, dueNew))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(startNew, dueNew)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         startNew.shiftTimeZone(TimeZone.getDefault()),
                                         dueNew.shiftTimeZone(TimeZone.getDefault()),
@@ -373,14 +373,14 @@ public class TaskProviderTest
         DateTime due = start.addDuration(new Duration(1, 1, 0));
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TitleData("Test")),
                 new Put<>(task, new TimeData(start, due))
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, due)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         start.shiftTimeZone(TimeZone.getDefault()),
                                         due.shiftTimeZone(TimeZone.getDefault()),
@@ -405,14 +405,14 @@ public class TaskProviderTest
         long durationMillis = duration.toMillis();
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TimeData(start, duration))
 
         ), resultsIn(mClient,
                 new Assert<>(task, new TimeData(start, duration)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         start.shiftTimeZone(TimeZone.getDefault()),
                                         start.shiftTimeZone(TimeZone.getDefault()).addDuration(duration),
@@ -438,7 +438,7 @@ public class TaskProviderTest
         DateTime startNew = start.shiftTimeZone(TimeZone.getTimeZone("America/New_York"));
 
         assertThat(new Seq<>(
-                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(taskList, new EmptyRowData<>()),
                 new Put<>(task, new TimeData(start, duration)),
                 // update the task with a the same start in a different time zone
                 new Put<>(task, new TimeData(startNew, duration))
@@ -448,7 +448,7 @@ public class TaskProviderTest
                 // note that, apart from the time zone, all values stay the same
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         start.shiftTimeZone(TimeZone.getDefault()),
                                         start.shiftTimeZone(TimeZone.getDefault()).addDuration(duration),
@@ -488,7 +488,7 @@ public class TaskProviderTest
                 new Assert<>(task, new TimeData(start, due2)),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new InstanceTestData(
                                         start.shiftTimeZone(TimeZone.getDefault()),
                                         due2.shiftTimeZone(TimeZone.getDefault()),

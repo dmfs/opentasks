@@ -31,6 +31,6 @@ public final class TaskListsTable extends DelegatingTable<TaskContract.TaskLists
 {
     public TaskListsTable(String authority)
     {
-        super(new BaseTable<TaskContract.TaskLists>(TaskContract.TaskLists.getContentUri(authority)));
+        super(new BaseTable<>(TaskContract.TaskLists.getContentUri(authority)));
     }
 }

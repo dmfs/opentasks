@@ -335,7 +335,7 @@ public class FTSDatabaseHelper
      */
     private static Set<Long> insertNGrams(SQLiteDatabase db, Set<String> ngrams)
     {
-        Set<Long> nGramIds = new HashSet<Long>(ngrams.size());
+        Set<Long> nGramIds = new HashSet<>(ngrams.size());
         ContentValues values = new ContentValues(1);
         for (String ngram : ngrams)
         {
@@ -345,18 +345,13 @@ public class FTSDatabaseHelper
             {
                 // the docs say insertWithOnConflict returns the existing row id when CONFLICT_IGNORE is specified an the values conflict with an existing
                 // column, however, that doesn't seem to work reliably, so we when for an error condition and get the row id ourselves
-                Cursor c = db
-                        .query(FTS_NGRAM_TABLE, new String[] { NGramColumns.NGRAM_ID }, NGramColumns.TEXT + "=?", new String[] { ngram }, null, null, null);
-                try
+                try (Cursor c = db
+                        .query(FTS_NGRAM_TABLE, new String[] { NGramColumns.NGRAM_ID }, NGramColumns.TEXT + "=?", new String[] { ngram }, null, null, null))
                 {
                     if (c.moveToFirst())
                     {
                         nGramId = c.getLong(0);
                     }
-                }
-                finally
-                {
-                    c.close();
                 }
 
             }

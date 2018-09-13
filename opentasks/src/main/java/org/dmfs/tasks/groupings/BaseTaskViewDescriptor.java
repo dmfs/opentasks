@@ -168,7 +168,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         SparseArrayCompat<View> viewHolder = (SparseArrayCompat<View>) view.getTag();
         if (viewHolder == null)
         {
-            viewHolder = new SparseArrayCompat<View>();
+            viewHolder = new SparseArrayCompat<>();
             view.setTag(viewHolder);
         }
         View res = viewHolder.get(viewId);

@@ -114,7 +114,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
     private static final int OPERATIONS = 100000;
 
-    private final static Set<String> TASK_LIST_SYNC_COLUMNS = new HashSet<String>(Arrays.asList(TaskLists.SYNC_ADAPTER_COLUMNS));
+    private final static Set<String> TASK_LIST_SYNC_COLUMNS = new HashSet<>(Arrays.asList(TaskLists.SYNC_ADAPTER_COLUMNS));
 
     /**
      * A list of {@link EntityProcessor}s to execute when doing operations on the instances table.
@@ -736,9 +736,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 }
 
                 // iterate over all lists that match the selection
-                final Cursor cursor = db.query(Tables.LISTS, null, selection, selectionArgs, null, null, null, null);
 
-                try
+                try (Cursor cursor = db.query(Tables.LISTS, null, selection, selectionArgs, null, null, null, null))
                 {
                     while (cursor.moveToNext())
                     {
@@ -748,10 +747,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         mOperationsLog.log(ProviderOperation.DELETE, list.uri(mAuthority));
                         count++;
                     }
-                }
-                finally
-                {
-                    cursor.close();
                 }
 
                 break;
@@ -777,9 +772,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 }
 
                 // iterate over all tasks that match the selection
-                final Cursor cursor = db.query(Tables.TASKS_VIEW, null, selection, selectionArgs, null, null, null, null);
 
-                try
+                try (Cursor cursor = db.query(Tables.TASKS_VIEW, null, selection, selectionArgs, null, null, null, null))
                 {
                     while (cursor.moveToNext())
                     {
@@ -790,10 +784,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         mOperationsLog.log(ProviderOperation.DELETE, task.uri(mAuthority));
                         count++;
                     }
-                }
-                finally
-                {
-                    cursor.close();
                 }
 
                 break;
@@ -832,9 +822,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
             case PROPERTIES:
                 // fetch all properties that match the selection
-                Cursor cursor = db.query(Tables.PROPERTIES, null, selection, selectionArgs, null, null, null);
 
-                try
+                try (Cursor cursor = db.query(Tables.PROPERTIES, null, selection, selectionArgs, null, null, null))
                 {
                     int propIdCol = cursor.getColumnIndex(Properties.PROPERTY_ID);
                     int taskIdCol = cursor.getColumnIndex(Properties.TASK_ID);
@@ -850,10 +839,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                             count += handler.delete(db, taskId, propertyId, cursor, isSyncAdapter);
                         }
                     }
-                }
-                finally
-                {
-                    cursor.close();
                 }
                 postNotifyUri(Properties.getContentUri(mAuthority));
                 break;
@@ -1061,9 +1046,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
             case TASKS:
             {
                 // iterate over all tasks that match the selection
-                final Cursor cursor = db.query(Tables.TASKS_VIEW, null, selection, selectionArgs, null, null, null, null);
 
-                try
+                try (Cursor cursor = db.query(Tables.TASKS_VIEW, null, selection, selectionArgs, null, null, null, null))
                 {
                     while (cursor.moveToNext())
                     {
@@ -1078,10 +1062,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         }
                         count++;
                     }
-                }
-                finally
-                {
-                    cursor.close();
                 }
 
                 if (count > 0)
@@ -1141,9 +1121,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 }
 
                 // fetch all properties that match the selection
-                Cursor cursor = db.query(Tables.PROPERTIES, null, selection, selectionArgs, null, null, null);
 
-                try
+                try (Cursor cursor = db.query(Tables.PROPERTIES, null, selection, selectionArgs, null, null, null))
                 {
                     int propIdCol = cursor.getColumnIndex(Properties.PROPERTY_ID);
                     int taskIdCol = cursor.getColumnIndex(Properties.TASK_ID);
@@ -1159,10 +1138,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                             count += handler.update(db, taskId, propertyId, values, cursor, isSyncAdapter);
                         }
                     }
-                }
-                finally
-                {
-                    cursor.close();
                 }
                 postNotifyUri(Properties.getContentUri(mAuthority));
                 break;

@@ -157,27 +157,13 @@ public class TimeZoneWrapper extends TimeZone
 
     public boolean referenceInDaylightTime()
     {
-        if (mReferenceTimeStamp != null)
-        {
-            return mTimeZone.inDaylightTime(new Date(mReferenceTimeStamp));
-        }
-        else
-        {
-            return false;
-        }
+        return mReferenceTimeStamp != null && mTimeZone.inDaylightTime(new Date(mReferenceTimeStamp));
     }
 
 
     public boolean inDaylightTime(Long timestamp)
     {
-        if (timestamp != null)
-        {
-            return mTimeZone.inDaylightTime(new Date(timestamp));
-        }
-        else
-        {
-            return false;
-        }
+        return timestamp != null && mTimeZone.inDaylightTime(new Date(timestamp));
     }
 
 

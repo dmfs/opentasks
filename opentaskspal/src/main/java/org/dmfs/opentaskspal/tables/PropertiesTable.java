@@ -31,6 +31,6 @@ public final class PropertiesTable extends DelegatingTable<TaskContract.Properti
 {
     public PropertiesTable(String authority)
     {
-        super(new BaseTable<TaskContract.Properties>(TaskContract.Properties.getContentUri(authority)));
+        super(new BaseTable<>(TaskContract.Properties.getContentUri(authority)));
     }
 }

@@ -32,10 +32,10 @@ public class ArrayChoicesAdapter extends AbstractArrayChoicesAdapter
 
     public ArrayChoicesAdapter()
     {
-        mChoices = new ArrayList<Object>();
-        mDrawables = new ArrayList<Drawable>();
-        mTitles = new ArrayList<String>();
-        mVisibleChoices = new ArrayList<Object>();
+        mChoices = new ArrayList<>();
+        mDrawables = new ArrayList<>();
+        mTitles = new ArrayList<>();
+        mVisibleChoices = new ArrayList<>();
     }
 
 

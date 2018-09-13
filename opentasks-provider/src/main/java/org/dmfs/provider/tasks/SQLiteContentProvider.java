@@ -61,7 +61,7 @@ abstract class SQLiteContentProvider extends ContentProvider
     private SQLiteOpenHelper mOpenHelper;
     private final Set<Uri> mChangedUris = new HashSet<>();
 
-    private final ThreadLocal<Boolean> mApplyingBatch = new ThreadLocal<Boolean>();
+    private final ThreadLocal<Boolean> mApplyingBatch = new ThreadLocal<>();
     private static final int SLEEP_AFTER_YIELD_DELAY = 4000;
 
     /**
@@ -75,7 +75,7 @@ abstract class SQLiteContentProvider extends ContentProvider
     protected SQLiteContentProvider(Iterable<TransactionEndTask> transactionEndTasks)
     {
         // append a task to set the transaction to successful
-        mTransactionEndTasks = new Flattened<>(transactionEndTasks, new SingletonIterable<TransactionEndTask>(new SuccessfulTransactionEndTask()));
+        mTransactionEndTasks = new Flattened<>(transactionEndTasks, new SingletonIterable<>(new SuccessfulTransactionEndTask()));
     }
 
 
@@ -178,9 +178,9 @@ abstract class SQLiteContentProvider extends ContentProvider
         db.beginTransaction();
         try
         {
-            for (int i = 0; i < numValues; i++)
+            for (ContentValues value : values)
             {
-                insertInTransaction(db, uri, values[i], callerIsSyncAdapter);
+                insertInTransaction(db, uri, value, callerIsSyncAdapter);
                 db.yieldIfContendedSafely();
             }
             endTransaction(db);
@@ -308,7 +308,7 @@ abstract class SQLiteContentProvider extends ContentProvider
         Set<Uri> changed;
         synchronized (mChangedUris)
         {
-            changed = new HashSet<Uri>(mChangedUris);
+            changed = new HashSet<>(mChangedUris);
             mChangedUris.clear();
         }
         ContentResolver resolver = getContext().getContentResolver();

@@ -95,7 +95,7 @@ public class BooleanFieldEditor extends AbstractFieldEditor implements OnChecked
             Boolean newValue = mAdapter.get(mValues);
             if (newValue != null)
             {
-                mCheckBox.setChecked(newValue.booleanValue());
+                mCheckBox.setChecked(newValue);
             }
         }
     }

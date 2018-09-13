@@ -44,7 +44,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
 
     @SuppressWarnings("unused")
     private static final String TAG = "TaskGroupPager";
-    private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
+    private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<>(16);
     private boolean mTwoPaneLayout;
     private final TabConfig mTabConfig;
 

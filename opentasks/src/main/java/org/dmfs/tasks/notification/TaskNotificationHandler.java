@@ -105,16 +105,11 @@ public class TaskNotificationHandler extends BroadcastReceiver
 
     private static int getPinnedTaskCount(Context context)
     {
-        final Cursor countCursor = context.getContentResolver().query(Tasks.getContentUri(AuthorityUtil.taskAuthority(context)),
-                new String[] { "count(*) AS count" }, Tasks.PINNED + " is not null", null, null);
-        try
+        try (Cursor countCursor = context.getContentResolver().query(Tasks.getContentUri(AuthorityUtil.taskAuthority(context)),
+                new String[] { "count(*) AS count" }, Tasks.PINNED + " is not null", null, null))
         {
             countCursor.moveToFirst();
             return countCursor.getInt(0);
-        }
-        finally
-        {
-            countCursor.close();
         }
     }
 
@@ -171,7 +166,7 @@ public class TaskNotificationHandler extends BroadcastReceiver
 
     static ArrayList<Uri> getPinnedTaskUris(Context context)
     {
-        final ArrayList<Uri> pinnedTaskUris = new ArrayList<Uri>(20);
+        final ArrayList<Uri> pinnedTaskUris = new ArrayList<>(20);
         final String pinnedTasks = PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREFERENCE_KEY_PINNED_TASKS, null);
         if (pinnedTasks == null)
         {

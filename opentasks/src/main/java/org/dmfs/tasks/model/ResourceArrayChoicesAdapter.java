@@ -43,7 +43,7 @@ public class ResourceArrayChoicesAdapter extends AbstractArrayChoicesAdapter
      */
     public ResourceArrayChoicesAdapter(int valuesResource, Context context)
     {
-        mChoices = mVisibleChoices = new ArrayList<Object>(Arrays.asList(context.getResources().getStringArray(valuesResource)));
+        mChoices = mVisibleChoices = new ArrayList<>(Arrays.asList(context.getResources().getStringArray(valuesResource)));
     }
 
 
@@ -61,7 +61,7 @@ public class ResourceArrayChoicesAdapter extends AbstractArrayChoicesAdapter
     {
         Resources resources = context.getResources();
         mTitles = Arrays.asList(resources.getStringArray(titlesResource));
-        mChoices = mVisibleChoices = new ArrayList<Object>(Arrays.asList(resources.getStringArray(valuesResource)));
+        mChoices = mVisibleChoices = new ArrayList<>(Arrays.asList(resources.getStringArray(valuesResource)));
     }
 
 
@@ -81,9 +81,9 @@ public class ResourceArrayChoicesAdapter extends AbstractArrayChoicesAdapter
     {
         Resources resources = context.getResources();
         mTitles = Arrays.asList(resources.getStringArray(titlesResource));
-        mChoices = mVisibleChoices = new ArrayList<Object>(Arrays.asList(resources.getStringArray(valuesResource)));
+        mChoices = mVisibleChoices = new ArrayList<>(Arrays.asList(resources.getStringArray(valuesResource)));
         TypedArray drawables = resources.obtainTypedArray(drawablesResource);
-        mDrawables = new ArrayList<Drawable>();
+        mDrawables = new ArrayList<>();
         for (int i = 0; i < drawables.length(); i++)
         {
             mDrawables.add(drawables.getDrawable(i));

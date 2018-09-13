@@ -44,286 +44,286 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
     /**
      * Adapter for the row id of a task.
      */
-    public final static LongFieldAdapter<TaskAdapter> _ID = new LongFieldAdapter<TaskAdapter>(Tasks._ID);
+    public final static LongFieldAdapter<TaskAdapter> _ID = new LongFieldAdapter<>(Tasks._ID);
 
     /**
      * Adapter for the task row id of as instance.
      */
-    public final static LongFieldAdapter<TaskAdapter> INSTANCE_TASK_ID = new LongFieldAdapter<TaskAdapter>(Instances.TASK_ID);
+    public final static LongFieldAdapter<TaskAdapter> INSTANCE_TASK_ID = new LongFieldAdapter<>(Instances.TASK_ID);
 
     /**
      * Adapter for the row id of the list of a task.
      */
-    public final static LongFieldAdapter<TaskAdapter> LIST_ID = new LongFieldAdapter<TaskAdapter>(Tasks.LIST_ID);
+    public final static LongFieldAdapter<TaskAdapter> LIST_ID = new LongFieldAdapter<>(Tasks.LIST_ID);
 
     /**
      * Adapter for the owner of the list of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> LIST_OWNER = new StringFieldAdapter<TaskAdapter>(Tasks.LIST_OWNER);
+    public final static StringFieldAdapter<TaskAdapter> LIST_OWNER = new StringFieldAdapter<>(Tasks.LIST_OWNER);
 
     /**
      * Adapter for the row id of original instance of a task.
      */
-    public final static LongFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_ID = new LongFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_ID);
+    public final static LongFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_ID = new LongFieldAdapter<>(Tasks.ORIGINAL_INSTANCE_ID);
 
     /**
      * Adapter for the sync_id of original instance of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_SYNC_ID = new StringFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_SYNC_ID);
+    public final static StringFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_SYNC_ID = new StringFieldAdapter<>(Tasks.ORIGINAL_INSTANCE_SYNC_ID);
 
     /**
      * Adapter for the original instance all day flag of a task.
      */
-    public final static BooleanFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_ALLDAY = new BooleanFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_ALLDAY);
+    public final static BooleanFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_ALLDAY = new BooleanFieldAdapter<>(Tasks.ORIGINAL_INSTANCE_ALLDAY);
 
     /**
      * Adapter for the all day flag of a task.
      */
-    public final static BooleanFieldAdapter<TaskAdapter> IS_ALLDAY = new BooleanFieldAdapter<TaskAdapter>(Tasks.IS_ALLDAY);
+    public final static BooleanFieldAdapter<TaskAdapter> IS_ALLDAY = new BooleanFieldAdapter<>(Tasks.IS_ALLDAY);
 
     /**
      * Adapter for the percent complete value of a task.
      */
-    public final static IntegerFieldAdapter<TaskAdapter> PERCENT_COMPLETE = new IntegerFieldAdapter<TaskAdapter>(Tasks.PERCENT_COMPLETE);
+    public final static IntegerFieldAdapter<TaskAdapter> PERCENT_COMPLETE = new IntegerFieldAdapter<>(Tasks.PERCENT_COMPLETE);
 
     /**
      * Adapter for the status of a task.
      */
-    public final static IntegerFieldAdapter<TaskAdapter> STATUS = new IntegerFieldAdapter<TaskAdapter>(Tasks.STATUS);
+    public final static IntegerFieldAdapter<TaskAdapter> STATUS = new IntegerFieldAdapter<>(Tasks.STATUS);
 
     /**
      * Adapter for the priority value of a task.
      */
-    public final static IntegerFieldAdapter<TaskAdapter> PRIORITY = new IntegerFieldAdapter<TaskAdapter>(Tasks.PRIORITY);
+    public final static IntegerFieldAdapter<TaskAdapter> PRIORITY = new IntegerFieldAdapter<>(Tasks.PRIORITY);
 
     /**
      * Adapter for the classification value of a task.
      */
-    public final static IntegerFieldAdapter<TaskAdapter> CLASSIFICATION = new IntegerFieldAdapter<TaskAdapter>(Tasks.CLASSIFICATION);
+    public final static IntegerFieldAdapter<TaskAdapter> CLASSIFICATION = new IntegerFieldAdapter<>(Tasks.CLASSIFICATION);
 
     /**
      * Adapter for the list name of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> LIST_NAME = new StringFieldAdapter<TaskAdapter>(Tasks.LIST_NAME);
+    public final static StringFieldAdapter<TaskAdapter> LIST_NAME = new StringFieldAdapter<>(Tasks.LIST_NAME);
 
     /**
      * Adapter for the account name of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> ACCOUNT_NAME = new StringFieldAdapter<TaskAdapter>(Tasks.ACCOUNT_NAME);
+    public final static StringFieldAdapter<TaskAdapter> ACCOUNT_NAME = new StringFieldAdapter<>(Tasks.ACCOUNT_NAME);
 
     /**
      * Adapter for the account type of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> ACCOUNT_TYPE = new StringFieldAdapter<TaskAdapter>(Tasks.ACCOUNT_TYPE);
+    public final static StringFieldAdapter<TaskAdapter> ACCOUNT_TYPE = new StringFieldAdapter<>(Tasks.ACCOUNT_TYPE);
 
     /**
      * Adapter for the title of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> TITLE = new StringFieldAdapter<TaskAdapter>(Tasks.TITLE);
+    public final static StringFieldAdapter<TaskAdapter> TITLE = new StringFieldAdapter<>(Tasks.TITLE);
 
     /**
      * Adapter for the location of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> LOCATION = new StringFieldAdapter<TaskAdapter>(Tasks.LOCATION);
+    public final static StringFieldAdapter<TaskAdapter> LOCATION = new StringFieldAdapter<>(Tasks.LOCATION);
 
     /**
      * Adapter for the description of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> DESCRIPTION = new StringFieldAdapter<TaskAdapter>(Tasks.DESCRIPTION);
+    public final static StringFieldAdapter<TaskAdapter> DESCRIPTION = new StringFieldAdapter<>(Tasks.DESCRIPTION);
 
     /**
      * Adapter for the start date of a task.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> DTSTART = new DateTimeFieldAdapter<TaskAdapter>(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
+    public final static DateTimeFieldAdapter<TaskAdapter> DTSTART = new DateTimeFieldAdapter<>(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
 
     /**
      * Adapter for the original date of a task.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_TIME = new DateTimeFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_TIME, Tasks.TZ,
+    public final static DateTimeFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_TIME = new DateTimeFieldAdapter<>(Tasks.ORIGINAL_INSTANCE_TIME, Tasks.TZ,
             Tasks.ORIGINAL_INSTANCE_ALLDAY);
 
     /**
      * Adapter for the raw start date timestamp of a task.
      */
-    public final static LongFieldAdapter<TaskAdapter> DTSTART_RAW = new LongFieldAdapter<TaskAdapter>(Tasks.DTSTART);
+    public final static LongFieldAdapter<TaskAdapter> DTSTART_RAW = new LongFieldAdapter<>(Tasks.DTSTART);
 
     /**
      * Adapter for the due date of a task.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> DUE = new DateTimeFieldAdapter<TaskAdapter>(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
+    public final static DateTimeFieldAdapter<TaskAdapter> DUE = new DateTimeFieldAdapter<>(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
 
     /**
      * Adapter for the raw due date timestamp of a task.
      */
-    public final static LongFieldAdapter<TaskAdapter> DUE_RAW = new LongFieldAdapter<TaskAdapter>(Tasks.DUE);
+    public final static LongFieldAdapter<TaskAdapter> DUE_RAW = new LongFieldAdapter<>(Tasks.DUE);
 
     /**
      * Adapter for the start date of a task.
      */
-    public final static DurationFieldAdapter<TaskAdapter> DURATION = new DurationFieldAdapter<TaskAdapter>(Tasks.DURATION);
+    public final static DurationFieldAdapter<TaskAdapter> DURATION = new DurationFieldAdapter<>(Tasks.DURATION);
 
     /**
      * Adapter for the dirty flag of a task.
      */
-    public final static BooleanFieldAdapter<TaskAdapter> _DIRTY = new BooleanFieldAdapter<TaskAdapter>(Tasks._DIRTY);
+    public final static BooleanFieldAdapter<TaskAdapter> _DIRTY = new BooleanFieldAdapter<>(Tasks._DIRTY);
 
     /**
      * Adapter for the deleted flag of a task.
      */
-    public final static BooleanFieldAdapter<TaskAdapter> _DELETED = new BooleanFieldAdapter<TaskAdapter>(Tasks._DELETED);
+    public final static BooleanFieldAdapter<TaskAdapter> _DELETED = new BooleanFieldAdapter<>(Tasks._DELETED);
 
     /**
      * Adapter for the completed date of a task.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> COMPLETED = new DateTimeFieldAdapter<TaskAdapter>(Tasks.COMPLETED, null, null);
+    public final static DateTimeFieldAdapter<TaskAdapter> COMPLETED = new DateTimeFieldAdapter<>(Tasks.COMPLETED, null, null);
 
     /**
      * Adapter for the created date of a task.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> CREATED = new DateTimeFieldAdapter<TaskAdapter>(Tasks.CREATED, null, null);
+    public final static DateTimeFieldAdapter<TaskAdapter> CREATED = new DateTimeFieldAdapter<>(Tasks.CREATED, null, null);
 
     /**
      * Adapter for the last modified date of a task.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> LAST_MODIFIED = new DateTimeFieldAdapter<TaskAdapter>(Tasks.LAST_MODIFIED, null, null);
+    public final static DateTimeFieldAdapter<TaskAdapter> LAST_MODIFIED = new DateTimeFieldAdapter<>(Tasks.LAST_MODIFIED, null, null);
 
     /**
      * Adapter for the URL of a task.
      */
-    public final static UrlFieldAdapter<TaskAdapter> URL = new UrlFieldAdapter<TaskAdapter>(TaskContract.Tasks.URL);
+    public final static UrlFieldAdapter<TaskAdapter> URL = new UrlFieldAdapter<>(TaskContract.Tasks.URL);
 
     /**
      * Adapter for the UID of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> _UID = new StringFieldAdapter<TaskAdapter>(TaskContract.Tasks._UID);
+    public final static StringFieldAdapter<TaskAdapter> _UID = new StringFieldAdapter<>(TaskContract.Tasks._UID);
 
     /**
      * Adapter for the raw time zone of a task.
      */
-    public final static StringFieldAdapter<TaskAdapter> TIMEZONE_RAW = new StringFieldAdapter<TaskAdapter>(TaskContract.Tasks.TZ);
+    public final static StringFieldAdapter<TaskAdapter> TIMEZONE_RAW = new StringFieldAdapter<>(TaskContract.Tasks.TZ);
 
     /**
      * Adapter for the Color of the task.
      */
-    public final static IntegerFieldAdapter<TaskAdapter> LIST_COLOR = new IntegerFieldAdapter<TaskAdapter>(TaskContract.Tasks.LIST_COLOR);
+    public final static IntegerFieldAdapter<TaskAdapter> LIST_COLOR = new IntegerFieldAdapter<>(TaskContract.Tasks.LIST_COLOR);
 
     /**
      * Adapter for the access level of the task list.
      */
-    public final static IntegerFieldAdapter<TaskAdapter> LIST_ACCESS_LEVEL = new IntegerFieldAdapter<TaskAdapter>(TaskContract.Tasks.LIST_ACCESS_LEVEL);
+    public final static IntegerFieldAdapter<TaskAdapter> LIST_ACCESS_LEVEL = new IntegerFieldAdapter<>(TaskContract.Tasks.LIST_ACCESS_LEVEL);
 
     /**
      * Adapter for the visibility setting of the task list.
      */
-    public final static BooleanFieldAdapter<TaskAdapter> LIST_VISIBLE = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.VISIBLE);
+    public final static BooleanFieldAdapter<TaskAdapter> LIST_VISIBLE = new BooleanFieldAdapter<>(TaskContract.Tasks.VISIBLE);
 
     /**
      * Adpater for the ID of the task.
      */
-    public static final IntegerFieldAdapter<TaskAdapter> TASK_ID = new IntegerFieldAdapter<TaskAdapter>(TaskContract.Tasks._ID);
+    public static final IntegerFieldAdapter<TaskAdapter> TASK_ID = new IntegerFieldAdapter<>(TaskContract.Tasks._ID);
 
     /**
      * Adapter for the IS_CLOSED flag of a task.
      */
-    public static final BooleanFieldAdapter<TaskAdapter> IS_CLOSED = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.IS_CLOSED);
+    public static final BooleanFieldAdapter<TaskAdapter> IS_CLOSED = new BooleanFieldAdapter<>(TaskContract.Tasks.IS_CLOSED);
 
     /**
      * Adapter for the IS_NEW flag of a task.
      */
-    public static final BooleanFieldAdapter<TaskAdapter> IS_NEW = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.IS_NEW);
+    public static final BooleanFieldAdapter<TaskAdapter> IS_NEW = new BooleanFieldAdapter<>(TaskContract.Tasks.IS_NEW);
 
     /**
      * Adapter for the PINNED flag of a task.
      */
-    public static final BooleanFieldAdapter<TaskAdapter> PINNED = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.PINNED);
+    public static final BooleanFieldAdapter<TaskAdapter> PINNED = new BooleanFieldAdapter<>(TaskContract.Tasks.PINNED);
 
     /**
      * Adapter for the HAS_ALARMS flag of a task.
      */
-    public static final BooleanFieldAdapter<TaskAdapter> HAS_ALARMS = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.HAS_ALARMS);
+    public static final BooleanFieldAdapter<TaskAdapter> HAS_ALARMS = new BooleanFieldAdapter<>(TaskContract.Tasks.HAS_ALARMS);
 
     /**
      * Adapter for the HAS_PROPERTIES flag of a task.
      */
-    public static final BooleanFieldAdapter<TaskAdapter> HAS_PROPERTIES = new BooleanFieldAdapter<TaskAdapter>(TaskContract.Tasks.HAS_PROPERTIES);
+    public static final BooleanFieldAdapter<TaskAdapter> HAS_PROPERTIES = new BooleanFieldAdapter<>(TaskContract.Tasks.HAS_PROPERTIES);
 
     /**
      * Adapter for the RRULE of a task.
      */
-    public static final RRuleFieldAdapter<TaskAdapter> RRULE = new RRuleFieldAdapter<TaskAdapter>(TaskContract.Tasks.RRULE);
+    public static final RRuleFieldAdapter<TaskAdapter> RRULE = new RRuleFieldAdapter<>(TaskContract.Tasks.RRULE);
 
     /**
      * Adapter for the RDATE of a task.
      */
-    public static final DateTimeIterableFieldAdapter<TaskAdapter> RDATE = new DateTimeIterableFieldAdapter<TaskAdapter>(TaskContract.Tasks.RDATE,
+    public static final DateTimeIterableFieldAdapter<TaskAdapter> RDATE = new DateTimeIterableFieldAdapter<>(TaskContract.Tasks.RDATE,
             TaskContract.Tasks.TZ);
 
     /**
      * Adapter for the EXDATE of a task.
      */
-    public static final DateTimeIterableFieldAdapter<TaskAdapter> EXDATE = new DateTimeIterableFieldAdapter<TaskAdapter>(TaskContract.Tasks.EXDATE,
+    public static final DateTimeIterableFieldAdapter<TaskAdapter> EXDATE = new DateTimeIterableFieldAdapter<>(TaskContract.Tasks.EXDATE,
             TaskContract.Tasks.TZ);
 
     /**
      * Adapter for the SYNC1 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC1 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC1);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC1 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC1);
 
     /**
      * Adapter for the SYNC2 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC2 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC2);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC2 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC2);
 
     /**
      * Adapter for the SYNC3 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC3 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC3);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC3 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC3);
 
     /**
      * Adapter for the SYNC4 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC4 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC4);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC4 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC4);
 
     /**
      * Adapter for the SYNC5 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC5 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC5);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC5 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC5);
 
     /**
      * Adapter for the SYNC6 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC6 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC6);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC6 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC6);
 
     /**
      * Adapter for the SYNC7 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC7 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC7);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC7 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC7);
 
     /**
      * Adapter for the SYNC8 field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC8 = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC8);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC8 = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC8);
 
     /**
      * Adapter for the SYNC_VERSION field of a task.
      */
-    public static final BinaryFieldAdapter<TaskAdapter> SYNC_VERSION = new BinaryFieldAdapter<TaskAdapter>(TaskContract.Tasks.SYNC_VERSION);
+    public static final BinaryFieldAdapter<TaskAdapter> SYNC_VERSION = new BinaryFieldAdapter<>(TaskContract.Tasks.SYNC_VERSION);
 
     /**
      * Adapter for the SYNC_ID field of a task.
      */
-    public static final StringFieldAdapter<TaskAdapter> SYNC_ID = new StringFieldAdapter<TaskAdapter>(TaskContract.Tasks._SYNC_ID);
+    public static final StringFieldAdapter<TaskAdapter> SYNC_ID = new StringFieldAdapter<>(TaskContract.Tasks._SYNC_ID);
 
     /**
      * Adapter for the due date of a task instance.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> INSTANCE_DUE = new DateTimeFieldAdapter<TaskAdapter>(Instances.INSTANCE_DUE, Tasks.TZ,
+    public final static DateTimeFieldAdapter<TaskAdapter> INSTANCE_DUE = new DateTimeFieldAdapter<>(Instances.INSTANCE_DUE, Tasks.TZ,
             Tasks.IS_ALLDAY);
 
     /**
      * Adapter for the start date of a task instance.
      */
-    public final static DateTimeFieldAdapter<TaskAdapter> INSTANCE_START = new DateTimeFieldAdapter<TaskAdapter>(Instances.INSTANCE_START, Tasks.TZ,
+    public final static DateTimeFieldAdapter<TaskAdapter> INSTANCE_START = new DateTimeFieldAdapter<>(Instances.INSTANCE_START, Tasks.TZ,
             Tasks.IS_ALLDAY);
 
     /**

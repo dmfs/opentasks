@@ -63,12 +63,12 @@ public class Utils
 
         try
         {
-            Cursor c = db.query(Tables.LISTS, new String[] { TaskListColumns._ID, TaskListSyncColumns.ACCOUNT_NAME, TaskListSyncColumns.ACCOUNT_TYPE }, null,
-                    null, null, null, null);
 
             // build a list of all task list ids that no longer have an account
-            List<Long> obsoleteLists = new ArrayList<Long>();
-            try
+            List<Long> obsoleteLists = new ArrayList<>();
+            try (Cursor c = db.query(Tables.LISTS, new String[] { TaskListColumns._ID, TaskListSyncColumns.ACCOUNT_NAME, TaskListSyncColumns.ACCOUNT_TYPE },
+                    null,
+                    null, null, null, null))
             {
                 while (c.moveToNext())
                 {
@@ -89,10 +89,6 @@ public class Utils
                         }
                     }
                 }
-            }
-            finally
-            {
-                c.close();
             }
 
             if (obsoleteLists.size() == 0)

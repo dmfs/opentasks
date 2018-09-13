@@ -41,9 +41,9 @@ import java.util.TimeZone;
 public class TimeZoneChoicesAdapter implements IChoicesAdapter
 {
 
-    private final List<String> mIdList = new ArrayList<String>();
-    private final Map<String, TimeZoneWrapper> mIdMap = new HashMap<String, TimeZoneWrapper>();
-    private final Map<String, String> mNameMap = new HashMap<String, String>();
+    private final List<String> mIdList = new ArrayList<>();
+    private final Map<String, TimeZoneWrapper> mIdMap = new HashMap<>();
+    private final Map<String, String> mNameMap = new HashMap<>();
 
     /**
      * This is a hack to show correct offsets for the currently selected date. This assumes that calls to getIndex are done with a a {@link TimeZoneWrapper}

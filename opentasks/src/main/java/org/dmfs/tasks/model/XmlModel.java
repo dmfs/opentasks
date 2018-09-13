@@ -83,7 +83,7 @@ public class XmlModel extends Model
      */
     public final static QualifiedName ATTR_HIDECHECKLIST = QualifiedName.get("hideCheckList");
 
-    private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
+    private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<>();
 
     private String mAccountLabel;
 
@@ -358,7 +358,7 @@ public class XmlModel extends Model
                 }
             }
         }
-        catch (NameNotFoundException e)
+        catch (NameNotFoundException ignored)
         {
         }
         return null;
@@ -473,7 +473,7 @@ public class XmlModel extends Model
         {
             if (mDetailsLayoutOptions == null)
             {
-                mDetailsLayoutOptions = new HashMap<String, Object>(4);
+                mDetailsLayoutOptions = new HashMap<>(4);
             }
             mDetailsLayoutOptions.put(key, value);
             return this;
@@ -485,7 +485,7 @@ public class XmlModel extends Model
         {
             if (mEditLayoutOptions == null)
             {
-                mEditLayoutOptions = new HashMap<String, Object>(4);
+                mEditLayoutOptions = new HashMap<>(4);
             }
             mEditLayoutOptions.put(key, value);
             return this;
@@ -496,7 +496,7 @@ public class XmlModel extends Model
         {
             if (mDetailsLayoutOptions == null)
             {
-                mDetailsLayoutOptions = new HashMap<String, Object>(4);
+                mDetailsLayoutOptions = new HashMap<>(4);
             }
             mDetailsLayoutOptions.put(key, value);
             return this;
@@ -508,7 +508,7 @@ public class XmlModel extends Model
         {
             if (mEditLayoutOptions == null)
             {
-                mEditLayoutOptions = new HashMap<String, Object>(4);
+                mEditLayoutOptions = new HashMap<>(4);
             }
             mEditLayoutOptions.put(key, value);
             return this;

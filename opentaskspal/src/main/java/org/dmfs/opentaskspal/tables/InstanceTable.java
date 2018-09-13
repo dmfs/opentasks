@@ -31,6 +31,6 @@ public final class InstanceTable extends DelegatingTable<TaskContract.Instances>
 {
     public InstanceTable(String authority)
     {
-        super(new BaseTable<TaskContract.Instances>(TaskContract.Instances.getContentUri(authority)));
+        super(new BaseTable<>(TaskContract.Instances.getContentUri(authority)));
     }
 }

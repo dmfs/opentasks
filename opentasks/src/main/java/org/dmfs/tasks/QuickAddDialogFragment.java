@@ -396,23 +396,23 @@ public class QuickAddDialogFragment extends SupportDialogFragment
         mSaveButton.setEnabled(false);
         mSaveAndNextButton.setEnabled(false);
 
-        if (id == android.R.id.button1)
+        switch (id)
         {
-            // "save" pressed
-            notifyUser(true /* close afterwards */);
-            createTask();
-        }
-        else if (id == android.R.id.button2)
-        {
-            // "save and continue" pressed
-            notifyUser(false /* reset view */);
-            createTask();
-        }
-        else if (id == android.R.id.edit)
-        {
-            // "edit" pressed
-            editTask();
-            dismiss();
+            case android.R.id.button1:
+                // "save" pressed
+                notifyUser(true /* close afterwards */);
+                createTask();
+                break;
+            case android.R.id.button2:
+                // "save and continue" pressed
+                notifyUser(false /* reset view */);
+                createTask();
+                break;
+            case android.R.id.edit:
+                // "edit" pressed
+                editTask();
+                dismiss();
+                break;
         }
     }
 

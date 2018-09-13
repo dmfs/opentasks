@@ -190,7 +190,7 @@ public final class DateTimeIterableFieldAdapter<EntityType> extends SimpleFieldA
         {
             super(new Mapped<>(
                     datetime -> !datetime.isFloating() && timeZone != null ? datetime.shiftTimeZone(timeZone) : datetime,
-                    new Mapped<CharSequence, DateTime>(
+                    new Mapped<>(
                             charSequence -> DateTime.parse(timeZone, charSequence.toString()),
                             new Split(dateTimeList, ','))));
         }

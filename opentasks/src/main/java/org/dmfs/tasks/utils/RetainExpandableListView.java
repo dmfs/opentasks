@@ -76,7 +76,7 @@ public class RetainExpandableListView extends ExpandableListView
     {
         ExpandableListAdapter adapter = this.getExpandableListAdapter();
         int count = adapter.getGroupCount();
-        ArrayList<Long> expandedIds = new ArrayList<Long>();
+        ArrayList<Long> expandedIds = new ArrayList<>();
         for (int i = 0; i < count; i++)
         {
             if (this.isGroupExpanded(i))
@@ -94,7 +94,7 @@ public class RetainExpandableListView extends ExpandableListView
         int i = 0;
         for (Long e : list)
         {
-            ret[i++] = e.longValue();
+            ret[i++] = e;
         }
         return ret;
     }

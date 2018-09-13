@@ -58,7 +58,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
     /**
      * Maps account types to their respective task model.
      */
-    private Map<String, Model> mAccountModelMap = new HashMap<String, Model>();
+    private Map<String, Model> mAccountModelMap = new HashMap<>();
 
     /**
      * Our application context.
@@ -278,7 +278,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
      */
     public List<Account> getExistingAccounts()
     {
-        List<Account> result = new ArrayList<Account>();
+        List<Account> result = new ArrayList<>();
         Account[] accounts = mAccountManager.getAccounts();
         for (Account account : accounts)
         {

@@ -304,7 +304,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
     {
         LayoutInflater inflater;
         private int listNameColumn, listColorColumn, compareColumn, accountNameColumn, accountTypeColumn;
-        private HashMap<Long, Boolean> savedPositions = new HashMap<Long, Boolean>();
+        private HashMap<Long, Boolean> savedPositions = new HashMap<>();
 
 
         @Override
@@ -407,7 +407,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
         private void addToState(long id, boolean val)
         {
-            if (savedPositions.containsKey(Long.valueOf(id)))
+            if (savedPositions.containsKey(id))
             {
                 savedPositions.remove(id);
             }
@@ -486,7 +486,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
     public void saveListState()
     {
         HashMap<Long, Boolean> savedPositions = ((VisibleListAdapter) getListAdapter()).getState();
-        ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+        ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
         for (Long posInt : savedPositions.keySet())
         {
