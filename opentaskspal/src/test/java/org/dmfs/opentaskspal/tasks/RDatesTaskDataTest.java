@@ -41,7 +41,7 @@ import static org.junit.Assert.assertThat;
 public class RDatesTaskDataTest
 {
     @Test
-    public void testEmpty() throws Exception
+    public void testEmpty()
     {
         assertThat(new RDatesTaskData(instance()),
                 builds(
@@ -51,7 +51,7 @@ public class RDatesTaskDataTest
 
 
     @Test
-    public void testSingle() throws Exception
+    public void testSingle()
     {
         assertThat(new RDatesTaskData(new SingletonIterable<>(DateTime.parse("Europe/Berlin", "20171212T123456"))),
                 builds(
@@ -61,7 +61,7 @@ public class RDatesTaskDataTest
 
 
     @Test
-    public void testSingleFloating() throws Exception
+    public void testSingleFloating()
     {
         assertThat(new RDatesTaskData(new SingletonIterable<>(DateTime.parse("20171212T123456"))),
                 builds(
@@ -71,7 +71,7 @@ public class RDatesTaskDataTest
 
 
     @Test
-    public void testSingleAllDay() throws Exception
+    public void testSingleAllDay()
     {
         assertThat(new RDatesTaskData(new SingletonIterable<>(DateTime.parse("20171212"))),
                 builds(
@@ -81,7 +81,7 @@ public class RDatesTaskDataTest
 
 
     @Test
-    public void testMulti1() throws Exception
+    public void testMulti1()
     {
         assertThat(new RDatesTaskData(
                         new Seq<>(
@@ -94,7 +94,7 @@ public class RDatesTaskDataTest
 
 
     @Test
-    public void testMulti2() throws Exception
+    public void testMulti2()
     {
         assertThat(new RDatesTaskData(
                         new Seq<>(

@@ -42,7 +42,7 @@ public class ListenableScrollView extends NestedScrollView
          * @param newScrollY
          *         The new scroll position.
          */
-        public void onScroll(int oldScrollY, int newScrollY);
+        void onScroll(int oldScrollY, int newScrollY);
     }
 
 

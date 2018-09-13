@@ -94,7 +94,7 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
         LayoutParams params = getWindow().getAttributes();
         params.height = LayoutParams.WRAP_CONTENT;
         params.width = LayoutParams.WRAP_CONTENT;
-        getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+        getWindow().setAttributes(params);
 
         findViewById(R.id.color_setting).setOnClickListener(this);
         findViewById(R.id.name_setting).setOnClickListener(this);

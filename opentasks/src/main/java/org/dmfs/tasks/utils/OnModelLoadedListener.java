@@ -32,5 +32,5 @@ public interface OnModelLoadedListener
      * @param model
      *         The {@link Model} for the requested account type or {@code null} if no such account type exists.
      */
-    public void onModelLoaded(Model model);
+    void onModelLoaded(Model model);
 }

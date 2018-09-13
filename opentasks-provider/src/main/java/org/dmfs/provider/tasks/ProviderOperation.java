@@ -35,5 +35,5 @@ public enum ProviderOperation
     /**
      * Delete operations.
      */
-    DELETE;
+    DELETE
 }

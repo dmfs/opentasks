@@ -308,7 +308,7 @@ public enum ContentOperation
     private static final String PREFS_KEY_LAST_ALARM_TIMESTAMP = "org.dmfs.provider.tasks.prefs.LAST_ALARM_TIMESTAMP";
 
 
-    private ContentOperation(OperationHandler handler)
+    ContentOperation(OperationHandler handler)
     {
         mHandler = handler;
     }
@@ -420,7 +420,7 @@ public enum ContentOperation
 
     public interface OperationHandler
     {
-        public void handleOperation(Context context, Uri uri, SQLiteDatabase db, ContentValues values);
+        void handleOperation(Context context, Uri uri, SQLiteDatabase db, ContentValues values);
     }
 
 }

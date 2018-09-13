@@ -35,7 +35,7 @@ public interface IChoicesAdapter
      *
      * @return The title or <code>null</code> if no such object is found among the choices.
      */
-    public String getTitle(Object object);
+    String getTitle(Object object);
 
     /**
      * Get a {@link Drawable} for the given object.
@@ -45,7 +45,7 @@ public interface IChoicesAdapter
      *
      * @return A {@link Drawable} or <code>null</code> if no such object is found among the choices.
      */
-    public Drawable getDrawable(Object object);
+    Drawable getDrawable(Object object);
 
     /**
      * Get the position of the object among the choices.
@@ -55,14 +55,14 @@ public interface IChoicesAdapter
      *
      * @return The position of the choice or <code>-1</code> if no such object is found among the choices.
      */
-    public int getIndex(Object object);
+    int getIndex(Object object);
 
     /**
      * Get the number of choices.
      *
      * @return The number of choices.
      */
-    public int getCount();
+    int getCount();
 
     /**
      * Get the choice at the specified position.
@@ -75,5 +75,5 @@ public interface IChoicesAdapter
      * @throws IndexOutOfBoundsException
      *         if the position is invalid.
      */
-    public Object getItem(int position);
+    Object getItem(int position);
 }

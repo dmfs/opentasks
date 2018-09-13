@@ -29,7 +29,7 @@ public interface OnContentChangeListener
      * @param contentSet
      *         The {@link ContentSet} that contains the changed key.
      */
-    public void onContentChanged(ContentSet contentSet);
+    void onContentChanged(ContentSet contentSet);
 
     /**
      * Called whenever the {@link ContentSet} has been (re-)loaded.
@@ -37,5 +37,5 @@ public interface OnContentChangeListener
      * @param contentSet
      *         The {@link ContentSet} that has been reloaded.
      */
-    public void onContentLoaded(ContentSet contentSet);
+    void onContentLoaded(ContentSet contentSet);
 }

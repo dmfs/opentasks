@@ -51,19 +51,19 @@ public final class TimeData implements RowData<TaskContract.Tasks>
 
     public TimeData(@NonNull DateTime start, @NonNull DateTime due)
     {
-        this(start, new Present<>(due), Absent.<Duration>absent());
+        this(start, new Present<>(due), Absent.absent());
     }
 
 
     public TimeData(@NonNull DateTime start, @NonNull Duration duration)
     {
-        this(start, Absent.<DateTime>absent(), new Present<>(duration));
+        this(start, Absent.absent(), new Present<>(duration));
     }
 
 
     public TimeData(@NonNull DateTime start)
     {
-        this(start, Absent.<DateTime>absent(), Absent.<Duration>absent());
+        this(start, Absent.absent(), Absent.absent());
     }
 
 

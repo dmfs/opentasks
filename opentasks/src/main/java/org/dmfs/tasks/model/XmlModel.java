@@ -130,7 +130,7 @@ public class XmlModel extends Model
     private static final ElementDescriptor<XmlModel> XML_MODEL_DESCRIPTOR = ElementDescriptor.register(QualifiedName.get(NAMESPACE, "TaskSource"),
             new AbstractObjectBuilder<XmlModel>()
             {
-                public XmlModel get(ElementDescriptor<XmlModel> descriptor, XmlModel recycle, ParserContext context) throws XmlObjectPullParserException
+                public XmlModel get(ElementDescriptor<XmlModel> descriptor, XmlModel recycle, ParserContext context)
                 {
                     // ensure we have a state object
                     context.setState(new ModelParserState());
@@ -143,23 +143,16 @@ public class XmlModel extends Model
                 }
 
 
-                ;
-
-
                 public XmlModel update(ElementDescriptor<XmlModel> descriptor, XmlModel object, QualifiedName attribute, String value, ParserContext context)
-                        throws XmlObjectPullParserException
                 {
                     // for now we ignore all attributes
                     return object;
                 }
 
 
-                ;
-
-
                 @SuppressWarnings("unchecked")
                 public <V extends Object> XmlModel update(ElementDescriptor<XmlModel> descriptor, XmlModel object, ElementDescriptor<V> childDescriptor, V child,
-                                                          ParserContext context) throws XmlObjectPullParserException
+                                                          ParserContext context)
                 {
                     if (childDescriptor == XML_DATAKIND)
                     {
@@ -200,11 +193,8 @@ public class XmlModel extends Model
                 }
 
 
-                ;
-
-
                 @SuppressWarnings("unchecked")
-                public XmlModel finish(ElementDescriptor<XmlModel> descriptor, XmlModel object, ParserContext context) throws XmlObjectPullParserException
+                public XmlModel finish(ElementDescriptor<XmlModel> descriptor, XmlModel object, ParserContext context)
                 {
                     ModelParserState state = (ModelParserState) context.getState();
                     if (state.alldayDescriptor != null)
@@ -222,14 +212,12 @@ public class XmlModel extends Model
                     return object;
                 }
 
-
-                ;
             });
 
     private final static ElementDescriptor<DataKind> XML_DATAKIND = ElementDescriptor.register(QualifiedName.get(NAMESPACE, "datakind"),
             new AbstractObjectBuilder<DataKind>()
             {
-                public DataKind get(ElementDescriptor<DataKind> descriptor, DataKind recycle, ParserContext context) throws XmlObjectPullParserException
+                public DataKind get(ElementDescriptor<DataKind> descriptor, DataKind recycle, ParserContext context)
                 {
                     if (recycle != null)
                     {
@@ -241,11 +229,7 @@ public class XmlModel extends Model
                 }
 
 
-                ;
-
-
                 public DataKind update(ElementDescriptor<DataKind> descriptor, DataKind object, QualifiedName attribute, String value, ParserContext context)
-                        throws XmlObjectPullParserException
                 {
                     if (attribute == ATTR_KIND)
                     {
@@ -258,8 +242,6 @@ public class XmlModel extends Model
                     return object;
                 }
 
-
-                ;
             });
 
     private final PackageManager mPackageManager;

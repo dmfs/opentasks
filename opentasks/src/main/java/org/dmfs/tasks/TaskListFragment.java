@@ -195,11 +195,11 @@ public class TaskListFragment extends SupportFragment
          * @param sender
          *         The sender of the callback.
          */
-        public void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
+        void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
 
-        public ExpandableGroupDescriptor getGroupDescriptor(int position);
+        ExpandableGroupDescriptor getGroupDescriptor(int position);
 
-        public void onAddNewTask();
+        void onAddNewTask();
     }
 
 
@@ -513,8 +513,8 @@ public class TaskListFragment extends SupportFragment
     {
         mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), mGroupDescriptor);
         mExpandableListView.setAdapter(mAdapter);
-        mExpandableListView.setOnChildClickListener((android.widget.ExpandableListView.OnChildClickListener) mTaskItemClickListener);
-        mExpandableListView.setOnGroupCollapseListener((android.widget.ExpandableListView.OnGroupCollapseListener) mTaskListCollapseListener);
+        mExpandableListView.setOnChildClickListener(mTaskItemClickListener);
+        mExpandableListView.setOnGroupCollapseListener(mTaskListCollapseListener);
         mAdapter.setOnChildLoadedListener(this);
         mAdapter.setChildCursorFilter(COMPLETED_FILTER);
         restoreFilterState();

@@ -155,7 +155,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     public TaskProvider()
     {
         // for now we don't have anything specific to execute before the transaction ends.
-        super(EmptyIterable.<TransactionEndTask>instance());
+        super(EmptyIterable.instance());
     }
 
 

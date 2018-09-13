@@ -53,9 +53,6 @@ public class ExpandableChildDescriptor
     }
 
 
-    ;
-
-
     /**
      * Create a new {@link ExpandableChildDescriptor} using the given values.
      *

@@ -280,7 +280,7 @@ public class TaskProviderInstancesTest
      * Create a single instance and insert an override for a new instance, turning the event into a recurring event.
      */
     @Test
-    public void testInsertSingleInstanceAddAnother() throws RemoteException, OperationApplicationException
+    public void testInsertSingleInstanceAddAnother()
     {
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TasksTable(mAuthority));
