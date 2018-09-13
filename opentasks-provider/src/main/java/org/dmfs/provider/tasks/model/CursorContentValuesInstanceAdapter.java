@@ -122,14 +122,14 @@ public class CursorContentValuesInstanceAdapter extends AbstractInstanceAdapter
 
 
     @Override
-    public int commit(SQLiteDatabase db)
+    public void commit(SQLiteDatabase db)
     {
         if (mValues.size() == 0)
         {
-            return 0;
+            return;
         }
 
-        return db.update(TaskDatabaseHelper.Tables.TASKS, mValues, TaskContract.TaskColumns._ID + "=" + mId, null);
+        db.update(TaskDatabaseHelper.Tables.TASKS, mValues, TaskContract.TaskColumns._ID + "=" + mId, null);
     }
 
 

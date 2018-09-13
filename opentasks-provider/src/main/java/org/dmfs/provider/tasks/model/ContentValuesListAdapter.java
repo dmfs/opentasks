@@ -103,21 +103,20 @@ public class ContentValuesListAdapter extends AbstractListAdapter
 
 
     @Override
-    public int commit(SQLiteDatabase db)
+    public void commit(SQLiteDatabase db)
     {
         if (mValues.size() == 0)
         {
-            return 0;
+            return;
         }
 
         if (mId < 0)
         {
             mId = db.insert(TaskDatabaseHelper.Tables.LISTS, null, mValues);
-            return mId > 0 ? 1 : 0;
         }
         else
         {
-            return db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
+            db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
         }
     }
 

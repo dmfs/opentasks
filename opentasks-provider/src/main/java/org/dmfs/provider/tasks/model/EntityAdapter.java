@@ -119,7 +119,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return The number of entries affected. This may be <code>0</code> if no fields have been changed.
      */
-    public int commit(SQLiteDatabase db);
+    public void commit(SQLiteDatabase db);
 
     /**
      * Return the value of a temporary state field. The state of an entity is not committed to the database, it's only bound to the instances of this

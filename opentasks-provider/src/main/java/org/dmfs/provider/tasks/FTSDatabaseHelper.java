@@ -438,7 +438,7 @@ public class FTSDatabaseHelper
      *
      * @return The number of deleted relations.
      */
-    private static int deleteNGramRelations(SQLiteDatabase db, long taskId, long propertyId, int contentType)
+    private static void deleteNGramRelations(SQLiteDatabase db, long taskId, long propertyId, int contentType)
     {
         StringBuilder whereClause = new StringBuilder(FTSContentColumns.TASK_ID).append(" = ").append(taskId);
         whereClause.append(" AND ").append(FTSContentColumns.TYPE).append(" = ").append(contentType);
@@ -446,7 +446,7 @@ public class FTSDatabaseHelper
         {
             whereClause.append(" AND ").append(FTSContentColumns.PROPERTY_ID).append(" = ").append(propertyId);
         }
-        return db.delete(FTS_CONTENT_TABLE, whereClause.toString(), null);
+        db.delete(FTS_CONTENT_TABLE, whereClause.toString(), null);
     }
 
 

@@ -405,17 +405,15 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
         }
 
 
-        private boolean addToState(long id, boolean val)
+        private void addToState(long id, boolean val)
         {
             if (savedPositions.containsKey(Long.valueOf(id)))
             {
                 savedPositions.remove(id);
-                return false;
             }
             else
             {
                 savedPositions.put(id, val);
-                return true;
             }
         }
 
@@ -485,7 +483,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
      *
      * @return <code>true</code> if the save operation was successful, <code>false</code> otherwise.
      */
-    public boolean saveListState()
+    public void saveListState()
     {
         HashMap<Long, Boolean> savedPositions = ((VisibleListAdapter) getListAdapter()).getState();
         ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
@@ -506,14 +504,11 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
         catch (RemoteException e)
         {
             e.printStackTrace();
-            return false;
         }
         catch (OperationApplicationException e)
         {
             e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
 

@@ -100,14 +100,14 @@ public class CursorContentValuesListAdapter extends AbstractListAdapter
 
 
     @Override
-    public int commit(SQLiteDatabase db)
+    public void commit(SQLiteDatabase db)
     {
         if (mValues.size() == 0)
         {
-            return 0;
+            return;
         }
 
-        return db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
+        db.update(TaskDatabaseHelper.Tables.LISTS, mValues, TaskContract.TaskListColumns._ID + "=" + mId, null);
     }
 
 

@@ -126,7 +126,6 @@ public class CheckListFieldEditor extends AbstractFieldEditor implements OnCheck
                 {
                     mAdapter.validateAndSet(mValues, mCurrentValue);
                 }
-                return;
             }
         }
     }

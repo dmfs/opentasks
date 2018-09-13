@@ -41,7 +41,7 @@ import static org.junit.Assert.assertThat;
 public class OverriddenTest
 {
     @Test
-    public void testAbsent() throws Exception
+    public void testAbsent()
     {
         ContentValues instanceData = new Overridden(absent(), ContentValues::new).value();
         assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, nullValue(Long.class)));
@@ -50,7 +50,7 @@ public class OverriddenTest
 
 
     @Test
-    public void testAbsentWithStart() throws Exception
+    public void testAbsentWithStart()
     {
         ContentValues values = new ContentValues();
         values.put(TaskContract.Instances.INSTANCE_START, 10);
@@ -62,7 +62,7 @@ public class OverriddenTest
 
 
     @Test
-    public void testAbsentWithDue() throws Exception
+    public void testAbsentWithDue()
     {
         ContentValues values = new ContentValues();
         values.put(TaskContract.Instances.INSTANCE_DUE, 20);
@@ -74,7 +74,7 @@ public class OverriddenTest
 
 
     @Test
-    public void testAbsentWithStartAndDue() throws Exception
+    public void testAbsentWithStartAndDue()
     {
         ContentValues values = new ContentValues();
         values.put(TaskContract.Instances.INSTANCE_START, 10);
@@ -87,7 +87,7 @@ public class OverriddenTest
 
 
     @Test
-    public void testPresent() throws Exception
+    public void testPresent()
     {
 
         ContentValues instanceData = new Overridden(new Present<>(new DateTime(40)), ContentValues::new).value();
@@ -97,7 +97,7 @@ public class OverriddenTest
 
 
     @Test
-    public void testPresentWithStartAndDue() throws Exception
+    public void testPresentWithStartAndDue()
     {
         ContentValues values = new ContentValues();
         values.put(TaskContract.Instances.INSTANCE_START, 10);

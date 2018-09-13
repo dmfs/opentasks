@@ -51,13 +51,12 @@ public class ArrayChoicesAdapter extends AbstractArrayChoicesAdapter
      *
      * @return itself as a reference so that it can used for chaining.
      */
-    public ArrayChoicesAdapter addChoice(Object choice, String title, Drawable drawable)
+    public void addChoice(Object choice, String title, Drawable drawable)
     {
         mVisibleChoices.add(choice);
         mChoices.add(choice);
         mTitles.add(title);
         mDrawables.add(drawable);
-        return this;
     }
 
 
@@ -73,12 +72,11 @@ public class ArrayChoicesAdapter extends AbstractArrayChoicesAdapter
      *
      * @return itself as a reference so that it can used for chaining.
      */
-    public ArrayChoicesAdapter addHiddenChoice(Object choice, String title, Drawable drawable)
+    public void addHiddenChoice(Object choice, String title, Drawable drawable)
     {
         mChoices.add(choice);
         mTitles.add(title);
         mDrawables.add(drawable);
-        return this;
     }
 
 }

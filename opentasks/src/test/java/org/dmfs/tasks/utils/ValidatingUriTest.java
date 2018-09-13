@@ -41,7 +41,7 @@ public final class ValidatingUriTest
 {
 
     @Test
-    public void testValidVariations() throws URISyntaxException
+    public void testValidVariations()
     {
         assertThat(new ValidatingUri("http://abc.com"), hasSuccessValue(Uri.parse("http://abc.com")));
         assertThat(new ValidatingUri("https://abc.com/path"), hasSuccessValue(Uri.parse("https://abc.com/path")));

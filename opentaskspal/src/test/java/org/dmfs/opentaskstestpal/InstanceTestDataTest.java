@@ -43,7 +43,7 @@ import static org.junit.Assert.assertThat;
 public class InstanceTestDataTest
 {
     @Test
-    public void testNoDate() throws Exception
+    public void testNoDate()
     {
         assertThat(new InstanceTestData(5),
                 builds(
@@ -68,7 +68,7 @@ public class InstanceTestDataTest
 
 
     @Test
-    public void testWithDate() throws Exception
+    public void testWithDate()
     {
         DateTime start = DateTime.now();
         DateTime due = start.addDuration(Duration.parse("P1DT1H"));
@@ -95,7 +95,7 @@ public class InstanceTestDataTest
 
 
     @Test
-    public void testWithDateAndOriginalTime() throws Exception
+    public void testWithDateAndOriginalTime()
     {
         DateTime start = DateTime.now();
         DateTime due = start.addDuration(Duration.parse("P1DT1H"));
@@ -123,7 +123,7 @@ public class InstanceTestDataTest
 
 
     @Test
-    public void testWithStartDateAndOriginalTime() throws Exception
+    public void testWithStartDateAndOriginalTime()
     {
         DateTime start = DateTime.now();
         DateTime original = start.addDuration(Duration.parse("P2DT2H"));
@@ -150,7 +150,7 @@ public class InstanceTestDataTest
 
 
     @Test
-    public void testWithDueDateAndOriginalTime() throws Exception
+    public void testWithDueDateAndOriginalTime()
     {
         DateTime due = DateTime.now();
         DateTime original = due.addDuration(Duration.parse("P2DT2H"));

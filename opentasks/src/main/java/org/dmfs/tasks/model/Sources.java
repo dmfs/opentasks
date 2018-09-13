@@ -99,18 +99,16 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
      *
      * @return <code>true</code> if the models were loaded already and the operation was executed synchronously, <code>false</code> otherwise.
      */
-    public static boolean loadModelAsync(Context context, String accountType, OnModelLoadedListener listener)
+    public static void loadModelAsync(Context context, String accountType, OnModelLoadedListener listener)
     {
         if (sInstance == null)
         {
             new AsyncModelLoader(context, listener).execute(accountType);
-            return false;
         }
         else
         {
             Sources sources = getInstance(context);
             listener.onModelLoaded(sources.getModel(accountType));
-            return true;
         }
     }
 
