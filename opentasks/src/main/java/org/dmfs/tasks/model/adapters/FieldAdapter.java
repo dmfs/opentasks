@@ -142,7 +142,7 @@ public abstract class FieldAdapter<Type>
     {
         if (mConstraints == null)
         {
-            mConstraints = new LinkedList<AbstractConstraint<Type>>();
+            mConstraints = new LinkedList<>();
         }
         mConstraints.add(constraint);
         return this;

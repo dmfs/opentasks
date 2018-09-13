@@ -55,7 +55,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
      * <p>
      * TODO: get rid of it
      */
-    private final static BooleanFieldAdapter<TaskAdapter> UPDATE_REQUESTED = new BooleanFieldAdapter<TaskAdapter>(
+    private final static BooleanFieldAdapter<TaskAdapter> UPDATE_REQUESTED = new BooleanFieldAdapter<>(
             "org.dmfs.tasks.TaskInstanceProcessor.UPDATE_REQUESTED");
 
     private final static int INSTANCE_COUNT_LIMIT = 1000;
@@ -156,14 +156,6 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     private void updateInstances(SQLiteDatabase db, TaskAdapter taskAdapter, long id)
     {
         // get a cursor of all existing instances
-        final Cursor existingInstances = db.query(
-                TaskDatabaseHelper.Tables.INSTANCE_VIEW,
-                new String[] { TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME },
-                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances.TASK_ID, id),
-                null,
-                null,
-                null,
-                TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
 
 
         /*
@@ -171,7 +163,14 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
          * 1) efficiency, in most cases existing instances don't change, deleting and recreating them would be very expensive
          * 2) stable row ids, deleting and recreating instances would change their id and void any existing URIs to them
          */
-        try
+        try (Cursor existingInstances = db.query(
+                TaskDatabaseHelper.Tables.INSTANCE_VIEW,
+                new String[] { TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME },
+                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances.TASK_ID, id),
+                null,
+                null,
+                null,
+                TaskContract.Instances.INSTANCE_ORIGINAL_TIME))
         {
             int idIdx = existingInstances.getColumnIndex(TaskContract.Instances._ID);
             final int startIdx = existingInstances.getColumnIndex(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
@@ -216,10 +215,6 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                             String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
                 }
             }
-        }
-        finally
-        {
-            existingInstances.close();
         }
     }
 

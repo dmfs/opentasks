@@ -30,9 +30,9 @@ import java.util.List;
  */
 public class ContentValueMapper
 {
-    private final List<String> StringColumns = new ArrayList<String>();
-    private final List<String> IntegerColumns = new ArrayList<String>();
-    private final List<String> LongColumns = new ArrayList<String>();
+    private final List<String> StringColumns = new ArrayList<>();
+    private final List<String> IntegerColumns = new ArrayList<>();
+    private final List<String> LongColumns = new ArrayList<>();
 
 
     /**

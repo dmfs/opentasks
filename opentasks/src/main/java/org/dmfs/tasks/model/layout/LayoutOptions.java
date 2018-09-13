@@ -47,7 +47,7 @@ public final class LayoutOptions
     {
         if (mOptionMap == null)
         {
-            mOptionMap = new HashMap<String, Object>();
+            mOptionMap = new HashMap<>();
         }
         mOptionMap.put(key, value);
     }
@@ -65,7 +65,7 @@ public final class LayoutOptions
     {
         if (mOptionMap == null)
         {
-            mOptionMap = new HashMap<String, Object>();
+            mOptionMap = new HashMap<>();
         }
         mOptionMap.put(key, value);
     }
@@ -83,7 +83,7 @@ public final class LayoutOptions
     {
         if (mOptionMap == null)
         {
-            mOptionMap = new HashMap<String, Object>();
+            mOptionMap = new HashMap<>();
         }
         mOptionMap.put(key, value);
     }

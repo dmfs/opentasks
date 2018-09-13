@@ -52,8 +52,8 @@ public class AsyncContentLoader extends AsyncTask<Uri, Void, ContentValues[]>
 
     public AsyncContentLoader(Context context, OnContentLoadedListener listener, ContentValueMapper mapper)
     {
-        mContext = new WeakReference<Context>(context);
-        mListener = new WeakReference<OnContentLoadedListener>(listener);
+        mContext = new WeakReference<>(context);
+        mListener = new WeakReference<>(listener);
         mMapper = mapper;
     }
 

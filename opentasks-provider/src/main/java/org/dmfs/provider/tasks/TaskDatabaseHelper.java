@@ -534,7 +534,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
             throw new IllegalArgumentException("need at least one field to build an index!");
         }
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         // Index name is constructed like this: tablename_fields[0]_idx
         buffer.append("CREATE ");

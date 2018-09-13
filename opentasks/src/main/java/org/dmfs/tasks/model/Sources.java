@@ -58,7 +58,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
     /**
      * Maps account types to their respective task model.
      */
-    private Map<String, Model> mAccountModelMap = new HashMap<String, Model>();
+    private Map<String, Model> mAccountModelMap = new HashMap<>();
 
     /**
      * Our application context.
@@ -99,18 +99,16 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
      *
      * @return <code>true</code> if the models were loaded already and the operation was executed synchronously, <code>false</code> otherwise.
      */
-    public static boolean loadModelAsync(Context context, String accountType, OnModelLoadedListener listener)
+    public static void loadModelAsync(Context context, String accountType, OnModelLoadedListener listener)
     {
         if (sInstance == null)
         {
             new AsyncModelLoader(context, listener).execute(accountType);
-            return false;
         }
         else
         {
             Sources sources = getInstance(context);
             listener.onModelLoaded(sources.getModel(accountType));
-            return true;
         }
     }
 
@@ -280,7 +278,7 @@ public final class Sources extends BroadcastReceiver implements OnAccountsUpdate
      */
     public List<Account> getExistingAccounts()
     {
-        List<Account> result = new ArrayList<Account>();
+        List<Account> result = new ArrayList<>();
         Account[] accounts = mAccountManager.getAccounts();
         for (Account account : accounts)
         {

@@ -59,7 +59,7 @@ public class TabConfig
     /**
      * A Builder that builds a {@link TabConfig} object.
      */
-    public final static IObjectBuilder<TabConfig> BUILDER = new RecyclingReflectionObjectBuilder<TabConfig>(TabConfig.class);
+    public final static IObjectBuilder<TabConfig> BUILDER = new RecyclingReflectionObjectBuilder<>(TabConfig.class);
 
     /**
      * The {@link XmlElementDescriptor} of the tabconfig element.
@@ -69,7 +69,7 @@ public class TabConfig
     /**
      * A Builder for {@link Tab} objects.
      */
-    public final static IObjectBuilder<Tab> TAB_BUILDER = new ReflectionObjectBuilder<Tab>(Tab.class);
+    public final static IObjectBuilder<Tab> TAB_BUILDER = new ReflectionObjectBuilder<>(Tab.class);
 
     /**
      * The {@link XmlElementDescriptor} for tab elements.
@@ -261,7 +261,7 @@ public class TabConfig
         List<Tab> visible = mVisible;
         if (visible == null)
         {
-            visible = mVisible = new ArrayList<Tab>(mTabs.size());
+            visible = mVisible = new ArrayList<>(mTabs.size());
         }
 
         visible.clear();

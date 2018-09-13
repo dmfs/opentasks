@@ -266,12 +266,12 @@ public class CategoryHandler extends PropertyHandler
      *
      * @return The row id of the inserted relation.
      */
-    private long insertRelation(SQLiteDatabase db, long taskId, long categoryId, long propertyId)
+    private void insertRelation(SQLiteDatabase db, long taskId, long categoryId, long propertyId)
     {
         ContentValues relationValues = new ContentValues(3);
         relationValues.put(CategoriesMapping.TASK_ID, taskId);
         relationValues.put(CategoriesMapping.CATEGORY_ID, categoryId);
         relationValues.put(CategoriesMapping.PROPERTY_ID, propertyId);
-        return db.insert(Tables.CATEGORIES_MAPPING, "", relationValues);
+        db.insert(Tables.CATEGORIES_MAPPING, "", relationValues);
     }
 }

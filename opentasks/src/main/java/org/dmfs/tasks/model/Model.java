@@ -47,8 +47,8 @@ public abstract class Model
     /**
      * A {@link List} of {@link FieldDescriptor}s of all fields that a model supports.
      */
-    private final List<FieldDescriptor> mFields = new ArrayList<FieldDescriptor>();
-    private final SparseArrayCompat<FieldDescriptor> mFieldIndex = new SparseArrayCompat<FieldDescriptor>(16);
+    private final List<FieldDescriptor> mFields = new ArrayList<>();
+    private final SparseArrayCompat<FieldDescriptor> mFieldIndex = new SparseArrayCompat<>(16);
 
     private final Context mContext;
     private final String mAuthority;
@@ -112,7 +112,7 @@ public abstract class Model
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return new ArrayList<FieldDescriptor>(mFields);
+        return new ArrayList<>(mFields);
     }
 
 

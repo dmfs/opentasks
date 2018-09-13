@@ -231,7 +231,6 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
             InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(getString(R.string.task_list_name_dialog_title),
                     getString(R.string.task_list_name_dialog_hint), mNameView.getText().toString());
             dialog.show(getSupportFragmentManager(), null);
-            return;
         }
     }
 
@@ -361,7 +360,7 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
     @Override
     public void onCancelInputDialog()
     {
-        if (mStateInsert == true)
+        if (mStateInsert)
         {
             setResult(Activity.RESULT_CANCELED);
             finish();

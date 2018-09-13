@@ -204,33 +204,28 @@ public class TasksExtension extends DashClockExtension
 
     private String getTaskTitleDisplayString(Cursor c, boolean isAllDay)
     {
-        if (DashClockPreferenceActivity.DISPLAY_MODE_DUE == mDisplayMode)
+        switch (mDisplayMode)
         {
-            // DUE event
-            return getTaskTitleDueString(c, isAllDay);
-        }
-        else if (DashClockPreferenceActivity.DISPLAY_MODE_START == mDisplayMode)
-        {
-            // START event
-            return getTaskTitleStartString(c, isAllDay);
-        }
-        else if (DashClockPreferenceActivity.DISPLAY_MODE_PINNED == mDisplayMode)
-        {
-            // return task title
-            return TaskFieldAdapters.TITLE.get(c);
-        }
-        else
-        {
-            // START or DUE event
-            String timeEventString = isDueEvent(c, isAllDay) ? getTaskTitleDueString(c, isAllDay) : getTaskTitleStartString(c, isAllDay);
-            if (timeEventString == null)
-            {
+            case DashClockPreferenceActivity.DISPLAY_MODE_DUE:
+                // DUE event
+                return getTaskTitleDueString(c, isAllDay);
+            case DashClockPreferenceActivity.DISPLAY_MODE_START:
+                // START event
+                return getTaskTitleStartString(c, isAllDay);
+            case DashClockPreferenceActivity.DISPLAY_MODE_PINNED:
+                // return task title
                 return TaskFieldAdapters.TITLE.get(c);
-            }
-            else
-            {
-                return timeEventString;
-            }
+            default:
+                // START or DUE event
+                String timeEventString = isDueEvent(c, isAllDay) ? getTaskTitleDueString(c, isAllDay) : getTaskTitleStartString(c, isAllDay);
+                if (timeEventString == null)
+                {
+                    return TaskFieldAdapters.TITLE.get(c);
+                }
+                else
+                {
+                    return timeEventString;
+                }
         }
     }
 
@@ -300,25 +295,11 @@ public class TasksExtension extends DashClockExtension
             calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
             long todayUTC = calendar.getTimeInMillis();
 
-            if (dueTime == todayUTC)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return dueTime == todayUTC;
         }
         else
         {
-            if (startTime < mNow)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return startTime < mNow;
         }
 
     }

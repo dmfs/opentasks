@@ -36,7 +36,7 @@ public interface InstanceAdapter extends EntityAdapter<InstanceAdapter>
     /**
      * Adapter for the row id of a task instance.
      */
-    LongFieldAdapter<InstanceAdapter> _ID = new LongFieldAdapter<InstanceAdapter>(Instances._ID);
+    LongFieldAdapter<InstanceAdapter> _ID = new LongFieldAdapter<>(Instances._ID);
 
     /**
      * Adapter for the due date of a task instance.
@@ -71,7 +71,7 @@ public interface InstanceAdapter extends EntityAdapter<InstanceAdapter>
     /**
      * Adapter for the row id of the task.
      */
-    LongFieldAdapter<InstanceAdapter> TASK_ID = new LongFieldAdapter<InstanceAdapter>(Instances.TASK_ID);
+    LongFieldAdapter<InstanceAdapter> TASK_ID = new LongFieldAdapter<>(Instances.TASK_ID);
 
     @Override
     InstanceAdapter duplicate();

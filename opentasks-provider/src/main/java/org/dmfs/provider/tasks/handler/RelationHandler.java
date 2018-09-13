@@ -169,43 +169,43 @@ public class RelationHandler extends PropertyHandler
             type = oldValues.getInt(oldValues.getColumnIndex(Relation.RELATED_TYPE));
         }
 
-        if (type == Relation.RELTYPE_PARENT)
+        switch (type)
         {
-            // this is a link to the parent, we need to update the PARENT_ID of this task, if we can
+            case Relation.RELTYPE_PARENT:
+                // this is a link to the parent, we need to update the PARENT_ID of this task, if we can
 
-            if (values.containsKey(Relation.RELATED_ID))
-            {
-                ContentValues taskValues = new ContentValues(1);
-                taskValues.put(Tasks.PARENT_ID, values.getAsLong(Relation.RELATED_ID));
-                db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
-            }
-            // else: the parent task is probably not synced yet, we have to fix this in RelationUpdaterHook
-        }
-        else if (type == Relation.RELTYPE_CHILD)
-        {
-            // this is a link to a child, we need to update the PARENT_ID of the linked task
+                if (values.containsKey(Relation.RELATED_ID))
+                {
+                    ContentValues taskValues = new ContentValues(1);
+                    taskValues.put(Tasks.PARENT_ID, values.getAsLong(Relation.RELATED_ID));
+                    db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
+                }
+                // else: the parent task is probably not synced yet, we have to fix this in RelationUpdaterHook
+                break;
+            case Relation.RELTYPE_CHILD:
+                // this is a link to a child, we need to update the PARENT_ID of the linked task
 
-            if (values.getAsLong(Relation.RELATED_ID) != null)
-            {
-                ContentValues taskValues = new ContentValues(1);
-                taskValues.put(Tasks.PARENT_ID, taskId);
-                db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + values.getAsLong(Relation.RELATED_ID), null);
-            }
-            // else: the child task is probably not synced yet, we have to fix this in RelationUpdaterHook
-        }
-        else if (type == Relation.RELTYPE_SIBLING)
-        {
-            // this is a link to a sibling, we need to copy the PARENT_ID of the linked task to this task
-            if (values.getAsLong(Relation.RELATED_ID) != null)
-            {
-                // get the parent of the other task first
-                Long otherParent = resolveTaskLongField(db, Tasks._ID, values.getAsString(Relation.RELATED_ID), Tasks.PARENT_ID);
+                if (values.getAsLong(Relation.RELATED_ID) != null)
+                {
+                    ContentValues taskValues = new ContentValues(1);
+                    taskValues.put(Tasks.PARENT_ID, taskId);
+                    db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + values.getAsLong(Relation.RELATED_ID), null);
+                }
+                // else: the child task is probably not synced yet, we have to fix this in RelationUpdaterHook
+                break;
+            case Relation.RELTYPE_SIBLING:
+                // this is a link to a sibling, we need to copy the PARENT_ID of the linked task to this task
+                if (values.getAsLong(Relation.RELATED_ID) != null)
+                {
+                    // get the parent of the other task first
+                    Long otherParent = resolveTaskLongField(db, Tasks._ID, values.getAsString(Relation.RELATED_ID), Tasks.PARENT_ID);
 
-                ContentValues taskValues = new ContentValues(1);
-                taskValues.put(Tasks.PARENT_ID, otherParent);
-                db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
-            }
-            // else: the sibling task is probably not synced yet, we have to fix this in RelationUpdaterHook
+                    ContentValues taskValues = new ContentValues(1);
+                    taskValues.put(Tasks.PARENT_ID, otherParent);
+                    db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
+                }
+                // else: the sibling task is probably not synced yet, we have to fix this in RelationUpdaterHook
+                break;
         }
     }
 
@@ -227,34 +227,35 @@ public class RelationHandler extends PropertyHandler
          *
          * FIXME: For now we ignore that fact. But we should fix it.
          */
+        ContentValues taskValues;
 
-        if (type == Relation.RELTYPE_PARENT)
+        switch (type)
         {
-            // this was a link to the parent, we're orphaned now, so clear PARENT_ID of this task
+            case Relation.RELTYPE_PARENT:
+                // this was a link to the parent, we're orphaned now, so clear PARENT_ID of this task
 
-            ContentValues taskValues = new ContentValues(1);
-            taskValues.putNull(Tasks.PARENT_ID);
-            db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
-        }
-        else if (type == Relation.RELTYPE_CHILD)
-        {
-            // this was a link to a child, the child is orphaned now, clear its PARENT_ID
-
-            int relIdCol = oldValues.getColumnIndex(Relation.RELATED_ID);
-            if (!oldValues.isNull(relIdCol))
-            {
-                ContentValues taskValues = new ContentValues(1);
+                taskValues = new ContentValues(1);
                 taskValues.putNull(Tasks.PARENT_ID);
-                db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + oldValues.getLong(relIdCol), null);
-            }
-        }
-        else if (type == Relation.RELTYPE_SIBLING)
-        {
-            /*
-             * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
-             *
-             * FIXME: properly handle this case
-             */
+                db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + taskId, null);
+                break;
+            case Relation.RELTYPE_CHILD:
+                // this was a link to a child, the child is orphaned now, clear its PARENT_ID
+
+                int relIdCol = oldValues.getColumnIndex(Relation.RELATED_ID);
+                if (!oldValues.isNull(relIdCol))
+                {
+                    taskValues = new ContentValues(1);
+                    taskValues.putNull(Tasks.PARENT_ID);
+                    db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + oldValues.getLong(relIdCol), null);
+                }
+                break;
+            case Relation.RELTYPE_SIBLING:
+                /*
+                 * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
+                 *
+                 * FIXME: properly handle this case
+                 */
+                break;
         }
     }
 }

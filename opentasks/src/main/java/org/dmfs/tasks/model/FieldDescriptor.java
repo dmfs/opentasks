@@ -250,10 +250,9 @@ public final class FieldDescriptor
      *
      * @return This instance.
      */
-    public FieldDescriptor setHint(String hint)
+    public void setHint(String hint)
     {
         mHint = hint;
-        return this;
     }
 
 

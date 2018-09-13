@@ -87,7 +87,7 @@ public class ViewTaskFragment extends SupportFragment
     /**
      * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
      */
-    private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(
+    private final static Set<String> RECURRENCE_VALUES = new HashSet<>(
             Arrays.asList(new String[] { Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY, Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE }));
 
     /**
@@ -534,65 +534,56 @@ public class ViewTaskFragment extends SupportFragment
         mDetailView.updateValues();
 
         int itemId = item.getItemId();
-        if (itemId == R.id.edit_task)
+        switch (itemId)
         {
-            // open editor for this task
-            mCallback.onEditTask(mTaskUri, mContentSet);
-            return true;
-        }
-        else if (itemId == R.id.delete_task)
-        {
-            new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
-                    .setNegativeButton(android.R.string.cancel, new OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
+            case R.id.edit_task:
+                // open editor for this task
+                mCallback.onEditTask(mTaskUri, mContentSet);
+                return true;
+            case R.id.delete_task:
+                new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
+                        .setNegativeButton(android.R.string.cancel, new OnClickListener()
                         {
-                            // nothing to do here
-                        }
-                    }).setPositiveButton(android.R.string.ok, new OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // nothing to do here
+                            }
+                        }).setPositiveButton(android.R.string.ok, new OnClickListener()
                 {
-                    if (mContentSet != null)
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
                     {
-                        // TODO: remove the task in a background task
-                        mContentSet.delete(mAppContext);
-                        mCallback.onDelete(mTaskUri);
+                        if (mContentSet != null)
+                        {
+                            // TODO: remove the task in a background task
+                            mContentSet.delete(mAppContext);
+                            mCallback.onDelete(mTaskUri);
+                        }
                     }
+                }).setMessage(R.string.confirm_delete_message).create().show();
+                return true;
+            case R.id.complete_task:
+                completeTask();
+                return true;
+            case R.id.pin_task:
+                if (TaskFieldAdapters.PINNED.get(mContentSet))
+                {
+                    item.setIcon(R.drawable.ic_pin_white_24dp);
+                    TaskNotificationHandler.unpinTask(mAppContext, mContentSet);
                 }
-            }).setMessage(R.string.confirm_delete_message).create().show();
-            return true;
-        }
-        else if (itemId == R.id.complete_task)
-        {
-            completeTask();
-            return true;
-        }
-        else if (itemId == R.id.pin_task)
-        {
-            if (TaskFieldAdapters.PINNED.get(mContentSet))
-            {
-                item.setIcon(R.drawable.ic_pin_white_24dp);
-                TaskNotificationHandler.unpinTask(mAppContext, mContentSet);
-            }
-            else
-            {
-                item.setIcon(R.drawable.ic_pin_off_white_24dp);
-                TaskNotificationHandler.pinTask(mAppContext, mContentSet);
-            }
-            persistTask();
-            return true;
-        }
-        else if (itemId == R.id.opentasks_send_task)
-        {
-            setSendMenuIntent();
-            return false;
-        }
-        else
-        {
-            return super.onOptionsItemSelected(item);
+                else
+                {
+                    item.setIcon(R.drawable.ic_pin_off_white_24dp);
+                    TaskNotificationHandler.pinTask(mAppContext, mContentSet);
+                }
+                persistTask();
+                return true;
+            case R.id.opentasks_send_task:
+                setSendMenuIntent();
+                return false;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

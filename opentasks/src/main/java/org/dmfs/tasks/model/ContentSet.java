@@ -68,7 +68,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
      * A {@link Map} for the {@link OnContentChangeListener}s. A listener registers for a specific key in a content set or for <code>null</code> to e notified
      * of full reloads.
      */
-    private final Map<String, Set<OnContentChangeListener>> mOnChangeListeners = new HashMap<String, Set<OnContentChangeListener>>();
+    private final Map<String, Set<OnContentChangeListener>> mOnChangeListeners = new HashMap<>();
 
     /**
      * A counter for the number of bulk updates currently running. It is incremented on {@link #startBulkUpdate()} and decremented on
@@ -79,7 +79,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     /**
      * Holds all {@link OnContentChangeListener}s that need to be notified, because something has changed during a bulk update.
      */
-    private final Set<OnContentChangeListener> mPendingNotifications = new HashSet<OnContentChangeListener>();
+    private final Set<OnContentChangeListener> mPendingNotifications = new HashSet<>();
 
     /**
      * Holds the name of the keys we've updated in {@link #mAfterContentValues}.
@@ -144,7 +144,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         if (other.mAfterContentValues != null)
         {
             mAfterContentValues = new ContentValues(other.mAfterContentValues);
-            mAfterKeys = new HashSet<String>(other.mAfterKeys);
+            mAfterKeys = new HashSet<>(other.mAfterKeys);
         }
 
         mUri = other.mUri;
@@ -282,7 +282,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
             return false;
         }
 
-        Set<String> keySet = new HashSet<String>(mAfterKeys);
+        Set<String> keySet = new HashSet<>(mAfterKeys);
 
         keySet.retainAll(keys);
 
@@ -308,7 +308,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
          *
          * TODO: find a better way to solve this
          */
-        for (Entry<String, Object> entry : new HashSet<Entry<String, Object>>(tempValues.valueSet()))
+        for (Entry<String, Object> entry : new HashSet<>(tempValues.valueSet()))
         {
             String key = entry.getKey();
             if (!keys.contains(key) || persistsKey(key))
@@ -336,7 +336,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
             values = new ContentValues();
             mAfterContentValues = values;
             // also create mAfterKeys
-            mAfterKeys = new HashSet<String>();
+            mAfterKeys = new HashSet<>();
         }
         return values;
     }
@@ -512,7 +512,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
     {
         if (mBulkUpdates == 1)
         {
-            Set<OnContentChangeListener> listeners = new HashSet<OnContentChangeListener>(mPendingNotifications);
+            Set<OnContentChangeListener> listeners = new HashSet<>(mPendingNotifications);
             mPendingNotifications.clear();
             for (OnContentChangeListener listener : listeners)
             {
@@ -642,7 +642,7 @@ public final class ContentSet implements OnContentLoadedListener, Parcelable
         if (mAfterContentValues != null)
         {
             int count = source.readInt();
-            Set<String> keys = new HashSet<String>();
+            Set<String> keys = new HashSet<>();
             while (--count >= 0)
             {
                 keys.add(source.readString());

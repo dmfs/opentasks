@@ -78,77 +78,81 @@ public class EditTaskActivity extends BaseActivity
         {
             Bundle arguments = new Bundle();
 
-            if (Intent.ACTION_SEND.equals(action))
+            switch (action)
             {
+                case Intent.ACTION_SEND:
+                {
 
-                // load data from incoming share intent
-                ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
-                if (intent.hasExtra(Intent.EXTRA_SUBJECT))
-                {
-                    sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_SUBJECT));
-                }
-                if (intent.hasExtra(Intent.EXTRA_TITLE))
-                {
-                    sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_TITLE));
-                }
-                if (intent.hasExtra(Intent.EXTRA_TEXT))
-                {
-                    String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
-                    sharedContentSet.put(Tasks.DESCRIPTION, extraText);
-                    // check if supplied text is a URL
-                    if (extraText.startsWith("http://") && !extraText.contains(" "))
+                    // load data from incoming share intent
+                    ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
+                    if (intent.hasExtra(Intent.EXTRA_SUBJECT))
                     {
-                        sharedContentSet.put(Tasks.URL, extraText);
+                        sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_SUBJECT));
+                    }
+                    if (intent.hasExtra(Intent.EXTRA_TITLE))
+                    {
+                        sharedContentSet.put(Tasks.TITLE, intent.getStringExtra(Intent.EXTRA_TITLE));
+                    }
+                    if (intent.hasExtra(Intent.EXTRA_TEXT))
+                    {
+                        String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                        sharedContentSet.put(Tasks.DESCRIPTION, extraText);
+                        // check if supplied text is a URL
+                        if (extraText.startsWith("http://") && !extraText.contains(" "))
+                        {
+                            sharedContentSet.put(Tasks.URL, extraText);
+                        }
+
+                    }
+                    // hand over shared information to EditTaskFragment
+                    arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
+
+                    break;
+                }
+                case ACTION_NOTE_TO_SELF:
+                {
+                    // process the note to self intent
+                    ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
+
+                    if (intent.hasExtra(Intent.EXTRA_SUBJECT))
+                    {
+                        sharedContentSet.put(Tasks.DESCRIPTION, intent.getStringExtra(Intent.EXTRA_SUBJECT));
                     }
 
-                }
-                // hand over shared information to EditTaskFragment
-                arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
-
-            }
-            else if (ACTION_NOTE_TO_SELF.equals(action))
-            {
-                // process the note to self intent
-                ContentSet sharedContentSet = new ContentSet(Tasks.getContentUri(mAuthority));
-
-                if (intent.hasExtra(Intent.EXTRA_SUBJECT))
-                {
-                    sharedContentSet.put(Tasks.DESCRIPTION, intent.getStringExtra(Intent.EXTRA_SUBJECT));
-                }
-
-                if (intent.hasExtra(Intent.EXTRA_TEXT))
-                {
-                    String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
-                    sharedContentSet.put(Tasks.TITLE, extraText);
-
-                }
-
-                // add start time stamp
-                sharedContentSet.put(Tasks.DTSTART, System.currentTimeMillis());
-                sharedContentSet.put(Tasks.TZ, TimeZone.getDefault().getID());
-
-                // hand over shared information to EditTaskFragment
-                arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
-
-            }
-            else
-            {
-                // hand over task URI for editing / creating empty task
-                arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
-                Bundle extraBundle = getIntent().getBundleExtra(EXTRA_DATA_BUNDLE);
-                if (extraBundle != null)
-                {
-                    ContentSet data = extraBundle.getParcelable(EXTRA_DATA_CONTENT_SET);
-                    if (data != null)
+                    if (intent.hasExtra(Intent.EXTRA_TEXT))
                     {
-                        arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, data);
+                        String extraText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                        sharedContentSet.put(Tasks.TITLE, extraText);
+
                     }
+
+                    // add start time stamp
+                    sharedContentSet.put(Tasks.DTSTART, System.currentTimeMillis());
+                    sharedContentSet.put(Tasks.TZ, TimeZone.getDefault().getID());
+
+                    // hand over shared information to EditTaskFragment
+                    arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, sharedContentSet);
+
+                    break;
                 }
-                String accountType = getIntent().getStringExtra(EXTRA_DATA_ACCOUNT_TYPE);
-                if (accountType != null)
-                {
-                    arguments.putString(EditTaskFragment.PARAM_ACCOUNT_TYPE, accountType);
-                }
+                default:
+                    // hand over task URI for editing / creating empty task
+                    arguments.putParcelable(EditTaskFragment.PARAM_TASK_URI, getIntent().getData());
+                    Bundle extraBundle = getIntent().getBundleExtra(EXTRA_DATA_BUNDLE);
+                    if (extraBundle != null)
+                    {
+                        ContentSet data = extraBundle.getParcelable(EXTRA_DATA_CONTENT_SET);
+                        if (data != null)
+                        {
+                            arguments.putParcelable(EditTaskFragment.PARAM_CONTENT_SET, data);
+                        }
+                    }
+                    String accountType = getIntent().getStringExtra(EXTRA_DATA_ACCOUNT_TYPE);
+                    if (accountType != null)
+                    {
+                        arguments.putString(EditTaskFragment.PARAM_ACCOUNT_TYPE, accountType);
+                    }
+                    break;
             }
 
             EditTaskFragment fragment = new EditTaskFragment();

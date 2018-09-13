@@ -56,8 +56,8 @@ public class AsyncModelLoader extends AsyncTask<String, Void, Model>
      */
     public AsyncModelLoader(Context context, OnModelLoadedListener listener)
     {
-        mContext = new WeakReference<Context>(context);
-        mListener = new WeakReference<OnModelLoadedListener>(listener);
+        mContext = new WeakReference<>(context);
+        mListener = new WeakReference<>(listener);
     }
 
 

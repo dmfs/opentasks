@@ -150,14 +150,13 @@ public class LayoutDescriptor
     }
 
 
-    public LayoutDescriptor setOption(String key, Object value)
+    public void setOption(String key, Object value)
     {
         if (mOptions == null)
         {
             mOptions = new LayoutOptions();
         }
         mOptions.put(key, value);
-        return this;
     }
 
 

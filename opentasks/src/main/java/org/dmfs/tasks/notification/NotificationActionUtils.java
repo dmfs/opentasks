@@ -72,7 +72,7 @@ public class NotificationActionUtils
      * If an undo notification is displayed, its timestamp ({@link android.app.Notification.Builder#setWhen(long)}) is stored here so we can use it for the
      * original notification if the action is undone.
      */
-    public static final HashMap<Integer, Long> sNotificationTimestamps = new HashMap<Integer, Long>();
+    public static final HashMap<Integer, Long> sNotificationTimestamps = new HashMap<>();
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

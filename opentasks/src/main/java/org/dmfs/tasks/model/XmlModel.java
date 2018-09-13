@@ -83,7 +83,7 @@ public class XmlModel extends Model
      */
     public final static QualifiedName ATTR_HIDECHECKLIST = QualifiedName.get("hideCheckList");
 
-    private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<String, FieldInflater>();
+    private final static Map<String, FieldInflater> FIELD_INFLATER_MAP = new HashMap<>();
 
     private String mAccountLabel;
 
@@ -130,7 +130,7 @@ public class XmlModel extends Model
     private static final ElementDescriptor<XmlModel> XML_MODEL_DESCRIPTOR = ElementDescriptor.register(QualifiedName.get(NAMESPACE, "TaskSource"),
             new AbstractObjectBuilder<XmlModel>()
             {
-                public XmlModel get(ElementDescriptor<XmlModel> descriptor, XmlModel recycle, ParserContext context) throws XmlObjectPullParserException
+                public XmlModel get(ElementDescriptor<XmlModel> descriptor, XmlModel recycle, ParserContext context)
                 {
                     // ensure we have a state object
                     context.setState(new ModelParserState());
@@ -147,7 +147,6 @@ public class XmlModel extends Model
 
 
                 public XmlModel update(ElementDescriptor<XmlModel> descriptor, XmlModel object, QualifiedName attribute, String value, ParserContext context)
-                        throws XmlObjectPullParserException
                 {
                     // for now we ignore all attributes
                     return object;
@@ -159,7 +158,7 @@ public class XmlModel extends Model
 
                 @SuppressWarnings("unchecked")
                 public <V extends Object> XmlModel update(ElementDescriptor<XmlModel> descriptor, XmlModel object, ElementDescriptor<V> childDescriptor, V child,
-                                                          ParserContext context) throws XmlObjectPullParserException
+                                                          ParserContext context)
                 {
                     if (childDescriptor == XML_DATAKIND)
                     {
@@ -204,7 +203,7 @@ public class XmlModel extends Model
 
 
                 @SuppressWarnings("unchecked")
-                public XmlModel finish(ElementDescriptor<XmlModel> descriptor, XmlModel object, ParserContext context) throws XmlObjectPullParserException
+                public XmlModel finish(ElementDescriptor<XmlModel> descriptor, XmlModel object, ParserContext context)
                 {
                     ModelParserState state = (ModelParserState) context.getState();
                     if (state.alldayDescriptor != null)
@@ -229,7 +228,7 @@ public class XmlModel extends Model
     private final static ElementDescriptor<DataKind> XML_DATAKIND = ElementDescriptor.register(QualifiedName.get(NAMESPACE, "datakind"),
             new AbstractObjectBuilder<DataKind>()
             {
-                public DataKind get(ElementDescriptor<DataKind> descriptor, DataKind recycle, ParserContext context) throws XmlObjectPullParserException
+                public DataKind get(ElementDescriptor<DataKind> descriptor, DataKind recycle, ParserContext context)
                 {
                     if (recycle != null)
                     {
@@ -245,7 +244,6 @@ public class XmlModel extends Model
 
 
                 public DataKind update(ElementDescriptor<DataKind> descriptor, DataKind object, QualifiedName attribute, String value, ParserContext context)
-                        throws XmlObjectPullParserException
                 {
                     if (attribute == ATTR_KIND)
                     {
@@ -360,7 +358,7 @@ public class XmlModel extends Model
                 }
             }
         }
-        catch (NameNotFoundException e)
+        catch (NameNotFoundException ignored)
         {
         }
         return null;
@@ -475,7 +473,7 @@ public class XmlModel extends Model
         {
             if (mDetailsLayoutOptions == null)
             {
-                mDetailsLayoutOptions = new HashMap<String, Object>(4);
+                mDetailsLayoutOptions = new HashMap<>(4);
             }
             mDetailsLayoutOptions.put(key, value);
             return this;
@@ -487,7 +485,7 @@ public class XmlModel extends Model
         {
             if (mEditLayoutOptions == null)
             {
-                mEditLayoutOptions = new HashMap<String, Object>(4);
+                mEditLayoutOptions = new HashMap<>(4);
             }
             mEditLayoutOptions.put(key, value);
             return this;
@@ -498,7 +496,7 @@ public class XmlModel extends Model
         {
             if (mDetailsLayoutOptions == null)
             {
-                mDetailsLayoutOptions = new HashMap<String, Object>(4);
+                mDetailsLayoutOptions = new HashMap<>(4);
             }
             mDetailsLayoutOptions.put(key, value);
             return this;
@@ -510,7 +508,7 @@ public class XmlModel extends Model
         {
             if (mEditLayoutOptions == null)
             {
-                mEditLayoutOptions = new HashMap<String, Object>(4);
+                mEditLayoutOptions = new HashMap<>(4);
             }
             mEditLayoutOptions.put(key, value);
             return this;

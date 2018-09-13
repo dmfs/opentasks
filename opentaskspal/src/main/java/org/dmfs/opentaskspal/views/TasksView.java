@@ -33,6 +33,6 @@ public final class TasksView extends DelegatingView<TaskContract.Tasks>
 {
     public TasksView(String authority, ContentProviderClient client)
     {
-        super(new BaseView<TaskContract.Tasks>(client, TaskContract.Tasks.getContentUri(authority)));
+        super(new BaseView<>(client, TaskContract.Tasks.getContentUri(authority)));
     }
 }

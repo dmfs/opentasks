@@ -34,6 +34,6 @@ public final class SyncIdData extends DelegatingRowData<TaskContract.Tasks>
     public SyncIdData(@NonNull CharSequence syncId)
     {
         // TODO CharSequenceRowData allows null so this class wouldn't fail with that but erase the value
-        super(new CharSequenceRowData<TaskContract.Tasks>(TaskContract.Tasks._SYNC_ID, syncId));
+        super(new CharSequenceRowData<>(TaskContract.Tasks._SYNC_ID, syncId));
     }
 }

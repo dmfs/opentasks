@@ -89,12 +89,11 @@ public enum ContentOperation
             String nowString = Long.toString(now.getInstance());
 
             // load all tasks that have started or became due since the last time we've shown a notification.
-            Cursor taskCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, "((" + TaskContract.Instances.INSTANCE_DUE_SORTING + ">? and "
-                    + TaskContract.Instances.INSTANCE_DUE_SORTING + "<=?) or (" + TaskContract.Instances.INSTANCE_START_SORTING + ">? and "
-                    + TaskContract.Instances.INSTANCE_START_SORTING + "<=?)) and " + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] {
-                    lastAlarmString, nowString, lastAlarmString, nowString }, null, null, null);
 
-            try
+            try (Cursor taskCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, "((" + Instances.INSTANCE_DUE_SORTING + ">? and "
+                    + Instances.INSTANCE_DUE_SORTING + "<=?) or (" + Instances.INSTANCE_START_SORTING + ">? and "
+                    + Instances.INSTANCE_START_SORTING + "<=?)) and " + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] {
+                    lastAlarmString, nowString, lastAlarmString, nowString }, null, null, null))
             {
                 while (taskCursor.moveToNext())
                 {
@@ -127,10 +126,6 @@ public enum ContentOperation
                                 task.valueOf(TaskAdapter.TITLE));
                     }
                 }
-            }
-            finally
-            {
-                taskCursor.close();
             }
 
             // all notifications up to now have been triggered
@@ -212,11 +207,10 @@ public enum ContentOperation
             DateTime nextAlarm = null;
 
             // find the next task that starts
-            Cursor nextTaskStartCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, TaskContract.Instances.INSTANCE_START_SORTING + ">? and "
-                            + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] { lastAlarmString }, null, null,
-                    TaskContract.Instances.INSTANCE_START_SORTING, "1");
 
-            try
+            try (Cursor nextTaskStartCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, Instances.INSTANCE_START_SORTING + ">? and "
+                            + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] { lastAlarmString }, null, null,
+                    Instances.INSTANCE_START_SORTING, "1"))
             {
                 if (nextTaskStartCursor.moveToNext())
                 {
@@ -228,17 +222,12 @@ public enum ContentOperation
                     }
                 }
             }
-            finally
-            {
-                nextTaskStartCursor.close();
-            }
 
             // find the next task that's due
-            Cursor nextTaskDueCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, TaskContract.Instances.INSTANCE_DUE_SORTING + ">? and "
-                            + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] { lastAlarmString }, null, null,
-                    TaskContract.Instances.INSTANCE_DUE_SORTING, "1");
 
-            try
+            try (Cursor nextTaskDueCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, Instances.INSTANCE_DUE_SORTING + ">? and "
+                            + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] { lastAlarmString }, null, null,
+                    Instances.INSTANCE_DUE_SORTING, "1"))
             {
                 if (nextTaskDueCursor.moveToNext())
                 {
@@ -254,10 +243,6 @@ public enum ContentOperation
                         nextAlarm = nextDue;
                     }
                 }
-            }
-            finally
-            {
-                nextTaskDueCursor.close();
             }
 
             if (nextAlarm != null)

@@ -153,7 +153,7 @@ public class WidgetConfigurationDatabaseHelper extends SQLiteOpenHelper
     {
         Cursor c = db.query(WIDGET_CONFIGURATION_TABLE, PROJECTION, WidgetConfigurationColumns.WIDGET_ID + " = " + widgetId, null, null, null, null);
 
-        ArrayList<Long> lists = new ArrayList<Long>(c.getCount());
+        ArrayList<Long> lists = new ArrayList<>(c.getCount());
         if (!c.moveToFirst())
         {
             return lists;

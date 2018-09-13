@@ -116,7 +116,7 @@ public final class NGramGenerator
      */
     public Set<String> getNgrams(String data)
     {
-        Set<String> result = new HashSet<String>(128);
+        Set<String> result = new HashSet<>(128);
 
         return getNgrams(result, data);
     }
@@ -143,7 +143,7 @@ public final class NGramGenerator
 
         if (set == null)
         {
-            set = new HashSet<String>(128);
+            set = new HashSet<>(128);
         }
 
         for (String word : words)

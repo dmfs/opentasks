@@ -105,21 +105,20 @@ public class ContentValuesInstanceAdapter extends AbstractInstanceAdapter
 
 
     @Override
-    public int commit(SQLiteDatabase db)
+    public void commit(SQLiteDatabase db)
     {
         if (mValues.size() == 0)
         {
-            return 0;
+            return;
         }
 
         if (mId < 0)
         {
             mId = db.insert(TaskDatabaseHelper.Tables.TASKS, null, mValues);
-            return mId > 0 ? 1 : 0;
         }
         else
         {
-            return db.update(TaskDatabaseHelper.Tables.TASKS, mValues, TaskContract.TaskColumns._ID + "=" + mId, null);
+            db.update(TaskDatabaseHelper.Tables.TASKS, mValues, TaskContract.TaskColumns._ID + "=" + mId, null);
         }
     }
 

@@ -459,15 +459,8 @@ public class DateFormatter
         java.text.DateFormat natural = java.text.DateFormat.getTimeInstance(java.text.DateFormat.LONG, locale);
 
         boolean result;
-        if (natural instanceof SimpleDateFormat)
-        {
-            result = ((SimpleDateFormat) natural).toPattern().indexOf('H') < 0;
-        }
-        else
-        {
-            // We don't know, so we fall back to true. (Same as in {@link DateFormat#is24HourFormat})
-            result = true;
-        }
+        result = !(natural instanceof SimpleDateFormat) || ((SimpleDateFormat) natural).toPattern().indexOf('H') < 0;
+// We don't know, so we fall back to true. (Same as in {@link DateFormat#is24HourFormat})
 
         sIs12hourFormatCache = new ValuePair<>(locale, result);
         return result;

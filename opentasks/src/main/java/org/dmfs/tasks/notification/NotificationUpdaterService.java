@@ -269,16 +269,15 @@ public class NotificationUpdaterService extends Service
 
     private ArrayList<ContentSet> queryTasksToPin()
     {
-        ArrayList<ContentSet> tasksToPin = new ArrayList<ContentSet>(20);
+        ArrayList<ContentSet> tasksToPin = new ArrayList<>(20);
 
         final ContentResolver resolver = this.getContentResolver();
         final Uri contentUri = Tasks.getContentUri(AuthorityUtil.taskAuthority(this));
-        final Cursor cursor = resolver.query(contentUri, new String[] {
+        try (Cursor cursor = resolver.query(contentUri, new String[] {
                         Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
                         Tasks.STATUS, Tasks.PRIORITY, Tasks.IS_CLOSED }, Tasks.PINNED + "= 1", null,
                 Tasks.PRIORITY + " is not null, " + Tasks.PRIORITY + ", " + Tasks.DUE + " is null, "
-                        + Tasks.DUE + " DESC");
-        try
+                        + Tasks.DUE + " DESC"))
         {
             if (cursor.moveToFirst())
             {
@@ -300,10 +299,6 @@ public class NotificationUpdaterService extends Service
                 } while (cursor.moveToNext());
             }
         }
-        finally
-        {
-            cursor.close();
-        }
         return tasksToPin;
     }
 
@@ -315,7 +310,7 @@ public class NotificationUpdaterService extends Service
         Resources resources = context.getResources();
 
         // reset actions
-        builder.mActions = new ArrayList<Action>(2);
+        builder.mActions = new ArrayList<>(2);
 
         // content
         builder.setSmallIcon(R.drawable.ic_pin_white_24dp).setContentTitle(TaskFieldAdapters.TITLE.get(task)).setOngoing(true).setShowWhen(false);
@@ -540,27 +535,27 @@ public class NotificationUpdaterService extends Service
             return;
         }
 
-        if (NotificationActionUtils.ACTION_UNDO.equals(action))
+        switch (action)
         {
-            NotificationActionUtils.cancelUndoTimeout(this, notificationAction);
-            NotificationActionUtils.cancelUndoNotification(this, notificationAction);
-            resendNotification(notificationAction);
-        }
-        else if (ACTION_COMPLETE.equals(action))
-        {
-            // All we need to do is switch to an Undo notification
-            NotificationActionUtils.createUndoNotification(this, notificationAction);
-            NotificationActionUtils.registerUndoTimeout(this, notificationAction);
-        }
-        else
-        {
-            if (NotificationActionUtils.ACTION_UNDO_TIMEOUT.equals(action) || NotificationActionUtils.ACTION_DESTRUCT.equals(action))
-            {
-                // Process the action
+            case NotificationActionUtils.ACTION_UNDO:
                 NotificationActionUtils.cancelUndoTimeout(this, notificationAction);
-                NotificationActionUtils.processUndoNotification(this, notificationAction);
-                processDesctructiveNotification(notificationAction);
-            }
+                NotificationActionUtils.cancelUndoNotification(this, notificationAction);
+                resendNotification(notificationAction);
+                break;
+            case ACTION_COMPLETE:
+                // All we need to do is switch to an Undo notification
+                NotificationActionUtils.createUndoNotification(this, notificationAction);
+                NotificationActionUtils.registerUndoTimeout(this, notificationAction);
+                break;
+            default:
+                if (NotificationActionUtils.ACTION_UNDO_TIMEOUT.equals(action) || NotificationActionUtils.ACTION_DESTRUCT.equals(action))
+                {
+                    // Process the action
+                    NotificationActionUtils.cancelUndoTimeout(this, notificationAction);
+                    NotificationActionUtils.processUndoNotification(this, notificationAction);
+                    processDesctructiveNotification(notificationAction);
+                }
+                break;
         }
     }
 
@@ -619,7 +614,7 @@ public class NotificationUpdaterService extends Service
     private void markCompleted(Uri taskUri)
     {
         ContentResolver contentResolver = getContentResolver();
-        ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>(1);
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>(1);
         ContentProviderOperation.Builder operation = ContentProviderOperation.newUpdate(taskUri);
         operation.withValue(Tasks.STATUS, Tasks.STATUS_COMPLETED);
         operation.withValue(Tasks.PINNED, false);

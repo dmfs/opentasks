@@ -383,28 +383,25 @@ public class TaskListFragment extends SupportFragment
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_show_completed)
+        switch (itemId)
         {
+            case R.id.menu_show_completed:
 
-            mSavedCompletedFilter = !mSavedCompletedFilter;
-            item.setChecked(mSavedCompletedFilter);
-            mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
+                mSavedCompletedFilter = !mSavedCompletedFilter;
+                item.setChecked(mSavedCompletedFilter);
+                mAdapter.setChildCursorFilter(mSavedCompletedFilter ? null : COMPLETED_FILTER);
 
-            // reload the child cursors only
-            for (int i = 0; i < mAdapter.getGroupCount(); ++i)
-            {
-                mAdapter.reloadGroup(i);
-            }
-            return true;
-        }
-        else if (itemId == R.id.menu_sync_now)
-        {
-            doSyncNow();
-            return true;
-        }
-        else
-        {
-            return super.onOptionsItemSelected(item);
+                // reload the child cursors only
+                for (int i = 0; i < mAdapter.getGroupCount(); ++i)
+                {
+                    mAdapter.reloadGroup(i);
+                }
+                return true;
+            case R.id.menu_sync_now:
+                doSyncNow();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -1035,10 +1032,8 @@ public class TaskListFragment extends SupportFragment
         protected Void doInBackground(SelectChildTaskParams... params)
         {
             int count = params.length;
-            for (int i = 0; i < count; i++)
+            for (final SelectChildTaskParams param : params)
             {
-                final SelectChildTaskParams param = params[i];
-
                 final int childPosition = getSelectedChildPostion(param.taskUriToSelect, param.childCursor);
                 if (childPosition > -1)
                 {

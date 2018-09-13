@@ -280,7 +280,7 @@ public class TaskProviderInstancesTest
      * Create a single instance and insert an override for a new instance, turning the event into a recurring event.
      */
     @Test
-    public void testInsertSingleInstanceAddAnother() throws RemoteException, OperationApplicationException
+    public void testInsertSingleInstanceAddAnother()
     {
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
         RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TasksTable(mAuthority));
@@ -296,12 +296,12 @@ public class TaskProviderInstancesTest
                 new Put<>(taskList, new NameData("list1")),
                 // insert a new task into the tasks table (we insert a task to get a RowReference to the new row)
                 new Put<>(task,
-                        new Composite<Tasks>(
+                        new Composite<>(
                                 new Referring<>(Tasks.LIST_ID, taskList),
                                 new TimeData(dateTimeOriginal),
                                 new TitleData("task1"))),
                 new Put<>(instance,
-                        new Composite<Instances>(
+                        new Composite<>(
                                 new Referring<>(Tasks.LIST_ID, taskList),
                                 new CharSequenceRowData<>(Tasks.DTSTART, "1234"),
                                 new CharSequenceRowData<>(Tasks.IS_ALLDAY, "0"),
@@ -317,14 +317,14 @@ public class TaskProviderInstancesTest
                 new Counted<>(2, new BulkAssert<>(new TasksTable(mAuthority))),
                 // check that the original task has RDATES now, one for the original start and one for the new override
                 new Assert<>(task,
-                        new Composite<Tasks>(
+                        new Composite<>(
                                 new Referring<>(Tasks.LIST_ID, taskList),
                                 new TimeData(dateTimeOriginal),
                                 new CharSequenceRowData<>(Tasks.RDATE, "20180110T224500Z,20180111T224500Z"),
                                 new TitleData("task1"))),
                 // and check there is a task for the override
                 new AssertRelated<>(new TasksTable(mAuthority), Tasks.ORIGINAL_INSTANCE_ID, task,
-                        new Composite<Tasks>(
+                        new Composite<>(
                                 new Referring<>(Tasks.LIST_ID, taskList),
                                 new CharSequenceRowData<>(Tasks.ORIGINAL_INSTANCE_TIME, startOverride),
                                 new TimeData(new DateTime(1234)),

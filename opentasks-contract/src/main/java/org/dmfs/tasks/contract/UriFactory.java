@@ -28,7 +28,7 @@ import java.util.Map;
 public final class UriFactory
 {
     private final String mAuthority;
-    private final Map<String, Uri> mUriMap = new HashMap<String, Uri>(16);
+    private final Map<String, Uri> mUriMap = new HashMap<>(16);
 
 
     UriFactory(String authority)

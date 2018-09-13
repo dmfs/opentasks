@@ -49,7 +49,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
     private final Context mContext;
     private final LayoutInflater mLayoutInflater;
     private final LoaderManager mLoaderManager;
-    private final Set<Integer> mLoadedGroups = new HashSet<Integer>();
+    private final Set<Integer> mLoadedGroups = new HashSet<>();
 
     private ExpandableGroupDescriptor mDescriptor;
     private OnChildLoadedListener mOnChildLoadedListener;
@@ -192,7 +192,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
     public void reloadLoadedGroups()
     {
         // we operate on a copy of the set to avoid concurrent modification when a group is loaded before we're done here
-        for (Integer i : new HashSet<Integer>(mLoadedGroups))
+        for (Integer i : new HashSet<>(mLoadedGroups))
         {
             int getGroupCount = getGroupCount();
             if (i < getGroupCount)

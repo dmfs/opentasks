@@ -31,9 +31,9 @@ import java.util.ArrayList;
  */
 public class ProviderOperationsLog
 {
-    private ArrayList<Uri> mUris = new ArrayList<Uri>(16);
+    private ArrayList<Uri> mUris = new ArrayList<>(16);
 
-    private ArrayList<Integer> mOperations = new ArrayList<Integer>(16);
+    private ArrayList<Integer> mOperations = new ArrayList<>(16);
 
 
     /**
@@ -78,8 +78,8 @@ public class ProviderOperationsLog
             if (clearLog)
             {
                 // we can't just clear the ArrayLists, because the Bundle keeps a reference to them
-                mUris = new ArrayList<Uri>(16);
-                mOperations = new ArrayList<Integer>(16);
+                mUris = new ArrayList<>(16);
+                mOperations = new ArrayList<>(16);
             }
         }
         return bundle;

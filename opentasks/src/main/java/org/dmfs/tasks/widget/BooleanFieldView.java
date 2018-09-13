@@ -79,7 +79,7 @@ public class BooleanFieldView extends AbstractFieldView
 
         if (mValues != null && adapterValue != null)
         {
-            mCheckBox.setChecked(adapterValue.booleanValue());
+            mCheckBox.setChecked(adapterValue);
             setVisibility(View.VISIBLE);
         }
         else

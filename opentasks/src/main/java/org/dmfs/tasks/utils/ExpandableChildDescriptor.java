@@ -109,17 +109,17 @@ public class ExpandableChildDescriptor
             selectionBuilder.append("(");
 
             // temporary array list for the selection arguments
-            List<String> selectionArgList = new ArrayList<String>();
+            List<String> selectionArgList = new ArrayList<>();
 
             // for every selection argument
-            for (int i = 0; i < mSelectionColumns.length; ++i)
+            for (int mSelectionColumn : mSelectionColumns)
             {
                 // find next "?"
                 newPos = mSelection.indexOf('?', pos == 0 ? pos : pos + 1);
                 selectionBuilder.append(mSelection.substring(pos, newPos));
 
                 // get the argument
-                String arg = cursor.getString(mSelectionColumns[i]);
+                String arg = cursor.getString(mSelectionColumn);
                 if (arg == null)
                 {
                     // insert null
@@ -162,7 +162,7 @@ public class ExpandableChildDescriptor
             if (filter != null)
             {
                 // temporary array list for the selection arguments
-                List<String> selectionArgList = new ArrayList<String>();
+                List<String> selectionArgList = new ArrayList<>();
                 if (filter != null)
                 {
                     filter.getSelectionArgs(selectionArgList);
