@@ -44,9 +44,9 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      */
     public interface OnDatabaseOperationListener
     {
-        public void onDatabaseCreated(SQLiteDatabase db);
+        void onDatabaseCreated(SQLiteDatabase db);
 
-        public void onDatabaseUpdate(SQLiteDatabase db, int oldVersion, int newVersion);
+        void onDatabaseUpdate(SQLiteDatabase db, int oldVersion, int newVersion);
     }
 
 
@@ -68,35 +68,35 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      */
     public interface Tables
     {
-        public static final String LISTS = "Lists";
+        String LISTS = "Lists";
 
-        public static final String WRITEABLE_LISTS = "Writeable_Lists";
+        String WRITEABLE_LISTS = "Writeable_Lists";
 
-        public static final String TASKS = "Tasks";
+        String TASKS = "Tasks";
 
-        public static final String TASKS_VIEW = "Task_View";
+        String TASKS_VIEW = "Task_View";
 
-        public static final String TASKS_PROPERTY_VIEW = "Task_Property_View";
+        String TASKS_PROPERTY_VIEW = "Task_Property_View";
 
-        public static final String INSTANCES = "Instances";
+        String INSTANCES = "Instances";
 
-        public static final String INSTANCE_VIEW = "Instance_View";
+        String INSTANCE_VIEW = "Instance_View";
 
-        public static final String INSTANCE_CLIENT_VIEW = "Instance_Client_View";
+        String INSTANCE_CLIENT_VIEW = "Instance_Client_View";
 
-        public static final String INSTANCE_PROPERTY_VIEW = "Instance_Property_View";
+        String INSTANCE_PROPERTY_VIEW = "Instance_Property_View";
 
-        public static final String INSTANCE_CATEGORY_VIEW = "Instance_Cagetory_View";
+        String INSTANCE_CATEGORY_VIEW = "Instance_Cagetory_View";
 
-        public static final String CATEGORIES = "Categories";
+        String CATEGORIES = "Categories";
 
-        public static final String CATEGORIES_MAPPING = "Categories_Mapping";
+        String CATEGORIES_MAPPING = "Categories_Mapping";
 
-        public static final String PROPERTIES = "Properties";
+        String PROPERTIES = "Properties";
 
-        public static final String ALARMS = "Alarms";
+        String ALARMS = "Alarms";
 
-        public static final String SYNCSTATE = "SyncState";
+        String SYNCSTATE = "SyncState";
     }
 
 
@@ -105,11 +105,11 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
      */
     public interface CategoriesMapping
     {
-        public static final String TASK_ID = "task_id";
+        String TASK_ID = "task_id";
 
-        public static final String CATEGORY_ID = "category_id";
+        String CATEGORY_ID = "category_id";
 
-        public static final String PROPERTY_ID = "property_id";
+        String PROPERTY_ID = "property_id";
 
     }
 

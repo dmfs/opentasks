@@ -37,7 +37,7 @@ import static org.junit.Assert.assertThat;
 public class TaskRelatedTest
 {
     @Test
-    public void testValue() throws Exception
+    public void testValue()
     {
         assertThat(new TaskRelated(123, ContentValues::new), hasValue(new ContentValuesWithLong(TaskContract.Instances.TASK_ID, 123)));
     }

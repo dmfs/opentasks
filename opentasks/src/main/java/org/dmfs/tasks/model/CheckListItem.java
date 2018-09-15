@@ -49,6 +49,4 @@ public final class CheckListItem
         return TextUtils.equals(text, other.text) && checked == other.checked;
     }
 
-
-    ;
 }

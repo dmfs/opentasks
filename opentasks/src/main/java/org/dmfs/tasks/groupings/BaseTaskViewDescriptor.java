@@ -119,7 +119,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
     protected void setDescription(View view, Cursor cursor)
     {
         String description = TaskFieldAdapters.DESCRIPTION.get(cursor);
-        TextView descriptionView = (TextView) getView(view, android.R.id.text1);
+        TextView descriptionView = getView(view, android.R.id.text1);
         if (TextUtils.isEmpty(description))
         {
             descriptionView.setVisibility(View.GONE);

@@ -100,15 +100,15 @@ public class QuickAddDialogFragment extends SupportDialogFragment
      */
     private interface TASK_LIST_PROJECTION_VALUES
     {
-        public final static int id = 0;
+        int id = 0;
         @SuppressWarnings("unused")
-        public final static int list_name = 1;
+        int list_name = 1;
         @SuppressWarnings("unused")
-        public final static int account_type = 2;
+        int account_type = 2;
         @SuppressWarnings("unused")
-        public final static int account_name = 3;
+        int account_name = 3;
         @SuppressWarnings("unused")
-        public final static int list_color = 4;
+        int list_color = 4;
     }
 
 
@@ -266,7 +266,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle)
     {
-        return new CursorLoader(getActivity(), (Uri) bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null,
+        return new CursorLoader(getActivity(), bundle.getParcelable(LIST_LOADER_URI), TASK_LIST_PROJECTION, bundle.getString(LIST_LOADER_FILTER), null,
                 null);
     }
 

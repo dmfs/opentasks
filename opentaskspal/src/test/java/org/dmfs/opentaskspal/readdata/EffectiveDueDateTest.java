@@ -72,7 +72,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.isAbsent());
     }
 
 
@@ -86,7 +86,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.isAbsent());
     }
 
 
@@ -100,7 +100,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.<DateTime>isAbsent());
+        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.isAbsent());
     }
 
 

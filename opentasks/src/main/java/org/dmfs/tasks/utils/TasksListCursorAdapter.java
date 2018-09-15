@@ -179,8 +179,8 @@ public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdap
      */
     public interface SelectionEnabledListener
     {
-        public void onSelectionEnabled();
+        void onSelectionEnabled();
 
-        public void onSelectionDisabled();
+        void onSelectionDisabled();
     }
 }

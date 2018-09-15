@@ -41,7 +41,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return
      */
-    public boolean existsIn(ContentValues values);
+    boolean existsIn(ContentValues values);
 
     /**
      * Check if a value is present (may be <code>null</code>) in the given {@link ContentValues}.
@@ -51,7 +51,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return
      */
-    public boolean isSetIn(ContentValues values);
+    boolean isSetIn(ContentValues values);
 
     /**
      * Get the value from the given {@link ContentValues}
@@ -61,7 +61,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return The value.
      */
-    public FieldType getFrom(ContentValues values);
+    FieldType getFrom(ContentValues values);
 
     /**
      * Check if a value is present and non-<code>null</code> in the given {@link Cursor}.
@@ -71,7 +71,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return
      */
-    public boolean existsIn(Cursor cursor);
+    boolean existsIn(Cursor cursor);
 
     /**
      * Get the value from the given {@link Cursor}
@@ -81,7 +81,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return The value.
      */
-    public FieldType getFrom(Cursor cursor);
+    FieldType getFrom(Cursor cursor);
 
     /**
      * Check if a value is present and non-<code>null</code> in the given {@link Cursor} or {@link ContentValues}.
@@ -93,7 +93,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return
      */
-    public boolean existsIn(Cursor cursor, ContentValues values);
+    boolean existsIn(Cursor cursor, ContentValues values);
 
     /**
      * Get the value from the given {@link Cursor} or {@link ContentValues}, with the {@link ContentValues} taking precedence over the cursor values.
@@ -105,7 +105,7 @@ public interface FieldAdapter<FieldType, EntitType>
      *
      * @return The value.
      */
-    public FieldType getFrom(Cursor cursor, ContentValues values);
+    FieldType getFrom(Cursor cursor, ContentValues values);
 
     /**
      * Set a value in the given {@link ContentValues}.
@@ -115,7 +115,7 @@ public interface FieldAdapter<FieldType, EntitType>
      * @param value
      *         The new value to store.
      */
-    public void setIn(ContentValues values, FieldType value);
+    void setIn(ContentValues values, FieldType value);
 
     /**
      * Remove a value from the given {@link ContentValues}.
@@ -123,7 +123,7 @@ public interface FieldAdapter<FieldType, EntitType>
      * @param values
      *         The {@link ContentValues} from which to remove the value.
      */
-    public void removeFrom(ContentValues values);
+    void removeFrom(ContentValues values);
 
     /**
      * Copy the value from a {@link Cursor} to the given {@link ContentValues}.
@@ -133,7 +133,7 @@ public interface FieldAdapter<FieldType, EntitType>
      * @param dest
      *         The {@link ContentValues} to receive the value.
      */
-    public void copyValue(Cursor source, ContentValues dest);
+    void copyValue(Cursor source, ContentValues dest);
 
     /**
      * Copy the value from {@link ContentValues} to another {@link ContentValues} object.
@@ -143,6 +143,6 @@ public interface FieldAdapter<FieldType, EntitType>
      * @param dest
      *         The {@link ContentValues} to receive the value.
      */
-    public void copyValue(ContentValues source, ContentValues dest);
+    void copyValue(ContentValues source, ContentValues dest);
 
 }

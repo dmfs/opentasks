@@ -300,25 +300,11 @@ public class TasksExtension extends DashClockExtension
             calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
             long todayUTC = calendar.getTimeInMillis();
 
-            if (dueTime == todayUTC)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return dueTime == todayUTC;
         }
         else
         {
-            if (startTime < mNow)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return startTime < mNow;
         }
 
     }

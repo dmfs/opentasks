@@ -29,7 +29,7 @@ public interface TimeChangeListener
      * @param timeChangeObserver
      *         The {@TimeChangeObserver} that has detected this update.
      */
-    public void onTimeUpdate(TimeChangeObserver timeChangeObserver);
+    void onTimeUpdate(TimeChangeObserver timeChangeObserver);
 
     /**
      * Callback that is invoked when an alarm has been triggered.
@@ -37,5 +37,5 @@ public interface TimeChangeListener
      * @param timeChangeObserver
      *         The {@TimeChangeObserver} that has been triggered.
      */
-    public void onAlarm(TimeChangeObserver timeChangeObserver);
+    void onAlarm(TimeChangeObserver timeChangeObserver);
 }

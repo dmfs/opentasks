@@ -40,7 +40,7 @@ import static org.junit.Assert.assertThat;
 public class DateTimeListDataTest
 {
     @Test
-    public void testEmpty() throws Exception
+    public void testEmpty()
     {
         assertThat(new DateTimeListData<>("somefieldname", instance()),
                 builds(
@@ -50,7 +50,7 @@ public class DateTimeListDataTest
 
 
     @Test
-    public void testSingle() throws Exception
+    public void testSingle()
     {
         assertThat(new DateTimeListData<>("somefieldname", new SingletonIterable<>(DateTime.parse("Europe/Berlin", "20171212T123456"))),
                 builds(
@@ -60,7 +60,7 @@ public class DateTimeListDataTest
 
 
     @Test
-    public void testSingleFloating() throws Exception
+    public void testSingleFloating()
     {
         assertThat(new DateTimeListData<>("somefieldname", new SingletonIterable<>(DateTime.parse("20171212T123456"))),
                 builds(
@@ -70,7 +70,7 @@ public class DateTimeListDataTest
 
 
     @Test
-    public void testSingleAllDay() throws Exception
+    public void testSingleAllDay()
     {
         assertThat(new DateTimeListData<>("somefieldname", new SingletonIterable<>(DateTime.parse("20171212"))),
                 builds(
@@ -80,7 +80,7 @@ public class DateTimeListDataTest
 
 
     @Test
-    public void testMulti1() throws Exception
+    public void testMulti1()
     {
         assertThat(new DateTimeListData<>("somefieldname",
                         new Seq<>(
@@ -93,7 +93,7 @@ public class DateTimeListDataTest
 
 
     @Test
-    public void testMulti2() throws Exception
+    public void testMulti2()
     {
         assertThat(new DateTimeListData<>("somefieldname",
                         new Seq<>(

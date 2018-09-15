@@ -34,7 +34,7 @@ public final class UriFactory
     UriFactory(String authority)
     {
         mAuthority = authority;
-        mUriMap.put((String) null, Uri.parse("content://" + authority));
+        mUriMap.put(null, Uri.parse("content://" + authority));
     }
 
 

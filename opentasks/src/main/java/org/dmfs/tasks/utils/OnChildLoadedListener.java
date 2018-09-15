@@ -34,5 +34,5 @@ public interface OnChildLoadedListener
      * @param childCursor
      *         The cursor of the children for the group.
      */
-    public void onChildLoaded(int pos, Cursor childCursor);
+    void onChildLoaded(int pos, Cursor childCursor);
 }

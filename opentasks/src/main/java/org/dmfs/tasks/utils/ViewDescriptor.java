@@ -33,12 +33,12 @@ public interface ViewDescriptor
     /**
      * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is the last child in a group.
      */
-    public final static int FLAG_IS_LAST_CHILD = 0x0001;
+    int FLAG_IS_LAST_CHILD = 0x0001;
 
     /**
      * Flag for {@link #populateView(View, Cursor, BaseExpandableListAdapter, int)} that indicates the view is group that's currently expanded.
      */
-    public final static int FLAG_IS_EXPANDED = 0x0002;
+    int FLAG_IS_EXPANDED = 0x0002;
 
     /**
      * Populate a view in an {@link ExpandableListView}.
@@ -52,33 +52,33 @@ public interface ViewDescriptor
      * @param flags
      *         Some flags that give additional information about the view. Any combination of {@link #FLAG_IS_EXPANDED} or {@link #FLAG_IS_LAST_CHILD}.
      */
-    public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags);
+    void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags);
 
     /**
      * Get the resource id of the view to use.
      *
      * @return The id of a layout resource.
      */
-    public int getView();
+    int getView();
 
     /**
      * Get the id of the inner content view that is supposed to fling
      *
      * @return The id of the view (-1) if the view is missing
      */
-    public int getFlingContentViewId();
+    int getFlingContentViewId();
 
     /**
      * Get the id of the view that reveals from the left side
      *
      * @return The id of the view (-1) if the view is missing
      */
-    public int getFlingRevealLeftViewId();
+    int getFlingRevealLeftViewId();
 
     /**
      * Get the id of the view that reveals from the right side
      *
      * @return The id of the view (-1) if the view is missing
      */
-    public int getFlingRevealRightViewId();
+    int getFlingRevealRightViewId();
 }

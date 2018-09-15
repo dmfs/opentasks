@@ -33,7 +33,7 @@ public interface AbstractFilter
      * @param stringBuilder
      *         The {@link StringBuilder} where to append the selection string.
      */
-    public abstract void getSelection(StringBuilder stringBuilder);
+    void getSelection(StringBuilder stringBuilder);
 
     /**
      * Append the selection arguments of this filter to a {@link List} of {@link String}s.
@@ -41,5 +41,5 @@ public interface AbstractFilter
      * @param selectionArgs
      *         The List where to append the arguments.
      */
-    public abstract void getSelectionArgs(List<String> selectionArgs);
+    void getSelectionArgs(List<String> selectionArgs);
 }

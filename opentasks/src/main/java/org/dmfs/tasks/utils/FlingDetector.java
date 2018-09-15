@@ -111,7 +111,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
          *
          * @return Bitmask with LEFT_FLING or RIGHT_FLING set to indicate directions of fling which are enabled.
          */
-        public int canFling(ListView listview, int pos);
+        int canFling(ListView listview, int pos);
 
         /**
          * Notify the listener of a fling event.
@@ -127,7 +127,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
          *
          * @return <code>true</code> if the event has been handled, <code>false</code> otherwise.
          */
-        public boolean onFlingEnd(ListView listview, View listElement, int pos, int direction);
+        boolean onFlingEnd(ListView listview, View listElement, int pos, int direction);
 
         /**
          * Notify the listener of a fling event start or direction change. This method might be called twice or more without a call to
@@ -142,7 +142,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
          * @param direction
          *         Flag to indicate in which direction the fling was performed.
          */
-        public void onFlingStart(ListView listview, View listElement, int position, int direction);
+        void onFlingStart(ListView listview, View listElement, int position, int direction);
 
         /**
          * Notify the listener of a fling event being cancelled.
@@ -150,7 +150,7 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
          * @param direction
          *         Flag to indicate in which direction the fling was performed.
          */
-        public void onFlingCancel(int direction);
+        void onFlingCancel(int direction);
     }
 
 

@@ -39,7 +39,7 @@ import static org.junit.Assert.assertThat;
 public class EnduringTest
 {
     @Test
-    public void testNoValue() throws Exception
+    public void testNoValue()
     {
         assertThat(new Enduring(ContentValues::new), hasValue(new ContentValuesWithLong(TaskContract.Instances.INSTANCE_DURATION, nullValue(Long.class))));
         assertThat(new Enduring(ContentValues::new).value().size(), is(1));
@@ -47,7 +47,7 @@ public class EnduringTest
 
 
     @Test
-    public void testStartValue() throws Exception
+    public void testStartValue()
     {
         ContentValues values = new ContentValues(1);
         values.put(TaskContract.Instances.INSTANCE_START, 10);
@@ -58,7 +58,7 @@ public class EnduringTest
 
 
     @Test
-    public void testDueValue() throws Exception
+    public void testDueValue()
     {
         ContentValues values = new ContentValues(1);
         values.put(TaskContract.Instances.INSTANCE_DUE, 10);
@@ -69,7 +69,7 @@ public class EnduringTest
 
 
     @Test
-    public void testStartDueValue() throws Exception
+    public void testStartDueValue()
     {
         ContentValues values = new ContentValues(2);
         values.put(TaskContract.Instances.INSTANCE_START, 1);
