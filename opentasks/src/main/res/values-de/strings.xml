@@ -247,13 +247,31 @@
     <!-- Incoming share -->
     <string name="share_as_task">Aufgabe erstellen</string>
 
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
     <string name="opentasks_settings_notification_enable">Benachrichtigungen</string>
+    <!-- Section title in settings for the notification signals -->
     <string name="opentasks_settings_notification_signals_section_title">Benachrichtungseinstellungen</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_sound">Ton</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_vibrate">Vibration</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_lights">LED</string>
 
     <!-- Outgoing share -->
     <string name="opentasks_share_footer">Geteilt mit OpenTasks</string>
+    
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Berechtigung erforderlich</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Um die Liste der Konten auf Ihrem Gerät zu lesen, die die Aufgabensynchronisation unterstützen, benötigt %s die Berechtigung GET_ACCOUNTS.<br/><br/>
+    Bitte beachten Sie, dass aufgrund einer unglücklichen Entscheidung von Google die Berechtigungsanfrage als &quot;Zugriff auf Ihre Kontakte&quot; bezeichnet wird anstatt &quot;Zugriff auf Ihr Konto&quot;. Siehe <a href="https://issuetracker.google.com/issues/37065963">Problem 37065963</a> für weitere Informationen.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Fortsetzen</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Einstellungen öffnen</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
+    <string name="opentasks_date_time">%1$s, %2$s</string>
 
 </resources>
