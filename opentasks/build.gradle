@@ -46,34 +46,34 @@ android {
 
 dependencies {
     implementation project(':opentasks-provider')
-    implementation 'com.android.support:appcompat-v7:' + SUPPORT_LIBRARY_VERSION
-    implementation 'com.android.support:design:' + SUPPORT_LIBRARY_VERSION
-    implementation('org.dmfs:android-xml-magic:0.1.1') {
+    implementation deps.support_appcompat
+    implementation deps.support_design
+    implementation(deps.xml_magic) {
         // xmlpull is part of the runtime, so don't pull it in here
         exclude group: 'xmlpull', module: 'xmlpull'
     }
-    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    implementation 'com.github.dmfs.color-picker:colorpicker-activity:1.1'
-    implementation('au.com.codeka:carrot:2.4.0') {
+    implementation deps.android_dashclock
+    implementation deps.color_picker
+    implementation(deps.codeka_carrot) {
         exclude module: 'iterators' // TODO Remove when iterators have been removed from codeka:carrot
     }
-    implementation('com.github.dmfs.androidcarrot:androidcarrot:13edc04') {
+    implementation(deps.android_carrot) {
         exclude module: 'carrot'
         exclude group: 'com.android.support'
         exclude module: 'iterators'
         exclude module: 'jems'
     }
-    implementation 'org.dmfs:jems:' + JEMS_VERSION
-    implementation 'org.dmfs:rfc5545-datetime:' + RFC5545_DATETIME_VERSION
-    implementation 'com.github.dmfs.bolts:color-bolts:' + BOLTS_VERSION
+    implementation deps.jems
+    implementation deps.datetime
+    implementation deps.bolts_color
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:3.5.1'
+    testImplementation deps.junit
+    testImplementation deps.robolectric
 
-    androidTestImplementation('com.android.support.test:runner:' + ANDROID_TEST_RUNNER_VERSION) {
+    androidTestImplementation(deps.support_test_runner) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestImplementation('com.android.support.test:rules:' + ANDROID_TEST_RUNNER_VERSION) {
+    androidTestImplementation(deps.support_test_rules) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 }
