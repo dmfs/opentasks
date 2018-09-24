@@ -226,6 +226,9 @@
     <string name="button_add_one_hour">+1 hour</string>
     <string name="button_add_one_day">+1 day</string>
 
+    <!-- Strings for QuickSettingsTile -->
+    <string name="quicksettingstile_create">Create Task</string>
+
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Tasks</string>
     <string name="dashclock_extension_description">Displays information for recent tasks.</string>
