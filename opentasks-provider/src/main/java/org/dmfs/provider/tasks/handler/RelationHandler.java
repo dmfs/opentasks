@@ -248,5 +248,13 @@ public class RelationHandler extends PropertyHandler
                 db.update(TaskDatabaseHelper.Tables.TASKS, taskValues, Tasks._ID + "=" + oldValues.getLong(relIdCol), null);
             }
         }
+        // else if (type == Relation.RELTYPE_SIBLING)
+        // {
+            /*
+             * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
+             *
+             * FIXME: properly handle this case
+             */
+        // }
     }
 }
