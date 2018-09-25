@@ -204,7 +204,8 @@
         </receiver>
 
         <!-- custom alarm receivers -->
-        <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver">
+        <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver"
+                android:permission="">
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_DUE"/>
 

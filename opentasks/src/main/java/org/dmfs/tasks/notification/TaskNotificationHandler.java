@@ -150,7 +150,7 @@ public class TaskNotificationHandler extends BroadcastReceiver
             }
         }
         Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        editor.putString(SHARED_PREFERENCE_KEY_PINNED_TASKS, sb.toString()).commit();
+        editor.putString(SHARED_PREFERENCE_KEY_PINNED_TASKS, sb.toString()).apply();
     }
 
 
@@ -165,7 +165,7 @@ public class TaskNotificationHandler extends BroadcastReceiver
         String pinnedTasks = PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREFERENCE_KEY_PINNED_TASKS, null);
         pinnedTasks += ",," + (pinnedTask.getUri().toString());
         Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        editor.putString(SHARED_PREFERENCE_KEY_PINNED_TASKS, pinnedTasks).commit();
+        editor.putString(SHARED_PREFERENCE_KEY_PINNED_TASKS, pinnedTasks).apply();
     }
 
 

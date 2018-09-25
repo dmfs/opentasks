@@ -7,7 +7,7 @@
             android:icon="@drawable/ic_action_add"
             android:title="@string/menu_add_task"
             android:titleCondensed="@string/menu_add_task_condensed"
-            app:showAsAction="always"/>
+            app:showAsAction="ifRoom"/>
     <item
             android:id="@+id/search"
             android:title="@string/task_group_search_title"
