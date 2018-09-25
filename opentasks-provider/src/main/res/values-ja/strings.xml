@@ -10,5 +10,6 @@
     <string name="opentasks_permission_description_read_tasks">タスクとタスクリストを読み込みます。</string>
     <string name="opentasks_permission_write_tasks">タスクを書く</string>
     <string name="opentasks_permission_description_write_tasks">タスクとタスクリストを作成、変更、削除します。</string>
+    <string name="opentasks_permission_group_description_tasks">タスクとタスクリストを作成、変更、削除します。</string>
 
 </resources>

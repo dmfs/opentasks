@@ -2,17 +2,23 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="org.dmfs.tasks.provider">
 
+    <permission-group
+            android:name="org.dmfs.tasks.permissiongroup.Tasks"
+            android:label="@string/opentasks_provider_label"
+            android:icon="@drawable/ic_24_opentasks"
+            android:description="@string/opentasks_permission_group_description_tasks"/>
+
     <permission
             android:name="org.dmfs.permission.READ_TASKS"
             android:description="@string/opentasks_permission_description_read_tasks"
             android:label="@string/opentasks_permission_read_tasks"
-            android:permissionGroup="android.permission-group.PERSONAL_INFO"
+            android:permissionGroup="org.dmfs.tasks.permissiongroup.Tasks"
             android:protectionLevel="dangerous"/>
     <permission
             android:name="org.dmfs.permission.WRITE_TASKS"
             android:description="@string/opentasks_permission_description_write_tasks"
             android:label="@string/opentasks_permission_write_tasks"
-            android:permissionGroup="android.permission-group.PERSONAL_INFO"
+            android:permissionGroup="org.dmfs.tasks.permissiongroup.Tasks"
             android:protectionLevel="dangerous"/>
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>

@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">читање задатака</string>
-    <string name="opentasks_permission_description_read_tasks">Дозвољава апликацији да чита задатке са ваше листе задатака.</string>
+    <string name="opentasks_permission_description_read_tasks">Дозвољава апликацији да чита задатке са ваше листе задатака</string>
     <string name="opentasks_permission_write_tasks">упис задатака</string>
-    <string name="opentasks_permission_description_write_tasks">Дозвољава апликацији да уноси задатке у вашу листу задатака.</string>
+    <string name="opentasks_permission_description_write_tasks">Дозвољава апликацији да уноси задатке у вашу листу задатака</string>
+    <string name="opentasks_permission_group_description_tasks">Дозвољава апликацији да уноси задатке у вашу листу задатака</string>
 
 </resources>
