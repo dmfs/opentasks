@@ -196,7 +196,7 @@ public class TimeZoneChoicesAdapter implements IChoicesAdapter
         long absmillis = (millis < 0) ? -millis : millis;
         int minutes = (int) ((absmillis / (1000 * 60)) % 60);
         int hours = (int) ((absmillis / (1000 * 60 * 60)) % 24);
-        return String.format("(GMT%c%02d:%02d) ", millis >= 0 ? '+' : '-', hours, minutes)
+        return String.format("(GMT%c%02d:%02d) ", millis >= 0 ? '+' : '-', hours, minutes);
     }
 
 
