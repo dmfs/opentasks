@@ -54,6 +54,7 @@ import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+import org.dmfs.tasks.detailsscreen.TaskDetailsUi;
 import org.dmfs.tasks.model.CheckListItem;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -789,7 +790,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 activity.finish();
                 if (isNewTask)
                 {
-                    activity.startActivity(new Intent("android.intent.action.VIEW", mTaskUri));
+                    new TaskDetailsUi(mTaskUri).show(activity);
                 }
             }
             else
