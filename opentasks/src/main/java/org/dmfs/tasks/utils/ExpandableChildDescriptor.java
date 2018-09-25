@@ -180,7 +180,7 @@ public class ExpandableChildDescriptor
         String selectionString = null;
         if (selection != null)
         {
-            selectionString = selection.toString();
+            selectionString = selection;
         }
         return new CursorLoader(context, mUri, mProjection, selectionString, selectionArgs, mSortOrder);
     }

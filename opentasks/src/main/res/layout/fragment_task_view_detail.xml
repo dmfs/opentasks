@@ -48,7 +48,7 @@
                             android:maxLines="3"
                             android:textColor="#ffffffff"
                             android:textColorLink="#d0ffffff"
-                            android:textSize="28sp"></TextView>
+                            android:textSize="28sp"/>
                 </org.dmfs.tasks.widget.TextFieldView>
 
                 <org.dmfs.tasks.widget.TimeFieldView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -73,14 +73,14 @@
                             android:gravity="center_vertical"
                             android:includeFontPadding="false"
                             android:textColor="#ffffffff"
-                            android:textSize="18sp"></TextView>
+                            android:textSize="18sp"/>
 
                     <TextView
                             android:id="@android:id/text2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="44dp"
-                            android:textColor="#ffffffff"></TextView>
+                            android:textColor="#ffffffff"/>
 
                     <LinearLayout
                             android:id="@+id/buttons"
@@ -128,7 +128,7 @@
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical"/>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton

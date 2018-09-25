@@ -153,11 +153,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     /**
      * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
      *
-     * @param titleId
-     *         The resource id of the title.
-     * @param initalText
-     *         The initial text in the input field.
-     *
      * @return A new {@link QuickAddDialogFragment}.
      */
     public static QuickAddDialogFragment newInstance(long listId)
@@ -172,11 +167,6 @@ public class QuickAddDialogFragment extends SupportDialogFragment
 
     /**
      * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
-     *
-     * @param titleId
-     *         The resource id of the title.
-     * @param initalText
-     *         The initial text in the input field.
      *
      * @return A new {@link QuickAddDialogFragment}.
      */

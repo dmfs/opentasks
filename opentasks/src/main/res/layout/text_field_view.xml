@@ -13,6 +13,6 @@
             style="@style/field_view_text_value"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autoLink="all"></TextView>
+            android:autoLink="all"/>
 
 </org.dmfs.tasks.widget.TextFieldView>

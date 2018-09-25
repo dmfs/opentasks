@@ -227,9 +227,6 @@ public class DateFormatter
      *
      * @param date
      *         The due date to format.
-     * @param useToday
-     *         <code>true</code> to write "today" instead of the date when the date is on the present day
-     *
      * @return A string with the formatted due date.
      */
     public String format(Time date, DateFormatContext dateContext)
@@ -255,9 +252,6 @@ public class DateFormatter
      *
      * @param date
      *         The due date to format.
-     * @param useToday
-     *         <code>true</code> to write "today" instead of the date when the date is on the present day
-     *
      * @return A string with the formatted due date.
      */
     public String format(Time date, Time now, DateFormatContext dateContext)

@@ -399,8 +399,6 @@ public class FTSDatabaseHelper
      *         The row id of the task.
      * @param propertyId
      *         The row id of the property.
-     * @param The
-     *         entry type of the relation (title, description, property).
      */
     private static void insertNGramRelations(SQLiteDatabase db, Set<Long> ngramIds, long taskId, Long propertyId, int contentType)
     {

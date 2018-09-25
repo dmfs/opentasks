@@ -57,8 +57,7 @@ public class SearchChildDescriptor extends ExpandableChildDescriptor
 
 
     /**
-     * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as defined by {@code selectionColumns} in
-     * {@link #ExpandableChildDescriptor(Uri, String[], String, String, int...)}. Also applies any selection defined by <code>filter</code>.
+     * Get a new {@link CursorLoader} and update it's selection arguments with the values in {@code cursor} as defined by {@code selectionColumns}. Also applies any selection defined by <code>filter</code>.
      *
      * @param context
      *         A {@link Context}.

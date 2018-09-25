@@ -58,11 +58,11 @@ public class UpdateAllDay extends AbstractConstraint<Boolean>
                 }
 
             }
-            else if ((newValue == null || !newValue) && oldValue != null && oldValue)
-            {
+            // else if ((newValue == null || !newValue) && oldValue != null && oldValue)
+             // {
                 // ideally we move the time to 00:00:00 in the new time zone. Unfortunately we don't know the time zone at this point
                 // TODO: move the time to 00:00:00 in the new time zone, somehow
-            }
+            // }
         }
         return newValue;
     }

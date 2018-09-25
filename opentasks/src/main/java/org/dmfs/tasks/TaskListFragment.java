@@ -99,8 +99,7 @@ public class TaskListFragment extends SupportFragment
     private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.IS_CLOSED + "=0");
 
     /**
-     * The group descriptor to use. At present this can be either {@link ByDueDate#GROUP_DESCRIPTOR}, {@link ByCompleted#GROUP_DESCRIPTOR} or
-     * {@link ByList#GROUP_DESCRIPTOR}.
+     * The group descriptor to use.
      */
     private ExpandableGroupDescriptor mGroupDescriptor;
 
@@ -192,8 +191,6 @@ public class TaskListFragment extends SupportFragment
          *         The {@link Uri} of the selected task.
          * @param forceReload
          *         Whether to reload the task or not.
-         * @param sender
-         *         The sender of the callback.
          */
         void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
 
@@ -599,8 +596,6 @@ public class TaskListFragment extends SupportFragment
      *
      * @param taskUri
      *         The {@link Uri} of the task.
-     * @param taskTitle
-     *         The name/title of the task.
      */
     private void openTaskEditor(final Uri taskUri, final String accountType)
     {

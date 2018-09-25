@@ -21,7 +21,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="2dip"
                 android:clickable="false"
-                android:focusable="false"></CheckBox>
+                android:focusable="false"/>
 
         <TextView
                 android:id="@android:id/title"

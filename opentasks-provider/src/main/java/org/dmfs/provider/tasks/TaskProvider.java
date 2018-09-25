@@ -875,8 +875,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     @Override
     public Uri insertInTransaction(final SQLiteDatabase db, Uri uri, final ContentValues values, final boolean isSyncAdapter)
     {
-        long rowId = 0;
-        Uri result_uri = null;
+        long rowId;
+        Uri result_uri;
 
         String accountName = getAccountName(uri);
         String accountType = getAccountType(uri);

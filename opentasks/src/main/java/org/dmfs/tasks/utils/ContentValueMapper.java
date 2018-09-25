@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -45,10 +46,7 @@ public class ContentValueMapper
      */
     public ContentValueMapper addString(String... columnNames)
     {
-        for (String column : columnNames)
-        {
-            StringColumns.add(column);
-        }
+        Collections.addAll(StringColumns, columnNames);
         return this;
     }
 
@@ -63,10 +61,7 @@ public class ContentValueMapper
      */
     public ContentValueMapper addInteger(String... columnNames)
     {
-        for (String column : columnNames)
-        {
-            IntegerColumns.add(column);
-        }
+        Collections.addAll(IntegerColumns, columnNames);
         return this;
     }
 
@@ -81,10 +76,7 @@ public class ContentValueMapper
      */
     public ContentValueMapper addLong(String... columnNames)
     {
-        for (String column : columnNames)
-        {
-            LongColumns.add(column);
-        }
+        Collections.addAll(LongColumns, columnNames);
         return this;
     }
 

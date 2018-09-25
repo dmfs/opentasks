@@ -45,6 +45,6 @@
             android:layout_marginLeft="3sp"
             android:layout_marginRight="3sp"
             android:layout_weight="1"
-            tools:listitem="@layout/task_list_widget_item"></ListView>
+            tools:listitem="@layout/task_list_widget_item"/>
 
 </LinearLayout>

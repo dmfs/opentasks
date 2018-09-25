@@ -137,8 +137,6 @@ public class FlingDetector implements OnTouchListener, OnScrollListener
          *         The parent {@link ListView} of the element that was flung.
          * @param listElement
          *         The list element that is flinging
-         * @param pos
-         *         The position of the item that was flung
          * @param direction
          *         Flag to indicate in which direction the fling was performed.
          */

@@ -16,6 +16,7 @@
 
 package org.dmfs.tasks.groupings.filters;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -61,10 +62,7 @@ public final class ConstantFilter implements AbstractFilter
         if (mSelectionArgs != null)
         {
             // append all arguments, if any
-            for (String arg : mSelectionArgs)
-            {
-                selectionArgs.add(arg);
-            }
+            Collections.addAll(selectionArgs, mSelectionArgs);
         }
     }
 }

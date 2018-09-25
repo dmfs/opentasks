@@ -147,9 +147,6 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
     /**
      * Returns whether this is an "all-day timezone".
      *
-     * @param cursor
-     *         The cursor to read from.
-     *
      * @return <code>true</code> if the cursor points to an all-day date.
      */
     public boolean isAllDay(ContentSet values)
@@ -166,9 +163,6 @@ public final class TimezoneFieldAdapter extends FieldAdapter<TimeZone>
 
     /**
      * Returns whether this is an "all-day timezone".
-     *
-     * @param cursor
-     *         The cursor to read from.
      *
      * @return <code>true</code> if the cursor points to an all-day date.
      */

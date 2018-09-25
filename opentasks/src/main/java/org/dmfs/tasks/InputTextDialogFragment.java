@@ -106,8 +106,6 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
      *
      * @param title
      *         The title of the dialog.
-     * @param message
-     *         The text of the message field.
      * @param hint
      *         The hint of the input field.
      *
@@ -124,9 +122,6 @@ public class InputTextDialogFragment extends SupportDialogFragment implements On
      *
      * @param title
      *         The title of the dialog.
-     * @param message
-     *         The text of the message field.
-     *
      * @return A new {@link InputTextDialogFragment}.
      */
     public static InputTextDialogFragment newInstance(String title, String hint)
