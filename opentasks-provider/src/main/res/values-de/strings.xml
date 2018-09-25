@@ -7,8 +7,9 @@
     <!-- Permissions  -->
 
     <string name="opentasks_permission_read_tasks">Aufgaben lesen</string>
-    <string name="opentasks_permission_description_read_tasks">Aufgaben lesen.</string>
+    <string name="opentasks_permission_description_read_tasks">Aufgaben lesen</string>
     <string name="opentasks_permission_write_tasks">Aufgaben schreiben</string>
-    <string name="opentasks_permission_description_write_tasks">Aufgaben und Aufgabenlisten erstellen, bearbeiten und löschen.</string>
+    <string name="opentasks_permission_description_write_tasks">Aufgaben und Aufgabenlisten erstellen, bearbeiten und löschen</string>
+    <string name="opentasks_permission_group_description_tasks">Aufgaben lesen und verwalten</string>
 
 </resources>

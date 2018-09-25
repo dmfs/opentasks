@@ -52,17 +52,17 @@ public class WidgetConfigurationDatabaseHelper extends SQLiteOpenHelper
         /**
          * The row id.
          */
-        public static final String _ID = "_id";
+        String _ID = "_id";
 
         /**
          * The id of the widget
          */
-        public static final String WIDGET_ID = "widget_id";
+        String WIDGET_ID = "widget_id";
 
         /**
          * The list name for the widget
          */
-        public static final String LIST_ID = "list_id";
+        String LIST_ID = "list_id";
 
     }
 

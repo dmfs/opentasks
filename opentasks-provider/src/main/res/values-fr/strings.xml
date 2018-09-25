@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">Lire tâches</string>
-    <string name="opentasks_permission_description_read_tasks">Autoriser une application à lire les tâches de la listes de tâches.</string>
+    <string name="opentasks_permission_description_read_tasks">Autoriser une application à lire les tâches de la listes de tâches</string>
     <string name="opentasks_permission_write_tasks">Écrire tâches</string>
-    <string name="opentasks_permission_description_write_tasks">Autoriser une application à écrire des tâches dans la listes de tâches.</string>
+    <string name="opentasks_permission_description_write_tasks">Autoriser une application à écrire des tâches dans la listes de tâches</string>
+    <string name="opentasks_permission_group_description_tasks">Autoriser une application à écrire des tâches dans la listes de tâches</string>
 
 </resources>

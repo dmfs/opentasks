@@ -44,7 +44,7 @@ public class DueDatedTest
 {
 
     @Test
-    public void testNone() throws Exception
+    public void testNone()
     {
         ContentValues instanceData = new DueDated(absent(), ContentValues::new).value();
 
@@ -56,7 +56,7 @@ public class DueDatedTest
 
 
     @Test
-    public void testStartEurope() throws Exception
+    public void testStartEurope()
     {
         DateTime start = DateTime.parse("Europe/Berlin", "20171208T125500");
 
@@ -70,7 +70,7 @@ public class DueDatedTest
 
 
     @Test
-    public void testStartAmerica() throws Exception
+    public void testStartAmerica()
     {
         DateTime start = DateTime.parse("America/New_York", "20171208T125500");
 

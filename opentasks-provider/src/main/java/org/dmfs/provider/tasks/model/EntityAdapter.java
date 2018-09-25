@@ -36,7 +36,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return The entity row id or <code>-1</code>.
      */
-    public long id();
+    long id();
 
     /**
      * Returns the {@link Uri} of the entity using the given authority.
@@ -46,7 +46,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return A {@link Uri} or <code>null</code> if this entity has not been stored yet.
      */
-    public Uri uri(String authority);
+    Uri uri(String authority);
 
     /**
      * Returns the value identified by the given {@link FieldAdapter}.
@@ -56,7 +56,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return The value, maybe be <code>null</code>.
      */
-    public <T> T valueOf(FieldAdapter<T, EntityType> fieldAdapter);
+    <T> T valueOf(FieldAdapter<T, EntityType> fieldAdapter);
 
     /**
      * Returns the old value identified by the given {@link FieldAdapter}. This will be equal to the value returned by {@link #valueOf(FieldAdapter)} unless it
@@ -67,7 +67,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return The value, maybe be <code>null</code>.
      */
-    public <T> T oldValueOf(FieldAdapter<T, EntityType> fieldAdapter);
+    <T> T oldValueOf(FieldAdapter<T, EntityType> fieldAdapter);
 
     /**
      * Returns whether the given field has been overridden or not.
@@ -77,21 +77,21 @@ public interface EntityAdapter<EntityType>
      *
      * @return <code>true</code> if the field has been overridden, <code>false</code> otherwise.
      */
-    public boolean isUpdated(FieldAdapter<?, EntityType> fieldAdapter);
+    boolean isUpdated(FieldAdapter<?, EntityType> fieldAdapter);
 
     /**
      * Returns whether this adapter supports modifying values.
      *
      * @return <code>true</code> if the task values can be changed by this adapter, false otherwise.
      */
-    public boolean isWriteable();
+    boolean isWriteable();
 
     /**
      * Returns whether any value has been modified.
      *
      * @return <code>true</code> if there are modified values, false otherwise.
      */
-    public boolean hasUpdates();
+    boolean hasUpdates();
 
     /**
      * Sets a value of the adapted entity. The value is identified by a {@link FieldAdapter}.
@@ -101,7 +101,7 @@ public interface EntityAdapter<EntityType>
      * @param value
      *         The new value.
      */
-    public <T> void set(FieldAdapter<T, EntityType> fieldAdapter, T value);
+    <T> void set(FieldAdapter<T, EntityType> fieldAdapter, T value);
 
     /**
      * Remove a value from the change set. In effect the respective field will keep it's old value.
@@ -109,7 +109,7 @@ public interface EntityAdapter<EntityType>
      * @param fieldAdapter
      *         The {@link FieldAdapter} of the field to un-set.
      */
-    public void unset(FieldAdapter<?, EntityType> fieldAdapter);
+    void unset(FieldAdapter<?, EntityType> fieldAdapter);
 
     /**
      * Commit all changes to the database.
@@ -119,7 +119,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return The number of entries affected. This may be <code>0</code> if no fields have been changed.
      */
-    public int commit(SQLiteDatabase db);
+    int commit(SQLiteDatabase db);
 
     /**
      * Return the value of a temporary state field. The state of an entity is not committed to the database, it's only bound to the instances of this
@@ -130,7 +130,7 @@ public interface EntityAdapter<EntityType>
      *
      * @return The value of the state field.
      */
-    public <T> T getState(FieldAdapter<T, EntityType> stateFieldAdater);
+    <T> T getState(FieldAdapter<T, EntityType> stateFieldAdater);
 
     /**
      * Set the value of a state field. This value is not stored in the database. Instead it only exists as long as this {@link EntityAdapter} exists.
@@ -140,12 +140,12 @@ public interface EntityAdapter<EntityType>
      * @param value
      *         The new state value.
      */
-    public <T> void setState(FieldAdapter<T, EntityType> stateFieldAdater, T value);
+    <T> void setState(FieldAdapter<T, EntityType> stateFieldAdater, T value);
 
     /***
      * Creates a {@link EntityAdapter} for a new entity initialized with the values of this entity (except for _ID).
      *
      * @return A new {@link EntityAdapter} having the same values.
      */
-    public EntityAdapter<EntityType> duplicate();
+    EntityAdapter<EntityType> duplicate();
 }

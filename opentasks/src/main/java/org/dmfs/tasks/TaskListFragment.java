@@ -192,11 +192,11 @@ public class TaskListFragment extends SupportFragment
          * @param forceReload
          *         Whether to reload the task or not.
          */
-        public void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
+        void onItemSelected(Uri taskUri, boolean forceReload, int pagePosition);
 
-        public ExpandableGroupDescriptor getGroupDescriptor(int position);
+        ExpandableGroupDescriptor getGroupDescriptor(int position);
 
-        public void onAddNewTask();
+        void onAddNewTask();
     }
 
 

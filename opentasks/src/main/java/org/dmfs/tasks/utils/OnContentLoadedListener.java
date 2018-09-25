@@ -32,5 +32,5 @@ public interface OnContentLoadedListener
      * @param values
      *         The loaded {@link ContentValues}.
      */
-    public void onContentLoaded(ContentValues values);
+    void onContentLoaded(ContentValues values);
 }

@@ -41,14 +41,14 @@ import static org.junit.Assert.assertThat;
 public class DateTimeIterableFieldAdapterTest
 {
     @Test
-    public void testFieldName() throws Exception
+    public void testFieldName()
     {
         assertThat(new DateTimeIterableFieldAdapter<>("x", "y").fieldName(), is("x"));
     }
 
 
     @Test
-    public void testGetFromCVAllDay1() throws Exception
+    public void testGetFromCVAllDay1()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -58,7 +58,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testGetFromCVAllDay2() throws Exception
+    public void testGetFromCVAllDay2()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -68,7 +68,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testGetFromCVFloating1() throws Exception
+    public void testGetFromCVFloating1()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -79,7 +79,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testGetFromCVFloating2() throws Exception
+    public void testGetFromCVFloating2()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -90,7 +90,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testGetFromCVAbsolute1() throws Exception
+    public void testGetFromCVAbsolute1()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -101,7 +101,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testGetFromCVAbsolute2() throws Exception
+    public void testGetFromCVAbsolute2()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -112,7 +112,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInNull() throws Exception
+    public void testSetInNull()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -122,7 +122,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInEmpty() throws Exception
+    public void testSetInEmpty()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -132,7 +132,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInSingleAllDay() throws Exception
+    public void testSetInSingleAllDay()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -142,7 +142,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInSingleFloating() throws Exception
+    public void testSetInSingleFloating()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -152,7 +152,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInSingleAbsolute() throws Exception
+    public void testSetInSingleAbsolute()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -162,7 +162,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInDoubleAllDay() throws Exception
+    public void testSetInDoubleAllDay()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -172,7 +172,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInDoubleFloating() throws Exception
+    public void testSetInDoubleFloating()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -182,7 +182,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInDoubleAbsolute() throws Exception
+    public void testSetInDoubleAbsolute()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -192,7 +192,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInMultiAllDay() throws Exception
+    public void testSetInMultiAllDay()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -202,7 +202,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInMultiFloating() throws Exception
+    public void testSetInMultiFloating()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");
@@ -212,7 +212,7 @@ public class DateTimeIterableFieldAdapterTest
 
 
     @Test
-    public void testSetInMultiAbsolute() throws Exception
+    public void testSetInMultiAbsolute()
     {
         ContentValues values = new ContentValues();
         FieldAdapter<Iterable<DateTime>, ?> adapter = new DateTimeIterableFieldAdapter<TaskAdapter>("x", "y");

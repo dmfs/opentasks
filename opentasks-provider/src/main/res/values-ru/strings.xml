@@ -9,8 +9,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">чтение задач</string>
-    <string name="opentasks_permission_description_read_tasks">Разрешить приложению читать задачи из Ваших списков задач.</string>
+    <string name="opentasks_permission_description_read_tasks">Разрешить приложению читать задачи из Ваших списков задач</string>
     <string name="opentasks_permission_write_tasks">запись задач</string>
-    <string name="opentasks_permission_description_write_tasks">Разрешить приложению сохранять задачи в Ваших списках задач.</string>
+    <string name="opentasks_permission_description_write_tasks">Разрешить приложению сохранять задачи в Ваших списках задач</string>
+    <string name="opentasks_permission_group_description_tasks">Разрешить приложению сохранять задачи в Ваших списках задач</string>
 
 </resources>

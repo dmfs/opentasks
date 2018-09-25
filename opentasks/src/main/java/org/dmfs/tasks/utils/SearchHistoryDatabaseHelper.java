@@ -53,22 +53,22 @@ public class SearchHistoryDatabaseHelper extends SQLiteOpenHelper
         /**
          * The row id.
          */
-        public static final String _ID = "_id";
+        String _ID = "_id";
 
         /**
          * The search query string.
          */
-        public static final String SEARCH_QUERY = "query";
+        String SEARCH_QUERY = "query";
 
         /**
          * Flag for historic search entries.
          */
-        public static final String HISTORIC = "historic";
+        String HISTORIC = "historic";
 
         /**
          * Time since the epoch in milliseconds of when the item was updated the last time.
          */
-        public static final String TIMESTAMP = "timestamp";
+        String TIMESTAMP = "timestamp";
     }
 
 

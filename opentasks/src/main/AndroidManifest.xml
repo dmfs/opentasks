@@ -204,7 +204,8 @@
         </receiver>
 
         <!-- custom alarm receivers -->
-        <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver">
+        <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver"
+                android:permission="">
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_DUE"/>
 
@@ -348,6 +349,18 @@
         <service
                 android:name="org.dmfs.tasks.notification.NotificationUpdaterService"
                 android:exported="false"/>
+
+        <service
+            android:name="org.dmfs.tasks.quicksettings.TaskQuickSettingsTile"
+            android:icon="@drawable/content_edit"
+            android:label="@string/quicksettingstile_create"
+            android:description="@string/quicksettingstile_create"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

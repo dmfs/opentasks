@@ -41,7 +41,6 @@ public class TimeRangeStartCursorFactory extends TimeRangeCursorFactory
     {
 
         mTime.setToNow();
-        ;
 
         MatrixCursor result = new MatrixCursor(mProjection);
 

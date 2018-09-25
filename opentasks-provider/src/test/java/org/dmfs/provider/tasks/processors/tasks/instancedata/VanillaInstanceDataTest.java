@@ -37,7 +37,7 @@ import static org.junit.Assert.assertThat;
 public class VanillaInstanceDataTest
 {
     @Test
-    public void testValue() throws Exception
+    public void testValue()
     {
         ContentValues values = new VanillaInstanceData().value();
         assertThat(values.get(TaskContract.Instances.INSTANCE_START), nullValue());

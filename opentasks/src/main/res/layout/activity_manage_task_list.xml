@@ -17,7 +17,8 @@
             android:paddingEnd="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:paddingStart="16dp">
+            android:paddingStart="16dp"
+            android:focusable="true">
 
         <TextView
                 style="@style/TextAppearance.AppCompat.Subhead"
@@ -44,7 +45,8 @@
             android:paddingEnd="16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:paddingStart="16dp">
+            android:paddingStart="16dp"
+            android:focusable="true">
 
         <TextView
                 style="@style/TextAppearance.AppCompat.Subhead"

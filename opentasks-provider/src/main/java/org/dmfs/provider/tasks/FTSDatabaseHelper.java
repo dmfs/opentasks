@@ -66,22 +66,22 @@ public class FTSDatabaseHelper
         /**
          * The row id of the belonging task.
          */
-        public static final String TASK_ID = "fts_task_id";
+        String TASK_ID = "fts_task_id";
 
         /**
          * The the property id of the searchable entry or <code>null</code> if the entry is not related to a property.
          */
-        public static final String PROPERTY_ID = "fts_property_id";
+        String PROPERTY_ID = "fts_property_id";
 
         /**
          * The the type of the searchable entry
          */
-        public static final String TYPE = "fts_type";
+        String TYPE = "fts_type";
 
         /**
          * An n-gram for a task.
          */
-        public static final String NGRAM_ID = "fts_ngram_id";
+        String NGRAM_ID = "fts_ngram_id";
 
     }
 
@@ -96,12 +96,12 @@ public class FTSDatabaseHelper
         /**
          * The row id of the N-gram.
          */
-        public static final String NGRAM_ID = "ngram_id";
+        String NGRAM_ID = "ngram_id";
 
         /**
          * The content of the N-gram
          */
-        public static final String TEXT = "ngram_text";
+        String TEXT = "ngram_text";
 
     }
 
@@ -154,22 +154,22 @@ public class FTSDatabaseHelper
         /**
          * This is an entry for the title of a task.
          */
-        public static final int TITLE = 1;
+        int TITLE = 1;
 
         /**
          * This is an entry for the description of a task.
          */
-        public static final int DESCRIPTION = 2;
+        int DESCRIPTION = 2;
 
         /**
          * This is an entry for the location of a task.
          */
-        public static final int LOCATION = 3;
+        int LOCATION = 3;
 
         /**
          * This is an entry for a property of a task.
          */
-        public static final int PROPERTY = 4;
+        int PROPERTY = 4;
 
     }
 

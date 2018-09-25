@@ -119,14 +119,14 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
      */
     private interface TASK_LIST_PROJECTION_VALUES
     {
-        public final static int id = 0;
+        int id = 0;
         @SuppressWarnings("unused")
-        public final static int list_name = 1;
-        public final static int account_type = 2;
+        int list_name = 1;
+        int account_type = 2;
         @SuppressWarnings("unused")
-        public final static int account_name = 3;
+        int account_name = 3;
         @SuppressWarnings("unused")
-        public final static int list_color = 4;
+        int list_color = 4;
     }
 
 
@@ -346,9 +346,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
         super.onPause();
     }
-
-
-    ;
 
 
     @Override

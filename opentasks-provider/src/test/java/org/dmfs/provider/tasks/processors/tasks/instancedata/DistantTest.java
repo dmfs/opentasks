@@ -37,7 +37,7 @@ public class DistantTest
 {
 
     @Test
-    public void test() throws Exception
+    public void test()
     {
         ContentValues instanceData = new Distant(100, ContentValues::new).value();
         assertThat(instanceData.get(TaskContract.Instances.DISTANCE_FROM_CURRENT), is(100));

@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">lettura attività</string>
-    <string name="opentasks_permission_description_read_tasks">Permette ad un\'app di leggere le attività del tuo elenco attività.</string>
+    <string name="opentasks_permission_description_read_tasks">Permette ad un\'app di leggere le attività del tuo elenco attività</string>
     <string name="opentasks_permission_write_tasks">scrittura attività</string>
-    <string name="opentasks_permission_description_write_tasks">Permette ad un\'app di modificare le attività del tuo elenco attività.</string>
+    <string name="opentasks_permission_description_write_tasks">Permette ad un\'app di modificare le attività del tuo elenco attività</string>
+    <string name="opentasks_permission_group_description_tasks">Permette ad un\'app di modificare le attività del tuo elenco attività</string>
 
 </resources>

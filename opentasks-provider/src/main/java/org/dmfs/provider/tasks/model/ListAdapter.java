@@ -35,42 +35,42 @@ public interface ListAdapter extends EntityAdapter<ListAdapter>
     /**
      * Adapter for the row id of a task list.
      */
-    public final static LongFieldAdapter<ListAdapter> _ID = new LongFieldAdapter<ListAdapter>(TaskLists._ID);
+    LongFieldAdapter<ListAdapter> _ID = new LongFieldAdapter<ListAdapter>(TaskLists._ID);
 
     /**
      * Adapter for the _sync_id of a list.
      */
-    public final static StringFieldAdapter<ListAdapter> SYNC_ID = new StringFieldAdapter<ListAdapter>(TaskLists._SYNC_ID);
+    StringFieldAdapter<ListAdapter> SYNC_ID = new StringFieldAdapter<ListAdapter>(TaskLists._SYNC_ID);
 
     /**
      * Adapter for the sync version of a list.
      */
-    public final static StringFieldAdapter<ListAdapter> SYNC_VERSION = new StringFieldAdapter<ListAdapter>(TaskLists.SYNC_VERSION);
+    StringFieldAdapter<ListAdapter> SYNC_VERSION = new StringFieldAdapter<ListAdapter>(TaskLists.SYNC_VERSION);
 
     /**
      * Adapter for the account name of a list.
      */
-    public final static StringFieldAdapter<ListAdapter> ACCOUNT_NAME = new StringFieldAdapter<ListAdapter>(TaskLists.ACCOUNT_NAME);
+    StringFieldAdapter<ListAdapter> ACCOUNT_NAME = new StringFieldAdapter<ListAdapter>(TaskLists.ACCOUNT_NAME);
 
     /**
      * Adapter for the account type of a list.
      */
-    public final static StringFieldAdapter<ListAdapter> ACCOUNT_TYPE = new StringFieldAdapter<ListAdapter>(TaskLists.ACCOUNT_TYPE);
+    StringFieldAdapter<ListAdapter> ACCOUNT_TYPE = new StringFieldAdapter<ListAdapter>(TaskLists.ACCOUNT_TYPE);
 
     /**
      * Adapter for the owner of a list.
      */
-    public final static StringFieldAdapter<ListAdapter> OWNER = new StringFieldAdapter<ListAdapter>(TaskLists.OWNER);
+    StringFieldAdapter<ListAdapter> OWNER = new StringFieldAdapter<ListAdapter>(TaskLists.OWNER);
 
     /**
      * Adapter for the name of a list.
      */
-    public final static StringFieldAdapter<ListAdapter> LIST_NAME = new StringFieldAdapter<ListAdapter>(TaskLists.LIST_NAME);
+    StringFieldAdapter<ListAdapter> LIST_NAME = new StringFieldAdapter<ListAdapter>(TaskLists.LIST_NAME);
 
     /**
      * Adapter for the color of a list.
      */
-    public final static IntegerFieldAdapter<ListAdapter> LIST_COLOR = new IntegerFieldAdapter<ListAdapter>(TaskLists.LIST_COLOR);
+    IntegerFieldAdapter<ListAdapter> LIST_COLOR = new IntegerFieldAdapter<ListAdapter>(TaskLists.LIST_COLOR);
 
     /***
      * Creates a {@link ListAdapter} for a new task initialized with the values of this task (except for _ID).
@@ -78,5 +78,5 @@ public interface ListAdapter extends EntityAdapter<ListAdapter>
      * @return A new task having the same values.
      */
     @Override
-    public ListAdapter duplicate();
+    ListAdapter duplicate();
 }

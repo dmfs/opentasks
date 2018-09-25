@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">ler tarefas</string>
-    <string name="opentasks_permission_description_read_tasks">Ler tarefas e listas de tarefas.</string>
+    <string name="opentasks_permission_description_read_tasks">Ler tarefas e listas de tarefas</string>
     <string name="opentasks_permission_write_tasks">escrever tarefas</string>
-    <string name="opentasks_permission_description_write_tasks">Criar, modificar e eliminar tarefas e listas de tarefas.</string>
+    <string name="opentasks_permission_description_write_tasks">Criar, modificar e eliminar tarefas e listas de tarefas</string>
+    <string name="opentasks_permission_group_description_tasks">Criar, modificar e eliminar tarefas e listas de tarefas</string>
 
 </resources>

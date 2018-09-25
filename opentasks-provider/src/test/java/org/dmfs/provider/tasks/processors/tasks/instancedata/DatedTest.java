@@ -40,7 +40,7 @@ public class DatedTest
 {
 
     @Test
-    public void testAbsent() throws Exception
+    public void testAbsent()
     {
         ContentValues instanceData = new Dated(absent(), "ts", "sorting", ContentValues::new).value();
         // this shouldn't really add any values and go by the "defaults"
@@ -49,7 +49,7 @@ public class DatedTest
 
 
     @Test
-    public void testPresent() throws Exception
+    public void testPresent()
     {
         DateTime start = DateTime.parse("Europe/Berlin", "20171208T125500");
 
