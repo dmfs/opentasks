@@ -16,7 +16,8 @@
     <uses-sdk tools:overrideLibrary="org.dmfs.android.bolts"/>
 
     <application
-            android:icon="@drawable/ic_launcher"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
             android:label="@string/app_name"
             android:name=".TasksApplication"
             android:taskAffinity="org.dmfs.tasks.TaskListActivity"
@@ -204,7 +205,8 @@
         </receiver>
 
         <!-- custom alarm receivers -->
-        <receiver android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver"
+        <receiver
+                android:name="org.dmfs.tasks.notification.AlarmBroadcastReceiver"
                 android:permission="">
             <intent-filter>
                 <action android:name="org.dmfs.android.tasks.TASK_DUE"/>
@@ -351,13 +353,13 @@
                 android:exported="false"/>
 
         <service
-            android:name="org.dmfs.tasks.quicksettings.TaskQuickSettingsTile"
-            android:icon="@drawable/content_edit"
-            android:label="@string/quicksettingstile_create"
-            android:description="@string/quicksettingstile_create"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+                android:name="org.dmfs.tasks.quicksettings.TaskQuickSettingsTile"
+                android:icon="@drawable/content_edit"
+                android:label="@string/quicksettingstile_create"
+                android:description="@string/quicksettingstile_create"
+                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
+                <action android:name="android.service.quicksettings.action.QS_TILE"/>
             </intent-filter>
         </service>
 
