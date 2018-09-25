@@ -18,11 +18,13 @@ package org.dmfs.tasks;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.dmfs.android.bolts.color.colors.AttributeColor;
+import org.dmfs.android.bolts.color.Color;
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 
 
@@ -34,11 +36,22 @@ import org.dmfs.android.retentionmagic.SupportFragment;
  */
 public class EmptyTaskFragment extends SupportFragment
 {
+    private static final String ARG_COLOR = "color";
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    private Color mColor;
+
+
+    /**
+     * @param color
+     *         The color that the toolbars should take. (If available provide the actual task list color, otherwise the primary color.)
+     */
+    public static Fragment newInstance(Color color)
     {
-        return inflater.inflate(R.layout.opentasks_fragment_empty_task, container, false);
+        EmptyTaskFragment fragment = new EmptyTaskFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_COLOR, color.argb());
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -46,10 +59,21 @@ public class EmptyTaskFragment extends SupportFragment
     public void onAttach(Activity activity)
     {
         super.onAttach(activity);
+
+        mColor = new ValueColor(getArguments().getInt(ARG_COLOR));
+
         if (activity instanceof ViewTaskFragment.Callback)
         {
-            ((ViewTaskFragment.Callback) activity)
-                    .updateColor(new AttributeColor(getContext(), R.attr.colorPrimary));
+            ((ViewTaskFragment.Callback) activity).onListColorLoaded(mColor);
         }
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.opentasks_fragment_empty_task, container, false);
+        view.findViewById(R.id.empty_task_fragment_appbar).setBackgroundColor(mColor.argb());
+        return view;
     }
 }

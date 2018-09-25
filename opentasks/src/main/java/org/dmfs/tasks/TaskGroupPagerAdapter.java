@@ -45,7 +45,6 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
     @SuppressWarnings("unused")
     private static final String TAG = "TaskGroupPager";
     private final Map<Integer, AbstractGroupingFactory> mGroupingFactories = new HashMap<Integer, AbstractGroupingFactory>(16);
-    private boolean mTwoPaneLayout;
     private final TabConfig mTabConfig;
 
 
@@ -94,7 +93,7 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
         int pageId = mTabConfig.getVisibleItem(position).getId();
         AbstractGroupingFactory factory = getGroupingFactoryForId(pageId);
 
-        TaskListFragment fragment = TaskListFragment.newInstance(position, mTwoPaneLayout);
+        TaskListFragment fragment = TaskListFragment.newInstance(position);
         fragment.setExpandableGroupDescriptor(factory.getExpandableGroupDescriptor());
         fragment.setPageId(pageId);
         return fragment;
@@ -156,12 +155,6 @@ public class TaskGroupPagerAdapter extends FragmentStatePagerAdapter
     public int getCount()
     {
         return mTabConfig.visibleSize();
-    }
-
-
-    public void setTwoPaneLayout(boolean twoPane)
-    {
-        mTwoPaneLayout = twoPane;
     }
 
 

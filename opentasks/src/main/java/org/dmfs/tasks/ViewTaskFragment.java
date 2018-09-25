@@ -26,9 +26,10 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
 import android.support.design.widget.CoordinatorLayout;
@@ -50,7 +51,8 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
-import org.dmfs.android.bolts.color.colors.ValueColor;
+import org.dmfs.android.bolts.color.Color;
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -83,6 +85,7 @@ public class ViewTaskFragment extends SupportFragment
         implements OnModelLoadedListener, OnContentChangeListener, OnMenuItemClickListener, OnOffsetChangedListener
 {
     private final static String ARG_URI = "uri";
+    private static final String ARG_STARTING_COLOR = "starting_color";
 
     /**
      * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
@@ -156,22 +159,24 @@ public class ViewTaskFragment extends SupportFragment
     public interface Callback
     {
         /**
-         * This is called to instruct the Activity to call the editor for a specific task.
+         * Called when user pressed 'edit' for the task.
          *
          * @param taskUri
          *         The {@link Uri} of the task to edit.
          * @param data
          *         The task data that belongs to the {@link Uri}. This is purely an optimization and may be <code>null</code>.
          */
-        void onEditTask(Uri taskUri, ContentSet data);
+        void onTaskEditRequested(@NonNull Uri taskUri, @Nullable ContentSet data);
 
         /**
-         * This is called to inform the Activity that a task has been deleted.
-         *
-         * @param taskUri
-         *         The {@link Uri} of the deleted task. Note that the Uri is likely to be invalid at the time of calling this method.
+         * Called when the task has been deleted by the user.
          */
-        void onDelete(Uri taskUri);
+        void onTaskDeleted(@NonNull Uri taskUri);
+
+        /**
+         * Called when the task has been marked completed by the user.
+         */
+        void onTaskCompleted(@NonNull Uri taskUri);
 
         /**
          * Notifies the listener about the list color of the current task.
@@ -179,28 +184,25 @@ public class ViewTaskFragment extends SupportFragment
          * @param color
          *         The color.
          */
-        void updateColor(org.dmfs.android.bolts.color.Color color);
-    }
-
-
-    public static ViewTaskFragment newInstance(Uri uri)
-    {
-        ViewTaskFragment result = new ViewTaskFragment();
-        if (uri != null)
-        {
-            Bundle args = new Bundle();
-            args.putParcelable(ARG_URI, uri);
-            result.setArguments(args);
-        }
-        return result;
+        void onListColorLoaded(@NonNull Color color);
     }
 
 
     /**
-     * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation changes).
+     * @param taskContentUri
+     *         the content uri of the task to display
+     * @param startingColor
+     *         The color that is used for the toolbars until the actual task color is loaded. (If available provide the actual task list color, otherwise the
+     *         primary color.)
      */
-    public ViewTaskFragment()
+    public static ViewTaskFragment newInstance(@NonNull Uri taskContentUri, @NonNull Color startingColor)
     {
+        ViewTaskFragment fragment = new ViewTaskFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(ARG_URI, taskContentUri);
+        args.putInt(ARG_STARTING_COLOR, startingColor.argb());
+        fragment.setArguments(args);
+        return fragment;
     }
 
 
@@ -243,11 +245,6 @@ public class ViewTaskFragment extends SupportFragment
             mAppContext.getContentResolver().unregisterContentObserver(mObserver);
         }
 
-        if (mContent != null)
-        {
-            mContent.removeAllViews();
-        }
-
         if (mDetailView != null)
         {
             // remove values, to ensure all listeners get released
@@ -274,15 +271,12 @@ public class ViewTaskFragment extends SupportFragment
 
         mFloatingActionButton = (FloatingActionButton) mRootView.findViewById(R.id.floating_action_button);
         showFloatingActionButton(false);
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener()
-        {
+        mFloatingActionButton.setOnClickListener(v -> completeTask());
 
-            @Override
-            public void onClick(View v)
-            {
-                completeTask();
-            }
-        });
+        // Update the toolbar color until the actual is loaded for the task
+
+        mListColor = new ValueColor(getArguments().getInt(ARG_STARTING_COLOR)).argb();
+        updateColor();
 
         mRestored = savedInstanceState != null;
 
@@ -339,6 +333,17 @@ public class ViewTaskFragment extends SupportFragment
     }
 
 
+    /*
+       TODO Refactor, simplify ViewTaskFragment now that it is only for displaying a single task once.
+       Ticket for this: https://github.com/dmfs/opentasks/issues/628
+
+       Earlier this Fragment was responsible for displaying no task (empty content)
+       and also updating itself to show a newly selected one, using this loadUri() method which was public at the time.
+       After refactorings, the Fragment is now only responsible to load an existing task once, for the task uri that is received in the args.
+       As a result this class can now be simplified, for example potentially removing all uri == null checks.
+     */
+
+
     /**
      * Load the task with the given {@link Uri} in the detail view.
      * <p>
@@ -349,7 +354,7 @@ public class ViewTaskFragment extends SupportFragment
      * @param uri
      *         The {@link Uri} of the task to show.
      */
-    public void loadUri(Uri uri)
+    private void loadUri(Uri uri)
     {
         showFloatingActionButton(false);
 
@@ -537,7 +542,7 @@ public class ViewTaskFragment extends SupportFragment
         if (itemId == R.id.edit_task)
         {
             // open editor for this task
-            mCallback.onEditTask(mTaskUri, mContentSet);
+            mCallback.onTaskEditRequested(mTaskUri, mContentSet);
             return true;
         }
         else if (itemId == R.id.delete_task)
@@ -559,7 +564,8 @@ public class ViewTaskFragment extends SupportFragment
                     {
                         // TODO: remove the task in a background task
                         mContentSet.delete(mAppContext);
-                        mCallback.onDelete(mTaskUri);
+                        mCallback.onTaskDeleted(mTaskUri);
+                        mTaskUri = null;
                     }
                 }
             }).setMessage(R.string.confirm_delete_message).create().show();
@@ -622,8 +628,7 @@ public class ViewTaskFragment extends SupportFragment
         persistTask();
         Snackbar.make(getActivity().getWindow().getDecorView(), getString(R.string.toast_task_completed, TaskFieldAdapters.TITLE.get(mContentSet)),
                 Snackbar.LENGTH_SHORT).show();
-        // at present we just handle it like deletion, i.e. close the task in phone mode, do nothing in tablet mode
-        mCallback.onDelete(mTaskUri);
+        mCallback.onTaskCompleted(mTaskUri);
         if (mShowFloatingActionButton)
         {
             // hide fab in two pane mode
@@ -641,7 +646,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             // the FAB gets a slightly lighter color to stand out a bit more. If it's too light, we darken it instead.
             float[] hsv = new float[3];
-            Color.colorToHSV(mListColor, hsv);
+            android.graphics.Color.colorToHSV(mListColor, hsv);
             if (hsv[2] * (1 - hsv[1]) < 0.4)
             {
                 hsv[2] *= 1.2;
@@ -650,7 +655,8 @@ public class ViewTaskFragment extends SupportFragment
             {
                 hsv[2] /= 1.2;
             }
-            mFloatingActionButton.setBackgroundTintList(new ColorStateList(new int[][] { new int[] { 0 } }, new int[] { Color.HSVToColor(hsv) }));
+            mFloatingActionButton.setBackgroundTintList(
+                    new ColorStateList(new int[][] { new int[] { 0 } }, new int[] { android.graphics.Color.HSVToColor(hsv) }));
         }
     }
 
@@ -662,7 +668,7 @@ public class ViewTaskFragment extends SupportFragment
         if (contentSet.containsKey(Tasks.ACCOUNT_TYPE))
         {
             mListColor = TaskFieldAdapters.LIST_COLOR.get(contentSet);
-            ((Callback) getActivity()).updateColor(new ValueColor(mListColor));
+            ((Callback) getActivity()).onListColorLoaded(new ValueColor(mListColor));
 
             updateColor();
 
@@ -715,7 +721,7 @@ public class ViewTaskFragment extends SupportFragment
         @Override
         public void onChange(boolean selfChange)
         {
-            if (mContentSet != null)
+            if (mContentSet != null && mTaskUri != null)
             {
                 // reload the task
                 mContentSet.update(mAppContext, CONTENT_VALUE_MAPPER);
