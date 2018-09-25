@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">читання завдань</string>
-    <string name="opentasks_permission_description_read_tasks">Дозволити додатку читати ваші завдання з ваших переліків завдань.</string>
+    <string name="opentasks_permission_description_read_tasks">Дозволити додатку читати ваші завдання з ваших переліків завдань</string>
     <string name="opentasks_permission_write_tasks">запис завдань</string>
-    <string name="opentasks_permission_description_write_tasks">Дозволити додатку зберігати завдання до ваших переліків завдань.</string>
+    <string name="opentasks_permission_description_write_tasks">Дозволити додатку зберігати завдання до ваших переліків завдань</string>
+    <string name="opentasks_permission_group_description_tasks">Дозволити додатку зберігати завдання до ваших переліків завдань</string>
 
 </resources>

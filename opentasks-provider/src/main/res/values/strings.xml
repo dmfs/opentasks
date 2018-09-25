@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">read tasks</string>
-    <string name="opentasks_permission_description_read_tasks">Read tasks and task lists.</string>
+    <string name="opentasks_permission_description_read_tasks">read tasks and task lists</string>
     <string name="opentasks_permission_write_tasks">write tasks</string>
-    <string name="opentasks_permission_description_write_tasks">Create, modify and delete tasks and task lists.</string>
+    <string name="opentasks_permission_description_write_tasks">create, modify and delete tasks and task lists</string>
+    <string name="opentasks_permission_group_description_tasks">access and manage tasks</string>
 
 </resources>

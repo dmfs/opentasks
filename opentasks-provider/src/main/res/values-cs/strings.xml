@@ -7,8 +7,9 @@
     <!-- Permissions -->
 
     <string name="opentasks_permission_read_tasks">přečíst úkoly</string>
-    <string name="opentasks_permission_description_read_tasks">Číst úkoly a seznamy úkolů.</string>
+    <string name="opentasks_permission_description_read_tasks">Číst úkoly a seznamy úkolů</string>
     <string name="opentasks_permission_write_tasks">zapsat úkoly</string>
-    <string name="opentasks_permission_description_write_tasks">Vytvořit, změnit a smazat úkoly a seznamy úkolů.</string>
+    <string name="opentasks_permission_description_write_tasks">Vytvořit, změnit a smazat úkoly a seznamy úkolů</string>
+    <string name="opentasks_permission_group_description_tasks">Vytvořit, změnit a smazat úkoly a seznamy úkolů</string>
 
 </resources>

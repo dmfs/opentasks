@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The name of the provider -->
+    <string name="opentasks_provider_label">Tarefas</string>
+
+    <!-- Permissions -->
+
+    <string name="opentasks_permission_read_tasks">ler tarefas</string>
+    <string name="opentasks_permission_description_read_tasks">Permite que um aplicativo leia as tarefas na sua lista de tarefas</string>
+    <string name="opentasks_permission_write_tasks">escrever tarefas</string>
+    <string name="opentasks_permission_description_write_tasks">Permite que um aplicativo escreva tarefas na sua lista de tarefas</string>
+    <string name="opentasks_permission_group_description_tasks">Permite que um aplicativo escreva tarefas na sua lista de tarefas</string>
+
+</resources>
