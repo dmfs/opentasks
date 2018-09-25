@@ -524,7 +524,7 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
 
 
     /**
-     * This class is used to display a list of accounts. The list can be modified by the  and  method. The dialog is
+     * This class is used to display a list of accounts. The dialog is
      * supposed to display accounts, which support the insert intent to create new task list. The selection must be done before. The adapter will show all
      * accounts, which are added.
      *

@@ -99,8 +99,7 @@ public class TaskListFragment extends SupportFragment
     private final static AbstractFilter COMPLETED_FILTER = new ConstantFilter(Tasks.IS_CLOSED + "=0");
 
     /**
-     * The group descriptor to use. At present this can be either ,  or
-     * .
+     * The group descriptor to use.
      */
     private ExpandableGroupDescriptor mGroupDescriptor;
 
