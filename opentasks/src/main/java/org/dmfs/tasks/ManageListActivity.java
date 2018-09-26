@@ -32,7 +32,14 @@ import android.view.WindowManager.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.dmfs.android.colorpicker.activity.ColorPickerActivity;
+import org.dmfs.android.colorpicker.ColorPickerDialogFragment;
+import org.dmfs.android.colorpicker.palettes.ArrayPalette;
+import org.dmfs.android.colorpicker.palettes.ColorFactory;
+import org.dmfs.android.colorpicker.palettes.ColorShadeFactory;
+import org.dmfs.android.colorpicker.palettes.CombinedColorFactory;
+import org.dmfs.android.colorpicker.palettes.FactoryPalette;
+import org.dmfs.android.colorpicker.palettes.Palette;
+import org.dmfs.android.colorpicker.palettes.RainbowColorFactory;
 import org.dmfs.android.colorpicker.palettes.RandomPalette;
 import org.dmfs.android.retentionmagic.annotations.Retain;
 import org.dmfs.tasks.InputTextDialogFragment.InputTextListener;
@@ -46,7 +53,7 @@ import org.dmfs.tasks.utils.BaseActivity;
  *
  * @author Tristan Heinig <tristan@dmfs.org>
  */
-public class ManageListActivity extends BaseActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener
+public class ManageListActivity extends BaseActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener, ColorPickerDialogFragment.ColorDialogResultListener
 {
     /**
      * Action to call the ColorPicker activity.
@@ -63,6 +70,27 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
     private static final int REQUEST_CODE_COLOR_PICKER = 4465;
     private static final int NO_COLOR = -1;
 
+    private static final int[] MATERIAL_COLORS_PRIMARY = new int[] {
+            -1499549, -769226, -43230, -26624, -16121, -5317, -3285959, -7617718, -11751600, -16738680, -16728876, -16537100, -14575885, -12627531, -10011977,
+            -6543440 };
+    private static final int[] MATERIAL_COLORS_DARK = new int[] {
+            -5434281, -3790808, -2604267, -1086464, -28928, -415707, -6382300, -11171025, -13730510, -16750244, -16743537, -16615491, -15374912, -14142061,
+            -12245088, -9823334 };
+    private static final Palette[] PALETTES = new Palette[] {
+            new ArrayPalette("material_primary", "Material Colors", MATERIAL_COLORS_PRIMARY),
+            new ArrayPalette("material_secondary", "Dark Material Colors", MATERIAL_COLORS_DARK),
+            new FactoryPalette("red", "Red", new CombinedColorFactory(new ColorShadeFactory(340.0F), ColorFactory.RED), 16),
+            new FactoryPalette("orange", "Orange", new CombinedColorFactory(new ColorShadeFactory(18.0F), ColorFactory.ORANGE), 16),
+            new FactoryPalette("yellow", "Yellow", new CombinedColorFactory(new ColorShadeFactory(53.0F), ColorFactory.YELLOW), 16),
+            new FactoryPalette("green", "Green", new CombinedColorFactory(new ColorShadeFactory(80.0F), ColorFactory.GREEN), 16),
+            new FactoryPalette("cyan", "Cyan", new CombinedColorFactory(new ColorShadeFactory(150.0F), ColorFactory.CYAN), 16),
+            new FactoryPalette("blue", "Blue", new CombinedColorFactory(new ColorShadeFactory(210.0F), ColorFactory.BLUE), 16),
+            new FactoryPalette("purple", "Purple", new CombinedColorFactory(new ColorShadeFactory(265.0F), ColorFactory.PURPLE), 16),
+            new FactoryPalette("pink", "Pink", new CombinedColorFactory(new ColorShadeFactory(300.0F), ColorFactory.PINK), 16),
+            new FactoryPalette("grey", "Grey", ColorFactory.GREY, 16), new FactoryPalette("pastel", "Pastel", ColorFactory.PASTEL, 16),
+            new FactoryPalette("rainbow", "Rainbow", ColorFactory.RAINBOW, 16),
+            new FactoryPalette("dark_rainbow", "Dark Rainbow", new RainbowColorFactory(0.5F, 0.5F), 16) };
+
     @Retain
     private int mListColor = NO_COLOR;
     private boolean mStateInsert;
@@ -73,6 +101,13 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
     private Account mAccount;
     private TextView mNameView;
     private View mColorView;
+
+    @Retain(
+            classNS = "ManageList",
+            key = "palette",
+            permanent = true
+    )
+    private String mPaletteId = null;
 
 
     @Override
@@ -200,10 +235,9 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
             {
                 updateList();
             }
-            return;
         }
         // click on delete
-        if (android.R.id.button2 == v.getId())
+        else if (android.R.id.button2 == v.getId())
         {
             final AlertDialog dialog = new AlertDialog.Builder(this).setTitle(getString(R.string.task_list_delete_dialog_title, mListName))
                     .setMessage(R.string.task_list_delete_dialog_message).setPositiveButton(R.string.activity_manage_list_btn_delete, this)
@@ -218,20 +252,20 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
                 }
             });
             dialog.show();
-            return;
         }
-        if (R.id.color_setting == v.getId())
+        else if (R.id.color_setting == v.getId())
         {
-            Intent intent = new Intent(ACTION_PICK_COLOR);
-            startActivityForResult(intent, REQUEST_CODE_COLOR_PICKER);
-            return;
+            ColorPickerDialogFragment d = new ColorPickerDialogFragment();
+            d.setPalettes(PALETTES);
+            d.setTitle(org.dmfs.android.colorpicker.R.string.org_dmfs_colorpicker_pick_a_color);
+            d.selectPaletteId(this.mPaletteId);
+            d.show(this.getSupportFragmentManager(), "");
         }
-        if (R.id.name_setting == v.getId())
+        else if (R.id.name_setting == v.getId())
         {
             InputTextDialogFragment dialog = InputTextDialogFragment.newInstance(getString(R.string.task_list_name_dialog_title),
                     getString(R.string.task_list_name_dialog_hint), mNameView.getText().toString());
             dialog.show(getSupportFragmentManager(), null);
-            return;
         }
     }
 
@@ -320,31 +354,6 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
     }
 
 
-    /*
-     * If we called the ColerPicker before, we will receive the chosen color here.
-     */
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (REQUEST_CODE_COLOR_PICKER == requestCode)
-        {
-            if (Activity.RESULT_OK == resultCode)
-            {
-                if (data != null && data.hasExtra(ColorPickerActivity.EXTRA_COLOR))
-                {
-                    mListColor = data.getIntExtra(ColorPickerActivity.EXTRA_COLOR, -1);
-                    if (mNameView != null)
-                    {
-                        mColorView.setBackgroundColor(mListColor);
-                    }
-                }
-            }
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
     @Override
     public void onInputTextChanged(String inputText)
     {
@@ -368,4 +377,19 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
         }
     }
 
+
+    @Override
+    public void onColorChanged(int i, String paletteId, String s1, String s2)
+    {
+        this.mPaletteId = paletteId;
+        mListColor = i;
+        mColorView.setBackgroundColor(mListColor);
+    }
+
+
+    @Override
+    public void onColorDialogCancelled()
+    {
+
+    }
 }
