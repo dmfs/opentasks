@@ -34,6 +34,7 @@ import org.dmfs.android.bolts.color.colors.PrimaryColor;
 import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
+import org.dmfs.tasks.utils.colors.DarkenedForStatusBar;
 
 
 /**
@@ -151,16 +152,6 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
     }
 
 
-    private int darkenColor(@ColorInt int color)
-    {
-        float[] hsv = new float[3];
-        android.graphics.Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * 0.75f;
-        color = android.graphics.Color.HSVToColor(hsv);
-        return color;
-    }
-
-
     @SuppressLint("NewApi")
     @Override
     public void onListColorLoaded(@NonNull Color color)
@@ -170,7 +161,7 @@ public class ViewTaskActivity extends BaseActivity implements ViewTaskFragment.C
         {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(darkenColor(color.argb()));
+            window.setStatusBarColor(new DarkenedForStatusBar(color).argb());
         }
     }
 

@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -47,6 +46,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
@@ -64,6 +64,9 @@ import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
+import org.dmfs.tasks.utils.colors.BlendColor;
+import org.dmfs.tasks.utils.colors.DarkenedForStatusBar;
+import org.dmfs.tasks.utils.colors.Mixed;
 import org.dmfs.tasks.widget.ListenableScrollView;
 import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskEdit;
@@ -614,67 +617,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     }
 
 
-    private static int darkenColor(int color)
-    {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * 0.75f;
-        color = Color.HSVToColor(hsv);
-        return color;
-    }
-
-
-    public int mixColors(int col1, int col2)
-    {
-        int r1, g1, b1, r2, g2, b2;
-
-        int a1 = Color.alpha(col1);
-
-        r1 = Color.red(col1);
-        g1 = Color.green(col1);
-        b1 = Color.blue(col1);
-
-        r2 = Color.red(col2);
-        g2 = Color.green(col2);
-        b2 = Color.blue(col2);
-
-        int r3 = (r1 * a1 + r2 * (255 - a1)) / 255;
-        int g3 = (g1 * a1 + g2 * (255 - a1)) / 255;
-        int b3 = (b1 * a1 + b2 * (255 - a1)) / 255;
-
-        return Color.rgb(r3, g3, b3);
-    }
-
-
-    private int getBlendColor(int baseColor, int targetColor, float alpha)
-    {
-        int r1, g1, b1, r3, g3, b3;
-
-        if (alpha <= 0)
-        {
-            return targetColor;
-        }
-        else if (alpha > 254)
-        {
-            return targetColor;
-        }
-
-        r1 = Color.red(baseColor);
-        g1 = Color.green(baseColor);
-        b1 = Color.blue(baseColor);
-
-        r3 = Color.red(targetColor);
-        g3 = Color.green(targetColor);
-        b3 = Color.blue(targetColor);
-
-        int r2 = (int) Math.ceil((Math.max(0, r3 * 255 - r1 * (255 - alpha))) / alpha);
-        int g2 = (int) Math.ceil((Math.max(0, g3 * 255 - g1 * (255 - alpha))) / alpha);
-        int b2 = (int) Math.ceil((Math.max(0, b3 * 255 - b1 * (255 - alpha))) / alpha);
-
-        return Color.argb((int) alpha, r2, g2, b2);
-    }
-
-
     @SuppressLint("NewApi")
     private void updateColor(float percentage)
     {
@@ -686,8 +628,9 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
         {
             percentage = Math.max(0, Math.min(Float.isNaN(percentage) ? 0 : percentage, 1));
         }
+        int alpha = (int) ((0.5 + 0.5 * percentage) * 255);
 
-        int newColor = getBlendColor(mListColor, darkenColor(mListColor), (int) ((0.5 + 0.5 * percentage) * 255));
+        int newColor = new BlendColor(new ValueColor(mListColor), new DarkenedForStatusBar(mListColor), alpha).argb();
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(newColor));
 
@@ -699,7 +642,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
         {
             Window window = getActivity().getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(mixColors(newColor, mListColor));
+            window.setStatusBarColor(new Mixed(newColor, mListColor).argb());
             // window.setNavigationBarColor(mixColors(newColor, mListColor));
         }
         mTaskListBar.setBackgroundColor(mListColor);

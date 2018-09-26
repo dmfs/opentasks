@@ -17,9 +17,9 @@
 package org.dmfs.tasks.model.adapters;
 
 import android.database.Cursor;
-import android.graphics.Color;
 
 import org.dmfs.tasks.model.ContentSet;
+import org.dmfs.tasks.utils.colors.SmoothLightnessCapped;
 
 
 /**
@@ -90,31 +90,21 @@ public final class ColorFieldAdapter extends IntegerFieldAdapter
     @Override
     public Integer get(ContentSet values)
     {
-        return darkenColor(super.get(values), mDarkenThreshold);
+        return new SmoothLightnessCapped(mDarkenThreshold, super.get(values)).argb();
     }
 
 
     @Override
     public Integer get(Cursor cursor)
     {
-        return darkenColor(super.get(cursor), mDarkenThreshold);
+        return new SmoothLightnessCapped(mDarkenThreshold, super.get(cursor)).argb();
     }
 
 
     @Override
     public Integer getDefault(ContentSet values)
     {
-        return darkenColor(super.getDefault(values), mDarkenThreshold);
-    }
-
-
-    private static int darkenColor(int color, float maxLuminance)
-    {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * hsv[2] * hsv[2] * hsv[2] * hsv[2] * (maxLuminance - 1) + hsv[2];
-        color = Color.HSVToColor(hsv);
-        return color;
+        return new SmoothLightnessCapped(mDarkenThreshold, super.getDefault(values)).argb();
     }
 
 }

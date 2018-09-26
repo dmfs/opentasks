@@ -17,7 +17,7 @@ ext.deps = [
         xml_magic          : 'org.dmfs:android-xml-magic:0.1.1',
         color_picker       : 'com.github.dmfs.color-picker:colorpicker-activity:1.1',
         android_carrot     : 'com.github.dmfs.androidcarrot:androidcarrot:13edc04',
-        bolts_color        : 'com.github.dmfs.bolts:color-bolts:27f34f7', // 27f34f7 -> 2017-12-04
+        bolts_color        : 'com.github.dmfs.bolts:color-bolts:2b1b95d', // 2b1b95d -> 2017-12-12
         contentpal         : "com.github.dmfs.contentpal:contentpal:$contentpal_version",
 
         // 3rd party

@@ -67,6 +67,7 @@ import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
+import org.dmfs.tasks.utils.colors.AdjustedForFab;
 import org.dmfs.tasks.widget.TaskView;
 
 import java.util.Arrays;
@@ -644,19 +645,7 @@ public class ViewTaskFragment extends SupportFragment
 
         if (mShowFloatingActionButton && mFloatingActionButton.getVisibility() == View.VISIBLE)
         {
-            // the FAB gets a slightly lighter color to stand out a bit more. If it's too light, we darken it instead.
-            float[] hsv = new float[3];
-            android.graphics.Color.colorToHSV(mListColor, hsv);
-            if (hsv[2] * (1 - hsv[1]) < 0.4)
-            {
-                hsv[2] *= 1.2;
-            }
-            else
-            {
-                hsv[2] /= 1.2;
-            }
-            mFloatingActionButton.setBackgroundTintList(
-                    new ColorStateList(new int[][] { new int[] { 0 } }, new int[] { android.graphics.Color.HSVToColor(hsv) }));
+            mFloatingActionButton.setBackgroundTintList(ColorStateList.valueOf(new AdjustedForFab(mListColor).argb()));
         }
     }
 

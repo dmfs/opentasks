@@ -65,6 +65,7 @@ import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
 import org.dmfs.tasks.utils.Unchecked;
+import org.dmfs.tasks.utils.colors.DarkenedForStatusBar;
 
 
 /**
@@ -595,7 +596,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             {
                 Window window = getWindow();
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(darkenColor(colorInt));
+                window.setStatusBarColor(new DarkenedForStatusBar(color).argb());
             }
         }
     }
@@ -748,16 +749,6 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             fragment.expandCurrentSearchGroup();
         }
     };
-
-
-    private int darkenColor(@ColorInt int color)
-    {
-        float[] hsv = new float[3];
-        android.graphics.Color.colorToHSV(color, hsv);
-        hsv[2] = hsv[2] * 0.75f;
-        color = android.graphics.Color.HSVToColor(hsv);
-        return color;
-    }
 
 
     public Uri getSelectedTaskUri()
