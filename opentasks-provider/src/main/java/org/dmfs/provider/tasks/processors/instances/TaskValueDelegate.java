@@ -18,6 +18,7 @@ package org.dmfs.provider.tasks.processors.instances;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.iterables.decorators.Filtered;
@@ -27,6 +28,8 @@ import org.dmfs.jems.iterable.composite.Joined;
 import org.dmfs.optional.NullSafe;
 import org.dmfs.optional.adapters.FirstPresent;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
+import org.dmfs.provider.tasks.handler.PropertyHandler;
+import org.dmfs.provider.tasks.handler.PropertyHandlerFactory;
 import org.dmfs.provider.tasks.model.ContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.InstanceAdapter;
@@ -91,10 +94,11 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
     public InstanceAdapter insert(SQLiteDatabase db, InstanceAdapter entityAdapter, boolean isSyncAdapter)
     {
         TaskAdapter taskAdapter = entityAdapter.taskAdapter();
+        Long masterTaskId = null;
         if (taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID) != null)
         {
             // this is going to be an override to an existing task - make sure we add an RDATE first
-            long masterTaskId = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID);
+            masterTaskId = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID);
             DateTime originalTime = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME);
             // get the master and add an rdate
             try (Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null /* all */, TaskContract.Tasks._ID + "=" + masterTaskId, null, null, null, null))
@@ -128,6 +132,12 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
 
         // move on with inserting the instance
         TaskAdapter taskResult = mDelegate.insert(db, entityAdapter.taskAdapter(), false);
+
+        if (masterTaskId != null)
+        {
+            // we just cloned the master task into a new instance, we need to copy the properties as well
+            copyProperties(db, masterTaskId, taskResult.id());
+        }
 
         try (Cursor c = db.query(TaskDatabaseHelper.Tables.INSTANCES, new String[] { TaskContract.Instances._ID },
                 TaskContract.Instances.TASK_ID + "=" + taskResult.id(), null, null, null, null))
@@ -173,7 +183,9 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
             override.set(TaskAdapter.ORIGINAL_INSTANCE_ALLDAY, taskAdapter.valueOf(TaskAdapter.IS_ALLDAY));
 
             // TODO: if this is the first instance (and maybe no other overrides exist), don't create an override but split the series into two tasks
-            mDelegate.insert(db, override, true /* for now insert as a sync adapter to retain the UID */);
+            TaskAdapter newTask = mDelegate.insert(db, override, true /* for now insert as a sync adapter to retain the UID */);
+
+            copyProperties(db, taskAdapter.id(), newTask.id());
         }
         else
         {
@@ -236,5 +248,34 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
     {
         taskAdapter.set(addfieldAdapter, new Joined<>(new Filtered<>(taskAdapter.valueOf(addfieldAdapter), new NoneOf<>(dateTime)), new Seq<>(dateTime)));
         taskAdapter.set(removefieldAdapter, new Filtered<>(taskAdapter.valueOf(removefieldAdapter), new NoneOf<>(dateTime)));
+    }
+
+
+    /**
+     * Copy the properties from the give original task to the new task.
+     *
+     * @param db
+     *         The {@link SQLiteDatabase}
+     * @param originalId
+     *         The ID of the task of which to copy the properties
+     * @param newId
+     *         The ID of the task to copy the properties to.
+     */
+    private void copyProperties(SQLiteDatabase db, long originalId, long newId)
+    {
+        // for each property of the original task
+        try (Cursor c = db.query(TaskDatabaseHelper.Tables.PROPERTIES, null /* all */,
+                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Properties.TASK_ID, originalId), null, null, null, null))
+        {
+            // load the property and insert it for the new task
+            ContentValues values = new ContentValues(c.getColumnCount());
+            while (c.moveToNext())
+            {
+                values.clear();
+                DatabaseUtils.cursorRowToContentValues(c, values);
+                PropertyHandler ph = PropertyHandlerFactory.get(values.getAsString(TaskContract.Properties.MIMETYPE));
+                ph.insert(db, newId, ph.cloneForNewTask(newId, values), false);
+            }
+        }
     }
 }

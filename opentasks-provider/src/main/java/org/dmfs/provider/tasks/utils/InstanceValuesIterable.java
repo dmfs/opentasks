@@ -46,6 +46,7 @@ import java.util.Iterator;
  *
  * @author Marten Gajda
  */
+// TODO: replace Single with Generator
 public final class InstanceValuesIterable implements Iterable<Single<ContentValues>>
 {
     private final TaskAdapter mTaskAdapter;

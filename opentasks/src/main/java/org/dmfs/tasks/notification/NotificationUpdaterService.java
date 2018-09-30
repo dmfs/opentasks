@@ -272,7 +272,8 @@ public class NotificationUpdaterService extends Service
         ArrayList<ContentSet> tasksToPin = new ArrayList<ContentSet>(20);
 
         final ContentResolver resolver = this.getContentResolver();
-        final Uri contentUri = Tasks.getContentUri(AuthorityUtil.taskAuthority(this));
+        // note, we pin tasks, not instances
+        final Uri contentUri = TaskContract.Tasks.getContentUri(AuthorityUtil.taskAuthority(this));
         final Cursor cursor = resolver.query(contentUri, new String[] {
                         Tasks._ID, Tasks.TITLE, Tasks.DESCRIPTION, Tasks.DTSTART, Tasks.DUE, Tasks.IS_ALLDAY,
                         Tasks.STATUS, Tasks.PRIORITY, Tasks.IS_CLOSED }, Tasks.PINNED + "= 1", null,

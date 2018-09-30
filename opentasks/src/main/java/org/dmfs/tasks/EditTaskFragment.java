@@ -261,7 +261,8 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 }
             });
         }
-        mAppForEdit = !Tasks.getContentUri(mAuthority).equals(mTaskUri) && mTaskUri != null;
+        mAppForEdit = !Tasks.getContentUri(mAuthority).equals(mTaskUri) && !TaskContract.Instances.getContentUri(mAuthority)
+                .equals(mTaskUri) && mTaskUri != null;
 
         mTaskListBar = (LinearLayout) inflater.inflate(R.layout.task_list_provider_bar, mHeader);
         mListSpinner = (Spinner) mTaskListBar.findViewById(R.id.task_list_spinner);
@@ -309,6 +310,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 // create empty ContentSet if there was no ContentSet supplied
                 if (mValues == null)
                 {
+                    // adding a new task is always done on the Tasks table
                     mValues = new ContentSet(Tasks.getContentUri(mAuthority));
                     // ensure we start with the current time zone
                     TaskFieldAdapters.TIMEZONE.set(mValues, TimeZone.getDefault());

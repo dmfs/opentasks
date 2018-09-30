@@ -56,6 +56,7 @@ import org.dmfs.provider.tasks.processors.lists.ListCommitProcessor;
 import org.dmfs.provider.tasks.processors.tasks.AutoCompleting;
 import org.dmfs.provider.tasks.processors.tasks.Instantiating;
 import org.dmfs.provider.tasks.processors.tasks.Moving;
+import org.dmfs.provider.tasks.processors.tasks.Originating;
 import org.dmfs.provider.tasks.processors.tasks.Relating;
 import org.dmfs.provider.tasks.processors.tasks.Searchable;
 import org.dmfs.provider.tasks.processors.tasks.TaskCommitProcessor;
@@ -164,7 +165,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     {
         mAuthority = AuthorityUtil.taskAuthority(getContext());
 
-        mTaskProcessorChain = new Validating(new AutoCompleting(new Relating(new Instantiating(new Searchable(new Moving(new TaskCommitProcessor()))))));
+        mTaskProcessorChain = new Validating(
+                new AutoCompleting(new Relating(new Instantiating(new Searchable(new Moving(new Originating(new TaskCommitProcessor())))))));
 
         mListProcessorChain = new org.dmfs.provider.tasks.processors.lists.Validating(new ListCommitProcessor());
 

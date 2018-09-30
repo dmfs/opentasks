@@ -371,6 +371,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
         }
         else
         {
+            // add a new task on the tasks table
             task = new ContentSet(Tasks.getContentUri(mAuthority));
         }
         task.put(Tasks.LIST_ID, mListSpinner.getSelectedItemId());

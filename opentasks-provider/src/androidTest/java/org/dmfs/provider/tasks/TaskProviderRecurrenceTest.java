@@ -27,12 +27,14 @@ import org.dmfs.android.contentpal.OperationsQueue;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.operations.Assert;
+import org.dmfs.android.contentpal.operations.BulkAssert;
 import org.dmfs.android.contentpal.operations.BulkDelete;
 import org.dmfs.android.contentpal.operations.BulkUpdate;
 import org.dmfs.android.contentpal.operations.Counted;
 import org.dmfs.android.contentpal.operations.Put;
 import org.dmfs.android.contentpal.predicates.AllOf;
 import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.android.contentpal.predicates.Not;
 import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
@@ -51,8 +53,11 @@ import org.dmfs.opentaskspal.tables.TasksTable;
 import org.dmfs.opentaskspal.tasks.DueData;
 import org.dmfs.opentaskspal.tasks.ExDatesTaskData;
 import org.dmfs.opentaskspal.tasks.OriginalInstanceData;
+import org.dmfs.opentaskspal.tasks.OriginalInstanceSyncIdData;
 import org.dmfs.opentaskspal.tasks.RDatesTaskData;
 import org.dmfs.opentaskspal.tasks.RRuleTaskData;
+import org.dmfs.opentaskspal.tasks.StatusData;
+import org.dmfs.opentaskspal.tasks.SyncIdData;
 import org.dmfs.opentaskspal.tasks.TimeData;
 import org.dmfs.opentaskspal.tasks.TitleData;
 import org.dmfs.opentaskstestpal.InstanceTestData;
@@ -174,19 +179,19 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 3rd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
                 // 4th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 0 /*TODO: this should be 4 */),
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 4),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
@@ -232,19 +237,19 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, due.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(absent(), new Present<>(second), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(absent(), new Present<>(second), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 3rd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(absent(), new Present<>(third), new Present<>(third), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(absent(), new Present<>(third), new Present<>(third), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
                 // 4th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(absent(), new Present<>(fourth), new Present<>(fourth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(absent(), new Present<>(fourth), new Present<>(fourth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(absent(), new Present<>(fifth), new Present<>(fifth), 0 /*TODO: this should be 4 */),
+                        new InstanceTestData(absent(), new Present<>(fifth), new Present<>(fifth), 4),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
@@ -290,19 +295,19 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(new Present<>(second), absent(), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(new Present<>(second), absent(), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 3rd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(new Present<>(third), absent(), new Present<>(third), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(new Present<>(third), absent(), new Present<>(third), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
                 // 4th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(new Present<>(fourth), absent(), new Present<>(fourth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(new Present<>(fourth), absent(), new Present<>(fourth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(new Present<>(fifth), absent(), new Present<>(fifth), 0 /*TODO: this should be 4 */),
+                        new InstanceTestData(new Present<>(fifth), absent(), new Present<>(fifth), 4),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
@@ -355,15 +360,15 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 4th instance (now 3rd):
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance (now 4th):
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
@@ -417,6 +422,7 @@ public class TaskProviderRecurrenceTest
                                 new TimeData(third.addDuration(hour), third.addDuration(hour).addDuration(hour)),
                                 new CharSequenceRowData<>(Tasks.TITLE, "override"),
                                 new OriginalInstanceData(task, third))),
+                new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, taskOverride)),
                 new Counted<>(4, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
                 // 1st instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
@@ -424,20 +430,20 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 3th instance (the overridden one):
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, taskOverride,
                         new InstanceTestData(third.addDuration(hour), third.addDuration(hour).addDuration(hour), new Present<>(third),
-                                0 /*TODO: this should be 2 */),
+                                2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
                 // 4th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 0 /*TODO: this should be 4 */),
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 4),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
@@ -500,19 +506,19 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 3th instance (the overridden one). We don't have a row reference to this row, so we select it by the ORIGINAL_INSTANCE-ID
                 new AssertRelated<>(instancesTable, Tasks.ORIGINAL_INSTANCE_ID, task,
-                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
                 // 4th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 0 /*TODO: this should be 4 */),
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 4),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
@@ -563,11 +569,11 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 4th instance (now 3rd):
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())))
         );
     }
@@ -622,20 +628,338 @@ public class TaskProviderRecurrenceTest
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
                 // 2nd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0 /*TODO: this should be 1 */),
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
                 // 3rd instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 0 /*TODO: this should be 2 */),
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 2),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
                 // 4th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 0 /*TODO: this should be 3 */),
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 3),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
                 // 5th instance:
                 new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
-                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 0 /*TODO: this should be 4 */),
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 4),
                         new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
         );
     }
+
+
+    /**
+     * Test if instances of a task with a DTSTART and RDATEs, add exdate afterwards.
+     */
+    @Test
+    public void testRDateAddExDate() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
+        DateTime start = DateTime.parse("20180104T123456Z");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        new Put<>(task,
+                                new Composite<>(
+                                        new TimeData(start, due),
+                                        new RDatesTaskData(new Seq<>(start, second, third, fourth, fifth)))),
+                        // the third instance becomed an exdate now
+                        new Put<>(task,
+                                new Composite<>(
+                                        new ExDatesTaskData(new Seq<>(third))))
+                ), resultsIn(mClient,
+                new Assert<>(task,
+                        new Composite<>(
+                                new TimeData(start, due),
+                                new CharSequenceRowData<>(Tasks.RDATE,
+                                        "20180104T123456Z," +
+                                                "20180105T123456Z," +
+                                                "20180106T123456Z," +
+                                                "20180107T123456Z," +
+                                                "20180108T123456Z"),
+                                new CharSequenceRowData<>(Tasks.EXDATE,
+                                        "20180106T123456Z"
+                                ))),
+                new Counted<>(4, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                // 1st instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(localStart, localDue, new Present<>(start), 0),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
+                // 2nd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
+                // 3rd instance:
+//                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+//                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 2),
+//                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
+                // 4th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 2),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
+                // 5th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 3),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
+        );
+    }
+
+
+    /**
+     * Test if instances of a task with a DTSTART and RDATEs, complete first.
+     */
+    @Test
+    public void testRDateFirstComplete() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+        RowSnapshot<Tasks> override = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
+        DateTime start = DateTime.parse("20180104T123456Z");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        // first insert new task,
+                        new Put<>(task,
+                                new Composite<>(
+                                        new TimeData(start, due),
+                                        new RDatesTaskData(new Seq<>(start, second, third, fourth, fifth)))),
+                        // next, insert override
+                        new Put<>(override,
+                                new Composite<>(
+                                        new TimeData(start, due),
+                                        new OriginalInstanceData(task, start),
+                                        new StatusData(Tasks.STATUS_COMPLETED)))
+
+                ), resultsIn(mClient,
+                new Assert<>(task,
+                        new Composite<>(
+                                new TimeData(start, due),
+                                new CharSequenceRowData<>(Tasks.RDATE,
+                                        "20180104T123456Z," +
+                                                "20180105T123456Z," +
+                                                "20180106T123456Z," +
+                                                "20180107T123456Z," +
+                                                "20180108T123456Z"
+                                ))),
+                new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, override)),
+                new Counted<>(4, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                // 1st instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, override,
+                        new InstanceTestData(localStart, localDue, new Present<>(start), -1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
+                // 2nd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
+                // 3rd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
+                // 4th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 2),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
+                // 5th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 3),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
+        );
+    }
+
+
+    /**
+     * Test if instances of a task with a DTSTART and RDATEs, complete first inserted first.
+     */
+    @Test
+    public void testRDateFirstCompleteFirstInserted() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+        RowSnapshot<Tasks> override = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
+        DateTime start = DateTime.parse("20180104T123456Z");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        // first insert override
+                        new Put<>(override,
+                                new Composite<>(
+                                        new TimeData(start, due),
+                                        new OriginalInstanceSyncIdData("xyz", start),
+                                        new StatusData(Tasks.STATUS_COMPLETED))),
+                        // then insert task
+                        new Put<>(task,
+                                new Composite<>(
+                                        new SyncIdData("xyz"),
+                                        new TimeData(start, due),
+                                        new RDatesTaskData(new Seq<>(start, second, third, fourth, fifth))))
+
+                ), resultsIn(mClient,
+                new Assert<>(task,
+                        new Composite<>(
+                                new TimeData(start, due),
+                                new SyncIdData("xyz"),
+                                new CharSequenceRowData<>(Tasks.RDATE,
+                                        "20180104T123456Z," +
+                                                "20180105T123456Z," +
+                                                "20180106T123456Z," +
+                                                "20180107T123456Z," +
+                                                "20180108T123456Z"
+                                ))),
+                new Assert<>(override,
+                        new Composite<>(
+                                new TimeData(start, due),
+                                new OriginalInstanceSyncIdData("xyz", start),
+                                new StatusData(Tasks.STATUS_COMPLETED))),
+                new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, override)),
+                new Counted<>(4, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                // 1st instance, overridden and completed
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, override,
+                        new InstanceTestData(localStart, localDue, new Present<>(start), -1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())),
+                // 2nd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
+                // 3rd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
+                // 4th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 2),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
+                // 5th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 3),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
+        );
+    }
+
+
+    /**
+     * Test if instances of a task with a DTSTART and RDATEs, complete first via instances table.
+     */
+    @Test
+    public void testRDateFirstCompleteViaInstances() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Tasks> tasksTable = new TasksTable(mAuthority);
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, tasksTable));
+
+        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
+        DateTime start = DateTime.parse("20180104T123456Z");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        // first insert the task
+                        new Put<>(task,
+                                new Composite<>(
+                                        new TimeData(start, due),
+                                        new RDatesTaskData(new Seq<>(start, second, third, fourth, fifth)))),
+                        // then complete the first instance
+                        new BulkUpdate<>(instancesTable, new CharSequenceRowData<>(Tasks.STATUS, String.valueOf(Tasks.STATUS_COMPLETED)),
+                                new AllOf(
+                                        new ReferringTo<>(Instances.TASK_ID, task),
+                                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp())))
+                ), resultsIn(mClient,
+                new Assert<>(task,
+                        new Composite<>(
+                                new TimeData(start, due),
+                                new CharSequenceRowData<>(Tasks.RDATE,
+                                        "20180104T123456Z," +
+                                                "20180105T123456Z," +
+                                                "20180106T123456Z," +
+                                                "20180107T123456Z," +
+                                                "20180108T123456Z"
+                                ))),
+                // there must be one task which is not equal to the original task
+                new Counted<>(1,
+                        new BulkAssert<>(tasksTable,
+                                new Composite<>(
+                                        new TimeData(start, due),
+                                        new StatusData(Tasks.STATUS_COMPLETED)),
+                                new Not(new ReferringTo<>(Tasks._ID, task)))),
+                // and one instance which doesn't refer to the original task
+                new Counted<>(1, new BulkAssert<>(instancesTable, new Not(new ReferringTo<>(Instances.TASK_ID, task)))),
+                // but 4 instances of that original task
+                new Counted<>(4, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                // 1st instance, overridden and completed
+                new Counted<>(1, new BulkAssert<>(instancesTable,
+                        new Composite<>(
+                                new InstanceTestData(localStart, localDue, new Present<>(start), -1)),
+                        new AllOf(
+                                new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()),
+                                new Not(new ReferringTo<>(Instances.TASK_ID, task))))),
+                // 2nd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 0),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
+                // 3rd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
+                // 4th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 2),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
+                // 5th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 3),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())))
+        );
+    }
+
 }

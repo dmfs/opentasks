@@ -34,6 +34,7 @@ import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.EditTaskActivity;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.TaskListActivity;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
@@ -84,9 +85,10 @@ public class TaskListWidgetProvider extends AppWidgetProvider
             if (!widgetLists.isEmpty())
             {
                 Cursor cursor = context.getContentResolver().query(
-                        TaskLists.getContentUri(authority),
+                        TaskContract.Instances.getContentUri(authority),
                         new String[] { TaskLists._ID },
-                        TaskLists.SYNC_ENABLED + "=1 AND " + TaskLists._ID + " IN (" + TextUtils.join(",", widgetLists) + ")",
+                        TaskLists.SYNC_ENABLED + "=1 AND " + TaskContract.Instances.DISTANCE_FROM_CURRENT + " <=0 AND" + TaskLists._ID + " IN (" + TextUtils.join(
+                                ",", widgetLists) + ")",
                         null,
                         null);
                 if (cursor != null)

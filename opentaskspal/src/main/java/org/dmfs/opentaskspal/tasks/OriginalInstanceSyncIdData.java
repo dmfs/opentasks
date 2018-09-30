@@ -20,7 +20,9 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
+import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
+import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -31,10 +33,12 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class OriginalInstanceSyncIdData extends DelegatingRowData<TaskContract.Tasks>
 {
-    public OriginalInstanceSyncIdData(@NonNull CharSequence originalInstanceSyncId)
+    public OriginalInstanceSyncIdData(@NonNull CharSequence originalInstanceSyncId, DateTime originalTime)
     {
         // TODO CharSequenceRowData allows null so this class wouldn't fail with that but erase the value
-        super(new CharSequenceRowData<TaskContract.Tasks>(TaskContract.Tasks.ORIGINAL_INSTANCE_SYNC_ID, originalInstanceSyncId));
+        super(new Composite<>(
+                new CharSequenceRowData<>(TaskContract.Tasks.ORIGINAL_INSTANCE_SYNC_ID, originalInstanceSyncId),
+                (transactionContext, builder) -> builder.withValue(TaskContract.Tasks.ORIGINAL_INSTANCE_TIME, originalTime.getTimestamp())));
     }
 
 }

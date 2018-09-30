@@ -33,7 +33,6 @@ import org.dmfs.android.contentpal.operations.BulkDelete;
 import org.dmfs.android.contentpal.operations.BulkUpdate;
 import org.dmfs.android.contentpal.operations.Delete;
 import org.dmfs.android.contentpal.operations.Put;
-import org.dmfs.android.contentpal.operations.Referring;
 import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
@@ -613,9 +612,7 @@ public class TaskProviderTest
         assertThat(new SingletonIterable<>(
                 new Put<>(exceptionTask, new Composite<>(
                         new TitleData("task1exception"),
-                        new OriginalInstanceSyncIdData("syncId1"),
-                        // adding an ORIGINAL_INSTANCE_SYNC_ID also requires an ORIGINAL_INSTANCE_TIME
-                        (transactionContext, builder) -> builder.withValue(Tasks.ORIGINAL_INSTANCE_TIME, 0))
+                        new OriginalInstanceSyncIdData("syncId1", new DateTime(0)))
                 )
 
         ), resultsIn(queue,
@@ -646,17 +643,19 @@ public class TaskProviderTest
         ));
         queue.flush();
 
+        DateTime now = DateTime.now();
+
         assertThat(new SingletonIterable<>(
                 new Put<>(exceptionTask,
                         new Composite<>(
                                 new TitleData("task1exception"),
-                                new OriginalInstanceData(task, DateTime.now())))
+                                new OriginalInstanceData(task, now)))
 
         ), resultsIn(queue,
                 new AssertRelated<>(new TasksTable(mAuthority), Tasks.ORIGINAL_INSTANCE_ID, task,
                         new Composite<>(
                                 new TitleData("task1exception"),
-                                new OriginalInstanceSyncIdData("syncId1")
+                                new OriginalInstanceSyncIdData("syncId1", now)
                         ))
         ));
     }

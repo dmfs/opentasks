@@ -72,6 +72,15 @@ public class RelationHandler extends PropertyHandler
 
 
     @Override
+    public ContentValues cloneForNewTask(long newTaskId, ContentValues values)
+    {
+        ContentValues newValues = super.cloneForNewTask(newTaskId, values);
+        newValues.remove(Relation.RELATED_CONTENT_URI);
+        return newValues;
+    }
+
+
+    @Override
     public int update(SQLiteDatabase db, long taskId, long propertyId, ContentValues values, Cursor oldValues, boolean isSyncAdapter)
     {
         validateValues(db, taskId, propertyId, false, values, isSyncAdapter);

@@ -302,6 +302,7 @@ public class ByDueDate extends AbstractGroupingFactory
     }
 
 
+
     @Override
     ExpandableGroupDescriptor makeExpandableGroupDescriptor(String authority)
     {

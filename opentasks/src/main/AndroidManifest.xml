@@ -52,6 +52,10 @@
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
             </intent-filter>
         </activity>
 
@@ -75,6 +79,10 @@
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
             </intent-filter>
 
             <!-- Voice command "note to self" in google search -->
@@ -103,6 +111,10 @@
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.instances"/>
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title">
                 <action android:name="android.intent.action.INSERT_OR_EDIT"/>
@@ -117,6 +129,14 @@
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.instaces"/>
+                <data
+                        android:scheme="content"
+                        android:host="@string/opentasks_authority"
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
             </intent-filter>
         </activity>
 
