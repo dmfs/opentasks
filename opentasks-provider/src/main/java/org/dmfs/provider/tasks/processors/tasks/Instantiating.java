@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
 import org.dmfs.jems.pair.Pair;
+import org.dmfs.jems.pair.elementary.RightSidedPair;
 import org.dmfs.jems.single.Single;
 import org.dmfs.optional.NullSafe;
 import org.dmfs.optional.Optional;
@@ -57,8 +58,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     private final static BooleanFieldAdapter<TaskAdapter> UPDATE_REQUESTED = new BooleanFieldAdapter<TaskAdapter>(
             "org.dmfs.tasks.TaskInstanceProcessor.UPDATE_REQUESTED");
 
-    // TODO: determine a reasonable number
-    private final static int INSTANCE_COUNT_LIMIT = 10;
+    // for now we only expand the next upcoming instance
+    private final static int UPCOMING_INSTANCE_COUNT_LIMIT = 1;
 
 
     /**
@@ -156,7 +157,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         {
             if (count++ > 1)
             {
-                throw new RuntimeException("more than once instance returned for task which was supposed to have exactly one");
+                throw new RuntimeException("more than one instance returned for task which was supposed to have exactly one");
             }
             try (Cursor c = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, new String[] { TaskContract.Instances._ID },
                     String.format(Locale.ENGLISH, "(%s = %d or %s = %d) and (%s = %d) ",
@@ -224,7 +225,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
 
         /*
          * The goal of the code below is to update existing instances in place (as opposed to delete and recreate all instances). We do this for two reasons:
-         * 1) efficiency, in most cases existing instances don't change, deleting and recreating them would be very expensive
+         * 1) efficiency, in most cases existing instances don't change, deleting and recreating them would be overly expensive
          * 2) stable row ids, deleting and recreating instances would change their id and void any existing URIs to them
          */
         try
@@ -237,10 +238,10 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
 
             // get an Iterator of all expected instances
             // for very long or even infinite series we need to stop iterating at some point.
-            // TODO: once we actually support recurrence we should only count future instances
 
             Iterable<Pair<Optional<ContentValues>, Optional<Integer>>> diff = new Diff<>(
-                    new Mapped<>(Single::value, new Limited<>(INSTANCE_COUNT_LIMIT, new InstanceValuesIterable(taskAdapter))),
+                    new Mapped<>(Single::value,
+                            new Limited<>(10000 /* fail safe for infinite rules*/, new InstanceValuesIterable(taskAdapter))),
                     new Range(existingInstances.getCount()),
                     (newInstanceValues, cursorRow) ->
                     {
@@ -253,6 +254,17 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
             // sync the instances table with the new instances
             for (Pair<Optional<ContentValues>, Optional<Integer>> next : diff)
             {
+                if (distance >= UPCOMING_INSTANCE_COUNT_LIMIT - 1)
+                {
+                    // if we already expanded enough instances, we pretend no other instance exists
+                    if (!next.right().isPresent())
+                    {
+                        // actually no instance exists, no need to do anything
+                        continue;
+                    }
+                    next = new RightSidedPair<>(next.right());
+                }
+
                 if (!next.left().isPresent())
                 {
                     // there is no new instance for this old one, remove it
