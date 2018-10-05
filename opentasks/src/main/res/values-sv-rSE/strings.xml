@@ -162,4 +162,13 @@
     <string name="task_list_selection_empty">Inga listor tillgängliga</string>
     <string name="fling_task_edit">Redigera</string>
     <string name="fling_task_delete">Radera</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[För att kunna hitta konton som har support för synkronisering av listor, måste %s få behöriheter till GET_ACCOUNTS.<br/><br/>     Notera att behörighetsmeddelandet kommer vara &quot;läsa kontakter&quot istället för &quot;läsa konton&quot. På grund av missgynnsamma val gjorda av Google. Läs här <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> för mer information.]]></string>
+    <string name="task_list_name_dialog_hint">listans namn</string>
+    <string name="task_list_name_dialog_title">Skriv listans namn</string>
+    <string name="task_list_name_dialog_error">Skriv ett namn</string>
+    <string name="task_list_delete_dialog_title">Radera %s</string>
+    <string name="task_list_delete_dialog_message">Radera listan och alla dess uppgifter? [...]</string>
+    <string name="task_list_delete_toast">%s raderad</string>
+    <string name="gd_by_completed">Efter klara</string>
+    <string name="gd_by_list">Efter lista</string>
 </resources>
