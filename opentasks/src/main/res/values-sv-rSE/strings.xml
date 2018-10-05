@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2018 dmfs GmbH
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+    <string name="app_name">OpenTasks</string>
+    <string name="menu_add_task_condensed">Lägg till</string>
+    <string name="toast_task_created">%1s skapad.</string>
+    <string name="toast_x_removed">%1s borttagen.</string>
+    <string name="activity_task_details_edit">Redigera</string>
+    <string name="activity_task_details_delete">Radera</string>
+    <string name="activity_task_details_pin">Nåla fast</string>
+    <string name="opentasks_task_details_menu_send_short">Skicka</string>
+    <string name="opentasks_task_details_menu_send">Skicka till</string>
+    <string name="activity_edit_task_title">Redigera</string>
+    <string name="activity_add_task_title">Skapa</string>
+    <string name="task_list">Lista</string>
+    <string name="task_title">Titel</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Fortsätt</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Öppna inställningar</string>
+    <string name="opentasks_share_footer">Delad via OpenTasks</string>
+    <string name="opentasks_settings_notification_lights">Blinka lampa</string>
+    <string name="opentasks_settings_notification_vibrate">Vibrera</string>
+    <string name="opentasks_settings_notification_sound">Ljud</string>
+    <string name="opentasks_settings_notification_enable">Aviseringar</string>
+    <string name="now">nu</string>
+    <string name="accept">Acceptera</string>
+    <string name="dashclock_display_type_all">allt</string>
+    <string name="menu_add_task">Lägg till uppgift</string>
+    <string name="menu_show_completed">Visa avklarade uppgifter</string>
+    <string name="menu_show_completed_condensed">Visa avklarade uppgifter</string>
+    <string name="menu_sync_now">Uppdatera</string>
+    <string name="menu_sync_now_condensed">Uppdatera</string>
+    <string name="menu_search_hint">Sök</string>
+    <string name="toast_task_completed">%1s avklarad.</string>
+    <string name="toast_task_uncompleted">%1s återuppagen.</string>
+    <string name="task_group_title_list">Uppgifter</string>
+    <string name="task_group_title_start">Uppgifter startar</string>
+    <string name="task_group_title_due">Uppgifter klara till</string>
+    <string name="task_group_title_priority">Uppgiftsprioritet</string>
+    <string name="task_group_title_progress">Uppgiftsförlopp</string>
+    <string name="task_group_title_default">Uppgifter</string>
+    <string name="quick_add_task_created">Uppgift skapad</string>
+    <string name="initial_local_task_list_name">Mina uppgifter</string>
+    <string name="activity_task_details_edit_task">Redigera uppgift</string>
+    <string name="activity_task_details_delete_task">Radera uppgift</string>
+    <string name="activity_task_details_complete">Avklara</string>
+    <string name="activity_task_details_complete_task">Avklara uppgift</string>
+    <string name="activity_task_details_pin_task">Nåla fast uppgift</string>
+    <string name="opentasks_details_no_task_selected">Ingen uppgift markerad</string>
+    <string name="opentasks_checklist_add_item">Lägg till artikel</string>
+    <string name="opentasks_checklist_empty_item_hint">Artikeltitel</string>
+    <string name="activity_edit_task_error_invalid_url">ogiltig URL</string>
+    <string name="activity_edit_task_task_saved">Uppgift sparad.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Den tomma uppgiften har ej sparats</string>
+    <string name="task_location">Plats</string>
+    <string name="task_description">Beskrivning</string>
+    <string name="task_checklist">Checklista</string>
+    <string name="task_start">Start</string>
+    <string name="task_due">Klart innan</string>
+    <string name="task_completed">Klar</string>
+    <string name="task_percent_complete">Procent i förloppet</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Integritet</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Uppgiftsdetaljer</string>
+    <string name="title_task_list">Uppgifter</string>
+    <string name="task_detail_activity">Uppgiftsdetaljer</string>
+    <string name="task_priority">Prioritet</string>
+    <string name="task_timezone">Tidszon</string>
+    <string name="task_all_day">Hela dagen</string>
+    <string name="task_group_overdue">Försenad</string>
+    <string name="task_group_due_today">Idag</string>
+    <string name="task_group_due_tomorrow">Imorgon</string>
+    <string name="task_group_due_within_7_days">Närmasta dagarna</string>
+    <string name="task_group_due_in_month">Klar i %s</string>
+    <string name="task_group_due_in_year">Klar under %d</string>
+    <string name="task_group_due_in_future">Någon gång</string>
+    <string name="task_group_start_started">Påbörjat</string>
+    <string name="task_group_start_today">Idag</string>
+    <string name="task_group_start_tomorrow">Imorgon</string>
+    <string name="task_group_start_within_7_days">Någon gång</string>
+    <string name="task_group_start_in_future">Senare</string>
+    <string name="task_group_all_title">Listor</string>
+    <string name="task_group_completed_title">Klara</string>
+    <string name="task_group_start_title">Start</string>
+    <string name="dashclock_pref_displayed_task_title">Visade händelser</string>
+    <string name="dashclock_pref_displayed_task_summary">Välj vilka händelser som ska visas i dashclock widgeten</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Händelser som ska visas</string>
+    <string name="dashclock_display_type_pinned">Fastnålade uppgifter</string>
+    <string name="button_add_one_hour">+1 timme</string>
+    <string name="button_add_one_day">+1 dag</string>
+    <string name="quicksettingstile_create">Skapa uppgift</string>
+    <string name="dashclock_extension_title">Uppgifter</string>
+    <string name="dashclock_extension_description">Visar information om de nyaste uppgifterna</string>
+    <string name="notification_task_pin_ticker">%1$s blev fastnålad</string>
+    <string name="notification_action_unpin">ta bort fastnålingen</string>
+    <string name="notification_action_complete">klar</string>
+    <string name="notification_action_completed">Klar</string>
+    <string name="task_list_selection_cancel">AVBRYT</string>
+    <string name="task_list_selection_ok">OKEJ</string>
+    <string name="task_group_search_title">Sök</string>
+    <string name="task_group_progress_0">Ingenting gjort</string>
+    <string name="task_group_progress_40">Sådärja</string>
+    <string name="task_group_progress_60">Hälvvägs</string>
+    <string name="task_group_progress_80">Nästan klart</string>
+    <string name="task_group_progress_100">Klart</string>
+    <string name="task_group_priority_high">Hög prioritet</string>
+    <string name="task_group_priority_medium">Medelprioritet</string>
+    <string name="task_group_priority_low">Låg prioritet</string>
+    <string name="task_group_priority_none">Ingen prioritet</string>
+    <string name="action_save">Spara</string>
+    <string name="action_cancel">Avbryt</string>
+    <string name="action_save_and_continue">Spara och fortsätt</string>
+    <string name="status_needs_action">kräver åtgärder</string>
+    <string name="status_completed">klar</string>
+    <string name="status_cancelled">avbruten</string>
+    <string name="status_incomplete">ej klar</string>
+    <string name="classification_not_specified">ospecificerad</string>
+    <string name="classification_public">offentlig</string>
+    <string name="classification_private">privat</string>
+    <string name="classification_confidential">konfidentiell</string>
+    <string name="priority_undefined">ingen</string>
+    <string name="priority_low">låg</string>
+    <string name="priority_medium">medel</string>
+    <string name="priority_high">hög</string>
+    <string name="priority_urgent">brådskande</string>
+    <string name="title_activity_settings">Inställningar</string>
+    <string name="action_settings">Inställningar</string>
+    <string name="action_add_local_list">Lägg till lista</string>
+    <string name="visible_task_lists">Visade listor</string>
+    <string name="synced_task_lists">Synkroniserade listor</string>
+    <string name="task_list_settings_dialog_account_title">Välj konto</string>
+    <string name="activity_manage_list_btn_save">spara</string>
+    <string name="activity_manage_list_btn_delete">radera lista</string>
+    <string name="activity_add_list_title">Skapa en lokal lista</string>
+    <string name="activity_edit_list_title">Inställningar för listor</string>
+    <string name="task_list_name_caption">Namn</string>
+    <string name="task_list_color_caption">Listans färg</string>
+    <string name="notification_action_delay_1h">+1 timme</string>
+    <string name="notification_action_delay_1d">+1 dag</string>
+    <string name="notification_undo">Ångra</string>
+    <string name="dashclock_preference_title">Uppgiftens DashClock Inställningar</string>
+    <string name="share_as_task">Skapa uppgift</string>
+    <string name="opentasks_settings_notification_signals_section_title">Notissignaler</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Behörigheter behövs</string>
+    <string name="toast_task_deleted">%1s har tagits bort.</string>
+    <string name="task_list_selection_title">Välj vilka listor som visas</string>
+    <string name="task_list_selection_empty">Inga listor tillgängliga</string>
+    <string name="fling_task_edit">Redigera</string>
+    <string name="fling_task_delete">Radera</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[För att kunna hitta konton som har support för synkronisering av listor, måste %s få behöriheter till GET_ACCOUNTS.<br/><br/>     Notera att behörighetsmeddelandet kommer vara &quot;läsa kontakter&quot istället för &quot;läsa konton&quot. På grund av missgynnsamma val gjorda av Google. Läs här <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> för mer information.]]></string>
+    <string name="task_list_name_dialog_hint">listans namn</string>
+    <string name="task_list_name_dialog_title">Skriv listans namn</string>
+    <string name="task_list_name_dialog_error">Skriv ett namn</string>
+    <string name="task_list_delete_dialog_title">Radera %s</string>
+    <string name="task_list_delete_dialog_message">Radera listan och alla dess uppgifter? [...]</string>
+    <string name="task_list_delete_toast">%s raderad</string>
+    <string name="gd_by_completed">Efter klara</string>
+    <string name="gd_by_list">Efter lista</string>
+    <string name="task_group_no_due">Inget förfallodatum</string>
+    <string name="task_group_due_title">Förfallodatum</string>
+    <string name="task_group_priority_title">Prioritet</string>
+    <string name="task_group_progress_title">Förlopp</string>
+    <string name="status_in_process">pågår</string>
+    <string name="gd_by_due_date">Efter förfallodatum</string>
+    <string name="confirm_delete_title">Bekräfta ratering</string>
+    <string name="confirm_delete_message">Radera denna uppgift?</string>
+    <string name="confirm_delete_message_with_title">Radera %s</string>
+    <string name="task_list_widget_title">Aktuella uppgifter</string>
+    <string name="task_list_widget_title_4x4">Aktuella uppgifter 4x4</string>
+    <string name="fling_task_complete">Klara</string>
+    <string name="fling_task_uncomplete">Ej klara</string>
+    <string name="notification_action_delay_toast">Förfallodatum uppdaterat</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s förfaller - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s förfaller</string>
+    <string name="dashclock_display_type_start">uppgifter som startar</string>
+    <string name="dashclock_display_type_due">uppgifter som förfaller</string>
+    <string name="dashclock_display_type_start_and_due">uppgifter som startar och förfaller</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s startar idag</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s startar - %2$s</string>
+    <string name="cd_start_date">ikon till startdatum för uppgiften</string>
+    <string name="cd_due_date">ikon till förfallodatumet för uppgiften</string>
+    <string name="notification_task_due_date">Uppgiften förfaller, %1s</string>
+    <string name="notification_task_start_date">Uppgiften startar, %1s</string>
+    <string name="notification_task_due_today">Uppgiften förfaller idag</string>
+    <string name="notification_task_start_today">Uppgiften startar idag</string>
+    <string name="task_list_no_sync">Notera att detta skapar en lokal lista. Uppgifter i listan kommer inte att synkroniseras.</string>
+</resources>
