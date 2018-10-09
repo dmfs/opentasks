@@ -37,8 +37,7 @@
             android:clickable="true"
             android:padding="12dp"
             android:src="@drawable/ic_24_settings_black50"
-            android:tint="?attr/colorAccent"
-            android:focusable="true"/>
+            android:tint="?attr/colorAccent"/>
 
     <TextView
             android:id="@android:id/text1"

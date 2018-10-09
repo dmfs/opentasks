@@ -28,8 +28,7 @@
                 android:layout_marginLeft="-8dp"
                 android:clickable="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:focusable="true">
+                android:orientation="horizontal">
 
             <ImageView
                     android:id="@+id/drag_handle"

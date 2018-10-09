@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.dmfs.tasks.widget.LocationFieldView xmlns:android="http://schemas.android.com/apk/res/android"
         android:clickable="true"
-        style="@style/task_widget"
-        android:focusable="true">
+        style="@style/task_widget">
 
     <!-- TODO Touch feedback could be added later (android:background="?android:attr/selectableItemBackground" requires min API 11)-->
 
