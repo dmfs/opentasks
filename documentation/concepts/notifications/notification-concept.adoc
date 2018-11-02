@@ -1,0 +1,158 @@
+:encoding: utf-8
+
+= OpenTasks Notifications
+
+This concept describes how notifications should be handled by OpenTasks.
+
+[NOTE]
+=========
+*This document is work in process.*
+
+*Open issues:*
+
+* How to handle reminders of recurring events?
+* Finish/revisit state diagram
+* Undo notifications (to undo actions triggered from a notification)
+* Notification texts (ticker text, title, description ...)
+* Notification actions
+* Notification layout (use inbox style to show task text?)
+* Use of groups?
+* Implementation details / design
+=========
+
+== Rationale
+
+Android SDK level 26 significantly changes how notifications are managed. In order to show
+a notification you need to create a channel and provide its ID when creating the notification.
+Details can be found at
+https://developer.android.com/guide/topics/ui/notifiers/notifications[Notifications Overview].
+
+We want to use this opportunity to rework and improve notification handling in general.
+
+== Triggers
+
+At present there are six reasons for the notifications to be created or updated:
+
+A task starts::
+
+The start date of a task has just passed. TaskProvider sends a broadcast each time a task starts.
+
+A task is due::
+
+The due date of a task has just passed. TaskProvider sends a broadcast each time a task is due.
+
+A task is pinned::
+
+A task has been pinned, either in the UI, a notification or "remotely" by a sync adapter.
+
+A task is unpinned::
+
+A task has been unpinned, either in the UI, a notification or "remotely" by a sync adapter.
+
+A task has been completed::
+
+A task has been completed, either in the UI, a notification or "remotely" by a sync adapter.
+
+A task has been deferred::
+
+The task has been deferred, either in the UI, a notification or "remotely" by a sync adapter.
+
+There a more reasons for showing notifications which are not implemented yet, for instance
+
+A task alarm time passes::
+
+A task may have one or more alert times, in which case a notification should be shown.
+
+A task geo fence entered::
+
+A task may have a location based reminder. If the location is approached a notification
+should be shown.
+
+== Requirements
+
+=== Legacy API level support
+
+A large amount of devices still uses Android API levels < 26 and its crucial to support older
+Android versions.
+
+==== Legacy notification layout
+
+Notifications may look different on older devices than on newer ones.
+
+==== Notification settings
+
+On Android 8+ the system provides the UI to change notification sound, heads up display and
+vibration settings. On older Android versions we need to maintain our own settings page.
+
+==== Foreground service management
+
+On Android 8+ a foreground service must explicitly enter foreground mode by calling
+`startForeground` right after the the service has been started.
+
+=== Group support
+
+Certain types of notifications should be grouped if supported by the device.
+
+TODO: The details still need to be worked out.
+
+=== Efficiency
+
+Notifications should not be updated more often than necessary and should reduce database
+queries to the bare minimum. Especially since any task update could trigger or update
+a notification it's essential to keep the overhead low in order to now slow down provider
+updates.
+
+== Notification types
+
+In OpenTasks we distinguish three notification types (channels/categories):
+
+Alerts::
+
+This channel contains notifications for alerts which depend on time, like start and due
+notifications.
+By default, this channel has a HIGH priority to show a heads up notification.
+
+Reminders::
+
+This channel contains custom user reminders like custom alarms and location based reminders.
+By default, this channel has a HIGH priority to show a heads up notification.
+
+Pin board::
+
+This channel contains notifications for pinned tasks.
+By default, this channel has a HIGH priority to make a sound but not
+show a heads up notification.
+
+== State diagram
+
+The following graph shows the notification state diagram.
+
+A task normally starts in the `No_Notification` state, though there may be exceptions, such as
+when a new task is synced which is already pinned.
+
+[plantuml, notification-state, svg]
+....
+[*] --> No_Notification
+
+No_Notification --> Notification: task start | due\nChannel: Alerts
+No_Notification --> Notification: task reminder\n(time or location)\nChannel: Reminders
+No_Notification --> Ongoing_Notification: task pinned\nChannel: Pin Board
+
+Notification --> No_Notification: notification clicked
+Notification --> No_Notification: task completed | deleted in Provider
+Notification --> No_Notification: click on defer
+Notification --> Undo_Notification: click on completed\nChannel: <original Channel>,silent
+Notification --> Notification: task start|due\n>Channel: Alerts
+Notification --> Notification: task reminder\n(time or location)\nChannel: Reminders
+Notification --> Ongoing_Notification: task pinned\nChannel: Pin Board
+
+Ongoing_Notification --> No_Notification: task unpinned | completed | deleted
+Ongoing_Notification --> Ongoing_Notification: task due | start\nChannel: Alerts
+Ongoing_Notification --> Ongoing_Notification: task reminder\n(time or location)\nChannel: Reminders
+
+Undo_Notification --> Notification: undo clicked\nChannel: <original Channel>
+Undo_Notification --> No_Notification: timeout
+
+Undo_Notification_Ongoing --> Ongoing_Notification: undo clicked\nChannel: <original Channel>
+Undo_Notification_Ongoing --> No_Notification: timeout
+....
