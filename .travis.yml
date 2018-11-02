@@ -9,15 +9,17 @@ android:
     - tools
     - platform-tools
     - tools
+    - build-tools-26.0.2
     - build-tools-27.0.1
     - android-24
-    - android-25
     - android-26
+    - extra
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-24
 
 # Emulator Management: Create, Start and Wait
 before_script:
+  - android list targets
   - echo no | android create avd --force -n test --target android-24 --abi armeabi-v7a
   - QEMU_AUDIO_DRV=none emulator -avd test -no-window &
   - android-wait-for-emulator
@@ -26,3 +28,6 @@ before_script:
 script:
   - android list target
   - ./gradlew check connectedAndroidTest
+
+after_script:
+  - cat /home/travis/build/dmfs/opentasks/opentasks/build/reports/lint-results.xml

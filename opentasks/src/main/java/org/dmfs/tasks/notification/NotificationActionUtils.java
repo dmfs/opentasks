@@ -92,7 +92,8 @@ public class NotificationActionUtils
         }
 
         // build notification
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, NotificationUpdaterService.CHANNEL_DUE_DATES).setSmallIcon(
+                R.drawable.ic_notification)
                 .setContentTitle(title).setContentText(dueString);
 
         // color
@@ -172,7 +173,8 @@ public class NotificationActionUtils
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // build notification
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(R.drawable.ic_notification)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, NotificationUpdaterService.CHANNEL_DUE_DATES).setSmallIcon(
+                R.drawable.ic_notification)
                 .setContentTitle(title).setContentText(startString);
 
         // color
@@ -251,7 +253,7 @@ public class NotificationActionUtils
      */
     public static void createUndoNotification(final Context context, NotificationAction action)
     {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NotificationUpdaterService.CHANNEL_DUE_DATES);
         builder.setContentTitle(context.getString(action.getActionTextResId()
 
         ));

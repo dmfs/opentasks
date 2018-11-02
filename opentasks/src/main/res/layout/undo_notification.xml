@@ -27,7 +27,7 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Title.colorFix"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Notification.Title.colorFix"/>
 
     <ImageView
             android:layout_width="1dip"
@@ -53,6 +53,6 @@
             android:paddingRight="16dip"
             android:text="@string/notification_undo"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.StatusBar.EventContent.Action"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Notification.Action"/>
 
 </LinearLayout>

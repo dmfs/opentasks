@@ -348,9 +348,9 @@
 
     <!-- styles for actionbar / toolbar -->
 
-    <style name="TextAppearance.StatusBar.EventContent.Title.colorFix"/>
+    <style name="TextAppearance.AppCompat.Notification.Title.colorFix"/>
 
-    <style name="TextAppearance.StatusBar.EventContent.Action"/>
+    <style name="TextAppearance.AppCompat.Notification.Action"/>
 
     <style name="ot_notification_icon_undo">
         <item name="android:src">@drawable/ic_24_undo_white</item>
