@@ -280,4 +280,10 @@
     <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
     <string name="opentasks_date_time">%1$s, %2$s</string>
 
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">Pinned tasks</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">Start and due dates </string>
+
 </resources>

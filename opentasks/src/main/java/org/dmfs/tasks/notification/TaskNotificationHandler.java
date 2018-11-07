@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 import org.dmfs.provider.tasks.AuthorityUtil;
@@ -99,7 +100,14 @@ public class TaskNotificationHandler extends BroadcastReceiver
         intent.setData(taskUri);
         intent.setAction(action);
         intent.putExtra(NotificationUpdaterService.EXTRA_NEW_PINNED_TASK, task);
-        context.startService(intent);
+        if (Build.VERSION.SDK_INT < 26)
+        {
+            context.startService(intent);
+        }
+        else
+        {
+            context.startForegroundService(intent);
+        }
     }
 
 
@@ -191,7 +199,14 @@ public class TaskNotificationHandler extends BroadcastReceiver
         intent.setAction(NotificationUpdaterService.ACTION_PINNED_TASK_START);
         intent.putExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, noSignal);
         intent.setData(taskUri);
-        context.startService(intent);
+        if (Build.VERSION.SDK_INT < 26)
+        {
+            context.startService(intent);
+        }
+        else
+        {
+            context.startForegroundService(intent);
+        }
     }
 
 
@@ -201,7 +216,14 @@ public class TaskNotificationHandler extends BroadcastReceiver
         intent.setAction(NotificationUpdaterService.ACTION_PINNED_TASK_DUE);
         intent.putExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, noSignal);
         intent.setData(taskUri);
-        context.startService(intent);
+        if (Build.VERSION.SDK_INT < 26)
+        {
+            context.startService(intent);
+        }
+        else
+        {
+            context.startForegroundService(intent);
+        }
     }
 
 }

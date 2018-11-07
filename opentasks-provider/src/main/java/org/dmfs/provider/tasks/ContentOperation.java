@@ -26,6 +26,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
@@ -183,6 +184,11 @@ public enum ContentOperation
                 intent.putExtra(TaskContract.EXTRA_TASK_TIMEZONE, datetime.getTimeZone().getID());
             }
             intent.putExtra(TaskContract.EXTRA_TASK_TITLE, title);
+            if (Build.VERSION.SDK_INT >= 26)
+            {
+                // for now only notify our own package
+                intent.setPackage(context.getPackageName());
+            }
             context.sendBroadcast(intent);
         }
     }),

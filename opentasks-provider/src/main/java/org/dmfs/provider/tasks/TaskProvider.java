@@ -32,6 +32,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.text.TextUtils;
@@ -1294,6 +1295,12 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         }
         // add the change log to the broadcast
         providerChangedIntent.putExtras(mOperationsLog.toBundle(true));
+        if (Build.VERSION.SDK_INT >= 26)
+        {
+            // for now we only notify our own package
+            // we'll have to figure out how to do this correctly on Android 8+, e.g. how is it done by CalendarProvider and ContactsProvider
+            providerChangedIntent.setPackage(getContext().getPackageName());
+        }
         getContext().sendBroadcast(providerChangedIntent);
     }
 
@@ -1313,6 +1320,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         // notify listeners that the database has been created
         Intent dbInitializedIntent = new Intent(TaskContract.ACTION_DATABASE_INITIALIZED);
         dbInitializedIntent.setDataAndType(TaskContract.getContentUri(mAuthority), TaskContract.MIMETYPE_AUTHORITY);
+        // Android SDK 26 doesn't allow us to send implicit broadcasts, this particular brodcast is only for internal use, so just make it explicit by setting our package name
+        dbInitializedIntent.setPackage(getContext().getPackageName());
         getContext().sendBroadcast(dbInitializedIntent);
     }
 
@@ -1322,14 +1331,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     {
         if (oldVersion < 15)
         {
-            mAsyncHandler.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    ContentOperation.UPDATE_TIMEZONE.fire(getContext(), null);
-                }
-            });
+            mAsyncHandler.post(() -> ContentOperation.UPDATE_TIMEZONE.fire(getContext(), null));
         }
     }
 

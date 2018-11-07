@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 import org.dmfs.tasks.R;
@@ -47,6 +48,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
         {
             if (isNotificationEnabled(context))
             {
+                NotificationUpdaterService.createChannels(context);
                 Uri taskUri = intent.getData();
 
                 boolean noSignal = intent.getBooleanExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, false);
@@ -72,6 +74,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
         {
             if (isNotificationEnabled(context))
             {
+                NotificationUpdaterService.createChannels(context);
                 Uri taskUri = intent.getData();
 
                 boolean noSignal = intent.getBooleanExtra(NotificationActionUtils.EXTRA_NOTIFICATION_NO_SIGNAL, false);
@@ -100,6 +103,11 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver
 
     public boolean isNotificationEnabled(Context context)
     {
+        if (Build.VERSION.SDK_INT >= 26)
+        {
+            // on Android 8+ we leave this decision to Android and always attempt to show the notification
+            return true;
+        }
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         return settings.getBoolean(context.getString(R.string.opentasks_pref_notification_enabled), true);
 

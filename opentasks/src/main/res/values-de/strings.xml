@@ -274,4 +274,7 @@
     <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
     <string name="opentasks_date_time">%1$s, %2$s</string>
 
+    <string name="opentasks_notification_channel_pinned_tasks">Angeheftete Aufgaben</string>
+    <string name="opentasks_notification_channel_due_dates">Beginn und Fälligkeiten</string>
+
 </resources>
