@@ -21,8 +21,21 @@ android {
         versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    if (project.hasProperty("DMFS_RELEASE_KEYSTORE")) {
+        signingConfigs {
+            release {
+                storeFile file(DMFS_RELEASE_KEYSTORE)
+                storePassword DMFS_RELEASE_KEYSTORE_PASSWORD
+                keyAlias DMFS_RELEASE_KEY_ALIAS
+                keyPassword DMFS_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     buildTypes {
         release {
+            if (project.hasProperty("DMFS_RELEASE_KEYSTORE")) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled true
             proguardFiles 'proguard.cfg'
         }
