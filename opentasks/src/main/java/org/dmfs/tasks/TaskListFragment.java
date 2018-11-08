@@ -503,7 +503,7 @@ public class TaskListFragment extends SupportFragment
             }
 
             // TODO For now we get the id of the task, not the instance, once we support recurrence we'll have to change that, use instance URI that time
-            Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), (long) TaskFieldAdapters.TASK_ID.get(cursor));
+            Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), (long) TaskFieldAdapters.INSTANCE_TASK_ID.get(cursor));
             Color taskListColor = new ValueColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
             mCallbacks.onItemSelected(taskUri, taskListColor, force, mInstancePosition);
         }
