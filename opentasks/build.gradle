@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-
+if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
+    apply plugin: 'com.github.triplet.play'
+}
 // commit number is only relevant to the application project
 def gitCommitNo = { ->
     def stdout = new ByteArrayOutputStream()
@@ -12,7 +14,6 @@ def gitCommitNo = { ->
 
 android {
     compileSdkVersion COMPILE_SDK_VERSION.toInteger()
-    buildToolsVersion BUILD_TOOLS_VERSION
     defaultConfig {
         applicationId "org.dmfs.tasks"
         minSdkVersion MIN_SDK_VERSION.toInteger()
@@ -88,5 +89,11 @@ dependencies {
     }
     androidTestImplementation(deps.support_test_rules) {
         exclude group: 'com.android.support', module: 'support-annotations'
+    }
+}
+
+if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
+    play {
+        serviceAccountCredentials = file(PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS)
     }
 }

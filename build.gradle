@@ -2,10 +2,12 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath("com.github.triplet.gradle:play-publisher:2.0.0-rc1")
     }
 }
 
