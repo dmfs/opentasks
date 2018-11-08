@@ -95,5 +95,22 @@ dependencies {
 if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
     play {
         serviceAccountCredentials = file(PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS)
+        // the track is determined automatically by the version number format
+        switch (version){
+            case ~/^(\d+)(\.\d+)*-\d+-[\w\d]+-dirty$/:
+                // work in progress goes to the internal track
+                track = "internal"
+                break
+            case ~/^(\d+)(\.\d+)*-\d+-[\w\d]+$/:
+                // untagged commits go to alpha
+                track = "alpha"
+                break
+            case ~/^(\d+)(\.\d+)*$/:
+                // tagged commits to go beta, from where they get promoted to releases
+                track = "beta"
+                break
+            default:
+                throw new IllegalArgumentException("Unrecognized version format")
+        }
     }
 }
