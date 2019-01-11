@@ -5,7 +5,9 @@
 
     <uses-permission android:name="org.dmfs.permission.READ_TASKS"/>
     <uses-permission android:name="org.dmfs.permission.WRITE_TASKS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission
+            android:name="android.permission.GET_ACCOUNTS"
+            android:maxSdkVersion="25"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -345,6 +347,13 @@
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.dir/vnd.org.dmfs.authority.mimetype"
                         android:scheme="content"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+                android:name=".StaleListBroadcastReceiver"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="org.dmfs.tasks.action.STALE_LIST_BROADCAST"/>
             </intent-filter>
         </receiver>
 
