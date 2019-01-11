@@ -18,6 +18,7 @@ package org.dmfs.tasks.utils;
 
 import android.Manifest;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -87,7 +88,8 @@ public abstract class BaseActivity extends AppCompatActivity
 
     private void requestMissingGetAccountsPermission()
     {
-        if (!mGetAccountsPermission.isGranted())
+        /* This is only a thing on Android SDK Level <26. The permission has been replaced with per-account visibility. */
+        if (Build.VERSION.SDK_INT < 26 && !mGetAccountsPermission.isGranted())
         {
             PermissionRequestDialogFragment.newInstance(mGetAccountsPermission.isRequestable(this)).show(getSupportFragmentManager(), "permission-dialog");
         }

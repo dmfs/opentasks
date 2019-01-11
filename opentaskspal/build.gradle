@@ -19,7 +19,7 @@ android {
 
 dependencies {
     implementation project(':opentasks-contract')
-    implementation(deps.contentpal) {
+    api(deps.contentpal) {
         exclude module: 'jems'
     }
     implementation deps.datetime
