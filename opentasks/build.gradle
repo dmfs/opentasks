@@ -90,7 +90,7 @@ dependencies {
     androidTestImplementation(deps.support_test_rules) {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile project(path: ':opentaskspal')
+    implementation project(path: ':opentaskspal')
 }
 
 if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
