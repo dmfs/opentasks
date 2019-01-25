@@ -1316,6 +1316,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         if (mChanged)
         {
             updateNotifications();
+            mChanged = false;
         }
         if (Build.VERSION.SDK_INT >= 26)
         {
