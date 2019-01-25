@@ -98,7 +98,7 @@ if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
         serviceAccountCredentials = file(PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS)
         // the track is determined automatically by the version number format
         switch (version){
-            case ~/^(\d+)(\.\d+)*-\d+-[\w\d]+-dirty$/:
+            case ~/^(\d+)(\.\d+)*(-\d+-[\w\d]+)?-dirty$/:
                 // work in progress goes to the internal track
                 track = "internal"
                 break
