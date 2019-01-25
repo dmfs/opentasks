@@ -1,5 +1,5 @@
 def support_lib_version = '26.1.0'
-def jems_version = '1.15'
+def jems_version = '1.18'
 def contentpal_version = '9b087b2' // 9b087b2 -> 2017-12-12
 def support_test_runner_version = '0.5'
 
