@@ -152,11 +152,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     Handler mAsyncHandler;
 
     /**
-     * An {@link ProviderOperationsLog} to track all changes within a transaction.
-     */
-    private ProviderOperationsLog mOperationsLog = new ProviderOperationsLog();
-
-    /**
      * This is a per transaction/thread flag which indicates whether new lists with an unknown account have been added.
      * If this holds true at the end of a transaction a window should be shown to ask the user for access to that account.
      */
@@ -762,7 +757,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final ListAdapter list = new CursorContentValuesListAdapter(ListAdapter._ID.getFrom(cursor), cursor, new ContentValues());
 
                         mListProcessorChain.delete(db, list, isSyncAdapter);
-                        mOperationsLog.log(ProviderOperation.DELETE, list.uri(mAuthority));
                         count++;
                     }
                 }
@@ -804,7 +798,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
                         mTaskProcessorChain.delete(db, task, isSyncAdapter);
 
-                        mOperationsLog.log(ProviderOperation.DELETE, task.uri(mAuthority));
                         count++;
                     }
                 }
@@ -923,7 +916,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 list.set(ListAdapter.ACCOUNT_TYPE, accountType);
 
                 mListProcessorChain.insert(db, list, isSyncAdapter);
-                mOperationsLog.log(ProviderOperation.INSERT, list.uri(mAuthority));
 
                 rowId = list.id();
                 result_uri = TaskContract.TaskLists.getContentUri(mAuthority);
@@ -942,8 +934,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 final TaskAdapter task = new ContentValuesTaskAdapter(values);
 
                 mTaskProcessorChain.insert(db, task, isSyncAdapter);
-
-                mOperationsLog.log(ProviderOperation.INSERT, task.uri(mAuthority));
 
                 rowId = task.id();
                 result_uri = TaskContract.Tasks.getContentUri(mAuthority);
@@ -1069,7 +1059,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final ListAdapter list = new CursorContentValuesListAdapter(listId, cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
                         mListProcessorChain.update(db, list, isSyncAdapter);
-                        mOperationsLog.log(ProviderOperation.UPDATE, list.uri(mAuthority));
                         count++;
                     }
                 }
@@ -1097,10 +1086,6 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final TaskAdapter task = new CursorContentValuesTaskAdapter(cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
                         mTaskProcessorChain.update(db, task, isSyncAdapter);
-                        if (task.hasUpdates())
-                        {
-                            mOperationsLog.log(ProviderOperation.UPDATE, task.uri(mAuthority));
-                        }
                         count++;
                     }
                 }
@@ -1313,12 +1298,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     {
         super.onEndTransaction(callerIsSyncAdapter);
         Intent providerChangedIntent = new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(mAuthority));
-        if (!mOperationsLog.isEmpty())
-        {
-            updateNotifications();
-        }
-        // add the change log to the broadcast
-        providerChangedIntent.putExtras(mOperationsLog.toBundle(true));
+        updateNotifications();
         if (Build.VERSION.SDK_INT >= 26)
         {
             // for now we only notify our own package
