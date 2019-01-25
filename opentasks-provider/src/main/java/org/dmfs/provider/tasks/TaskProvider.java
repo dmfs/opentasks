@@ -152,6 +152,11 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     Handler mAsyncHandler;
 
     /**
+     * Boolean to track if there are changes within a transaction.
+     */
+    private boolean mChanged = false;
+
+    /**
      * This is a per transaction/thread flag which indicates whether new lists with an unknown account have been added.
      * If this holds true at the end of a transaction a window should be shown to ask the user for access to that account.
      */
@@ -757,6 +762,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final ListAdapter list = new CursorContentValuesListAdapter(ListAdapter._ID.getFrom(cursor), cursor, new ContentValues());
 
                         mListProcessorChain.delete(db, list, isSyncAdapter);
+                        mChanged = true;
                         count++;
                     }
                 }
@@ -798,6 +804,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
                         mTaskProcessorChain.delete(db, task, isSyncAdapter);
 
+                        mChanged = true;
                         count++;
                     }
                 }
@@ -916,6 +923,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 list.set(ListAdapter.ACCOUNT_TYPE, accountType);
 
                 mListProcessorChain.insert(db, list, isSyncAdapter);
+                mChanged = true;
 
                 rowId = list.id();
                 result_uri = TaskContract.TaskLists.getContentUri(mAuthority);
@@ -934,6 +942,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 final TaskAdapter task = new ContentValuesTaskAdapter(values);
 
                 mTaskProcessorChain.insert(db, task, isSyncAdapter);
+
+                mChanged = true;
 
                 rowId = task.id();
                 result_uri = TaskContract.Tasks.getContentUri(mAuthority);
@@ -1059,6 +1069,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final ListAdapter list = new CursorContentValuesListAdapter(listId, cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
                         mListProcessorChain.update(db, list, isSyncAdapter);
+                        mChanged = true;
                         count++;
                     }
                 }
@@ -1086,6 +1097,10 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final TaskAdapter task = new CursorContentValuesTaskAdapter(cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
                         mTaskProcessorChain.update(db, task, isSyncAdapter);
+                        if (task.hasUpdates())
+                        {
+                            mChanged = true;
+                        }
                         count++;
                     }
                 }
@@ -1298,7 +1313,10 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     {
         super.onEndTransaction(callerIsSyncAdapter);
         Intent providerChangedIntent = new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(mAuthority));
-        updateNotifications();
+        if (mChanged)
+        {
+            updateNotifications();
+        }
         if (Build.VERSION.SDK_INT >= 26)
         {
             // for now we only notify our own package
