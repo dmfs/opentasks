@@ -16,6 +16,7 @@
 
 package org.dmfs.ngrams;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -112,28 +113,15 @@ public final class NGramGenerator
      * @param data
      *         The String to analyze.
      *
-     * @return A {@link Set} containing all N-grams.
+     * @return The {@link Set} containing the N-grams.
      */
     public Set<String> getNgrams(String data)
     {
-        Set<String> result = new HashSet<String>(128);
+        if (data == null)
+        {
+            return Collections.emptySet();
+        }
 
-        return getNgrams(result, data);
-    }
-
-
-    /**
-     * Get all N-grams contained in the given String.
-     *
-     * @param set
-     *         The set to add all the N-grams to, or <code>null</code> to create a new set.
-     * @param data
-     *         The String to analyze.
-     *
-     * @return The {@link Set} containing the N-grams.
-     */
-    public Set<String> getNgrams(Set<String> set, String data)
-    {
         if (mAllLowercase)
         {
             data = data.toLowerCase(mLocale);
@@ -141,10 +129,7 @@ public final class NGramGenerator
 
         String[] words = mReturnNumbers ? SEPARATOR_PATTERN.split(data) : SEPARATOR_PATTERN_NO_NUMBERS.split(data);
 
-        if (set == null)
-        {
-            set = new HashSet<String>(128);
-        }
+        Set<String> set = new HashSet<String>(128);
 
         for (String word : words)
         {
