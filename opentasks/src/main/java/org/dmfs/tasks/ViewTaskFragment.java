@@ -143,7 +143,7 @@ public class ViewTaskFragment extends SupportFragment
     private Toolbar mToolBar;
     private View mRootView;
 
-    private int mAppBarOffset = 0;
+        private int mAppBarOffset = 0;
 
     private FloatingActionButton mFloatingActionButton;
 
@@ -262,6 +262,8 @@ public class ViewTaskFragment extends SupportFragment
 
         mRootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
         mContent = (ViewGroup) mRootView.findViewById(R.id.content);
+        mDetailView = (TaskView) inflater.inflate(R.layout.task_view, mContent, false);
+        mContent.addView(mDetailView);
         mAppBar = (AppBarLayout) mRootView.findViewById(R.id.appbar);
         mToolBar = (Toolbar) mRootView.findViewById(R.id.toolbar);
         mToolBar.setOnMenuItemClickListener(this);
