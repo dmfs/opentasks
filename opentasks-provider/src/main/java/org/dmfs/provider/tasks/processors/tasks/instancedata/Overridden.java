@@ -19,11 +19,12 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 import android.content.ContentValues;
 
 import org.dmfs.iterables.elementary.Seq;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.adapters.FirstPresent;
 import org.dmfs.jems.optional.decorators.Mapped;
+import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.jems.single.Single;
-import org.dmfs.optional.NullSafe;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.adapters.FirstPresent;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -53,12 +54,13 @@ public final class Overridden implements Single<ContentValues>
     {
         ContentValues values = mDelegate.value();
         values.put(TaskContract.Instances.INSTANCE_ORIGINAL_TIME,
-                new FirstPresent<>(
-                        new Seq<>(
-                                new Mapped<>(DateTime::getTimestamp, mOriginalTime),
-                                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
-                                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE))))
-                        .value(null));
+                new Backed<Long>(
+                        new FirstPresent<>(
+                                new Seq<>(
+                                        new Mapped<>(DateTime::getTimestamp, mOriginalTime),
+                                        new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
+                                        new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE)))),
+                        () -> null).value());
         return values;
     }
 }

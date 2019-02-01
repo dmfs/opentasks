@@ -83,6 +83,7 @@ dependencies {
 
     testImplementation deps.junit
     testImplementation deps.robolectric
+    testImplementation deps.jems_testing
 
     androidTestImplementation(deps.support_test_runner) {
         exclude group: 'com.android.support', module: 'support-annotations'

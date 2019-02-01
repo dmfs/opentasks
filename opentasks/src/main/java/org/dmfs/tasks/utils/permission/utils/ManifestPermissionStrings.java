@@ -20,7 +20,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import org.dmfs.iterators.ArrayIterator;
+import org.dmfs.iterators.elementary.Seq;
 
 import java.util.Iterator;
 
@@ -47,7 +47,7 @@ public final class ManifestPermissionStrings implements Iterable<String>
         try
         {
             PackageInfo packageInfo = mAppContext.getPackageManager().getPackageInfo(mAppContext.getPackageName(), PackageManager.GET_PERMISSIONS);
-            return new ArrayIterator<>(packageInfo.requestedPermissions);
+            return new Seq<>(packageInfo.requestedPermissions);
         }
         catch (PackageManager.NameNotFoundException e)
         {

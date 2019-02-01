@@ -27,8 +27,8 @@ import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.UriParams;
 import org.dmfs.android.contentpal.View;
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.opentaskspal.predicates.TaskOnList;
-import org.dmfs.optional.Optional;
 import org.dmfs.tasks.contract.TaskContract;
 
 

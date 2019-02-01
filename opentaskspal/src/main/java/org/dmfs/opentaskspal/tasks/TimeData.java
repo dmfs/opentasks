@@ -21,9 +21,9 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
-import org.dmfs.optional.Absent;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.Present;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.elementary.Absent;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;

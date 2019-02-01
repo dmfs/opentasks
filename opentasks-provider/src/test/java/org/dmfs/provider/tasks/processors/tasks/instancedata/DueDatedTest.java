@@ -18,7 +18,7 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 
 import android.content.ContentValues;
 
-import org.dmfs.optional.Present;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.provider.tasks.utils.ContentValuesWithLong;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
@@ -29,7 +29,7 @@ import org.robolectric.annotation.Config;
 
 import java.util.TimeZone;
 
-import static org.dmfs.optional.Absent.absent;
+import static org.dmfs.jems.optional.elementary.Absent.absent;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;

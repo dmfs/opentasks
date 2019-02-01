@@ -23,10 +23,10 @@ import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.Composite;
 import org.dmfs.android.contentpal.projections.MultiProjection;
 import org.dmfs.iterables.elementary.Seq;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.adapters.FirstPresent;
-import org.dmfs.optional.composite.Zipped;
-import org.dmfs.optional.decorators.DelegatingOptional;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.adapters.FirstPresent;
+import org.dmfs.jems.optional.composite.Zipped;
+import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 

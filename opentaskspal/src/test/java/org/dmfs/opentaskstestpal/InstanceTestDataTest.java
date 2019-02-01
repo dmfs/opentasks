@@ -16,7 +16,7 @@
 
 package org.dmfs.opentaskstestpal;
 
-import org.dmfs.optional.Present;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;
@@ -31,7 +31,7 @@ import static org.dmfs.android.contentpal.testing.contentoperationbuilder.WithVa
 import static org.dmfs.android.contentpal.testing.contentvalues.Containing.containing;
 import static org.dmfs.android.contentpal.testing.contentvalues.NullValue.withNullValue;
 import static org.dmfs.android.contentpal.testing.rowdata.RowDataMatcher.builds;
-import static org.dmfs.optional.Absent.absent;
+import static org.dmfs.jems.optional.elementary.Absent.absent;
 import static org.junit.Assert.assertThat;
 
 

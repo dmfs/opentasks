@@ -22,9 +22,10 @@ import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.Composite;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.decorators.DelegatingOptional;
-import org.dmfs.optional.decorators.Mapped;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.decorators.DelegatingOptional;
+import org.dmfs.jems.optional.decorators.Mapped;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
@@ -46,7 +47,7 @@ public final class TaskDateTime extends DelegatingOptional<DateTime>
     {
         super(new Mapped<>(
 
-                (Long timeStamp) -> rowData.data(Tasks.IS_ALLDAY, "1"::equals).value(false) ?
+                (Long timeStamp) -> new Backed<>(rowData.data(Tasks.IS_ALLDAY, "1"::equals), false).value() ?
                         new DateTime(timeStamp).toAllDay() :
                         new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(rowData).value()),
 

@@ -21,8 +21,8 @@ import android.support.annotation.NonNull;
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.decorators.DelegatingOptional;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 

@@ -18,9 +18,10 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 
 import android.content.ContentValues;
 
+import org.dmfs.jems.optional.composite.Zipped;
+import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.jems.single.Single;
-import org.dmfs.optional.NullSafe;
-import org.dmfs.optional.composite.Zipped;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -47,11 +48,12 @@ public final class Enduring implements Single<ContentValues>
         ContentValues values = mDelegate.value();
         // just store the difference between due and start, if both are present, otherwise store null
         values.put(TaskContract.Instances.INSTANCE_DURATION,
-                new Zipped<>(
-                        new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
-                        new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE)),
-                        (start, due) -> due - start)
-                        .value(null));
+                new Backed<Long>(
+                        new Zipped<>(
+                                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_START)),
+                                new NullSafe<>(values.getAsLong(TaskContract.Instances.INSTANCE_DUE)),
+                                (start, due) -> due - start),
+                        () -> null).value());
         return values;
     }
 }

@@ -18,7 +18,7 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 
 import android.content.ContentValues;
 
-import org.dmfs.optional.Present;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.provider.tasks.utils.ContentValuesWithLong;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;

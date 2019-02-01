@@ -27,7 +27,7 @@ import org.dmfs.tasks.contract.TaskContract;
 
 
 /**
- *{@link Table} for {@link TaskContract.TaskLists} scoped on local lists, i.e. lists with 'the local account'.
+ * {@link Table} for {@link TaskContract.TaskLists} scoped on local lists, i.e. lists with 'the local account'.
  *
  * @author Gabor Keszthelyi
  */

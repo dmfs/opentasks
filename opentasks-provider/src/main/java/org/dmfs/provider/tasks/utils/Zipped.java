@@ -17,11 +17,11 @@
 package org.dmfs.provider.tasks.utils;
 
 import org.dmfs.jems.function.BiFunction;
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.decorators.Mapped;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
-import org.dmfs.optional.Optional;
 
 
 /**

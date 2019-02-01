@@ -21,9 +21,9 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.iterables.decorators.Sieved;
 import org.dmfs.iterables.elementary.Seq;
-import org.dmfs.optional.First;
-import org.dmfs.optional.NullSafe;
-import org.dmfs.optional.Optional;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.adapters.First;
+import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.InstanceAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;

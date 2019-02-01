@@ -17,8 +17,8 @@
 package org.dmfs.opentaskspal.readdata;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.jems.hamcrest.matchers.AbsentMatcher;
-import org.dmfs.optional.Present;
+import org.dmfs.jems.hamcrest.matchers.optional.AbsentMatcher;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -30,8 +30,9 @@ import java.util.concurrent.TimeUnit;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
-import static org.dmfs.optional.Absent.absent;
+import static org.dmfs.jems.optional.elementary.Absent.absent;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -72,7 +73,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.isAbsent());
+        assertThat(new EffectiveDueDate(mockData), is(AbsentMatcher.absent()));
     }
 
 
@@ -86,7 +87,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.isAbsent());
+        assertThat(new EffectiveDueDate(mockData), is(AbsentMatcher.absent()));
     }
 
 
@@ -100,7 +101,7 @@ public final class EffectiveDueDateTest
         doReturn(new Present<>(false)).when(mockData).data(eq(Tasks.IS_ALLDAY), any());
         doReturn(new Present<>(TimeZone.getTimeZone("UTC"))).when(mockData).data(eq(Tasks.TZ), any());
 
-        assertThat(new EffectiveDueDate(mockData), AbsentMatcher.isAbsent());
+        assertThat(new EffectiveDueDate(mockData), is(AbsentMatcher.absent()));
     }
 
 

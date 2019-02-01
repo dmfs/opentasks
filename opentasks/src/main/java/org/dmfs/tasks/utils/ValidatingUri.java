@@ -19,6 +19,8 @@ package org.dmfs.tasks.utils;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import org.dmfs.jems.fragile.Fragile;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
