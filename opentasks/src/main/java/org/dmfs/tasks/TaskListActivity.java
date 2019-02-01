@@ -455,9 +455,14 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
 
     private void replaceTaskDetailsFragment(@NonNull Fragment fragment)
     {
-        getSupportFragmentManager().beginTransaction()
-                .setCustomAnimations(0, R.anim.openttasks_fade_exit, 0, 0)
-                .replace(R.id.task_detail_container, fragment, DETAILS_FRAGMENT_TAG).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // only change state if the state has not been saved yet, otherwise just drop it
+        if (!fragmentManager.isStateSaved())
+        {
+            fragmentManager.beginTransaction()
+                    .setCustomAnimations(0, R.anim.openttasks_fade_exit, 0, 0)
+                    .replace(R.id.task_detail_container, fragment, DETAILS_FRAGMENT_TAG).commit();
+        }
     }
 
 
