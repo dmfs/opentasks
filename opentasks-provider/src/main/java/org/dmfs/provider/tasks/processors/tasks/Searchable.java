@@ -21,6 +21,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.dmfs.provider.tasks.FTSDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
+import org.dmfs.provider.tasks.utils.Profiled;
 
 
 /**
@@ -43,7 +44,7 @@ public final class Searchable implements EntityProcessor<TaskAdapter>
     public TaskAdapter insert(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         TaskAdapter result = mDelegate.insert(db, task, isSyncAdapter);
-        FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+        new Profiled("InsertFTS").run(() -> FTSDatabaseHelper.updateTaskFTSEntries(db, task));
         return result;
     }
 
@@ -52,7 +53,7 @@ public final class Searchable implements EntityProcessor<TaskAdapter>
     public TaskAdapter update(SQLiteDatabase db, TaskAdapter task, boolean isSyncAdapter)
     {
         TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
-        FTSDatabaseHelper.updateTaskFTSEntries(db, task);
+        new Profiled("UpdateFTS").run(() -> FTSDatabaseHelper.updateTaskFTSEntries(db, task));
         return result;
     }
 
@@ -60,6 +61,6 @@ public final class Searchable implements EntityProcessor<TaskAdapter>
     @Override
     public void delete(SQLiteDatabase db, TaskAdapter entityAdapter, boolean isSyncAdapter)
     {
-        mDelegate.delete(db, entityAdapter, isSyncAdapter);
+        new Profiled("DeleteFTS").run(() -> mDelegate.delete(db, entityAdapter, isSyncAdapter));
     }
 }
