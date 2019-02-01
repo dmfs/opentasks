@@ -18,7 +18,7 @@ package org.dmfs.opentaskspal.readdata;
 
 import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.optional.Present;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.junit.Test;
 

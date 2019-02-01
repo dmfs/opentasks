@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.dmfs.optional.NullSafe;
+import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.Tasks;

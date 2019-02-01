@@ -17,8 +17,8 @@
 package org.dmfs.opentaskspal.readdata;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.jems.hamcrest.matchers.AbsentMatcher;
-import org.dmfs.optional.Present;
+import org.dmfs.jems.hamcrest.matchers.optional.AbsentMatcher;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.junit.Test;
@@ -31,6 +31,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
 import static org.dmfs.optional.Absent.absent;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
@@ -50,7 +51,7 @@ public final class TaskDateTimeTest
         RowDataSnapshot<Tasks> mockData = failingMock(RowDataSnapshot.class);
         doReturn(absent()).when(mockData).data(eq(Tasks.DTSTART), any());
 
-        assertThat(new TaskDateTime(Tasks.DTSTART, mockData), AbsentMatcher.isAbsent());
+        assertThat(new TaskDateTime(Tasks.DTSTART, mockData), is(AbsentMatcher.absent()));
     }
 
 

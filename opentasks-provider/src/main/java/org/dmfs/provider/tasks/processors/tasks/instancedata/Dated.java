@@ -18,9 +18,9 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 
 import android.content.ContentValues;
 
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
-import org.dmfs.optional.Optional;
 import org.dmfs.provider.tasks.utils.Zipped;
 import org.dmfs.rfc5545.DateTime;
 

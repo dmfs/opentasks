@@ -25,9 +25,9 @@ import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.SoftRowReference;
 import org.dmfs.android.contentpal.TransactionContext;
 import org.dmfs.android.contentpal.operations.Insert;
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.opentaskspal.tables.PropertiesTable;
 import org.dmfs.opentaskspal.tasks.ParentTaskRelationData;
-import org.dmfs.optional.Optional;
 import org.dmfs.tasks.contract.TaskContract;
 
 

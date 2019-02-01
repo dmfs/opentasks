@@ -16,6 +16,7 @@
 
 package org.dmfs.tasks.utils;
 
+import org.dmfs.jems.fragile.Fragile;
 import org.dmfs.jems.single.Single;
 
 

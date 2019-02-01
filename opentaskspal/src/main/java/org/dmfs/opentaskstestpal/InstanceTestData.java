@@ -21,14 +21,15 @@ import android.support.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.composite.Zipped;
 import org.dmfs.jems.optional.decorators.Mapped;
-import org.dmfs.optional.Optional;
-import org.dmfs.optional.Present;
-import org.dmfs.optional.composite.Zipped;
+import org.dmfs.jems.optional.elementary.Present;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
-import static org.dmfs.optional.Absent.absent;
+import static org.dmfs.jems.optional.elementary.Absent.absent;
 
 
 /**
@@ -78,7 +79,8 @@ public final class InstanceTestData implements RowData<TaskContract.Instances>
                 .withValue(TaskContract.Instances.INSTANCE_DUE, new Mapped<>(DateTime::getTimestamp, mInstanceDue).value(null))
                 .withValue(TaskContract.Instances.INSTANCE_DUE_SORTING, new Mapped<>(DateTime::getInstance, mInstanceDue).value(null))
                 .withValue(TaskContract.Instances.INSTANCE_DURATION,
-                        new Zipped<>(mInstanceStart, mInstanceDue, (start, due) -> (due.getTimestamp() - start.getTimestamp())).value(null))
+                        new Backed<Long>(
+                                new Zipped<>(mInstanceStart, mInstanceDue, (start, due) -> (due.getTimestamp() - start.getTimestamp())), () -> null).value())
                 .withValue(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, new Mapped<>(DateTime::getTimestamp, mOriginalTime).value(null))
                 .withValue(TaskContract.Instances.DISTANCE_FROM_CURRENT, mDistanceFromCurrent)
                 // the instances view overrides some of the task values. Since they are closely tied to the instance data we test them here as well.

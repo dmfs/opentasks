@@ -21,8 +21,9 @@ import android.util.Log;
 
 import org.dmfs.iterables.Split;
 import org.dmfs.iterables.decorators.Fluent;
-import org.dmfs.optional.NullSafe;
-import org.dmfs.optional.Optional;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.elementary.NullSafe;
+import org.dmfs.jems.single.combined.Backed;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,7 @@ public class RecentlyUsedLists
     private static List<Long> getList(Context context)
     {
         Optional<String> listStrOpt = new NullSafe<>(PreferenceManager.getDefaultSharedPreferences(context).getString(PREFERENCE_KEY, null));
-        Log.v(RecentlyUsedLists.class.getSimpleName(), "getList:  " + listStrOpt.value("empty"));
+        Log.v(RecentlyUsedLists.class.getSimpleName(), "getList:  " + new Backed<>(listStrOpt, "empty").value());
         if (!listStrOpt.isPresent())
         {
             return new ArrayList<>(0);

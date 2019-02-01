@@ -17,14 +17,14 @@
 package org.dmfs.provider.tasks.utils;
 
 import org.dmfs.jems.function.BiFunction;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.jems.single.elementary.ValueSingle;
-import org.dmfs.optional.Present;
 import org.junit.Test;
 
 import static org.dmfs.jems.hamcrest.matchers.SingleMatcher.hasValue;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.dummy;
 import static org.dmfs.jems.mockito.doubles.TestDoubles.failingMock;
-import static org.dmfs.optional.Absent.absent;
+import static org.dmfs.jems.optional.elementary.Absent.absent;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doReturn;

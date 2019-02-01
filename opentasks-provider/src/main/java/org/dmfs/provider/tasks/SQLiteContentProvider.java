@@ -28,8 +28,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 import org.dmfs.iterables.SingletonIterable;
-import org.dmfs.iterables.decorators.Flattened;
 import org.dmfs.jems.fragile.Fragile;
+import org.dmfs.jems.iterable.composite.Joined;
 import org.dmfs.jems.single.Single;
 import org.dmfs.provider.tasks.utils.Profiled;
 
@@ -79,7 +79,7 @@ abstract class SQLiteContentProvider extends ContentProvider
     protected SQLiteContentProvider(Iterable<TransactionEndTask> transactionEndTasks)
     {
         // append a task to set the transaction to successful
-        mTransactionEndTasks = new Flattened<>(transactionEndTasks, new SingletonIterable<TransactionEndTask>(new SuccessfulTransactionEndTask()));
+        mTransactionEndTasks = new Joined<>(transactionEndTasks, new SingletonIterable<>(new SuccessfulTransactionEndTask()));
     }
 
 

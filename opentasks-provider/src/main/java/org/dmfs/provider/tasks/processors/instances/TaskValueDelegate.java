@@ -24,8 +24,9 @@ import org.dmfs.iterables.decorators.Filtered;
 import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.iterators.filters.NoneOf;
 import org.dmfs.jems.iterable.composite.Joined;
-import org.dmfs.optional.NullSafe;
-import org.dmfs.optional.adapters.FirstPresent;
+import org.dmfs.jems.optional.adapters.FirstPresent;
+import org.dmfs.jems.optional.elementary.NullSafe;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.ContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
@@ -106,9 +107,9 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
                     {
                         throw new IllegalArgumentException("Can't add an instance to an override instance");
                     }
-                    DateTime masterDate = new FirstPresent<>(new Seq<>(
+                    DateTime masterDate = new Backed<DateTime>(new FirstPresent<>(new Seq<>(
                             new NullSafe<>(masterTaskAdapter.valueOf(TaskAdapter.DTSTART)),
-                            new NullSafe<>(masterTaskAdapter.valueOf(TaskAdapter.DUE)))).value(null);
+                            new NullSafe<>(masterTaskAdapter.valueOf(TaskAdapter.DUE)))), () -> null).value();
                     if (!masterTaskAdapter.isRecurring() && masterDate != null)
                     {
                         // master is not recurring yet, also add its start as an RDATE

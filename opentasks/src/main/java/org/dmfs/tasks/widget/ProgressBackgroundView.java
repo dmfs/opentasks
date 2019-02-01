@@ -18,7 +18,7 @@ package org.dmfs.tasks.widget;
 
 import android.view.View;
 
-import org.dmfs.optional.Optional;
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.tasks.R;
 
 
