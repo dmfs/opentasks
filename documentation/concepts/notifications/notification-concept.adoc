@@ -29,9 +29,54 @@ https://developer.android.com/guide/topics/ui/notifiers/notifications[Notificati
 
 We want to use this opportunity to rework and improve notification handling in general.
 
-== Triggers
+== Definition
 
-At present there are six reasons for the notifications to be created or updated:
+By "task notifification" we mean a visual or aural signal to inform the user
+about a certain task property or state transition, using Android's notification
+framework.
+
+
+== Requirements
+
+=== Legacy API level support
+
+A large amount of devices still uses Android API levels < 26 and its crucial to support older
+Android versions.
+
+==== Legacy notification layout
+
+Notifications may look different on older devices than on newer ones.
+
+==== Notification settings
+
+On Android 8+ the system provides the UI to change notification sound, heads up display and
+vibration settings. On older Android versions we need to maintain our own settings page.
+
+==== Foreground service management
+
+On Android 8+ a foreground service must explicitly enter foreground mode by calling
+`startForeground` right after the the service has been started.
+
+=== Group support
+
+Certain types of notifications should be grouped if supported by the device.
+
+TODO: The details still need to be worked out.
+
+=== Efficiency
+
+Notifications should not be updated more often than necessary and should reduce database
+queries to the bare minimum. Especially since any task update could trigger or update
+a notification it's essential to keep the overhead low in order to now slow down provider
+updates.
+
+
+== Notification sources
+
+A notification source means a condition which is based on one or multiple
+task properties and which results in a notification when it occurs.
+
+At present there are six sources for notifications:
 
 A task starts::
 
@@ -68,39 +113,53 @@ A task geo fence entered::
 A task may have a location based reminder. If the location is approached a notification
 should be shown.
 
-== Requirements
 
-=== Legacy API level support
+In later versions we may support other sources like state transitions.
 
-A large amount of devices still uses Android API levels < 26 and its crucial to support older
-Android versions.
+== Notification triggers
 
-==== Legacy notification layout
+A notification trigger means an event which results in an update of the currently shown
+notifications.
 
-Notifications may look different on older devices than on newer ones.
+Currently we have three:
 
-==== Notification settings
+A task provider operation::
 
-On Android 8+ the system provides the UI to change notification sound, heads up display and
-vibration settings. On older Android versions we need to maintain our own settings page.
+    We don't distinguish between UI operations and sync adapter operations. We should
+    check if a "notification relevant" field has been updated. This way we can avoid
+    notification updates in case only a field like "title" has been changed.
 
-==== Foreground service management
+    The following fields are considered notification relevant:
 
-On Android 8+ a foreground service must explicitly enter foreground mode by calling
-`startForeground` right after the the service has been started.
+    * dtstart
+    * due
+    * status
+    * pinned
+    * extended property for alarm
+    * extended property for geo fences
 
-=== Group support
+    In order to save precious resources we only update task notifications which
+    need to be updated.
 
-Certain types of notifications should be grouped if supported by the device.
 
-TODO: The details still need to be worked out.
+The system has booted::
 
-=== Efficiency
+   After booting the system no notifications are shown and wwe have to restore them.
+   Ideally we also restore start and due notifications which have not been
+   dismissed yet.
 
-Notifications should not be updated more often than necessary and should reduce database
-queries to the bare minimum. Especially since any task update could trigger or update
-a notification it's essential to keep the overhead low in order to now slow down provider
-updates.
+The app has been updated::
+
+   When the app is updated, it is first stopped, causing exiting notifications to be
+   removed. In that case we also have to restore the notifications.
+
+In addition there is one future source planned:
+
+A geo fence has been crossed::
+
+   When the app is updated, it is first stopped, causing exiting notifications to be
+   removed. In that case we also have to restore the notifications.
+
 
 == Notification types
 
@@ -120,7 +179,7 @@ By default, this channel has a HIGH priority to show a heads up notification.
 Pin board::
 
 This channel contains notifications for pinned tasks.
-By default, this channel has a HIGH priority to make a sound but not
+By default, this channel has a MEDIUM priority to make a sound but not
 show a heads up notification.
 
 == State diagram
