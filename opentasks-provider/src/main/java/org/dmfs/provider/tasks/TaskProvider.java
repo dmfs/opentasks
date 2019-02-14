@@ -1013,6 +1013,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                                    final boolean isSyncAdapter)
     {
         int count = 0;
+        boolean dataChanged = !TASK_LIST_SYNC_COLUMNS.containsAll(values.keySet());
         switch (mUriMatcher.match(uri))
         {
             case SYNCSTATE_ID:
@@ -1097,7 +1098,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final TaskAdapter task = new CursorContentValuesTaskAdapter(cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
                         mTaskProcessorChain.update(db, task, isSyncAdapter);
-                        if (task.hasUpdates())
+                        if (dataChanged && task.hasUpdates())
                         {
                             mChanged = true;
                         }
@@ -1109,7 +1110,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     cursor.close();
                 }
 
-                if (count > 0)
+                if (dataChanged)
                 {
                     postNotifyUri(Instances.getContentUri(mAuthority));
                     postNotifyUri(Tasks.getContentUri(mAuthority));
@@ -1139,7 +1140,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                     }
                 }
 
-                if (count > 0)
+                if (dataChanged)
                 {
                     postNotifyUri(Instances.getContentUri(mAuthority));
                     postNotifyUri(Tasks.getContentUri(mAuthority));
@@ -1213,7 +1214,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                 operation.run(getContext(), mAsyncHandler, uri, db, values);
         }
 
-        if (!TASK_LIST_SYNC_COLUMNS.containsAll(values.keySet()))
+        if (dataChanged)
         {
             // send notifications, because non-sync columns have been updated
             postNotifyUri(uri);
@@ -1312,19 +1313,19 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     protected void onEndTransaction(boolean callerIsSyncAdapter)
     {
         super.onEndTransaction(callerIsSyncAdapter);
-        Intent providerChangedIntent = new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(mAuthority));
         if (mChanged)
         {
+            Intent providerChangedIntent = new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(mAuthority));
             updateNotifications();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+                // for now we only notify our own package
+                // we'll have to figure out how to do this correctly on Android 8+, e.g. how is it done by CalendarProvider and ContactsProvider
+                providerChangedIntent.setPackage(getContext().getPackageName());
+            }
+            getContext().sendBroadcast(providerChangedIntent);
             mChanged = false;
         }
-        if (Build.VERSION.SDK_INT >= 26)
-        {
-            // for now we only notify our own package
-            // we'll have to figure out how to do this correctly on Android 8+, e.g. how is it done by CalendarProvider and ContactsProvider
-            providerChangedIntent.setPackage(getContext().getPackageName());
-        }
-        getContext().sendBroadcast(providerChangedIntent);
 
         if (Boolean.TRUE.equals(mStaleListCreated.get()))
         {
