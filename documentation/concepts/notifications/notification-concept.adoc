@@ -31,7 +31,7 @@ We want to use this opportunity to rework and improve notification handling in g
 
 == Definition
 
-By "task notifification" we mean a visual or aural signal to inform the user
+By "task notification" we mean a visual or aural signal to inform the user
 about a certain task property or state transition, using Android's notification
 framework.
 
@@ -121,9 +121,12 @@ In later versions we may support other sources like state transitions.
 A notification trigger means an event which results in an update of the currently shown
 notifications.
 
-Currently we have three:
+Currently we have these:
+
 
 A task provider operation::
+
+    Broadcast: `android.intent.action.PROVIDER_CHANGED`
 
     We don't distinguish between UI operations and sync adapter operations. We should
     check if a "notification relevant" field has been updated. This way we can avoid
@@ -146,21 +149,46 @@ A task provider operation::
 
 The system has booted::
 
-   After booting the system no notifications are shown and we have to restore them.
-   Ideally we also restore start and due notifications which have not been
-   dismissed yet.
+    Broadcast: `android.intent.action.BOOT_COMPLETED`
+
+    After booting the system no notifications are shown and we have to restore them.
+    Ideally we also restore start and due notifications which have not been
+    dismissed yet.
+
 
 The app has been updated::
 
-   When the app is updated, it is first stopped, causing existing notifications to be
-   removed. In that case we also have to restore the notifications.
+    Broadcast: `android.intent.action.MY_PACKAGE_REPLACED`
+
+    When the app is updated, it is first stopped, causing existing notifications to be
+    removed. In that case we also have to restore the notifications.
+
+
+Local time and date have been changed::
+
+    Broadcast: `android.intent.action.DATE_CHANGED`
+
+    Broadcast: `android.intent.action.TIME_SET`
+
+    Broadcast: `android.intent.action.TIMEZONE_CHANGED`
+
+    If the local time have been changed we may have to update notifications.
+
+
+A notification has been updated directly::
+
+    In some occasions we need to update notifications directly, in particular removing
+    notifications for start and due notifications may require a direct call.
+
 
 In addition there is one future source planned:
 
 A geo fence has been crossed::
 
-   When the app is updated, it is first stopped, causing exiting notifications to be
-   removed. In that case we also have to restore the notifications.
+    Broadcast: TDB
+
+    When the app is updated, it is first stopped, causing existing notifications to be
+    removed. In that case we also have to restore the notifications.
 
 
 == Notification types
