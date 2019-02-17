@@ -1,39 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Russian Translation (c) Nikita Tratorov, NiXProSoft.Ru, 18.05.2014 -->
-
-
     <!-- Manifest stuff -->
     <string name="app_name">OpenTasks</string>
 
     <!-- Task list -->
     <string name="menu_add_task">Добавить задачу</string>
-    <string name="menu_add_task_condensed">Новая</string>
-    <string name="menu_show_completed">Показывать выполненные задачи</string>
-    <string name="menu_show_completed_condensed">Показывать выполненные задачи</string>
+    <string name="menu_add_task_condensed">Добавить</string>
+    <string name="menu_show_completed">Показать выполненные задачи</string>
+    <string name="menu_show_completed_condensed">Показать выполненные задачи</string>
     <string name="menu_sync_now">Обновить</string>
     <string name="menu_sync_now_condensed">Обновить</string>
     <string name="menu_search_hint">Поиск</string>
     <string name="toast_task_created">\"%1s\" создана.</string>
-    <string name="toast_task_completed">\"%1s\" выполнено.</string>
-    <string name="toast_task_uncompleted">\"%1s\" возобновлено.</string>
+    <string name="toast_task_completed">\"%1s\" завершена.</string>
+    <string name="toast_task_uncompleted">\"%1s\" возобновлена.</string>
     <string name="toast_x_removed">\"%1s\" удалена.</string>
     <string name="task_group_title_list">Задачи</string>
     <string name="task_group_title_start">Начало задачи</string>
     <string name="task_group_title_due">Срок выполнения задачи</string>
     <string name="task_group_title_priority">Приоритет задачи</string>
-    <string name="task_group_title_progress">Прогресс в задаче</string>
+    <string name="task_group_title_progress">Ход выполнения задачи</string>
     <string name="task_group_title_default">Задачи</string>
     <string name="quick_add_task_created">Задача создана</string>
+    <string name="initial_local_task_list_name">Мои задачи</string>
 
     <plurals name="number_of_tasks">
-
-        <!-- last number 1 -->
         <item quantity="one">%d задача</item>
-        <!-- last number 2-4 -->
         <item quantity="few">%d задачи</item>
-        <!-- (last number 5-9,0) || (quantity > 9 && quantity <= 20) -->
         <item quantity="many">%d задач</item>
         <item quantity="other">%d задачи</item>
     </plurals>
@@ -45,26 +39,40 @@
     <string name="activity_task_details_delete_task">Удалить задачу</string>
     <string name="activity_task_details_complete">Завершить</string>
     <string name="activity_task_details_complete_task">Завершить задачу</string>
+    <string name="activity_task_details_pin">Закрепить</string>
+    <string name="activity_task_details_pin_task">Закрепить задачу</string>
+    <string name="opentasks_details_no_task_selected">Задача не выбрана</string>
+    <string name="opentasks_task_details_menu_send_short">Отправить</string>
+    <string name="opentasks_task_details_menu_send">Отправить</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Добавить элемент списка</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Введите текст</string>
 
     <!-- Task editor -->
-    <string name="activity_edit_task_title">Редактировать</string>
-    <string name="activity_add_task_title">Новая задача</string>
-    <string name="activity_edit_task_error_invalid_url">Неверная ссылка URL</string>
+    <string name="activity_edit_task_title">Изменение</string>
+    <string name="activity_add_task_title">Создание</string>
+    <string name="activity_edit_task_error_invalid_url">Неверная ссылка</string>
     <string name="activity_edit_task_task_saved">Задача сохранена.</string>
     <string name="activity_edit_task_empty_task_not_saved">Пустая задача не сохранена.</string>
 
     <!-- Names of task attributes -->
 
     <string name="task_list">Список</string>
-    <string name="task_title">Название</string>
-    <string name="task_location">Место</string>
+    <string name="task_title">Заголовок</string>
+    <string name="task_location">Местоположение</string>
     <string name="task_description">Описание</string>
-    <string name="task_checklist">Перечень</string>
+    <string name="task_checklist">Список</string>
     <string name="task_start">Начало</string>
     <string name="task_due">Срок</string>
     <string name="task_completed">Выполнено</string>
     <string name="task_percent_complete">Процент выполнения</string>
-    <string name="task_status">Состояние</string>
+    <string name="task_status">Статус</string>
     <string name="task_classification">Приватность</string>
     <string name="task_url">URL</string>
     <string name="title_task_detail">Подробности задачи</string>
@@ -85,7 +93,7 @@
     <string name="task_group_due_in_future">В будущем</string>
 
     <!-- Task list start group titles -->
-    <string name="task_group_start_started">Уже начата</string>
+    <string name="task_group_start_started">Уже начато</string>
     <string name="task_group_start_today">Сегодня</string>
     <string name="task_group_start_tomorrow">Завтра</string>
     <string name="task_group_start_within_7_days">В течение недели</string>
@@ -99,29 +107,28 @@
     <string name="task_group_progress_title">Прогресс</string>
 
     <!-- Task list progress group titles -->
-    <!-- With small piece of Russian's humour. -->
-    <string name="task_group_progress_0">Конь не валялся</string>
-    <string name="task_group_progress_40">Лед тронулся</string>
-    <string name="task_group_progress_60">Пересекли экватор</string>
-    <string name="task_group_progress_80">Последний рывок</string>
-    <string name="task_group_progress_100">Доска почета</string>
+    <string name="task_group_progress_0">Ничего не сделано</string>
+    <string name="task_group_progress_40">Начало положено</string>
+    <string name="task_group_progress_60">На полпути</string>
+    <string name="task_group_progress_80">Почти готово</string>
+    <string name="task_group_progress_100">Выполнено</string>
 
     <!-- Task list priority group titles -->
-    <string name="task_group_priority_high">Высокий</string>
-    <string name="task_group_priority_medium">Средний</string>
-    <string name="task_group_priority_low">Низкий</string>
+    <string name="task_group_priority_high">Высокий приоритет</string>
+    <string name="task_group_priority_medium">Средний приоритет</string>
+    <string name="task_group_priority_low">Низкий приоритет</string>
     <string name="task_group_priority_none">Без приоритета</string>
 
     <!-- Task editor labels -->
 
     <string name="action_save">Сохранить</string>
     <string name="action_cancel">Отмена</string>
-    <string name="action_save_and_continue">Сохранить и дальше</string>
+    <string name="action_save_and_continue">Сохранить и продолжить</string>
 
     <!-- Status labels -->
 
-    <string name="status_needs_action">в ожидании</string>
-    <string name="status_in_process">выполняется</string>
+    <string name="status_needs_action">требуются действия</string>
+    <string name="status_in_process">в процессе</string>
     <string name="status_completed">выполнена</string>
     <string name="status_cancelled">отменена</string>
     <string name="status_incomplete">не выполнена</string>
@@ -145,25 +152,48 @@
 
     <string name="title_activity_settings">Настройки</string>
     <string name="action_settings">Настройки</string>
-    <string name="visible_task_lists">Используемые списки</string>
-    <string name="opentasks_settings_notification_enable">Напоминания</string>
-    <string name="synced_task_lists">Все доступные списки</string>
+    <string name="action_add_local_list">Добавить список</string>
+    <string name="visible_task_lists">Отображаемые списки</string>
+    <string name="synced_task_lists">Синхронизированные списки</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Выберите аккаунт</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">сохранить</string>
+    <string name="activity_manage_list_btn_delete">удалить список</string>
+    <string name="activity_add_list_title">Создать локальный список</string>
+    <string name="activity_edit_list_title">Настройки списка</string>
+    <string name="task_list_name_caption">Название</string>
+    <string name="task_list_no_sync">Примечание: будет создан локальный список. Задачи в локальных списках не синхронизируются.</string>
+    <string name="task_list_color_caption">Цвет списка</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">название списка</string>
+    <string name="task_list_name_dialog_title">Введите название списка</string>
+    <string name="task_list_name_dialog_error">Введите название.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Удалить %s</string>
+    <string name="task_list_delete_dialog_message">Удалить список и все его задачи?\nПримечание: восстановить удаленный список невозможно.</string>
+    <string name="task_list_delete_toast">%s удален</string>
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">По сроку</string>
     <string name="gd_by_completed">По состоянию</string>
-    <string name="gd_by_list">По спискам</string>
+    <string name="gd_by_list">По списку</string>
 
     <!-- String for confirm delete dialog -->
-    <string name="confirm_delete_title">Подтвердите удаление</string>
+    <string name="confirm_delete_title">Подтвердить удаление</string>
     <string name="confirm_delete_message">Удалить эту задачу?</string>
     <string name="confirm_delete_message_with_title">Удалить \"%1s\"?</string>
     <string name="toast_task_deleted">\"%1s\" удалена.</string>
 
     <!-- Strings in the Task List Selection Fragment -->
-    <string name="task_list_selection_empty">Нет списка задач</string>
-    <string name="task_list_selection_title">Селекция списков</string>
-    <string name="task_list_selection_ok">ОК</string>
+    <string name="task_list_selection_empty">Список задач недоступен</string>
+    <string name="task_list_selection_title">Выберите списки для отображения</string>
+    <string name="task_list_selection_ok">OK</string>
     <string name="task_list_selection_cancel">ОТМЕНА</string>
 
     <!-- Strings for Task List Widget -->
@@ -177,47 +207,85 @@
     <string name="fling_task_uncomplete">Сбросить</string>
 
     <!-- Accessibility content description -->
-    <string name="cd_start_date">значок для даты начала задачи</string>
-    <string name="cd_due_date">значок для срока выполнения задачи</string>
+    <string name="cd_start_date">значок даты начала выполнения задачи</string>
+    <string name="cd_due_date">значок срока выполнения задачи</string>
 
     <!-- Strings for notification -->
-    <string name="notification_task_due_date">Срок выполнения задачи %1s</string>
-    <string name="notification_task_start_date">Начало задачи %1s</string>
-    <string name="notification_task_due_today">Срок выполнения задачи сегодня</string>
-    <string name="notification_task_start_today">Начало задачи сегодня</string>
-    <string name="notification_action_complete">Завершить</string>
+    <string name="notification_task_due_date">Срок задачи, %1s</string>
+    <string name="notification_task_start_date">Начало задачи, %1s</string>
+    <string name="notification_task_due_today">Задача на сегодня</string>
+    <string name="notification_task_start_today">Задача начинается сегодня</string>
+    <string name="notification_action_complete">завершить</string>
     <string name="notification_action_completed">Выполнена</string>
     <string name="notification_action_delay_1h">+1 час</string>
     <string name="notification_action_delay_1d">+1 день</string>
     <string name="notification_action_delay_toast">Срок выполнения обновлен</string>
-    <string name="notification_undo">Возврат</string>
+    <string name="notification_undo">Вернуть</string>
+    <string name="notification_action_unpin">открепить</string>
+    <string name="notification_task_pin_ticker">%1$s была закреплена</string>
 
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 час</string>
     <string name="button_add_one_day">+1 день</string>
 
+    <!-- Strings for QuickSettingsTile -->
+    <string name="quicksettingstile_create">Создать задачу</string>
+
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Задачи</string>
-    <string name="dashclock_extension_description">Информация по актуальным задачам.</string>
+    <string name="dashclock_extension_description">Отображает информацию о последних задачах.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s срок - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s срок</string>
     <string name="dashclock_widget_title_start_expanded">%1$s начало - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s начало сегодня</string>
-    <string name="dashclock_pref_displayed_task_title">Показаны задачи</string>
-    <string name="dashclock_pref_displayed_task_summary">Выбор, какие задачи показываются в виджет часы экрана</string>
-    <string name="dashclock_pref_displayed_task_dialog_title">Задачи для показа</string>
-    <string name="dashclock_display_type_due">Задачи по сроку выполнения</string>
-    <string name="dashclock_display_type_start">Начатые задачи</string>
-    <string name="dashclock_display_type_start_and_due">Задачи начатые и по сроку выполнения</string>
-    <string name="dashclock_preference_title">Задачи часы экрана установки</string>
+    <string name="dashclock_pref_displayed_task_title">Отображаемые события</string>
+    <string name="dashclock_pref_displayed_task_summary">Выберите, какие события задач будут отображаться в виджете часов</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">События для отображения</string>
+    <string name="dashclock_display_type_due">истекающие задачи</string>
+    <string name="dashclock_display_type_start">начинающиеся задачи</string>
+    <string name="dashclock_display_type_start_and_due">начинающиеся и истекающие задачи</string>
+    <string name="dashclock_display_type_all">все</string>
+    <string name="dashclock_display_type_pinned">закрепленные задачи</string>
+    <string name="dashclock_preference_title">Установки задач для виджета часов</string>
 
     <!-- General -->
-    <string name="accept">Подтвердить</string>
-    <string name="now">Сейчас</string>
+    <string name="accept">Принять</string>
+    <string name="now">сейчас</string>
 
     <!-- Incoming share -->
-    <string name="share_as_task">Добавить задачу</string>
+    <string name="share_as_task">Создать задачу</string>
 
-    <string name="opentasks_date_time">%2$s, %1$s</string>
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Уведомления</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Сигналы уведомлений</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Звук</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Вибрация</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Светодиод</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Поделиться через OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Требуется разрешение</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Для чтения списка учетных записей на устройстве, поддерживающих синхронизацию задач, %s необходимо разрешение GET_ACCOUNTS.<br/><br/>
+    Обратите внимание, что в связи с неудачным выбором Google запрос на получение разрешения будет помечен как &quot;доступ к вашим контактам&quot; вместо &quot;чтения ваших аккаунтов&quot;. См. <a href="https://issuetracker.google.com/issues/37065963">Проблема 37065963</a> для дополнительной информации.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Продолжить</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Открыть настройки</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
+    <string name="opentasks_date_time">%1$s, %2$s</string>
+
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">Закрепленные задачи</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">Даты начала и срока выполнения </string>
 
 </resources>
