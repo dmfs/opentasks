@@ -21,8 +21,8 @@ import android.database.Cursor;
 
 import org.dmfs.provider.tasks.model.adapters.BinaryFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
-import org.dmfs.provider.tasks.model.adapters.DateTimeIterableFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.DateTimeFieldAdapter;
+import org.dmfs.provider.tasks.model.adapters.DateTimeIterableFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.DurationFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.LongFieldAdapter;
@@ -45,6 +45,11 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
      * Adapter for the row id of a task.
      */
     LongFieldAdapter<TaskAdapter> _ID = new LongFieldAdapter<TaskAdapter>(Tasks._ID);
+
+    /**
+     * Adapter for the version of a task.
+     */
+    LongFieldAdapter<TaskAdapter> VERSION = new LongFieldAdapter<>(Tasks.VERSION);
 
     /**
      * Adapter for the task row id of as instance.
