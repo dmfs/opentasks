@@ -60,7 +60,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
 
 
     /**
@@ -365,6 +365,14 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
                     + " END;";
 
     /**
+     * SQL command to create a trigger to increment task version number on every update.
+     */
+    private final static String SQL_CREATE_TASK_VERSION_TRIGGER =
+            "CREATE TRIGGER task_version_trigger BEFORE UPDATE ON " + Tables.TASKS + " BEGIN "
+                    + " UPDATE " + Tables.TASKS + " SET " + Tasks.VERSION + " = OLD." + Tasks.VERSION + " + 1 where " + Tasks._ID + " = NEW." + Tasks._ID + ";"
+                    + " END;";
+
+    /**
      * SQL command to create the task list table.
      */
     private final static String SQL_CREATE_LISTS_TABLE =
@@ -396,6 +404,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     private final static String SQL_CREATE_TASKS_TABLE =
             "CREATE TABLE " + Tables.TASKS + " ( "
                     + TaskContract.Tasks._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + TaskContract.Tasks.VERSION + " INTEGER DEFAULT 0,"
                     + TaskContract.Tasks.LIST_ID + " INTEGER NOT NULL, "
                     + TaskContract.Tasks.TITLE + " TEXT,"
                     + TaskContract.Tasks.LOCATION + " TEXT,"
@@ -595,6 +604,9 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         db.execSQL("CREATE TRIGGER task_list_make_dirty_on_insert AFTER INSERT ON " + Tables.TASKS + " BEGIN UPDATE " + Tables.LISTS + " SET "
                 + TaskContract.TaskLists._DIRTY + "=" + TaskContract.TaskLists._DIRTY + " + " + "new." + TaskContract.Tasks._DIRTY + " + " + "new."
                 + TaskContract.Tasks._DELETED + " WHERE " + TaskContract.TaskLists._ID + "= new." + TaskContract.Tasks.LIST_ID + "; END");
+
+        // create task version update trigger
+        db.execSQL(SQL_CREATE_TASK_VERSION_TRIGGER);
 
         // create instances table and view
         db.execSQL(SQL_CREATE_INSTANCES_TABLE);
@@ -809,6 +821,13 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
         if (oldVersion < 19)
         {
             db.execSQL(SQL_CREATE_INSTANCE_CLIENT_VIEW);
+        }
+
+        if (oldVersion < 20)
+        {
+            // create task version column and update trigger
+            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.VERSION + " Integer default 0;");
+            db.execSQL(SQL_CREATE_TASK_VERSION_TRIGGER);
         }
 
         // upgrade FTS

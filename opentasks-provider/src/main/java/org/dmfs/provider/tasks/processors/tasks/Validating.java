@@ -115,6 +115,11 @@ public final class Validating implements EntityProcessor<TaskAdapter>
             throw new IllegalArgumentException("_ID can not be set manually");
         }
 
+        if (task.isUpdated(TaskAdapter.VERSION))
+        {
+            throw new IllegalArgumentException("VERSION can not be set manually");
+        }
+
         // account name can not be set on a tasks
         if (task.isUpdated(TaskAdapter.ACCOUNT_NAME))
         {

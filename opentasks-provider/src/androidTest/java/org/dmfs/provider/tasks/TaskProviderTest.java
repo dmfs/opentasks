@@ -55,6 +55,7 @@ import org.dmfs.opentaskspal.tasks.StatusData;
 import org.dmfs.opentaskspal.tasks.SyncIdData;
 import org.dmfs.opentaskspal.tasks.TimeData;
 import org.dmfs.opentaskspal.tasks.TitleData;
+import org.dmfs.opentaskspal.tasks.VersionData;
 import org.dmfs.opentaskstestpal.InstanceTestData;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
@@ -147,7 +148,9 @@ public class TaskProviderTest
 
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
-                new Assert<>(task, new TitleData("task1")),
+                new Assert<>(task, new Composite<>(
+                        new TitleData("task1"),
+                        new VersionData(0))),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
                                 new InstanceTestData(0),
@@ -173,7 +176,9 @@ public class TaskProviderTest
 
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
-                new Assert<>(task, new TitleData("task updated")),
+                new Assert<>(task, new Composite<>(
+                        new TitleData("task updated"),
+                        new VersionData(1))),
                 new AssertRelated<>(new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
                                 new InstanceTestData(0),
@@ -205,9 +210,71 @@ public class TaskProviderTest
         ), resultsIn(mClient,
                 new Assert<>(taskList1, new NameData("list1")),
                 new Assert<>(taskList2, new NameData("list2")),
-                new Assert<>(task1, new TitleData("task1")),
-                new Assert<>(task2, new TitleData("task2")),
-                new Assert<>(task3, new TitleData("task3")),
+                new Assert<>(task1, new Composite<>(
+                        new TitleData("task1"),
+                        new VersionData(0))),
+                new Assert<>(task2, new Composite<>(
+                        new TitleData("task2"),
+                        new VersionData(0))),
+                new Assert<>(task3, new Composite<>(
+                        new TitleData("task3"),
+                        new VersionData(0))),
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task1,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))),
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task2,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))),
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task3,
+                        new Composite<Instances>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TZ, null))
+                )));
+    }
+
+
+    /**
+     * Create 2 task list and 3 tasks with updates, check values.
+     */
+    @Test
+    public void testMultipleInsertsAndUpdates()
+    {
+        Table<TaskLists> taskListsTable = new LocalTaskListsTable(mAuthority);
+        RowSnapshot<TaskLists> taskList1 = new VirtualRowSnapshot<>(taskListsTable);
+        RowSnapshot<TaskLists> taskList2 = new VirtualRowSnapshot<>(taskListsTable);
+        RowSnapshot<Tasks> task1 = new VirtualRowSnapshot<>(new TaskListScoped(taskList1, new TasksTable(mAuthority)));
+        RowSnapshot<Tasks> task2 = new VirtualRowSnapshot<>(new TaskListScoped(taskList1, new TasksTable(mAuthority)));
+        RowSnapshot<Tasks> task3 = new VirtualRowSnapshot<>(new TaskListScoped(taskList2, new TasksTable(mAuthority)));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList1, new NameData("list1")),
+                new Put<>(taskList2, new NameData("list2")),
+                new Put<>(task1, new TitleData("task1a")),
+                new Put<>(task2, new TitleData("task2a")),
+                new Put<>(task3, new TitleData("task3a")),
+                // update task 1 and 2
+                new Put<>(task1, new TitleData("task1b")),
+                new Put<>(task2, new TitleData("task2b")),
+                // update task 1 once more
+                new Put<>(task1, new TitleData("task1c"))
+
+        ), resultsIn(mClient,
+                new Assert<>(taskList1, new NameData("list1")),
+                new Assert<>(taskList2, new NameData("list2")),
+                new Assert<>(task1, new Composite<>(
+                        new TitleData("task1c"),
+                        new VersionData(2))),
+                new Assert<>(task2, new Composite<>(
+                        new TitleData("task2b"),
+                        new VersionData(1))),
+                new Assert<>(task3, new Composite<>(
+                        new TitleData("task3a"),
+                        new VersionData(0))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task1,
                         new Composite<Instances>(
@@ -244,7 +311,9 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(start, due))
 
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(start, due)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(start, due),
+                        new VersionData(0))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
@@ -276,7 +345,46 @@ public class TaskProviderTest
                 // update the status of the new task
                 new Put<>(task, new StatusData(Tasks.STATUS_COMPLETED))
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(start, due)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(start, due),
+                        new VersionData(1))), // task has been updated once
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start.shiftTimeZone(TimeZone.getDefault()),
+                                        due.shiftTimeZone(TimeZone.getDefault()),
+                                        absent(),
+                                        -1),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
+    }
+
+
+    /**
+     * Create task with start and due, check datetime and INSTANCE_STATUS values after updating the task twice.
+     */
+    @Test
+    public void testInsertTaskWithStartAndDueUpdateTwice()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now();
+        DateTime due = start.addDuration(new Duration(1, 1, 0));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<>()),
+                new Put<>(task, new TimeData(start, due)),
+                // update the status of the new task
+                new Put<>(task, new StatusData(Tasks.STATUS_COMPLETED)),
+                // update the title of the new task
+                new Put<>(task, new TitleData("Task Title"))
+        ), resultsIn(mClient,
+                new Assert<>(task, new Composite<>(
+                        new TimeData(start, due),
+                        new TitleData("Task Title"),
+                        new VersionData(2))), // task has been updated twice
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
@@ -311,7 +419,9 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(start, due)),
                 new Put<>(task, new TimeData(startNew, dueNew))
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(startNew, dueNew)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(startNew, dueNew),
+                        new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
@@ -346,7 +456,9 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(start, due)),
                 new Put<>(task, new TimeData(startNew, dueNew))
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(startNew, dueNew)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(startNew, dueNew),
+                        new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
@@ -377,7 +489,9 @@ public class TaskProviderTest
                 new Put<>(task, new TitleData("Test")),
                 new Put<>(task, new TimeData(start, due))
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(start, due)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(start, due),
+                        new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
@@ -409,7 +523,9 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(start, duration))
 
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(start, duration)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(start, duration),
+                        new VersionData(0))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(
@@ -444,7 +560,9 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(startNew, duration))
 
         ), resultsIn(mClient,
-                new Assert<>(task, new TimeData(startNew, duration)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(startNew, duration),
+                        new VersionData(1))),
                 // note that, apart from the time zone, all values stay the same
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -485,7 +603,9 @@ public class TaskProviderTest
                 new Put<>(task, new TimeData(start, due2))
 
         ), resultsIn(queue,
-                new Assert<>(task, new TimeData(start, due2)),
+                new Assert<>(task, new Composite<>(
+                        new TimeData(start, due2),
+                        new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
                         new Composite<Instances>(

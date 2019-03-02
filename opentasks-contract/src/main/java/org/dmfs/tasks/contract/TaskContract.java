@@ -472,6 +472,18 @@ public final class TaskContract
         String _ID = "_id";
 
         /**
+         * The local version number of this task. The only guarantee about the value is, it's incremented whenever the task changes (this includes any
+         * changes applied by sync adapters).
+         * <p>
+         * Note, there is no guarantee about how much it's incremented other than by at least 1.
+         * <p>
+         * Value: Integer
+         * <p>
+         * read-only
+         */
+        String VERSION = "version";
+
+        /**
          * The id of the list this task belongs to. This value is <strong>write-once</strong> and must not be <code>null</code>.
          * <p>
          * Value: Integer
