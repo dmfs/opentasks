@@ -62,7 +62,7 @@ import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
-import org.dmfs.tasks.notification.TaskNotificationHandler;
+import org.dmfs.tasks.notification.ActionService;
 import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
@@ -143,7 +143,7 @@ public class ViewTaskFragment extends SupportFragment
     private Toolbar mToolBar;
     private View mRootView;
 
-        private int mAppBarOffset = 0;
+    private int mAppBarOffset = 0;
 
     private FloatingActionButton mFloatingActionButton;
 
@@ -584,12 +584,12 @@ public class ViewTaskFragment extends SupportFragment
             if (TaskFieldAdapters.PINNED.get(mContentSet))
             {
                 item.setIcon(R.drawable.ic_pin_white_24dp);
-                TaskNotificationHandler.unpinTask(mAppContext, mContentSet);
+                ActionService.startAction(getActivity(), ActionService.ACTION_UNPIN, mTaskUri);
             }
             else
             {
                 item.setIcon(R.drawable.ic_pin_off_white_24dp);
-                TaskNotificationHandler.pinTask(mAppContext, mContentSet);
+                ActionService.startAction(getActivity(), ActionService.ACTION_PIN_TASK, mTaskUri);
             }
             persistTask();
             return true;

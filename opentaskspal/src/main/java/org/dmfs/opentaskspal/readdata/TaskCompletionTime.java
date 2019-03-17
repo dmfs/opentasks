@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2019 dmfs GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,34 +21,30 @@ import android.support.annotation.NonNull;
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.Composite;
-import org.dmfs.android.contentpal.projections.MultiProjection;
+import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.jems.optional.decorators.Mapped;
-import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
 /**
- * An {@link Optional} of a specific {@link DateTime} value of a task.
+ * An {@link Optional} of completion {@link DateTime} of a task.
  *
  * @author Marten Gajda
- * @author Gabor Keszthelyi
  */
-public final class TaskDateTime extends DelegatingOptional<DateTime>
+public final class TaskCompletionTime extends DelegatingOptional<DateTime>
 {
     public static final Projection<Tasks> PROJECTION = new Composite<>(
-            new MultiProjection<>(Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks.IS_ALLDAY),
+            new SingleColProjection<>(Tasks.COMPLETED),
             EffectiveTimezone.PROJECTION);
 
 
-    public TaskDateTime(@NonNull String columnName, @NonNull final RowDataSnapshot<Tasks> rowData)
+    public TaskCompletionTime(@NonNull final RowDataSnapshot<Tasks> rowData)
     {
         super(new Mapped<>(
-                (Long timeStamp) -> new Backed<>(rowData.data(Tasks.IS_ALLDAY, "1"::equals), false).value() ?
-                        new DateTime(timeStamp).toAllDay() :
-                        new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(rowData).value()),
-                rowData.data(columnName, Long::valueOf)));
+                timeStamp -> new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(rowData).value()),
+                rowData.data(Tasks.COMPLETED, Long::valueOf)));
     }
 }
