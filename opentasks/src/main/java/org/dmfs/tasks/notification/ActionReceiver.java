@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2019 dmfs GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +16,22 @@
 
 package org.dmfs.tasks.notification;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
 
 /**
- * The PinTaskHandler simplifies the pinning and unpinning of tasks. Internally it manages the pin notification handling.
- *
- * @author Tobias Reinsch <tobias@dmfs.org>
+ * A {@link BroadcastReceiver} which enqueues {@link ActionService} Jobs sent via {@link PendingIntent}s.
  */
-public class TaskNotificationHandler extends BroadcastReceiver
+public final class ActionReceiver extends BroadcastReceiver
 {
 
-    /**
-     * Receives the a notification when the data in the provider changed.
-     */
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        TaskNotificationService.enqueueWork(context, intent);
+        // PendingIntents can't start a JobIntentService, so we're using this as a trampoline.
+        ActionService.enqueueWork(context, intent);
     }
 }

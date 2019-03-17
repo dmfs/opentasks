@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2019 dmfs GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,27 +14,33 @@
  * limitations under the License.
  */
 
-package org.dmfs.tasks.notification;
+package org.dmfs.tasks.actions.utils;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
+import android.content.SharedPreferences;
+
+import org.dmfs.jems.generator.Generator;
 
 
 /**
- * The PinTaskHandler simplifies the pinning and unpinning of tasks. Internally it manages the pin notification handling.
+ * {@link Generator} of {@link SharedPreferences} instances which contain the active notifications.
  *
- * @author Tobias Reinsch <tobias@dmfs.org>
+ * @author Marten Gajda
  */
-public class TaskNotificationHandler extends BroadcastReceiver
+public final class NotificationPrefs implements Generator<SharedPreferences>
 {
+    private final Context mContext;
 
-    /**
-     * Receives the a notification when the data in the provider changed.
-     */
-    @Override
-    public void onReceive(Context context, Intent intent)
+
+    public NotificationPrefs(Context context)
     {
-        TaskNotificationService.enqueueWork(context, intent);
+        mContext = context;
+    }
+
+
+    @Override
+    public SharedPreferences next()
+    {
+        return mContext.getSharedPreferences("org.dmfs.tasks.notifications", Context.MODE_PRIVATE);
     }
 }
