@@ -117,3 +117,21 @@ if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
         }
     }
 }
+
+task postVersion {
+    doLast {
+        if (project.hasProperty('OPENTASKS_API_KEY')) {
+            // publish version number on api.opentasks.app
+            ((HttpURLConnection) new URL('https://opentasks-app.appspot.com/v1/app/latest_version/').openConnection()).with({
+                requestMethod = 'POST'
+                doOutput = true
+                setRequestProperty('Content-Type', 'application/x-www-form-urlencoded')
+                setRequestProperty('Authorization', "Token token=\"${OPENTASKS_API_KEY}\"")
+                outputStream.withPrintWriter({ printWriter ->
+                    printWriter.write("version_code=${project.android.defaultConfig.versionCode}&version_name=${project.android.defaultConfig.versionName}")
+                })
+                content
+            })
+        }
+    }
+}
