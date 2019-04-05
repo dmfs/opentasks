@@ -3,10 +3,10 @@ if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
     apply plugin: 'com.github.triplet.play'
 }
 // commit number is only relevant to the application project
-def gitCommitNo = { ->
+def gitCommitNo = { ref ->
     def stdout = new ByteArrayOutputStream()
     exec {
-        commandLine 'git', 'rev-list', '--count', 'HEAD'
+        commandLine 'git', 'rev-list', '--count', ref
         standardOutput = stdout
     }
     return Integer.parseInt(stdout.toString().trim())
@@ -18,7 +18,8 @@ android {
         applicationId "org.dmfs.tasks"
         minSdkVersion MIN_SDK_VERSION.toInteger()
         targetSdkVersion TARGET_SDK_VERSION.toInteger()
-        versionCode gitCommitNo() * 10 // spread version code to allow inserting versions if necessary
+        // spread version code to allow inserting versions if necessary
+        versionCode gitCommitNo('refs/remotes/origin/master') * 99 + gitCommitNo('HEAD') + Integer.parseInt(VERSION_OVERRIDE)
         versionName version
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -98,7 +99,7 @@ if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
     play {
         serviceAccountCredentials = file(PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS)
         // the track is determined automatically by the version number format
-        switch (version){
+        switch (version) {
             case ~/^(\d+)(\.\d+)*(-\d+-[\w\d]+)?-dirty$/:
                 // work in progress goes to the internal track
                 track = "internal"
