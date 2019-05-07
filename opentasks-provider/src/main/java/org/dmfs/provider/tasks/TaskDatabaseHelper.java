@@ -22,6 +22,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import org.dmfs.jems.optional.adapters.First;
+import org.dmfs.jems.predicate.elementary.Equals;
+import org.dmfs.provider.tasks.utils.TableColumns;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Properties;
 import org.dmfs.tasks.contract.TaskContract.Property.Alarm;
@@ -60,7 +63,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    private static final int DATABASE_VERSION = 20;
+    private static final int DATABASE_VERSION = 21;
 
 
     /**
@@ -823,13 +826,16 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
             db.execSQL(SQL_CREATE_INSTANCE_CLIENT_VIEW);
         }
 
-        if (oldVersion < 20)
+        if (oldVersion < 21)
         {
-            // create task version column and update trigger
-            db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.VERSION + " Integer default 0;");
-            db.execSQL(SQL_CREATE_TASK_VERSION_TRIGGER);
+            // create version column, unless it already exists
+            if (!new First<>(new TableColumns(Tables.TASKS).value(db), new Equals<>(Tasks.VERSION)).isPresent())
+            {
+                // create task version column and update trigger
+                db.execSQL("alter table " + Tables.TASKS + " add column " + Tasks.VERSION + " Integer default 0;");
+                db.execSQL(SQL_CREATE_TASK_VERSION_TRIGGER);
+            }
         }
-
         // upgrade FTS
         FTSDatabaseHelper.onUpgrade(db, oldVersion, newVersion);
 
