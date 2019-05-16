@@ -56,10 +56,6 @@ import org.dmfs.tasks.utils.BaseActivity;
 public class ManageListActivity extends BaseActivity implements OnClickListener, InputTextListener, android.content.DialogInterface.OnClickListener, ColorPickerDialogFragment.ColorDialogResultListener
 {
     /**
-     * Action to call the ColorPicker activity.
-     */
-    public static final String ACTION_PICK_COLOR = "org.openintents.action.PICK_COLOR";
-    /**
      * Account, that is assigned to the task list.
      */
     public static final String EXTRA_ACCOUNT = "dmfs_extra_account";
@@ -67,7 +63,6 @@ public class ManageListActivity extends BaseActivity implements OnClickListener,
      * Intent filter category to handle local lists only.
      */
     public static final String CATEGORY_LOCAL = "org.dmfs.intent.category.LOCAL";
-    private static final int REQUEST_CODE_COLOR_PICKER = 4465;
     private static final int NO_COLOR = -1;
 
     private static final int[] MATERIAL_COLORS_PRIMARY = new int[] {
