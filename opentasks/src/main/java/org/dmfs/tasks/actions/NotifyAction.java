@@ -212,7 +212,6 @@ public final class NotifyAction implements TaskAction
         String dateString;
         if (time.isAllDay())
         {
-            DateTime today = DateTime.today();
             dateString = DateUtils.getRelativeTimeSpanString(time.getTimestamp(), DateTime.today().getTimestamp(), DateUtils.DAY_IN_MILLIS).toString();
         }
         else
