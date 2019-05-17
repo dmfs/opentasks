@@ -435,10 +435,11 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
         @Override
         public void onClick(View v)
         {
-            Cursor cursor = (Cursor) getItem((Integer) v.getTag());
+            Integer position = (Integer) v.getTag();
+            Cursor cursor = (Cursor) getItem(position);
             if (cursor != null)
             {
-                onEditListClick(new Account(cursor.getString(accountNameColumn), cursor.getString(accountTypeColumn)), cursor.getLong(mRowIDColumn),
+                onEditListClick(new Account(cursor.getString(accountNameColumn), cursor.getString(accountTypeColumn)), getItemId(position),
                         cursor.getString(listNameColumn), cursor.getInt(listColorColumn));
             }
         }
