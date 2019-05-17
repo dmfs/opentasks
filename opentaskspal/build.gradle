@@ -22,14 +22,15 @@ dependencies {
     api(deps.contentpal) {
         exclude module: 'jems'
     }
+    implementation deps.support_appcompat
+
     implementation deps.datetime
     implementation deps.lib_recur
     implementation deps.jems
     implementation deps.bolts_color
 
-    testImplementation(deps.contentpal_testing) {
-        exclude module: 'jems'
-    }
+    testImplementation deps.contentpal_testing
+    testImplementation deps.jems_testing
     testImplementation deps.robolectric
     testImplementation deps.junit
     testImplementation deps.mockito

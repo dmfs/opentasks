@@ -1,12 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
+        google()
         jcenter()
         mavenCentral()
-        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.4.1'
         classpath("com.github.triplet.gradle:play-publisher:2.0.0-rc1")
     }
 }
@@ -24,9 +24,9 @@ allprojects {
     version gitVersion()
 
     repositories {
+        google()
         jcenter()
         maven { url "https://jitpack.io" }
-        google()
     }
 }
 

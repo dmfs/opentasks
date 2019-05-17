@@ -40,9 +40,7 @@ dependencies {
     testImplementation deps.hamcrest
 
     androidTestImplementation project(':opentaskspal')
-    androidTestImplementation(deps.contenttestpal) {
-        exclude module: 'jems'
-    }
+    androidTestImplementation deps.contenttestpal
     androidTestImplementation deps.support_annotations
     androidTestImplementation deps.support_test_runner
     androidTestImplementation deps.support_test_rules
