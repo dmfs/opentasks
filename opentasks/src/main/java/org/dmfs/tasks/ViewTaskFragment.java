@@ -820,7 +820,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             p.setAnchorId(R.id.appbar);
             mFloatingActionButton.setLayoutParams(p);
-            mFloatingActionButton.setVisibility(View.VISIBLE);
+            mFloatingActionButton.show();
             // make sure the FAB has the right color
             updateColor();
         }
@@ -828,7 +828,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             p.setAnchorId(View.NO_ID);
             mFloatingActionButton.setLayoutParams(p);
-            mFloatingActionButton.setVisibility(View.GONE);
+            mFloatingActionButton.hide();
         }
     }
 }
