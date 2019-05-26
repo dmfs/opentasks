@@ -20,7 +20,7 @@
             android:title="@string/opentasks_task_details_menu_send"
             android:titleCondensed="@string/opentasks_task_details_menu_send_short"
             app:showAsAction="never"
-            app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
+            app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"/>
     <item
             android:id="@+id/delete_task"
             android:icon="@drawable/content_discard"

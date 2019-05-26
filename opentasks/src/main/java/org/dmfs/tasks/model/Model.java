@@ -22,7 +22,7 @@ import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
 import android.text.TextUtils;
 
 import org.dmfs.provider.tasks.AuthorityUtil;

@@ -31,13 +31,15 @@ import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.ArrayList;
 
+import androidx.cursoradapter.widget.CursorAdapter;
+
 
 /**
  * An adapter to adapt a cursor containing task lists to a {@link Spinner}.
  *
  * @author Tobias Reinsch <tobias@dmfs.org>
  */
-public class TasksListCursorAdapter extends android.support.v4.widget.CursorAdapter
+public class TasksListCursorAdapter extends CursorAdapter
 {
     LayoutInflater mInflater;
 

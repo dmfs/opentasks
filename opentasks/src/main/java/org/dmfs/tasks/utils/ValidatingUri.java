@@ -17,7 +17,7 @@
 package org.dmfs.tasks.utils;
 
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import org.dmfs.jems.fragile.Fragile;
 

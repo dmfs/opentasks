@@ -16,7 +16,7 @@
 
 package org.dmfs.opentaskspal.readdata;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.bolts.color.colors.DelegatingColor;

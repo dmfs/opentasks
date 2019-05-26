@@ -17,18 +17,17 @@
 package org.dmfs.tasks.notification;
 
 import android.app.Notification;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v4.app.JobIntentService;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.Builder;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationCompat.Builder;
+import androidx.core.app.NotificationManagerCompat;
 
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.predicates.AnyOf;
@@ -44,18 +43,14 @@ import org.dmfs.opentaskspal.readdata.TaskPin;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
 import org.dmfs.opentaskspal.views.TasksView;
 import org.dmfs.optional.Optional;
-import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.JobIds;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.actions.utils.NotificationPrefs;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
-import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.notification.state.PrefState;
 import org.dmfs.tasks.notification.state.RowState;
 import org.dmfs.tasks.notification.state.TaskNotificationState;
 import org.dmfs.tasks.utils.In;
-
-import java.util.ArrayList;
 
 
 /**

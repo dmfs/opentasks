@@ -16,7 +16,7 @@
 package org.dmfs.tasks.utils;
 
 import android.database.DataSetObservable;
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
 
 
 public class ObservableSparseArrayCompat<E> extends SparseArrayCompat<E>

@@ -29,13 +29,15 @@ import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 
+import androidx.cursoradapter.widget.CursorAdapter;
+
 
 /**
  * An adapter to adapt a cursor containing task lists to a {@link Spinner}.
  *
  * @author Arjun Naik<arjun@arjunnaik.in>
  */
-public class TasksListCursorSpinnerAdapter extends android.support.v4.widget.CursorAdapter implements SpinnerAdapter
+public class TasksListCursorSpinnerAdapter extends CursorAdapter implements SpinnerAdapter
 {
     LayoutInflater mInflater;
 

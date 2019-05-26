@@ -21,7 +21,7 @@ android {
         // spread version code to allow inserting versions if necessary
         versionCode gitCommitNo('refs/remotes/origin/master') * 99 + gitCommitNo('HEAD') + Integer.parseInt(VERSION_OVERRIDE)
         versionName version
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     if (project.hasProperty("DMFS_RELEASE_KEYSTORE")) {
         signingConfigs {

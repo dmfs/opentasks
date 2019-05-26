@@ -1,13 +1,12 @@
-def support_lib_version = '28.0.0'
 def jems_version = '1.18'
 def contentpal_version = 'a7fbc62eef' //  a7fbc62eef -> 2018-08-19
-def support_test_runner_version = '1.0.2'
+def androidx_test_runner_version = '1.1.0'
 
 ext.deps = [
         // Support & Google libraries
-        support_appcompat  : "com.android.support:appcompat-v7:$support_lib_version",
-        support_annotations: "com.android.support:support-annotations:$support_lib_version",
-        support_design     : "com.android.support:design:$support_lib_version",
+        support_appcompat  : 'androidx.appcompat:appcompat:1.0.0',
+        support_annotations: 'androidx.annotation:annotation:1.0.0',
+        support_design     : 'com.google.android.material:material:1.0.0',
         android_dashclock  : 'com.google.android.apps.dashclock:dashclock-api:2.0.0',
 
         // dmfs
@@ -28,8 +27,8 @@ ext.deps = [
         hamcrest           : 'org.hamcrest:hamcrest-all:1.3',
         mockito            : 'org.mockito:mockito-core:2.27.0',
         robolectric        : 'org.robolectric:robolectric:3.5.1',
-        support_test_runner: "com.android.support.test:runner:$support_test_runner_version",
-        support_test_rules : "com.android.support.test:rules:$support_test_runner_version",
+        support_test_runner: "androidx.test:runner:$androidx_test_runner_version",
+        support_test_rules : "androidx.test:rules:$androidx_test_runner_version",
 
         // dmfs testing
         jems_testing       : "org.dmfs:jems-testing:$jems_version",

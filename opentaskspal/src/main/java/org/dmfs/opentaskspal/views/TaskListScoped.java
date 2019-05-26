@@ -18,7 +18,7 @@ package org.dmfs.opentaskspal.views;
 
 import android.database.Cursor;
 import android.os.RemoteException;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.InsertOperation;
 import org.dmfs.android.contentpal.Predicate;

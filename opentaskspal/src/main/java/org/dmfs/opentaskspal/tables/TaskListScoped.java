@@ -17,7 +17,7 @@
 package org.dmfs.opentaskspal.tables;
 
 import android.content.ContentProviderClient;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.InsertOperation;
 import org.dmfs.android.contentpal.Operation;
