@@ -74,7 +74,6 @@ dependencies {
     }
     implementation(deps.android_carrot) {
         exclude module: 'carrot'
-        exclude group: 'com.android.support'
         exclude module: 'iterators'
         exclude module: 'jems'
     }
@@ -86,12 +85,8 @@ dependencies {
     testImplementation deps.robolectric
     testImplementation deps.jems_testing
 
-    androidTestImplementation(deps.support_test_runner) {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestImplementation(deps.support_test_rules) {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    androidTestImplementation deps.support_test_runner
+    androidTestImplementation deps.support_test_rules
     implementation project(path: ':opentaskspal')
 }
 

@@ -1,6 +1,6 @@
 def jems_version = '1.18'
 def contentpal_version = 'a7fbc62eef' //  a7fbc62eef -> 2018-08-19
-def androidx_test_runner_version = '1.1.0'
+def androidx_test_runner_version = '1.1.1'
 
 ext.deps = [
         // Support & Google libraries
