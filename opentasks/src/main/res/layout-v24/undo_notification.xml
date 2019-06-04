@@ -16,7 +16,7 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Notification.Title.colorFix"/>
+            android:textAppearance="@style/TextAppearance.Compat.Notification.Title.colorFix"/>
 
     <ImageView
             style="@style/ot_notification_icon_undo"
@@ -34,6 +34,6 @@
             android:paddingRight="16dip"
             android:text="@string/notification_undo"
             android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Notification.Action"/>
+            android:textAppearance="@style/TextAppearance.Compat.Notification.Action"/>
 
 </LinearLayout>

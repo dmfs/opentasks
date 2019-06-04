@@ -26,7 +26,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.v4.content.CursorLoader;
+import androidx.loader.content.CursorLoader;
 import android.text.format.Time;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;

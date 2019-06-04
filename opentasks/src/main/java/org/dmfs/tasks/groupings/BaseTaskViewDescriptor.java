@@ -18,7 +18,7 @@ package org.dmfs.tasks.groupings;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;

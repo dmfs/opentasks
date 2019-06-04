@@ -17,7 +17,7 @@
 package org.dmfs.opentaskspal.rowdata;
 
 import android.content.ContentProviderOperation;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import org.dmfs.android.contentpal.RowData;

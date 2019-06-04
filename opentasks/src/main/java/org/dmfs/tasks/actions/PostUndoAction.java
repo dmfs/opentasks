@@ -25,8 +25,8 @@ import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.RemoteException;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import android.widget.RemoteViews;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;

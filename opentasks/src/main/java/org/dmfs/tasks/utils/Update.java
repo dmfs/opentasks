@@ -17,7 +17,7 @@
 package org.dmfs.tasks.utils;
 
 import android.content.ContentProviderOperation;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.Operation;
 import org.dmfs.android.contentpal.RowData;

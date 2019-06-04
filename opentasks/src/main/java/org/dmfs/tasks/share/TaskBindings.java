@@ -16,7 +16,7 @@
 
 package org.dmfs.tasks.share;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.format.Time;
 
 import org.dmfs.iterators.Function;

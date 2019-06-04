@@ -28,19 +28,19 @@ import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.AppBarLayout.OnOffsetChangedListener;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ShareActionProvider;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.MenuItemCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -794,7 +794,7 @@ public class ViewTaskFragment extends SupportFragment
      * @param activty
      *         an {@link AppCompatActivity}.
      */
-    public void setupToolbarAsActionbar(android.support.v7.app.AppCompatActivity activty)
+    public void setupToolbarAsActionbar(androidx.appcompat.app.AppCompatActivity activty)
     {
         if (mToolBar == null)
         {
@@ -820,7 +820,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             p.setAnchorId(R.id.appbar);
             mFloatingActionButton.setLayoutParams(p);
-            mFloatingActionButton.setVisibility(View.VISIBLE);
+            mFloatingActionButton.show();
             // make sure the FAB has the right color
             updateColor();
         }
@@ -828,7 +828,7 @@ public class ViewTaskFragment extends SupportFragment
         {
             p.setAnchorId(View.NO_ID);
             mFloatingActionButton.setLayoutParams(p);
-            mFloatingActionButton.setVisibility(View.GONE);
+            mFloatingActionButton.hide();
         }
     }
 }

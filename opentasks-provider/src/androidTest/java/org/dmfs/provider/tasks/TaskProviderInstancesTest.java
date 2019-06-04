@@ -21,8 +21,8 @@ import android.content.Context;
 import android.content.OperationApplicationException;
 import android.os.Build;
 import android.os.RemoteException;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.dmfs.android.contentpal.Operation;
 import org.dmfs.android.contentpal.OperationsQueue;
