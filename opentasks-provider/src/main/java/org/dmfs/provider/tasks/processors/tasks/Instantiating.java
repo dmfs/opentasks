@@ -22,11 +22,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.jems.pair.Pair;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.combined.Backed;
-import org.dmfs.optional.Optional;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
@@ -187,10 +187,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                     (newInstanceValues, cursorRow) ->
                     {
                         existingInstances.moveToPosition(cursorRow);
-                        return (int) (existingInstances.getLong(startIdx) -
-                                new Backed<>(
-                                        new NullSafe<>(newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME)),
-                                        0L).value());
+                        return (int) (new Backed<>(new NullSafe<>(newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME)), 0L).value()
+                                - existingInstances.getLong(startIdx));
                     });
 
             // sync the instances table with the new instances

@@ -18,16 +18,14 @@ android {
 }
 
 dependencies {
-    implementation project(':opentasks-contract')
-    api(deps.contentpal) {
-        exclude module: 'jems'
-    }
-    implementation deps.support_appcompat
+    api project(':opentasks-contract')
+    api deps.contentpal
+    api deps.datetime
+    api deps.lib_recur
+    api deps.support_annotations
+    api deps.bolts_color
 
-    implementation deps.datetime
-    implementation deps.lib_recur
     implementation deps.jems
-    implementation deps.bolts_color
 
     testImplementation deps.contentpal_testing
     testImplementation deps.jems_testing

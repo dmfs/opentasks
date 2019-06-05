@@ -23,26 +23,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import androidx.annotation.NonNull;
-import androidx.core.app.JobIntentService;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationCompat.Builder;
-import androidx.core.app.NotificationManagerCompat;
 
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.predicates.AnyOf;
 import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.android.contentpal.predicates.In;
 import org.dmfs.android.contentpal.projections.Composite;
 import org.dmfs.android.contentpal.rowsets.QueryRowSet;
 import org.dmfs.android.contentpal.views.Sorted;
 import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
+import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.pair.Pair;
 import org.dmfs.opentaskspal.readdata.Id;
 import org.dmfs.opentaskspal.readdata.TaskPin;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
 import org.dmfs.opentaskspal.views.TasksView;
-import org.dmfs.optional.Optional;
 import org.dmfs.tasks.JobIds;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.actions.utils.NotificationPrefs;
@@ -50,7 +46,10 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.notification.state.PrefState;
 import org.dmfs.tasks.notification.state.RowState;
 import org.dmfs.tasks.notification.state.TaskNotificationState;
-import org.dmfs.tasks.utils.In;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
+import androidx.core.app.NotificationManagerCompat;
 
 
 /**
@@ -120,7 +119,7 @@ public class TaskNotificationService extends JobIntentService
                                                 new EqArg(Tasks.PINNED, 1),
                                                 new In(Tasks._ID, new Mapped<>(p -> ContentUris.parseId(p.task()), currentNotifications))))),
                         // NOTE due to a bug in diff, the logic is currently reversed
-                        (o, o2) -> (int) (ContentUris.parseId(o2.task()) - ContentUris.parseId(o.task()))))
+                        (o, o2) -> (int) (ContentUris.parseId(o.task()) - ContentUris.parseId(o2.task()))))
                 {
                     if (!diff.left().isPresent())
                     {

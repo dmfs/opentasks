@@ -80,6 +80,7 @@ dependencies {
     implementation deps.jems
     implementation deps.datetime
     implementation deps.bolts_color
+    implementation deps.retention_magic
 
     testImplementation deps.junit
     testImplementation deps.robolectric

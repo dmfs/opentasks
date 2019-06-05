@@ -17,13 +17,14 @@
 package org.dmfs.opentaskspal.tables;
 
 import android.accounts.Account;
-import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.tables.AccountScoped;
 import org.dmfs.android.contentpal.tables.DelegatingTable;
 import org.dmfs.android.contentpal.tables.Synced;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -35,9 +36,15 @@ public final class LocalTaskListsTable extends DelegatingTable<TaskContract.Task
 {
     public LocalTaskListsTable(@NonNull String authority)
     {
+        this(new Account(TaskContract.LOCAL_ACCOUNT_NAME, TaskContract.LOCAL_ACCOUNT_TYPE), authority);
+    }
+
+
+    private LocalTaskListsTable(@NonNull Account localAccount, @NonNull String authority)
+    {
         // TODO When https://github.com/dmfs/opentasks/issues/416 is completed Synced can be removed from here:
-        super(new Synced<>(
-                new AccountScoped<>(new Account(TaskContract.LOCAL_ACCOUNT_NAME, TaskContract.LOCAL_ACCOUNT_TYPE),
+        super(new Synced<>(localAccount,
+                new AccountScoped<>(localAccount,
                         new TaskListsTable(authority))));
     }
 }
