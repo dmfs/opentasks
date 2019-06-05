@@ -17,7 +17,7 @@
 package org.dmfs.opentaskspal.readdata.functions;
 
 import org.dmfs.android.bolts.color.Color;
-import org.dmfs.android.bolts.color.colors.ValueColor;
+import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.jems.function.Function;
 
 

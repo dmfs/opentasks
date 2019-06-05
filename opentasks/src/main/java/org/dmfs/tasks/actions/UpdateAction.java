@@ -24,12 +24,12 @@ import android.os.RemoteException;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.RowDataSnapshot;
+import org.dmfs.android.contentpal.operations.Update;
 import org.dmfs.android.contentpal.references.RowUriReference;
 import org.dmfs.android.contentpal.transactions.BaseTransaction;
 import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.jems.function.Function;
 import org.dmfs.tasks.contract.TaskContract;
-import org.dmfs.tasks.utils.Update;
 
 
 /**

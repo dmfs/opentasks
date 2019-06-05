@@ -18,7 +18,6 @@ package org.dmfs.opentaskspal.views;
 
 import android.database.Cursor;
 import android.os.RemoteException;
-import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.InsertOperation;
 import org.dmfs.android.contentpal.Predicate;
@@ -30,6 +29,8 @@ import org.dmfs.android.contentpal.View;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.opentaskspal.predicates.TaskOnList;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -53,7 +54,7 @@ public final class TaskListScoped implements View<TaskContract.Tasks>
 
     @NonNull
     @Override
-    public Cursor rows(@NonNull UriParams uriParams, @NonNull Projection<TaskContract.Tasks> projection, @NonNull Predicate predicate, @NonNull Optional<String> sorting) throws RemoteException
+    public Cursor rows(@NonNull UriParams uriParams, @NonNull Projection<? super TaskContract.Tasks> projection, @NonNull Predicate predicate, @NonNull Optional<String> sorting) throws RemoteException
     {
         return mDelegate.rows(uriParams, projection, new TaskOnList(mTaskListRow, predicate), sorting);
     }

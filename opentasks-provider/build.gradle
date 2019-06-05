@@ -27,8 +27,7 @@ android {
 }
 
 dependencies {
-    api project(':opentasks-contract')
-
+    implementation project(':opentasks-contract')
     implementation deps.datetime
     implementation deps.lib_recur
     implementation deps.jems
