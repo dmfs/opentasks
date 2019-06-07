@@ -27,8 +27,6 @@ import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.RemoteException;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import android.text.format.DateUtils;
 
 import org.dmfs.android.bolts.color.colors.ResourceColor;
@@ -51,6 +49,9 @@ import org.dmfs.tasks.notification.ActionReceiver;
 import org.dmfs.tasks.notification.ActionService;
 import org.dmfs.tasks.notification.signals.Conditional;
 import org.dmfs.tasks.utils.DateFormatter;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 
 /**
@@ -126,6 +127,11 @@ public final class NotifyAction implements TaskAction
                 new Intent(context, ActionReceiver.class).setAction(
                         pin ? ActionService.ACTION_OPEN_TASK : ActionService.ACTION_OPEN_TASK_CANCEL_NOTIFICATION)
                         .setData(taskUri),
+                PendingIntent.FLAG_UPDATE_CURRENT));
+
+        // make sure we un-persist the notification when its cancelled
+        builder.setDeleteIntent(PendingIntent.getBroadcast(context, notificationId,
+                new Intent(context, ActionReceiver.class).setAction(ActionService.ACTION_REMOVE_NOTIFICATION).setData(taskUri),
                 PendingIntent.FLAG_UPDATE_CURRENT));
 
         if (!new TaskIsClosed(data).value())
