@@ -23,8 +23,6 @@ import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.RemoteException;
-import androidx.annotation.NonNull;
-import androidx.core.app.JobIntentService;
 import android.util.Log;
 
 import org.dmfs.android.contentpal.Projection;
@@ -54,9 +52,13 @@ import org.dmfs.tasks.actions.NotifyStickyAction;
 import org.dmfs.tasks.actions.OpenAction;
 import org.dmfs.tasks.actions.PinAction;
 import org.dmfs.tasks.actions.PostUndoAction;
+import org.dmfs.tasks.actions.RemoveNotificationAction;
 import org.dmfs.tasks.actions.TaskAction;
 import org.dmfs.tasks.actions.WipeNotificationAction;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.JobIntentService;
 
 
 /**
@@ -76,6 +78,7 @@ public final class ActionService extends JobIntentService
     public static final String ACTION_UNPIN = "org.dmfs.tasks.intent.UNPIN";
     public static final String ACTION_OPEN_TASK = "org.dmfs.tasks.intent.OPEN_TASK";
     public static final String ACTION_OPEN_TASK_CANCEL_NOTIFICATION = "org.dmfs.tasks.intent.OPEN_CANCEL_TASK";
+    public static final String ACTION_REMOVE_NOTIFICATION = "org.dmfs.tasks.intent.CANCEL_NOTIFICATION";
     public static final String ACTION_NEXT_DAY = "org.dmfs.tasks.intent.ACTION_DAY_CHANGED";
     public static final String ACTION_RENOTIFY = "org.dmfs.tasks.intent.NOTIFY";
     public static final String ACTION_DEFER_1D = "org.dmfs.tasks.action.notification.DELAY_1D";
@@ -163,6 +166,10 @@ public final class ActionService extends JobIntentService
             case ACTION_OPEN_TASK_CANCEL_NOTIFICATION:
                 // just open the task and cancel the notification
                 return new Composite(new OpenAction(), new WipeNotificationAction());
+
+            case ACTION_REMOVE_NOTIFICATION:
+                // remove the notification
+                return new RemoveNotificationAction();
 
             case ACTION_DEFER_1D:
                 // defer the due date and remove notification if not pinned and due date is in the future
