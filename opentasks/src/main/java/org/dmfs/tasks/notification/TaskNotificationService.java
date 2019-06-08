@@ -135,18 +135,18 @@ public class TaskNotificationService extends JobIntentService
                     {
                         if (diff.left().value().taskVersion() != diff.right().value().taskVersion())
                         {
-                            /*
-                             * The task has been modified. If it's pinned we update it.
-                             * Otherwise we remove it if it was pinned before.
-                             */
-                            if (diff.right().value().ongoing())
+                            if (diff.left().value().ongoing() && !diff.right().value().ongoing())
                             {
-                                ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.left().value().task());
-                            }
-                            else if (diff.left().value().ongoing())
-                            {
-                                // task has been unpinned
+                                // task has been unpinned, remove the notification
                                 removeTaskNotification(diff.left().value().task());
+                            }
+                            else
+                            {
+                                // task was updated, also update the notification
+                                // TODO: if the original reason for the notification is no longer true, remove the notification.
+                                // example: the due date of a task with a due notification is moved to the future
+                                // see https://github.com/dmfs/opentasks/issues/400
+                                ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.left().value().task());
                             }
                         }
                     }
