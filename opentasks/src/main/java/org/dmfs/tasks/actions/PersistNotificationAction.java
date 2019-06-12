@@ -23,10 +23,10 @@ import android.net.Uri;
 import android.os.RemoteException;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.opentaskspal.readdata.TaskPin;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
 import org.dmfs.tasks.actions.utils.NotificationPrefs;
 import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.notification.state.RowStateInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,13 +43,17 @@ public final class PersistNotificationAction implements TaskAction
     {
         try
         {
+            RowStateInfo rsi = new RowStateInfo(data);
             new NotificationPrefs(context).next()
                     .edit()
                     .putString(
                             taskUri.toString(),
                             new JSONObject()
                                     .put("version", new TaskVersion(data).value())
-                                    .put("ongoing", new TaskPin(data).value()).toString())
+                                    .put("started", rsi.started())
+                                    .put("due", rsi.due())
+                                    .put("done", rsi.done())
+                                    .put("ongoing", rsi.pinned()).toString())
                     .apply();
         }
         catch (JSONException e)

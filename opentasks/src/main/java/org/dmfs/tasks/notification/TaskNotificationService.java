@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 
-import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.predicates.AnyOf;
 import org.dmfs.android.contentpal.predicates.EqArg;
 import org.dmfs.android.contentpal.predicates.In;
@@ -35,8 +34,11 @@ import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.pair.Pair;
+import org.dmfs.opentaskspal.readdata.EffectiveDueDate;
 import org.dmfs.opentaskspal.readdata.Id;
+import org.dmfs.opentaskspal.readdata.TaskIsClosed;
 import org.dmfs.opentaskspal.readdata.TaskPin;
+import org.dmfs.opentaskspal.readdata.TaskStart;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
 import org.dmfs.opentaskspal.views.TasksView;
 import org.dmfs.tasks.JobIds;
@@ -45,6 +47,7 @@ import org.dmfs.tasks.actions.utils.NotificationPrefs;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.notification.state.PrefState;
 import org.dmfs.tasks.notification.state.RowState;
+import org.dmfs.tasks.notification.state.StateInfo;
 import org.dmfs.tasks.notification.state.TaskNotificationState;
 
 import androidx.annotation.NonNull;
@@ -99,7 +102,7 @@ public class TaskNotificationService extends JobIntentService
                  * Notifications of tasks which no longer exist are removed.
                  * Notifications of tasks which have been pinned are added.
                  * Notifications of tasks which have been unpinned are removed.
-                 * Notifications of tasks which have changed otherwise ae updated.
+                 * Notifications of tasks which have changed otherwise are updated.
                  */
                 String authority = getString(R.string.opentasks_authority);
 
@@ -114,11 +117,12 @@ public class TaskNotificationService extends JobIntentService
                         new Mapped<>(snapShot -> new RowState(authority, snapShot.values()),
                                 new QueryRowSet<>(
                                         new Sorted<>(Tasks._ID, new TasksView(authority, getContentResolver().acquireContentProviderClient(authority))),
-                                        new Composite<>((Projection<Tasks>) Id.PROJECTION, TaskVersion.PROJECTION, TaskPin.PROJECTION),
+                                        new Composite<>(Id.PROJECTION, TaskVersion.PROJECTION, TaskPin.PROJECTION, TaskIsClosed.PROJECTION,
+                                                EffectiveDueDate.PROJECTION, TaskStart.PROJECTION),
                                         new AnyOf(
+                                                // task is either pinned or has a notification
                                                 new EqArg(Tasks.PINNED, 1),
                                                 new In(Tasks._ID, new Mapped<>(p -> ContentUris.parseId(p.task()), currentNotifications))))),
-                        // NOTE due to a bug in diff, the logic is currently reversed
                         (o, o2) -> (int) (ContentUris.parseId(o.task()) - ContentUris.parseId(o2.task()))))
                 {
                     if (!diff.left().isPresent())
@@ -135,17 +139,22 @@ public class TaskNotificationService extends JobIntentService
                     {
                         if (diff.left().value().taskVersion() != diff.right().value().taskVersion())
                         {
-                            if (diff.left().value().ongoing() && !diff.right().value().ongoing())
+                            // the task has been updated -> update the notification if necessary
+                            StateInfo before = diff.left().value().info();
+                            StateInfo now = diff.right().value().info();
+                            if (!now.pinned() && // don't remove pinned notifications
+                                    (before.pinned() // pin was removed
+                                            || before.started() && !now.started() // start was deferred or removed
+                                            || !now.started() && before.due() && !now.due() // due was deferred or removed
+                                            || !before.done() && now.done() // task was closed
+                                    ))
                             {
-                                // task has been unpinned, remove the notification
+                                // notification is obsolete
                                 removeTaskNotification(diff.left().value().task());
                             }
                             else
                             {
                                 // task was updated, also update the notification
-                                // TODO: if the original reason for the notification is no longer true, remove the notification.
-                                // example: the due date of a task with a due notification is moved to the future
-                                // see https://github.com/dmfs/opentasks/issues/400
                                 ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.left().value().task());
                             }
                         }

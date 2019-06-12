@@ -16,25 +16,30 @@
 
 package org.dmfs.tasks.notification.state;
 
-import android.net.Uri;
-
-import androidx.annotation.NonNull;
-
-
 /**
- * The state of a task notification.
- * <p>
- * TODO: refactor! The name is not quite correct and we may be able to generalize the interface.
+ * Gives information about the status of a task with a notification.
  *
  * @author Marten Gajda
  */
-public interface TaskNotificationState
+public interface StateInfo
 {
-    @NonNull
-    Uri task();
+    /**
+     * The task is pinned or was pinned when notified.
+     */
+    boolean pinned();
 
-    int taskVersion();
+    /**
+     * The task is due or was due when notified.
+     */
+    boolean due();
 
-    @NonNull
-    StateInfo info();
+    /**
+     * The task is started or was started when notified.
+     */
+    boolean started();
+
+    /**
+     * The task is done or was done when notified.
+     */
+    boolean done();
 }

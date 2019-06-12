@@ -65,7 +65,7 @@ import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
-import org.dmfs.tasks.utils.Unchecked;
+import org.dmfs.jems.single.adapters.Unchecked;
 import org.dmfs.tasks.utils.colors.DarkenedForStatusBar;
 
 

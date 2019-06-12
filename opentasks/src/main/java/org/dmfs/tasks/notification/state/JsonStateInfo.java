@@ -16,25 +16,52 @@
 
 package org.dmfs.tasks.notification.state;
 
-import android.net.Uri;
+import org.json.JSONObject;
 
 import androidx.annotation.NonNull;
 
 
 /**
- * The state of a task notification.
- * <p>
- * TODO: refactor! The name is not quite correct and we may be able to generalize the interface.
+ * The {@link StateInfo} stored in a {@link JSONObject}.
  *
  * @author Marten Gajda
  */
-public interface TaskNotificationState
+final class JsonStateInfo implements StateInfo
 {
-    @NonNull
-    Uri task();
 
-    int taskVersion();
+    private final JSONObject mObject;
 
-    @NonNull
-    StateInfo info();
+
+    JsonStateInfo(@NonNull JSONObject object)
+    {
+        mObject = object;
+    }
+
+
+    @Override
+    public boolean pinned()
+    {
+        return mObject.optBoolean("ongoing", false);
+    }
+
+
+    @Override
+    public boolean due()
+    {
+        return mObject.optBoolean("due", false);
+    }
+
+
+    @Override
+    public boolean started()
+    {
+        return mObject.optBoolean("started", false);
+    }
+
+
+    @Override
+    public boolean done()
+    {
+        return mObject.optBoolean("done", false);
+    }
 }

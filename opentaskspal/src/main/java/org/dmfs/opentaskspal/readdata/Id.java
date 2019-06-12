@@ -34,7 +34,7 @@ import org.dmfs.jems.single.elementary.ValueSingle;
  */
 public final class Id extends DelegatingSingle<Long>
 {
-    public static final Projection<?> PROJECTION = new SingleColProjection<>(BaseColumns._ID);
+    public static final Projection<BaseColumns> PROJECTION = new SingleColProjection<>(BaseColumns._ID);
 
 
     public Id(@NonNull RowDataSnapshot<?> rowDataSnapshot)

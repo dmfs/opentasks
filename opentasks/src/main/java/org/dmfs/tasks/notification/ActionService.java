@@ -117,7 +117,7 @@ public final class ActionService extends JobIntentService
             for (RowSnapshot<TaskContract.Tasks> snapshot : new QueryRowSet<>(
                     new TasksView(taskUri.getAuthority(), contentProviderClient),
                     new org.dmfs.android.contentpal.projections.Composite<>(
-                            (Projection<TaskContract.Tasks>) Id.PROJECTION,
+                            Id.PROJECTION,
                             EffectiveDueDate.PROJECTION,
                             TaskStart.PROJECTION,
                             TaskPin.PROJECTION,
@@ -148,8 +148,7 @@ public final class ActionService extends JobIntentService
                         // create undo notification
                         new PostUndoAction(),
                         // create delayed action to finish the completion
-                        new DelayedAction(ACTION_FINISH_COMPLETE, UNDO_TIMEOUT_MILLIS)
-                );
+                        new DelayedAction(ACTION_FINISH_COMPLETE, UNDO_TIMEOUT_MILLIS));
 
             case ACTION_PIN_TASK:
                 // just pin, let TaskNotificationService do the rest

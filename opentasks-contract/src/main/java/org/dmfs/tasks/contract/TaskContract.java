@@ -460,7 +460,7 @@ public final class TaskContract
      *
      * @author Marten Gajda <marten@dmfs.org>
      */
-    public interface TaskColumns
+    public interface TaskColumns extends BaseColumns
     {
 
         /**
