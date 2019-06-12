@@ -21,9 +21,10 @@ import android.net.Uri;
 
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.opentaskspal.readdata.Id;
-import org.dmfs.opentaskspal.readdata.TaskPin;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -37,13 +38,14 @@ public final class RowState implements TaskNotificationState
     private final RowDataSnapshot<TaskContract.Tasks> mRow;
 
 
-    public RowState(String authority, RowDataSnapshot<TaskContract.Tasks> row)
+    public RowState(@NonNull String authority, @NonNull RowDataSnapshot<TaskContract.Tasks> row)
     {
         mAuthority = authority;
         mRow = row;
     }
 
 
+    @NonNull
     @Override
     public Uri task()
     {
@@ -58,9 +60,10 @@ public final class RowState implements TaskNotificationState
     }
 
 
+    @NonNull
     @Override
-    public boolean ongoing()
+    public StateInfo info()
     {
-        return new TaskPin(mRow).value();
+        return new RowStateInfo(mRow);
     }
 }

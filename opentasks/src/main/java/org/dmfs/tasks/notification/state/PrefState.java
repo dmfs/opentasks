@@ -18,10 +18,14 @@ package org.dmfs.tasks.notification.state;
 
 import android.net.Uri;
 
-import org.json.JSONException;
+import org.dmfs.jems.single.Single;
+import org.dmfs.jems.single.adapters.Unchecked;
+import org.dmfs.jems.single.elementary.Frozen;
 import org.json.JSONObject;
 
 import java.util.Map;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -32,14 +36,17 @@ import java.util.Map;
 public final class PrefState implements TaskNotificationState
 {
     private final Map.Entry<String, ?> mEntry;
+    private final Single<JSONObject> mStateObject;
 
 
-    public PrefState(Map.Entry<String, ?> entry)
+    public PrefState(@NonNull Map.Entry<String, ?> entry)
     {
         mEntry = entry;
+        mStateObject = new Frozen<>(new Unchecked<>("Could not parse notification JSON object", () -> new JSONObject(entry.getValue().toString())));
     }
 
 
+    @NonNull
     @Override
     public Uri task()
     {
@@ -50,26 +57,14 @@ public final class PrefState implements TaskNotificationState
     @Override
     public int taskVersion()
     {
-        return jsonObject().optInt("version", 0);
+        return mStateObject.value().optInt("version", 0);
     }
 
 
+    @NonNull
     @Override
-    public boolean ongoing()
+    public StateInfo info()
     {
-        return jsonObject().optBoolean("ongoing", false);
-    }
-
-
-    private JSONObject jsonObject()
-    {
-        try
-        {
-            return new JSONObject(mEntry.getValue().toString());
-        }
-        catch (JSONException e)
-        {
-            throw new RuntimeException(String.format("Can't parse JSONObject %s", mEntry.getValue()), e);
-        }
+        return new JsonStateInfo(mStateObject.value());
     }
 }
