@@ -23,7 +23,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.iterables.SingletonIterable;
+import org.dmfs.jems.iterable.composite.Joined;
+import org.dmfs.jems.iterable.decorators.Mapped;
+import org.dmfs.jems.procedure.composite.Batch;
 import org.dmfs.provider.tasks.TaskDatabaseHelper.Tables;
+import org.dmfs.provider.tasks.utils.ResourceArray;
+import org.dmfs.provider.tasks.utils.With;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.SyncState;
@@ -31,6 +37,7 @@ import org.dmfs.tasks.contract.TaskContract.TaskListColumns;
 import org.dmfs.tasks.contract.TaskContract.TaskListSyncColumns;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+import org.dmfs.tasks.provider.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,8 +56,18 @@ public class Utils
     {
         // TODO: Using the TaskContract content uri results in a "Unknown URI content" error message. Using the Tasks content uri instead will break the
         // broadcast receiver. We have to find away around this
-        Intent providerChangedIntent = new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(authority));
-        context.sendBroadcast(providerChangedIntent);
+        // TODO: coalesce fast consecutive broadcasts, a delay of up to 1 second should be acceptable
+
+        new With<>(new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(authority)))
+                .process(providerChangedIntent ->
+                        new Batch<Intent>(context::sendBroadcast)
+                                .process(new Mapped<>(
+                                        packageName -> new Intent(providerChangedIntent).setPackage(packageName),
+                                        // TODO: fow now we hard code 3rd party package names, this should be replaced by some sort or registry
+                                        // see https://github.com/dmfs/opentasks/issues/824
+                                        new Joined<>(
+                                                new SingletonIterable<>(context.getPackageName()),
+                                                new ResourceArray(context, R.array.opentasks_provider_changed_receivers)))));
     }
 
 
