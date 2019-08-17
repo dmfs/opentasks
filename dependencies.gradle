@@ -1,4 +1,4 @@
-def jems_version = '1.23'
+def jems_version = '1.24'
 def contentpal_version = '0.5'
 def androidx_test_runner_version = '1.1.1'
 

@@ -1317,15 +1317,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         super.onEndTransaction(callerIsSyncAdapter);
         if (mChanged.compareAndSet(true, false))
         {
-            Intent providerChangedIntent = new Intent(Intent.ACTION_PROVIDER_CHANGED, TaskContract.getContentUri(mAuthority));
             updateNotifications();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            {
-                // for now we only notify our own package
-                // we'll have to figure out how to do this correctly on Android 8+, e.g. how is it done by CalendarProvider and ContactsProvider
-                providerChangedIntent.setPackage(getContext().getPackageName());
-            }
-            getContext().sendBroadcast(providerChangedIntent);
+            Utils.sendActionProviderChangedBroadCast(getContext(), mAuthority);
         }
 
         if (Boolean.TRUE.equals(mStaleListCreated.get()))
