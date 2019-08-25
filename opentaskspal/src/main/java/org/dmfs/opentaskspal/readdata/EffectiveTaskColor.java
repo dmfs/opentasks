@@ -38,10 +38,10 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class EffectiveTaskColor extends DelegatingColor
 {
-    public static final Projection<Tasks> PROJECTION = new MultiProjection<>(Tasks.TASK_COLOR, Tasks.LIST_COLOR);
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new MultiProjection<>(Tasks.TASK_COLOR, Tasks.LIST_COLOR);
 
 
-    public EffectiveTaskColor(@NonNull RowDataSnapshot<TaskContract.Tasks> rowData)
+    public EffectiveTaskColor(@NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowData)
     {
         super(new SingleColor(
                 new Backed<Color>(

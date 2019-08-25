@@ -33,7 +33,6 @@ import org.dmfs.android.contentpal.operations.BulkDelete;
 import org.dmfs.android.contentpal.operations.BulkUpdate;
 import org.dmfs.android.contentpal.operations.Delete;
 import org.dmfs.android.contentpal.operations.Put;
-import org.dmfs.android.contentpal.operations.Referring;
 import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
@@ -50,6 +49,7 @@ import org.dmfs.opentaskspal.tables.TaskListScoped;
 import org.dmfs.opentaskspal.tables.TaskListsTable;
 import org.dmfs.opentaskspal.tables.TasksTable;
 import org.dmfs.opentaskspal.tasklists.NameData;
+import org.dmfs.opentaskspal.tasks.OriginalInstanceData;
 import org.dmfs.opentaskspal.tasks.OriginalInstanceSyncIdData;
 import org.dmfs.opentaskspal.tasks.StatusData;
 import org.dmfs.opentaskspal.tasks.SyncIdData;
@@ -308,11 +308,11 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
-                new Put<>(task, new TimeData(start, due))
+                new Put<>(task, new TimeData<>(start, due))
 
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(start, due),
+                        new TimeData<>(start, due),
                         new VersionData(0))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -341,12 +341,12 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<>()),
-                new Put<>(task, new TimeData(start, due)),
+                new Put<>(task, new TimeData<>(start, due)),
                 // update the status of the new task
-                new Put<>(task, new StatusData(Tasks.STATUS_COMPLETED))
+                new Put<>(task, new StatusData<>(Tasks.STATUS_COMPLETED))
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(start, due),
+                        new TimeData<>(start, due),
                         new VersionData(1))), // task has been updated once
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -375,14 +375,14 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<>()),
-                new Put<>(task, new TimeData(start, due)),
+                new Put<>(task, new TimeData<>(start, due)),
                 // update the status of the new task
-                new Put<>(task, new StatusData(Tasks.STATUS_COMPLETED)),
+                new Put<>(task, new StatusData<>(Tasks.STATUS_COMPLETED)),
                 // update the title of the new task
                 new Put<>(task, new TitleData("Task Title"))
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(start, due),
+                        new TimeData<>(start, due),
                         new TitleData("Task Title"),
                         new VersionData(2))), // task has been updated twice
                 new AssertRelated<>(
@@ -416,11 +416,11 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
-                new Put<>(task, new TimeData(start, due)),
-                new Put<>(task, new TimeData(startNew, dueNew))
+                new Put<>(task, new TimeData<>(start, due)),
+                new Put<>(task, new TimeData<>(startNew, dueNew))
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(startNew, dueNew),
+                        new TimeData<>(startNew, dueNew),
                         new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -453,11 +453,11 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
-                new Put<>(task, new TimeData(start, due)),
-                new Put<>(task, new TimeData(startNew, dueNew))
+                new Put<>(task, new TimeData<>(start, due)),
+                new Put<>(task, new TimeData<>(startNew, dueNew))
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(startNew, dueNew),
+                        new TimeData<>(startNew, dueNew),
                         new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -487,10 +487,10 @@ public class TaskProviderTest
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
                 new Put<>(task, new TitleData("Test")),
-                new Put<>(task, new TimeData(start, due))
+                new Put<>(task, new TimeData<>(start, due))
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(start, due),
+                        new TimeData<>(start, due),
                         new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -520,11 +520,11 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
-                new Put<>(task, new TimeData(start, duration))
+                new Put<>(task, new TimeData<>(start, duration))
 
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(start, duration),
+                        new TimeData<>(start, duration),
                         new VersionData(0))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -555,13 +555,13 @@ public class TaskProviderTest
 
         assertThat(new Seq<>(
                 new Put<>(taskList, new EmptyRowData<TaskLists>()),
-                new Put<>(task, new TimeData(start, duration)),
+                new Put<>(task, new TimeData<>(start, duration)),
                 // update the task with a the same start in a different time zone
-                new Put<>(task, new TimeData(startNew, duration))
+                new Put<>(task, new TimeData<>(startNew, duration))
 
         ), resultsIn(mClient,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(startNew, duration),
+                        new TimeData<>(startNew, duration),
                         new VersionData(1))),
                 // note that, apart from the time zone, all values stay the same
                 new AssertRelated<>(
@@ -593,18 +593,18 @@ public class TaskProviderTest
 
         queue.enqueue(new Seq<>(
                 new Put<>(taskList, new NameData("list1")),
-                new Put<>(task, new TimeData(start, due))
+                new Put<>(task, new TimeData<>(start, due))
         ));
         queue.flush();
 
         DateTime due2 = due.addDuration(new Duration(1, 0, 2));
 
         assertThat(new SingletonIterable<>(
-                new Put<>(task, new TimeData(start, due2))
+                new Put<>(task, new TimeData<>(start, due2))
 
         ), resultsIn(queue,
                 new Assert<>(task, new Composite<>(
-                        new TimeData(start, due2),
+                        new TimeData<>(start, due2),
                         new VersionData(1))),
                 new AssertRelated<>(
                         new InstanceTable(mAuthority), Instances.TASK_ID, task,
@@ -732,7 +732,7 @@ public class TaskProviderTest
         assertThat(new SingletonIterable<>(
                 new Put<>(exceptionTask, new Composite<>(
                         new TitleData("task1exception"),
-                        new OriginalInstanceSyncIdData("syncId1"))
+                        new OriginalInstanceSyncIdData("syncId1", new DateTime(0)))
                 )
 
         ), resultsIn(queue,
@@ -759,20 +759,23 @@ public class TaskProviderTest
                 new Put<>(taskList, new NameData("list1")),
                 new Put<>(task, new Composite<>(
                         new TitleData("task1"),
-                        new SyncIdData("syncId1"))
-                )
+                        new SyncIdData("syncId1")))
         ));
         queue.flush();
 
+        DateTime now = DateTime.now();
+
         assertThat(new SingletonIterable<>(
-                new Referring<>(task, Tasks.ORIGINAL_INSTANCE_ID,
-                        new Put<>(exceptionTask, new TitleData("task1exception")))
+                new Put<>(exceptionTask,
+                        new Composite<>(
+                                new TitleData("task1exception"),
+                                new OriginalInstanceData(task, now)))
 
         ), resultsIn(queue,
                 new AssertRelated<>(new TasksTable(mAuthority), Tasks.ORIGINAL_INSTANCE_ID, task,
                         new Composite<>(
                                 new TitleData("task1exception"),
-                                new OriginalInstanceSyncIdData("syncId1")
+                                new OriginalInstanceSyncIdData("syncId1", now)
                         ))
         ));
     }

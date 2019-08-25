@@ -48,7 +48,7 @@ public final class CancelDelayedAction implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         ((AlarmManager) context.getSystemService(Context.ALARM_SERVICE)).cancel(
                 PendingIntent.getBroadcast(

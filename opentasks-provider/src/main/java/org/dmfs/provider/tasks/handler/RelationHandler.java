@@ -72,6 +72,15 @@ public class RelationHandler extends PropertyHandler
 
 
     @Override
+    public ContentValues cloneForNewTask(long newTaskId, ContentValues values)
+    {
+        ContentValues newValues = super.cloneForNewTask(newTaskId, values);
+        newValues.remove(Relation.RELATED_CONTENT_URI);
+        return newValues;
+    }
+
+
+    @Override
     public int update(SQLiteDatabase db, long taskId, long propertyId, ContentValues values, Cursor oldValues, boolean isSyncAdapter)
     {
         validateValues(db, taskId, propertyId, false, values, isSyncAdapter);
@@ -250,11 +259,11 @@ public class RelationHandler extends PropertyHandler
         }
         // else if (type == Relation.RELTYPE_SIBLING)
         // {
-            /*
-             * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
-             *
-             * FIXME: properly handle this case
-             */
+        /*
+         * This was a link to a sibling, since it's no longer our sibling either it or we're orphaned now We won't know unless we check all relations.
+         *
+         * FIXME: properly handle this case
+         */
         // }
     }
 }

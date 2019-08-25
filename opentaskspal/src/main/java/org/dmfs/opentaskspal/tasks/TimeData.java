@@ -34,7 +34,7 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class TimeData implements RowData<TaskContract.Tasks>
+public final class TimeData<T extends TaskContract.TaskColumns> implements RowData<T>
 {
     private final DateTime mStart;
     private final Optional<DateTime> mDue;

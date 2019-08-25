@@ -29,7 +29,7 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Marten Gajda
  */
-public final class PinnedData implements RowData<TaskContract.Tasks>
+public final class PinnedData<T extends TaskContract.TaskColumns> implements RowData<T>
 {
     private final boolean mPinned;
 

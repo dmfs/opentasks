@@ -29,8 +29,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import android.widget.RemoteViews;
 
+import org.dmfs.android.bolts.color.colors.ResourceColor;
 import org.dmfs.android.contentpal.RowDataSnapshot;
-import org.dmfs.opentaskspal.readdata.EffectiveTaskColor;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.notification.ActionReceiver;
@@ -51,7 +51,7 @@ public final class PostUndoAction implements TaskAction
 
 
     @Override
-    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> data, Uri taskUri) throws RemoteException, OperationApplicationException
+    public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> data, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         int id = (int) ContentUris.parseId(taskUri);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, ActionService.CHANNEL_DUE_DATES);
@@ -84,7 +84,7 @@ public final class PostUndoAction implements TaskAction
             // don't execute this on Android 4, otherwise no notification will show up
             builder.setGroup(GROUP_UNDO);
         }
-        builder.setColor(new EffectiveTaskColor(data).argb());
+        builder.setColor(new ResourceColor(context, R.color.primary).argb());
 
         NotificationManagerCompat.from(context).notify("tasks.undo", id, builder.build());
     }

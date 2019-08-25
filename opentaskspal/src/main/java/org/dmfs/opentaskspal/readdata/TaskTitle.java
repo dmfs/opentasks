@@ -23,6 +23,7 @@ import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.decorators.DelegatingOptional;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -33,10 +34,10 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskTitle extends DelegatingOptional<CharSequence>
 {
-    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.TITLE);
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new SingleColProjection<>(Tasks.TITLE);
 
 
-    public TaskTitle(@NonNull RowDataSnapshot<Tasks> rowDataSnapshot)
+    public TaskTitle(@NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowDataSnapshot)
     {
         super(rowDataSnapshot.data(Tasks.TITLE, s -> s));
     }

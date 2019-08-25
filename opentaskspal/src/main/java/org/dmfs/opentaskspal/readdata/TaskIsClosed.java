@@ -24,6 +24,7 @@ import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -34,10 +35,10 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskIsClosed extends DelegatingSingle<Boolean>
 {
-    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.IS_CLOSED);
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new SingleColProjection<>(Tasks.IS_CLOSED);
 
 
-    public TaskIsClosed(@NonNull RowDataSnapshot<Tasks> rowDataSnapshot)
+    public TaskIsClosed(@NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowDataSnapshot)
     {
         super(new Backed<>(rowDataSnapshot.data(Tasks.IS_CLOSED, "1"::equals), false));
     }

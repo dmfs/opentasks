@@ -776,8 +776,8 @@ public final class TaskContract
         String ORIGINAL_INSTANCE_ID = "original_instance_id";
 
         /**
-         * The time in milliseconds since the Epoch of the original instance that is overridden by this instance or <code>null</code> if this task is not an
-         * exception.
+         * The time in milliseconds since the Epoch of the original instance that is overridden by this instance or <code>null</code> if this task is not a
+         * recurring instance.
          * <p>
          * Value: Long
          * </p>

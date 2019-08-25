@@ -139,6 +139,17 @@ public abstract class PropertyHandler
     protected void updateFTSEntry(SQLiteDatabase db, long taskId, long propertyId, String text)
     {
         FTSDatabaseHelper.updatePropertyFTSEntry(db, taskId, propertyId, text);
-
     }
+
+
+    public ContentValues cloneForNewTask(long newTaskId, ContentValues values)
+    {
+        ContentValues newValues = new ContentValues(values);
+        newValues.remove(Properties.PROPERTY_ID);
+        newValues.put(Properties.TASK_ID, newTaskId);
+        return newValues;
+    }
+
+
+    ;
 }

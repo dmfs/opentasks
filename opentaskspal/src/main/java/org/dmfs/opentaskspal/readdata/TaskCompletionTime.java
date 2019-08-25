@@ -26,6 +26,7 @@ import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.jems.optional.decorators.Mapped;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -36,12 +37,12 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskCompletionTime extends DelegatingOptional<DateTime>
 {
-    public static final Projection<Tasks> PROJECTION = new Composite<>(
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new Composite<>(
             new SingleColProjection<>(Tasks.COMPLETED),
             EffectiveTimezone.PROJECTION);
 
 
-    public TaskCompletionTime(@NonNull final RowDataSnapshot<Tasks> rowData)
+    public TaskCompletionTime(@NonNull final RowDataSnapshot<? extends TaskContract.TaskColumns> rowData)
     {
         super(new Mapped<>(
                 timeStamp -> new DateTime(timeStamp).shiftTimeZone(new EffectiveTimezone(rowData).value()),

@@ -29,6 +29,6 @@ public final class CompleteAction extends DelegatingTaskAction
 {
     public CompleteAction()
     {
-        super(new UpdateAction((snapshot) -> new StatusData(TaskContract.Tasks.STATUS_COMPLETED)));
+        super(new UpdateAction((snapshot) -> new StatusData<>(TaskContract.Tasks.STATUS_COMPLETED)));
     }
 }

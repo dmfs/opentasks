@@ -30,8 +30,7 @@ import androidx.annotation.NonNull;
  */
 public interface TaskNotificationState
 {
-    @NonNull
-    Uri task();
+    Uri instance();
 
     int taskVersion();
 

@@ -500,8 +500,7 @@ public class TaskListFragment extends SupportFragment
                 return;
             }
 
-            // TODO For now we get the id of the task, not the instance, once we support recurrence we'll have to change that, use instance URI that time
-            Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), (long) TaskFieldAdapters.INSTANCE_TASK_ID.get(cursor));
+            Uri taskUri = ContentUris.withAppendedId(Instances.getContentUri(mAuthority), (long) TaskFieldAdapters.TASK_ID.get(cursor));
             Color taskListColor = new ValueColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
             mCallbacks.onItemSelected(taskUri, taskListColor, force, mInstancePosition);
         }
@@ -703,42 +702,38 @@ public class TaskListFragment extends SupportFragment
 
             if (cursor != null)
             {
-                // TODO: for now we get the id of the task, not the instance, once we support recurrence we'll have to change that
-                Long taskId = cursor.getLong(cursor.getColumnIndex(Instances.TASK_ID));
+                long instanceId = cursor.getLong(cursor.getColumnIndex(Instances._ID));
 
-                if (taskId != null)
+                boolean closed = cursor.getLong(cursor.getColumnIndex(Instances.IS_CLOSED)) > 0;
+                String title = cursor.getString(cursor.getColumnIndex(Instances.TITLE));
+                // TODO: use the instance URI once we support recurrence
+                Uri taskUri = ContentUris.withAppendedId(Instances.getContentUri(mAuthority), instanceId);
+
+                if (direction == FlingDetector.RIGHT_FLING)
                 {
-                    boolean closed = cursor.getLong(cursor.getColumnIndex(Instances.IS_CLOSED)) > 0;
-                    String title = cursor.getString(cursor.getColumnIndex(Instances.TITLE));
-                    // TODO: use the instance URI once we support recurrence
-                    Uri taskUri = ContentUris.withAppendedId(Tasks.getContentUri(mAuthority), taskId);
-
-                    if (direction == FlingDetector.RIGHT_FLING)
+                    if (closed)
                     {
-                        if (closed)
-                        {
-                            removeTask(taskUri, title);
-                            // we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
+                        removeTask(taskUri, title);
+                        // we do not know for sure if the task has been removed since the user is asked for confirmation first, so return false
 
-                            return false;
+                        return false;
 
-                        }
-                        else
-                        {
-                            return setCompleteTask(taskUri, title, true);
-                        }
                     }
-                    else if (direction == FlingDetector.LEFT_FLING)
+                    else
                     {
-                        if (closed)
-                        {
-                            return setCompleteTask(taskUri, title, false);
-                        }
-                        else
-                        {
-                            openTaskEditor(taskUri, cursor.getString(cursor.getColumnIndex(Instances.ACCOUNT_TYPE)));
-                            return false;
-                        }
+                        return setCompleteTask(taskUri, title, true);
+                    }
+                }
+                else if (direction == FlingDetector.LEFT_FLING)
+                {
+                    if (closed)
+                    {
+                        return setCompleteTask(taskUri, title, false);
+                    }
+                    else
+                    {
+                        openTaskEditor(taskUri, cursor.getString(cursor.getColumnIndex(Instances.ACCOUNT_TYPE)));
+                        return false;
                     }
                 }
             }

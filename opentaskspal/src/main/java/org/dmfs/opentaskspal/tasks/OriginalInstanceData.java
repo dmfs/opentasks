@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2018 dmfs GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,28 +16,28 @@
 
 package org.dmfs.opentaskspal.tasks;
 
-import androidx.annotation.NonNull;
-
 import org.dmfs.android.contentpal.RowData;
-import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
+import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
+import org.dmfs.android.contentpal.rowdata.Referring;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 
+import androidx.annotation.NonNull;
+
 
 /**
- * {@link RowData} for adding {@link TaskContract.Tasks#ORIGINAL_INSTANCE_SYNC_ID}
+ * {@link RowData} of an instance override.
  *
- * @author Gabor Keszthelyi
+ * @author Marten Gajda
  */
-public final class OriginalInstanceSyncIdData extends DelegatingRowData<TaskContract.Tasks>
+public final class OriginalInstanceData extends DelegatingRowData<TaskContract.Tasks>
 {
-    public OriginalInstanceSyncIdData(@NonNull CharSequence originalInstanceSyncId, DateTime originalTime)
+    public OriginalInstanceData(@NonNull RowSnapshot originalTask, DateTime originalTime)
     {
-        // TODO CharSequenceRowData allows null so this class wouldn't fail with that but erase the value
         super(new Composite<>(
-                new CharSequenceRowData<>(TaskContract.Tasks.ORIGINAL_INSTANCE_SYNC_ID, originalInstanceSyncId),
+                new Referring<>(TaskContract.Tasks.ORIGINAL_INSTANCE_ID, originalTask),
                 (transactionContext, builder) -> builder.withValue(TaskContract.Tasks.ORIGINAL_INSTANCE_TIME, originalTime.getTimestamp())));
     }
 

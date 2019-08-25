@@ -35,10 +35,10 @@ import androidx.annotation.NonNull;
 public final class RowState implements TaskNotificationState
 {
     private final String mAuthority;
-    private final RowDataSnapshot<TaskContract.Tasks> mRow;
+    private final RowDataSnapshot<? extends TaskContract.Instances> mRow;
 
 
-    public RowState(@NonNull String authority, @NonNull RowDataSnapshot<TaskContract.Tasks> row)
+    public RowState(@NonNull String authority, @NonNull RowDataSnapshot<? extends TaskContract.Instances> row)
     {
         mAuthority = authority;
         mRow = row;
@@ -47,9 +47,9 @@ public final class RowState implements TaskNotificationState
 
     @NonNull
     @Override
-    public Uri task()
+    public Uri instance()
     {
-        return ContentUris.withAppendedId(TaskContract.Tasks.getContentUri(mAuthority), new Id(mRow).value());
+        return ContentUris.withAppendedId(TaskContract.Instances.getContentUri(mAuthority), new Id(mRow).value());
     }
 
 

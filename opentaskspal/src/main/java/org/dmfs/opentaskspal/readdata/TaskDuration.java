@@ -24,6 +24,7 @@ import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.rfc5545.Duration;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -34,10 +35,10 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskDuration extends DelegatingOptional<Duration>
 {
-    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.DURATION);
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new SingleColProjection<>(Tasks.DURATION);
 
 
-    public TaskDuration(@NonNull RowDataSnapshot<Tasks> rowData)
+    public TaskDuration(@NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowData)
     {
         super(rowData.data(Tasks.DURATION, Duration::parse));
     }

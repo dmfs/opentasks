@@ -47,7 +47,7 @@ public final class DueDataTest
     {
         DateTime due = DateTime.now();
 
-        assertThat(new DueData(due),
+        assertThat(new DueData<>(due),
                 builds(
                         withValuesOnly(
                                 containing(Tasks.DUE, due.getTimestamp()),
@@ -70,7 +70,7 @@ public final class DueDataTest
     {
         DateTime due = DateTime.now().shiftTimeZone(TimeZone.getTimeZone("GMT+4"));
 
-        assertThat(new DueData(due),
+        assertThat(new DueData<>(due),
                 builds(
                         withValuesOnly(
                                 containing(Tasks.DUE, due.getTimestamp()),
@@ -93,7 +93,7 @@ public final class DueDataTest
     {
         DateTime due = DateTime.now().toAllDay();
 
-        assertThat(new DueData(due),
+        assertThat(new DueData<>(due),
                 builds(
                         withValuesOnly(
                                 containing(Tasks.DUE, due.getTimestamp()),

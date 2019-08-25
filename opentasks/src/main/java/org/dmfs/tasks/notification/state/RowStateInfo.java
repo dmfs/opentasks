@@ -36,10 +36,10 @@ import androidx.annotation.NonNull;
  */
 public final class RowStateInfo implements StateInfo
 {
-    private final RowDataSnapshot<TaskContract.Tasks> mRow;
+    private final RowDataSnapshot<? extends TaskContract.Instances> mRow;
 
 
-    public RowStateInfo(@NonNull RowDataSnapshot<TaskContract.Tasks> row)
+    public RowStateInfo(@NonNull RowDataSnapshot<? extends TaskContract.Instances> row)
     {
         mRow = row;
     }

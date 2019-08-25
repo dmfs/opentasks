@@ -42,7 +42,7 @@ public abstract class DelegatingTaskAction implements TaskAction
     }
 
 
-    public final void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Tasks> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
+    public final void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri) throws RemoteException, OperationApplicationException
     {
         mDelegate.execute(context, contentProviderClient, rowSnapshot, taskUri);
     }

@@ -30,10 +30,10 @@ import org.dmfs.tasks.contract.TaskContract;
 /**
  * @author Marten Gajda
  */
-public final class NotificationEnabled implements BiFunction<Context, RowDataSnapshot<TaskContract.Tasks>, Boolean>
+public final class NotificationEnabled implements BiFunction<Context, RowDataSnapshot<? extends TaskContract.TaskColumns>, Boolean>
 {
     @Override
-    public Boolean value(Context context, RowDataSnapshot<TaskContract.Tasks> snapshot)
+    public Boolean value(Context context, RowDataSnapshot<? extends TaskContract.TaskColumns> snapshot)
     {
         if (Build.VERSION.SDK_INT >= 26)
         {

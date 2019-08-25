@@ -26,11 +26,12 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 
+import org.dmfs.provider.tasks.model.CursorContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
+import org.dmfs.provider.tasks.model.InstanceAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.tasks.Instantiating;
 import org.dmfs.rfc5545.DateTime;
@@ -90,25 +91,25 @@ public enum ContentOperation
             String nowString = Long.toString(now.getInstance());
 
             // load all tasks that have started or became due since the last time we've shown a notification.
-            Cursor taskCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, "((" + TaskContract.Instances.INSTANCE_DUE_SORTING + ">? and "
+            Cursor instancesCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, "((" + TaskContract.Instances.INSTANCE_DUE_SORTING + ">? and "
                     + TaskContract.Instances.INSTANCE_DUE_SORTING + "<=?) or (" + TaskContract.Instances.INSTANCE_START_SORTING + ">? and "
                     + TaskContract.Instances.INSTANCE_START_SORTING + "<=?)) and " + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] {
                     lastAlarmString, nowString, lastAlarmString, nowString }, null, null, null);
 
             try
             {
-                while (taskCursor.moveToNext())
+                while (instancesCursor.moveToNext())
                 {
-                    TaskAdapter task = new CursorContentValuesTaskAdapter(TaskAdapter.INSTANCE_TASK_ID.getFrom(taskCursor), taskCursor, null);
+                    InstanceAdapter task = new CursorContentValuesInstanceAdapter(InstanceAdapter._ID.getFrom(instancesCursor), instancesCursor, null);
 
-                    DateTime instanceDue = task.valueOf(TaskAdapter.INSTANCE_DUE);
+                    DateTime instanceDue = task.valueOf(InstanceAdapter.INSTANCE_DUE);
                     if (instanceDue != null && !instanceDue.isFloating())
                     {
                         // make sure we compare instances in local time
                         instanceDue = instanceDue.shiftTimeZone(localTimeZone);
                     }
 
-                    DateTime instanceStart = task.valueOf(TaskAdapter.INSTANCE_START);
+                    DateTime instanceStart = task.valueOf(InstanceAdapter.INSTANCE_START);
                     if (instanceStart != null && !instanceStart.isFloating())
                     {
                         // make sure we compare instances in local time
@@ -118,20 +119,18 @@ public enum ContentOperation
                     if (instanceDue != null && lastAlarm.getInstance() < instanceDue.getInstance() && instanceDue.getInstance() <= now.getInstance())
                     {
                         // this task became due since the last alarm, send a due broadcast
-                        sendBroadcast(context, TaskContract.ACTION_BROADCAST_TASK_DUE, task.uri(uri.getAuthority()), instanceDue,
-                                task.valueOf(TaskAdapter.TITLE));
+                        sendBroadcast(context, TaskContract.ACTION_BROADCAST_TASK_DUE, task.uri(uri.getAuthority()));
                     }
                     else if (instanceStart != null && lastAlarm.getInstance() < instanceStart.getInstance() && instanceStart.getInstance() <= now.getInstance())
                     {
                         // this task has started since the last alarm, send a start broadcast
-                        sendBroadcast(context, TaskContract.ACTION_BROADCAST_TASK_STARTING, task.uri(uri.getAuthority()), instanceStart,
-                                task.valueOf(TaskAdapter.TITLE));
+                        sendBroadcast(context, TaskContract.ACTION_BROADCAST_TASK_STARTING, task.uri(uri.getAuthority()));
                     }
                 }
             }
             finally
             {
-                taskCursor.close();
+                instancesCursor.close();
             }
 
             // all notifications up to now have been triggered
@@ -160,7 +159,7 @@ public enum ContentOperation
 
 
         /**
-         * Sends a notification broadcast for a task that has started or became due.
+         * Sends a notification broadcast for a task instance that has started or became due.
          *
          * @param context
          *         A {@link Context}.
@@ -168,27 +167,13 @@ public enum ContentOperation
          *         The broadcast action.
          * @param uri
          *         The task uri.
-         * @param datetime
-         *         The datetime to add.
-         * @param title
-         *         The task title.
          */
-        private void sendBroadcast(Context context, String action, Uri uri, DateTime datetime, String title)
+        private void sendBroadcast(Context context, String action, Uri uri)
         {
             Intent intent = new Intent(action);
             intent.setData(uri);
-            intent.putExtra(TaskContract.EXTRA_TASK_TIMESTAMP, datetime.getTimestamp());
-            intent.putExtra(TaskContract.EXTRA_TASK_ALLDAY, datetime.isAllDay());
-            if (!datetime.isFloating())
-            {
-                intent.putExtra(TaskContract.EXTRA_TASK_TIMEZONE, datetime.getTimeZone().getID());
-            }
-            intent.putExtra(TaskContract.EXTRA_TASK_TITLE, title);
-            if (Build.VERSION.SDK_INT >= 26)
-            {
-                // for now only notify our own package
-                intent.setPackage(context.getPackageName());
-            }
+            // only notify our own package
+            intent.setPackage(context.getPackageName());
             context.sendBroadcast(intent);
         }
     }),
@@ -218,15 +203,16 @@ public enum ContentOperation
             DateTime nextAlarm = null;
 
             // find the next task that starts
-            Cursor nextTaskStartCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, TaskContract.Instances.INSTANCE_START_SORTING + ">? and "
+            Cursor nextInstanceStartCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, TaskContract.Instances.INSTANCE_START_SORTING + ">? and "
                             + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] { lastAlarmString }, null, null,
                     TaskContract.Instances.INSTANCE_START_SORTING, "1");
 
             try
             {
-                if (nextTaskStartCursor.moveToNext())
+                if (nextInstanceStartCursor.moveToNext())
                 {
-                    TaskAdapter task = new CursorContentValuesTaskAdapter(TaskAdapter.INSTANCE_TASK_ID.getFrom(nextTaskStartCursor), nextTaskStartCursor, null);
+                    TaskAdapter task = new CursorContentValuesTaskAdapter(TaskAdapter.INSTANCE_TASK_ID.getFrom(nextInstanceStartCursor),
+                            nextInstanceStartCursor, null);
                     nextAlarm = task.valueOf(TaskAdapter.INSTANCE_START);
                     if (!nextAlarm.isFloating())
                     {
@@ -236,19 +222,20 @@ public enum ContentOperation
             }
             finally
             {
-                nextTaskStartCursor.close();
+                nextInstanceStartCursor.close();
             }
 
             // find the next task that's due
-            Cursor nextTaskDueCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, TaskContract.Instances.INSTANCE_DUE_SORTING + ">? and "
+            Cursor nextInstanceDueCursor = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, null, TaskContract.Instances.INSTANCE_DUE_SORTING + ">? and "
                             + Instances.IS_CLOSED + " = 0 and " + Tasks._DELETED + "=0", new String[] { lastAlarmString }, null, null,
                     TaskContract.Instances.INSTANCE_DUE_SORTING, "1");
 
             try
             {
-                if (nextTaskDueCursor.moveToNext())
+                if (nextInstanceDueCursor.moveToNext())
                 {
-                    TaskAdapter task = new CursorContentValuesTaskAdapter(TaskAdapter.INSTANCE_TASK_ID.getFrom(nextTaskDueCursor), nextTaskDueCursor, null);
+                    TaskAdapter task = new CursorContentValuesTaskAdapter(TaskAdapter.INSTANCE_TASK_ID.getFrom(nextInstanceDueCursor), nextInstanceDueCursor,
+                            null);
                     DateTime nextDue = task.valueOf(TaskAdapter.INSTANCE_DUE);
                     if (!nextDue.isFloating())
                     {
@@ -263,7 +250,7 @@ public enum ContentOperation
             }
             finally
             {
-                nextTaskDueCursor.close();
+                nextInstanceDueCursor.close();
             }
 
             if (nextAlarm != null)

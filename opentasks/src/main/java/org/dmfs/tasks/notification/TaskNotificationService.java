@@ -40,10 +40,11 @@ import org.dmfs.opentaskspal.readdata.TaskIsClosed;
 import org.dmfs.opentaskspal.readdata.TaskPin;
 import org.dmfs.opentaskspal.readdata.TaskStart;
 import org.dmfs.opentaskspal.readdata.TaskVersion;
-import org.dmfs.opentaskspal.views.TasksView;
+import org.dmfs.opentaskspal.views.InstancesView;
 import org.dmfs.tasks.JobIds;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.actions.utils.NotificationPrefs;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.notification.state.PrefState;
 import org.dmfs.tasks.notification.state.RowState;
@@ -62,7 +63,6 @@ import androidx.core.app.NotificationManagerCompat;
  */
 public class TaskNotificationService extends JobIntentService
 {
-
     public static void enqueueWork(@NonNull Context context, @NonNull Intent work)
     {
         enqueueWork(context, TaskNotificationService.class, JobIds.NOTIFICATION_SERVICE, work);
@@ -107,7 +107,7 @@ public class TaskNotificationService extends JobIntentService
                 String authority = getString(R.string.opentasks_authority);
 
                 Iterable<TaskNotificationState> currentNotifications = new org.dmfs.tasks.utils.Sorted<>(
-                        (o, o2) -> (int) (ContentUris.parseId(o.task()) - ContentUris.parseId(o2.task())),
+                        (o, o2) -> (int) (ContentUris.parseId(o.instance()) - ContentUris.parseId(o2.instance())),
                         new Mapped<>(
                                 PrefState::new,
                                 mNotificationPrefs.getAll().entrySet()));
@@ -116,24 +116,25 @@ public class TaskNotificationService extends JobIntentService
                         currentNotifications,
                         new Mapped<>(snapShot -> new RowState(authority, snapShot.values()),
                                 new QueryRowSet<>(
-                                        new Sorted<>(Tasks._ID, new TasksView(authority, getContentResolver().acquireContentProviderClient(authority))),
+                                        new Sorted<>(TaskContract.Instances._ID,
+                                                new InstancesView<>(authority, getContentResolver().acquireContentProviderClient(authority))),
                                         new Composite<>(Id.PROJECTION, TaskVersion.PROJECTION, TaskPin.PROJECTION, TaskIsClosed.PROJECTION,
                                                 EffectiveDueDate.PROJECTION, TaskStart.PROJECTION),
                                         new AnyOf(
                                                 // task is either pinned or has a notification
                                                 new EqArg(Tasks.PINNED, 1),
-                                                new In(Tasks._ID, new Mapped<>(p -> ContentUris.parseId(p.task()), currentNotifications))))),
-                        (o, o2) -> (int) (ContentUris.parseId(o.task()) - ContentUris.parseId(o2.task()))))
+                                                new In(Tasks._ID, new Mapped<>(p -> ContentUris.parseId(p.instance()), currentNotifications))))),
+                        (o, o2) -> (int) (ContentUris.parseId(o.instance()) - ContentUris.parseId(o2.instance()))))
                 {
                     if (!diff.left().isPresent())
                     {
                         // new task not notified yet, must be pinned
-                        ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.right().value().task());
+                        ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.right().value().instance());
                     }
                     else if (!diff.right().isPresent())
                     {
                         // task no longer present, remove notification
-                        removeTaskNotification(diff.left().value().task());
+                        removeTaskNotification(diff.left().value().instance());
                     }
                     else
                     {
@@ -150,12 +151,12 @@ public class TaskNotificationService extends JobIntentService
                                     ))
                             {
                                 // notification is obsolete
-                                removeTaskNotification(diff.left().value().task());
+                                removeTaskNotification(diff.left().value().instance());
                             }
                             else
                             {
                                 // task was updated, also update the notification
-                                ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.left().value().task());
+                                ActionService.startAction(this, ActionService.ACTION_RENOTIFY, diff.left().value().instance());
                             }
                         }
                     }

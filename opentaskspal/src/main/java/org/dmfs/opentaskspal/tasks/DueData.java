@@ -30,7 +30,7 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class DueData implements RowData<TaskContract.Tasks>
+public final class DueData<T extends TaskContract.TaskColumns> implements RowData<T>
 {
     private final DateTime mDue;
 

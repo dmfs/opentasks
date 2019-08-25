@@ -24,6 +24,7 @@ import org.dmfs.android.contentpal.projections.SingleColProjection;
 import org.dmfs.jems.single.Single;
 import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.jems.single.decorators.DelegatingSingle;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 
 
@@ -34,10 +35,10 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public final class TaskVersion extends DelegatingSingle<Integer>
 {
-    public static final Projection<Tasks> PROJECTION = new SingleColProjection<>(Tasks.VERSION);
+    public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new SingleColProjection<>(Tasks.VERSION);
 
 
-    public TaskVersion(@NonNull RowDataSnapshot<Tasks> rowDataSnapshot)
+    public TaskVersion(@NonNull RowDataSnapshot<? extends TaskContract.TaskColumns> rowDataSnapshot)
     {
         super(new Backed<>(rowDataSnapshot.data(Tasks.VERSION, Integer::parseInt), 0));
     }

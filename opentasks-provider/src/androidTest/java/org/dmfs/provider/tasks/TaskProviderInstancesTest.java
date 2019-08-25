@@ -30,9 +30,10 @@ import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.operations.Assert;
 import org.dmfs.android.contentpal.operations.BulkAssert;
 import org.dmfs.android.contentpal.operations.BulkDelete;
+import org.dmfs.android.contentpal.operations.BulkUpdate;
 import org.dmfs.android.contentpal.operations.Counted;
-import org.dmfs.android.contentpal.operations.Delete;
 import org.dmfs.android.contentpal.operations.Put;
+import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
 import org.dmfs.android.contentpal.rowdata.Composite;
@@ -57,6 +58,7 @@ import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -123,6 +125,7 @@ public class TaskProviderInstancesTest
     /**
      * Create a single instance.
      */
+    @Ignore("Inserting instances is currently unsupported.")
     @Test
     public void testInsertSingleInstance()
     {
@@ -158,15 +161,18 @@ public class TaskProviderInstancesTest
     public void testUpdateSingleInstance()
     {
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
-        RowSnapshot<Instances> instance = new VirtualRowSnapshot<>(new InstanceTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TasksTable(mAuthority));
 
         assertThat(new Seq<>(
                 // create a local list
                 new Put<>(taskList, new NameData("list1")),
                 // insert a new task straight into the instances table
-                new Put<>(instance, new Referring<>(Tasks.LIST_ID, taskList, new CharSequenceRowData<>(Tasks.TITLE, "task1"))),
+                new Put<>(task, new Referring<>(Tasks.LIST_ID, taskList, new CharSequenceRowData<>(Tasks.TITLE, "task1"))),
                 // update the instance
-                new Put<>(instance, new CharSequenceRowData<>(Tasks.TITLE, "Updated"))
+                new BulkUpdate<>(
+                        new InstanceTable(mAuthority),
+                        new CharSequenceRowData<>(Tasks.TITLE, "Updated"),
+                        new ReferringTo<>(Instances.TASK_ID, task))
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
                 // the task list contains exactly one task with the title "Updated"
@@ -177,9 +183,12 @@ public class TaskProviderInstancesTest
                 // the instances table contains one instance
                 new Counted<>(1, new BulkAssert<>(new InstanceTable(mAuthority))),
                 // the instances table contains the given instance
-                new Assert<>(instance, new Composite<>(
-                        new InstanceTestData(0),
-                        new CharSequenceRowData<>(Tasks.TITLE, "Updated")))));
+                new Counted<>(1, new BulkAssert<>(
+                        new InstanceTable(mAuthority),
+                        new Composite<>(
+                                new InstanceTestData(0),
+                                new CharSequenceRowData<>(Tasks.TITLE, "Updated")),
+                        new ReferringTo<>(Instances.TASK_ID, task)))));
     }
 
 
@@ -190,15 +199,18 @@ public class TaskProviderInstancesTest
     public void testCompleteSingleInstance()
     {
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
-        RowSnapshot<Instances> instance = new VirtualRowSnapshot<>(new InstanceTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TasksTable(mAuthority));
 
         assertThat(new Seq<>(
                 // create a local list
                 new Put<>(taskList, new NameData("list1")),
                 // insert a new task straight into the instances table
-                new Put<>(instance, new Referring<>(Tasks.LIST_ID, taskList, new CharSequenceRowData<>(Tasks.TITLE, "task1"))),
+                new Put<>(task, new Referring<>(Tasks.LIST_ID, taskList, new CharSequenceRowData<>(Tasks.TITLE, "task1"))),
                 // update the instance status
-                new Put<>(instance, (transactionContext, builder) -> builder.withValue(Tasks.STATUS, Tasks.STATUS_COMPLETED))
+                new BulkUpdate<>(
+                        new InstanceTable(mAuthority),
+                        (transactionContext, builder) -> builder.withValue(Tasks.STATUS, Tasks.STATUS_COMPLETED),
+                        new ReferringTo<>(Instances.TASK_ID, task))
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
                 // the task list contains exactly one task with the title "Updated"
@@ -209,9 +221,12 @@ public class TaskProviderInstancesTest
                 // the instances table contains one instance
                 new Counted<>(1, new BulkAssert<>(new InstanceTable(mAuthority))),
                 // the instances table contains the given instance
-                new Assert<>(instance, new Composite<>(
-                        new InstanceTestData(-1),
-                        new CharSequenceRowData<>(Tasks.TITLE, "task1")))));
+                new Counted<>(1, new BulkAssert<>(
+                        new InstanceTable(mAuthority),
+                        new Composite<>(
+                                new InstanceTestData(-1),
+                                new CharSequenceRowData<>(Tasks.TITLE, "task1")),
+                        new ReferringTo<>(Instances.TASK_ID, task)))));
     }
 
 
@@ -222,15 +237,15 @@ public class TaskProviderInstancesTest
     public void testDeleteSingleInstance()
     {
         RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
-        RowSnapshot<Instances> instance = new VirtualRowSnapshot<>(new InstanceTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TasksTable(mAuthority));
 
         assertThat(new Seq<>(
                 // create a local list
                 new Put<>(taskList, new NameData("list1")),
-                // insert a new task straight into the instances table
-                new Put<>(instance, new Referring<>(Tasks.LIST_ID, taskList, new CharSequenceRowData<>(Tasks.TITLE, "task1"))),
+                // insert a new task
+                new Put<>(task, new Referring<>(Tasks.LIST_ID, taskList, new CharSequenceRowData<>(Tasks.TITLE, "task1"))),
                 // delete the instance
-                new Delete<>(instance)
+                new BulkDelete<>(new InstanceTable(mAuthority), new ReferringTo<>(Instances.TASK_ID, task))
         ), resultsIn(mClient,
                 new Assert<>(taskList, new NameData("list1")),
                 // the list does not contain a single task
@@ -260,7 +275,7 @@ public class TaskProviderInstancesTest
                 new Put<>(task,
                         new Composite<>(
                                 new Referring<>(Tasks.LIST_ID, taskList),
-                                new TimeData(dateTime),
+                                new TimeData<>(dateTime),
                                 new TitleData("task1"))),
                 new Put<>(instance,
                         new Composite<>(
@@ -279,6 +294,7 @@ public class TaskProviderInstancesTest
     /**
      * Create a single instance and insert an override for a new instance, turning the event into a recurring event.
      */
+    @Ignore("Inserting instances is currently not supported.")
     @Test
     public void testInsertSingleInstanceAddAnother()
     {
