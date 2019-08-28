@@ -16,6 +16,7 @@
 
 package org.dmfs.provider.tasks;
 
+import android.accounts.Account;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -39,6 +40,7 @@ import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.EmptyRowData;
 import org.dmfs.android.contentpal.rowdata.Referring;
 import org.dmfs.android.contentpal.rowsnapshots.VirtualRowSnapshot;
+import org.dmfs.android.contentpal.tables.Synced;
 import org.dmfs.android.contenttestpal.operations.AssertEmptyTable;
 import org.dmfs.android.contenttestpal.operations.AssertRelated;
 import org.dmfs.iterables.SingletonIterable;
@@ -788,7 +790,7 @@ public class TaskProviderTest
      * Move a non-recurring task to another list.
      */
     @Test
-    public void testMoveTask() throws Exception
+    public void testMoveTaskInstance() throws Exception
     {
         RowSnapshot<TaskLists> taskListOld = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
         RowSnapshot<TaskLists> taskListNew = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
@@ -813,6 +815,56 @@ public class TaskProviderTest
                 // assert the new list contains a single entry
                 new Counted<>(1, new AssertRelated<>(new InstanceTable(mAuthority), Tasks.LIST_ID, taskListNew)),
                 new Counted<>(1, new AssertRelated<>(new TasksTable(mAuthority), Tasks.LIST_ID, taskListNew, new TitleData("title")))
+        ));
+    }
+
+
+    /**
+     * Move a non-recurring task to another list.
+     */
+    @Test
+    public void testMoveTaskInstanceAsSyncAdapter() throws Exception
+    {
+        Account dummyAccount = new Account("name", "type");
+        Table<TaskLists> taskListsTable = new Synced<>(dummyAccount, new TaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new Synced<>(dummyAccount, new InstanceTable(mAuthority));
+        Table<Tasks> tasksTable = new Synced<>(dummyAccount, new TasksTable(mAuthority));
+
+        RowSnapshot<TaskLists> taskListOld = new VirtualRowSnapshot<>(taskListsTable);
+        RowSnapshot<TaskLists> taskListNew = new VirtualRowSnapshot<>(taskListsTable);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskListOld, tasksTable));
+        OperationsQueue queue = new BasicOperationsQueue(mClient);
+
+        // create two lists and a single task in the first list
+        queue.enqueue(new Seq<>(
+                new Put<>(taskListOld, new NameData("list1")),
+                new Put<>(taskListNew, new NameData("list2")),
+                new Put<>(task, new Composite<>(
+                        new SyncIdData("syncid"), // give it a sync id, so it counts as synced
+                        new TitleData("title")))));
+        queue.flush();
+
+        assertThat(new SingletonIterable<>(
+                // update the sole task instance to the new list
+                new BulkUpdate<>(new InstanceTable(mAuthority), new Referring<>(Tasks.LIST_ID, taskListNew), new ReferringTo<>(Tasks.LIST_ID, taskListOld))
+        ), resultsIn(queue,
+                // assert the old list contains a deleted entry for the task
+                new Counted<>(0,
+                        new AssertRelated<>(
+                                instancesTable,
+                                Tasks.LIST_ID,
+                                taskListOld)),
+                new Counted<>(1,
+                        new AssertRelated<>(
+                                tasksTable,
+                                Tasks.LIST_ID,
+                                taskListOld,
+                                new Composite<>(
+                                        new TitleData("title"),
+                                        new CharSequenceRowData<>(Tasks._DELETED, "1")))),
+                // assert the new list contains a single entry
+                new Counted<>(1, new AssertRelated<>(instancesTable, Tasks.LIST_ID, taskListNew)),
+                new Counted<>(1, new AssertRelated<>(tasksTable, Tasks.LIST_ID, taskListNew, new TitleData("title")))
         ));
     }
 

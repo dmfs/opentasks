@@ -23,8 +23,14 @@ import org.dmfs.provider.tasks.model.adapters.DateTimeFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.IntegerFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.LongFieldAdapter;
 import org.dmfs.provider.tasks.model.adapters.StringFieldAdapter;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+import static java.util.Arrays.asList;
 
 
 /**
@@ -34,6 +40,18 @@ import org.dmfs.tasks.contract.TaskContract.Tasks;
  */
 public interface InstanceAdapter extends EntityAdapter<InstanceAdapter>
 {
+
+    Collection<String> INSTANCE_COLUMN_NAMES = new HashSet<>(asList(
+            TaskContract.Instances.INSTANCE_START,
+            TaskContract.Instances.INSTANCE_START_SORTING,
+            TaskContract.Instances.INSTANCE_DUE,
+            TaskContract.Instances.INSTANCE_DUE_SORTING,
+            TaskContract.Instances.INSTANCE_DURATION,
+            TaskContract.Instances.INSTANCE_ORIGINAL_TIME,
+            TaskContract.Instances.TASK_ID,
+            TaskContract.Instances.DISTANCE_FROM_CURRENT,
+            "_id:1"));
+
     /**
      * Adapter for the row id of a task instance.
      */

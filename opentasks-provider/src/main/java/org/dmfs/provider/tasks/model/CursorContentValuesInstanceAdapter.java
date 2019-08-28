@@ -18,11 +18,19 @@ package org.dmfs.provider.tasks.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.iterables.decorators.Sieved;
+import org.dmfs.iterables.elementary.Seq;
+import org.dmfs.jems.iterable.decorators.Mapped;
+import org.dmfs.jems.single.elementary.Collected;
+import org.dmfs.jems.single.elementary.Reduced;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.contract.TaskContract;
+
+import java.util.ArrayList;
 
 
 /**
@@ -170,17 +178,27 @@ public class CursorContentValuesInstanceAdapter extends AbstractInstanceAdapter
     public TaskAdapter taskAdapter()
     {
         // make sure we remove any instance fields
-        ContentValues values = new ContentValues(mValues);
-        values.remove(TaskContract.Instances.INSTANCE_START);
-        values.remove(TaskContract.Instances.INSTANCE_START_SORTING);
-        values.remove(TaskContract.Instances.INSTANCE_DUE);
-        values.remove(TaskContract.Instances.INSTANCE_DUE_SORTING);
-        values.remove(TaskContract.Instances.INSTANCE_DURATION);
-        values.remove(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
-        values.remove(TaskContract.Instances.TASK_ID);
-        values.remove(TaskContract.Instances.DISTANCE_FROM_CURRENT);
-        values.remove("_id:1");
+        ContentValues values = new Reduced<String, ContentValues>(
+                () -> new ContentValues(mValues),
+                (contentValues, column) -> {
+                    contentValues.remove(column);
+                    return contentValues;
+                },
+                INSTANCE_COLUMN_NAMES).value();
 
-        return new CursorContentValuesTaskAdapter(valueOf(InstanceAdapter.TASK_ID), mCursor, values);
+        // create a new cursor which doesn't contain the instance columns
+        String[] cursorColumns = new Collected<>(
+                ArrayList::new,
+                new Sieved<>(col -> !INSTANCE_COLUMN_NAMES.contains(col), new Seq<>(mCursor.getColumnNames())))
+                .value().toArray(new String[0]);
+        MatrixCursor cursor = new MatrixCursor(cursorColumns);
+        cursor.addRow(
+                new Mapped<>(
+                        column -> mCursor.getType(column) == Cursor.FIELD_TYPE_BLOB ? mCursor.getBlob(column) : mCursor.getString(column),
+                        new Mapped<>(
+                                mCursor::getColumnIndex,
+                                new Seq<>(cursorColumns))));
+        cursor.moveToFirst();
+        return new CursorContentValuesTaskAdapter(valueOf(InstanceAdapter.TASK_ID), cursor, values);
     }
 }

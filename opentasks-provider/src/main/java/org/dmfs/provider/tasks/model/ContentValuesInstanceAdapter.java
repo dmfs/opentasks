@@ -19,6 +19,7 @@ package org.dmfs.provider.tasks.model;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.jems.single.elementary.Reduced;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.contract.TaskContract;
@@ -149,17 +150,12 @@ public class ContentValuesInstanceAdapter extends AbstractInstanceAdapter
     public TaskAdapter taskAdapter()
     {
         // make sure we remove any instance fields
-        ContentValues values = new ContentValues(mValues);
-        values.remove(TaskContract.Instances.INSTANCE_START);
-        values.remove(TaskContract.Instances.INSTANCE_START_SORTING);
-        values.remove(TaskContract.Instances.INSTANCE_DUE);
-        values.remove(TaskContract.Instances.INSTANCE_DUE_SORTING);
-        values.remove(TaskContract.Instances.INSTANCE_DURATION);
-        values.remove(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
-        values.remove(TaskContract.Instances.TASK_ID);
-        values.remove(TaskContract.Instances.DISTANCE_FROM_CURRENT);
-        values.remove("_id:1");
-
-        return new ContentValuesTaskAdapter(values);
+        return new ContentValuesTaskAdapter(new Reduced<String, ContentValues>(
+                () -> new ContentValues(mValues),
+                (contentValues, column) -> {
+                    contentValues.remove(column);
+                    return contentValues;
+                },
+                INSTANCE_COLUMN_NAMES).value());
     }
 }
