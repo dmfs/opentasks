@@ -25,12 +25,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,11 +65,15 @@ import org.dmfs.tasks.widget.ListenableScrollView;
 import org.dmfs.tasks.widget.ListenableScrollView.OnScrollListener;
 import org.dmfs.tasks.widget.TaskEdit;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 
 /**
@@ -104,12 +102,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
     public static final String PREFERENCE_LAST_ACCOUNT_TYPE = "pref_last_account_type_used_for_new_event";
 
     public static final String KEY_NEW_TASK = "new_event";
-
-    /**
-     * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
-     */
-    private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(Arrays.asList(Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY,
-            Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE));
 
     /**
      * Projection into the task list.
@@ -717,12 +709,6 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
             if (!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || mValues.isUpdate())
             {
-
-                if (mValues.updatesAnyKey(RECURRENCE_VALUES))
-                {
-                    mValues.ensureUpdates(RECURRENCE_VALUES);
-                }
-
                 if (mValues.isInsert())
                 {
                     // update recently used lists
