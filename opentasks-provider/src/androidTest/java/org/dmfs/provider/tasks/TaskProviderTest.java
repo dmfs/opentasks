@@ -93,6 +93,7 @@ public class TaskProviderTest
     private String mAuthority;
     private Context mContext;
     private ContentProviderClient mClient;
+    private final Account testAccount = new Account("foo", "bar");
 
 
     @Before
@@ -124,7 +125,9 @@ public class TaskProviderTest
 
         // Clear the DB:
         BasicOperationsQueue queue = new BasicOperationsQueue(mClient);
-        queue.enqueue(new SingletonIterable<Operation<?>>(new BulkDelete<>(new LocalTaskListsTable(mAuthority))));
+        queue.enqueue(new Seq<Operation<?>>(
+                new BulkDelete<>(new LocalTaskListsTable(mAuthority)),
+                new BulkDelete<>(new Synced<>(testAccount, new TaskListsTable(mAuthority)))));
         queue.flush();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -825,10 +828,9 @@ public class TaskProviderTest
     @Test
     public void testMoveTaskInstanceAsSyncAdapter() throws Exception
     {
-        Account dummyAccount = new Account("name", "type");
-        Table<TaskLists> taskListsTable = new Synced<>(dummyAccount, new TaskListsTable(mAuthority));
-        Table<Instances> instancesTable = new Synced<>(dummyAccount, new InstanceTable(mAuthority));
-        Table<Tasks> tasksTable = new Synced<>(dummyAccount, new TasksTable(mAuthority));
+        Table<TaskLists> taskListsTable = new Synced<>(testAccount, new TaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new Synced<>(testAccount, new InstanceTable(mAuthority));
+        Table<Tasks> tasksTable = new Synced<>(testAccount, new TasksTable(mAuthority));
 
         RowSnapshot<TaskLists> taskListOld = new VirtualRowSnapshot<>(taskListsTable);
         RowSnapshot<TaskLists> taskListNew = new VirtualRowSnapshot<>(taskListsTable);
