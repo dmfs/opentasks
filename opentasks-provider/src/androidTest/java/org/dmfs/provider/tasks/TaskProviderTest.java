@@ -16,13 +16,12 @@
 
 package org.dmfs.provider.tasks;
 
+import android.accounts.Account;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Build;
-import androidx.test.InstrumentationRegistry;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.dmfs.android.contentpal.Operation;
 import org.dmfs.android.contentpal.OperationsQueue;
@@ -31,6 +30,7 @@ import org.dmfs.android.contentpal.Table;
 import org.dmfs.android.contentpal.operations.Assert;
 import org.dmfs.android.contentpal.operations.BulkDelete;
 import org.dmfs.android.contentpal.operations.BulkUpdate;
+import org.dmfs.android.contentpal.operations.Counted;
 import org.dmfs.android.contentpal.operations.Delete;
 import org.dmfs.android.contentpal.operations.Put;
 import org.dmfs.android.contentpal.predicates.ReferringTo;
@@ -38,7 +38,9 @@ import org.dmfs.android.contentpal.queues.BasicOperationsQueue;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
 import org.dmfs.android.contentpal.rowdata.Composite;
 import org.dmfs.android.contentpal.rowdata.EmptyRowData;
+import org.dmfs.android.contentpal.rowdata.Referring;
 import org.dmfs.android.contentpal.rowsnapshots.VirtualRowSnapshot;
+import org.dmfs.android.contentpal.tables.Synced;
 import org.dmfs.android.contenttestpal.operations.AssertEmptyTable;
 import org.dmfs.android.contenttestpal.operations.AssertRelated;
 import org.dmfs.iterables.SingletonIterable;
@@ -69,6 +71,9 @@ import org.junit.runner.RunWith;
 
 import java.util.TimeZone;
 
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
+
 import static org.dmfs.android.contenttestpal.ContentMatcher.resultsIn;
 import static org.dmfs.optional.Absent.absent;
 import static org.junit.Assert.assertThat;
@@ -88,6 +93,7 @@ public class TaskProviderTest
     private String mAuthority;
     private Context mContext;
     private ContentProviderClient mClient;
+    private final Account testAccount = new Account("foo", "bar");
 
 
     @Before
@@ -119,7 +125,9 @@ public class TaskProviderTest
 
         // Clear the DB:
         BasicOperationsQueue queue = new BasicOperationsQueue(mClient);
-        queue.enqueue(new SingletonIterable<Operation<?>>(new BulkDelete<>(new LocalTaskListsTable(mAuthority))));
+        queue.enqueue(new Seq<Operation<?>>(
+                new BulkDelete<>(new LocalTaskListsTable(mAuthority)),
+                new BulkDelete<>(new Synced<>(testAccount, new TaskListsTable(mAuthority)))));
         queue.flush();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -779,4 +787,87 @@ public class TaskProviderTest
                         ))
         ));
     }
+
+
+    /**
+     * Move a non-recurring task to another list.
+     */
+    @Test
+    public void testMoveTaskInstance() throws Exception
+    {
+        RowSnapshot<TaskLists> taskListOld = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<TaskLists> taskListNew = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskListOld, new TasksTable(mAuthority)));
+        OperationsQueue queue = new BasicOperationsQueue(mClient);
+
+        // create two lists and a single task in the first list
+        queue.enqueue(new Seq<>(
+                new Put<>(taskListOld, new NameData("list1")),
+                new Put<>(taskListNew, new NameData("list2")),
+                new Put<>(task, new TitleData("title"))
+        ));
+        queue.flush();
+
+        assertThat(new SingletonIterable<>(
+                // update the sole task instance to the new list
+                new BulkUpdate<>(new InstanceTable(mAuthority), new Referring<>(Tasks.LIST_ID, taskListNew), new ReferringTo<>(Tasks.LIST_ID, taskListOld))
+        ), resultsIn(queue,
+                // assert the old list is empty
+                new Counted<>(0, new AssertRelated<>(new InstanceTable(mAuthority), Tasks.LIST_ID, taskListOld)),
+                new Counted<>(0, new AssertRelated<>(new TasksTable(mAuthority), Tasks.LIST_ID, taskListOld)),
+                // assert the new list contains a single entry
+                new Counted<>(1, new AssertRelated<>(new InstanceTable(mAuthority), Tasks.LIST_ID, taskListNew)),
+                new Counted<>(1, new AssertRelated<>(new TasksTable(mAuthority), Tasks.LIST_ID, taskListNew, new TitleData("title")))
+        ));
+    }
+
+
+    /**
+     * Move a non-recurring task to another list.
+     */
+    @Test
+    public void testMoveTaskInstanceAsSyncAdapter() throws Exception
+    {
+        Table<TaskLists> taskListsTable = new Synced<>(testAccount, new TaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new Synced<>(testAccount, new InstanceTable(mAuthority));
+        Table<Tasks> tasksTable = new Synced<>(testAccount, new TasksTable(mAuthority));
+
+        RowSnapshot<TaskLists> taskListOld = new VirtualRowSnapshot<>(taskListsTable);
+        RowSnapshot<TaskLists> taskListNew = new VirtualRowSnapshot<>(taskListsTable);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskListOld, tasksTable));
+        OperationsQueue queue = new BasicOperationsQueue(mClient);
+
+        // create two lists and a single task in the first list
+        queue.enqueue(new Seq<>(
+                new Put<>(taskListOld, new NameData("list1")),
+                new Put<>(taskListNew, new NameData("list2")),
+                new Put<>(task, new Composite<>(
+                        new SyncIdData("syncid"), // give it a sync id, so it counts as synced
+                        new TitleData("title")))));
+        queue.flush();
+
+        assertThat(new SingletonIterable<>(
+                // update the sole task instance to the new list
+                new BulkUpdate<>(new InstanceTable(mAuthority), new Referring<>(Tasks.LIST_ID, taskListNew), new ReferringTo<>(Tasks.LIST_ID, taskListOld))
+        ), resultsIn(queue,
+                // assert the old list contains a deleted entry for the task
+                new Counted<>(0,
+                        new AssertRelated<>(
+                                instancesTable,
+                                Tasks.LIST_ID,
+                                taskListOld)),
+                new Counted<>(1,
+                        new AssertRelated<>(
+                                tasksTable,
+                                Tasks.LIST_ID,
+                                taskListOld,
+                                new Composite<>(
+                                        new TitleData("title"),
+                                        new CharSequenceRowData<>(Tasks._DELETED, "1")))),
+                // assert the new list contains a single entry
+                new Counted<>(1, new AssertRelated<>(instancesTable, Tasks.LIST_ID, taskListNew)),
+                new Counted<>(1, new AssertRelated<>(tasksTable, Tasks.LIST_ID, taskListNew, new TitleData("title")))
+        ));
+    }
+
 }
