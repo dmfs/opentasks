@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
+import org.dmfs.provider.tasks.utils.ContainsValues;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -103,7 +104,7 @@ public class CursorContentValuesTaskAdapter extends AbstractTaskAdapter
     @Override
     public boolean hasUpdates()
     {
-        return mValues != null && mValues.size() > 0;
+        return mValues != null && mValues.size() > 0 && !new ContainsValues(mValues).satisfiedBy(mCursor);
     }
 
 

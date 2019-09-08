@@ -28,6 +28,7 @@ import org.dmfs.jems.single.elementary.Collected;
 import org.dmfs.jems.single.elementary.Reduced;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.adapters.FieldAdapter;
+import org.dmfs.provider.tasks.utils.ContainsValues;
 import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.ArrayList;
@@ -111,7 +112,7 @@ public class CursorContentValuesInstanceAdapter extends AbstractInstanceAdapter
     @Override
     public boolean hasUpdates()
     {
-        return mValues != null && mValues.size() > 0;
+        return mValues != null && mValues.size() > 0 && !new ContainsValues(mValues).satisfiedBy(mCursor);
     }
 
 

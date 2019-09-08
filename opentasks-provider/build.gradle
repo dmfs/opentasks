@@ -43,4 +43,8 @@ dependencies {
     androidTestImplementation deps.support_annotations
     androidTestImplementation deps.support_test_runner
     androidTestImplementation deps.support_test_rules
+    androidTestImplementation deps.mockito
+    androidTestImplementation deps.jems_testing
+    androidTestImplementation deps.hamcrest
+    androidTestImplementation deps.contentpal_testing
 }
