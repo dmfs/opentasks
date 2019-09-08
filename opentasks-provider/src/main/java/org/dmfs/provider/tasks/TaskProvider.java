@@ -80,6 +80,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -154,9 +155,9 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
     /**
      * Boolean to track if there are changes within a transaction.
      * <p>
-     * This can be shared by multiple threads, hence the {@link AtomicReference}.
+     * This can be shared by multiple threads, hence the {@link AtomicBoolean}.
      */
-    private AtomicReference<Boolean> mChanged = new AtomicReference<>(false);
+    private AtomicBoolean mChanged = new AtomicBoolean(false);
 
     /**
      * This is a per transaction/thread flag which indicates whether new lists with an unknown account have been added.
@@ -1020,7 +1021,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                                    final boolean isSyncAdapter)
     {
         int count = 0;
-        boolean dataChanged = !TASK_LIST_SYNC_COLUMNS.containsAll(values.keySet());
+        boolean dataChanged = false;
         switch (mUriMatcher.match(uri))
         {
             case SYNCSTATE_ID:
@@ -1076,8 +1077,12 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         // we need this, because the processors may change the values
                         final ListAdapter list = new CursorContentValuesListAdapter(listId, cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
-                        mListProcessorChain.update(db, list, isSyncAdapter);
-                        mChanged.set(true);
+                        if (list.hasUpdates())
+                        {
+                            mListProcessorChain.update(db, list, isSyncAdapter);
+                            dataChanged |= !TASK_LIST_SYNC_COLUMNS.containsAll(values.keySet());
+                        }
+                        // note we still count the row even if no update was necessary
                         count++;
                     }
                 }
@@ -1104,11 +1109,12 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         // we need this, because the processors may change the values
                         final TaskAdapter task = new CursorContentValuesTaskAdapter(cursor, cursor.getCount() > 1 ? new ContentValues(values) : values);
 
-                        mTaskProcessorChain.update(db, task, isSyncAdapter);
-                        if (dataChanged && task.hasUpdates())
+                        if (task.hasUpdates())
                         {
-                            mChanged.set(true);
+                            mTaskProcessorChain.update(db, task, isSyncAdapter);
+                            dataChanged |= !TASK_LIST_SYNC_COLUMNS.containsAll(values.keySet());
                         }
+                        // note we still count the row even if no update was necessary
                         count++;
                     }
                 }
@@ -1142,11 +1148,12 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
                         final InstanceAdapter instance = new CursorContentValuesInstanceAdapter(cursor,
                                 cursor.getCount() > 1 ? new ContentValues(values) : values);
 
-                        mInstanceProcessorChain.update(db, instance, isSyncAdapter);
-                        if (dataChanged && instance.hasUpdates())
+                        if (instance.hasUpdates())
                         {
-                            mChanged.set(true);
+                            mInstanceProcessorChain.update(db, instance, isSyncAdapter);
+                            dataChanged = true;
                         }
+                        // note we still count the row even if no update was necessary
                         count++;
                     }
                 }
@@ -1229,6 +1236,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         {
             // send notifications, because non-sync columns have been updated
             postNotifyUri(uri);
+            mChanged.set(true);
         }
 
         return count;
