@@ -44,7 +44,8 @@ public abstract class AbstractTaskAdapter implements TaskAdapter
     @Override
     public boolean isRecurring()
     {
-        return valueOf(RRULE) != null || valueOf(RDATE).iterator().hasNext();
+        // recurring tasks must have an RRULE or RDATEs and at least one of DTSTART and DUE date
+        return (valueOf(RRULE) != null || valueOf(RDATE).iterator().hasNext()) && (valueOf(DTSTART) != null || valueOf(DUE) != null);
     }
 
 
