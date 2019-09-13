@@ -91,7 +91,7 @@ public final class InstanceValuesIterable implements Iterable<Single<ContentValu
 
             return new Mapped<>(dateTime -> new Distant(mTaskAdapter.valueOf(TaskAdapter.IS_CLOSED) ? -1 : 0,
                     new Overridden(new Present<>(dateTime),
-                            new Enduring(new DueDated(new Zipped<>(new Present<>(dateTime), effectiveDuration, DateTime::addDuration),
+                            new Enduring(new DueDated(new Zipped<>(new Present<>(dateTime), effectiveDuration, this::addDuration),
                                     new StartDated(new Present<>(dateTime), new VanillaInstanceData()))))),
                     new TaskInstanceIterable(mTaskAdapter).iterator());
         }
@@ -102,6 +102,16 @@ public final class InstanceValuesIterable implements Iterable<Single<ContentValu
                         new DueDated(new Present<>(dateTime), new VanillaInstanceData()))),
                 new TaskInstanceIterable(mTaskAdapter).iterator());
 
+    }
+
+
+    private DateTime addDuration(DateTime dt, Duration dur)
+    {
+        if (dt.isAllDay() && dur.getSecondsOfDay() != 0)
+        {
+            dur = new Duration(1, dur.getWeeks() * 7 + dur.getDays() + dur.getSecondsOfDay() / (3600 * 24), 0);
+        }
+        return dt.addDuration(dur);
     }
 
 }

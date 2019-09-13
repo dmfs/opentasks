@@ -200,6 +200,70 @@ public class TaskProviderRecurrenceTest
     }
 
 
+
+    /**
+     * Test if instances of a task with an all-day DTSTART, DUE and an RRULE.
+     */
+    @Test
+    public void testAllDayRRule() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration days = new Duration(1, 2, 0);
+        DateTime start = DateTime.parse("20180104");
+        DateTime due = start.addDuration(days);
+        DateTime localStart = start;
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        DateTime localDue = due;
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        new Put<>(task,
+                                new Composite<>(
+                                        new TimeData<>(start, due),
+                                        new RRuleTaskData(new RecurrenceRule("FREQ=DAILY;COUNT=5", RecurrenceRule.RfcMode.RFC2445_LAX))))
+
+                ), resultsIn(mClient,
+                new Assert<>(task,
+                        new Composite<>(
+                                new TimeData<>(start, due),
+                                new CharSequenceRowData<>(Tasks.RRULE, "FREQ=DAILY;COUNT=5"))),
+//                new Counted<>(5, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                // 1st instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(localStart, localDue, new Present<>(start), 0),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()))/*,
+                // 2nd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(second, second.addDuration(hour), new Present<>(second), 1),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, second.getTimestamp())),
+                // 3rd instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(third, third.addDuration(hour), new Present<>(third), 2),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, third.getTimestamp())),
+                // 4th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fourth, fourth.addDuration(hour), new Present<>(fourth), 3),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fourth.getTimestamp())),
+                // 5th instance:
+                new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                        new InstanceTestData(fifth, fifth.addDuration(hour), new Present<>(fifth), 4),
+                        new EqArg(Instances.INSTANCE_ORIGINAL_TIME, fifth.getTimestamp())) */)
+        );
+    }
+
+
+
     /**
      * Test if instances of a task with a DUE and an RRULE but no DTSTART.
      */
