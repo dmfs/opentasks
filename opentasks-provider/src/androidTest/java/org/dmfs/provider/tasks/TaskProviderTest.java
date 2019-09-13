@@ -335,6 +335,40 @@ public class TaskProviderTest
     }
 
 
+
+    /**
+     * Create task with start and due, check datetime values including generated duration.
+     */
+    @Test
+    public void testInsertTaskWithAlldayStartAndDue()
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        DateTime start = DateTime.now().toAllDay();
+        DateTime due = start.addDuration(new Duration(1, 2, 0));
+
+        assertThat(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<TaskLists>()),
+                new Put<>(task, new TimeData<>(start, due))
+
+        ), resultsIn(mClient,
+                new Assert<>(task, new Composite<>(
+                        new TimeData<>(start, due),
+                        new VersionData(0))),
+                new AssertRelated<>(
+                        new InstanceTable(mAuthority), Instances.TASK_ID, task,
+                        new Composite<Instances>(
+                                new InstanceTestData(
+                                        start,
+                                        due,
+                                        absent(),
+                                        0),
+                                new CharSequenceRowData<>(Tasks.TZ, "UTC"))
+                )));
+    }
+
+
     /**
      * Create task with start and due, check datetime and INSTANCE_STATUS values after updating the status.
      */
