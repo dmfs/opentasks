@@ -16,13 +16,14 @@
 
 package org.dmfs.opentaskspal.tasks;
 
-import androidx.annotation.NonNull;
-
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
+import org.dmfs.jems.iterable.elementary.Seq;
 import org.dmfs.opentaskspal.rowdata.DateTimeListData;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -34,6 +35,12 @@ import org.dmfs.tasks.contract.TaskContract;
  */
 public final class RDatesTaskData extends DelegatingRowData<TaskContract.Tasks>
 {
+    public RDatesTaskData(@NonNull DateTime... rdates)
+    {
+        this(new Seq<>(rdates));
+    }
+
+
     public RDatesTaskData(@NonNull Iterable<DateTime> rdates)
     {
         super(new DateTimeListData<>(TaskContract.Tasks.RDATE, rdates));

@@ -213,7 +213,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
      */
     private void updateMasterInstances(SQLiteDatabase db, TaskAdapter taskAdapter, long id)
     {
-        final Cursor existingInstances = db.query(
+        try (Cursor existingInstances = db.query(
                 TaskDatabaseHelper.Tables.INSTANCE_VIEW,
                 new String[] {
                         TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME, TaskContract.Instances.TASK_ID,
@@ -222,15 +222,14 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                 null,
                 null,
                 null,
-                TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
-
-        /*
-         * The goal of the code below is to update existing instances in place (as opposed to delete and recreate all instances). We do this for two reasons:
-         * 1) efficiency, in most cases existing instances don't change, deleting and recreating them would be overly expensive
-         * 2) stable row ids, deleting and recreating instances would change their id and void any existing URIs to them
-         */
-        try
+                TaskContract.Instances.INSTANCE_ORIGINAL_TIME))
         {
+
+            /*
+             * The goal of the code below is to update existing instances in place (as opposed to delete and recreate all instances). We do this for two reasons:
+             * 1) efficiency, in most cases existing instances don't change, deleting and recreating them would be overly expensive
+             * 2) stable row ids, deleting and recreating instances would change their id and void any existing URIs to them
+             */
             final int idIdx = existingInstances.getColumnIndex(TaskContract.Instances._ID);
             final int startIdx = existingInstances.getColumnIndex(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
             final int taskIdIdx = existingInstances.getColumnIndex(TaskContract.Instances.TASK_ID);
@@ -320,10 +319,6 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                     }
                 }
             }
-        }
-        finally
-        {
-            existingInstances.close();
         }
     }
 

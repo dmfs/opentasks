@@ -18,6 +18,7 @@ package org.dmfs.provider.tasks.utils;
 
 import android.content.ContentValues;
 
+import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.provider.tasks.model.ContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.rfc5545.DateTime;
@@ -103,6 +104,85 @@ public class TaskInstanceIterableTest
                         DateTime.parse("20170620T121314"),
                         DateTime.parse("20170622T121314"),
                         DateTime.parse("20170624T121314")
+                ));
+    }
+
+
+    @Test
+    public void testRDate() throws Exception
+    {
+        TaskAdapter taskAdapter = new ContentValuesTaskAdapter(new ContentValues());
+        taskAdapter.set(TaskAdapter.DTSTART, DateTime.parse("Europe/Berlin", "20170606T121314"));
+        taskAdapter.set(TaskAdapter.RDATE, new Seq<>(
+                DateTime.parse("Europe/Berlin", "20170606T121314"),
+                DateTime.parse("Europe/Berlin", "20170608T121314"),
+                DateTime.parse("Europe/Berlin", "20170610T121314"),
+                DateTime.parse("Europe/Berlin", "20170612T121314"),
+                DateTime.parse("Europe/Berlin", "20170614T121314"),
+                DateTime.parse("Europe/Berlin", "20170616T121314"),
+                DateTime.parse("Europe/Berlin", "20170618T121314"),
+                DateTime.parse("Europe/Berlin", "20170620T121314"),
+                DateTime.parse("Europe/Berlin", "20170622T121314"),
+                DateTime.parse("Europe/Berlin", "20170624T121314")
+        ));
+
+        assertThat(new TaskInstanceIterable(taskAdapter),
+                iteratesTo(
+                        DateTime.parse("Europe/Berlin", "20170606T121314"),
+                        DateTime.parse("Europe/Berlin", "20170608T121314"),
+                        DateTime.parse("Europe/Berlin", "20170610T121314"),
+                        DateTime.parse("Europe/Berlin", "20170612T121314"),
+                        DateTime.parse("Europe/Berlin", "20170614T121314"),
+                        DateTime.parse("Europe/Berlin", "20170616T121314"),
+                        DateTime.parse("Europe/Berlin", "20170618T121314"),
+                        DateTime.parse("Europe/Berlin", "20170620T121314"),
+                        DateTime.parse("Europe/Berlin", "20170622T121314"),
+                        DateTime.parse("Europe/Berlin", "20170624T121314")
+                ));
+    }
+
+
+    @Test
+    public void testRDateAndRRule() throws Exception
+    {
+        TaskAdapter taskAdapter = new ContentValuesTaskAdapter(new ContentValues());
+        taskAdapter.set(TaskAdapter.DTSTART, DateTime.parse("Europe/Berlin", "20170606T121314"));
+        taskAdapter.set(TaskAdapter.RRULE, new RecurrenceRule("FREQ=DAILY;INTERVAL=2;COUNT=10"));
+        taskAdapter.set(TaskAdapter.RDATE, new Seq<>(
+                DateTime.parse("Europe/Berlin", "20170606T121313"),
+                DateTime.parse("Europe/Berlin", "20170608T121313"),
+                DateTime.parse("Europe/Berlin", "20170610T121313"),
+                DateTime.parse("Europe/Berlin", "20170612T121313"),
+                DateTime.parse("Europe/Berlin", "20170614T121313"),
+                DateTime.parse("Europe/Berlin", "20170616T121313"),
+                DateTime.parse("Europe/Berlin", "20170618T121313"),
+                DateTime.parse("Europe/Berlin", "20170620T121313"),
+                DateTime.parse("Europe/Berlin", "20170622T121313"),
+                DateTime.parse("Europe/Berlin", "20170624T121313")
+        ));
+
+        assertThat(new TaskInstanceIterable(taskAdapter),
+                iteratesTo(
+                        DateTime.parse("Europe/Berlin", "20170606T121313"),
+                        DateTime.parse("Europe/Berlin", "20170606T121314"),
+                        DateTime.parse("Europe/Berlin", "20170608T121313"),
+                        DateTime.parse("Europe/Berlin", "20170608T121314"),
+                        DateTime.parse("Europe/Berlin", "20170610T121313"),
+                        DateTime.parse("Europe/Berlin", "20170610T121314"),
+                        DateTime.parse("Europe/Berlin", "20170612T121313"),
+                        DateTime.parse("Europe/Berlin", "20170612T121314"),
+                        DateTime.parse("Europe/Berlin", "20170614T121313"),
+                        DateTime.parse("Europe/Berlin", "20170614T121314"),
+                        DateTime.parse("Europe/Berlin", "20170616T121313"),
+                        DateTime.parse("Europe/Berlin", "20170616T121314"),
+                        DateTime.parse("Europe/Berlin", "20170618T121313"),
+                        DateTime.parse("Europe/Berlin", "20170618T121314"),
+                        DateTime.parse("Europe/Berlin", "20170620T121313"),
+                        DateTime.parse("Europe/Berlin", "20170620T121314"),
+                        DateTime.parse("Europe/Berlin", "20170622T121313"),
+                        DateTime.parse("Europe/Berlin", "20170622T121314"),
+                        DateTime.parse("Europe/Berlin", "20170624T121313"),
+                        DateTime.parse("Europe/Berlin", "20170624T121314")
                 ));
     }
 }
