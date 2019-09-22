@@ -27,6 +27,7 @@ import org.dmfs.rfc5545.recurrenceset.RecurrenceSet;
 import org.dmfs.rfc5545.recurrenceset.RecurrenceSetIterator;
 
 import java.util.Iterator;
+import java.util.TimeZone;
 
 
 /**
@@ -54,6 +55,21 @@ public final class TaskInstanceIterable implements Iterable<DateTime>
         RecurrenceRule rule = mTaskAdapter.valueOf(TaskAdapter.RRULE);
         if (rule != null)
         {
+            if (rule.getUntil() != null && dtstart.isFloating() != rule.getUntil().isFloating())
+            {
+                // rule UNTIL date mismatches start. This is merely a workaround for existing users. In future we should make sure
+                // such tasks don't exist
+                if (dtstart.isFloating())
+                {
+                    // make until floating too by making it floating in the current time zone
+                    rule.setUntil(rule.getUntil().shiftTimeZone(TimeZone.getDefault()).swapTimeZone(null));
+                }
+                else
+                {
+                    // anchor UNTIL in the current time zone
+                    rule.setUntil(new DateTime(null, rule.getUntil().getTimestamp()).swapTimeZone(TimeZone.getDefault()));
+                }
+            }
             set.addInstances(new RecurrenceRuleAdapter(rule));
         }
 
