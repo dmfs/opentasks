@@ -17,12 +17,13 @@
 package org.dmfs.opentaskspal.tasks;
 
 import android.content.ContentProviderOperation;
-import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -49,14 +50,8 @@ public final class DueData<T extends TaskContract.TaskColumns> implements RowDat
                 .withValue(TaskContract.Tasks.DUE, mDue.getTimestamp())
                 .withValue(TaskContract.Tasks.TZ, mDue.isAllDay() ? "UTC" : mDue.getTimeZone().getID())
                 .withValue(TaskContract.Tasks.IS_ALLDAY, mDue.isAllDay() ? 1 : 0)
-
                 .withValue(TaskContract.Tasks.DTSTART, null)
-
-                .withValue(TaskContract.Tasks.DURATION, null)
-
-                .withValue(TaskContract.Tasks.RDATE, null)
-                .withValue(TaskContract.Tasks.RRULE, null)
-                .withValue(TaskContract.Tasks.EXDATE, null);
+                .withValue(TaskContract.Tasks.DURATION, null);
     }
 
 }
