@@ -53,14 +53,8 @@ public final class DueDataTest
                                 containing(Tasks.DUE, due.getTimestamp()),
                                 containing(Tasks.TZ, "UTC"),
                                 containing(Tasks.IS_ALLDAY, 0),
-
                                 withNullValue(Tasks.DTSTART),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 
@@ -76,14 +70,8 @@ public final class DueDataTest
                                 containing(Tasks.DUE, due.getTimestamp()),
                                 containing(Tasks.TZ, "GMT+04:00"),
                                 containing(Tasks.IS_ALLDAY, 0),
-
                                 withNullValue(Tasks.DTSTART),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 
@@ -99,14 +87,8 @@ public final class DueDataTest
                                 containing(Tasks.DUE, due.getTimestamp()),
                                 containing(Tasks.TZ, "UTC"),
                                 containing(Tasks.IS_ALLDAY, 1),
-
                                 withNullValue(Tasks.DTSTART),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 

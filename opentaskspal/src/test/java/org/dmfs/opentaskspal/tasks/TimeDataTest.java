@@ -58,14 +58,8 @@ public final class TimeDataTest
                                 containing(Tasks.DTSTART, start.getTimestamp()),
                                 containing(Tasks.TZ, "UTC"),
                                 containing(Tasks.IS_ALLDAY, 0),
-
                                 containing(Tasks.DUE, due.getTimestamp()),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 
@@ -82,14 +76,8 @@ public final class TimeDataTest
                                 containing(Tasks.DTSTART, start.getTimestamp()),
                                 containing(Tasks.TZ, "UTC"),
                                 containing(Tasks.IS_ALLDAY, 0),
-
                                 withNullValue(Tasks.DUE),
-
-                                containing(Tasks.DURATION, duration.toString()),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                containing(Tasks.DURATION, duration.toString())
                         )));
     }
 
@@ -105,14 +93,8 @@ public final class TimeDataTest
                                 containing(Tasks.DTSTART, start.getTimestamp()),
                                 containing(Tasks.TZ, "UTC"),
                                 containing(Tasks.IS_ALLDAY, 0),
-
                                 withNullValue(Tasks.DUE),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 
@@ -147,14 +129,8 @@ public final class TimeDataTest
                                 containing(Tasks.DTSTART, startExpected.getTimestamp()),
                                 containing(Tasks.TZ, "GMT+06:00"),
                                 containing(Tasks.IS_ALLDAY, 0),
-
                                 containing(Tasks.DUE, due.getTimestamp()),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 
@@ -171,14 +147,8 @@ public final class TimeDataTest
                                 containing(Tasks.DTSTART, start.getTimestamp()),
                                 containing(Tasks.TZ, "UTC"),
                                 containing(Tasks.IS_ALLDAY, 1),
-
                                 containing(Tasks.DUE, due.getTimestamp()),
-
-                                withNullValue(Tasks.DURATION),
-
-                                withNullValue(Tasks.RDATE),
-                                withNullValue(Tasks.RRULE),
-                                withNullValue(Tasks.EXDATE)
+                                withNullValue(Tasks.DURATION)
                         )));
     }
 }

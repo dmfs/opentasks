@@ -17,7 +17,6 @@
 package org.dmfs.opentaskspal.tasks;
 
 import android.content.ContentProviderOperation;
-import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
@@ -27,6 +26,8 @@ import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.Duration;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -95,13 +96,7 @@ public final class TimeData<T extends TaskContract.TaskColumns> implements RowDa
                 .withValue(TaskContract.Tasks.DTSTART, start.getTimestamp())
                 .withValue(TaskContract.Tasks.TZ, start.isAllDay() ? "UTC" : start.getTimeZone().getID())
                 .withValue(TaskContract.Tasks.IS_ALLDAY, start.isAllDay() ? 1 : 0)
-
                 .withValue(TaskContract.Tasks.DUE, due.isPresent() ? due.value().getTimestamp() : null)
-
-                .withValue(TaskContract.Tasks.DURATION, duration.isPresent() ? duration.value().toString() : null)
-
-                .withValue(TaskContract.Tasks.RDATE, null)
-                .withValue(TaskContract.Tasks.RRULE, null)
-                .withValue(TaskContract.Tasks.EXDATE, null);
+                .withValue(TaskContract.Tasks.DURATION, duration.isPresent() ? duration.value().toString() : null);
     }
 }
