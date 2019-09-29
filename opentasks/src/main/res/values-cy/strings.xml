@@ -7,8 +7,8 @@
     <!-- Task list -->
     <string name="menu_add_task">Ychwanegu tasg</string>
     <string name="menu_add_task_condensed">Ychwanegu</string>
-    <string name="menu_show_completed">Dangos tasgau wedi'u cyflawni</string>
-    <string name="menu_show_completed_condensed">Dangos tasgau wedi'u cyflawni</string>
+    <string name="menu_show_completed">Dangos tasgau wedi\'u cyflawni</string>
+    <string name="menu_show_completed_condensed">Dangos tasgau wedi\'u cyflawni</string>
     <string name="menu_sync_now">Ail-lwytho</string>
     <string name="menu_sync_now_condensed">Ail-lwytho</string>
     <string name="menu_search_hint">Chwilio</string>
@@ -18,11 +18,11 @@
     <string name="toast_x_removed">Tynnwyd \"%1s\".</string>
     <string name="task_group_title_list">Tasgau</string>
     <string name="task_group_title_start">Tasgau yn dechrau</string>
-    <string name="task_group_title_due">Tasgau i'w gwneud</string>
+    <string name="task_group_title_due">Tasgau i\'w gwneud</string>
     <string name="task_group_title_priority">Blaenoriaeth tasg</string>
     <string name="task_group_title_progress">Cynnydd tasg</string>
     <string name="task_group_title_default">Tasgau</string>
-    <string name="quick_add_task_created">Tasgau wedi'u creu</string>
+    <string name="quick_add_task_created">Tasgau wedi\'u creu</string>
     <string name="initial_local_task_list_name">Fy nhasgau</string>
 
     <plurals name="number_of_tasks">
@@ -36,14 +36,14 @@
 
     <!-- Task detail view -->
     <string name="activity_task_details_edit">Golygu</string>
-    <string name="activity_task_details_edit_task">Golygu'r dasg</string>
+    <string name="activity_task_details_edit_task">Golygu\'r dasg</string>
     <string name="activity_task_details_delete">Dileu</string>
-    <string name="activity_task_details_delete_task">Dileu'r dasg</string>
+    <string name="activity_task_details_delete_task">Dileu\'r dasg</string>
     <string name="activity_task_details_complete">Cyflawni</string>
-    <string name="activity_task_details_complete_task">Cyflawni'r dasg</string>
+    <string name="activity_task_details_complete_task">Cyflawni\'r dasg</string>
     <string name="activity_task_details_pin">Hoelio</string>
-    <string name="activity_task_details_pin_task">Hoelio'r dasg</string>
-    <string name="opentasks_details_no_task_selected">Dim tasg wedi'i dewis</string>
+    <string name="activity_task_details_pin_task">Hoelio\'r dasg</string>
+    <string name="opentasks_details_no_task_selected">Dim tasg wedi\'i dewis</string>
     <string name="opentasks_task_details_menu_send_short">Anfon</string>
     <string name="opentasks_task_details_menu_send">Anfon at</string>
 
@@ -51,7 +51,7 @@
     <string name="opentasks_checklist_add_item">Ychwanegu eitem</string>
 
     <!--
-    The hint that's shown for a check list item that has no text.
+    The hint that\'s shown for a check list item that has no text.
     Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
     -->
     <string name="opentasks_checklist_empty_item_hint">Teitl eitem</string>
@@ -73,7 +73,7 @@
     <string name="task_start">Dechrau</string>
     <string name="task_due">Terfyn</string>
     <string name="task_completed">Cyflawnwyd</string>
-    <string name="task_percent_complete">Canran wedi'i gyflawni</string>
+    <string name="task_percent_complete">Canran wedi\'i gyflawni</string>
     <string name="task_status">Statws</string>
     <string name="task_classification">Preifatrwydd</string>
     <string name="task_url">URL</string>
@@ -82,7 +82,7 @@
     <string name="task_detail_activity">Manylion y Dasg</string>
     <string name="task_priority">Blaenoriaeth</string>
     <string name="task_timezone">Cylchfa Amser</string>
-    <string name="task_all_day">Trwy'r Dydd</string>
+    <string name="task_all_day">Trwy\'r Dydd</string>
 
     <!-- Task list due group titles -->
     <string name="task_group_no_due">Dim dyddiad terfyn</string>
@@ -90,12 +90,12 @@
     <string name="task_group_due_today">Heddiw</string>
     <string name="task_group_due_tomorrow">Yfory</string>
     <string name="task_group_due_within_7_days">O fewn wythnos</string>
-    <string name="task_group_due_in_month">I'w gwblhau ymhen %s</string>
-    <string name="task_group_due_in_year">I'w gwblhau ymhen %d</string>
+    <string name="task_group_due_in_month">I\'w gwblhau ymhen %s</string>
+    <string name="task_group_due_in_year">I\'w gwblhau ymhen %d</string>
     <string name="task_group_due_in_future">Rhyw ddydd</string>
 
     <!-- Task list start group titles -->
-    <string name="task_group_start_started">Eisoes wedi'i Ddechrau</string>
+    <string name="task_group_start_started">Eisoes wedi\'i Ddechrau</string>
     <string name="task_group_start_today">Heddiw</string>
     <string name="task_group_start_tomorrow">Yfory</string>
     <string name="task_group_start_within_7_days">Rhyw ddydd</string>
@@ -155,8 +155,8 @@
     <string name="title_activity_settings">Gosodiadau</string>
     <string name="action_settings">Gosodiadau</string>
     <string name="action_add_local_list">Ychwanegu Rhestr</string>
-    <string name="visible_task_lists">Rhestrau wedi'u Dangos</string>
-    <string name="synced_task_lists">Rhestrau wedi'u Cysoni</string>
+    <string name="visible_task_lists">Rhestrau wedi\'u Dangos</string>
+    <string name="synced_task_lists">Rhestrau wedi\'u Cysoni</string>
 
     <!-- dialogs -->
     <string name="task_list_settings_dialog_account_title">Dewisa gyfrif</string>
@@ -178,7 +178,7 @@
 
     <!-- delete dialog -->
     <string name="task_list_delete_dialog_title">Dileu %s</string>
-    <string name="task_list_delete_dialog_message">Dileu'r rhestr a phob tasg ynddi?\nNoder: Nid oes modd adfer rhestr ar ôl iddi gael ei dileu.</string>
+    <string name="task_list_delete_dialog_message">Dileu\'r rhestr a phob tasg ynddi?\nNoder: Nid oes modd adfer rhestr ar ôl iddi gael ei dileu.</string>
     <string name="task_list_delete_toast">Dileuwyd %s</string>
 
     <!-- Label for Expandable Group Descriptors -->
@@ -188,19 +188,19 @@
 
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Cadarnhau dileu</string>
-    <string name="confirm_delete_message">Dileu'r dasg hon?</string>
+    <string name="confirm_delete_message">Dileu\'r dasg hon?</string>
     <string name="confirm_delete_message_with_title">Dileu \"%1s\"?</string>
     <string name="toast_task_deleted">Tynnwyd \"%1s\".</string>
 
     <!-- Strings in the Task List Selection Fragment -->
     <string name="task_list_selection_empty">Dim rhestr dasgau ar gael</string>
-    <string name="task_list_selection_title">Dewisa rhestrau i'w dangos</string>
+    <string name="task_list_selection_title">Dewisa rhestrau i\'w dangos</string>
     <string name="task_list_selection_ok">IAWN</string>
     <string name="task_list_selection_cancel">DIDDYMU</string>
 
     <!-- Strings for Task List Widget -->
-    <string name="task_list_widget_title">Current tasks</string>
-    <string name="task_list_widget_title_4x4">Current tasks 4x4</string>
+    <string name="task_list_widget_title">Tasgau cyfredol</string>
+    <string name="task_list_widget_title_4x4">Tasgau cyfredol 4x4</string>
 
     <!-- Strings for fling actions -->
     <string name="fling_task_complete">Cyflawn</string>
@@ -209,13 +209,13 @@
     <string name="fling_task_uncomplete">Anghyflawn</string>
 
     <!-- Accessibility content description -->
-    <string name="cd_start_date">eicon ar gyfer dyddiad dechrau'r dasg</string>
+    <string name="cd_start_date">eicon ar gyfer dyddiad dechrau\'r dasg</string>
     <string name="cd_due_date">eicon ar gyfer dyddiad terfyn y dasg</string>
 
     <!-- Strings for notification -->
     <string name="notification_task_due_date">Rhaid cyflawni tasg, %1s</string>
     <string name="notification_task_start_date">Dechrau tasg, %1s</string>
-    <string name="notification_task_due_today">Tasg i'w gyflawni heddiw</string>
+    <string name="notification_task_due_today">Tasg i\'w gyflawni heddiw</string>
     <string name="notification_task_start_today">Tasg yn dechrau heddiw</string>
     <string name="notification_action_complete">cyflawn</string>
     <string name="notification_action_completed">Cyflawnwyd</string>
@@ -235,14 +235,14 @@
 
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Tasgau</string>
-    <string name="dashclock_extension_description">Mae'n dangos gwybodaeth am dasgau diweddar.</string>
+    <string name="dashclock_extension_description">Mae\'n dangos gwybodaeth am dasgau diweddar.</string>
     <string name="dashclock_widget_title_due_expanded">Rhaid cyflawni %1$s - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">Rhaid cyflawni %1$s</string>
     <string name="dashclock_widget_title_start_expanded">Mae %1$s yn dechrau - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">Mae %1$s yn dechrau heddiw</string>
     <string name="dashclock_pref_displayed_task_title">Digwyddiadau a ddangosir</string>
-    <string name="dashclock_pref_displayed_task_summary">Dewisa pa ddigwyddiadau tasgau i'w dangos yn y teclyn DashGloc.</string>
-    <string name="dashclock_pref_displayed_task_dialog_title">Digwyddiadau i'w dangos</string>
+    <string name="dashclock_pref_displayed_task_summary">Dewisa pa ddigwyddiadau tasgau i\'w dangos yn y teclyn DashGloc.</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Digwyddiadau i\'w dangos</string>
     <string name="dashclock_display_type_due">tasgau yn derfyn</string>
     <string name="dashclock_display_type_start">tasgau yn dechrau</string>
     <string name="dashclock_display_type_start_and_due">tasgau yn dechrau a therfyn</string>
@@ -274,8 +274,8 @@
 
     <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
     <string name="opentasks_permission_request_dialog_getaccounts_title">Angen caniatâd</string>
-    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[In order to read the list of accounts on your device which support task synchronization, %s needs the GET_ACCOUNTS permission.<br/><br/>
-    Please note that, due to an unfortunate choice by Google, the permission request will be labeled as &quot;access your contacts&quot; instead of &quot;read your accounts&quot;. See <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> for further information.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Er mwyn darllen y rhestr o gyfrifon ar dy ddyfais sy'n cefnogi cydamseru tasgau, mae ar %s angen caniatâd GET_ACCOUNTS.<br/><br/>
+    Noder, oherwydd dewis anffodus gan Google, caiff y cais am ganiatâd ei labelu fel &quot;access your contacts&quot; yn hytrach na &quot;read your accounts&quot;. Gweler <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> am wybodaeth bellach.]]></string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Parhau</string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Agor Gosodiadau</string>
 
@@ -285,7 +285,7 @@
     <string name="opentasks_date_time">%1$s, %2$s</string>
 
     <!-- Title of the notification channel for pinned tasks -->
-    <string name="opentasks_notification_channel_pinned_tasks">Tasgau wedi'u hoelio</string>
+    <string name="opentasks_notification_channel_pinned_tasks">Tasgau wedi\'u hoelio</string>
 
     <!-- Title of the notification channel for start and due alerts -->
     <string name="opentasks_notification_channel_due_dates">Dyddiadau dechrau a therfyn </string>
