@@ -29,14 +29,11 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,6 +46,8 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupCollapseListener;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.bolts.color.elementary.ValueColor;
@@ -73,6 +72,10 @@ import org.dmfs.tasks.utils.OnModelLoadedListener;
 import org.dmfs.tasks.utils.RetainExpandableListView;
 import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.utils.SearchHistoryDatabaseHelper.SearchHistoryColumns;
+
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 
 /**
@@ -458,7 +461,7 @@ public class TaskListFragment extends SupportFragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader)
     {
-        mAdapter.changeCursor(null);
+        mAdapter.changeCursor(new MatrixCursor(new String[] { "_id" }));
     }
 
 
@@ -512,7 +515,7 @@ public class TaskListFragment extends SupportFragment
      */
     public void prepareReload()
     {
-        mAdapter = new ExpandableGroupDescriptorAdapter(getActivity(), getLoaderManager(), mGroupDescriptor);
+        mAdapter = new ExpandableGroupDescriptorAdapter(new MatrixCursor(new String[] { "_id" }), getActivity(), getLoaderManager(), mGroupDescriptor);
         mExpandableListView.setAdapter(mAdapter);
         mExpandableListView.setOnChildClickListener(mTaskItemClickListener);
         mExpandableListView.setOnGroupCollapseListener(mTaskListCollapseListener);
