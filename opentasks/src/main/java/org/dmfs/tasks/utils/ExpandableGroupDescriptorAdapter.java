@@ -20,8 +20,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +31,10 @@ import org.dmfs.tasks.groupings.filters.AbstractFilter;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 
 /**
@@ -57,13 +59,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
     private Handler mHandler = new Handler();
 
 
-    public ExpandableGroupDescriptorAdapter(Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
-    {
-        this(null, context, loaderManager, descriptor);
-    }
-
-
-    public ExpandableGroupDescriptorAdapter(Cursor cursor, Context context, LoaderManager loaderManager, ExpandableGroupDescriptor descriptor)
+    public ExpandableGroupDescriptorAdapter(@NonNull Cursor cursor, @NonNull Context context, @NonNull LoaderManager loaderManager, @NonNull ExpandableGroupDescriptor descriptor)
     {
         super(cursor, context, false);
         mContext = context;
@@ -91,6 +87,7 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
     }
 
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int pos, Bundle arguments)
     {
