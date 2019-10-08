@@ -27,10 +27,10 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class IsProperty extends DelegatingPredicate
+public final class IsProperty extends DelegatingPredicate<TaskContract.Properties>
 {
     public IsProperty(String mimeType)
     {
-        super(new EqArg(TaskContract.PropertyColumns.MIMETYPE, mimeType));
+        super(new EqArg<>(TaskContract.PropertyColumns.MIMETYPE, mimeType));
     }
 }

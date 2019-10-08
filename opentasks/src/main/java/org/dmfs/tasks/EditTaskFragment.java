@@ -18,6 +18,7 @@ package org.dmfs.tasks;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -41,10 +42,20 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import org.dmfs.android.bolts.color.elementary.ValueColor;
+import org.dmfs.android.contentpal.predicates.AllOf;
+import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.android.contentpal.predicates.ReferringTo;
+import org.dmfs.android.contentpal.references.RowUriReference;
+import org.dmfs.android.contentpal.rowsets.Frozen;
+import org.dmfs.android.contentpal.rowsets.QueryRowSet;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.jems.optional.adapters.First;
+import org.dmfs.opentaskspal.readdata.Id;
+import org.dmfs.opentaskspal.views.InstancesView;
 import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.provider.tasks.utils.With;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -722,9 +733,25 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 activity.finish();
                 if (isNewTask)
                 {
-                    activity.startActivity(
-                            new Intent(Intent.ACTION_VIEW, mTaskUri)
-                                    .putExtra(ViewTaskActivity.EXTRA_COLOR, mListColor));
+                    // When creating a new task we're dealing with a task URI, for now we start the details view with an instance URI though
+                    // so get the first instance of the new task and open it
+                    new With<>(
+                            new First<>(
+                                    new Frozen<>(
+                                            new QueryRowSet<>(
+                                                    new InstancesView<>(mAuthority, activity.getContentResolver().acquireContentProviderClient(mAuthority)),
+                                                    Id.PROJECTION,
+                                                    new AllOf<>(
+                                                            new EqArg<>(TaskContract.Instances.DISTANCE_FROM_CURRENT, 0),
+                                                            new ReferringTo<>(TaskContract.Instances.TASK_ID, new RowUriReference<Tasks>(mTaskUri)))))))
+                            .process(
+                                    snapShot ->
+                                            activity.startActivity(
+                                                    new Intent(
+                                                            Intent.ACTION_VIEW,
+                                                            ContentUris.withAppendedId(TaskContract.Instances.getContentUri(mAuthority),
+                                                                    new Id(snapShot.values()).value()))
+                                                            .putExtra(ViewTaskActivity.EXTRA_COLOR, mListColor)));
                 }
             }
             else

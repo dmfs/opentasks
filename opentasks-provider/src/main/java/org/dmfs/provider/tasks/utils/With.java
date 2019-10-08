@@ -16,6 +16,8 @@
 
 package org.dmfs.provider.tasks.utils;
 
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.adapters.SinglePresent;
 import org.dmfs.jems.procedure.Procedure;
 import org.dmfs.jems.single.Single;
 
@@ -30,7 +32,7 @@ import org.dmfs.jems.single.Single;
 @Deprecated
 public final class With<T> implements Procedure<Procedure<T>>
 {
-    private final Single<T> mValue;
+    private final Optional<T> mValue;
 
 
     public With(T value)
@@ -41,6 +43,12 @@ public final class With<T> implements Procedure<Procedure<T>>
 
     public With(Single<T> value)
     {
+        this(new SinglePresent<>(value));
+    }
+
+
+    public With(Optional<T> value)
+    {
         mValue = value;
     }
 
@@ -48,6 +56,9 @@ public final class With<T> implements Procedure<Procedure<T>>
     @Override
     public void process(Procedure<T> delegate)
     {
-        delegate.process(mValue.value());
+        if (mValue.isPresent())
+        {
+            delegate.process(mValue.value());
+        }
     }
 }

@@ -16,8 +16,6 @@
 
 package org.dmfs.opentaskspal.rowsets;
 
-import androidx.annotation.NonNull;
-
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowReference;
 import org.dmfs.android.contentpal.RowSet;
@@ -26,6 +24,8 @@ import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.rowsets.DelegatingRowSet;
 import org.dmfs.android.contentpal.rowsets.QueryRowSet;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -37,7 +37,7 @@ public final class Subtasks extends DelegatingRowSet<Tasks>
 {
 
     public Subtasks(@NonNull View<Tasks> view,
-                    @NonNull Projection projection,
+                    @NonNull Projection<? super Tasks> projection,
                     @NonNull RowReference<Tasks> parentTask)
     {
         super(new QueryRowSet<>(view, projection, new ReferringTo<>(Tasks.PARENT_ID, parentTask)));

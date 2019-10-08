@@ -124,7 +124,7 @@ public final class ActionService extends JobIntentService
                             TaskTitle.PROJECTION,
                             TaskVersion.PROJECTION,
                             TaskIsClosed.PROJECTION),
-                    new EqArg(TaskContract.Instances._ID, ContentUris.parseId(instanceUri))))
+                    new EqArg<>(TaskContract.Instances._ID, ContentUris.parseId(instanceUri))))
             {
                 resolveAction(intent.getAction()).execute(this, contentProviderClient, snapshot.values(), instanceUri);
             }

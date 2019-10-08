@@ -17,7 +17,6 @@
 package org.dmfs.opentaskspal.tables;
 
 import android.content.ContentProviderClient;
-import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.InsertOperation;
 import org.dmfs.android.contentpal.Operation;
@@ -29,6 +28,8 @@ import org.dmfs.android.contentpal.View;
 import org.dmfs.opentaskspal.operations.TaskListTask;
 import org.dmfs.opentaskspal.predicates.TaskOnList;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -61,7 +62,7 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
 
     @NonNull
     @Override
-    public Operation<TaskContract.Tasks> updateOperation(@NonNull UriParams uriParams, @NonNull Predicate predicate)
+    public Operation<TaskContract.Tasks> updateOperation(@NonNull UriParams uriParams, @NonNull Predicate<? super TaskContract.Tasks> predicate)
     {
         return mDelegate.updateOperation(uriParams, new TaskOnList(mTaskListRow, predicate));
     }
@@ -69,7 +70,7 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
 
     @NonNull
     @Override
-    public Operation<TaskContract.Tasks> deleteOperation(@NonNull UriParams uriParams, @NonNull Predicate predicate)
+    public Operation<TaskContract.Tasks> deleteOperation(@NonNull UriParams uriParams, @NonNull Predicate<? super TaskContract.Tasks> predicate)
     {
         return mDelegate.deleteOperation(uriParams, new TaskOnList(mTaskListRow, predicate));
     }
@@ -77,7 +78,7 @@ public final class TaskListScoped implements Table<TaskContract.Tasks>
 
     @NonNull
     @Override
-    public Operation<TaskContract.Tasks> assertOperation(@NonNull UriParams uriParams, @NonNull Predicate predicate)
+    public Operation<TaskContract.Tasks> assertOperation(@NonNull UriParams uriParams, @NonNull Predicate<? super TaskContract.Tasks> predicate)
     {
         return mDelegate.assertOperation(uriParams, new TaskOnList(mTaskListRow, predicate));
     }
