@@ -120,10 +120,10 @@ public class TaskNotificationService extends JobIntentService
                                                 new InstancesView<>(authority, getContentResolver().acquireContentProviderClient(authority))),
                                         new Composite<>(Id.PROJECTION, TaskVersion.PROJECTION, TaskPin.PROJECTION, TaskIsClosed.PROJECTION,
                                                 EffectiveDueDate.PROJECTION, TaskStart.PROJECTION),
-                                        new AnyOf(
+                                        new AnyOf<>(
                                                 // task is either pinned or has a notification
-                                                new EqArg(Tasks.PINNED, 1),
-                                                new In(Tasks._ID, new Mapped<>(p -> ContentUris.parseId(p.instance()), currentNotifications))))),
+                                                new EqArg<>(Tasks.PINNED, 1),
+                                                new In<>(Tasks._ID, new Mapped<>(p -> ContentUris.parseId(p.instance()), currentNotifications))))),
                         (o, o2) -> (int) (ContentUris.parseId(o.instance()) - ContentUris.parseId(o2.instance()))))
                 {
                     if (!diff.left().isPresent())

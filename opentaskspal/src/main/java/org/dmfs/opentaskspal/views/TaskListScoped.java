@@ -54,7 +54,7 @@ public final class TaskListScoped implements View<TaskContract.Tasks>
 
     @NonNull
     @Override
-    public Cursor rows(@NonNull UriParams uriParams, @NonNull Projection<? super TaskContract.Tasks> projection, @NonNull Predicate predicate, @NonNull Optional<String> sorting) throws RemoteException
+    public Cursor rows(@NonNull UriParams uriParams, @NonNull Projection<? super TaskContract.Tasks> projection, @NonNull Predicate<? super TaskContract.Tasks> predicate, @NonNull Optional<String> sorting) throws RemoteException
     {
         return mDelegate.rows(uriParams, projection, new TaskOnList(mTaskListRow, predicate), sorting);
     }
