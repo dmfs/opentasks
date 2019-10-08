@@ -29,11 +29,11 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class TaskOnList extends DelegatingPredicate
+public final class TaskOnList extends DelegatingPredicate<TaskContract.Tasks>
 {
-    public TaskOnList(RowSnapshot<TaskContract.TaskLists> taskListRow, Predicate predicate)
+    public TaskOnList(RowSnapshot<TaskContract.TaskLists> taskListRow, Predicate<? super TaskContract.Tasks> predicate)
     {
-        super(new AllOf(predicate, new ReferringTo<>(TaskContract.Tasks.LIST_ID, taskListRow)));
+        super(new AllOf<>(predicate, new ReferringTo<>(TaskContract.Tasks.LIST_ID, taskListRow)));
     }
 
 }

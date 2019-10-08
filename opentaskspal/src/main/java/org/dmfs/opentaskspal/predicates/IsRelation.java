@@ -26,7 +26,7 @@ import org.dmfs.tasks.contract.TaskContract;
  *
  * @author Gabor Keszthelyi
  */
-public final class IsRelation extends DelegatingPredicate
+public final class IsRelation extends DelegatingPredicate<TaskContract.Properties>
 {
     public IsRelation()
     {

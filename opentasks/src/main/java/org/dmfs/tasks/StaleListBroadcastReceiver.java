@@ -71,9 +71,9 @@ public final class StaleListBroadcastReceiver extends BroadcastReceiver
                                         new QueryRowSet<>(
                                                 new TaskListsView(authority, context.getContentResolver().acquireContentProviderClient(authority)),
                                                 new MultiProjection<>(TaskContract.TaskLists.ACCOUNT_NAME, TaskContract.TaskLists.ACCOUNT_TYPE),
-                                                new Not(new AnyOf(
+                                                new Not<>(new AnyOf<>(
                                                         new Joined<>(new Seq<>(
-                                                                new EqArg(TaskContract.TaskLists.ACCOUNT_TYPE, TaskContract.LOCAL_ACCOUNT_TYPE)),
+                                                                new EqArg<>(TaskContract.TaskLists.ACCOUNT_TYPE, TaskContract.LOCAL_ACCOUNT_TYPE)),
                                                                 new Mapped<>(AccountEq::new, new Seq<>(accountManager.getAccounts()))))))))))
         {
             context.startActivity(accountRequestIntent);
