@@ -6,10 +6,10 @@
 
     <!-- Permissions -->
 
-    <string name="opentasks_permission_read_tasks">lees taken</string>
-    <string name="opentasks_permission_description_read_tasks">Staat toe een app om taken in je takenlijst te lezen</string>
-    <string name="opentasks_permission_write_tasks">schrijf taken</string>
-    <string name="opentasks_permission_description_write_tasks">Staat toe een app om taken in je takenlijst aan te maken</string>
-    <string name="opentasks_permission_group_description_tasks">Staat toe een app om taken in je takenlijst aan te maken</string>
+    <string name="opentasks_permission_read_tasks">leestaken</string>
+    <string name="opentasks_permission_description_read_tasks">Staat een app toe om taken in je takenlijst te lezen</string>
+    <string name="opentasks_permission_write_tasks">schrijftaken</string>
+    <string name="opentasks_permission_description_write_tasks">Staat een app toe om taken in je takenlijst aan te maken</string>
+    <string name="opentasks_permission_group_description_tasks">Staat een app tpe om taken in je takenlijst aan te maken</string>
 
 </resources>
