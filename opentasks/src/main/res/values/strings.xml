@@ -237,7 +237,7 @@
     <string name="dashclock_widget_title_start_expanded">%1$s starts - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s starts today</string>
     <string name="dashclock_pref_displayed_task_title">Displayed events</string>
-    <string name="dashclock_pref_displayed_task_summary">Select which events of tasks are displayed in the dashclock widget</string>
+    <string name="dashclock_pref_displayed_task_summary">Select which events of tasks are displayed in the DashClock widget</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Events to display</string>
     <string name="dashclock_display_type_due">due tasks</string>
     <string name="dashclock_display_type_start">starting tasks</string>
@@ -284,6 +284,6 @@
     <string name="opentasks_notification_channel_pinned_tasks">Pinned tasks</string>
 
     <!-- Title of the notification channel for start and due alerts -->
-    <string name="opentasks_notification_channel_due_dates">Start and due dates </string>
+    <string name="opentasks_notification_channel_due_dates">Start and due dates</string>
 
 </resources>

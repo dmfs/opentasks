@@ -5,18 +5,18 @@
     <string name="app_name">OpenTasks</string>
 
     <!-- Task list -->
-    <string name="menu_add_task">Taak toevoegen</string>
-    <string name="menu_add_task_condensed">Toevoegen</string>
-    <string name="menu_show_completed">Afgeronde taken weergeven</string>
-    <string name="menu_show_completed_condensed">Afgeronde taken weergeven</string>
+    <string name="menu_add_task">Voeg taak toe</string>
+    <string name="menu_add_task_condensed">Voeg toe</string>
+    <string name="menu_show_completed">Toon afgeronde taken</string>
+    <string name="menu_show_completed_condensed">Toon afgeronde taken</string>
     <string name="menu_sync_now">Ververs</string>
     <string name="menu_sync_now_condensed">Ververs</string>
-    <string name="menu_search_hint">Zoeken</string>
-    <string name="toast_task_completed">\"%1s\" afgerond.</string>
-    <string name="toast_task_uncompleted">\"%1s\" heropend.</string>
-    <string name="toast_x_removed">\"%1s\" verwijderd.</string>
+    <string name="menu_search_hint">Zoek</string>
+    <string name="toast_task_completed">\"%1s\" afgerond</string>
+    <string name="toast_task_uncompleted">\"%1s\" heropend</string>
+    <string name="toast_x_removed">\"%1s\" verwijderd</string>
     <string name="task_group_title_list">Taken</string>
-    <string name="task_group_title_start">Taken beginnen</string>
+    <string name="task_group_title_start">Taken te starten</string>
     <string name="task_group_title_due">Taken te doen</string>
     <string name="task_group_title_priority">Taakprioriteit</string>
     <string name="task_group_title_progress">Taakvoortgang</string>
@@ -34,24 +34,24 @@
     <string name="activity_task_details_edit_task">Taak wijzigen</string>
     <string name="activity_task_details_delete">Verwijder</string>
     <string name="activity_task_details_delete_task">Taak verwijderen</string>
-    <string name="activity_task_details_complete">Afronden</string>
+    <string name="activity_task_details_complete">Rond af</string>
     <string name="activity_task_details_complete_task">Taak afronden</string>
-    <string name="activity_task_details_pin">Vastzetten</string>
+    <string name="activity_task_details_pin">Zet vast</string>
 
     <!-- The title of the button to add a new item to a check list. -->
-    <string name="opentasks_checklist_add_item">Item toevoegen</string>
+    <string name="opentasks_checklist_add_item">Voeg item toe</string>
 
     <!--
     The hint that's shown for a check list item that has no text.
     Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
     -->
-    <string name="opentasks_checklist_empty_item_hint">Item titel</string>
+    <string name="opentasks_checklist_empty_item_hint">Itemtitel</string>
 
     <!-- Task editor -->
-    <string name="activity_edit_task_title">Taak aanpassen</string>
-    <string name="activity_add_task_title">Taak maken</string>
+    <string name="activity_edit_task_title">Pas taak aan</string>
+    <string name="activity_add_task_title">Maak aak aan</string>
     <string name="activity_edit_task_error_invalid_url">Ongeldige URL</string>
-    <string name="activity_edit_task_task_saved">Taak opgeslagen.</string>
+    <string name="activity_edit_task_task_saved">Taak is opgeslagen.</string>
     <string name="activity_edit_task_empty_task_not_saved">Een lege taak wordt niet opgeslagen.</string>
 
     <!-- Names of task attributes -->
@@ -86,7 +86,7 @@
     <string name="task_group_due_in_future">In de toekomst</string>
 
     <!-- Task list start group titles -->
-    <string name="task_group_start_started">Al begonnen</string>
+    <string name="task_group_start_started">Al gestart</string>
     <string name="task_group_start_today">Vandaag</string>
     <string name="task_group_start_tomorrow">Morgen</string>
     <string name="task_group_start_within_7_days">Binnen een week</string>
@@ -114,9 +114,9 @@
 
     <!-- Task editor labels -->
 
-    <string name="action_save">Opslaan</string>
+    <string name="action_save">Sla op</string>
     <string name="action_cancel">Annuleer</string>
-    <string name="action_save_and_continue">Opslaan en doorgaan</string>
+    <string name="action_save_and_continue">Sla op en ga door</string>
 
     <!-- Status labels -->
 
@@ -145,7 +145,7 @@
 
     <string name="title_activity_settings">Instellingen</string>
     <string name="action_settings">Instellingen</string>
-    <string name="action_add_local_list">Lijst toevoegen</string>
+    <string name="action_add_local_list">Voeg lijst toe</string>
     <string name="visible_task_lists">Getoonde taaklijsten</string>
     <string name="synced_task_lists">Gesynchroniseerde lijsten</string>
 
@@ -154,16 +154,16 @@
 
     <!-- manage task list activity -->
 
-    <string name="activity_manage_list_btn_save">Opslaan</string>
-    <string name="activity_manage_list_btn_delete">Lijst verwijderen</string>
-    <string name="activity_add_list_title">Lokale lijst aanmaken</string>
-    <string name="activity_edit_list_title">Lijst instellingen</string>
+    <string name="activity_manage_list_btn_save">Sla op</string>
+    <string name="activity_manage_list_btn_delete">Verwijder lijst</string>
+    <string name="activity_add_list_title">Maak lokale lijst aan</string>
+    <string name="activity_edit_list_title">Lijstinstellingen</string>
     <string name="task_list_name_caption">Naam</string>
-    <string name="task_list_no_sync">NB: Dit maakt een lokale lijst. Deze taken worden niet gesynchroniseerd.</string>
-    <string name="task_list_color_caption">Lijst kleur</string>
+    <string name="task_list_no_sync">NB: Dit creëert een lokale lijst. Deze taken worden niet gesynchroniseerd.</string>
+    <string name="task_list_color_caption">Lijstkleur</string>
 
     <!-- input dialog -->
-    <string name="task_list_name_dialog_hint">Lijst naam</string>
+    <string name="task_list_name_dialog_hint">Lijstnaam</string>
     <string name="task_list_name_dialog_title">Geef je lijst een naam</string>
     <string name="task_list_name_dialog_error">Voer een naam in.</string>
 
@@ -171,24 +171,24 @@
     <string name="task_list_delete_dialog_title">Verwijder %s</string>
     <string name="task_list_delete_dialog_message">Verwijder de lijst en alle taken in de lijst?\n
  NB: Er is geen mogelijkheid om een verwijderde lijst te herstellen.</string>
-    <string name="task_list_delete_toast">%s verwijderd</string>
+    <string name="task_list_delete_toast">%s is verwijderd</string>
 
     <!-- Label for Expandable Group Descriptors -->
-    <string name="gd_by_due_date">Per einddatum</string>
-    <string name="gd_by_completed">Per status</string>
-    <string name="gd_by_list">Per lijst</string>
+    <string name="gd_by_due_date">Op einddatum</string>
+    <string name="gd_by_completed">Op status</string>
+    <string name="gd_by_list">Op lijst</string>
 
     <!-- String for confirm delete dialog -->
     <string name="confirm_delete_title">Bevestig verwijderen</string>
     <string name="confirm_delete_message">Verwijder deze taak?</string>
     <string name="confirm_delete_message_with_title">Verwijder \"%1s\"?</string>
-    <string name="toast_task_deleted">\"%1s\" verwijderd.</string>
+    <string name="toast_task_deleted">\"%1s\" is verwijderd</string>
 
     <!-- Strings in the Task List Selection Fragment -->
     <string name="task_list_selection_empty">Er zijn geen takenlijsten beschikbaar</string>
     <string name="task_list_selection_title">Kies je lijst</string>
-    <string name="task_list_selection_ok">Ok</string>
-    <string name="task_list_selection_cancel">Annuleren</string>
+    <string name="task_list_selection_ok">Oké</string>
+    <string name="task_list_selection_cancel">Annuleer</string>
 
     <!-- Strings for Task List Widget -->
     <string name="task_list_widget_title">Actuele taken</string>
@@ -206,15 +206,15 @@
 
     <!-- Strings for notification -->
     <string name="notification_task_due_date">Taak te doen, %1s</string>
-    <string name="notification_task_start_date">Taak begint, %1s</string>
-    <string name="notification_task_due_today">Taak vandaag te doen</string>
-    <string name="notification_task_start_today">Taak begint vandaag</string>
+    <string name="notification_task_start_date">Taak te starten, %1s</string>
+    <string name="notification_task_due_today">Taak vandaag doen</string>
+    <string name="notification_task_start_today">Taak vandaag starten</string>
     <string name="notification_action_completed">Afgerond</string>
     <string name="notification_action_delay_1h">+1 uur</string>
     <string name="notification_action_delay_1d">+1 dag</string>
-    <string name="notification_action_delay_toast">Datum achterstallige taak bijgewerkt</string>
-    <string name="notification_undo">Herstellen</string>
-    <string name="notification_action_unpin">Losgezet</string>
+    <string name="notification_action_delay_toast">Datum achterstallige taak is bijgewerkt</string>
+    <string name="notification_undo">Maak ongedaan</string>
+    <string name="notification_action_unpin">Zet los</string>
     <string name="notification_task_pin_ticker">%1$s is vastgezet</string>
 
     <!-- Strings for time UI widgets -->
@@ -223,26 +223,59 @@
 
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Taken</string>
+    <string name="dashclock_extension_description">Toon informatie over recente taken.</string>
     <string name="dashclock_widget_title_due_expanded">%1$s moet worden gedaan - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s moet worden gedaan</string>
-    <string name="dashclock_widget_title_start_expanded">%1$s begint - %2$s</string>
-    <string name="dashclock_widget_title_start_expanded_allday">%1$s starten vandaag</string>
-    <string name="dashclock_pref_displayed_task_summary">Selecteer taken en items om weer te geven in de dashclock widget</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s start - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s start vandaag</string>
+    <string name="dashclock_pref_displayed_task_title">Toon evenementen</string>
+    <string name="dashclock_pref_displayed_task_summary">Selecteer taken en items om weer te geven in de DashClock-widget</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Activiteiten om weer te geven</string>
     <string name="dashclock_display_type_due">Taken te doen</string>
-    <string name="dashclock_display_type_start">Beginnende taken</string>
-    <string name="dashclock_display_type_start_and_due">Beginnende en huidige taken</string>
+    <string name="dashclock_display_type_start">Taken te starten</string>
+    <string name="dashclock_display_type_start_and_due">Taken te starten en te doen</string>
     <string name="dashclock_display_type_all">Alle</string>
     <string name="dashclock_display_type_pinned">Vastgezette taken</string>
-    <string name="dashclock_preference_title">Taak DashClock voorkeuren</string>
+    <string name="dashclock_preference_title">Taakvoorkeuren DashClock</string>
 
     <!-- General -->
-    <string name="accept">Accepteren</string>
+    <string name="accept">Accepteer</string>
     <string name="now">Nu</string>
 
     <!-- Incoming share -->
-    <string name="share_as_task">Taak toevoegen</string>
+    <string name="share_as_task">Voeg toe als taak</string>
 
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Notificaties</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Notificatiesignalen</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Geluid</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibreer</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Lichtpuls</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Deel via OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Rechten nodig</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Om op je apparaat de lijst van accounts te kunnen lezen die taaksynchronisatie ondersteunen heeft %s de rechten GET_ACCOUNTS nodig.<br/><br/>
+    Let op: door een onhandige keuze van Google zal het verzoek gelabelled zijn met &quot;access your contacts&quot; in plaats van &quot;read your accounts&quot;. Zie <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> voor meer informatie.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Ga verder</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Open instellingen</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
     <string name="opentasks_date_time">%1$s %2$s</string>
+
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">Vastgezette taken</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">Start- en einddata</string>
 
 </resources>
