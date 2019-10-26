@@ -39,7 +39,7 @@
     <string name="activity_task_details_complete_task">Komplet opgave</string>
     <string name="activity_task_details_pin">Pin</string>
     <string name="activity_task_details_pin_task">Pin opgave</string>
-    <string name="opentasks_details_no_task_selected">Ingen opgave valgt/string>
+    <string name="opentasks_details_no_task_selected">Ingen opgave valgt</string>
     <string name="opentasks_task_details_menu_send_short">Send</string>
     <string name="opentasks_task_details_menu_send">Send til</string>
 
