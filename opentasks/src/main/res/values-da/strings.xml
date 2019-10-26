@@ -136,7 +136,7 @@
     <string name="classification_not_specified">ikke specificeret</string>
     <string name="classification_public">offentlig</string>
     <string name="classification_private">privat</string>
-    <string name="classification_confidential">fortrolig/string>
+    <string name="classification_confidential">fortrolig</string>
 
     <!-- Priority labels -->
 
@@ -284,6 +284,6 @@
     <string name="opentasks_notification_channel_pinned_tasks">Fastlagte opgaver</string>
 
     <!-- Title of the notification channel for start and due alerts -->
-    <string name="opentasks_notification_channel_due_dates">Start og forfaldsdatoer </string>
+    <string name="opentasks_notification_channel_due_dates">Start og forfaldsdatoer</string>
 
 </resources>
