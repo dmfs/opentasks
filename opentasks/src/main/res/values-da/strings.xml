@@ -121,11 +121,11 @@
 
     <string name="action_save">Gem</string>
     <string name="action_cancel">Annuller</string>
-    <string name="action_save_and_continue">Gem og fortsæt/string>
+    <string name="action_save_and_continue">Gem og fortsæt</string>
 
     <!-- Status labels -->
 
-    <string name="status_needs_action">har brug for handling/string>
+    <string name="status_needs_action">har brug for handling</string>
     <string name="status_in_process">under behandling</string>
     <string name="status_completed">færdig</string>
     <string name="status_cancelled">annulleret</string>
@@ -133,7 +133,7 @@
 
     <!-- Classification labels -->
 
-    <string name="classification_not_specified">ikke specificeret/string>
+    <string name="classification_not_specified">ikke specificeret</string>
     <string name="classification_public">offentlig</string>
     <string name="classification_private">privat</string>
     <string name="classification_confidential">fortrolig/string>
