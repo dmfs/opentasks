@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">Tilføj opgave</string>
+    <string name="menu_add_task_condensed">Tilføj</string>
+    <string name="menu_show_completed">Vis afsluttede opgaver</string>
+    <string name="menu_show_completed_condensed">Vis afsluttede opgaver</string>
+    <string name="menu_sync_now">Opdater</string>
+    <string name="menu_sync_now_condensed">Opdater</string>
+    <string name="menu_search_hint">Søg</string>
+    <string name="toast_task_created">\"%1s\" tilføjet.</string>
+    <string name="toast_task_completed">\"%1s\" afsluttet.</string>
+    <string name="toast_task_uncompleted">\"%1s\" genåbnet.</string>
+    <string name="toast_x_removed">\"%1s\" fjernet.</string>
+    <string name="task_group_title_list">Opgaver</string>
+    <string name="task_group_title_start">Opgaver starter</string>
+    <string name="task_group_title_due">Forfaldne opgaver</string>
+    <string name="task_group_title_priority">Opgaveprioritet</string>
+    <string name="task_group_title_progress">Opgave fremskridt</string>
+    <string name="task_group_title_default">Opgaver</string>
+    <string name="quick_add_task_created">Opgave oprettet</string>
+    <string name="initial_local_task_list_name">Mine opgaver</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="one">%d opgave</item>
+        <item quantity="other">%d opgaver</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">Edit</string>
+    <string name="activity_task_details_edit_task">Rediger opgave</string>
+    <string name="activity_task_details_delete">Slet</string>
+    <string name="activity_task_details_delete_task">Slet opgave</string>
+    <string name="activity_task_details_complete">Komplet</string>
+    <string name="activity_task_details_complete_task">Komplet opgave</string>
+    <string name="activity_task_details_pin">Pin</string>
+    <string name="activity_task_details_pin_task">Pin opgave</string>
+    <string name="opentasks_details_no_task_selected">Ingen opgave valgt</string>
+    <string name="opentasks_task_details_menu_send_short">Send</string>
+    <string name="opentasks_task_details_menu_send">Send til</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Tilføj opgave</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Item title</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">Redigere</string>
+    <string name="activity_add_task_title">Opret</string>
+    <string name="activity_edit_task_error_invalid_url">ugyldig URL</string>
+    <string name="activity_edit_task_task_saved">Opgaven er gemt.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Tom opgave er ikke gemt.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">List</string>
+    <string name="task_title">Title</string>
+    <string name="task_location">Sted</string>
+    <string name="task_description">Beskrivelse</string>
+    <string name="task_checklist">Tjekliste</string>
+    <string name="task_start">Start</string>
+    <string name="task_due">Forfald</string>
+    <string name="task_completed">Afsluttet</string>
+    <string name="task_percent_complete">Procent fuldført</string>
+    <string name="task_status">Status</string>
+    <string name="task_classification">Privatliv</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">Opgavedetaljer</string>
+    <string name="title_task_list">Opgaver</string>
+    <string name="task_detail_activity">Opgavedetaljer</string>
+    <string name="task_priority">Prioritet</string>
+    <string name="task_timezone">Tidszone</string>
+    <string name="task_all_day">Hele Dagen</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">Ingen forfaldsdato</string>
+    <string name="task_group_overdue">Forsinket</string>
+    <string name="task_group_due_today">I dag</string>
+    <string name="task_group_due_tomorrow">I morgen</string>
+    <string name="task_group_due_within_7_days">De næste dage</string>
+    <string name="task_group_due_in_month">Due in %s</string>
+    <string name="task_group_due_in_year">Due in %d</string>
+    <string name="task_group_due_in_future">En Dag</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">Allerede Startet</string>
+    <string name="task_group_start_today">I dag</string>
+    <string name="task_group_start_tomorrow">I morgen</string>
+    <string name="task_group_start_within_7_days">En Dag</string>
+    <string name="task_group_start_in_future">Senere</string>
+    <string name="task_group_due_title">Due</string>
+    <string name="task_group_all_title">Lister</string>
+    <string name="task_group_completed_title">Afsluttet</string>
+    <string name="task_group_start_title">Start</string>
+    <string name="task_group_search_title">Søg</string>
+    <string name="task_group_priority_title">Prioritet</string>
+    <string name="task_group_progress_title">Fremskridt</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">Intet opnået</string>
+    <string name="task_group_progress_40">Lidt i nu</string>
+    <string name="task_group_progress_60">Halvvejs der</string>
+    <string name="task_group_progress_80">Næsten færdig</string>
+    <string name="task_group_progress_100">Færdig</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">Høj prioritet</string>
+    <string name="task_group_priority_medium">Medium prioritet</string>
+    <string name="task_group_priority_low">Lav prioritet</string>
+    <string name="task_group_priority_none">Ingen prioritet</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">Gem</string>
+    <string name="action_cancel">Annuller</string>
+    <string name="action_save_and_continue">Gem og fortsæt</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">har brug for handling</string>
+    <string name="status_in_process">under behandling</string>
+    <string name="status_completed">færdig</string>
+    <string name="status_cancelled">annulleret</string>
+    <string name="status_incomplete">ufuldstændig</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">ikke specificeret</string>
+    <string name="classification_public">offentlig</string>
+    <string name="classification_private">privat</string>
+    <string name="classification_confidential">fortrolig</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">ingen</string>
+    <string name="priority_low">lav</string>
+    <string name="priority_medium">medium</string>
+    <string name="priority_high">høj</string>
+    <string name="priority_urgent">trængende</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">Indstillinger</string>
+    <string name="action_settings">Indstillinger</string>
+    <string name="action_add_local_list">Tilføj Liste</string>
+    <string name="visible_task_lists">Vis Lister</string>
+    <string name="synced_task_lists">Synkroniserede Lister</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">Vælg en konto</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">gem</string>
+    <string name="activity_manage_list_btn_delete">slet liste</string>
+    <string name="activity_add_list_title">Opret lokal liste</string>
+    <string name="activity_edit_list_title">Listeindstillinger</string>
+    <string name="task_list_name_caption">Navn</string>
+    <string name="task_list_no_sync">Bemærk: Der opretter en lokal liste. Opgaver i lokale lister synkroniseres ikke.</string>
+    <string name="task_list_color_caption">List Color</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">liste navn</string>
+    <string name="task_list_name_dialog_title">Indtast listen navn</string>
+    <string name="task_list_name_dialog_error">Indtast et navn.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">Slet %s</string>
+    <string name="task_list_delete_dialog_message">Slet listen og alle opgaver inden for?\nBemærk: Der er ingen måde at gendanne en slettet liste.</string>
+    <string name="task_list_delete_toast">%s slettet</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">Efter forfaldsdato</string>
+    <string name="gd_by_completed">Efter afsluttet</string>
+    <string name="gd_by_list">Efter liste</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">Bekræft sletning</string>
+    <string name="confirm_delete_message">Slet denne opgave?</string>
+    <string name="confirm_delete_message_with_title">Slet \"%1s\"?</string>
+    <string name="toast_task_deleted">\"%1s\" fjernet.</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">Der findes ingen opgaveliste</string>
+    <string name="task_list_selection_title">Vælg lister, der skal vises</string>
+    <string name="task_list_selection_ok">OK</string>
+    <string name="task_list_selection_cancel">CANCEL</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">Nuværende opgaver</string>
+    <string name="task_list_widget_title_4x4">Nuværende opgaves 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">Komplet</string>
+    <string name="fling_task_edit">Redigere</string>
+    <string name="fling_task_delete">Slet</string>
+    <string name="fling_task_uncomplete">Ikke færdig</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">ikon for opgavens startdato</string>
+    <string name="cd_due_date">ikon for forfaldsdato for opgaven</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_date">Opgave forfaldsdato, %1s</string>
+    <string name="notification_task_start_date">Opgavestart, %1s</string>
+    <string name="notification_task_due_today">Opgave i dag</string>
+    <string name="notification_task_start_today">Opgaven starter i dag</string>
+    <string name="notification_action_complete">komplet</string>
+    <string name="notification_action_completed">Afsluttet</string>
+    <string name="notification_action_delay_1h">+1 time</string>
+    <string name="notification_action_delay_1d">+1 dag</string>
+    <string name="notification_action_delay_toast">Forfaldsdato opdateret</string>
+    <string name="notification_undo">Fortryd</string>
+    <string name="notification_action_unpin">frigøre</string>
+    <string name="notification_task_pin_ticker">%1$s blev fastgjort</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 time</string>
+    <string name="button_add_one_day">+1 dag</string>
+
+    <!-- Strings for QuickSettingsTile -->
+    <string name="quicksettingstile_create">Opret Opgave</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">Tasks</string>
+    <string name="dashclock_extension_description">Viser oplysninger til nylige opgaver.</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s forfalder - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">%1$s forfalder</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s starter - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s starter i dag</string>
+    <string name="dashclock_pref_displayed_task_title">Vis begivenheder</string>
+    <string name="dashclock_pref_displayed_task_summary">Vælg hvilke opgaver, der skal vises i dashlock-widgeten</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">Begivenheder, der skal vises</string>
+    <string name="dashclock_display_type_due">due tasks</string>
+    <string name="dashclock_display_type_start">startopgaver</string>
+    <string name="dashclock_display_type_start_and_due">start og forfaldne opgaver</string>
+    <string name="dashclock_display_type_all">alle</string>
+    <string name="dashclock_display_type_pinned">fastlagte opgaver</string>
+    <string name="dashclock_preference_title">Opgave DashClock-indstillinger</string>
+
+    <!-- General -->
+    <string name="accept">Acceptere</string>
+    <string name="now">nu</string>
+
+    <!-- Incoming share -->
+    <string name="share_as_task">Opret Opgave</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Underretninger</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Meddelelsessignaler</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Lyd</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibrere</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Pulslys</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Delt via OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Tilladelse nødvendig</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[For at læse listen over konti på din enhed, der understøtter synkronisering af opgaver, %s har brug for GET_ACCOUNTS tilladelse.<br/><br/>
+    Bemærk, at på grund af et uheldigt valg fra Google, vil tilladelsesanmodningen blive mærket som &quot;få adgang til dine kontakter&quot; i stedet for &quot;læse dine konti&quot;. Se <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> for mere information.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Forsæt</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Åbn Indstillinger</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
+    <string name="opentasks_date_time">%1$s, %2$s</string>
+
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">Fastlagte opgaver</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">Start og forfaldsdatoer</string>
+
+</resources>
