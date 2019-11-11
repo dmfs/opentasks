@@ -794,6 +794,9 @@ public final class TaskContract
 
         /**
          * The row id of the parent task. <code>null</code> if the task has no parent task.
+         *
+         * <b>This field may be read-only in the future.</b> Create a
+         * {@link org.dmfs.tasks.contract.TaskContract.Property.Relation} instead of writing to this field directly.
          * <p>
          * Value: Long
          * </p>
