@@ -70,14 +70,7 @@ public class TaskProviderBroadcastReceiver extends BroadcastReceiver
         }
 
         // AlarmManager API changed in v19 (KitKat) and the "set" method is not called at the exact time anymore
-        if (Build.VERSION.SDK_INT > 18)
-        {
-            am.setExact(AlarmManager.RTC_WAKEUP, updateTime.getTimestamp(), pendingIntent);
-        }
-        else
-        {
-            am.set(AlarmManager.RTC_WAKEUP, updateTime.getTimestamp(), pendingIntent);
-        }
+        am.setExact(AlarmManager.RTC_WAKEUP, updateTime.getTimestamp(), pendingIntent);
     }
 
 

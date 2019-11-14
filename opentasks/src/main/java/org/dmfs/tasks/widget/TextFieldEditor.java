@@ -77,15 +77,6 @@ public class TextFieldEditor extends AbstractFieldEditor implements OnFocusChang
         mText = (EditText) findViewById(android.R.id.text1);
         if (mText != null)
         {
-            /*
-             * enable memory leak workaround on android < 4.3: disable spell checker
-             */
-
-            int inputType = mText.getInputType();
-            if (Build.VERSION.SDK_INT < 18)
-            {
-                mText.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-            }
             mText.setOnFocusChangeListener(this);
         }
     }
