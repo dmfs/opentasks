@@ -1,8 +1,0 @@
-<resources>
-
-    <!--
-    On large devices we have to set a custom background since there doesn't seem to exist a way
-    to combine the default background for selectable and for activated items, but we need both.
-    -->
-
-</resources>

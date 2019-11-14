@@ -17,7 +17,6 @@
 package org.dmfs.tasks.widget;
 
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -300,15 +299,6 @@ public class CheckListFieldView extends AbstractFieldView implements OnCheckedCh
                 item.text = s.toString();
             }
         });
-
-        /*
-         * enable memory leak workaround on android < 4.3: disable spell checker
-         */
-        if (VERSION.SDK_INT < 18)
-        {
-            int inputType = text.getInputType();
-            text.setInputType(inputType | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        }
 
         // bind the remove button
         View removeButton = itemView.findViewById(R.id.remove_item);
