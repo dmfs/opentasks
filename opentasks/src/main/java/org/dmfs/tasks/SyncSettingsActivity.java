@@ -16,10 +16,14 @@
 package org.dmfs.tasks;
 
 import android.os.Bundle;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.android.material.appbar.AppBarLayout;
 
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.utils.BaseActivity;
@@ -42,6 +46,10 @@ public class SyncSettingsActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         // Show the Up button in the action bar.
+        AppBarLayout mAppBarLayout = findViewById(R.id.appbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mManager = getSupportFragmentManager();

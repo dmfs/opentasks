@@ -3,24 +3,22 @@
         style="@style/task_group_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff0f0f0"
-        android:paddingBottom="8dp"
         android:paddingLeft="@dimen/task_list_left_margin"
+        android:paddingTop="8dp"
         android:paddingRight="@dimen/task_list_right_margin"
-        android:paddingTop="8dp">
+        android:paddingBottom="8dp">
 
     <TextView
             android:id="@android:id/title"
             style="@style/task_group_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_margin="8dip"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textIsSelectable="false"/>
+            android:textIsSelectable="false" />
 
     <TextView
             android:id="@android:id/text2"
@@ -34,7 +32,7 @@
             android:padding="8dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textIsSelectable="false"/>
+            android:textIsSelectable="false" />
 
     <ImageView
             android:id="@+id/quick_add_task"
@@ -47,15 +45,6 @@
             android:clickable="true"
             android:padding="8dp"
             android:src="@drawable/ic_24_plus_black50"
-            android:visibility="gone"/>
-
-    <View
-            android:id="@+id/divider"
-            style="@style/task_list_group_divider"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:visibility="gone" />
 
 </RelativeLayout>

@@ -18,6 +18,7 @@ package org.dmfs.tasks.utils;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -87,6 +88,22 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
     }
 
 
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+    {
+        try
+        {
+            return super.getGroupView(groupPosition, isExpanded, convertView, parent);
+        }
+        catch (IllegalStateException e)
+        {
+            // temporary workaround for Exception with unknown reason
+            // for no w we simply try to ignore it
+            return newGroupView(mContext, new MatrixCursor(new String[0], 1), isExpanded, parent);
+        }
+    }
+
+
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int pos, Bundle arguments)
@@ -109,22 +126,6 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
     public boolean hasStableIds()
     {
         return true;
-    }
-
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
-    {
-        try
-        {
-            return super.getGroupView(groupPosition, isExpanded, convertView, parent);
-        }
-        catch (IllegalStateException e)
-        {
-            // try to silence an issue which appears to be a race condition until we've gotten rid of ExpandableListView
-            // for now we just return an empty group view
-            return newGroupView(mContext, null /* we don't use this */, false, parent);
-        }
     }
 
 

@@ -212,7 +212,7 @@
     <string name="fling_task_complete">Complete</string>
     <string name="fling_task_edit">Edit</string>
     <string name="fling_task_delete">Delete</string>
-    <string name="fling_task_uncomplete">Uncomplete</string>
+    <string name="fling_task_uncomplete">Resume</string>
 
     <!-- Accessibility content description -->
     <string name="cd_start_date">icon for the start date of the task</string>

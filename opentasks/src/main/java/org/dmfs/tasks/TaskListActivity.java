@@ -20,38 +20,26 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.view.MenuItemCompat;
-import androidx.core.view.MenuItemCompat.OnActionExpandListener;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
-import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.SearchView.OnQueryTextListener;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
-import android.view.WindowManager;
+
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.bolts.color.colors.PrimaryColor;
 import org.dmfs.android.bolts.color.elementary.ValueColor;
 import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.jems.single.adapters.Unchecked;
 import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.groupings.AbstractGroupingFactory;
@@ -65,8 +53,18 @@ import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.SearchHistoryHelper;
-import org.dmfs.jems.single.adapters.Unchecked;
-import org.dmfs.tasks.utils.colors.DarkenedForStatusBar;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SearchView.OnQueryTextListener;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
+import androidx.core.view.MenuItemCompat.OnActionExpandListener;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
 
 /**
@@ -538,7 +536,9 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             See https://github.com/dmfs/opentasks/issues/643
             and https://stackoverflow.com/questions/42209046/tablayout-icons-disappear-after-viewpager-refresh */
             setupTabIcons();
+            return;
         }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
 
@@ -586,25 +586,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     @Override
     public void onListColorLoaded(@NonNull Color color)
     {
-        mLastUsedColor = color.argb();
-        if (mTwoPane)
-        {
-            int colorInt = color.argb();
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(colorInt));
-            mTabs.setBackgroundColor(colorInt);
-
-            if (mAppBarLayout != null)
-            {
-                mAppBarLayout.setBackgroundColor(colorInt);
-            }
-
-            if (VERSION.SDK_INT >= 21)
-            {
-                Window window = getWindow();
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(new DarkenedForStatusBar(color).argb());
-            }
-        }
+        // nothing to do
     }
 
 

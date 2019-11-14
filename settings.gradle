@@ -1,1 +1,2 @@
+include ':opentasks-theme'
 include ':opentasks', ':opentasks-provider', ':opentasks-contract', ':opentaskspal'

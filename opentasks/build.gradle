@@ -60,6 +60,7 @@ android {
 }
 
 dependencies {
+    implementation project(':opentasks-theme')
     implementation project(':opentasks-provider')
     implementation deps.support_appcompat
     implementation deps.support_design

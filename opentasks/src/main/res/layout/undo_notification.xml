@@ -13,7 +13,7 @@
             android:layout_height="40dp"
             android:layout_margin="12dp"
             android:background="@drawable/shape_color_circle"
-            android:backgroundTint="@color/primary"
+            android:backgroundTint="?attr/colorPrimary"
             android:padding="11dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_notification"/>

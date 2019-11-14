@@ -7,23 +7,23 @@
     <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:background="?android:windowBackground">
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                android:layout_height="?attr/actionBarSize" />
 
         <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?android:windowBackground"
                 app:tabGravity="fill"
-                app:tabIndicatorColor="@android:color/white"
+                app:tabIconTint="?attr/tabIconTint"
+                app:tabIndicatorColor="?attr/tabIndicatorColor"
                 app:tabIndicatorHeight="8dp"
-                app:tabMode="fixed"/>
+                app:tabMode="fixed" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager xmlns:tools="http://schemas.android.com/tools"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context=".MainActivity"/>
+            tools:context=".MainActivity" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floating_action_button"
@@ -39,8 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="16dp"
+            android:src="@drawable/ic_action_add"
             app:layout_anchor="@id/pager"
-            app:layout_anchorGravity="bottom|right|end"
-            android:src="@drawable/ic_action_add"/>
+            app:layout_anchorGravity="bottom|right|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

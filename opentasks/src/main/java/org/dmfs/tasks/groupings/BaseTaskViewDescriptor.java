@@ -18,13 +18,15 @@ package org.dmfs.tasks.groupings;
 
 import android.annotation.SuppressLint;
 import android.database.Cursor;
-import androidx.collection.SparseArrayCompat;
 import android.text.TextUtils;
 import android.text.format.Time;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.card.MaterialCardView;
+
+import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DateFormatter;
@@ -32,6 +34,13 @@ import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
 import java.util.TimeZone;
+
+import androidx.collection.SparseArrayCompat;
+import androidx.core.graphics.ColorUtils;
+
+import static org.dmfs.tasks.contract.TaskContract.TaskColumns.STATUS_CANCELLED;
+import static org.dmfs.tasks.model.TaskFieldAdapters.IS_CLOSED;
+import static org.dmfs.tasks.model.TaskFieldAdapters.STATUS;
 
 
 /**
@@ -101,18 +110,6 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 
     protected void setOverlay(View view, int position, int count)
     {
-        View overlayTop = getView(view, R.id.overlay_top);
-        View overlayBottom = getView(view, R.id.overlay_bottom);
-
-        if (overlayTop != null)
-        {
-            overlayTop.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-        }
-
-        if (overlayBottom != null)
-        {
-            overlayBottom.setVisibility(position == count - 1 ? View.VISIBLE : View.GONE);
-        }
     }
 
 
@@ -120,13 +117,14 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
     {
         String description = TaskFieldAdapters.DESCRIPTION.get(cursor);
         TextView descriptionView = getView(view, android.R.id.text1);
+        View content = getView(view, R.id.cardcontent);
         if (TextUtils.isEmpty(description))
         {
-            descriptionView.setVisibility(View.GONE);
+            content.setVisibility(View.GONE);
         }
         else
         {
-            descriptionView.setVisibility(View.VISIBLE);
+            content.setVisibility(View.VISIBLE);
             if (description.length() > 150)
             {
                 description = description.substring(0, 150);
@@ -138,10 +136,37 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 
     protected void setColorBar(View view, Cursor cursor)
     {
-        View colorbar = getView(view, R.id.colorbar);
-        if (colorbar != null)
+        MaterialCardView cardView = getView(view, R.id.flingContentView);
+        if (cardView != null)
         {
-            colorbar.setBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+            if (IS_CLOSED.get(cursor))
+            {
+                if (STATUS.get(cursor) == STATUS_CANCELLED)
+                {
+                    cardView.setCardBackgroundColor(0xfff0f0f0);
+                    cardView.setStrokeColor(0);
+                    ((TextView) cardView.findViewById(android.R.id.title)).setTextColor(0x50000000);
+                    cardView.setStrokeWidth(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_open_border_width));
+
+                }
+                else
+                {
+                    cardView.setCardBackgroundColor(new AttributeColor(view.getContext(), android.R.attr.windowBackground).argb());
+                    //cardView.setCardElevation(1f);
+                    ((TextView) cardView.findViewById(android.R.id.title)).setTextColor(0x80000000);
+                    cardView.setStrokeColor(0xffc0c0c0);
+                    cardView.setStrokeWidth(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_closed_border_width));
+                }
+                cardView.setCardElevation(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_closed_elevation));
+            }
+            else
+            {
+                cardView.setCardBackgroundColor(TaskFieldAdapters.LIST_COLOR.get(cursor));
+                cardView.setStrokeColor(0);
+                ((TextView) cardView.findViewById(android.R.id.title)).setTextColor(0xffffffff);
+                cardView.setStrokeWidth(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_open_border_width));
+                cardView.setCardElevation(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_open_elevation));
+            }
         }
     }
 

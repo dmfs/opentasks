@@ -13,7 +13,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginStart="24dp"
             android:src="@drawable/ic_24_account_circle_black50"
-            android:tint="?attr/colorAccent"/>
+            android:tint="?attr/colorSecondary"/>
 
     <LinearLayout
             android:layout_width="match_parent"

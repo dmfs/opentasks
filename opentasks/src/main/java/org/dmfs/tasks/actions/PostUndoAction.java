@@ -23,19 +23,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.net.Uri;
-import android.os.Build;
 import android.os.RemoteException;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import android.widget.RemoteViews;
 
-import org.dmfs.android.bolts.color.colors.ResourceColor;
+import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.notification.ActionReceiver;
 import org.dmfs.tasks.notification.ActionService;
 import org.dmfs.tasks.notification.signals.NoSignal;
+
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 
 /**
@@ -79,12 +80,8 @@ public final class PostUndoAction implements TaskAction
                 new Intent(context, ActionReceiver.class).setData(taskUri).setAction(ActionService.ACTION_FINISH_COMPLETE),
                 PendingIntent.FLAG_CANCEL_CURRENT));
         builder.setShowWhen(false);
-        if (Build.VERSION.SDK_INT >= 21)
-        {
-            // don't execute this on Android 4, otherwise no notification will show up
-            builder.setGroup(GROUP_UNDO);
-        }
-        builder.setColor(new ResourceColor(context, R.color.primary).argb());
+        builder.setGroup(GROUP_UNDO);
+        builder.setColor(new AttributeColor(new ContextThemeWrapper(context, R.style.OpenTasks_Theme_Default), R.attr.colorPrimary).argb());
 
         NotificationManagerCompat.from(context).notify("tasks.undo", id, builder.build());
     }

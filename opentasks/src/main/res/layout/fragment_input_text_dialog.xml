@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:textColor="@color/priority_red"
+            android:textColor="@color/material_red_700"
             android:visibility="invisible"/>
 
     <LinearLayout
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="@android:string/cancel"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="?attr/colorAccent"/>
+                android:textColor="?android:textColorSecondary"/>
 
         <TextView
                 android:id="@android:id/button1"
@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:text="@android:string/ok"
                 android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="?attr/colorAccent"/>
+                android:textColor="?attr/colorPrimary"/>
     </LinearLayout>
 
 </LinearLayout>
