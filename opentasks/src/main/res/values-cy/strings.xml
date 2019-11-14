@@ -274,7 +274,7 @@
 
     <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
     <string name="opentasks_permission_request_dialog_getaccounts_title">Angen caniatâd</string>
-    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Er mwyn darllen y rhestr o gyfrifon ar dy ddyfais sy'n cefnogi cydamseru tasgau, mae ar %s angen caniatâd GET_ACCOUNTS.<br/><br/>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Er mwyn darllen y rhestr o gyfrifon ar dy ddyfais sy\'n cefnogi cydamseru tasgau, mae ar %s angen caniatâd GET_ACCOUNTS.<br/><br/>
     Noder, oherwydd dewis anffodus gan Google, caiff y cais am ganiatâd ei labelu fel &quot;access your contacts&quot; yn hytrach na &quot;read your accounts&quot;. Gweler <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> am wybodaeth bellach.]]></string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Parhau</string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Agor Gosodiadau</string>
