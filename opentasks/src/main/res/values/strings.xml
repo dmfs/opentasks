@@ -43,6 +43,16 @@
     <string name="opentasks_task_details_menu_send_short">Send</string>
     <string name="opentasks_task_details_menu_send">Send to</string>
 
+    <!-- Label of button to hide a tick box -->
+    <string name="opentasks_hide_tick_box">Text</string>
+
+    <!-- Label of button to show a tick box -->
+    <string name="opentasks_show_tick_box">Checklist</string>
+
+    <!-- Label of button to delete checklist item -->
+    <string name="opentasks_delete_item">Delete</string>
+
+
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Add item</string>
 

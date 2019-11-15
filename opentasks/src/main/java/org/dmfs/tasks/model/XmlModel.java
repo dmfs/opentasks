@@ -24,7 +24,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ServiceInfo;
 import android.content.res.XmlResourceParser;
-import android.util.Log;
 
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -39,7 +38,6 @@ import org.dmfs.xmlobjects.builder.AbstractObjectBuilder;
 import org.dmfs.xmlobjects.pull.ParserContext;
 import org.dmfs.xmlobjects.pull.Recyclable;
 import org.dmfs.xmlobjects.pull.XmlObjectPull;
-import org.dmfs.xmlobjects.pull.XmlObjectPullParserException;
 import org.dmfs.xmlobjects.pull.XmlPath;
 
 import java.util.HashMap;
@@ -178,11 +176,6 @@ public class XmlModel extends Model
                             else if ("dtstart".equals(datakind.datakind))
                             {
                                 state.hasStart = true;
-                            }
-                            else if ("description".equals(datakind.datakind) && !datakind.hideCheckList)
-                            {
-                                Log.i(TAG, "found old description data kind, adding checklist");
-                                object.addField(FIELD_INFLATER_MAP.get("checklist").inflate(appContext, object.mModelContext, datakind));
                             }
                         }
                         // we don't need the datakind object anymore, so recycle it
@@ -511,10 +504,8 @@ public class XmlModel extends Model
         FIELD_INFLATER_MAP.put("location", new FieldInflater(TaskFieldAdapters.LOCATION, R.id.task_field_location, R.string.task_location,
                 R.layout.opentasks_location_field_view, R.layout.text_field_editor, R.drawable.ic_detail_location).addDetailsLayoutOption(
                 LayoutDescriptor.OPTION_LINKIFY, 0));
-        FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION, R.id.task_field_description, R.string.task_description,
-                R.layout.text_field_view, R.layout.text_field_editor, R.drawable.ic_detail_description));
-        FIELD_INFLATER_MAP.put("checklist", new FieldInflater(TaskFieldAdapters.CHECKLIST, R.id.task_field_checklist, R.string.task_checklist,
-                R.layout.checklist_field_view, R.layout.checklist_field_editor, R.drawable.ic_detail_checklist));
+        FIELD_INFLATER_MAP.put("description", new FieldInflater(TaskFieldAdapters.DESCRIPTION_CHECKLIST, R.id.task_field_description, R.string.task_description,
+                R.layout.description_field_view, R.layout.description_field_editor, R.drawable.ic_detail_description));
 
         FIELD_INFLATER_MAP.put("dtstart", new FieldInflater(TaskFieldAdapters.DTSTART, R.id.task_field_dtstart, R.string.task_start, R.layout.time_field_view,
                 R.layout.time_field_editor, R.drawable.ic_detail_start));

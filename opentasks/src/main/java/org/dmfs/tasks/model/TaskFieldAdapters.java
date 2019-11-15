@@ -24,6 +24,7 @@ import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
 import org.dmfs.tasks.model.adapters.ColorFieldAdapter;
 import org.dmfs.tasks.model.adapters.CustomizedDefaultFieldAdapter;
+import org.dmfs.tasks.model.adapters.DescriptionFieldAdapter;
 import org.dmfs.tasks.model.adapters.DescriptionStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
@@ -37,6 +38,7 @@ import org.dmfs.tasks.model.constraints.AdjustPercentComplete;
 import org.dmfs.tasks.model.constraints.After;
 import org.dmfs.tasks.model.constraints.BeforeOrShiftTime;
 import org.dmfs.tasks.model.constraints.ChecklistConstraint;
+import org.dmfs.tasks.model.constraints.DescriptionConstraint;
 import org.dmfs.tasks.model.defaults.DefaultAfter;
 import org.dmfs.tasks.model.defaults.DefaultBefore;
 
@@ -109,6 +111,12 @@ public final class TaskFieldAdapters
      */
     public final static ChecklistFieldAdapter CHECKLIST = (ChecklistFieldAdapter) new ChecklistFieldAdapter(Tasks.DESCRIPTION)
             .addContraint(new ChecklistConstraint(STATUS, PERCENT_COMPLETE));
+
+    /**
+     * Adapter for the checklist of a task.
+     */
+    public final static DescriptionFieldAdapter DESCRIPTION_CHECKLIST = (DescriptionFieldAdapter) new DescriptionFieldAdapter(Tasks.DESCRIPTION)
+            .addContraint(new DescriptionConstraint(STATUS, PERCENT_COMPLETE));
 
     /**
      * Private adapter for the start date of a task. We need this to reference DTSTART from DUE.

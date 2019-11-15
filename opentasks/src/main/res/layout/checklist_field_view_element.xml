@@ -24,7 +24,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:padding="8dp"
-            android:src="@drawable/ic_24_drag_handle_black50"/>
+            android:src="@drawable/ic_drag_indicator_24px"/>
 
     <ImageView
             android:id="@+id/remove_item"

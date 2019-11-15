@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<org.dmfs.tasks.widget.DescriptionFieldView xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/task_edit_widget"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:visibility="visible">
+
+    <include layout="@layout/editor_header" />
+
+    <com.jmedeisis.draglinearlayout.DragLinearLayout
+            android:id="@+id/checklist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical">
+
+        <!-- TODO: this should be a button -->
+        <TextView
+                android:id="@+id/add_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selectable_background_white"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_24_plus_black50"
+                android:drawablePadding="8dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:text="@string/opentasks_checklist_add_item" />
+    </com.jmedeisis.draglinearlayout.DragLinearLayout>
+
+</org.dmfs.tasks.widget.DescriptionFieldView>
