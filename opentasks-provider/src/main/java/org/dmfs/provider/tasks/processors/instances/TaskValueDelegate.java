@@ -80,7 +80,9 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
             // also unset any recurrence fields
             TaskAdapter.RRULE,
             TaskAdapter.RDATE,
-            TaskAdapter.EXDATE
+            TaskAdapter.EXDATE,
+            TaskAdapter.CREATED,
+            TaskAdapter.LAST_MODIFIED
     );
 
     private final EntityProcessor<TaskAdapter> mDelegate;
@@ -184,8 +186,7 @@ public final class TaskValueDelegate implements EntityProcessor<InstanceAdapter>
             // copy original instance allday flag
             override.set(TaskAdapter.ORIGINAL_INSTANCE_ALLDAY, taskAdapter.valueOf(TaskAdapter.IS_ALLDAY));
 
-            // TODO: if this is the first instance (and maybe no other overrides exist), don't create an override but split the series into two tasks
-            TaskAdapter newTask = mDelegate.insert(db, override, true /* for now insert as a sync adapter to retain the UID */);
+            TaskAdapter newTask = mDelegate.insert(db, override, false);
 
             copyProperties(db, taskAdapter.id(), newTask.id());
         }

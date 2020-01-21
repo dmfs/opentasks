@@ -17,7 +17,6 @@
 package org.dmfs.opentaskstestpal;
 
 import android.content.ContentProviderOperation;
-import androidx.annotation.NonNull;
 
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.TransactionContext;
@@ -28,6 +27,10 @@ import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
+
+import java.util.TimeZone;
+
+import androidx.annotation.NonNull;
 
 import static org.dmfs.jems.optional.elementary.Absent.absent;
 
@@ -75,12 +78,17 @@ public final class InstanceTestData implements RowData<TaskContract.Instances>
     {
         return builder
                 .withValue(TaskContract.Instances.INSTANCE_START, new Mapped<>(DateTime::getTimestamp, mInstanceStart).value(null))
-                .withValue(TaskContract.Instances.INSTANCE_START_SORTING, new Mapped<>(DateTime::getInstance, mInstanceStart).value(null))
+                .withValue(TaskContract.Instances.INSTANCE_START_SORTING, new Mapped<>(this::toInstance, mInstanceStart).value(null))
                 .withValue(TaskContract.Instances.INSTANCE_DUE, new Mapped<>(DateTime::getTimestamp, mInstanceDue).value(null))
-                .withValue(TaskContract.Instances.INSTANCE_DUE_SORTING, new Mapped<>(DateTime::getInstance, mInstanceDue).value(null))
+                .withValue(TaskContract.Instances.INSTANCE_DUE_SORTING, new Mapped<>(this::toInstance, mInstanceDue).value(null))
                 .withValue(TaskContract.Instances.INSTANCE_DURATION,
-                        new Backed<Long>(
-                                new Zipped<>(mInstanceStart, mInstanceDue, (start, due) -> (due.getTimestamp() - start.getTimestamp())), () -> null).value())
+                        new Backed<>(
+                                new Zipped<>(
+                                        mInstanceStart,
+                                        mInstanceDue,
+                                        (start, due) -> (due.getTimestamp() - start.getTimestamp())),
+                                () -> null)
+                                .value())
                 .withValue(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, new Mapped<>(DateTime::getTimestamp, mOriginalTime).value(null))
                 .withValue(TaskContract.Instances.DISTANCE_FROM_CURRENT, mDistanceFromCurrent)
                 // the instances view overrides some of the task values. Since they are closely tied to the instance data we test them here as well.
@@ -91,6 +99,12 @@ public final class InstanceTestData implements RowData<TaskContract.Instances>
                 .withValue(TaskContract.Instances.RRULE, null)
                 .withValue(TaskContract.Instances.RDATE, null)
                 .withValue(TaskContract.Instances.EXDATE, null);
+    }
+
+
+    private long toInstance(DateTime dateTime)
+    {
+        return (dateTime.isAllDay() ? dateTime : dateTime.shiftTimeZone(TimeZone.getDefault())).getInstance();
     }
 
 }

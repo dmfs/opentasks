@@ -88,6 +88,13 @@ public final class Validating implements EntityProcessor<TaskAdapter>
         {
             throw new IllegalArgumentException("ORIGINAL_INSTANCE_SYNC_ID and ORIGINAL_INSTANCE_ID can be modified by sync adapters only");
         }
+
+        // only sync adapters are allowed to change the UID of existing tasks
+        if (!isSyncAdapter && task.isUpdated(TaskAdapter._UID))
+        {
+            throw new IllegalArgumentException("modification of _UID is not allowed to non-sync adapters");
+        }
+
         return mDelegate.update(db, task, isSyncAdapter);
     }
 
@@ -142,13 +149,6 @@ public final class Validating implements EntityProcessor<TaskAdapter>
         if (task.isUpdated(TaskAdapter._DELETED))
         {
             throw new IllegalArgumentException("modification of _DELETE is not allowed");
-        }
-
-        // only sync adapters are allowed to change the UID
-        // TODO: we probably should allow clients to set a UID on inserts
-        if (!isSyncAdapter && task.isUpdated(TaskAdapter._UID))
-        {
-            throw new IllegalArgumentException("modification of _UID is not allowed");
         }
 
         // only sync adapters are allowed to remove the dirty flag

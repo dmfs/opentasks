@@ -52,6 +52,7 @@ import org.dmfs.provider.tasks.model.InstanceAdapter;
 import org.dmfs.provider.tasks.model.ListAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
+import org.dmfs.provider.tasks.processors.instances.Detaching;
 import org.dmfs.provider.tasks.processors.instances.TaskValueDelegate;
 import org.dmfs.provider.tasks.processors.lists.ListCommitProcessor;
 import org.dmfs.provider.tasks.processors.tasks.AutoCompleting;
@@ -189,7 +190,8 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
 
         mListProcessorChain = new org.dmfs.provider.tasks.processors.lists.Validating(new ListCommitProcessor());
 
-        mInstanceProcessorChain = new org.dmfs.provider.tasks.processors.instances.Validating(new TaskValueDelegate(mTaskProcessorChain));
+        mInstanceProcessorChain = new org.dmfs.provider.tasks.processors.instances.Validating(
+                new Detaching(new TaskValueDelegate(mTaskProcessorChain), mTaskProcessorChain));
 
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(mAuthority, TaskContract.TaskLists.CONTENT_URI_PATH, LISTS);

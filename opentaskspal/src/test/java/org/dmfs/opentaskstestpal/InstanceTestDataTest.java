@@ -76,9 +76,9 @@ public class InstanceTestDataTest
                 builds(
                         withValuesOnly(
                                 containing(TaskContract.Instances.INSTANCE_START, start.getTimestamp()),
-                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                                 containing(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp()),
-                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                                 containing(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                                 withNullValue(TaskContract.Instances.INSTANCE_ORIGINAL_TIME),
                                 containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
@@ -104,9 +104,9 @@ public class InstanceTestDataTest
                 builds(
                         withValuesOnly(
                                 containing(TaskContract.Instances.INSTANCE_START, start.getTimestamp()),
-                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                                 containing(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp()),
-                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                                 containing(TaskContract.Instances.INSTANCE_DURATION, due.getTimestamp() - start.getTimestamp()),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
                                 containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),
@@ -131,7 +131,7 @@ public class InstanceTestDataTest
                 builds(
                         withValuesOnly(
                                 containing(TaskContract.Instances.INSTANCE_START, start.getTimestamp()),
-                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_START_SORTING, start.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                                 withNullValue(TaskContract.Instances.INSTANCE_DUE),
                                 withNullValue(TaskContract.Instances.INSTANCE_DUE_SORTING),
                                 withNullValue(TaskContract.Instances.INSTANCE_DURATION),
@@ -160,7 +160,7 @@ public class InstanceTestDataTest
                                 withNullValue(TaskContract.Instances.INSTANCE_START),
                                 withNullValue(TaskContract.Instances.INSTANCE_START_SORTING),
                                 containing(TaskContract.Instances.INSTANCE_DUE, due.getTimestamp()),
-                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.swapTimeZone(TimeZone.getDefault()).getInstance()),
+                                containing(TaskContract.Instances.INSTANCE_DUE_SORTING, due.shiftTimeZone(TimeZone.getDefault()).getInstance()),
                                 withNullValue(TaskContract.Instances.INSTANCE_DURATION),
                                 containing(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, original.getTimestamp()),
                                 containing(TaskContract.Instances.DISTANCE_FROM_CURRENT, 5),

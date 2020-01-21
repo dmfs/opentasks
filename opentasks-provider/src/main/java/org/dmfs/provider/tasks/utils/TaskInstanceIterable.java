@@ -16,8 +16,8 @@
 
 package org.dmfs.provider.tasks.utils;
 
+import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.jems.single.combined.Backed;
-import org.dmfs.optional.NullSafe;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
@@ -73,29 +73,12 @@ public final class TaskInstanceIterable implements Iterable<DateTime>
             set.addInstances(new RecurrenceRuleAdapter(rule));
         }
 
-        set.addInstances(new RecurrenceList(toLongArray(mTaskAdapter.valueOf(TaskAdapter.RDATE))));
-        set.addExceptions(new RecurrenceList(toLongArray(mTaskAdapter.valueOf(TaskAdapter.EXDATE))));
+        set.addInstances(new RecurrenceList(new Timestamps(mTaskAdapter.valueOf(TaskAdapter.RDATE)).value()));
+        set.addExceptions(new RecurrenceList(new Timestamps(mTaskAdapter.valueOf(TaskAdapter.EXDATE)).value()));
 
         RecurrenceSetIterator setIterator = set.iterator(dtstart.getTimeZone(), dtstart.getTimestamp(),
                 System.currentTimeMillis() + 10L * 356L * 3600L * 1000L);
 
         return new TaskInstanceIterator(dtstart, setIterator, mTaskAdapter.valueOf(TaskAdapter.TIMEZONE_RAW));
-    }
-
-
-    private long[] toLongArray(Iterable<DateTime> dates)
-    {
-        int count = 0;
-        for (DateTime ignored : dates)
-        {
-            count += 1;
-        }
-        long[] timeStamps = new long[count];
-        int i = 0;
-        for (DateTime dt : dates)
-        {
-            timeStamps[i++] = dt.getTimestamp();
-        }
-        return timeStamps;
     }
 }

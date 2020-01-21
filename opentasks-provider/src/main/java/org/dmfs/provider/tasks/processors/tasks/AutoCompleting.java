@@ -128,8 +128,7 @@ public final class AutoCompleting implements EntityProcessor<TaskAdapter>
         if (task.isUpdated(TaskAdapter.ORIGINAL_INSTANCE_SYNC_ID))
         {
             String[] syncId = { task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_SYNC_ID) };
-            Cursor cursor = db.query(TaskDatabaseHelper.Tables.TASKS, TASK_ID_PROJECTION, SYNC_ID_SELECTION, syncId, null, null, null);
-            try
+            try (Cursor cursor = db.query(TaskDatabaseHelper.Tables.TASKS, TASK_ID_PROJECTION, SYNC_ID_SELECTION, syncId, null, null, null))
             {
                 if (cursor.moveToNext())
                 {
@@ -137,31 +136,16 @@ public final class AutoCompleting implements EntityProcessor<TaskAdapter>
                     task.set(TaskAdapter.ORIGINAL_INSTANCE_ID, originalId);
                 }
             }
-            finally
-            {
-                if (cursor != null)
-                {
-                    cursor.close();
-                }
-            }
         }
         else if (task.isUpdated(TaskAdapter.ORIGINAL_INSTANCE_ID)) // Find corresponding ORIGINAL_INSTANCE_SYNC_ID
         {
             String[] id = { Long.toString(task.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID)) };
-            Cursor cursor = db.query(TaskDatabaseHelper.Tables.TASKS, TASK_SYNC_ID_PROJECTION, TASK_ID_SELECTION, id, null, null, null);
-            try
+            try (Cursor cursor = db.query(TaskDatabaseHelper.Tables.TASKS, TASK_SYNC_ID_PROJECTION, TASK_ID_SELECTION, id, null, null, null))
             {
                 if (cursor.moveToNext())
                 {
                     String originalSyncId = cursor.getString(0);
                     task.set(TaskAdapter.ORIGINAL_INSTANCE_SYNC_ID, originalSyncId);
-                }
-            }
-            finally
-            {
-                if (cursor != null)
-                {
-                    cursor.close();
                 }
             }
         }
@@ -202,8 +186,8 @@ public final class AutoCompleting implements EntityProcessor<TaskAdapter>
                 task.set(TaskAdapter.STATUS, status);
             }
 
-            task.set(TaskAdapter.IS_NEW, status == null || status == TaskContract.Tasks.STATUS_NEEDS_ACTION);
-            task.set(TaskAdapter.IS_CLOSED, status != null && (status == TaskContract.Tasks.STATUS_COMPLETED || status == TaskContract.Tasks.STATUS_CANCELLED));
+            task.set(TaskAdapter.IS_NEW, status == TaskContract.Tasks.STATUS_NEEDS_ACTION);
+            task.set(TaskAdapter.IS_CLOSED, status == TaskContract.Tasks.STATUS_COMPLETED || status == TaskContract.Tasks.STATUS_CANCELLED);
 
             /*
              * Update PERCENT_COMPLETE and COMPLETED (if not given). Sync adapters should know what they're doing, so don't update anything if caller is a sync
@@ -212,7 +196,7 @@ public final class AutoCompleting implements EntityProcessor<TaskAdapter>
             if (status == TaskContract.Tasks.STATUS_COMPLETED && !isSyncAdapter)
             {
                 task.set(TaskAdapter.PERCENT_COMPLETE, 100);
-                if (!task.isUpdated(TaskAdapter.COMPLETED))
+                if (!task.isUpdated(TaskAdapter.COMPLETED) || task.valueOf(TaskAdapter.COMPLETED) == null)
                 {
                     task.set(TaskAdapter.COMPLETED, new DateTime(System.currentTimeMillis()));
                 }
