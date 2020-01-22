@@ -650,4 +650,103 @@ public class TaskProviderDetachInstancesTest
                                         new TitleData("Test-Task"),
                                         new EqArg<>(Tasks._DELETED, 1)))));
     }
+
+
+    /**
+     * Test if two all-day instances of a task with a DTSTART, DUE, RRULE, RDATE and EXDATE are detached correctly.
+     */
+    @Test
+    public void testRRuleRDateCompleteWithExdatesAllDay() throws InvalidRecurrenceRuleException, RemoteException, OperationApplicationException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new Synced<>(mTestAccount, new TaskListsTable(mAuthority)));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration hour = new Duration(1, 1, 0);
+        DateTime start = DateTime.parse("20180104");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        OperationsQueue queue = new BasicOperationsQueue(mClient);
+        queue.enqueue(new Seq<>(
+                new Put<>(taskList, new EmptyRowData<>()),
+                new Put<>(task,
+                        new Composite<>(
+                                new TitleData("Test-Task"),
+                                new TimeData<>(start, due),
+                                new RRuleTaskData(new RecurrenceRule("FREQ=DAILY;INTERVAL=2;COUNT=2", RecurrenceRule.RfcMode.RFC2445_LAX)),
+                                new RDatesTaskData(
+                                        new Seq<>(
+                                                DateTime.parse("20180105"),
+                                                DateTime.parse("20180107"))),
+                                new ExDatesTaskData(
+                                        new Seq<>(
+                                                DateTime.parse("20180104"),
+                                                DateTime.parse("20180105"))))),
+                // update the first non-closed instance
+                new BulkUpdate<>(instancesTable, new StatusData<>(Tasks.STATUS_COMPLETED),
+                        new AllOf<>(new ReferringTo<>(Instances.TASK_ID, task),
+                                new EqArg<>(Instances.DISTANCE_FROM_CURRENT, 0)))
+        ));
+        queue.flush();
+
+        Synced<Tasks> tasksTable = new Synced<>(mTestAccount, new TasksTable(mAuthority));
+        Synced<Instances> syncedInstances = new Synced<>(mTestAccount, instancesTable);
+        assertThat(new Seq<>(
+                        // update the second instance
+                        new BulkUpdate<>(instancesTable, new StatusData<>(Tasks.STATUS_COMPLETED),
+                                new AllOf<>(new ReferringTo<>(Instances.TASK_ID, task),
+                                        new EqArg<>(Instances.DISTANCE_FROM_CURRENT, 0)))
+                ),
+                resultsIn(queue,
+                        /*
+                         * We expect five tasks:
+                         * - the original master deleted
+                         * - completed and deleted overrides for the first and second instance
+                         * - detached first and second instances
+                         */
+
+                        // the first detached task instance:
+                        new Counted<>(1, new BulkAssert<>(syncedInstances,
+                                new Composite<>(
+                                        new InstanceTestData(DateTime.parse("20180106"), DateTime.parse("20180107"), absent(), -1),
+                                        new CharSequenceRowData<>(Tasks.STATUS, String.valueOf(Tasks.STATUS_COMPLETED))),
+                                new AllOf<>(
+                                        new EqArg<>(Instances.INSTANCE_START, DateTime.parse("20180106").getTimestamp()),
+                                        new Not<>(new ReferringTo<>(Instances.TASK_ID, task))))),
+                        // the original master has been deleted
+                        new Counted<>(0, new Assert<>(task, new Composite<>(new EmptyRowData<>()))),
+                        // there is no instance referring to the master
+                        new Counted<>(0, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                        // the second detached task instance:
+                        new Counted<>(1, new BulkAssert<>(syncedInstances,
+                                new Composite<>(
+                                        new InstanceTestData(DateTime.parse("20180107"), DateTime.parse("20180108"), absent(), -1),
+                                        new CharSequenceRowData<>(Tasks.STATUS, String.valueOf(Tasks.STATUS_COMPLETED))),
+                                new AllOf<>(
+                                        new EqArg<>(Instances.INSTANCE_START, DateTime.parse("20180107").getTimestamp()),
+                                        new Not<>(new ReferringTo<>(Instances.TASK_ID, task))))),
+                        // two completed instances, neither of them referring to the master
+                        new Counted<>(2,
+                                new BulkAssert<>(
+                                        syncedInstances,
+                                        new CharSequenceRowData<>(Tasks.STATUS, String.valueOf(Tasks.STATUS_COMPLETED)),
+                                        new AllOf<>(
+                                                new EqArg<>(Instances.DISTANCE_FROM_CURRENT, -1),
+                                                new Not<>(new ReferringTo<>(Instances.TASK_ID, task))))),
+                        // five tasks in total (two deleted overrides, two detached ones and the old master)
+                        new Counted<>(5,
+                                new BulkAssert<>(
+                                        tasksTable,
+                                        new TitleData("Test-Task"),
+                                        new AnyOf<>())),
+                        // three deleted tasks in total (the old overrides and the old master)
+                        new Counted<>(3,
+                                new BulkAssert<>(
+                                        tasksTable,
+                                        new TitleData("Test-Task"),
+                                        new EqArg<>(Tasks._DELETED, 1)))));
+    }
+
 }
