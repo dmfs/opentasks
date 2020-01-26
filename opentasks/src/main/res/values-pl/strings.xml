@@ -23,6 +23,7 @@
     <string name="task_group_title_progress">Stan realizacji</string>
     <string name="task_group_title_default">Zadania</string>
     <string name="quick_add_task_created">Zadanie utworzone</string>
+    <string name="initial_local_task_list_name">Moje zadania</string>
 
     <plurals name="number_of_tasks">
         <item quantity="one">%d zadanie</item>
@@ -40,6 +41,18 @@
     <string name="activity_task_details_complete_task">Zakończone zadanie</string>
     <string name="activity_task_details_pin">Przypnij</string>
     <string name="activity_task_details_pin_task">Przypnij zadanie do paska zadań</string>
+    <string name="opentasks_details_no_task_selected">Nie wybrano żadnego zadania</string>
+    <string name="opentasks_task_details_menu_send_short">Wyślij</string>
+    <string name="opentasks_task_details_menu_send">Wyślij do</string>
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">Dodaj pozycję</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">Nazwa pozycji</string>
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Edytuj zadanie</string>
@@ -141,7 +154,6 @@
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_local_list">Dodaj listę</string>
     <string name="visible_task_lists">Wyświetlane listy</string>
-    <string name="opentasks_settings_notification_enable">Powiadomienia</string>
     <string name="synced_task_lists">Synchronizowane listy</string>
 
     <!-- dialogs -->
@@ -215,6 +227,9 @@
     <!-- Strings for time UI widgets -->
     <string name="button_add_one_hour">+1 godzina</string>
     <string name="button_add_one_day">+1 dzień</string>
+    
+    <!-- Strings for QuickSettingsTile -->
+    <string name="quicksettingstile_create">Utwórz zadanie</string>
 
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Zadania</string>
@@ -239,7 +254,38 @@
 
     <!-- Incoming share -->
     <string name="share_as_task">Dodaj zadanie</string>
+    
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Powiadomienia</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Sygnały powiadomień</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Dźwięk</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Wibracja</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Światło pulsacyjne</string>
 
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Udostępnione przez OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Wymagane pozwolenie</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[In order to read the list of accounts on your device which support task synchronization, %s needs the GET_ACCOUNTS permission.<br/><br/>
+    Please note that, due to an unfortunate choice by Google, the permission request will be labeled as &quot;access your contacts&quot; instead of &quot;read your accounts&quot;. See <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> for further information.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Kontyntynuj</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Otwórz ustawienia</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
     <string name="opentasks_date_time">%1$s %2$s</string>
+    
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">Przypięte zadania</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">Daty rozpoczęcia i realizacji</string>
 
 </resources>
