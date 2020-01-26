@@ -85,19 +85,19 @@
     <!-- Task list group titles -->
     <string name="task_group_no_due">Brak daty zakończenia</string>
     <string name="task_group_overdue">Zaległe</string>
-    <string name="task_group_due_today">Na dziś</string>
+    <string name="task_group_due_today">Na dzisiaj</string>
     <string name="task_group_due_tomorrow">Na jutro</string>
-    <string name="task_group_due_within_7_days">Wkrótce</string>
+    <string name="task_group_due_within_7_days">Na następne dni</string>
     <string name="task_group_due_in_month">Na miesiąc %s</string>
-    <string name="task_group_due_in_year">W roku %d</string>
-    <string name="task_group_due_in_future">W przyszłości</string>
+    <string name="task_group_due_in_year">Na rok %d</string>
+    <string name="task_group_due_in_future">Na pozostałe dni</string>
 
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Już rozpoczęte</string>
-    <string name="task_group_start_today">Dziś</string>
+    <string name="task_group_start_today">Dzisiaj</string>
     <string name="task_group_start_tomorrow">Jutro</string>
-    <string name="task_group_start_within_7_days">Kiedyś</string>
-    <string name="task_group_start_in_future">Później</string>
+    <string name="task_group_start_within_7_days">W następnych dniach</string>
+    <string name="task_group_start_in_future">W pozostałych dniach</string>
     <string name="task_group_due_title">Konieczne</string>
     <string name="task_group_all_title">Listy</string>
     <string name="task_group_completed_title">Zakończone</string>
