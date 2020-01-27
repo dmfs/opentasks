@@ -128,7 +128,7 @@
     <!-- Status labels -->
 
     <string name="status_needs_action">wymaga działania</string>
-    <string name="status_in_process">trwa</string>
+    <string name="status_in_process">w trakcie</string>
     <string name="status_completed">wykonane</string>
     <string name="status_cancelled">anulowane</string>
     <string name="status_incomplete">niekompletne</string>
