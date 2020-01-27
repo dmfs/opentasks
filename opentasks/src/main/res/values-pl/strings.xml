@@ -96,7 +96,7 @@
     <string name="task_group_start_started">Już rozpoczęte</string>
     <string name="task_group_start_today">Dzisiaj</string>
     <string name="task_group_start_tomorrow">Jutro</string>
-    <string name="task_group_start_within_7_days">W następnych dniach</string>
+    <string name="task_group_start_within_7_days">W najbliższych dniach</string>
     <string name="task_group_start_in_future">W pozostałych dniach</string>
     <string name="task_group_due_title">Konieczne</string>
     <string name="task_group_all_title">Listy</string>
