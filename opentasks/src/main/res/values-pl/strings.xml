@@ -154,7 +154,7 @@
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_local_list">Dodaj listę</string>
     <string name="visible_task_lists">Wyświetlane listy</string>
-    <string name="synced_task_lists">Synchronizowane listy</string>
+    <string name="synced_task_lists">Listy zsynchronizowane</string>
 
     <!-- dialogs -->
     <string name="task_list_settings_dialog_account_title">Wybierz konto</string>
