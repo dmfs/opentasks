@@ -59,7 +59,7 @@
     <string name="activity_add_task_title">Utwórz zadanie</string>
     <string name="activity_edit_task_error_invalid_url">Błędny adres URL</string>
     <string name="activity_edit_task_task_saved">Zadanie zapisane.</string>
-    <string name="activity_edit_task_empty_task_not_saved">Puste zadanie - nie zostało zapisane.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Puste zadanie nie zostało zapisane.</string>
 
     <!-- Names of task attributes -->
 
