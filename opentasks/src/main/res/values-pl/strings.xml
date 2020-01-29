@@ -59,7 +59,7 @@
     <string name="activity_add_task_title">Utwórz zadanie</string>
     <string name="activity_edit_task_error_invalid_url">Błędny adres URL</string>
     <string name="activity_edit_task_task_saved">Zadanie zapisane.</string>
-    <string name="activity_edit_task_empty_task_not_saved">Puste zadanie - nie zostało zapisane.</string>
+    <string name="activity_edit_task_empty_task_not_saved">Puste zadanie nie zostało zapisane.</string>
 
     <!-- Names of task attributes -->
 
@@ -85,19 +85,19 @@
     <!-- Task list group titles -->
     <string name="task_group_no_due">Brak daty zakończenia</string>
     <string name="task_group_overdue">Zaległe</string>
-    <string name="task_group_due_today">Na dziś</string>
+    <string name="task_group_due_today">Na dzisiaj</string>
     <string name="task_group_due_tomorrow">Na jutro</string>
-    <string name="task_group_due_within_7_days">Wkrótce</string>
+    <string name="task_group_due_within_7_days">Na następne dni</string>
     <string name="task_group_due_in_month">Na miesiąc %s</string>
-    <string name="task_group_due_in_year">W roku %d</string>
-    <string name="task_group_due_in_future">W przyszłości</string>
+    <string name="task_group_due_in_year">Na rok %d</string>
+    <string name="task_group_due_in_future">Na pozostałe dni</string>
 
     <!-- Task list start group titles -->
     <string name="task_group_start_started">Już rozpoczęte</string>
-    <string name="task_group_start_today">Dziś</string>
+    <string name="task_group_start_today">Dzisiaj</string>
     <string name="task_group_start_tomorrow">Jutro</string>
-    <string name="task_group_start_within_7_days">Kiedyś</string>
-    <string name="task_group_start_in_future">Później</string>
+    <string name="task_group_start_within_7_days">W najbliższych dniach</string>
+    <string name="task_group_start_in_future">W pozostałych dniach</string>
     <string name="task_group_due_title">Konieczne</string>
     <string name="task_group_all_title">Listy</string>
     <string name="task_group_completed_title">Zakończone</string>
@@ -128,7 +128,7 @@
     <!-- Status labels -->
 
     <string name="status_needs_action">wymaga działania</string>
-    <string name="status_in_process">trwa</string>
+    <string name="status_in_process">w trakcie</string>
     <string name="status_completed">wykonane</string>
     <string name="status_cancelled">anulowane</string>
     <string name="status_incomplete">niekompletne</string>
@@ -154,7 +154,7 @@
     <string name="action_settings">Ustawienia</string>
     <string name="action_add_local_list">Dodaj listę</string>
     <string name="visible_task_lists">Wyświetlane listy</string>
-    <string name="synced_task_lists">Synchronizowane listy</string>
+    <string name="synced_task_lists">Listy zsynchronizowane</string>
 
     <!-- dialogs -->
     <string name="task_list_settings_dialog_account_title">Wybierz konto</string>
@@ -272,8 +272,8 @@
 
     <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
     <string name="opentasks_permission_request_dialog_getaccounts_title">Wymagane pozwolenie</string>
-    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[In order to read the list of accounts on your device which support task synchronization, %s needs the GET_ACCOUNTS permission.<br/><br/>
-    Please note that, due to an unfortunate choice by Google, the permission request will be labeled as &quot;access your contacts&quot; instead of &quot;read your accounts&quot;. See <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> for further information.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Aby odczytać listę kont na Twoim urządzeniu, które obsługują synchronizację zadań, %s potrzeba pozwolenia GET_ACCOUNTS.<br/><br/>
+    Pamiętaj, że z powodu nie przemyślanego wyboru Google, prośba o pozwolenie będzie oznaczać jako &quot;uzyskanie dostępu do kontaktów&quot; zamiast &quot;czytać konta&quot;. Zobacz <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> w celu uzyskania dalszych informacji.]]></string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Kontyntynuj</string>
     <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Otwórz ustawienia</string>
 
