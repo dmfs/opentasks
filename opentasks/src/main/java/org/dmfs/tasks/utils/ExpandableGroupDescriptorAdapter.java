@@ -113,6 +113,22 @@ public class ExpandableGroupDescriptorAdapter extends CursorTreeAdapter implemen
 
 
     @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
+    {
+        try
+        {
+            return super.getGroupView(groupPosition, isExpanded, convertView, parent);
+        }
+        catch (IllegalStateException e)
+        {
+            // try to silence an issue which appears to be a race condition until we've gotten rid of ExpandableListView
+            // for now we just return an empty group view
+            return newGroupView(mContext, null /* we don't use this */, false, parent);
+        }
+    }
+
+
+    @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor)
     {
         int pos = loader.getId();
