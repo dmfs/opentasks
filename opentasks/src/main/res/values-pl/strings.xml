@@ -109,7 +109,7 @@
     <!-- Task list progress group titles -->
     <string name="task_group_progress_0">Nie zrealizowane</string>
     <string name="task_group_progress_40">Rozpoczęte</string>
-    <string name="task_group_progress_60">Połowa wykonana</string>
+    <string name="task_group_progress_60">Częściowo wykonane</string>
     <string name="task_group_progress_80">Prawie zakończone</string>
     <string name="task_group_progress_100">Zakończone</string>
 
