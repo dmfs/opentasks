@@ -38,8 +38,8 @@ public class DefaultModel extends Model
     private final static LayoutDescriptor TEXT_EDIT = new LayoutDescriptor(R.layout.text_field_editor);
     private final static LayoutDescriptor TEXT_EDIT_SINGLE_LINE = new LayoutDescriptor(R.layout.text_field_editor).setOption(LayoutDescriptor.OPTION_MULTILINE,
             false);
-    private final static LayoutDescriptor CHECKLIST_VIEW = new LayoutDescriptor(R.layout.checklist_field_view);
-    private final static LayoutDescriptor CHECKLIST_EDIT = new LayoutDescriptor(R.layout.checklist_field_editor);
+    private final static LayoutDescriptor DESCRIPTION_VIEW = new LayoutDescriptor(R.layout.description_field_view);
+    private final static LayoutDescriptor DESCRIPTION_EDIT = new LayoutDescriptor(R.layout.description_field_editor);
     private final static LayoutDescriptor CHOICES_VIEW = new LayoutDescriptor(R.layout.choices_field_view);
     private final static LayoutDescriptor CHOICES_EDIT = new LayoutDescriptor(R.layout.choices_field_editor);
     private final static LayoutDescriptor PROGRESS_VIEW = new LayoutDescriptor(R.layout.percentage_field_view);
@@ -106,13 +106,10 @@ public class DefaultModel extends Model
                 .setEditorLayout(TEXT_EDIT).setIcon(R.drawable.ic_detail_location));
 
         // description
-        addField(new FieldDescriptor(context, R.id.task_field_description, R.string.task_description, TaskFieldAdapters.DESCRIPTION)
-                .setViewLayout(TEXT_VIEW.setOption(LayoutDescriptor.OPTION_LINKIFY, Linkify.ALL)).setEditorLayout(TEXT_EDIT)
+        addField(new FieldDescriptor(context, R.id.task_field_checklist, R.string.task_description, TaskFieldAdapters.DESCRIPTION_CHECKLIST)
+                .setViewLayout(DESCRIPTION_VIEW)
+                .setEditorLayout(DESCRIPTION_EDIT)
                 .setIcon(R.drawable.ic_detail_description));
-
-        // description
-        addField(new FieldDescriptor(context, R.id.task_field_checklist, R.string.task_checklist, TaskFieldAdapters.CHECKLIST).setViewLayout(CHECKLIST_VIEW)
-                .setEditorLayout(CHECKLIST_EDIT).setIcon(R.drawable.ic_detail_checklist));
 
         // start
         addField(new FieldDescriptor(context, R.id.task_field_dtstart, R.string.task_start, TaskFieldAdapters.DTSTART).setViewLayout(TIME_VIEW)

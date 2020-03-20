@@ -276,5 +276,8 @@
 
     <string name="opentasks_notification_channel_pinned_tasks">Angeheftete Aufgaben</string>
     <string name="opentasks_notification_channel_due_dates">Beginn und Fälligkeiten</string>
+    <string name="opentasks_delete_item">Löschen</string>
+    <string name="opentasks_hide_tick_box">Text</string>
+    <string name="opentasks_show_tick_box">Checkliste</string>
 
 </resources>

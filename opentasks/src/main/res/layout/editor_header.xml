@@ -6,7 +6,6 @@
             style="@style/editor_label_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-8dip"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:paddingLeft="4dip"
