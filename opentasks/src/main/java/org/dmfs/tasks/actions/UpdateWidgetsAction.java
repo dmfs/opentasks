@@ -25,6 +25,7 @@ import android.net.Uri;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.homescreen.TaskListWidgetProvider;
+import org.dmfs.tasks.homescreen.TaskListWidgetProviderLarge;
 import org.dmfs.tasks.R;
 
 
@@ -44,7 +45,13 @@ public final class UpdateWidgetsAction implements TaskAction
     public void execute(Context context, ContentProviderClient contentProviderClient, RowDataSnapshot<TaskContract.Instances> rowSnapshot, Uri taskUri)
     {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        final ComponentName componentName = new ComponentName(context, TaskListWidgetProvider.class);
+        notifyTaskListDataChanged(appWidgetManager, new ComponentName(context, TaskListWidgetProvider.class));
+        notifyTaskListDataChanged(appWidgetManager, new ComponentName(context, TaskListWidgetProviderLarge.class));
+    }
+
+
+    private void notifyTaskListDataChanged(AppWidgetManager appWidgetManager, ComponentName componentName)
+    {
         final int[] appWidgetIds = appWidgetManager.getAppWidgetIds(componentName);
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.task_list_widget_lv);
     }
