@@ -35,8 +35,6 @@ import org.dmfs.tasks.R;
  */
 public final class UpdateWidgetsAction implements TaskAction
 {
-    private final static String TAG = "UpdateWidgetsAction";
-
     public UpdateWidgetsAction()
     {
     }
