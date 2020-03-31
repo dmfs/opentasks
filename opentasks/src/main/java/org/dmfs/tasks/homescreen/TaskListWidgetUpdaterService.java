@@ -233,7 +233,7 @@ public class TaskListWidgetUpdaterService extends RemoteViewsService
                 row.setTextViewText(android.R.id.text1, mDueDateFormatter.format(dueDate, DateFormatContext.WIDGET_VIEW));
 
                 // highlight overdue dates & times
-                if ((!dueDate.allDay && dueDate.before(mNow) || dueDate.allDay
+                if ((!dueDate.allDay && Time.compare(dueDate, mNow) <= 0 || dueDate.allDay
                         && (dueDate.year < mNow.year || dueDate.yearDay <= mNow.yearDay && dueDate.year == mNow.year))
                         && !items[position].getIsClosed())
                 {

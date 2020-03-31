@@ -53,6 +53,7 @@ import org.dmfs.tasks.actions.PinAction;
 import org.dmfs.tasks.actions.PostUndoAction;
 import org.dmfs.tasks.actions.RemoveNotificationAction;
 import org.dmfs.tasks.actions.TaskAction;
+import org.dmfs.tasks.actions.UpdateWidgetsAction;
 import org.dmfs.tasks.actions.WipeNotificationAction;
 import org.dmfs.tasks.contract.TaskContract;
 
@@ -180,8 +181,10 @@ public final class ActionService extends JobIntentService
 
             case TaskContract.ACTION_BROADCAST_TASK_DUE:
             case TaskContract.ACTION_BROADCAST_TASK_STARTING:
-                // post start and due notification on the due date channel
-                return new NotifyStickyAction(data -> CHANNEL_DUE_DATES, true);
+                return new Composite(
+                        // post start and due notification on the due date channel
+                        new NotifyStickyAction(data -> CHANNEL_DUE_DATES, true),
+                        new UpdateWidgetsAction());
 
             case ACTION_UNDO_COMPLETE:
                 return new Composite(
