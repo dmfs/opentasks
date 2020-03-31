@@ -138,7 +138,7 @@ public final class TaskFieldAdapters
     /**
      * Adapter for the completed date of a task.
      */
-    public final static TimeFieldAdapter COMPLETED = new TimeFieldAdapter(Tasks.COMPLETED, null, null);
+    public final static TimeFieldAdapter COMPLETED = new TimeFieldAdapter(Tasks.COMPLETED, Tasks.TZ, null);
 
     /**
      * Adapter for the time zone of a task.
