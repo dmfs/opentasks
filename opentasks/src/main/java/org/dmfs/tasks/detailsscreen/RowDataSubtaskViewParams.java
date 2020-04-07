@@ -25,9 +25,12 @@ import org.dmfs.opentaskspal.readdata.EffectiveDueDate;
 import org.dmfs.opentaskspal.readdata.EffectiveTaskColor;
 import org.dmfs.opentaskspal.readdata.Id;
 import org.dmfs.opentaskspal.readdata.PercentComplete;
+import org.dmfs.opentaskspal.readdata.TaskCompletionTime;
 import org.dmfs.opentaskspal.readdata.TaskTitle;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
+
+import java.util.Date;
 
 
 /**
@@ -83,6 +86,13 @@ public final class RowDataSubtaskViewParams implements SubtaskView.Params
     public Color color()
     {
         return new EffectiveTaskColor(mRowDataSnapshot);
+    }
+
+
+    @Override
+    public Optional<DateTime> completionTime()
+    {
+        return new TaskCompletionTime(mRowDataSnapshot);
     }
 
 

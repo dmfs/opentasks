@@ -16,15 +16,26 @@
 
 package org.dmfs.tasks.detailsscreen;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.dmfs.android.bolts.color.Color;
+import org.dmfs.tasks.QuickAddDialogFragment;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
+import org.dmfs.tasks.utils.BaseActivity;
 import org.dmfs.tasks.widget.PopulateableViewGroup;
 import org.dmfs.tasks.widget.SmartView;
 import org.dmfs.tasks.widget.UpdatedSmartViews;
+
+import androidx.fragment.app.FragmentActivity;
 
 
 /**
@@ -38,35 +49,48 @@ public final class SubtasksView implements SmartView<SubtasksView.Params>
     {
         Color taskListColor();
 
+        Long listId();
+
+        Long parentId();
+
         Iterable<SubtaskView.Params> subtasks();
     }
 
 
     private final ViewGroup mContentView;
 
-
     public SubtasksView(ViewGroup contentView)
     {
         mContentView = contentView;
     }
 
+    private BaseActivity getActivity(Context context) {
+        while (context instanceof ContextWrapper) {
+            if (context instanceof BaseActivity) {
+                return (BaseActivity) context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
+    }
 
     @Override
     public void update(SubtasksView.Params params)
     {
-        if (!params.subtasks().iterator().hasNext())
-        {
-            // Don't show the subtasks UI section if there are no subtasks
-            return;
-        }
 
         LayoutInflater inflater = LayoutInflater.from(mContentView.getContext());
 
         inflater.inflate(R.layout.opentasks_view_item_divider, mContentView);
 
-        TextView sectionHeader = (TextView) inflater.inflate(R.layout.opentasks_view_item_task_details_subtitles_section_header, null);
+        RelativeLayout headerLayout = (RelativeLayout) inflater.inflate(R.layout.opentasks_view_item_task_details_subtitles_section_header, null);
+        TextView sectionHeader = headerLayout.findViewById(R.id.opentasks_view_item_task_details_subtitles_section_header);
         sectionHeader.setTextColor(new Darkened(params.taskListColor()).argb());
-        mContentView.addView(sectionHeader);
+        ImageView quickAddTask = headerLayout.findViewById(R.id.opentasks_view_item_task_details_subtitles_section_header_quick_add);
+        quickAddTask.setOnClickListener(v -> {
+            QuickAddDialogFragment.newInstance(params.listId(), params.parentId())
+                    .show(getActivity(v.getContext()).getSupportFragmentManager(), null);
+        });
+        mContentView.addView(headerLayout);
 
         new PopulateableViewGroup<SubtaskView>(mContentView)
                 .populate(new UpdatedSmartViews<>(params.subtasks(), inflater, R.layout.opentasks_view_item_task_details_subtask));

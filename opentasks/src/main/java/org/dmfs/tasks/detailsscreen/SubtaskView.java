@@ -16,17 +16,25 @@
 
 package org.dmfs.tasks.detailsscreen;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.single.combined.Backed;
+import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.databinding.OpentasksViewItemTaskDetailsSubtaskBinding;
 import org.dmfs.tasks.readdata.TaskContentUri;
 import org.dmfs.tasks.utils.DateFormatter;
@@ -57,6 +65,8 @@ public final class SubtaskView extends FrameLayout implements SmartView<SubtaskV
 
         Color color();
 
+        Optional<DateTime> completionTime();
+
         Optional<Integer> percentComplete();
     }
 
@@ -82,6 +92,42 @@ public final class SubtaskView extends FrameLayout implements SmartView<SubtaskV
         }
 
         views.opentasksTaskDetailsSubtaskListRibbon.setBackgroundColor(subtask.color().argb());
+
+        // checkbox color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            ColorStateList colorStateList = new ColorStateList(
+                    new int[][] {
+
+                            new int[] { -subtask.color().argb() }, //disabled
+                            new int[] { subtask.color().argb() } //enabled
+                    },
+                    new int[] {
+                            -subtask.color().argb(), //disabled
+                            subtask.color().argb() //enabled
+                    }
+            );
+            views.opentasksTaskDetailsSubtaskCheckbox.setButtonTintList(colorStateList);
+        }
+        views.opentasksTaskDetailsSubtaskCheckbox.setTextColor(subtask.color().argb());
+        if (subtask.completionTime().isPresent())
+        {
+            views.opentasksTaskDetailsSubtaskDue.setText(
+                    new DateFormatter(getContext()).format(subtask.completionTime().value(), DateTime.now(), DateFormatContext.LIST_VIEW));
+        }
+
+        views.opentasksTaskDetailsSubtaskCheckbox.setChecked(subtask.percentComplete().isPresent() && subtask.percentComplete().value() == 100);
+        views.opentasksTaskDetailsSubtaskCheckbox.setOnCheckedChangeListener((buttonView, completedValue) -> {
+            ContentValues values = new ContentValues();
+            values.put(TaskContract.Tasks.STATUS, completedValue ? TaskContract.Tasks.STATUS_COMPLETED : TaskContract.Tasks.STATUS_IN_PROCESS);
+            if (!completedValue)
+            {
+                values.put(TaskContract.Tasks.PERCENT_COMPLETE, 0);
+            }
+            Context ctx = buttonView.getContext();
+            Uri taskUri = ContentUris.withAppendedId(TaskContract.Instances.getContentUri(AuthorityUtil.taskAuthority(ctx)), subtask.id());
+            boolean completed = ctx.getApplicationContext().getContentResolver().update(taskUri, values, null, null) != 0;
+        });
 
         new ProgressBackgroundView(views.opentasksTaskDetailsSubtaskProgressBackground)
                 .update(subtask.percentComplete());

@@ -1,14 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/opentasks_view_item_task_details_subtitles_section_header"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/opentasks_view_item_task_details_subtitles_section_header_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="@color/darker_gray"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:textSize="12sp"
-        android:textAllCaps="true"
-        android:textStyle="bold"
-        android:text="@string/opentasks_task_details_subtasks_section_title"/>
+        android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/opentasks_view_item_task_details_subtitles_section_header"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:paddingLeft="16dp"
+            android:paddingTop="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/opentasks_task_details_subtasks_section_title"
+            android:textAllCaps="true"
+            android:textColor="@color/darker_gray"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+
+    <ImageView
+            android:id="@+id/opentasks_view_item_task_details_subtitles_section_header_quick_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:padding="8dp"
+            android:src="@drawable/ic_24_plus_black50"
+            android:visibility="visible"
+            android:focusable="true" />
+</RelativeLayout>
+<!--                if (quickAddTask != null)-->
+<!--                {-->
+<!--                quickAddTask.setOnClickListener(quickAddClickListener);-->
+<!--                quickAddTask.setTag(cursor.getLong(cursor.getColumnIndex(TaskLists._ID)));-->
+<!--                }-->

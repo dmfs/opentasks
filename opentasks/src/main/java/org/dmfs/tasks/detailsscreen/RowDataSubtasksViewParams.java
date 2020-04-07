@@ -30,12 +30,16 @@ import org.dmfs.tasks.contract.TaskContract;
 public final class RowDataSubtasksViewParams implements SubtasksView.Params
 {
     private final Color mTaskListColor;
+    private final Long mListId;
+    private final Long mParentId;
     private final Iterable<RowDataSnapshot<TaskContract.Tasks>> mSubtaskRows;
 
 
-    public RowDataSubtasksViewParams(Color taskListColor, Iterable<RowDataSnapshot<TaskContract.Tasks>> subtaskRows)
+    public RowDataSubtasksViewParams(Color taskListColor, Long listId, Long parentId, Iterable<RowDataSnapshot<TaskContract.Tasks>> subtaskRows)
     {
         mTaskListColor = taskListColor;
+        mListId = listId;
+        mParentId = parentId;
         mSubtaskRows = subtaskRows;
     }
 
@@ -44,6 +48,19 @@ public final class RowDataSubtasksViewParams implements SubtasksView.Params
     public Color taskListColor()
     {
         return mTaskListColor;
+    }
+
+
+    @Override
+    public Long listId()
+    {
+        return mListId;
+    }
+
+    @Override
+    public Long parentId()
+    {
+        return mParentId;
     }
 
 

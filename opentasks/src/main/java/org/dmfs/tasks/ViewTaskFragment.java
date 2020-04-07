@@ -453,11 +453,11 @@ public class ViewTaskFragment extends SupportFragment
             }
         }
 
+        Long listId = mContentSet.getAsLong(Tasks.LIST_ID);
+        Long parentId = mContentSet.getAsLong(Tasks._ID);
         mDisposables.add(new SubtasksSource(mAppContext, mTaskUri, RowDataSubtaskViewParams.SUBTASK_PROJECTION)
                 .subscribe(subtasks ->
-                {
-                    new SubtasksView(mContent).update(new RowDataSubtasksViewParams(new ValueColor(mListColor), subtasks));
-                }));
+                        new SubtasksView(mContent).update(new RowDataSubtasksViewParams(new ValueColor(mListColor), listId, parentId, subtasks))));
     }
 
 
@@ -582,6 +582,7 @@ public class ViewTaskFragment extends SupportFragment
                     if (mContentSet != null)
                     {
                         // TODO: remove the task in a background task
+                        // TODO: subtask: remove subtasks
                         mContentSet.delete(mAppContext);
                         mCallback.onTaskDeleted(mTaskUri);
                         mTaskUri = null;
