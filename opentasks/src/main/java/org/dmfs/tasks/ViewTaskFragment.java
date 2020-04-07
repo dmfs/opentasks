@@ -53,9 +53,11 @@ import android.widget.TextView;
 
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.bolts.color.elementary.ValueColor;
+import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.opentaskspal.readdata.Id;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.detailsscreen.RowDataSubtaskViewParams;
 import org.dmfs.tasks.detailsscreen.RowDataSubtasksViewParams;
@@ -67,6 +69,7 @@ import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.ActionService;
+import org.dmfs.tasks.readdata.TaskContentUri;
 import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
@@ -79,6 +82,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -582,7 +586,16 @@ public class ViewTaskFragment extends SupportFragment
                     if (mContentSet != null)
                     {
                         // TODO: remove the task in a background task
-                        // TODO: subtask: remove subtasks
+                        // delete subtasks
+                        mDisposables.add(new SubtasksSource(mAppContext, mTaskUri, RowDataSubtaskViewParams.SUBTASK_PROJECTION).subscribe(subtasks ->
+                        {
+                            for (RowDataSnapshot<Tasks> x : subtasks) {
+                                Long subtaskId = new Id(x).value();
+                                ContentSet contentSet = new ContentSet(new TaskContentUri(subtaskId, mAppContext).value());
+                                contentSet.delete(mAppContext);
+                            }
+                        }));
+
                         mContentSet.delete(mAppContext);
                         mCallback.onTaskDeleted(mTaskUri);
                         mTaskUri = null;

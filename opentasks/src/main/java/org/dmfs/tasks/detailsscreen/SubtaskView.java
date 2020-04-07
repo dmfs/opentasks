@@ -36,6 +36,7 @@ import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.databinding.OpentasksViewItemTaskDetailsSubtaskBinding;
+import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.readdata.TaskContentUri;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
@@ -127,6 +128,12 @@ public final class SubtaskView extends FrameLayout implements SmartView<SubtaskV
             Context ctx = buttonView.getContext();
             Uri taskUri = ContentUris.withAppendedId(TaskContract.Instances.getContentUri(AuthorityUtil.taskAuthority(ctx)), subtask.id());
             boolean completed = ctx.getApplicationContext().getContentResolver().update(taskUri, values, null, null) != 0;
+        });
+
+        views.opentasksTaskDetailsSubtaskQuickRemove.setOnClickListener(v -> {
+            Context ctx = v.getContext();
+            ContentSet contentSet = new ContentSet(new TaskContentUri(subtask.id(), ctx).value());
+            contentSet.delete(ctx);
         });
 
         new ProgressBackgroundView(views.opentasksTaskDetailsSubtaskProgressBackground)
