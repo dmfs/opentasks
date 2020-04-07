@@ -79,7 +79,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     /**
      * The maximum time to add for the first time the "Task completed" info is shown.
      */
-    private final static int COMPLETION_DELAY_MAX = 1500; // ms
+    private final static int COMPLETION_DELAY_MAX = 1000; // ms
 
     private final static String ARG_LIST_ID = "list_id";
     private final static String ARG_PARENT_ID = "parent_id";
@@ -323,7 +323,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     {
         if (EditorInfo.IME_ACTION_DONE == actionId)
         {
-            notifyUser(true /* close afterwards */);
+            notifyUser(mParentId == -1 /* close if no parent */);
             createTask();
             return true;
         }
