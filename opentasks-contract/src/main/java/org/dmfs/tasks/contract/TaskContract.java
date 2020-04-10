@@ -1573,6 +1573,8 @@ public final class TaskContract
          * <p>
          * When writing a relation, exactly one of {@link #RELATED_ID} or {@link #RELATED_UID} must be present. The missing value and {@link
          * #RELATED_CONTENT_URI} will be populated automatically if possible.
+         * <p>
+         * {@link Tasks#PARENT_ID} is updated automatically if possible.
          */
         interface Relation extends PropertyColumns
         {

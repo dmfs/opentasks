@@ -17,6 +17,7 @@
 package org.dmfs.provider.tasks.processors.tasks;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
@@ -35,7 +36,6 @@ import org.dmfs.tasks.contract.TaskContract;
  * It also updates {@link TaskContract.Property.Relation#RELATED_UID} when a tasks
  * is synced the first time and a UID has been set.
  * <p>
- * TODO: update {@link TaskContract.Tasks#PARENT_ID} of related tasks.
  *
  * @author Marten Gajda
  */
@@ -69,9 +69,35 @@ public final class Relating implements EntityProcessor<TaskAdapter>
             ContentValues v = new ContentValues(1);
             v.put(TaskContract.Property.Relation.RELATED_ID, result.id());
 
-            db.update(TaskDatabaseHelper.Tables.PROPERTIES, v,
+            int updates = db.update(TaskDatabaseHelper.Tables.PROPERTIES, v,
                     TaskContract.Property.Relation.MIMETYPE + "= ? AND " + TaskContract.Property.Relation.RELATED_UID + "=?", new String[] {
                             TaskContract.Property.Relation.CONTENT_ITEM_TYPE, uid });
+
+            if (updates > 0)
+            {
+                // there were other relations pointing towards this task, update PARENT_IDs if necessary
+                ContentValues parentIdValues = new ContentValues(1);
+                parentIdValues.put(TaskContract.Tasks.PARENT_ID, result.id());
+                // iterate over all tasks which refer to this as their parent and update their PARENT_ID
+                try (Cursor c = db.query(
+                        TaskDatabaseHelper.Tables.PROPERTIES, new String[] { TaskContract.Property.Relation.TASK_ID },
+                        String.format("%s = ? and %s = ? and %s = ?",
+                                TaskContract.Property.Relation.MIMETYPE,
+                                TaskContract.Property.Relation.RELATED_ID,
+                                TaskContract.Property.Relation.RELATED_TYPE),
+                        new String[] {
+                                TaskContract.Property.Relation.CONTENT_ITEM_TYPE,
+                                String.valueOf(result.id()),
+                                String.valueOf(TaskContract.Property.Relation.RELTYPE_PARENT) },
+                        null, null, null))
+                {
+                    while (c.moveToNext())
+                    {
+                        db.update(TaskDatabaseHelper.Tables.TASKS, parentIdValues, TaskContract.Tasks._ID + " = ?", new String[] { c.getString(0) });
+                    }
+                }
+                // TODO, way also may have to do this for all the siblings of these tasks.
+            }
         }
         return result;
     }
@@ -82,6 +108,7 @@ public final class Relating implements EntityProcessor<TaskAdapter>
     {
         TaskAdapter result = mDelegate.update(db, task, isSyncAdapter);
         // A task has been updated and may have received a UID by the sync adapter. Update all by-id references to this task.
+        // in this case we don't need to update any PARENT_ID because it should already be set.
 
         if (!isSyncAdapter)
         {
