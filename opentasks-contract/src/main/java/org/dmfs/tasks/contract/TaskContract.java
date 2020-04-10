@@ -795,6 +795,13 @@ public final class TaskContract
         /**
          * The row id of the parent task. <code>null</code> if the task has no parent task.
          * <p>
+         * Note, when writing this value the task {@link Property.Relation} properties are updated accordingly. Any parent or child relations which
+         * make this a child of another task are deleted and a new {@link Property.Relation#RELTYPE_PARENT} relation pointing to the new parent is created.
+         * Be aware that Siblings will be split, i.e. they are not moved to the new parent. Currently this might cause siblings to become orphans if they
+         * don't have a parent-child relationship. This behavior may change in future version.
+         * </p>
+         *
+         * <p>
          * Value: Long
          * </p>
          */
