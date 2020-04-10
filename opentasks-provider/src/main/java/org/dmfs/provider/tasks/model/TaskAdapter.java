@@ -82,6 +82,11 @@ public interface TaskAdapter extends EntityAdapter<TaskAdapter>
     BooleanFieldAdapter<TaskAdapter> ORIGINAL_INSTANCE_ALLDAY = new BooleanFieldAdapter<TaskAdapter>(Tasks.ORIGINAL_INSTANCE_ALLDAY);
 
     /**
+     * Adapter for the parent_id of a task.
+     */
+    LongFieldAdapter<TaskAdapter> PARENT_ID = new LongFieldAdapter<TaskAdapter>(Tasks.PARENT_ID);
+
+    /**
      * Adapter for the all day flag of a task.
      */
     BooleanFieldAdapter<TaskAdapter> IS_ALLDAY = new BooleanFieldAdapter<TaskAdapter>(Tasks.IS_ALLDAY);
