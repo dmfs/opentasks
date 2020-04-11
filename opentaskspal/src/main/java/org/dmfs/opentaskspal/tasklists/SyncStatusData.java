@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 dmfs GmbH
+ * Copyright 2018 dmfs GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package org.dmfs.opentaskspal.tables;
+package org.dmfs.opentaskspal.tasklists;
 
-import org.dmfs.android.contentpal.Table;
-import org.dmfs.android.contentpal.tables.BaseTable;
-import org.dmfs.android.contentpal.tables.DelegatingTable;
+import org.dmfs.android.contentpal.RowData;
+import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.tasks.contract.TaskContract;
-
-import androidx.annotation.NonNull;
 
 
 /**
- * {@link Table} for {@link TaskContract.Properties}.
+ * {@link RowData} of the sync status of a task list.
  *
- * @author Gabor Keszthelyi
+ * @author Marten Gajda
  */
-public final class PropertiesTable extends DelegatingTable<TaskContract.Properties>
+public final class SyncStatusData extends DelegatingRowData<TaskContract.TaskLists>
 {
-    public PropertiesTable(@NonNull String authority)
+
+    public SyncStatusData()
     {
-        super(new BaseTable<>(TaskContract.Properties.getContentUri(authority)));
+        this(true);
     }
+
+
+    public SyncStatusData(boolean syncEnabled)
+    {
+        super((transactionContext, builder) -> builder.withValue(TaskContract.TaskLists.SYNC_ENABLED, syncEnabled ? 1 : 0));
+    }
+
 }

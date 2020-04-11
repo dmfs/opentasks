@@ -16,12 +16,9 @@
 
 package org.dmfs.opentaskspal.readdata;
 
-import androidx.annotation.NonNull;
-
 import org.dmfs.android.contentpal.Projection;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.contentpal.projections.Composite;
-import org.dmfs.android.contentpal.projections.Joined;
 import org.dmfs.android.contentpal.projections.MultiProjection;
 import org.dmfs.iterables.elementary.Seq;
 import org.dmfs.jems.optional.Optional;
@@ -31,6 +28,8 @@ import org.dmfs.jems.optional.decorators.DelegatingOptional;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -43,8 +42,7 @@ public final class EffectiveDueDate extends DelegatingOptional<DateTime>
 {
     public static final Projection<? super TaskContract.TaskColumns> PROJECTION = new Composite<>(
             new MultiProjection<>(Tasks.DUE, Tasks.DTSTART),
-            // TODO: figure out how to get rid of Joined here
-            new Joined<>(TaskDateTime.PROJECTION),
+            TaskDateTime.PROJECTION,
             TaskDuration.PROJECTION);
 
 
