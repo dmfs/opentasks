@@ -16,8 +16,6 @@
 
 package org.dmfs.opentaskspal.tasks;
 
-import androidx.annotation.NonNull;
-
 import org.dmfs.android.contentpal.RowData;
 import org.dmfs.android.contentpal.RowSnapshot;
 import org.dmfs.android.contentpal.rowdata.CharSequenceRowData;
@@ -26,6 +24,8 @@ import org.dmfs.android.contentpal.rowdata.DelegatingRowData;
 import org.dmfs.android.contentpal.rowdata.RawRowData;
 import org.dmfs.android.contentpal.rowdata.Referring;
 import org.dmfs.tasks.contract.TaskContract;
+
+import androidx.annotation.NonNull;
 
 
 /**
@@ -39,10 +39,11 @@ public final class RelationData extends DelegatingRowData<TaskContract.Propertie
                         int relType,
                         @NonNull RowSnapshot<TaskContract.Tasks> relatedTask)
     {
-        super(new Composite<>(
-                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.TASK_ID, relatingTask),
-                new RawRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_TYPE, relType),
-                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_ID, relatedTask)));
+        super(new PropertyData(TaskContract.Property.Relation.CONTENT_ITEM_TYPE,
+                new Composite<>(
+                        new Referring<>(TaskContract.Property.Relation.TASK_ID, relatingTask),
+                        new RawRowData<>(TaskContract.Property.Relation.RELATED_TYPE, relType),
+                        new Referring<>(TaskContract.Property.Relation.RELATED_ID, relatedTask))));
     }
 
 
@@ -50,9 +51,10 @@ public final class RelationData extends DelegatingRowData<TaskContract.Propertie
                         int relType,
                         @NonNull CharSequence relatedTaskUid)
     {
-        super(new Composite<>(
-                new Referring<TaskContract.Properties>(TaskContract.Property.Relation.TASK_ID, relatingTask),
-                new RawRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_TYPE, relType),
-                new CharSequenceRowData<TaskContract.Properties>(TaskContract.Property.Relation.RELATED_UID, relatedTaskUid)));
+        super(new PropertyData(TaskContract.Property.Relation.CONTENT_ITEM_TYPE,
+                new Composite<>(
+                        new Referring<>(TaskContract.Property.Relation.TASK_ID, relatingTask),
+                        new RawRowData<>(TaskContract.Property.Relation.RELATED_TYPE, relType),
+                        new CharSequenceRowData<>(TaskContract.Property.Relation.RELATED_UID, relatedTaskUid))));
     }
 }
