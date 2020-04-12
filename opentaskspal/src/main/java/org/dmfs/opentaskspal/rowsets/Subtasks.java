@@ -23,6 +23,7 @@ import org.dmfs.android.contentpal.View;
 import org.dmfs.android.contentpal.predicates.ReferringTo;
 import org.dmfs.android.contentpal.rowsets.DelegatingRowSet;
 import org.dmfs.android.contentpal.rowsets.QueryRowSet;
+import org.dmfs.android.contentpal.views.Sorted;
 import org.dmfs.jems.optional.Optional;
 import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
@@ -38,12 +39,15 @@ import androidx.annotation.NonNull;
 public final class Subtasks extends DelegatingRowSet<Tasks>
 {
 
-    @SuppressWarnings("unchecked")
     public Subtasks(@NonNull View<Tasks> view,
                     @NonNull Projection<? super Tasks> projection,
                     @NonNull RowReference<Tasks> parentTask)
     {
-        super(new QueryRowSetSorting<>(view, projection, new ReferringTo<>(Tasks.PARENT_ID, parentTask), new Present(Tasks.STATUS + ", " + Tasks.TITLE)));
+        super(
+                new QueryRowSet<>(
+                        new Sorted<>(Tasks.PERCENT_COMPLETE + ", " + Tasks.TITLE, view),
+                        projection,
+                        new ReferringTo<>(Tasks.PARENT_ID, parentTask)));
     }
 
 }
