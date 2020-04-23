@@ -31,7 +31,6 @@ import org.dmfs.tasks.databinding.OpentasksViewItemTaskDetailsSubtaskBinding;
 import org.dmfs.tasks.readdata.TaskContentUri;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
-import org.dmfs.tasks.widget.ProgressBackgroundView;
 import org.dmfs.tasks.widget.SmartView;
 
 import androidx.annotation.NonNull;
@@ -82,9 +81,6 @@ public final class SubtaskView extends FrameLayout implements SmartView<SubtaskV
         }
 
         views.opentasksTaskDetailsSubtaskListRibbon.setBackgroundColor(subtask.color().argb());
-
-        new ProgressBackgroundView(views.opentasksTaskDetailsSubtaskProgressBackground)
-                .update(subtask.percentComplete());
 
         views.getRoot().setOnClickListener((v) ->
         {

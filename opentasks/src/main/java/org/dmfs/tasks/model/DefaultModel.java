@@ -170,9 +170,6 @@ public class DefaultModel extends Model
         addField(new FieldDescriptor(context, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
                 .setViewLayout(TEXT_VIEW_NO_LINKS).setIcon(R.drawable.ic_detail_list));
 
-        setAllowRecurrence(false);
-        setAllowExceptions(false);
-
         mInflated = true;
     }
 }
