@@ -14,7 +14,7 @@ public class TaskQuickSettingsTile extends TileService {
     @Override
     public void onClick() {
         final Intent taskCreateIntent = new Intent(getApplicationContext(), EditTaskActivity.class);
-        taskCreateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        taskCreateIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         unlockAndRun(new Runnable() {
             @Override
             public void run() {
