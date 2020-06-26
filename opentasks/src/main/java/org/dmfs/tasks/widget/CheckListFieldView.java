@@ -246,9 +246,6 @@ public class CheckListFieldView extends AbstractFieldView implements OnCheckedCh
             @Override
             public void onFocusChange(View v, boolean hasFocus)
             {
-                itemView.findViewById(R.id.drag_handle).setVisibility(hasFocus ? View.INVISIBLE : View.VISIBLE);
-                itemView.findViewById(R.id.remove_item).setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
-
                 String newText = text.getText().toString();
                 if (!hasFocus && !newText.equals(item.text) && mValues != null && !mCurrentValue.equals(mAdapter.get(mValues)))
                 {
@@ -297,22 +294,6 @@ public class CheckListFieldView extends AbstractFieldView implements OnCheckedCh
             public void afterTextChanged(Editable s)
             {
                 item.text = s.toString();
-            }
-        });
-
-        // bind the remove button
-        View removeButton = itemView.findViewById(R.id.remove_item);
-        removeButton.setTag(item);
-        removeButton.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                mImm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                mCurrentValue.remove(v.getTag());
-
-                mAdapter.validateAndSet(mValues, mCurrentValue);
-                mContainer.removeDragView(itemView);
             }
         });
     }
