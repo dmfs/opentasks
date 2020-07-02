@@ -58,6 +58,8 @@ import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
 
+import java.util.TimeZone;
+
 
 /**
  * A quick add dialog. It allows the user to enter a new task without having to deal with the full blown editor interface. At present it support task with a
@@ -80,6 +82,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     private final static int COMPLETION_DELAY_MAX = 1500; // ms
 
     private final static String ARG_LIST_ID = "list_id";
+    private final static String ARG_PARENT_ID = "parent_id";
     private final static String ARG_CONTENT = "content";
 
     public static final String LIST_LOADER_URI = "uri";
@@ -121,6 +124,9 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     @Parameter(key = ARG_LIST_ID)
     private long mListId = -1;
 
+    @Parameter(key = ARG_PARENT_ID)
+    private long mParentId = -1;
+
     @Parameter(key = ARG_CONTENT)
     private ContentSet mInitialContent;
 
@@ -160,6 +166,22 @@ public class QuickAddDialogFragment extends SupportDialogFragment
         QuickAddDialogFragment fragment = new QuickAddDialogFragment();
         Bundle args = new Bundle();
         args.putLong(ARG_LIST_ID, listId);
+        args.putLong(ARG_PARENT_ID, -1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    /**
+     * Create a {@link QuickAddDialogFragment} with the given title and initial text value.
+     *
+     * @return A new {@link QuickAddDialogFragment}.
+     */
+    public static QuickAddDialogFragment newInstance(long listId, long parentId)
+    {
+        QuickAddDialogFragment fragment = new QuickAddDialogFragment();
+        Bundle args = new Bundle();
+        args.putLong(ARG_LIST_ID, listId);
+        args.putLong(ARG_PARENT_ID, parentId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -176,6 +198,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
         Bundle args = new Bundle();
         args.putParcelable(ARG_CONTENT, content);
         args.putLong(ARG_LIST_ID, -1);
+        args.putLong(ARG_PARENT_ID, -1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -300,7 +323,7 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     {
         if (EditorInfo.IME_ACTION_DONE == actionId)
         {
-            notifyUser(true /* close afterwards */);
+            notifyUser(mParentId == -1 /* close if no parent */);
             createTask();
             return true;
         }
@@ -375,7 +398,11 @@ public class QuickAddDialogFragment extends SupportDialogFragment
             task = new ContentSet(Tasks.getContentUri(mAuthority));
         }
         task.put(Tasks.LIST_ID, mListSpinner.getSelectedItemId());
+        if (mParentId != -1) {
+            task.put(Tasks.PARENT_ID, mParentId);
+        }
         TaskFieldAdapters.TITLE.set(task, mEditText.getText().toString());
+        TaskFieldAdapters.TIMEZONE.set(task, TimeZone.getDefault());
         return task;
     }
 

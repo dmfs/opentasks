@@ -326,7 +326,7 @@ public class ByList extends AbstractGroupingFactory
     @Override
     public ExpandableChildDescriptor makeExpandableChildDescriptor(String authority)
     {
-        return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=?",
+        return new ExpandableChildDescriptor(Instances.getContentUri(authority), INSTANCE_PROJECTION, Instances.VISIBLE + "=1 and " + Instances.LIST_ID + "=? and " + Instances.PARENT_ID + " is null",
                 Instances.INSTANCE_DUE_SORTING + " is null, " + Instances.INSTANCE_DUE_SORTING + ", " + Instances.TITLE + " COLLATE NOCASE ASC", 0)
                 .setViewDescriptor(TASK_VIEW_DESCRIPTOR);
     }

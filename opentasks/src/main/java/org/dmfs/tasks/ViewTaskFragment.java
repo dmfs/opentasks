@@ -53,16 +53,23 @@ import android.widget.TextView;
 
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.bolts.color.elementary.ValueColor;
+import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.opentaskspal.readdata.Id;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
+import org.dmfs.tasks.detailsscreen.RowDataSubtaskViewParams;
+import org.dmfs.tasks.detailsscreen.RowDataSubtasksViewParams;
+import org.dmfs.tasks.detailsscreen.SubtasksSource;
+import org.dmfs.tasks.detailsscreen.SubtasksView;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
 import org.dmfs.tasks.model.OnContentChangeListener;
 import org.dmfs.tasks.model.Sources;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.notification.ActionService;
+import org.dmfs.tasks.readdata.TaskContentUri;
 import org.dmfs.tasks.share.ShareIntentFactory;
 import org.dmfs.tasks.utils.ContentValueMapper;
 import org.dmfs.tasks.utils.OnModelLoadedListener;
@@ -73,6 +80,9 @@ import org.dmfs.tasks.widget.TaskView;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -134,6 +144,8 @@ public class ViewTaskFragment extends SupportFragment
      * The actual detail view. We store this direct reference to be able to clear it when the fragment gets detached.
      */
     private TaskView mDetailView;
+
+    private CompositeDisposable mDisposables;
 
     private int mListColor;
     private int mOldStatus = -1;
@@ -252,12 +264,14 @@ public class ViewTaskFragment extends SupportFragment
             mDetailView.setValues(null);
         }
 
+        mDisposables.dispose();
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        mDisposables = new CompositeDisposable();
         mShowFloatingActionButton = !getResources().getBoolean(R.bool.has_two_panes);
 
         mRootView = inflater.inflate(R.layout.fragment_task_view_detail, container, false);
@@ -442,6 +456,12 @@ public class ViewTaskFragment extends SupportFragment
                 ((TextView) mToolBar.findViewById(R.id.toolbar_title)).setText(TaskFieldAdapters.TITLE.get(mContentSet));
             }
         }
+
+        Long listId = mContentSet.getAsLong(Tasks.LIST_ID);
+        Long parentId = mContentSet.getAsLong(Tasks._ID);
+        mDisposables.add(new SubtasksSource(mAppContext, mTaskUri, RowDataSubtaskViewParams.SUBTASK_PROJECTION)
+                .subscribe(subtasks ->
+                        new SubtasksView(mContent).update(new RowDataSubtasksViewParams(new ValueColor(mListColor), listId, parentId, subtasks))));
     }
 
 
@@ -566,6 +586,16 @@ public class ViewTaskFragment extends SupportFragment
                     if (mContentSet != null)
                     {
                         // TODO: remove the task in a background task
+                        // delete subtasks
+                        mDisposables.add(new SubtasksSource(mAppContext, mTaskUri, RowDataSubtaskViewParams.SUBTASK_PROJECTION).subscribe(subtasks ->
+                        {
+                            for (RowDataSnapshot<Tasks> x : subtasks) {
+                                Long subtaskId = new Id(x).value();
+                                ContentSet contentSet = new ContentSet(new TaskContentUri(subtaskId, mAppContext).value());
+                                contentSet.delete(mAppContext);
+                            }
+                        }));
+
                         mContentSet.delete(mAppContext);
                         mCallback.onTaskDeleted(mTaskUri);
                         mTaskUri = null;
