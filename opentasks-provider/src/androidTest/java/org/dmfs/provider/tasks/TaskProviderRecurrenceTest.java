@@ -649,6 +649,134 @@ public class TaskProviderRecurrenceTest
 
 
     /**
+     * Test RRULE with overridden instance (inserted into the tasks table) and a completed 1st instance.
+     */
+    @Test
+    public void testRRuleWith2ndOverrideAndCompleted1st() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+        RowSnapshot<Tasks> taskOverride = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
+        DateTime start = DateTime.parse("20180104T123456Z");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        new Put<>(task,
+                                new Composite<>(
+                                        new TimeData<>(start, due),
+                                        new TitleData("original"),
+                                        new RRuleTaskData(new RecurrenceRule("FREQ=DAILY;COUNT=5", RecurrenceRule.RfcMode.RFC2445_LAX)))),
+                        // the override moves the instance by an hour
+                        new Put<>(taskOverride, new Composite<>(
+                                new TimeData<>(second.addDuration(hour), second.addDuration(hour).addDuration(hour)),
+                                new TitleData("override"),
+                                new OriginalInstanceData(task, second))),
+                        new Put<>(task, new StatusData<>(Tasks.STATUS_COMPLETED))),
+                resultsIn(mClient,
+                        new Assert<>(task,
+                                new Composite<>(
+                                        new TimeData<>(start, due),
+                                        new CharSequenceRowData<>(Tasks.TITLE, "original"),
+                                        new CharSequenceRowData<>(Tasks.RRULE, "FREQ=DAILY;COUNT=5"),
+                                        new StatusData<>(Tasks.STATUS_COMPLETED))),
+                        new Assert<>(taskOverride,
+                                new Composite<>(
+                                        new TimeData<>(second.addDuration(hour), second.addDuration(hour).addDuration(hour)),
+                                        new CharSequenceRowData<>(Tasks.TITLE, "override"),
+                                        new OriginalInstanceData(task, second))),
+                        // 1st (completed) instance:
+                        new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, task,
+                                new InstanceTestData(localStart, localDue, new Present<>(start), -1),
+                                new EqArg<>(Instances.INSTANCE_ORIGINAL_TIME, start.getTimestamp()))),
+                        // 2nd instance (now the current one):
+                        new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, taskOverride,
+                                new InstanceTestData(
+                                        second.addDuration(hour),
+                                        second.addDuration(hour).addDuration(hour),
+                                        new Present<>(second), 0)))));
+    }
+
+
+    /**
+     * Test RRULE with overridden instance (inserted into the tasks table) and a deleted 1st instance.
+     */
+    @Test
+    public void testRRuleWith2ndOverrideAndDeleted1st() throws InvalidRecurrenceRuleException
+    {
+        RowSnapshot<TaskLists> taskList = new VirtualRowSnapshot<>(new LocalTaskListsTable(mAuthority));
+        Table<Instances> instancesTable = new InstanceTable(mAuthority);
+        RowSnapshot<Tasks> task = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+        RowSnapshot<Tasks> taskOverride = new VirtualRowSnapshot<>(new TaskListScoped(taskList, new TasksTable(mAuthority)));
+
+        Duration hour = new Duration(1, 0, 3600 /* 1 hour */);
+        DateTime start = DateTime.parse("20180104T123456Z");
+        DateTime due = start.addDuration(hour);
+
+        Duration day = new Duration(1, 1, 0);
+
+        DateTime localStart = start.shiftTimeZone(TimeZone.getDefault());
+        DateTime localDue = due.shiftTimeZone(TimeZone.getDefault());
+
+        DateTime second = localStart.addDuration(day);
+        DateTime third = second.addDuration(day);
+        DateTime fourth = third.addDuration(day);
+        DateTime fifth = fourth.addDuration(day);
+
+        assertThat(new Seq<>(
+                        new Put<>(taskList, new EmptyRowData<>()),
+                        new Put<>(task,
+                                new Composite<>(
+                                        new TimeData<>(start, due),
+                                        new TitleData("original"),
+                                        new RRuleTaskData(new RecurrenceRule("FREQ=DAILY;COUNT=5", RecurrenceRule.RfcMode.RFC2445_LAX)))),
+                        // the override moves the instance by an hour
+                        new Put<>(taskOverride, new Composite<>(
+                                new TimeData<>(second.addDuration(hour), second.addDuration(hour).addDuration(hour)),
+                                new TitleData("override"),
+                                new OriginalInstanceData(task, second))),
+                        // delete 1st instance
+                        new BulkDelete<>(instancesTable, new AllOf<>(
+                                new ReferringTo<>(Instances.TASK_ID, task),
+                                new EqArg<>(Instances.DISTANCE_FROM_CURRENT, "0")))),
+                resultsIn(mClient,
+                        new Assert<>(task,
+                                new Composite<>(
+                                        new TimeData<>(start, due),
+                                        new CharSequenceRowData<>(Tasks.TITLE, "original"),
+                                        new CharSequenceRowData<>(Tasks.RRULE, "FREQ=DAILY;COUNT=5"),
+                                        new CharSequenceRowData<>(Tasks.EXDATE, start.toString()),
+                                        new StatusData<>(Tasks.STATUS_DEFAULT))),
+                        new Assert<>(taskOverride,
+                                new Composite<>(
+                                        new TimeData<>(second.addDuration(hour), second.addDuration(hour).addDuration(hour)),
+                                        new CharSequenceRowData<>(Tasks.TITLE, "override"),
+                                        new OriginalInstanceData(task, second))),
+                        // no instances point to the original task
+                        new Counted<>(0, new AssertRelated<>(instancesTable, Instances.TASK_ID, task)),
+                        // 2nd instance (now the current one):
+                        new Counted<>(1, new AssertRelated<>(instancesTable, Instances.TASK_ID, taskOverride,
+                                new InstanceTestData(
+                                        second.addDuration(hour),
+                                        second.addDuration(hour).addDuration(hour),
+                                        new Present<>(second), 0)))));
+    }
+
+
+    /**
      * Test RRULE with overridden instance (via update on the instances table). This time we don't override the date time fields and expect the instance to
      * inherit the original instance start and due (instead of the master start and due)
      */

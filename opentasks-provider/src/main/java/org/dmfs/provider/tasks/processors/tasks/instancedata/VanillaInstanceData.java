@@ -33,7 +33,7 @@ public final class VanillaInstanceData implements Single<ContentValues>
     @Override
     public ContentValues value()
     {
-        ContentValues values = new ContentValues(6);
+        ContentValues values = new ContentValues(10);
         values.putNull(TaskContract.Instances.INSTANCE_START);
         values.putNull(TaskContract.Instances.INSTANCE_START_SORTING);
         values.putNull(TaskContract.Instances.INSTANCE_DUE);

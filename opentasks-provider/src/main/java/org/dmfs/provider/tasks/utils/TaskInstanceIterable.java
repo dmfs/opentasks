@@ -24,7 +24,6 @@ import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.rfc5545.recurrenceset.RecurrenceList;
 import org.dmfs.rfc5545.recurrenceset.RecurrenceRuleAdapter;
 import org.dmfs.rfc5545.recurrenceset.RecurrenceSet;
-import org.dmfs.rfc5545.recurrenceset.RecurrenceSetIterator;
 
 import java.util.Iterator;
 import java.util.TimeZone;
@@ -76,9 +75,6 @@ public final class TaskInstanceIterable implements Iterable<DateTime>
         set.addInstances(new RecurrenceList(new Timestamps(mTaskAdapter.valueOf(TaskAdapter.RDATE)).value()));
         set.addExceptions(new RecurrenceList(new Timestamps(mTaskAdapter.valueOf(TaskAdapter.EXDATE)).value()));
 
-        RecurrenceSetIterator setIterator = set.iterator(dtstart.getTimeZone(), dtstart.getTimestamp(),
-                System.currentTimeMillis() + 10L * 356L * 3600L * 1000L);
-
-        return new TaskInstanceIterator(dtstart, setIterator, mTaskAdapter.valueOf(TaskAdapter.TIMEZONE_RAW));
+        return new TaskInstanceIterator(dtstart, set);
     }
 }

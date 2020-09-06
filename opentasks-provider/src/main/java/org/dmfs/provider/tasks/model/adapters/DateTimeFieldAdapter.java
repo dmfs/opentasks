@@ -89,9 +89,8 @@ public final class DateTimeFieldAdapter<EntityType> extends SimpleFieldAdapter<D
             // if the time stamp is null we return null
             return null;
         }
-        // create a new Time for the given time zone, falling back to UTC if none is given
         String timezone = mTzField == null ? null : values.getAsString(mTzField);
-        DateTime value = new DateTime(timezone == null ? DateTime.UTC : TimeZone.getTimeZone(timezone), timestamp);
+        DateTime value = new DateTime(timezone == null ? null : TimeZone.getTimeZone(timezone), timestamp);
 
         // cache mAlldayField locally
         String allDayField = mAllDayField;
@@ -128,9 +127,8 @@ public final class DateTimeFieldAdapter<EntityType> extends SimpleFieldAdapter<D
 
         Long timestamp = cursor.getLong(tsIdx);
 
-        // create a new Time for the given time zone, falling back to UTC if none is given
         String timezone = mTzField == null ? null : cursor.getString(tzIdx);
-        DateTime value = new DateTime(timezone == null ? DateTime.UTC : TimeZone.getTimeZone(timezone), timestamp);
+        DateTime value = new DateTime(timezone == null ? null : TimeZone.getTimeZone(timezone), timestamp);
 
         // set the allday flag appropriately
         Integer allDayInt = adIdx < 0 ? null : cursor.getInt(adIdx);
@@ -208,8 +206,7 @@ public final class DateTimeFieldAdapter<EntityType> extends SimpleFieldAdapter<D
             }
         }
 
-        // create a new Time for the given time zone, falling back to UTC if none is given
-        DateTime value = new DateTime(timeZoneId == null ? DateTime.UTC : TimeZone.getTimeZone(timeZoneId), timestamp);
+        DateTime value = new DateTime(timeZoneId == null ? null : TimeZone.getTimeZone(timeZoneId), timestamp);
 
         if (allDay != 0)
         {

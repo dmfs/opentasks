@@ -26,6 +26,7 @@ import org.dmfs.jems.iterable.composite.Joined;
 import org.dmfs.jems.optional.adapters.FirstPresent;
 import org.dmfs.jems.optional.elementary.NullSafe;
 import org.dmfs.jems.predicate.composite.AnyOf;
+import org.dmfs.jems.predicate.composite.Not;
 import org.dmfs.provider.tasks.TaskDatabaseHelper;
 import org.dmfs.provider.tasks.model.CursorContentValuesInstanceAdapter;
 import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
@@ -195,7 +196,7 @@ public final class Detaching implements EntityProcessor<InstanceAdapter>
                     {
                         // remove the RRULE but keep a mask for the old start
                         masterTask.set(TaskAdapter.EXDATE,
-                                new Joined<>(new SingletonIterable<>(oldStart), new Sieved<>(oldStart::equals, masterTask.valueOf(TaskAdapter.EXDATE))));
+                                new Joined<>(new SingletonIterable<>(oldStart), new Sieved<>(new Not<>(oldStart::equals), masterTask.valueOf(TaskAdapter.EXDATE))));
                         masterTask.set(TaskAdapter.RRULE, null);
                     }
                     else
