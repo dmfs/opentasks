@@ -36,8 +36,8 @@ import org.dmfs.tasks.utils.ViewDescriptor;
 import java.util.TimeZone;
 
 import androidx.collection.SparseArrayCompat;
-import androidx.core.graphics.ColorUtils;
 
+import static java.lang.Boolean.TRUE;
 import static org.dmfs.tasks.contract.TaskContract.TaskColumns.STATUS_CANCELLED;
 import static org.dmfs.tasks.model.TaskFieldAdapters.IS_CLOSED;
 import static org.dmfs.tasks.model.TaskFieldAdapters.STATUS;
@@ -92,6 +92,10 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
             {
                 view.setTextAppearance(view.getContext(), R.style.task_list_overdue_text);
             }
+            else if (isClosed)
+            {
+                view.setTextAppearance(view.getContext(), R.style.task_list_due_text_closed);
+            }
             else
             {
                 view.setTextAppearance(view.getContext(), R.style.task_list_due_text);
@@ -118,7 +122,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         String description = TaskFieldAdapters.DESCRIPTION.get(cursor);
         TextView descriptionView = getView(view, android.R.id.text1);
         View content = getView(view, R.id.cardcontent);
-        if (TextUtils.isEmpty(description))
+        if (TextUtils.isEmpty(description) || TRUE.equals(IS_CLOSED.get(cursor)))
         {
             content.setVisibility(View.GONE);
         }

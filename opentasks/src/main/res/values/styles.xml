@@ -56,13 +56,13 @@
     </style>
 
     <style name="DatePickerHolo"
-            parent="@android:style/Theme.Holo.Light.Dialog"/>
+            parent="@android:style/Theme.Holo.Light.Dialog" />
 
     <style name="task_progressbar"
-            parent="android:Widget.Holo.ProgressBar.Horizontal"/>
+            parent="android:Widget.Holo.ProgressBar.Horizontal" />
 
     <style name="task_seekbar"
-            parent="android:Widget.Holo.SeekBar"/>
+            parent="android:Widget.Holo.SeekBar" />
 
     <style name="TextAppearance.EditTask_Spinner"
             parent="android:style/Widget.Holo.Light.Spinner">
@@ -251,7 +251,7 @@
     </style>
 
     <style name="legacyEditText"
-            parent="@android:style/Widget.EditText"/>
+            parent="@android:style/Widget.EditText" />
 
     <!-- Styles for Task Editor -->
 
@@ -269,7 +269,7 @@
         <item name="android:background">?android:windowBackground</item>
     </style>
 
-    <style name="task_group_list_item"/>
+    <style name="task_group_list_item" />
 
     <style name="task_list_item_date">
         <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
@@ -283,6 +283,11 @@
     <style name="task_list_overdue_text">
         <item name="android:textColor">@color/overdue_date_text</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="task_list_due_text_closed">
+        <item name="android:textColor">#60000000</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="task_list_due_text">
@@ -347,9 +352,9 @@
 
     <!-- styles for actionbar / toolbar -->
 
-    <style name="TextAppearance.Compat.Notification.Title.colorFix"/>
+    <style name="TextAppearance.Compat.Notification.Title.colorFix" />
 
-    <style name="TextAppearance.Compat.Notification.Action"/>
+    <style name="TextAppearance.Compat.Notification.Action" />
 
     <style name="ot_notification_icon_undo">
         <item name="android:src">@drawable/ic_24_undo_white</item>
