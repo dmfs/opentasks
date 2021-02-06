@@ -17,9 +17,15 @@
 package org.dmfs.tasks.groupings;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.text.style.DynamicDrawableSpan;
+import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,16 +33,26 @@ import android.widget.TextView;
 import com.google.android.material.card.MaterialCardView;
 
 import org.dmfs.android.bolts.color.colors.AttributeColor;
+import org.dmfs.iterables.decorators.Sieved;
+import org.dmfs.jems.single.elementary.Reduced;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.model.DescriptionItem;
 import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.DateFormatter;
 import org.dmfs.tasks.utils.DateFormatter.DateFormatContext;
 import org.dmfs.tasks.utils.ViewDescriptor;
 
+import java.util.List;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.collection.SparseArrayCompat;
+import androidx.core.content.ContextCompat;
 
+import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 import static java.lang.Boolean.TRUE;
 import static org.dmfs.tasks.contract.TaskContract.TaskColumns.STATUS_CANCELLED;
 import static org.dmfs.tasks.model.TaskFieldAdapters.IS_CLOSED;
@@ -51,6 +67,8 @@ import static org.dmfs.tasks.model.TaskFieldAdapters.STATUS;
 public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 {
 
+    private final static Pattern CHECKED_PATTERN = Pattern.compile("(-\\s*)?\\[[xX]]");
+    private final static Pattern UNCHECKED_PATTERN = Pattern.compile("(-\\s*)?\\[\\s?]");
     /**
      * We use this to get the current time.
      */
@@ -119,22 +137,102 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 
     protected void setDescription(View view, Cursor cursor)
     {
-        String description = TaskFieldAdapters.DESCRIPTION.get(cursor);
-        TextView descriptionView = getView(view, android.R.id.text1);
         View content = getView(view, R.id.cardcontent);
-        if (TextUtils.isEmpty(description) || TRUE.equals(IS_CLOSED.get(cursor)))
+        TextView descriptionView = getView(content, android.R.id.text1);
+        if (TextUtils.isEmpty(TaskFieldAdapters.DESCRIPTION.get(cursor)) || TRUE.equals(IS_CLOSED.get(cursor)))
         {
             content.setVisibility(View.GONE);
         }
         else
         {
             content.setVisibility(View.VISIBLE);
-            if (description.length() > 150)
+            List<DescriptionItem> checkList = TaskFieldAdapters.DESCRIPTION_CHECKLIST.get(cursor);
+            if (checkList.size() > 0 && !checkList.get(0).checkbox)
             {
-                description = description.substring(0, 150);
+                String description = checkList.get(0).text;
+                if (description.length() > 150)
+                {
+                    description = description.substring(0, 150) + "…";
+                }
+
+                descriptionView.setVisibility(View.VISIBLE);
+                descriptionView.setText(description);
             }
-            descriptionView.setText(description);
+            else
+            {
+                descriptionView.setVisibility(View.GONE);
+            }
+
+            TextView checkboxItemCountView = getView(content, R.id.checkbox_item_count);
+            Iterable<DescriptionItem> checkedItems = new Sieved<>(item -> item.checkbox, checkList);
+            int checkboxItemCount = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1, checkedItems).value();
+            if (checkboxItemCount == 0)
+            {
+                checkboxItemCountView.setVisibility(View.GONE);
+            }
+            else
+            {
+                checkboxItemCountView.setVisibility(View.VISIBLE);
+                int checked = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1,
+                        new Sieved<>(item -> item.checked, checkedItems)).value();
+                if (checked == 0)
+                {
+                    checkboxItemCountView.setText(
+                            withCheckBoxes(checkboxItemCountView,
+                                    view.getContext().getString(R.string.opentasks_checkbox_item_count_none_checked, checkboxItemCount)));
+                }
+                else if (checked == checkboxItemCount)
+                {
+                    checkboxItemCountView.setText(
+                            withCheckBoxes(checkboxItemCountView,
+                                    view.getContext().getString(R.string.opentasks_checkbox_item_count_all_checked, checkboxItemCount)));
+                }
+                else
+                {
+                    checkboxItemCountView.setText(withCheckBoxes(checkboxItemCountView,
+                            view.getContext().getString(R.string.opentasks_checkbox_item_count_partially_checked, checkboxItemCount - checked, checked)));
+                }
+            }
         }
+    }
+
+
+    private Spannable withCheckBoxes(
+            @NonNull TextView view,
+            @NonNull String s)
+    {
+        return withDrawable(
+                view,
+                withDrawable(
+                        view,
+
+                        new SpannableString(s),
+                        CHECKED_PATTERN,
+                        R.drawable.ic_outline_check_box_24),
+                UNCHECKED_PATTERN,
+                R.drawable.ic_outline_check_box_outline_blank_24);
+    }
+
+
+    private Spannable withDrawable(
+            @NonNull TextView view,
+            @NonNull Spannable s,
+            @NonNull Pattern pattern,
+            @DrawableRes int drawable)
+    {
+        Context context = view.getContext();
+        Matcher matcher = pattern.matcher(s.toString());
+        while (matcher.find())
+        {
+            Drawable drawable1 = ContextCompat.getDrawable(context, drawable);
+            int lineHeight = view.getLineHeight();
+            int additionalSpace = (int) ((lineHeight - view.getTextSize()) / 2);
+            drawable1.setBounds(0, 0, lineHeight + additionalSpace, lineHeight + additionalSpace);
+            drawable1.setTint(0xc0ffffff);
+            s.setSpan(new ImageSpan(drawable1, DynamicDrawableSpan.ALIGN_BOTTOM), matcher.start(), matcher.end(), SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        return s;
     }
 
 
