@@ -1,97 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/checklist_element"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="-4dp"
         android:layout_marginLeft="-4dp"
-        android:animateLayoutChanges="true"
-        android:background="#e0ffffff"
-        android:orientation="vertical">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@android:id/checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:padding="4dp" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-                android:id="@android:id/title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:hint="@string/opentasks_checklist_empty_item_hint"
-                android:imeOptions="actionNext"
-                android:inputType="text|textCapSentences|textMultiLine"
-                android:isScrollContainer="true"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:scrollHorizontally="false"
-                android:singleLine="false"
-                android:textSize="16sp" />
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:animateLayoutChanges="true">
 
 
-        <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/drag_handle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:src="@drawable/ic_drag_indicator_24px" />
-
-    </LinearLayout>
-
-    <!-- TODO this functionality could be moved to a bottom bar -->
-    <LinearLayout
-            android:id="@+id/tools"
+    <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@android:id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-4dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
+            android:padding="4dp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/drag_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_drag_indicator_24px" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+            android:id="@android:id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toStartOf="@id/drag_handle"
+            android:layout_toEndOf="@android:id/checkbox"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/opentasks_checklist_empty_item_hint"
+            android:inputType="text|textCapSentences|textMultiLine"
+            android:isScrollContainer="true"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:visibility="gone">
+            android:scrollHorizontally="false"
+            android:singleLine="false"
+            android:textSize="16sp" />
 
-        <!-- TODO: this should be a button -->
-
-        <TextView
-                android:id="@+id/toggle_checkable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/selectable_background_white"
-                android:clickable="true"
-                android:drawableStart="@drawable/ic_list_24px"
-                android:drawablePadding="8dp"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:padding="8dp"
-                android:text="@string/opentasks_show_tick_box" />
-
-        <!-- TODO: this should be a button -->
-
-        <TextView
-                android:id="@+id/delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/selectable_background_white"
-                android:clickable="true"
-                android:drawableStart="@drawable/ic_delete_24px"
-                android:drawablePadding="4dp"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:padding="8dp"
-                android:text="@string/opentasks_delete_item" />
-
-        <!-- TODO: add buttons "move to top" and "move to bottom" -->
-    </LinearLayout>
-</LinearLayout>
+    <FrameLayout
+            android:id="@+id/action_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@android:id/title"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true" />
+</RelativeLayout>

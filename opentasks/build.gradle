@@ -5,11 +5,17 @@ if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {
 // commit number is only relevant to the application project
 def gitCommitNo = { ref ->
     def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-list', '--count', ref
-        standardOutput = stdout
+    try {
+        exec {
+            commandLine 'git', 'rev-list', '--count', ref
+            standardOutput = stdout
+        }
+
+        return Integer.parseInt(stdout.toString().trim())
     }
-    return Integer.parseInt(stdout.toString().trim())
+    catch (Exception e) {
+        return 0
+    }
 }
 
 android {

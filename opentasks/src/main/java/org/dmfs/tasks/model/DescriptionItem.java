@@ -16,12 +16,15 @@
 
 package org.dmfs.tasks.model;
 
+import androidx.annotation.Nullable;
+
+
 /**
  * A bloody POJO o_O to store a description/check list item
  */
 public final class DescriptionItem
 {
-    public final boolean checkbox;
+    public boolean checkbox;
     public boolean checked;
     public String text;
 
@@ -31,5 +34,22 @@ public final class DescriptionItem
         this.checkbox = checkbox;
         this.checked = checked;
         this.text = text;
+    }
+
+
+    @Override
+    public boolean equals(@Nullable Object obj)
+    {
+        return obj instanceof DescriptionItem
+                && ((DescriptionItem) obj).checkbox == checkbox
+                && ((DescriptionItem) obj).checked == checked
+                && ((DescriptionItem) obj).text.equals(text);
+    }
+
+
+    @Override
+    public int hashCode()
+    {
+        return text.hashCode() * 31 + (checkbox ? 1 : 0) + (checked ? 2 : 0);
     }
 }
