@@ -12,12 +12,7 @@
         <item name="android:layout_width">fill_parent</item>
     </style>
 
-    <style name="task_list_container">
-        <item name="android:background">@android:color/white</item>
-    </style>
-
-    <style name="task_list_item_date"
-            parent="dark_text">
+    <style name="task_list_item_date">
         <item name="android:layout_marginRight">25dp</item>
     </style>
 

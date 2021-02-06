@@ -286,12 +286,6 @@ public class TaskListFragment extends SupportFragment
         View rootView = inflater.inflate(R.layout.fragment_expandable_task_list, container, false);
         mExpandableListView = (RetainExpandableListView) rootView.findViewById(android.R.id.list);
 
-        if (!mTwoPaneLayout)
-        {
-            // Add a footer to make sure the floating action button doesn't hide anything.
-            mExpandableListView.addFooterView(inflater.inflate(R.layout.task_list_group, mExpandableListView, false));
-        }
-
         if (mGroupDescriptor == null)
         {
             loadGroupDescriptor();

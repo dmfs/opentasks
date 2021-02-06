@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Our primary color - a nice shade of teal -->
+    <color name="primary">#009688</color>
+    <color name="primary_dark">#00796B</color>
+    <color name="secondary">#ff5722</color>
+    <color name="secondary_variant">#ff5722</color>
+
+    <!-- material colors -->
+
+    <!-- green -->
+    <color name="material_green_500">#4caf50</color>
+
+    <!-- red -->
+    <color name="material_red_500">#f44336</color>
+    <color name="material_red_700">#d32f2f</color>
+    <color name="material_red_900">#b71c1c</color>
+
+    <!-- teal -->
+    <color name="material_teal_500">#009688</color>
+    <color name="material_teal_700">#00796B</color>
+
+    <!-- amber -->
+    <color name="material_amber_500">#ffc107</color>
+
+    <!-- deep orange -->
+    <color name="material_deep_orange_500">#ff5722</color>
+    <color name="material_deep_orange_900">#bf360c</color>
+
+</resources>

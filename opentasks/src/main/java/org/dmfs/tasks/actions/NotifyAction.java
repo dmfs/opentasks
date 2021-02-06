@@ -29,7 +29,7 @@ import android.os.Build;
 import android.os.RemoteException;
 import android.text.format.DateUtils;
 
-import org.dmfs.android.bolts.color.colors.ResourceColor;
+import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.android.contentpal.RowDataSnapshot;
 import org.dmfs.jems.function.Function;
 import org.dmfs.jems.optional.Optional;
@@ -50,6 +50,7 @@ import org.dmfs.tasks.notification.ActionService;
 import org.dmfs.tasks.notification.signals.Conditional;
 import org.dmfs.tasks.utils.DateFormatter;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -171,11 +172,7 @@ public final class NotifyAction implements TaskAction
         builder.setOnlyAlertOnce(!mRepost);
         builder.setOngoing(pin);
         builder.setShowWhen(false);
-        if (Build.VERSION.SDK_INT >= 21)
-        {
-            // don't execute this on Android 4, otherwise no notification will show up
-            builder.setGroup(pin ? GROUP_PINS : GROUP_ALERTS);
-        }
+        builder.setGroup(pin ? GROUP_PINS : GROUP_ALERTS);
         builder.setPriority(pin ? NotificationCompat.PRIORITY_DEFAULT : NotificationCompat.PRIORITY_HIGH);
 
         if (Build.VERSION.SDK_INT < 26)
@@ -183,7 +180,7 @@ public final class NotifyAction implements TaskAction
             builder.setDefaults(new Conditional(mRepost, context).value());
         }
         // TODO: for now we only use the primary app color, later we allow the user to select how to color notifications: default, list, priority
-        builder.setColor(new ResourceColor(context, R.color.primary).argb());
+        builder.setColor(new AttributeColor(new ContextThemeWrapper(context, R.style.OpenTasks_Theme_Default), R.attr.colorPrimary).argb());
         //builder.setColor(new EffectiveTaskColor(data).argb());
         NotificationManagerCompat.from(context).notify("tasks", notificationId, builder.build());
     }

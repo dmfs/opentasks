@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/edit_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -11,7 +12,7 @@
     <FrameLayout
             android:id="@+id/header_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     <FrameLayout
             android:layout_width="match_parent"
@@ -22,7 +23,7 @@
 
         <View
                 android:layout_width="match_parent"
-                android:layout_height="0dp"/>
+                android:layout_height="0dp" />
 
         <LinearLayout
                 android:id="@+id/content"
@@ -39,7 +40,7 @@
                     android:hint="@string/task_title"
                     android:imeOptions="actionDone"
                     android:inputType="textCapSentences"
-                    android:minWidth="240dp"/>
+                    android:minWidth="240dp" />
 
             <LinearLayout
                     android:layout_width="wrap_content"
@@ -65,17 +66,16 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/created_confirmation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawableLeft="@drawable/ic_checkmark_light"
-                android:drawableStart="@drawable/ic_checkmark_light"
                 android:gravity="center"
                 android:text="@string/quick_add_task_created"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                app:drawableStartCompat="@drawable/ic_checkmark_light" />
     </FrameLayout>
 
 </LinearLayout>

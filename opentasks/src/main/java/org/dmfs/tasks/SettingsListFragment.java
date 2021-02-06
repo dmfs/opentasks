@@ -25,14 +25,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.RemoteException;
-import androidx.fragment.app.ListFragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.cursoradapter.widget.CursorAdapter;
-import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +41,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.android.widgets.ColoredShapeCheckBox;
 import org.dmfs.provider.tasks.AuthorityUtil;
 import org.dmfs.tasks.contract.TaskContract;
@@ -56,6 +52,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.cursoradapter.widget.CursorAdapter;
+import androidx.fragment.app.ListFragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 
 /**
@@ -187,9 +192,17 @@ public class SettingsListFragment extends ListFragment implements AbsListView.On
      * Adds an action to the ActionBar to create local lists.
      */
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater)
     {
         inflater.inflate(R.menu.list_settings_menu, menu);
+        // for now we tint all icons manually
+        for (int i = 0; i < menu.size(); ++i)
+        {
+            MenuItem item = menu.getItem(0);
+            Drawable drawable = DrawableCompat.wrap(item.getIcon());
+            drawable.setTint(0x80000000);
+            item.setIcon(drawable);
+        }
     }
 
 

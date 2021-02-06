@@ -69,7 +69,7 @@
             android:padding="4dp"
             android:gravity="center_vertical">
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
                 android:id="@android:id/button2"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
@@ -77,15 +77,14 @@
                 android:gravity="center"
                 android:minWidth="64dp"
                 android:text="@string/activity_manage_list_btn_delete"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="@color/holo_red_light"/>
+                android:textColor="?attr/colorWarning"/>
 
         <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
 
-        <TextView
+        <com.google.android.material.button.MaterialButton
                 android:id="@android:id/button3"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
@@ -93,8 +92,7 @@
                 android:gravity="center"
                 android:minWidth="0dp"
                 android:text="@string/activity_manage_list_btn_save"
-                android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                android:textColor="?attr/colorAccent"/>
+                android:textColor="?attr/colorPrimary"/>
     </LinearLayout>
 
 </LinearLayout>

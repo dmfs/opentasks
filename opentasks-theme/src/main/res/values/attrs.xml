@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="colorHighPriority"
+            format="color" />
+    <attr name="colorMediumPriority"
+            format="color" />
+    <attr name="colorLowPriority"
+            format="color" />
+
+    <attr name="colorError"
+            format="color" />
+
+    <attr name="colorWarning"
+            format="color" />
+
+</resources>
