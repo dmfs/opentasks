@@ -18,8 +18,6 @@ package org.dmfs.tasks.model.adapters;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.text.TextUtils;
-import android.util.Log;
 
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.DescriptionItem;
@@ -140,7 +138,7 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
         }
         else
         {
-            values.put(mFieldName, "");
+            values.putNull(mFieldName);
         }
 
     }
@@ -163,7 +161,7 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
     private static List<DescriptionItem> parseDescription(String description)
     {
         List<DescriptionItem> result = new ArrayList<DescriptionItem>(16);
-        if (TextUtils.isEmpty(description))
+        if (description == null)
         {
             return result;
         }

@@ -3,11 +3,16 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="task_list_left_margin">0dp</dimen>
-    <dimen name="task_list_right_margin">0dp</dimen>
+    <dimen name="task_list_left_margin">8dp</dimen>
+    <dimen name="task_list_right_margin">8dp</dimen>
     <dimen name="dialog_buttom_bar_height">52dp</dimen>
     <dimen name="opentasks_two_pane_list_width">432dp</dimen>
     <dimen name="opentasks_details_pane_overlay_top">120dp</dimen>
     <dimen name="opentasks_details_pane_margin_bottom">-80dp</dimen>
+    <dimen name="opentasks_cardlist_closed_border_width">1dp</dimen>
+    <dimen name="opentasks_cardlist_closed_elevation">0dp</dimen>
+    <dimen name="opentasks_cardlist_open_border_width">0dp</dimen>
+    <dimen name="opentasks_cardlist_open_elevation">2dp</dimen>
+    <dimen name="opentasks_cardlist_title_height">40dp</dimen>
 
 </resources>

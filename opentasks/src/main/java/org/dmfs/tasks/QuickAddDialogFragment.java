@@ -23,9 +23,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
@@ -57,6 +54,10 @@ import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.RecentlyUsedLists;
 import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.utils.TasksListCursorSpinnerAdapter;
+
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 
 /**
@@ -200,16 +201,12 @@ public class QuickAddDialogFragment extends SupportDialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-
-        // create ContextThemeWrapper from the original Activity Context with the custom theme
-        final Context contextThemeWrapperLight = new ContextThemeWrapper(getActivity(), R.style.ThemeOverlay_AppCompat_Light);
         final Context contextThemeWrapperDark = new ContextThemeWrapper(getActivity(), R.style.Base_Theme_AppCompat);
 
-        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapperLight);
-        View view = localInflater.inflate(R.layout.fragment_quick_add_dialog, container);
+        View view = inflater.inflate(R.layout.fragment_quick_add_dialog, container);
 
         ViewGroup headerContainer = (ViewGroup) view.findViewById(R.id.header_container);
-        localInflater = inflater.cloneInContext(contextThemeWrapperDark);
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapperDark);
         localInflater.inflate(R.layout.fragment_quick_add_dialog_header, headerContainer);
 
         if (savedInstanceState == null)

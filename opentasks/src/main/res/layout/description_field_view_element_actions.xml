@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:layout_marginLeft="-4dp"
+        android:background="#fff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+    <!-- TODO: this should be a button -->
+
+    <TextView
+            android:id="@+id/toggle_checkable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_background_white"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_list_24px"
+            android:drawablePadding="8dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:text="@string/opentasks_show_tick_box" />
+
+    <!-- TODO: this should be a button -->
+
+    <TextView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_background_white"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_delete_24px"
+            android:drawablePadding="4dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:text="@string/opentasks_delete_item" />
+
+    <!-- TODO: add buttons "move to top" and "move to bottom" -->
+</LinearLayout>

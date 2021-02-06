@@ -16,30 +16,31 @@
 
 package org.dmfs.tasks.widget;
 
+import android.animation.LayoutTransition;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 
 import com.jmedeisis.draglinearlayout.DragLinearLayout;
 import com.jmedeisis.draglinearlayout.DragLinearLayout.OnViewSwapListener;
 
 import org.dmfs.android.bolts.color.colors.AttributeColor;
+import org.dmfs.jems.function.Function;
+import org.dmfs.jems.procedure.Procedure;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.DescriptionItem;
@@ -61,12 +62,11 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
 {
     private DescriptionFieldAdapter mAdapter;
     private DragLinearLayout mContainer;
-
     private List<DescriptionItem> mCurrentValue;
-
     private boolean mBuilding = false;
     private LayoutInflater mInflater;
     private InputMethodManager mImm;
+    private View mActionView;
 
 
     public DescriptionFieldView(Context context)
@@ -99,8 +99,8 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         super.onFinishInflate();
         mContainer = findViewById(R.id.checklist);
         mContainer.setOnViewSwapListener(this);
-
         mContainer.findViewById(R.id.add_item).setOnClickListener(this);
+        mActionView = mInflater.inflate(R.layout.description_field_view_element_actions, mContainer, false);
     }
 
 
@@ -112,7 +112,6 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
     }
 
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
     {
@@ -181,8 +180,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
             if (itemView == null || itemView.getId() != R.id.checklist_element)
             {
                 itemView = createItemView();
-                mContainer.addView(itemView, mContainer.getChildCount() - 1);
-                mContainer.setViewDraggable(itemView, itemView.findViewById(R.id.drag_handle));
+                mContainer.addDragView(itemView, itemView.findViewById(R.id.drag_handle), mContainer.getChildCount() - 1);
             }
 
             bindItemView(itemView, item);
@@ -222,20 +220,29 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
      */
     private View createItemView()
     {
-        return mInflater.inflate(R.layout.description_field_view_element, mContainer, false);
+        View item = mInflater.inflate(R.layout.description_field_view_element, mContainer, false);
+        // disable transition animations
+        LayoutTransition transition = ((ViewGroup) item).getLayoutTransition();
+        transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
+        transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+        transition.disableTransitionType(LayoutTransition.CHANGING);
+        transition.disableTransitionType(LayoutTransition.APPEARING);
+        transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+        return item;
     }
 
 
-    @SuppressWarnings("deprecation")
     private void bindItemView(final View itemView, final DescriptionItem item)
     {
         // set the checkbox status
         CheckBox checkbox = itemView.findViewById(android.R.id.checkbox);
+
         // make sure we don't receive our own updates
         checkbox.setOnCheckedChangeListener(null);
         checkbox.setChecked(item.checked && item.checkbox);
         checkbox.jumpDrawablesToCurrentState();
         checkbox.setOnCheckedChangeListener(DescriptionFieldView.this);
+
         checkbox.setVisibility(item.checkbox ? VISIBLE : GONE);
 
         // configure the title
@@ -246,56 +253,85 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
             text.removeTextChangedListener((TextWatcher) text.getTag());
         }
         text.setText(item.text);
+
         ColorStateList colorStateList = new ColorStateList(
                 new int[][] { new int[] { android.R.attr.state_focused }, new int[] { -android.R.attr.state_focused } },
                 new int[] { new AttributeColor(getContext(), R.attr.colorPrimary).argb(), 0 });
         ViewCompat.setBackgroundTintList(text, colorStateList);
-        text.setOnFocusChangeListener(new OnFocusChangeListener()
-        {
 
-            @Override
-            public void onFocusChange(View v, boolean hasFocus)
+        text.setOnFocusChangeListener((v, hasFocus) -> {
+            String newText = text.getText().toString();
+            if (!hasFocus && !newText.equals(item.text))
             {
-                View tools = itemView.findViewById(R.id.tools);
-                tools.setVisibility(hasFocus ? VISIBLE : GONE);
-                String newText = text.getText().toString();
-                if (!hasFocus && !newText.equals(item.text) && mValues != null && !mCurrentValue.equals(mAdapter.get(mValues)))
-                {
-                    item.text = newText;
-                }
+                item.text = newText;
+            }
 
-                if (hasFocus)
-                {
-                    v.postDelayed(
-                            () -> tools.requestRectangleOnScreen(new Rect(0, 0, tools.getWidth(), tools.getHeight()), false),
-                            200);
-                }
+            if (hasFocus)
+            {
+                addActionView(itemView, item);
+                setupActionView(item);
+            }
+            else
+            {
+                ((ViewGroup) itemView.findViewById(R.id.action_bar)).removeAllViews();
             }
         });
-        if (item.checkbox)
-        {
-            text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-        }
-        else
-        {
-            text.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        }
-        text.setOnEditorActionListener(new OnEditorActionListener()
-        {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+        text.setOnKeyListener((view, i, keyEvent) -> {
+            // intercept DEL key so we can join lines
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL && text.getSelectionStart() == 0)
             {
-                if (actionId == EditorInfo.IME_ACTION_NEXT)
+                int pos = mContainer.indexOfChild(itemView);
+                if (pos > 0)
                 {
-                    int pos = mContainer.indexOfChild(itemView);
-                    insertEmptyItem(item.checkbox, pos + 1);
+                    EditText previousEditText = mContainer.getChildAt(pos - 1).findViewById(android.R.id.title);
+                    String previousText = previousEditText.getText().toString();
+                    int selectorPos = previousText.length();
+
+                    String newText = previousText + text.getText().toString();
+                    // concat content of this item to the previous one
+                    previousEditText.setText(newText);
+                    previousEditText.requestFocus();
+                    mCurrentValue.get(pos - 1).text = newText;
+                    mCurrentValue.remove(item);
+                    mContainer.removeDragView(itemView);
+                    mAdapter.validateAndSet(mValues, mCurrentValue);
+                    previousEditText.setSelection(Math.min(selectorPos, previousEditText.getText().length()));
                     return true;
                 }
-                return false;
             }
+            if (item.checkbox && keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+            {
+                // we own this event
+                return true;
+            }
+            if (item.checkbox && keyEvent.getAction() == KeyEvent.ACTION_UP && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+            {
+                if (text.getText().length() == 0)
+                {
+                    // convert to unchecked text
+                    item.checkbox = false;
+                    new Animated(checkbox, v -> (ViewGroup) v.getParent()).process(c -> c.setVisibility(View.GONE));
+                    text.requestFocus();
+                    text.setSingleLine(false);
+                    return true;
+                }
+                // split current
+                int sel = text.getSelectionStart();
+                String newText = text.getText().toString().substring(sel);
+                item.text = text.getText().toString().substring(0, sel);
+                text.setText(item.text);
+                text.clearFocus();
+                // create new item with new test
+                int pos = mContainer.indexOfChild(itemView);
+                insertItem(item.checkbox, pos + 1, newText);
+                ((EditText) mContainer.getChildAt(pos + 1).findViewById(android.R.id.title)).setSelection(0);
+                ((EditText) mContainer.getChildAt(pos + 1).findViewById(android.R.id.title)).setSingleLine(true);
+                return true;
+            }
+            return false;
         });
-        text.setImeOptions(EditorInfo.IME_ACTION_NEXT);
+
+        text.setSingleLine(item.checkbox);
 
         TextWatcher watcher = new TextWatcher()
         {
@@ -322,64 +358,6 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
 
         text.setTag(watcher);
         text.addTextChangedListener(watcher);
-
-        // bind the remove button
-        View removeButton = itemView.findViewById(R.id.delete);
-        removeButton.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //   mImm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                mCurrentValue.remove(item);
-
-                mContainer.removeDragView(itemView);
-                mAdapter.validateAndSet(mValues, mCurrentValue);
-            }
-        });
-
-        // bind the remove button
-        TextView toggleCheckableButton = itemView.findViewById(R.id.toggle_checkable);
-        toggleCheckableButton.setText(item.checkbox ? R.string.opentasks_hide_tick_box : R.string.opentasks_show_tick_box);
-        toggleCheckableButton.setCompoundDrawablesWithIntrinsicBounds(item.checkbox ? R.drawable.ic_text_24px : R.drawable.ic_list_24px, 0, 0, 0);
-        toggleCheckableButton.setOnClickListener(new OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                //     mImm.hideSoftInputFromWindow(text.getWindowToken(), 0);
-                int idx = mCurrentValue.indexOf(item);
-                mCurrentValue.remove(item);
-                if (!item.checkbox)
-                {
-                    String[] lines = item.text.split("\n");
-
-                    if (lines.length == 1)
-                    {
-                        DescriptionItem newItem = new DescriptionItem(true, item.checked, item.text);
-                        mCurrentValue.add(idx, newItem);
-                    }
-                    else
-                    {
-                        for (String i : lines)
-                        {
-                            DescriptionItem newItem = new DescriptionItem(true, false, i);
-                            mCurrentValue.add(idx, newItem);
-                            idx += 1;
-
-                        }
-                    }
-                }
-                else
-                {
-                    DescriptionItem newItem = new DescriptionItem(false, item.checked, item.text);
-                    mCurrentValue.add(idx, newItem);
-                    bindItemView(itemView, newItem);
-                }
-                updateCheckList(mCurrentValue);
-                mAdapter.validateAndSet(mValues, mCurrentValue);
-            }
-        });
     }
 
 
@@ -390,18 +368,20 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
      * @param withCheckBox
      * @param pos
      */
-    private void insertEmptyItem(boolean withCheckBox, int pos)
+    private void insertItem(boolean withCheckBox, int pos, String initialText)
     {
         if (mCurrentValue.size() > pos && mCurrentValue.get(pos).text.length() == 0)
         {
             // there already is an empty item at this pos focus it and return
             View view = mContainer.getChildAt(pos);
+            ((EditText) view.findViewById(android.R.id.title)).setText(initialText);
             focusTitle(view);
             return;
         }
+        mContainer.clearFocus();
 
         // create a new empty item
-        DescriptionItem item = new DescriptionItem(withCheckBox, false, "");
+        DescriptionItem item = new DescriptionItem(withCheckBox, false, initialText);
         mCurrentValue.add(pos, item);
         View newItem = createItemView();
         bindItemView(newItem, item);
@@ -419,7 +399,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         int id = v.getId();
         if (id == R.id.add_item)
         {
-            insertEmptyItem(!mCurrentValue.isEmpty(), mCurrentValue.size());
+            insertItem(!mCurrentValue.isEmpty(), mCurrentValue.size(), "");
         }
     }
 
@@ -439,4 +419,112 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         }
     }
 
+
+    private void addActionView(View itemView, DescriptionItem item)
+    {
+        // attach the action view
+        ((ViewGroup) itemView.findViewById(R.id.action_bar)).addView(mActionView);
+        mActionView.findViewById(R.id.delete).setOnClickListener((view -> {
+            mCurrentValue.remove(item);
+            mContainer.removeDragView(itemView);
+            mAdapter.validateAndSet(mValues, mCurrentValue);
+        }));
+    }
+
+
+    private void setupActionView(DescriptionItem item)
+    {
+        TextView toggleCheckableButton = mActionView.findViewById(R.id.toggle_checkable);
+        toggleCheckableButton.setText(item.checkbox ? R.string.opentasks_hide_tick_box : R.string.opentasks_show_tick_box);
+        toggleCheckableButton.setCompoundDrawablesWithIntrinsicBounds(item.checkbox ? R.drawable.ic_text_24px : R.drawable.ic_list_24px, 0, 0, 0);
+        toggleCheckableButton.setOnClickListener(button -> {
+            int idx = mCurrentValue.indexOf(item);
+            int origidx = idx;
+            mCurrentValue.remove(item);
+            if (!item.checkbox)
+            {
+                String[] lines = item.text.split("\n");
+
+                if (lines.length == 1)
+                {
+                    DescriptionItem newItem = new DescriptionItem(true, item.checked, item.text);
+                    mCurrentValue.add(idx, newItem);
+                    new Animated(mContainer.getChildAt(origidx), v -> (ViewGroup) v).process(v -> bindItemView(v, newItem));
+                    setupActionView(newItem);
+                }
+                else
+                {
+                    for (String i : lines)
+                    {
+                        DescriptionItem newItem = new DescriptionItem(true, false, i);
+                        mCurrentValue.add(idx, newItem);
+                        if (idx == origidx)
+                        {
+                            new Animated(mContainer.getChildAt(origidx), v -> (ViewGroup) v).process(v -> bindItemView(v, newItem));
+                        }
+                        else
+                        {
+                            View itemView = createItemView();
+                            bindItemView(itemView, newItem);
+                            mContainer.addDragView(itemView, itemView.findViewById(R.id.drag_handle), idx);
+                        }
+
+                        idx += 1;
+                    }
+                }
+            }
+            else
+            {
+                DescriptionItem newItem = new DescriptionItem(false, item.checked, item.text);
+                mCurrentValue.add(idx, newItem);
+                if (idx == 0 || mCurrentValue.get(idx - 1).checkbox)
+                {
+                    new Animated(mContainer.getChildAt(idx), v -> (ViewGroup) v).process(v -> bindItemView(v, newItem));
+                }
+                setupActionView(newItem);
+            }
+            mAdapter.validateAndSet(mValues, mCurrentValue);
+
+            if (mCurrentValue.size() > 0)
+            {
+                setupActionView(mCurrentValue.get(Math.min(origidx, mCurrentValue.size() - 1)));
+            }
+        });
+
+        mActionView.postDelayed(
+                () -> mActionView.requestRectangleOnScreen(new Rect(0, 0, mActionView.getWidth(), mActionView.getHeight()), false), 1);
+
+    }
+
+
+    public static final class Animated implements Procedure<Procedure<? super View>>
+    {
+        private final View mView;
+        private final Function<View, ViewGroup> mViewGroupFunction;
+
+
+        public Animated(View view, Function<View, ViewGroup> viewGroupFunction)
+        {
+            mView = view;
+            mViewGroupFunction = viewGroupFunction;
+        }
+
+
+        @Override
+        public void process(Procedure<? super View> arg)
+        {
+            LayoutTransition transition = mViewGroupFunction.value(mView).getLayoutTransition();
+            transition.enableTransitionType(LayoutTransition.CHANGE_APPEARING);
+            transition.enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+            transition.enableTransitionType(LayoutTransition.CHANGING);
+            transition.enableTransitionType(LayoutTransition.APPEARING);
+            transition.enableTransitionType(LayoutTransition.DISAPPEARING);
+            arg.process(mView);
+            transition.disableTransitionType(LayoutTransition.CHANGE_APPEARING);
+            transition.disableTransitionType(LayoutTransition.CHANGE_DISAPPEARING);
+            transition.disableTransitionType(LayoutTransition.CHANGING);
+            transition.disableTransitionType(LayoutTransition.APPEARING);
+            transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+        }
+    }
 }

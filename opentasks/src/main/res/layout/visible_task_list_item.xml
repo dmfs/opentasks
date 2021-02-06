@@ -3,28 +3,28 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="8dip"
-        android:paddingTop="8dip">
+        android:paddingTop="8dip"
+        android:paddingBottom="8dip">
 
     <org.dmfs.android.widgets.ColoredShapeCheckBox
             android:id="@+id/visible_task_list_checked"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
             android:background="@null"
             android:checked="true"
             android:clickable="false"
             android:focusable="false"
             app:backgroundShape="@drawable/rect_shape_corners"
             app:darkCheckmark="@drawable/org_dmfs_colorshape_checkbox_white_shape_selector"
-            app:lightCheckmark="@drawable/org_dmfs_colorshape_checkbox_white_shape_selector"/>
+            app:lightCheckmark="@drawable/org_dmfs_colorshape_checkbox_white_shape_selector" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/btn_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -33,35 +33,35 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:padding="12dp"
-            android:src="@drawable/ic_24_settings_black50"
-            android:tint="?attr/colorAccent"/>
+            android:src="@drawable/ic_24_settings_black50" />
 
     <TextView
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="48dp"
-            android:layout_marginLeft="62dp"
-            android:layout_marginRight="48dp"
             android:layout_marginStart="62dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="false"/>
+            android:textColor="#c0000000"
+            android:textIsSelectable="false" />
 
     <TextView
             android:id="@android:id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@android:id/text1"
-            android:layout_marginEnd="48dp"
-            android:layout_marginLeft="62dp"
-            android:layout_marginRight="48dp"
             android:layout_marginStart="62dp"
+            android:layout_marginLeft="62dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginRight="48dp"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textIsSelectable="false"/>
+            android:textColor="#c0000000"
+            android:textIsSelectable="false" />
 
 </RelativeLayout>

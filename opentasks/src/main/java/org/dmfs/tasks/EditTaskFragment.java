@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -643,13 +642,10 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowTitleEnabled(true);
 
-        if (VERSION.SDK_INT >= 21)
-        {
-            Window window = getActivity().getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(new Mixed(newColor, mListColor).argb());
-            // window.setNavigationBarColor(mixColors(newColor, mListColor));
-        }
+        Window window = getActivity().getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(new Mixed(newColor, mListColor).argb());
+
         mTaskListBar.setBackgroundColor(mListColor);
         if (mColorBar != null)
         {

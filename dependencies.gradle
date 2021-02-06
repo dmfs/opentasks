@@ -4,9 +4,9 @@ def androidx_test_runner_version = '1.1.1'
 
 ext.deps = [
         // Support & Google libraries
-        support_appcompat  : 'androidx.appcompat:appcompat:1.0.2',
-        support_annotations: 'androidx.annotation:annotation:1.0.0',
-        support_design     : 'com.google.android.material:material:1.0.0',
+        support_appcompat  : 'androidx.appcompat:appcompat:1.2.0',
+        support_annotations: 'androidx.annotation:annotation:1.1.0',
+        support_design     : 'com.google.android.material:material:1.2.1',
         android_dashclock  : 'com.google.android.apps.dashclock:dashclock-api:2.0.0',
 
         // dmfs

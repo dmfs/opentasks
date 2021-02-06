@@ -95,7 +95,6 @@
         <item name="android:scrollbarStyle">insideOverlay</item>
         <item name="android:scrollbarSize">20dp</item>
         <item name="android:divider">@null</item>
-        <item name="android:background">#fff0f0f0</item>
     </style>
 
     <style name="task_list_item_divider">
@@ -115,7 +114,7 @@
     <style name="dialog_button_primary"
             parent="TextAppearance.AppCompat.Button">
         <item name="android:background">?android:attr/selectableItemBackground</item>
-        <item name="android:textColor">@color/accent_material_light</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:padding">8dp</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
@@ -181,7 +180,7 @@
 
     <style name="task_list_progress_background">
         <item name="android:visibility">visible</item>
-        <item name="android:background">@drawable/task_progress_background_shade</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="time_forward_button"
@@ -216,7 +215,7 @@
             parent="OpenTasksAppBaseTheme">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
+        <item name="colorAccent">@color/material_deep_orange_500</item>
         <item name="android:windowTitleStyle">@style/window_title_style</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -267,13 +266,12 @@
     <!-- Styles for main task list -->
 
     <style name="task_list_container">
-        <item name="android:background">@android:color/white</item>
+        <item name="android:background">?android:windowBackground</item>
     </style>
 
     <style name="task_group_list_item"/>
 
-    <style name="task_list_item_date"
-            parent="dark_text">
+    <style name="task_list_item_date">
         <item name="android:layout_marginRight">@dimen/task_list_right_margin</item>
     </style>
 
@@ -289,6 +287,7 @@
 
     <style name="task_list_due_text">
         <item name="android:textColor">@color/due_date_text</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <!-- Styles for Widgets -->

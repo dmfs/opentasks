@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- This sets the default theme to light -->
+
+    <style name="OpenTasks_Theme.Default"
+            parent="OpenTasks_Theme.Light" />
+
+
+    <style name="OpenTasks_Theme.Default.Dialog"
+            parent="OpenTasks_BaseTheme.Light.Dialog" />
+
+</resources>
