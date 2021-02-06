@@ -25,6 +25,10 @@
     <string name="quick_add_task_created">Task created</string>
     <string name="initial_local_task_list_name">My tasks</string>
 
+    <string name="opentasks_checkbox_item_count_none_checked">[ ] %d</string>
+    <string name="opentasks_checkbox_item_count_all_checked">[x] %d</string>
+    <string name="opentasks_checkbox_item_count_partially_checked">[ ] %d / [x] %d</string>
+
     <plurals name="number_of_tasks">
         <item quantity="one">%d task</item>
         <item quantity="other">%d tasks</item>
