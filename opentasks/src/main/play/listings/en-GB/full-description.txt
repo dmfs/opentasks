@@ -1,0 +1,25 @@
+An Open Source task app in Material Design.
+
+This app supports basic task management and provides user friendly user interface.
+
+To complete a task in the list view, just hold it for a moment and fling it from the left to the right.
+To edit a task fling it from the right to the left.
+
+<b>Open source</b>
+The app is open source. Please feel free to join the development at: https://github.com/dmfs/tasks
+
+<b>Report bugs</b>
+To report bugs, please use this bug tracker: https://github.com/dmfs/tasks/issues
+
+<b>Features still to come:</b>
+* more translations
+* support for recurring tasks
+* support for alarms
+* support for categories
+* sortings and filters
+* many more
+
+Please don't rate missing features, but only features the app already has. The app is still under development and lots of fancy stuff is still to come.
+
+<b>Permissions</b>
+At present the app doesn't use the "read contacts" permission. This permission has been added in advance for future releases. It's planned to support adding attendees to tasks and to provide auto-completion for the contacts.
