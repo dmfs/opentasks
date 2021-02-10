@@ -45,7 +45,7 @@ public class OverriddenTest
     {
         ContentValues instanceData = new Overridden(absent(), ContentValues::new).value();
         assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, nullValue(Long.class)));
-        assertThat(instanceData.size(), is(1));
+        assertThat(instanceData.size(), is(0));
     }
 
 
@@ -56,8 +56,8 @@ public class OverriddenTest
         values.put(TaskContract.Instances.INSTANCE_START, 10);
 
         ContentValues instanceData = new Overridden(absent(), () -> new ContentValues(values)).value();
-        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 10));
-        assertThat(instanceData.size(), is(2));
+        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, nullValue(Long.class)));
+        assertThat(instanceData.size(), is(1));
     }
 
 
@@ -68,8 +68,8 @@ public class OverriddenTest
         values.put(TaskContract.Instances.INSTANCE_DUE, 20);
 
         ContentValues instanceData = new Overridden(absent(), () -> new ContentValues(values)).value();
-        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 20));
-        assertThat(instanceData.size(), is(2));
+        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, nullValue(Long.class)));
+        assertThat(instanceData.size(), is(1));
     }
 
 
@@ -81,8 +81,8 @@ public class OverriddenTest
         values.put(TaskContract.Instances.INSTANCE_DUE, 20);
 
         ContentValues instanceData = new Overridden(absent(), () -> new ContentValues(values)).value();
-        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, 10));
-        assertThat(instanceData.size(), is(3));
+        assertThat(instanceData, new ContentValuesWithLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME, nullValue(Long.class)));
+        assertThat(instanceData.size(), is(2));
     }
 
 

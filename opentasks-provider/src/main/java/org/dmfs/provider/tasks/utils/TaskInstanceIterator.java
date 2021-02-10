@@ -17,10 +17,16 @@
 package org.dmfs.provider.tasks.utils;
 
 import org.dmfs.iterators.AbstractBaseIterator;
+import org.dmfs.jems.optional.decorators.Mapped;
+import org.dmfs.jems.optional.elementary.NullSafe;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.recurrenceset.RecurrenceSet;
 import org.dmfs.rfc5545.recurrenceset.RecurrenceSetIterator;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.TimeZone;
 
 
 /**
@@ -35,6 +41,13 @@ public final class TaskInstanceIterator extends AbstractBaseIterator<DateTime>
     private final DateTime mStart;
     private final RecurrenceSetIterator mSetIterator;
     private final String mTimezone;
+
+
+    TaskInstanceIterator(DateTime start, RecurrenceSet set)
+    {
+        this(start, set.iterator(start.getTimeZone(), start.getTimestamp()),
+                new Backed<>(new Mapped<>(TimeZone::getID, new NullSafe<>(start.getTimeZone())), () -> null).value());
+    }
 
 
     TaskInstanceIterator(DateTime start, RecurrenceSetIterator setIterator, String timezone)
@@ -55,6 +68,10 @@ public final class TaskInstanceIterator extends AbstractBaseIterator<DateTime>
     @Override
     public DateTime next()
     {
+        if (!hasNext())
+        {
+            throw new NoSuchElementException("No more elements to iterate");
+        }
         DateTime result = new DateTime(mStart.getTimeZone(), mSetIterator.next());
         return mStart.isAllDay() ? result.toAllDay() : mTimezone == null ? result.swapTimeZone(null) : result;
     }

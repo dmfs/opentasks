@@ -19,6 +19,7 @@ package org.dmfs.provider.tasks.processors.tasks.instancedata;
 import android.content.ContentValues;
 
 import org.dmfs.jems.single.Single;
+import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.tasks.contract.TaskContract;
 
 
@@ -31,6 +32,12 @@ public final class TaskRelated implements Single<ContentValues>
 {
     private final long mTaskId;
     private final Single<ContentValues> mDelegate;
+
+
+    public TaskRelated(TaskAdapter taskAdapter, Single<ContentValues> delegate)
+    {
+        this(taskAdapter.id(), delegate);
+    }
 
 
     public TaskRelated(long taskId, Single<ContentValues> delegate)

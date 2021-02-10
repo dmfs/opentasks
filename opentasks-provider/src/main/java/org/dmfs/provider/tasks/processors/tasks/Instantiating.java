@@ -20,6 +20,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.dmfs.jems.function.elementary.DiffMap;
 import org.dmfs.jems.iterable.composite.Diff;
 import org.dmfs.jems.iterable.decorators.Mapped;
 import org.dmfs.jems.optional.Optional;
@@ -36,7 +37,9 @@ import org.dmfs.provider.tasks.processors.EntityProcessor;
 import org.dmfs.provider.tasks.processors.tasks.instancedata.TaskRelated;
 import org.dmfs.provider.tasks.utils.InstanceValuesIterable;
 import org.dmfs.provider.tasks.utils.Limited;
+import org.dmfs.provider.tasks.utils.OverrideValuesFunction;
 import org.dmfs.provider.tasks.utils.Range;
+import org.dmfs.provider.tasks.utils.RowIterator;
 import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.Locale;
@@ -49,6 +52,19 @@ import java.util.Locale;
  */
 public final class Instantiating implements EntityProcessor<TaskAdapter>
 {
+    /**
+     * Projection we use to read the overrides of a task
+     */
+    private final static String[] OVERRIDE_PROJECTION = {
+            TaskContract.Tasks._ID,
+            TaskContract.Tasks.DTSTART,
+            TaskContract.Tasks.DUE,
+            TaskContract.Tasks.DURATION,
+            TaskContract.Tasks.TZ,
+            TaskContract.Tasks.IS_ALLDAY,
+            TaskContract.Tasks.IS_CLOSED,
+            TaskContract.Tasks.ORIGINAL_INSTANCE_TIME,
+            TaskContract.Tasks.ORIGINAL_INSTANCE_ALLDAY };
 
     /**
      * This is a field adapter for a pseudo column to indicate that the instances may need an update, even if no relevant value has changed. This is useful to
@@ -154,7 +170,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     {
         long origId = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID);
         int count = 0;
-        for (Single<ContentValues> values : new InstanceValuesIterable(taskAdapter))
+        for (Single<ContentValues> values : new InstanceValuesIterable(id, taskAdapter))
         {
             if (count++ > 1)
             {
@@ -201,8 +217,6 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
 
     /**
      * Updates the instances of an existing task
-     * <p>
-     * TODO: take instance overrides into account
      *
      * @param db
      *         An {@link SQLiteDatabase}.
@@ -218,11 +232,19 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                 new String[] {
                         TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME, TaskContract.Instances.TASK_ID,
                         TaskContract.Instances.IS_CLOSED, TaskContract.Instances.DISTANCE_FROM_CURRENT },
-                String.format(Locale.ENGLISH, "%s = %d or %s = %d", TaskContract.Instances.TASK_ID, id, TaskContract.Instances.ORIGINAL_INSTANCE_ID, id),
+                String.format(Locale.ENGLISH, "%s = ? or %s = ?", TaskContract.Instances.TASK_ID, TaskContract.Instances.ORIGINAL_INSTANCE_ID),
+                new String[] { Long.toString(id), Long.toString(id) },
                 null,
                 null,
-                null,
-                TaskContract.Instances.INSTANCE_ORIGINAL_TIME))
+                TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+             Cursor overrides = db.query(
+                     TaskDatabaseHelper.Tables.TASKS,
+                     OVERRIDE_PROJECTION,
+                     String.format("%s = ? AND %s != 1", TaskContract.Tasks.ORIGINAL_INSTANCE_ID, TaskContract.Tasks._DELETED),
+                     new String[] { Long.toString(id) },
+                     null,
+                     null,
+                     TaskContract.Tasks.ORIGINAL_INSTANCE_TIME);)
         {
 
             /*
@@ -240,14 +262,43 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
             // for very long or even infinite series we need to stop iterating at some point.
 
             Iterable<Pair<Optional<ContentValues>, Optional<Integer>>> diff = new Diff<>(
-                    new Mapped<>(Single::value,
-                            new Limited<>(10000 /* hard limit for infinite rules*/, new InstanceValuesIterable(taskAdapter))),
+                    new Mapped<>(Single::value, new Limited<>(10000 /* hard limit for infinite rules*/,
+                            new Mapped<>(
+                                    new DiffMap<>(
+                                            (original, override) -> override, // we have both, a regular instance and an override -> take the override
+                                            original -> original,
+                                            override -> override // we only have an override :-o, not really valid but tolerated
+                                    ),
+                                    new Diff<>(
+                                            new InstanceValuesIterable(id, taskAdapter),
+                                            new Mapped<>(
+                                                    cursor ->
+                                                            new OverrideValuesFunction()
+                                                                    .value(new CursorContentValuesTaskAdapter(cursor, new ContentValues())),
+                                                    () -> new RowIterator(overrides)),
+                                            (left, right) -> {
+                                                Long leftLong = left.value().getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+                                                Long rightLong = right.value().getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+                                                // null is always smaller
+                                                if (leftLong == null)
+                                                {
+                                                    return rightLong == null ? 0 : -1;
+                                                }
+                                                if (rightLong == null)
+                                                {
+                                                    return 1;
+                                                }
+
+                                                long ldiff = leftLong - rightLong;
+                                                return ldiff < 0 ? -1 : (ldiff > 0 ? 1 : 0);
+                                            })))),
                     new Range(existingInstances.getCount()),
                     (newInstanceValues, cursorRow) ->
                     {
                         existingInstances.moveToPosition(cursorRow);
-                        return (int) (new Backed<>(new NullSafe<>(newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME)), 0L).value()
-                                - existingInstances.getLong(startIdx));
+                        long ldiff = new Backed<>(new NullSafe<>(newInstanceValues.getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME)), 0L).value()
+                                - existingInstances.getLong(startIdx);
+                        return ldiff < 0 ? -1 : (ldiff > 0 ? 1 : 0);
                     });
 
             int distance = -1;
@@ -256,10 +307,17 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
             {
                 if (distance >= UPCOMING_INSTANCE_COUNT_LIMIT - 1)
                 {
-                    // if we already expanded enough instances, we pretend no other instance exists
+                    // we already expanded enough instances
                     if (!next.right().isPresent())
                     {
-                        // actually no instance exists, no need to do anything
+                        // if no further instances exist, stop here
+                        Long original =next.left().value().getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+                        if (original != null && existingInstances.moveToLast() && existingInstances.getLong(startIdx)<original)
+                        {
+                            break;
+                        }
+
+                        // we may have to delete a few future instances
                         continue;
                     }
                     next = new RightSidedPair<>(next.right());
@@ -276,8 +334,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                 {
                     // there is no old instance for this new one, add it
                     ContentValues values = next.left().value();
-                    values.put(TaskContract.Instances.TASK_ID, taskAdapter.id());
-                    if (distance >= 0 || !taskAdapter.valueOf(TaskAdapter.IS_CLOSED))
+                    if (distance >= 0 || values.getAsLong(TaskContract.Instances.DISTANCE_FROM_CURRENT) >= 0)
                     {
                         distance += 1;
                     }
@@ -289,12 +346,10 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                     // update this instance
                     existingInstances.moveToPosition(next.right().value());
                     // only update if the instance belongs to this task
-                    if (existingInstances.getLong(taskIdIdx) == id)
+//                    if (existingInstances.getLong(taskIdIdx) == id)
                     {
                         ContentValues values = next.left().value();
-                        if (distance >= 0 ||
-                                taskAdapter.isUpdated(TaskAdapter.IS_CLOSED) && !taskAdapter.valueOf(TaskAdapter.IS_CLOSED) ||
-                                !taskAdapter.isUpdated(TaskAdapter.IS_CLOSED) && existingInstances.getInt(isClosedIdx) == 0)
+                        if (distance >= 0 || values.getAsLong(TaskContract.Instances.DISTANCE_FROM_CURRENT) >= 0)
                         {
                             // the distance needs to be updated
                             distance += 1;
@@ -305,7 +360,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                         db.update(TaskDatabaseHelper.Tables.INSTANCES, values,
                                 String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
                     }
-                    else if (distance >= 0 || existingInstances.getInt(isClosedIdx) == 0)
+ /*                   else if (distance >= 0 || existingInstances.getInt(isClosedIdx) == 0)
                     {
                         // this is an override and we need to check the distance value
                         distance += 1;
@@ -316,10 +371,9 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                             db.update(TaskDatabaseHelper.Tables.INSTANCES, contentValues,
                                     String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
                         }
-                    }
+                    }*/
                 }
             }
         }
     }
-
 }
