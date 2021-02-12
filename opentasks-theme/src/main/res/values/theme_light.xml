@@ -28,11 +28,14 @@
         <item name="colorError">@color/material_red_900</item>
         <item name="colorWarning">@color/material_deep_orange_900</item>
 
+        <item name="android:textColorPrimaryInverse">#ffffffff</item>
+        <item name="android:textColorSecondaryInverse">#c0ffffff</item>
+
         <item name="tabIconTint">?attr/colorPrimary</item>
         <item name="tabIndicatorColor">?attr/colorPrimary</item>
 
         <item name="android:scrollbarTrackVertical">@null</item>
-        <item name="android:scrollbarSize">2dp</item>
+        <item name="android:scrollbarSize">12dp</item>
 
     </style>
 
@@ -52,11 +55,14 @@
         <item name="colorError">@color/material_red_900</item>
         <item name="colorWarning">@color/material_deep_orange_900</item>
 
+        <item name="android:textColorPrimaryInverse">#ffffffff</item>
+        <item name="android:textColorSecondaryInverse">#c0ffffff</item>
+
         <item name="tabIconTint">?attr/colorPrimary</item>
         <item name="tabIndicatorColor">?attr/colorPrimary</item>
 
         <item name="android:scrollbarTrackVertical">@null</item>
-        <item name="android:scrollbarSize">2dp</item>
+        <item name="android:scrollbarSize">12dp</item>
     </style>
 
 </resources>

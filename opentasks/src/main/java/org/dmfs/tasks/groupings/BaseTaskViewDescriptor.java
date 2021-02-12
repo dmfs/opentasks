@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.TextUtils;
 import android.text.format.Time;
 import android.text.style.DynamicDrawableSpan;
 import android.text.style.ImageSpan;
@@ -53,7 +52,6 @@ import androidx.collection.SparseArrayCompat;
 import androidx.core.content.ContextCompat;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
-import static java.lang.Boolean.TRUE;
 import static org.dmfs.tasks.contract.TaskContract.TaskColumns.STATUS_CANCELLED;
 import static org.dmfs.tasks.model.TaskFieldAdapters.IS_CLOSED;
 import static org.dmfs.tasks.model.TaskFieldAdapters.STATUS;
@@ -137,61 +135,48 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 
     protected void setDescription(View view, Cursor cursor)
     {
-        View content = getView(view, R.id.cardcontent);
-        TextView descriptionView = getView(content, android.R.id.text1);
-        if (TextUtils.isEmpty(TaskFieldAdapters.DESCRIPTION.get(cursor)) || TRUE.equals(IS_CLOSED.get(cursor)))
+        TextView descriptionView = getView(view, android.R.id.text1);
+
+        List<DescriptionItem> checkList = TaskFieldAdapters.DESCRIPTION_CHECKLIST.get(cursor);
+        if (checkList.size() > 0 && !checkList.get(0).checkbox)
         {
-            content.setVisibility(View.GONE);
+            String description = checkList.get(0).text;
+            descriptionView.setVisibility(View.VISIBLE);
+            descriptionView.setText(description);
         }
         else
         {
-            content.setVisibility(View.VISIBLE);
-            List<DescriptionItem> checkList = TaskFieldAdapters.DESCRIPTION_CHECKLIST.get(cursor);
-            if (checkList.size() > 0 && !checkList.get(0).checkbox)
-            {
-                String description = checkList.get(0).text;
-                if (description.length() > 150)
-                {
-                    description = description.substring(0, 150) + "…";
-                }
+            descriptionView.setVisibility(View.GONE);
+        }
 
-                descriptionView.setVisibility(View.VISIBLE);
-                descriptionView.setText(description);
+        TextView checkboxItemCountView = getView(view, R.id.checkbox_item_count);
+        Iterable<DescriptionItem> checkedItems = new Sieved<>(item -> item.checkbox, checkList);
+        int checkboxItemCount = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1, checkedItems).value();
+        if (checkboxItemCount == 0)
+        {
+            checkboxItemCountView.setVisibility(View.GONE);
+        }
+        else
+        {
+            checkboxItemCountView.setVisibility(View.VISIBLE);
+            int checked = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1,
+                    new Sieved<>(item -> item.checked, checkedItems)).value();
+            if (checked == 0)
+            {
+                checkboxItemCountView.setText(
+                        withCheckBoxes(checkboxItemCountView,
+                                view.getContext().getString(R.string.opentasks_checkbox_item_count_none_checked, checkboxItemCount)));
+            }
+            else if (checked == checkboxItemCount)
+            {
+                checkboxItemCountView.setText(
+                        withCheckBoxes(checkboxItemCountView,
+                                view.getContext().getString(R.string.opentasks_checkbox_item_count_all_checked, checkboxItemCount)));
             }
             else
             {
-                descriptionView.setVisibility(View.GONE);
-            }
-
-            TextView checkboxItemCountView = getView(content, R.id.checkbox_item_count);
-            Iterable<DescriptionItem> checkedItems = new Sieved<>(item -> item.checkbox, checkList);
-            int checkboxItemCount = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1, checkedItems).value();
-            if (checkboxItemCount == 0)
-            {
-                checkboxItemCountView.setVisibility(View.GONE);
-            }
-            else
-            {
-                checkboxItemCountView.setVisibility(View.VISIBLE);
-                int checked = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1,
-                        new Sieved<>(item -> item.checked, checkedItems)).value();
-                if (checked == 0)
-                {
-                    checkboxItemCountView.setText(
-                            withCheckBoxes(checkboxItemCountView,
-                                    view.getContext().getString(R.string.opentasks_checkbox_item_count_none_checked, checkboxItemCount)));
-                }
-                else if (checked == checkboxItemCount)
-                {
-                    checkboxItemCountView.setText(
-                            withCheckBoxes(checkboxItemCountView,
-                                    view.getContext().getString(R.string.opentasks_checkbox_item_count_all_checked, checkboxItemCount)));
-                }
-                else
-                {
-                    checkboxItemCountView.setText(withCheckBoxes(checkboxItemCountView,
-                            view.getContext().getString(R.string.opentasks_checkbox_item_count_partially_checked, checkboxItemCount - checked, checked)));
-                }
+                checkboxItemCountView.setText(withCheckBoxes(checkboxItemCountView,
+                        view.getContext().getString(R.string.opentasks_checkbox_item_count_partially_checked, checkboxItemCount - checked, checked)));
             }
         }
     }
@@ -205,7 +190,6 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
                 view,
                 withDrawable(
                         view,
-
                         new SpannableString(s),
                         CHECKED_PATTERN,
                         R.drawable.ic_outline_check_box_24),
@@ -228,7 +212,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
             int lineHeight = view.getLineHeight();
             int additionalSpace = (int) ((lineHeight - view.getTextSize()) / 2);
             drawable1.setBounds(0, 0, lineHeight + additionalSpace, lineHeight + additionalSpace);
-            drawable1.setTint(0xc0ffffff);
+            drawable1.setTint(view.getCurrentTextColor());
             s.setSpan(new ImageSpan(drawable1, DynamicDrawableSpan.ALIGN_BOTTOM), matcher.start(), matcher.end(), SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 

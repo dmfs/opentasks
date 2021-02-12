@@ -10,9 +10,6 @@
             style="@style/expandable_task_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:groupIndicator="@null"/>
-
-
-    <!-- use android:groupIndicator="@null" to hide the indicator -->
+            android:groupIndicator="@null" />
 
 </LinearLayout>

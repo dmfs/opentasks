@@ -93,7 +93,6 @@
 
     <style name="expandable_task_list">
         <item name="android:scrollbarStyle">insideOverlay</item>
-        <item name="android:scrollbarSize">20dp</item>
         <item name="android:divider">@null</item>
     </style>
 
@@ -281,7 +280,7 @@
     </style>
 
     <style name="task_list_overdue_text">
-        <item name="android:textColor">@color/overdue_date_text</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -291,7 +290,7 @@
     </style>
 
     <style name="task_list_due_text">
-        <item name="android:textColor">@color/due_date_text</item>
+        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
         <item name="android:textStyle">normal</item>
     </style>
 
