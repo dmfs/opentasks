@@ -51,33 +51,16 @@
                 android:layout_marginBottom="8dp"
                 app:cardCornerRadius="4dp">
 
-            <FrameLayout
-                    android:id="@+id/percentage_background_view"
-                    style="@style/task_list_progress_background"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/opentasks_cardlist_title_height"
-                    android:layout_gravity="top"
-                    android:visibility="gone" />
-
-            <FrameLayout
-                    android:id="@+id/percentage_remainder_background_view"
-                    style="@style/task_list_progress_background"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/opentasks_cardlist_title_height"
-                    android:layout_gravity="top|right|end"
-                    android:visibility="gone" />
-
             <RelativeLayout
                     style="@style/tasks_expandable_list_item"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/opentasks_cardlist_title_height"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="top"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:duplicateParentState="true"
-                    android:minHeight="48dp"
-                    android:paddingLeft="@dimen/task_list_right_margin"
-                    android:paddingRight="@dimen/task_list_right_margin"
+                    android:paddingVertical="6dp"
+                    android:paddingHorizontal="10dp"
                     android:state_checkable="true">
 
                 <LinearLayout
@@ -88,8 +71,7 @@
                         android:layout_centerVertical="true"
                         android:gravity="right"
                         android:orientation="vertical"
-                        android:paddingLeft="0dp"
-                        android:paddingRight="8dp">
+                        android:padding="2dp">
 
                     <LinearLayout
                             android:layout_width="wrap_content"
@@ -104,7 +86,7 @@
                                 android:gravity="right"
                                 android:paddingLeft="0dip"
                                 android:paddingRight="2dip"
-                                android:textColor="#d0ffffff"
+                                android:textColor="?android:attr/textColorSecondaryInverse"
                                 android:textIsSelectable="false"
                                 android:textSize="12sp"
                                 android:visibility="gone" />
@@ -118,7 +100,7 @@
                                 android:contentDescription="@string/cd_start_date"
                                 android:scaleType="fitStart"
                                 android:src="@drawable/task_start"
-                                android:tint="#d0ffffff"
+                                android:tint="?android:attr/textColorSecondaryInverse"
                                 android:visibility="gone" />
                     </LinearLayout>
 
@@ -136,7 +118,7 @@
                                 android:gravity="right"
                                 android:paddingLeft="0dip"
                                 android:paddingRight="2dip"
-                                android:textColor="#ffffffff"
+                                android:textColor="?android:attr/textColorSecondaryInverse"
                                 android:textIsSelectable="false"
                                 android:textSize="12sp" />
 
@@ -149,93 +131,66 @@
                                 android:contentDescription="@string/cd_due_date"
                                 android:scaleType="fitStart"
                                 android:src="@drawable/task_due"
-                                android:tint="#d0ffffff"
+                                android:tint="?android:attr/textColorSecondaryInverse"
                                 android:visibility="gone" />
                     </LinearLayout>
                 </LinearLayout>
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
                         android:id="@android:id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
                         android:layout_toLeftOf="@id/task_dates"
+                        android:layout_alignParentTop="true"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingLeft="8dip"
-                        android:paddingRight="8dp"
+                        android:padding="2dip"
                         android:singleLine="true"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:textColor="@color/dark_gray"
+                        android:textColor="?android:attr/textColorPrimaryInverse"
                         android:textIsSelectable="false" />
 
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@android:id/text1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:layout_below="@android:id/title"
+                        android:padding="2dip"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="?android:attr/textColorSecondaryInverse"
+                        android:textIsSelectable="false"
+                        android:textSize="12sp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/checkbox_item_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@android:id/text1"
+                        android:layout_alignParentStart="true"
+                        android:padding="2dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="?android:attr/textColorSecondaryInverse"
+                        android:textIsSelectable="false"
+                        android:textSize="12sp" />
 
             </RelativeLayout>
 
             <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:layout_marginTop="@dimen/opentasks_cardlist_title_height"
-                    android:duplicateParentState="true">
-
-                <RelativeLayout
-                        android:id="@+id/cardcontent"
-                        style="@style/tasks_expandable_list_item"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:duplicateParentState="true"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:paddingBottom="12dp"
-                        android:visibility="visible">
-
-                    <TextView
-                            android:id="@android:id/text1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:gravity="center_vertical"
-                            android:maxLines="2"
-                            android:orientation="vertical"
-                            android:padding="4dip"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="#c0ffffff"
-                            android:textIsSelectable="false"
-                            android:textSize="12sp" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/checkbox_item_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@android:id/text1"
-                            android:layout_alignParentStart="true"
-                            android:padding="4dp"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="#c0ffffff"
-                            android:textIsSelectable="false"
-                            android:textSize="12sp"
-                            android:visibility="gone" />
-                </RelativeLayout>
-            </FrameLayout>
-
-            <FrameLayout
                     android:id="@+id/priority_label"
-                    android:layout_width="6dip"
+                    android:layout_width="8dip"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_gravity="right"
-                    android:minHeight="@dimen/opentasks_cardlist_title_height">
+                    android:layout_gravity="right">
 
                 <View
                         android:layout_width="2dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="start"
-                        android:background="#ffffffff"
-                        android:minHeight="@dimen/opentasks_cardlist_title_height" />
+                        android:background="#ffffffff" />
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
 
