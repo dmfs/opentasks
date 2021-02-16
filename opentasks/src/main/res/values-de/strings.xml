@@ -261,7 +261,7 @@
 
     <!-- Outgoing share -->
     <string name="opentasks_share_footer">Geteilt mit OpenTasks</string>
-    
+
     <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
     <string name="opentasks_permission_request_dialog_getaccounts_title">Berechtigung erforderlich</string>
     <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[Um die Liste der Konten auf Ihrem Gerät zu lesen, die die Aufgabensynchronisation unterstützen, benötigt %s die Berechtigung GET_ACCOUNTS.<br/><br/>
@@ -279,5 +279,17 @@
     <string name="opentasks_delete_item">Löschen</string>
     <string name="opentasks_hide_tick_box">Text</string>
     <string name="opentasks_show_tick_box">Checkliste</string>
+
+
+    <!-- Titles of ActionMode Context menu -->
+
+    <!-- Action for URLs (most likely http/https)-->
+    <string name="opentasks_actionmode_open">Öffnen</string>
+
+    <!-- Action for Phone numbers -->
+    <string name="opentasks_actionmode_call">Anrufen</string>
+
+    <!-- Action for Email addresses -->
+    <string name="opentasks_actionmode_mail_to">Email senden</string>
 
 </resources>

@@ -18,13 +18,19 @@ package org.dmfs.tasks.widget;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,8 +46,14 @@ import com.jmedeisis.draglinearlayout.DragLinearLayout.OnViewSwapListener;
 
 import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.jems.function.Function;
+import org.dmfs.jems.iterable.composite.Joined;
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.jems.optional.decorators.Mapped;
+import org.dmfs.jems.optional.elementary.Present;
 import org.dmfs.jems.procedure.Procedure;
+import org.dmfs.jems.procedure.composite.ForEach;
 import org.dmfs.tasks.R;
+import org.dmfs.tasks.linkify.ActionModeLinkify;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.DescriptionItem;
 import org.dmfs.tasks.model.FieldDescriptor;
@@ -52,13 +64,15 @@ import java.util.List;
 
 import androidx.core.view.ViewCompat;
 
+import static org.dmfs.jems.optional.elementary.Absent.absent;
+
 
 /**
  * View widget for descriptions with checklists.
  *
  * @author Marten Gajda <marten@dmfs.org>
  */
-public class DescriptionFieldView extends AbstractFieldView implements OnCheckedChangeListener, OnViewSwapListener, OnClickListener
+public class DescriptionFieldView extends AbstractFieldView implements OnCheckedChangeListener, OnViewSwapListener, OnClickListener, ActionModeLinkify.ActionModeListener
 {
     private DescriptionFieldAdapter mAdapter;
     private DragLinearLayout mContainer;
@@ -228,6 +242,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         transition.disableTransitionType(LayoutTransition.CHANGING);
         transition.disableTransitionType(LayoutTransition.APPEARING);
         transition.disableTransitionType(LayoutTransition.DISAPPEARING);
+        ((TextView) item.findViewById(android.R.id.title)).setMovementMethod(LinkMovementMethod.getInstance());
         return item;
     }
 
@@ -273,6 +288,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
             }
             else
             {
+                ActionModeLinkify.linkify(text, DescriptionFieldView.this);
                 ((ViewGroup) itemView.findViewById(R.id.action_bar)).removeAllViews();
             }
         });
@@ -357,7 +373,67 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         };
 
         text.setTag(watcher);
+        ActionModeLinkify.linkify(text, this);
         text.addTextChangedListener(watcher);
+    }
+
+
+    @Override
+    public boolean prepareMenu(TextView view, Uri uri, Menu menu)
+    {
+        Optional<String> optAction = actionForUri(uri);
+        new ForEach<>(new Joined<>(
+                new Mapped<>(action -> getContext().getPackageManager()
+                        .queryIntentActivities(new Intent(action).setData(uri), PackageManager.GET_RESOLVED_FILTER | PackageManager.GET_META_DATA),
+                        optAction)))
+                .process(
+                        resolveInfo -> menu.add(titleForAction(optAction.value()))
+                                .setIcon(resolveInfo.loadIcon(getContext().getPackageManager()))
+                                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                );
+        return menu.size() > 0;
+    }
+
+
+    @Override
+    public boolean onClick(TextView view, Uri uri, MenuItem item)
+    {
+        new ForEach<>(actionForUri(uri)).process(
+                action -> getContext().startActivity(new Intent(action).setData(uri)));
+        return false;
+    }
+
+
+    private static Optional<String> actionForUri(Uri uri)
+    {
+        if ("http".equals(uri.getScheme()) || "https".equals(uri.getScheme()))
+        {
+            return new Present<>(Intent.ACTION_VIEW);
+        }
+        else if ("mailto".equals(uri.getScheme()))
+        {
+            return new Present<>(Intent.ACTION_SENDTO);
+        }
+        else if ("tel".equals(uri.getScheme()))
+        {
+            return new Present<>(Intent.ACTION_DIAL);
+        }
+        return absent();
+    }
+
+
+    private static int titleForAction(String action)
+    {
+        switch (action)
+        {
+            case Intent.ACTION_DIAL:
+                return R.string.opentasks_actionmode_call;
+            case Intent.ACTION_SENDTO:
+                return R.string.opentasks_actionmode_mail_to;
+            case Intent.ACTION_VIEW:
+                return R.string.opentasks_actionmode_open;
+        }
+        return -1;
     }
 
 
