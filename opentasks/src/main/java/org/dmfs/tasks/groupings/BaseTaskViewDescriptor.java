@@ -34,6 +34,7 @@ import com.google.android.material.card.MaterialCardView;
 import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.iterables.decorators.Sieved;
 import org.dmfs.jems.single.elementary.Reduced;
+import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.model.DescriptionItem;
 import org.dmfs.tasks.model.TaskFieldAdapters;
@@ -135,10 +136,11 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 
     protected void setDescription(View view, Cursor cursor)
     {
+        boolean isClosed = TaskAdapter.IS_CLOSED.getFrom(cursor);
         TextView descriptionView = getView(view, android.R.id.text1);
 
         List<DescriptionItem> checkList = TaskFieldAdapters.DESCRIPTION_CHECKLIST.get(cursor);
-        if (checkList.size() > 0 && !checkList.get(0).checkbox)
+        if (checkList.size() > 0 && !checkList.get(0).checkbox && !isClosed)
         {
             String description = checkList.get(0).text;
             descriptionView.setVisibility(View.VISIBLE);
@@ -152,7 +154,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         TextView checkboxItemCountView = getView(view, R.id.checkbox_item_count);
         Iterable<DescriptionItem> checkedItems = new Sieved<>(item -> item.checkbox, checkList);
         int checkboxItemCount = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1, checkedItems).value();
-        if (checkboxItemCount == 0)
+        if (checkboxItemCount == 0 || isClosed)
         {
             checkboxItemCountView.setVisibility(View.GONE);
         }
