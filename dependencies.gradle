@@ -12,7 +12,7 @@ ext.deps = [
         // dmfs
         jems               : "org.dmfs:jems:$jems_version",
         datetime           : 'org.dmfs:rfc5545-datetime:0.2.4',
-        lib_recur          : 'org.dmfs:lib-recur:0.11.4',
+        lib_recur          : 'org.dmfs:lib-recur:0.12.2',
         xml_magic          : 'org.dmfs:android-xml-magic:0.1.1',
         color_picker       : 'com.github.dmfs:color-picker:1.3',
         android_carrot     : 'com.github.dmfs.androidcarrot:androidcarrot:13edc04',
