@@ -300,4 +300,16 @@
     <!-- Title of the notification channel for start and due alerts -->
     <string name="opentasks_notification_channel_due_dates">Start and due dates</string>
 
+
+    <!-- Titles of ActionMode Context menu -->
+
+    <!-- Action for URLs (most likely http/https)-->
+    <string name="opentasks_actionmode_open">Open</string>
+
+    <!-- Action for Phone numbers -->
+    <string name="opentasks_actionmode_call">Call</string>
+
+    <!-- Action for Email addresses -->
+    <string name="opentasks_actionmode_mail_to">Email</string>
+
 </resources>
