@@ -68,7 +68,14 @@ public class CursorContentValuesListAdapter extends AbstractListAdapter
     @Override
     public boolean isUpdated(FieldAdapter<?, ListAdapter> fieldAdapter)
     {
-        return mValues != null && fieldAdapter.isSetIn(mValues);
+        if (mValues == null || !fieldAdapter.isSetIn(mValues))
+        {
+            return false;
+        }
+        Object oldValue = fieldAdapter.getFrom(mCursor);
+        Object newValue = fieldAdapter.getFrom(mValues);
+
+        return oldValue == null && newValue != null || oldValue != null && !oldValue.equals(newValue);
     }
 
 
