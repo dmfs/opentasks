@@ -90,7 +90,22 @@ public class CursorContentValuesTaskAdapter extends AbstractTaskAdapter
     @Override
     public boolean isUpdated(FieldAdapter<?, TaskAdapter> fieldAdapter)
     {
-        return mValues != null && fieldAdapter.isSetIn(mValues);
+        if (mValues == null || !fieldAdapter.isSetIn(mValues))
+        {
+            return false;
+        }
+        Object oldValue = fieldAdapter.getFrom(mCursor);
+        Object newValue = fieldAdapter.getFrom(mValues);
+        // we need to special case RRULE, because RecurrenceRule doesn't support `equals`
+        if (fieldAdapter != TaskAdapter.RRULE)
+        {
+            return oldValue == null && newValue != null || oldValue != null && !oldValue.equals(newValue);
+        }
+        else
+        {
+            // in case of RRULE we compare the String values.
+            return oldValue == null && newValue != null || oldValue != null && (newValue == null || !oldValue.toString().equals(newValue.toString()));
+        }
     }
 
 

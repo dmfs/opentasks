@@ -34,7 +34,6 @@ import org.dmfs.provider.tasks.model.CursorContentValuesTaskAdapter;
 import org.dmfs.provider.tasks.model.TaskAdapter;
 import org.dmfs.provider.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.provider.tasks.processors.EntityProcessor;
-import org.dmfs.provider.tasks.processors.tasks.instancedata.TaskRelated;
 import org.dmfs.provider.tasks.utils.InstanceValuesIterable;
 import org.dmfs.provider.tasks.utils.Limited;
 import org.dmfs.provider.tasks.utils.OverrideValuesFunction;
@@ -43,6 +42,8 @@ import org.dmfs.provider.tasks.utils.RowIterator;
 import org.dmfs.tasks.contract.TaskContract;
 
 import java.util.Locale;
+
+import static org.dmfs.provider.tasks.model.TaskAdapter.IS_CLOSED;
 
 
 /**
@@ -129,7 +130,7 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
 
         if (!result.isUpdated(TaskAdapter.DTSTART) && !result.isUpdated(TaskAdapter.DUE) && !result.isUpdated(TaskAdapter.DURATION)
                 && !result.isUpdated(TaskAdapter.STATUS) && !result.isUpdated(TaskAdapter.RDATE) && !result.isUpdated(TaskAdapter.RRULE) && !result.isUpdated(
-                TaskAdapter.EXDATE) && !result.isUpdated(TaskAdapter.IS_CLOSED) && !updateRequested)
+                TaskAdapter.EXDATE) && !result.isUpdated(IS_CLOSED) && !updateRequested)
         {
             // date values didn't change and update not requested -> no need to update the instances table
             return result;
@@ -170,46 +171,43 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
     {
         long origId = taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_ID);
         int count = 0;
-        for (Single<ContentValues> values : new InstanceValuesIterable(id, taskAdapter))
+        if (!taskAdapter.isUpdated(IS_CLOSED))
         {
-            if (count++ > 1)
+            // task status was not updated, we can take the shortcut and only update any existing instance values
+            for (Single<ContentValues> values : new InstanceValuesIterable(id, taskAdapter))
             {
-                throw new RuntimeException("more than one instance returned for task which was supposed to have exactly one");
+                if (count++ > 1)
+                {
+                    throw new RuntimeException("more than one instance returned for task instance which was supposed to have exactly one");
+                }
+                ContentValues contentValues = values.value();
+                // we don't know the current distance, but it for sure hasn't changed either, so just make sure we don't change it
+                contentValues.remove(TaskContract.Instances.DISTANCE_FROM_CURRENT);
+                // TASK_ID hasn't changed either
+                contentValues.remove(TaskContract.Instances.TASK_ID);
+
+                db.update(TaskDatabaseHelper.Tables.INSTANCES,
+                        contentValues,
+                        String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances.TASK_ID, id),
+                        null);
             }
-            try (Cursor c = db.query(TaskDatabaseHelper.Tables.INSTANCE_VIEW, new String[] { TaskContract.Instances._ID },
-                    String.format(Locale.ENGLISH, "(%s = %d or %s = %d) and (%s = %d) ",
-                            TaskContract.Instances.TASK_ID,
-                            origId,
-                            TaskContract.Instances.ORIGINAL_INSTANCE_ID,
-                            origId,
-                            TaskContract.Instances.INSTANCE_ORIGINAL_TIME,
-                            taskAdapter.valueOf(TaskAdapter.ORIGINAL_INSTANCE_TIME).getTimestamp()),
-                    null, null, null, null))
+            if (count == 0)
+            {
+                throw new RuntimeException("no instance returned for task which was supposed to have exactly one");
+            }
+        }
+        else
+        {
+            // task status was updated, this might affect other instances, update them all
+            // ensure the distance from current is set properly for all sibling instances
+            try (Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null,
+                    String.format(Locale.ENGLISH, "(%s = %d)", TaskContract.Tasks._ID, origId), null, null, null, null))
             {
                 if (c.moveToFirst())
                 {
-                    db.update(TaskDatabaseHelper.Tables.INSTANCES, new TaskRelated(id, values).value(), String.format(Locale.ENGLISH, "%s = %d",
-                            TaskContract.Instances._ID, c.getLong(0)), null);
+                    TaskAdapter ta = new CursorContentValuesTaskAdapter(c, new ContentValues());
+                    updateMasterInstances(db, ta, ta.id());
                 }
-                else
-                {
-                    db.insert(TaskDatabaseHelper.Tables.INSTANCES, "", new TaskRelated(id, values).value());
-                }
-            }
-        }
-        if (count == 0)
-        {
-            throw new RuntimeException("no instance returned for task which was supposed to have exactly one");
-        }
-
-        // ensure the distance from current is set properly for all sibling instances
-        try (Cursor c = db.query(TaskDatabaseHelper.Tables.TASKS, null,
-                String.format(Locale.ENGLISH, "(%s = %d)", TaskContract.Tasks._ID, origId), null, null, null, null))
-        {
-            if (c.moveToFirst())
-            {
-                TaskAdapter ta = new CursorContentValuesTaskAdapter(c, new ContentValues());
-                updateMasterInstances(db, ta, ta.id());
             }
         }
     }
@@ -230,8 +228,16 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
         try (Cursor existingInstances = db.query(
                 TaskDatabaseHelper.Tables.INSTANCE_VIEW,
                 new String[] {
-                        TaskContract.Instances._ID, TaskContract.Instances.INSTANCE_ORIGINAL_TIME, TaskContract.Instances.TASK_ID,
-                        TaskContract.Instances.IS_CLOSED, TaskContract.Instances.DISTANCE_FROM_CURRENT },
+                        TaskContract.Instances._ID,
+                        TaskContract.InstanceColumns.INSTANCE_ORIGINAL_TIME,
+                        TaskContract.InstanceColumns.INSTANCE_START,
+                        TaskContract.InstanceColumns.INSTANCE_START_SORTING,
+                        TaskContract.InstanceColumns.INSTANCE_DUE,
+                        TaskContract.InstanceColumns.INSTANCE_DUE_SORTING,
+                        TaskContract.InstanceColumns.INSTANCE_DURATION,
+                        TaskContract.InstanceColumns.TASK_ID,
+                        TaskContract.InstanceColumns.DISTANCE_FROM_CURRENT,
+                        TaskContract.Instances.IS_CLOSED },
                 String.format(Locale.ENGLISH, "%s = ? or %s = ?", TaskContract.Instances.TASK_ID, TaskContract.Instances.ORIGINAL_INSTANCE_ID),
                 new String[] { Long.toString(id), Long.toString(id) },
                 null,
@@ -311,8 +317,8 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                     if (!next.right().isPresent())
                     {
                         // if no further instances exist, stop here
-                        Long original =next.left().value().getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
-                        if (original != null && existingInstances.moveToLast() && existingInstances.getLong(startIdx)<original)
+                        Long original = next.left().value().getAsLong(TaskContract.Instances.INSTANCE_ORIGINAL_TIME);
+                        if (original != null && existingInstances.moveToLast() && existingInstances.getLong(startIdx) < original)
                         {
                             break;
                         }
@@ -345,35 +351,47 @@ public final class Instantiating implements EntityProcessor<TaskAdapter>
                 {
                     // update this instance
                     existingInstances.moveToPosition(next.right().value());
-                    // only update if the instance belongs to this task
-//                    if (existingInstances.getLong(taskIdIdx) == id)
+                    ContentValues values = next.left().value();
+                    if (distance >= 0 || values.getAsLong(TaskContract.Instances.DISTANCE_FROM_CURRENT) >= 0)
                     {
-                        ContentValues values = next.left().value();
-                        if (distance >= 0 || values.getAsLong(TaskContract.Instances.DISTANCE_FROM_CURRENT) >= 0)
-                        {
-                            // the distance needs to be updated
-                            distance += 1;
-                            values.put(TaskContract.Instances.DISTANCE_FROM_CURRENT, distance);
-                        }
-
-                        // TODO: only update if something actually changed
-                        db.update(TaskDatabaseHelper.Tables.INSTANCES, values,
-                                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
-                    }
- /*                   else if (distance >= 0 || existingInstances.getInt(isClosedIdx) == 0)
-                    {
-                        // this is an override and we need to check the distance value
+                        // the distance needs to be updated
                         distance += 1;
-                        if (distance != existingInstances.getInt(distanceIdx))
-                        {
-                            ContentValues contentValues = new ContentValues(1);
-                            contentValues.put(TaskContract.Instances.DISTANCE_FROM_CURRENT, distance);
-                            db.update(TaskDatabaseHelper.Tables.INSTANCES, contentValues,
-                                    String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)), null);
-                        }
-                    }*/
+                        values.put(TaskContract.Instances.DISTANCE_FROM_CURRENT, distance);
+                    }
+
+                    ContentValues updates = updatedOnly(values, existingInstances);
+                    if (updates.size() > 0)
+                    {
+                        db.update(TaskDatabaseHelper.Tables.INSTANCES,
+                                updates,
+                                String.format(Locale.ENGLISH, "%s = %d", TaskContract.Instances._ID, existingInstances.getLong(idIdx)),
+                                null);
+                    }
                 }
             }
         }
+    }
+
+
+    private static ContentValues updatedOnly(ContentValues newValues, Cursor oldValues)
+    {
+        ContentValues result = new ContentValues(newValues);
+        for (String key : newValues.keySet())
+        {
+            int columnIdx = oldValues.getColumnIndex(key);
+            if (columnIdx < 0)
+            {
+                throw new RuntimeException("Missing column " + key + " in Cursor ");
+            }
+            if (oldValues.isNull(columnIdx) && newValues.get(key) == null)
+            {
+                result.remove(key);
+            }
+            else if (!oldValues.isNull(columnIdx) && newValues.get(key) != null && oldValues.getLong(columnIdx) == newValues.getAsLong(key))
+            {
+                result.remove(key);
+            }
+        }
+        return result;
     }
 }

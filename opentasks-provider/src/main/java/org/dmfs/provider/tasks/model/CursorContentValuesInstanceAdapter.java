@@ -98,7 +98,14 @@ public class CursorContentValuesInstanceAdapter extends AbstractInstanceAdapter
     @Override
     public boolean isUpdated(FieldAdapter<?, InstanceAdapter> fieldAdapter)
     {
-        return mValues != null && fieldAdapter.isSetIn(mValues);
+        if (mValues == null || !fieldAdapter.isSetIn(mValues))
+        {
+            return false;
+        }
+        Object oldValue = fieldAdapter.getFrom(mCursor);
+        Object newValue = fieldAdapter.getFrom(mValues);
+
+        return oldValue == null && newValue != null || oldValue != null && !oldValue.equals(newValue);
     }
 
 
