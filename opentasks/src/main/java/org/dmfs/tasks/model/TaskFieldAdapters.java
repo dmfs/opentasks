@@ -18,18 +18,24 @@ package org.dmfs.tasks.model;
 
 import android.text.format.Time;
 
+import org.dmfs.jems.optional.Optional;
+import org.dmfs.rfc5545.DateTime;
+import org.dmfs.rfc5545.recur.RecurrenceRule;
 import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.adapters.BooleanFieldAdapter;
 import org.dmfs.tasks.model.adapters.ChecklistFieldAdapter;
 import org.dmfs.tasks.model.adapters.ColorFieldAdapter;
 import org.dmfs.tasks.model.adapters.CustomizedDefaultFieldAdapter;
+import org.dmfs.tasks.model.adapters.DateTimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.DescriptionFieldAdapter;
 import org.dmfs.tasks.model.adapters.DescriptionStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.FieldAdapter;
 import org.dmfs.tasks.model.adapters.FloatFieldAdapter;
 import org.dmfs.tasks.model.adapters.FormattedStringFieldAdapter;
 import org.dmfs.tasks.model.adapters.IntegerFieldAdapter;
+import org.dmfs.tasks.model.adapters.OptionalLongFieldAdapter;
+import org.dmfs.tasks.model.adapters.RRuleFieldAdapter;
 import org.dmfs.tasks.model.adapters.StringFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimeFieldAdapter;
 import org.dmfs.tasks.model.adapters.TimezoneFieldAdapter;
@@ -136,6 +142,21 @@ public final class TaskFieldAdapters
             new BeforeOrShiftTime(DUE));
 
     /**
+     * Adapter for the due date of a task.
+     */
+    public final static FieldAdapter<Optional<DateTime>> DUE_DATETIME = new DateTimeFieldAdapter(Tasks.DUE, Tasks.TZ, Tasks.IS_ALLDAY);
+
+    /**
+     * Adapter for the start date of a task.
+     */
+    public final static FieldAdapter<Optional<DateTime>> DTSTART_DATETIME = new DateTimeFieldAdapter(Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY);
+
+    /**
+     * Adapter for the rrule of a task.
+     */
+    public final static FieldAdapter<Optional<RecurrenceRule>> RRULE = new RRuleFieldAdapter(Tasks.RRULE);
+
+    /**
      * Adapter for the completed date of a task.
      */
     public final static TimeFieldAdapter COMPLETED = new TimeFieldAdapter(Tasks.COMPLETED, Tasks.TZ, null);
@@ -169,6 +190,16 @@ public final class TaskFieldAdapters
      * Adpater for the TASK_ID of an instance of a task.
      */
     public static final IntegerFieldAdapter INSTANCE_TASK_ID = new IntegerFieldAdapter(TaskContract.Instances.TASK_ID);
+
+    /**
+     * Adpater for the ORIGINAL_INSTANCE_ID of an instance of a task.
+     */
+    public static final OptionalLongFieldAdapter ORIGINAL_INSTANCE_ID = new OptionalLongFieldAdapter(TaskContract.Instances.ORIGINAL_INSTANCE_ID);
+
+    /**
+     * Adapter for the IS_RECURRING flag of an instance.
+     */
+    public static final BooleanFieldAdapter IS_RECURRING_INSTANCE = new BooleanFieldAdapter(TaskContract.Instances.IS_RECURRING);
 
     /**
      * Adapter for the IS_CLOSED flag of a task.

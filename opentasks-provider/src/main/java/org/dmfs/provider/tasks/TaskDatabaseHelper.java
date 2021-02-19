@@ -71,7 +71,7 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
     /**
      * The database version.
      */
-    private static final int DATABASE_VERSION = 22;
+    private static final int DATABASE_VERSION = 23;
 
 
     /**
@@ -197,6 +197,8 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
             + "null as " + Tasks.RRULE + ", "
             + "null as " + Tasks.RDATE + ", "
             + "null as " + Tasks.EXDATE + ", "
+            // this instance is part of a recurring task if either it has recurrence values or overrides an instance
+            + "not (" + Tasks.RRULE + " is null and " + Tasks.RDATE + " is null and " + Tasks.ORIGINAL_INSTANCE_ID + " is null and " + Tasks.ORIGINAL_INSTANCE_SYNC_ID + " is null) as " + TaskContract.Instances.IS_RECURRING + ", "
             + Tables.TASKS + ".*, "
             + Tables.LISTS + "." + Tasks.ACCOUNT_NAME + ", "
             + Tables.LISTS + "." + Tasks.ACCOUNT_TYPE + ", "
@@ -873,6 +875,12 @@ public class TaskDatabaseHelper extends SQLiteOpenHelper
             {
                 db.endTransaction();
             }
+        }
+
+        if (oldVersion < 23)
+        {
+            db.execSQL("drop view " + Tables.INSTANCE_CLIENT_VIEW + ";");
+            db.execSQL(SQL_CREATE_INSTANCE_CLIENT_VIEW);
         }
 
         // upgrade FTS

@@ -1211,6 +1211,15 @@ public final class TaskContract
          */
         public static final String VISIBLE = "visible";
 
+        /**
+         * Flag indicating that ths is an instance of a recurring task.
+         * <p>
+         * Value: Integer
+         * <p>
+         * read-only
+         */
+        public static final String IS_RECURRING = "is_recurring";
+
         public static final String CONTENT_URI_PATH = "instances";
 
         public static final String DEFAULT_SORT_ORDER = INSTANCE_DUE_SORTING;

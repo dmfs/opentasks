@@ -141,9 +141,10 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
     static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
             .addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
-                    Tasks.LIST_NAME)
+                    Tasks.LIST_NAME, Tasks.RRULE, Tasks.RDATE)
             .addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY,
-                    Tasks.IS_CLOSED, Tasks.PINNED).addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID);
+                    Tasks.IS_CLOSED, Tasks.PINNED)
+            .addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID, Tasks.ORIGINAL_INSTANCE_ID);
 
     private boolean mAppForEdit = true;
     private TasksListCursorSpinnerAdapter mTaskListAdapter;

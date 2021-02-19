@@ -53,6 +53,7 @@ public class DefaultModel extends Model
     private final static LayoutDescriptor BOOLEAN_EDIT = new LayoutDescriptor(R.layout.boolean_field_editor);
     private final static LayoutDescriptor URL_VIEW = new LayoutDescriptor(R.layout.url_field_view);
     private final static LayoutDescriptor URL_EDIT = new LayoutDescriptor(R.layout.url_field_editor);
+    private final static LayoutDescriptor RRULE_EDIT = new LayoutDescriptor(R.layout.opentasks_rrule_field_editor);
 
     final static LayoutDescriptor LIST_COLOR_VIEW = new LayoutDescriptor(R.layout.list_color_view);
 
@@ -121,6 +122,10 @@ public class DefaultModel extends Model
 
         // all day flag
         addField(new FieldDescriptor(context, R.id.task_field_all_day, R.string.task_all_day, TaskFieldAdapters.ALLDAY).setEditorLayout(BOOLEAN_EDIT));
+
+        // rrule
+        addField(new FieldDescriptor(context, R.id.task_field_rrule, R.string.task_recurrence, TaskFieldAdapters.RRULE)
+                .setEditorLayout(RRULE_EDIT).setIcon(R.drawable.ic_baseline_repeat_24));
 
         TimeZoneChoicesAdapter tzaca = new TimeZoneChoicesAdapter(context);
         // time zone

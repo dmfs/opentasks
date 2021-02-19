@@ -308,6 +308,16 @@ public class XmlModel extends Model
             addField(new FieldDescriptor(context, R.id.task_field_list_and_account_name, R.string.task_list, null, TaskFieldAdapters.LIST_AND_ACCOUNT_NAME)
                     .setViewLayout(DefaultModel.TEXT_VIEW_NO_LINKS).setIcon(R.drawable.ic_detail_list));
 
+            if ("org.dmfs.caldav.account".equals(getAccountType()))
+            {
+                // for now we hardcode rrule support for CalDAV-Sync
+                if (getField(R.id.task_field_rrule) == null)
+                {
+                    addFieldAfter(R.id.task_field_all_day,
+                            new FieldDescriptor(context, R.id.task_field_rrule, R.string.task_recurrence, TaskFieldAdapters.RRULE)
+                                    .setEditorLayout(new LayoutDescriptor(R.layout.opentasks_rrule_field_editor)).setIcon(R.drawable.ic_baseline_repeat_24));
+                }
+            }
         }
         catch (Exception e)
         {
@@ -598,6 +608,9 @@ public class XmlModel extends Model
             }
 
         });
+
+        FIELD_INFLATER_MAP.put("rrule", new FieldInflater(TaskFieldAdapters.RRULE, R.id.task_field_rrule, R.string.task_recurrence, -1,
+                R.layout.opentasks_rrule_field_editor, R.drawable.ic_baseline_repeat_24));
 
     }
 }
