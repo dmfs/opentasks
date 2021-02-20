@@ -340,14 +340,19 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
                 // create new item with new test
                 int pos = mContainer.indexOfChild(itemView);
                 insertItem(item.checkbox, pos + 1, newText);
-                ((EditText) mContainer.getChildAt(pos + 1).findViewById(android.R.id.title)).setSelection(0);
-                ((EditText) mContainer.getChildAt(pos + 1).findViewById(android.R.id.title)).setSingleLine(true);
+                EditText editText = ((EditText) mContainer.getChildAt(pos + 1).findViewById(android.R.id.title));
+                editText.setSelection(0);
+                editText.setSingleLine(true);
+                editText.setMaxLines(Integer.MAX_VALUE);
+                editText.setHorizontallyScrolling(false);
                 return true;
             }
             return false;
         });
 
         text.setSingleLine(item.checkbox);
+        text.setMaxLines(Integer.MAX_VALUE);
+        text.setHorizontallyScrolling(false);
 
         TextWatcher watcher = new TextWatcher()
         {
