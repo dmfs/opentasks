@@ -1,1 +1,1 @@
-see https://github.com/dmfs/opentasks/releases/tag/1.3.0
+see https://github.com/dmfs/opentasks/releases/tag/1.3.1
