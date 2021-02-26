@@ -1,0 +1,7 @@
+<resources>
+
+    <!-- Listview card dimensions -->
+    <dimen name="opentasks_tasklist_card_elevation_closed">0dp</dimen>
+    <dimen name="opentasks_tasklist_card_elevation">2dp</dimen>
+    <dimen name="opentasks_tasklist_card_corner_radius">4dp</dimen>
+</resources>

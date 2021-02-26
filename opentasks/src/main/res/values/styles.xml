@@ -328,7 +328,7 @@
 
     <style name="dialog_button_stacked_secondary"
             parent="dialog_button_stacked_primary">
-        <item name="android:textColor">#90000000</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
     <style name="checklist_checked_item_text">

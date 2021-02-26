@@ -22,4 +22,10 @@
     <string name="opentasks_pref_appearance_list_progress"
             translatable="false">opentasks_pref_list_progress</string>
 
+    <string name="opentasks_pref_appearance_system_theme"
+            translatable="false">opentasks_pref_system_theme</string>
+
+    <string name="opentasks_pref_appearance_dark_theme"
+            translatable="false">opentasks_pref_dark_theme</string>
+
 </resources>

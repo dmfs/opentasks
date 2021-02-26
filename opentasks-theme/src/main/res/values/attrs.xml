@@ -14,4 +14,7 @@
     <attr name="colorWarning"
             format="color" />
 
+    <attr name="closedCardBackground"
+            format="color|reference" />
+
 </resources>

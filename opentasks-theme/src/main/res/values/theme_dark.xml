@@ -3,18 +3,18 @@
 <resources>
 
     <!-- The default Light theme. Use this as the parent of your theme to customize it. -->
-    <style name="OpenTasks_Theme.Light"
-            parent="OpenTasks_BaseTheme.Light.NoActionBar" />
+    <style name="OpenTasks_Theme.Dark"
+            parent="OpenTasks_BaseTheme.Dark.NoActionBar" />
 
-    <style name="OpenTasks_BaseTheme.Light.NoActionBar">
+    <style name="OpenTasks_BaseTheme.Dark.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">#ffd0d0d0</item>
+        <item name="android:statusBarColor">#ff303030</item>
     </style>
 
-    <style name="OpenTasks_BaseTheme.Light"
-            parent="Theme.MaterialComponents.Light">
+    <style name="OpenTasks_BaseTheme.Dark"
+            parent="Theme.MaterialComponents">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">?attr/colorSecondary</item>
@@ -28,13 +28,10 @@
         <item name="colorError">@color/material_red_900</item>
         <item name="colorWarning">@color/material_deep_orange_900</item>
 
-        <item name="android:textColorPrimary">#d0000000</item>
-        <item name="android:textColorSecondary">#80000000</item>
-        <item name="android:textColorTertiary">#50000000</item>
-        <item name="closedCardBackground">#fff0f0f0</item>
-
-        <item name="android:textColorPrimaryInverse">#ffffffff</item>
-        <item name="android:textColorSecondaryInverse">#c0ffffff</item>
+        <item name="android:textColorPrimary">#ffe0e0e0</item>
+        <item name="android:textColorSecondary">#ff808080</item>
+        <item name="android:textColorTertiary">#ff505050</item>
+        <item name="closedCardBackground">#ff202020</item>
 
         <item name="tabIconTint">?attr/colorPrimary</item>
         <item name="tabIndicatorColor">?attr/colorPrimary</item>
@@ -45,8 +42,8 @@
     </style>
 
     <!-- TODO: what's the correct way of sharing the details of the themes? -->
-    <style name="OpenTasks_BaseTheme.Light.Dialog"
-            parent="Theme.MaterialComponents.Light.Dialog">
+    <style name="OpenTasks_BaseTheme.Dark.Dialog"
+            parent="Theme.MaterialComponents.Dialog">
         <item name="colorPrimary">@color/material_teal_500</item>
         <item name="colorPrimaryDark">@color/material_teal_700</item>
         <item name="colorAccent">?attr/colorSecondary</item>
@@ -60,13 +57,10 @@
         <item name="colorError">@color/material_red_900</item>
         <item name="colorWarning">@color/material_deep_orange_900</item>
 
-        <item name="android:textColorPrimary">#d0000000</item>
-        <item name="android:textColorSecondary">#80000000</item>
-        <item name="android:textColorTertiary">#50000000</item>
-        <item name="closedCardBackground">#fff0f0f0</item>
-
-        <item name="android:textColorPrimaryInverse">#ffffffff</item>
-        <item name="android:textColorSecondaryInverse">#c0ffffff</item>
+        <item name="android:textColorPrimary">#ffe0e0e0</item>
+        <item name="android:textColorSecondary">#ff808080</item>
+        <item name="android:textColorTertiary">#ff505050</item>
+        <item name="closedCardBackground">#ff202020</item>
 
         <item name="tabIconTint">?attr/colorPrimary</item>
         <item name="tabIndicatorColor">?attr/colorPrimary</item>

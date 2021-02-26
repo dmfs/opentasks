@@ -5,10 +5,10 @@
     <!-- This sets the default theme to light -->
 
     <style name="OpenTasks_Theme.Default"
-            parent="OpenTasks_Theme.Light" />
+            parent="OpenTasks_Theme.DayNight" />
 
 
     <style name="OpenTasks_Theme.Default.Dialog"
-            parent="OpenTasks_BaseTheme.Light.Dialog" />
+            parent="OpenTasks_BaseTheme.DayNight.Dialog" />
 
 </resources>

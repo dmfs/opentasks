@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <!-- The default DayNight theme. Use this as the parent of your theme to customize it. -->
+    <style name="OpenTasks_Theme.DayNight"
+            parent="OpenTasks_BaseTheme.DayNight.NoActionBar" />
+
+    <style name="OpenTasks_BaseTheme.DayNight.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">#ffd0d0d0</item>
+    </style>
+
+    <style name="OpenTasks_BaseTheme.DayNight"
+            parent="OpenTasks_BaseTheme.Light" />
+
+    <!-- TODO: what's the correct way of sharing the details of the themes? -->
+    <style name="OpenTasks_BaseTheme.DayNight.Dialog"
+            parent="OpenTasks_BaseTheme.Light.Dialog" />
+
+</resources>

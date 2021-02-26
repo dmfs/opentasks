@@ -3,12 +3,19 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         app:title="@string/opentasks_preference_appearance">
 
-    <androidx.preference.PreferenceCategory android:title="Theme">
+    <androidx.preference.PreferenceCategory android:title="@string/opentasks_preference_theme">
+        <androidx.preference.SwitchPreferenceCompat
+                android:title="@string/opentasks_preference_system_theme"
+                android:key="@string/opentasks_pref_appearance_system_theme"
+                app:disableDependentsState="true"
+                app:summary="@string/opentasks_preference_dark_theme_disclaimer"
+                app:defaultValue="@bool/opentasks_system_theme_default" />
         <androidx.preference.SwitchPreferenceCompat
                 android:title="@string/opentasks_preference_dark_theme"
                 android:key="@string/opentasks_pref_appearance_dark_theme"
-                app:defaultValue="@bool/opentasks_dark_theme_default"
-                app:summary="@string/opentasks_preference_dark_theme_disclaimer" />
+                android:dependency="@string/opentasks_pref_appearance_system_theme"
+                app:summary="@string/opentasks_preference_dark_theme_disclaimer"
+                app:defaultValue="@bool/opentasks_dark_theme_default" />
     </androidx.preference.PreferenceCategory>
     <androidx.preference.PreferenceCategory app:title="@string/opentasks_preference_appearance_task_list">
         <androidx.preference.SeekBarPreference

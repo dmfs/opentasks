@@ -55,10 +55,8 @@ import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
-import static org.dmfs.tasks.contract.TaskContract.TaskColumns.STATUS_CANCELLED;
 import static org.dmfs.tasks.model.TaskFieldAdapters.IS_CLOSED;
-import static org.dmfs.tasks.model.TaskFieldAdapters.LIST_COLOR_RAW;
-import static org.dmfs.tasks.model.TaskFieldAdapters.STATUS;
+import static org.dmfs.tasks.model.TaskFieldAdapters.LIST_COLOR;
 
 
 /**
@@ -262,42 +260,19 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         MaterialCardView cardView = getView(view, R.id.flingContentView);
         if (cardView != null)
         {
-            cardView.findViewById(R.id.color_label).setVisibility(View.VISIBLE);
-            cardView.findViewById(R.id.color_label).setBackgroundColor(LIST_COLOR_RAW.get(cursor));
-            if (IS_CLOSED.get(cursor))
-            {
-                cardView.findViewById(R.id.color_label).setAlpha(0.4f);
-
-                if (STATUS.get(cursor) == STATUS_CANCELLED)
-                {
-                    cardView.setCardBackgroundColor(0xfff0f0f0);
-                    cardView.setStrokeColor(0);
-                    ((TextView) cardView.findViewById(android.R.id.title)).setTextColor(
-                            new AttributeColor(view.getContext(), android.R.attr.textColorTertiary).argb());
-                    cardView.setStrokeWidth(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_open_border_width));
-
-                }
-                else
-                {
-                    cardView.setCardBackgroundColor(new AttributeColor(view.getContext(), android.R.attr.windowBackground).argb());
-                    //cardView.setCardElevation(1f);
-                    ((TextView) cardView.findViewById(android.R.id.title)).setTextColor(
-                            new AttributeColor(view.getContext(), android.R.attr.textColorTertiary).argb());
-                    cardView.setStrokeColor(0xfff0f0f0);
-                    cardView.setStrokeWidth(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_closed_border_width));
-                }
-                cardView.setCardElevation(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_closed_elevation));
-            }
-            else
-            {
-                cardView.findViewById(R.id.color_label).setAlpha(1f);
-                cardView.setCardBackgroundColor(new AttributeColor(view.getContext(), android.R.attr.colorBackground).argb());
-                cardView.setStrokeColor(0);
-                ((TextView) cardView.findViewById(android.R.id.title)).setTextColor(
-                        new AttributeColor(view.getContext(), android.R.attr.textColorPrimary).argb());
-                cardView.setStrokeWidth(0);
-                cardView.setCardElevation(view.getResources().getDimensionPixelSize(R.dimen.opentasks_cardlist_open_elevation));
-            }
+            boolean isClosed = IS_CLOSED.get(cursor);
+            cardView.findViewById(R.id.color_label).setBackgroundColor(LIST_COLOR.get(cursor));
+            cardView.findViewById(R.id.card_background).setVisibility(isClosed ? View.VISIBLE : View.GONE);
+            cardView.findViewById(R.id.color_label).setAlpha(isClosed ? 0.4f : 1f);
+            cardView.setCardElevation(view.getResources().getDimensionPixelSize(
+                    isClosed ?
+                            R.dimen.opentasks_tasklist_card_elevation_closed :
+                            R.dimen.opentasks_tasklist_card_elevation));
+            ((TextView) cardView.findViewById(android.R.id.title))
+                    .setTextColor(new AttributeColor(view.getContext(),
+                            isClosed ?
+                                    android.R.attr.textColorTertiary :
+                                    android.R.attr.textColorPrimary).argb());
         }
     }
 
