@@ -13,4 +13,13 @@
     <string name="opentasks_pref_notification_lights"
             translatable="false">opentasks_pref_notification_lights</string>
 
+    <string name="opentasks_pref_appearance_list_show_priority"
+            translatable="false">opentasks_pref_list_show_priority</string>
+
+    <string name="opentasks_pref_appearance_list_description_lines"
+            translatable="false">opentasks_pref_list_description_lines</string>
+
+    <string name="opentasks_pref_appearance_list_progress"
+            translatable="false">opentasks_pref_list_progress</string>
+
 </resources>

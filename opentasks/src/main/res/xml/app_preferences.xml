@@ -1,30 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
-            android:key="@string/opentasks_pref_notification_enabled"
-            android:title="@string/opentasks_settings_notification_enable"
-            android:defaultValue="true"/>
-
-    <PreferenceCategory
-            android:title="@string/opentasks_settings_notification_signals_section_title"
-            android:dependency="@string/opentasks_pref_notification_enabled">
-
-        <SwitchPreference
-                android:key="@string/opentasks_pref_notification_sound"
-                android:title="@string/opentasks_settings_notification_sound"
-                android:defaultValue="true"/>
-
-        <SwitchPreference
-                android:key="@string/opentasks_pref_notification_vibrate"
-                android:title="@string/opentasks_settings_notification_vibrate"
-                android:defaultValue="true"/>
-
-        <SwitchPreference
-                android:key="@string/opentasks_pref_notification_lights"
-                android:title="@string/opentasks_settings_notification_lights"
-                android:defaultValue="true"/>
-
-    </PreferenceCategory>
-
-</PreferenceScreen>
+    <Preference
+            app:title="@string/opentasks_settings_notification_enable"
+            app:key="notifications"
+            app:fragment="org.dmfs.tasks.AppNotificationSettingsFragment" />
+    <Preference
+            app:title="@string/opentasks_preference_appearance"
+            app:fragment="org.dmfs.tasks.AppAppearanceSettingsFragment" />
+</androidx.preference.PreferenceScreen>
