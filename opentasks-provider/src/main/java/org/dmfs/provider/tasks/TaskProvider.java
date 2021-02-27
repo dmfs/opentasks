@@ -516,7 +516,7 @@ public final class TaskProvider extends SQLiteContentProvider implements OnAccou
         {
             if (sb.length() > 0)
             {
-                sb.append("AND ( ").append(selection).append(" ) ");
+                sb.append(" AND ( ").append(selection).append(" ) ");
             }
             else
             {
