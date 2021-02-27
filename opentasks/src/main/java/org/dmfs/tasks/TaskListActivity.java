@@ -21,10 +21,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -627,18 +625,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         }
         else if (item.getItemId() == R.id.opentasks_menu_app_settings)
         {
-            if (VERSION.SDK_INT < 26)
-            {
-                startActivity(new Intent(this, AppSettingsActivity.class));
-            }
-            else
-            {
-                // for now just open the notification settings, which is all we currently support anyway
-                Intent intent = new Intent();
-                intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
-                intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
-                startActivity(intent);
-            }
+            startActivity(new Intent(this, AppSettingsActivity.class));
             return true;
         }
         else

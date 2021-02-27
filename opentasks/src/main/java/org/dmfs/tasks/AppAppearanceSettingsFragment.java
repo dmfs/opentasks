@@ -22,13 +22,13 @@ import androidx.preference.PreferenceFragmentCompat;
 
 
 /**
- * Fragment for the general app settings.
+ * Fragment for the app appearance settings.
  */
-public final class AppSettingsFragment extends PreferenceFragmentCompat
+public final class AppAppearanceSettingsFragment extends PreferenceFragmentCompat
 {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
     {
-        setPreferencesFromResource(R.xml.app_preferences, rootKey);
+        setPreferencesFromResource(R.xml.appearance_preferences, rootKey);
     }
 }

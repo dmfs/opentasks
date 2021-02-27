@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:title="@string/opentasks_preference_appearance">
+
+    <androidx.preference.PreferenceCategory app:title="@string/opentasks_preference_appearance_task_list">
+        <androidx.preference.SeekBarPreference
+                app:title="@string/opentasks_preference_description_preview"
+                android:summary="@string/opentasks_preference_description_preview_summary"
+                app:min="0"
+                app:showSeekBarValue="true"
+                android:max="@integer/opentasks_preferences_description_lines_max"
+                android:defaultValue="@integer/opentasks_preferences_description_lines_default"
+                app:key="@string/opentasks_pref_appearance_list_description_lines" />
+        <androidx.preference.DropDownPreference
+                app:title="@string/opentasks_preference_show_progress"
+                app:key="@string/opentasks_pref_appearance_list_progress"
+                app:entries="@array/opentasks_preference_entry_names_show_progress"
+                app:defaultValue="checked"
+                app:useSimpleSummaryProvider="true"
+                app:entryValues="@array/opentasks_preference_entry_values_show_progress" />
+        <androidx.preference.CheckBoxPreference
+                app:title="@string/opentasks_preference_show_priority"
+                app:defaultValue="true"
+                app:key="@string/opentasks_pref_appearance_list_show_priority" />
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

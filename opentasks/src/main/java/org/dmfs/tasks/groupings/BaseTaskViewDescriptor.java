@@ -18,6 +18,7 @@ package org.dmfs.tasks.groupings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -51,6 +52,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.collection.SparseArrayCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 import static org.dmfs.tasks.contract.TaskContract.TaskColumns.STATUS_CANCELLED;
@@ -66,8 +68,8 @@ import static org.dmfs.tasks.model.TaskFieldAdapters.STATUS;
 public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 {
 
-    private final static Pattern CHECKED_PATTERN = Pattern.compile("(-\\s*)?\\[[xX]]");
-    private final static Pattern UNCHECKED_PATTERN = Pattern.compile("(-\\s*)?\\[\\s?]");
+    private final static int[] DRAWABLES = new int[] { R.drawable.ic_outline_check_box_24, R.drawable.ic_outline_check_box_outline_blank_24 };
+    private final static Pattern DRAWABLE_PATTERN = Pattern.compile("((?:-\\s*)?\\[[xX]])|((?:-\\s*)?\\[\\s?])");
     /**
      * We use this to get the current time.
      */
@@ -136,25 +138,30 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
 
     protected void setDescription(View view, Cursor cursor)
     {
+        Context context = view.getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean isClosed = TaskAdapter.IS_CLOSED.getFrom(cursor);
         TextView descriptionView = getView(view, android.R.id.text1);
+        int maxDescriptionLines = prefs.getInt(context.getString(R.string.opentasks_pref_appearance_list_description_lines),
+                context.getResources().getInteger(R.integer.opentasks_preferences_description_lines_default));
 
         List<DescriptionItem> checkList = TaskFieldAdapters.DESCRIPTION_CHECKLIST.get(cursor);
-        if (checkList.size() > 0 && !checkList.get(0).checkbox && !isClosed)
+        if (maxDescriptionLines > 0 && checkList.size() > 0 && !checkList.get(0).checkbox && !isClosed)
         {
-            String description = checkList.get(0).text;
             descriptionView.setVisibility(View.VISIBLE);
-            descriptionView.setText(description);
+            descriptionView.setText(withCheckBoxes(descriptionView, checkList.get(0).text));
+            descriptionView.setMaxLines(maxDescriptionLines);
         }
         else
         {
             descriptionView.setVisibility(View.GONE);
         }
 
+        String progress = prefs.getString(context.getString(R.string.opentasks_pref_appearance_list_progress), "checked");
         TextView checkboxItemCountView = getView(view, R.id.checkbox_item_count);
         Iterable<DescriptionItem> checkedItems = new Sieved<>(item -> item.checkbox, checkList);
         int checkboxItemCount = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1, checkedItems).value();
-        if (checkboxItemCount == 0 || isClosed)
+        if (checkboxItemCount == 0 || isClosed || "none".equals(progress))
         {
             checkboxItemCountView.setVisibility(View.GONE);
         }
@@ -167,18 +174,18 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
             {
                 checkboxItemCountView.setText(
                         withCheckBoxes(checkboxItemCountView,
-                                view.getContext().getString(R.string.opentasks_checkbox_item_count_none_checked, checkboxItemCount)));
+                                context.getString(R.string.opentasks_checkbox_item_count_none_checked, checkboxItemCount)));
             }
             else if (checked == checkboxItemCount)
             {
                 checkboxItemCountView.setText(
                         withCheckBoxes(checkboxItemCountView,
-                                view.getContext().getString(R.string.opentasks_checkbox_item_count_all_checked, checkboxItemCount)));
+                                context.getString(R.string.opentasks_checkbox_item_count_all_checked, checkboxItemCount)));
             }
             else
             {
                 checkboxItemCountView.setText(withCheckBoxes(checkboxItemCountView,
-                        view.getContext().getString(R.string.opentasks_checkbox_item_count_partially_checked, checkboxItemCount - checked, checked)));
+                        context.getString(R.string.opentasks_checkbox_item_count_partially_checked, checkboxItemCount - checked, checked)));
             }
         }
     }
@@ -190,13 +197,9 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
     {
         return withDrawable(
                 view,
-                withDrawable(
-                        view,
-                        new SpannableString(s),
-                        CHECKED_PATTERN,
-                        R.drawable.ic_outline_check_box_24),
-                UNCHECKED_PATTERN,
-                R.drawable.ic_outline_check_box_outline_blank_24);
+                new SpannableString(s),
+                DRAWABLE_PATTERN,
+                DRAWABLES);
     }
 
 
@@ -204,13 +207,14 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
             @NonNull TextView view,
             @NonNull Spannable s,
             @NonNull Pattern pattern,
-            @DrawableRes int drawable)
+            @DrawableRes int[] drawable)
     {
         Context context = view.getContext();
         Matcher matcher = pattern.matcher(s.toString());
         while (matcher.find())
         {
-            Drawable drawable1 = ContextCompat.getDrawable(context, drawable);
+            int idx = matcher.group(1) == null ? 1 : 0;
+            Drawable drawable1 = ContextCompat.getDrawable(context, drawable[idx]);
             int lineHeight = view.getLineHeight();
             int additionalSpace = (int) ((lineHeight - view.getTextSize()) / 2);
             drawable1.setBounds(0, 0, lineHeight + additionalSpace, lineHeight + additionalSpace);
@@ -219,6 +223,35 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         }
 
         return s;
+    }
+
+
+    protected void setPrio(SharedPreferences prefs, View view, Cursor cursor)
+    {
+        // display priority
+        View prioLabel = getView(view, R.id.priority_label);
+        int priority = TaskFieldAdapters.PRIORITY.get(cursor);
+        if (priority > 0 &&
+                prefs.getBoolean(prioLabel.getContext().getString(R.string.opentasks_pref_appearance_list_show_priority), true))
+        {
+            if (priority < 5)
+            {
+                prioLabel.setBackgroundColor(new AttributeColor(prioLabel.getContext(), R.attr.colorHighPriority).argb());
+            }
+            if (priority == 5)
+            {
+                prioLabel.setBackgroundColor(new AttributeColor(prioLabel.getContext(), R.attr.colorMediumPriority).argb());
+            }
+            if (priority > 5)
+            {
+                prioLabel.setBackgroundColor(new AttributeColor(prioLabel.getContext(), R.attr.colorLowPriority).argb());
+            }
+            prioLabel.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            prioLabel.setVisibility(View.GONE);
+        }
     }
 
 

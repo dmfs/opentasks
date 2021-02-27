@@ -259,6 +259,28 @@
     <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_lights">LED</string>
 
+    <!-- Title of the general appearance screen -->
+    <string name="opentasks_preference_appearance">Erscheinungsbild</string>
+
+    <!-- List appearance settings -->
+    <string name="opentasks_preference_appearance_task_list">Aufgabenliste</string>
+
+    <!-- Number of description lines to show -->
+    <string name="opentasks_preference_description_preview">Beschreibungsvorschau</string>
+    <string name="opentasks_preference_description_preview_summary">Maximale Anzahl anzuzeigender Zeilen.</string>
+
+    <!-- If and how to show progress -->
+    <string name="opentasks_preference_show_progress">Fortschritt zeigen</string>
+
+    <!-- Names of options to indicate progress on the task list -->
+    <string-array name="opentasks_preference_entry_names_show_progress">
+        <item>Nie</item>
+        <item>Zusammenfassung Checkliste</item>
+    </string-array>
+
+    <!-- Whether to show the priority indicator -->
+    <string name="opentasks_preference_show_priority">Priorität zeigen</string>
+
     <!-- Outgoing share -->
     <string name="opentasks_share_footer">Geteilt mit OpenTasks</string>
 

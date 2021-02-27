@@ -17,6 +17,7 @@
 package org.dmfs.tasks.groupings;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Paint;
@@ -24,16 +25,16 @@ import android.view.View;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import org.dmfs.android.bolts.color.colors.AttributeColor;
 import org.dmfs.tasks.R;
 import org.dmfs.tasks.contract.TaskContract.Instances;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorFactory;
 import org.dmfs.tasks.groupings.cursorloaders.ProgressCursorLoaderFactory;
-import org.dmfs.tasks.model.TaskFieldAdapters;
 import org.dmfs.tasks.utils.ExpandableChildDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptor;
 import org.dmfs.tasks.utils.ExpandableGroupDescriptorAdapter;
 import org.dmfs.tasks.utils.ViewDescriptor;
+
+import androidx.preference.PreferenceManager;
 
 
 /**
@@ -57,6 +58,7 @@ public class ByProgress extends AbstractGroupingFactory
         @Override
         public void populateView(View view, Cursor cursor, BaseExpandableListAdapter adapter, int flags)
         {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(view.getContext());
             TextView title = getView(view, android.R.id.title);
             boolean isClosed = cursor.getInt(13) > 0;
 
@@ -78,29 +80,7 @@ public class ByProgress extends AbstractGroupingFactory
 
             setDueDate(getView(view, R.id.task_due_date), null, INSTANCE_DUE_ADAPTER.get(cursor), isClosed);
 
-            // display priority
-            View prioLabel = getView(view, R.id.priority_label);
-            Integer priority = TaskFieldAdapters.PRIORITY.get(cursor);
-            if (priority > 0)
-            {
-                if (priority > 0 && priority < 5)
-                {
-                    prioLabel.setBackgroundColor(new AttributeColor(prioLabel.getContext(), R.attr.colorHighPriority).argb());
-                }
-                if (priority == 5)
-                {
-                    prioLabel.setBackgroundColor(new AttributeColor(prioLabel.getContext(), R.attr.colorMediumPriority).argb());
-                }
-                if (priority > 5 && priority <= 9)
-                {
-                    prioLabel.setBackgroundColor(new AttributeColor(prioLabel.getContext(), R.attr.colorLowPriority).argb());
-                }
-                prioLabel.setVisibility(View.VISIBLE);
-            }
-            else
-            {
-                prioLabel.setVisibility(View.GONE);
-            }
+            setPrio(prefs, view, cursor);
 
             setColorBar(view, cursor);
             setDescription(view, cursor);

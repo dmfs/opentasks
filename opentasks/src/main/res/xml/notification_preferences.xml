@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:title="Notifications">
+
+
+    <androidx.preference.SwitchPreference
+            android:key="@string/opentasks_pref_notification_enabled"
+            android:title="@string/opentasks_settings_notification_enable"
+            android:defaultValue="true" />
+
+    <androidx.preference.PreferenceCategory
+            android:title="@string/opentasks_settings_notification_signals_section_title"
+            android:dependency="@string/opentasks_pref_notification_enabled">
+
+        <androidx.preference.SwitchPreference
+                android:key="@string/opentasks_pref_notification_sound"
+                android:title="@string/opentasks_settings_notification_sound"
+                android:defaultValue="true" />
+
+        <androidx.preference.SwitchPreference
+                android:key="@string/opentasks_pref_notification_vibrate"
+                android:title="@string/opentasks_settings_notification_vibrate"
+                android:defaultValue="true" />
+
+        <androidx.preference.SwitchPreference
+                android:key="@string/opentasks_pref_notification_lights"
+                android:title="@string/opentasks_settings_notification_lights"
+                android:defaultValue="true" />
+
+    </androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

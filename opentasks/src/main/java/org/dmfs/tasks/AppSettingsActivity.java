@@ -16,10 +16,16 @@
 
 package org.dmfs.tasks;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 
 import org.dmfs.tasks.utils.BaseActivity;
+
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 
 
 /**
@@ -27,7 +33,7 @@ import org.dmfs.tasks.utils.BaseActivity;
  *
  * @author Gabor Keszthelyi
  */
-public final class AppSettingsActivity extends BaseActivity
+public final class AppSettingsActivity extends BaseActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback
 {
 
     @Override
@@ -35,7 +41,7 @@ public final class AppSettingsActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new AppSettingsFragment())
                 .commit();
 
@@ -54,4 +60,23 @@ public final class AppSettingsActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref)
+    {
+        if (Build.VERSION.SDK_INT >= 26 && "notifications".equalsIgnoreCase(pref.getKey()))
+        {
+            //  open the system notification settings
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APP_NOTIFICATION_SETTINGS);
+            intent.putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName());
+            startActivity(intent);
+            return true;
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, getSupportFragmentManager().getFragmentFactory().instantiate(getClassLoader(), pref.getFragment()))
+                .addToBackStack("")
+                .commit();
+        return true;
+    }
 }

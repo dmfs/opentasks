@@ -22,13 +22,13 @@ import androidx.preference.PreferenceFragmentCompat;
 
 
 /**
- * Fragment for the general app settings.
+ * Fragment for the app notifications settings on Android <8.
  */
-public final class AppSettingsFragment extends PreferenceFragmentCompat
+public final class AppNotificationSettingsFragment extends PreferenceFragmentCompat
 {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
     {
-        setPreferencesFromResource(R.xml.app_preferences, rootKey);
+        setPreferencesFromResource(R.xml.notification_preferences, rootKey);
     }
 }

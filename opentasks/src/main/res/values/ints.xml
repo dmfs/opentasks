@@ -1,0 +1,7 @@
+<resources>
+
+    <!-- Default and maximum number of description lines to show in the list view. -->
+    <integer name="opentasks_preferences_description_lines_default">2</integer>
+    <integer name="opentasks_preferences_description_lines_max">20</integer>
+
+</resources>
