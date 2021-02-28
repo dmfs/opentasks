@@ -28,6 +28,10 @@
         <item name="colorError">@color/material_red_900</item>
         <item name="colorWarning">@color/material_deep_orange_900</item>
 
+        <item name="android:textColorPrimary">#d0000000</item>
+        <item name="android:textColorSecondary">#80000000</item>
+        <item name="android:textColorTertiary">#50000000</item>
+
         <item name="android:textColorPrimaryInverse">#ffffffff</item>
         <item name="android:textColorSecondaryInverse">#c0ffffff</item>
 
@@ -54,6 +58,10 @@
 
         <item name="colorError">@color/material_red_900</item>
         <item name="colorWarning">@color/material_deep_orange_900</item>
+
+        <item name="android:textColorPrimary">#d0000000</item>
+        <item name="android:textColorSecondary">#80000000</item>
+        <item name="android:textColorTertiary">#50000000</item>
 
         <item name="android:textColorPrimaryInverse">#ffffffff</item>
         <item name="android:textColorSecondaryInverse">#c0ffffff</item>
