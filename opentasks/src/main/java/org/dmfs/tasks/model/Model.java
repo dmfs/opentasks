@@ -22,7 +22,6 @@ import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import androidx.collection.SparseArrayCompat;
 import android.text.TextUtils;
 
 import org.dmfs.provider.tasks.AuthorityUtil;
@@ -31,6 +30,8 @@ import org.dmfs.tasks.contract.TaskContract.TaskLists;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.collection.SparseArrayCompat;
 
 
 /**
@@ -55,8 +56,6 @@ public abstract class Model
 
     boolean mInflated = false;
 
-    private boolean mAllowRecurrence = false;
-    private boolean mAllowExceptions = false;
     private int mIconId = -1;
     private int mLabelId = -1;
     private String mAccountType;
@@ -112,31 +111,7 @@ public abstract class Model
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return new ArrayList<FieldDescriptor>(mFields);
-    }
-
-
-    public boolean getAllowRecurrence()
-    {
-        return mAllowRecurrence;
-    }
-
-
-    void setAllowRecurrence(boolean allowRecurrence)
-    {
-        mAllowRecurrence = allowRecurrence;
-    }
-
-
-    public boolean getAllowExceptions()
-    {
-        return mAllowExceptions;
-    }
-
-
-    void setAllowExceptions(boolean allowExceptions)
-    {
-        mAllowExceptions = allowExceptions;
+        return new ArrayList<>(mFields);
     }
 
 
@@ -183,7 +158,7 @@ public abstract class Model
             throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support inserting lists.");
         }
 
-        activity.startActivity(getListIntent(mContext, Intent.ACTION_INSERT, account));
+        activity.startActivity(getListIntent(Intent.ACTION_INSERT, account));
     }
 
 
@@ -194,7 +169,7 @@ public abstract class Model
             throw new IllegalStateException("Syncadapter for " + mAccountType + " does not support editing lists.");
         }
 
-        Intent intent = getListIntent(mContext, Intent.ACTION_EDIT, account);
+        Intent intent = getListIntent(Intent.ACTION_EDIT, account);
         intent.setData(ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), listId));
         if (nameHint != null)
         {
@@ -212,7 +187,7 @@ public abstract class Model
     {
         if (mSupportsEditListIntent == null)
         {
-            ComponentName editComponent = getListIntent(mContext, Intent.ACTION_EDIT, null).setData(
+            ComponentName editComponent = getListIntent(Intent.ACTION_EDIT, null).setData(
                     ContentUris.withAppendedId(TaskLists.getContentUri(mAuthority), 0 /* for pure intent resolution it doesn't matter which id we append */))
                     .resolveActivity(mContext.getPackageManager());
             mSupportsEditListIntent = editComponent != null;
@@ -226,7 +201,7 @@ public abstract class Model
     {
         if (mSupportsInsertListIntent == null)
         {
-            ComponentName insertComponent = getListIntent(mContext, Intent.ACTION_INSERT, null).resolveActivity(mContext.getPackageManager());
+            ComponentName insertComponent = getListIntent(Intent.ACTION_INSERT, null).resolveActivity(mContext.getPackageManager());
             mSupportsInsertListIntent = insertComponent != null;
         }
 
@@ -234,7 +209,7 @@ public abstract class Model
     }
 
 
-    private Intent getListIntent(Context context, String action, Account account)
+    private Intent getListIntent(String action, Account account)
     {
         // insert action
         Intent insertIntent = new Intent();

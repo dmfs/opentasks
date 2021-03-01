@@ -62,9 +62,6 @@ public class MinimalModel extends Model
         addField(new FieldDescriptor(context, R.id.task_field_due, R.string.task_due, TaskFieldAdapters.DUE).setViewLayout(TIME_VIEW_ADD_BUTTON)
                 .setEditorLayout(TIME_EDIT).setIcon(R.drawable.ic_detail_due));
 
-        setAllowRecurrence(false);
-        setAllowExceptions(false);
-
         mInflated = true;
     }
 }
