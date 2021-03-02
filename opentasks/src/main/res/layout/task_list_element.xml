@@ -81,7 +81,7 @@
                             android:padding="2dip"
                             android:singleLine="true"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="?android:attr/textColorPrimaryInverse"
+                            android:textColor="?android:attr/textColorPrimary"
                             android:textIsSelectable="false" />
 
                     <LinearLayout
@@ -106,7 +106,7 @@
                                     android:gravity="right"
                                     android:paddingLeft="0dip"
                                     android:paddingRight="2dip"
-                                    android:textColor="?android:attr/textColorSecondaryInverse"
+                                    android:textColor="?android:attr/textColorSecondary"
                                     android:textIsSelectable="false"
                                     android:textSize="12sp"
                                     android:visibility="gone" />
@@ -120,7 +120,7 @@
                                     android:contentDescription="@string/cd_start_date"
                                     android:scaleType="fitStart"
                                     android:src="@drawable/task_start"
-                                    android:tint="?android:attr/textColorSecondaryInverse"
+                                    android:tint="?android:attr/textColorSecondary"
                                     android:visibility="gone" />
                         </LinearLayout>
 
@@ -138,7 +138,7 @@
                                     android:gravity="right"
                                     android:paddingLeft="0dip"
                                     android:paddingRight="2dip"
-                                    android:textColor="?android:attr/textColorSecondaryInverse"
+                                    android:textColor="?android:attr/textColorSecondary"
                                     android:textIsSelectable="false"
                                     android:textSize="12sp" />
 
@@ -151,11 +151,10 @@
                                     android:contentDescription="@string/cd_due_date"
                                     android:scaleType="fitStart"
                                     android:src="@drawable/task_due"
-                                    android:tint="?android:attr/textColorSecondaryInverse"
+                                    android:tint="?android:attr/textColorSecondary"
                                     android:visibility="gone" />
                         </LinearLayout>
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -167,7 +166,7 @@
                         android:layout_below="@id/title_layout"
                         android:padding="2dip"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="?android:attr/textColorSecondaryInverse"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textIsSelectable="false"
                         android:textSize="12sp" />
 
@@ -179,26 +178,23 @@
                         android:layout_alignParentStart="true"
                         android:padding="2dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:textColor="?android:attr/textColorSecondaryInverse"
+                        android:textColor="?android:attr/textColorSecondary"
                         android:textIsSelectable="false"
                         android:textSize="12sp" />
-
             </RelativeLayout>
 
-            <FrameLayout
-                    android:id="@+id/priority_label"
-                    android:layout_width="8dip"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="right">
 
-                <View
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:background="#ffffffff" />
-            </FrameLayout>
+            <View
+                    android:id="@+id/color_label"
+                    android:layout_width="6dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start" />
+
+            <View
+                    android:id="@+id/priority_label"
+                    android:layout_width="6dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end" />
         </com.google.android.material.card.MaterialCardView>
 
     </RelativeLayout>

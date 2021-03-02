@@ -280,17 +280,17 @@
     </style>
 
     <style name="task_list_overdue_text">
-        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
     <style name="task_list_due_text_closed">
-        <item name="android:textColor">#60000000</item>
+        <item name="android:textColor">?android:attr/textColorTertiary</item>
         <item name="android:textStyle">normal</item>
     </style>
 
     <style name="task_list_due_text">
-        <item name="android:textColor">?android:attr/textColorSecondaryInverse</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textStyle">normal</item>
     </style>
 

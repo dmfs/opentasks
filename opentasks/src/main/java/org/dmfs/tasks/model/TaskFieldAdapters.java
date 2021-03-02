@@ -156,6 +156,11 @@ public final class TaskFieldAdapters
     public final static IntegerFieldAdapter LIST_COLOR = new ColorFieldAdapter(TaskContract.Tasks.LIST_COLOR, 0.8f);
 
     /**
+     * Adapter for the Raw Color Value of the task.
+     */
+    public final static IntegerFieldAdapter LIST_COLOR_RAW = new IntegerFieldAdapter(TaskContract.Tasks.LIST_COLOR);
+
+    /**
      * Adpater for the ID of the task.
      */
     public static final IntegerFieldAdapter TASK_ID = new IntegerFieldAdapter(TaskContract.Tasks._ID);
