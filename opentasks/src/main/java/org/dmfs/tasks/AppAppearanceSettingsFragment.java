@@ -16,9 +16,16 @@
 
 package org.dmfs.tasks;
 
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
+
+import static java.util.Arrays.asList;
 
 
 /**
@@ -30,5 +37,38 @@ public final class AppAppearanceSettingsFragment extends PreferenceFragmentCompa
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey)
     {
         setPreferencesFromResource(R.xml.appearance_preferences, rootKey);
+    }
+
+
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference)
+    {
+        if (asList(
+                getString(R.string.opentasks_pref_appearance_system_theme),
+                getString(R.string.opentasks_pref_appearance_dark_theme)).contains(preference.getKey()))
+        {
+            if (Build.VERSION.SDK_INT >= 29)
+            {
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+                boolean sysTheme = prefs.getBoolean(
+                        getString(R.string.opentasks_pref_appearance_system_theme),
+                        getResources().getBoolean(R.bool.opentasks_system_theme_default));
+                boolean darkTheme = prefs.getBoolean(
+                        getString(R.string.opentasks_pref_appearance_dark_theme),
+                        getResources().getBoolean(R.bool.opentasks_dark_theme_default));
+
+                AppCompatDelegate.setDefaultNightMode(
+                        sysTheme ?
+                                AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM :
+                                darkTheme ?
+                                        AppCompatDelegate.MODE_NIGHT_YES :
+                                        AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            else
+            {
+                getActivity().recreate();
+            }
+        }
+        return super.onPreferenceTreeClick(preference);
     }
 }
