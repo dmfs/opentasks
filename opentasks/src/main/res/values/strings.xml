@@ -282,6 +282,18 @@
     <!-- Title of the general appearance screen -->
     <string name="opentasks_preference_appearance">Appearance</string>
 
+    <!-- Theme category title -->
+    <string name="opentasks_preference_theme">Theme</string>
+
+    <!-- Option to follow the system theme  -->
+    <string name="opentasks_preference_system_theme">Follow system</string>
+
+    <!-- Option to use a dark theme -->
+    <string name="opentasks_preference_dark_theme">Dark theme</string>
+
+    <!-- Dark theme disclaimer -->
+    <string name="opentasks_preference_dark_theme_disclaimer">Dark theme is experimental and only partially implemented.</string>
+
     <!-- List appearance settings -->
     <string name="opentasks_preference_appearance_task_list">Task list view</string>
 

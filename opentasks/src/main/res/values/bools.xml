@@ -3,4 +3,8 @@
 
     <bool name="has_two_panes">false</bool>
 
+    <!-- For now we don't follow the system's theme by default because the dark theme is still incomplete -->
+    <bool name="opentasks_system_theme_default">false</bool>
+    <bool name="opentasks_dark_theme_default">false</bool>
+
 </resources>

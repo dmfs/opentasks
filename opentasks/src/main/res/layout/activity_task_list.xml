@@ -41,7 +41,7 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_action_add"
             app:layout_anchor="@id/pager"
-            app:tint="@android:color/white"
+            app:tint="?attr/colorOnPrimary"
             app:layout_anchorGravity="bottom|right|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

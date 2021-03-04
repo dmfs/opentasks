@@ -3,19 +3,19 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="org.dmfs.tasks">
     <!-- TODO Remove after https://github.com/dmfs/opentasks/issues/392 -->
-    <uses-sdk tools:overrideLibrary="org.dmfs.android.bolts"/>
+    <uses-sdk tools:overrideLibrary="org.dmfs.android.bolts" />
 
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="org.dmfs.permission.READ_TASKS"/>
-    <uses-permission android:name="org.dmfs.permission.WRITE_TASKS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="org.dmfs.permission.READ_TASKS" />
+    <uses-permission android:name="org.dmfs.permission.WRITE_TASKS" />
     <uses-permission
             android:name="android.permission.GET_ACCOUNTS"
-            android:maxSdkVersion="25"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+            android:maxSdkVersion="25" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
             android:name=".TasksApplication"
@@ -32,9 +32,9 @@
                 android:label="@string/title_task_list"
                 android:launchMode="singleTask">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -46,18 +46,18 @@
                 android:theme="@style/OpenTasksAppTheme"
                 android:windowSoftInputMode="adjustResize">
             <intent-filter android:label="edit">
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances" />
             </intent-filter>
         </activity>
 
@@ -70,75 +70,75 @@
                 android:windowSoftInputMode="stateHidden|adjustResize">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="org.dmfs.tasks.TaskListActivity"/>
+                    android:value="org.dmfs.tasks.TaskListActivity" />
 
             <intent-filter android:label="@string/activity_edit_task_title">
-                <action android:name="android.intent.action.EDIT"/>
+                <action android:name="android.intent.action.EDIT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances" />
             </intent-filter>
 
             <!-- Voice command "note to self" in google search -->
             <intent-filter android:label="@string/activity_add_task_title">
-                <action android:name="com.google.android.gm.action.AUTO_SEND"/>
+                <action android:name="com.google.android.gm.action.AUTO_SEND" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/*"/>
+                <data android:mimeType="text/*" />
             </intent-filter>
 
             <!-- Intent filter for share intents -->
             <intent-filter android:label="@string/share_as_task">
-                <action android:name="android.intent.action.SEND"/>
+                <action android:name="android.intent.action.SEND" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain"/>
+                <data android:mimeType="text/plain" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title">
-                <action android:name="android.intent.action.INSERT"/>
+                <action android:name="android.intent.action.INSERT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.instances"/>
+                        android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.instances" />
             </intent-filter>
             <intent-filter android:label="@string/activity_add_task_title">
-                <action android:name="android.intent.action.INSERT_OR_EDIT"/>
+                <action android:name="android.intent.action.INSERT_OR_EDIT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.instances"/>
+                        android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.instances" />
                 <data
                         android:scheme="content"
                         android:host="@string/opentasks_authority"
-                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"/>
+                        android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances" />
             </intent-filter>
         </activity>
 
@@ -149,7 +149,7 @@
                 android:parentActivityName=".TaskListActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="org.dmfs.tasks.TaskListActivity"/>
+                    android:value="org.dmfs.tasks.TaskListActivity" />
         </activity>
 
         <!-- homescreen widgets -->
@@ -158,72 +158,72 @@
                 android:label="@string/task_list_selection_title"
                 android:theme="@style/OpenTasks_BaseTheme.Light.Dialog">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
         <service
                 android:name=".homescreen.TaskListWidgetUpdaterService"
-                android:permission="android.permission.BIND_REMOTEVIEWS"/>
+                android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver
                 android:name=".homescreen.TaskListWidgetProvider"
                 android:label="@string/task_list_widget_title">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE"/>
+                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
                 <data
                         android:host="@string/opentasks_authority"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_START"/>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
 
             <meta-data
                     android:name="android.appwidget.provider"
-                    android:resource="@xml/task_widget_info"/>
+                    android:resource="@xml/task_widget_info" />
         </receiver>
         <receiver
                 android:name=".homescreen.TaskListWidgetProviderLarge"
                 android:enabled="true"
                 android:label="@string/task_list_widget_title_4x4">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE"/>
+                <action android:name="org.dmfs.tasks.action.TASKWIDGET_UPDATE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
                 <data
                         android:host="@string/opentasks_authority"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_START"/>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
 
             <meta-data
                     android:name="android.appwidget.provider"
-                    android:resource="@xml/task_widget_info_large"/>
+                    android:resource="@xml/task_widget_info_large" />
         </receiver>
 
         <!-- Dashclock extension -->
@@ -233,88 +233,87 @@
                 android:label="@string/dashclock_extension_title"
                 android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
             <intent-filter>
-                <action android:name="com.google.android.apps.dashclock.Extension"/>
+                <action android:name="com.google.android.apps.dashclock.Extension" />
             </intent-filter>
 
             <meta-data
                     android:name="protocolVersion"
-                    android:value="2"/>
+                    android:value="2" />
             <meta-data
                     android:name="worldReadable"
-                    android:value="true"/>
+                    android:value="true" />
             <meta-data
                     android:name="description"
-                    android:value="@string/dashclock_extension_description"/>
+                    android:value="@string/dashclock_extension_description" />
             <!-- A settings activity is optional -->
             <meta-data
                     android:name="settingsActivity"
-                    android:value="org.dmfs.tasks.dashclock.DashClockPreferenceActivity"/>
+                    android:value="org.dmfs.tasks.dashclock.DashClockPreferenceActivity" />
         </service>
 
         <activity
                 android:name=".dashclock.DashClockPreferenceActivity"
                 android:exported="true"
                 android:label="@string/title_task_list"
-                android:theme="@style/AppTheme"/>
+                android:theme="@style/AppTheme" />
 
         <!-- Manage List -->
         <activity
                 android:name=".ManageListActivity"
                 android:theme="@style/OpenTasks_Theme.Default.Dialog">
             <intent-filter>
-                <action android:name="android.intent.action.INSERT"/>
+                <action android:name="android.intent.action.INSERT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.dir/org.dmfs.tasks.tasklists"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.EDIT"/>
+                <action android:name="android.intent.action.EDIT" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="org.dmfs.intent.category.org.dmfs.account.LOCAL" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasklists"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
         </activity>
 
         <!-- App Settings -->
         <activity
                 android:name=".AppSettingsActivity"
-                android:label="@string/title_activity_settings"
-                android:theme="@style/AppTheme"/>
+                android:label="@string/title_activity_settings" />
 
         <!-- Notification -->
         <receiver
                 android:name=".notification.TaskNotificationHandler"
                 android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
 
                 <data
                         android:host="@string/opentasks_authority"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="android.intent.action.TIME_SET"/>
-                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
-                <action android:name="android.intent.action.DATE_CHANGED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.dmfs.tasks.intent.ACTION_DAY_CHANGED"/>
-                <action android:name="org.dmfs.tasks.action.notification.UNDO"/>
-                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT"/>
-                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT"/>
+                <action android:name="org.dmfs.tasks.intent.ACTION_DAY_CHANGED" />
+                <action android:name="org.dmfs.tasks.action.notification.UNDO" />
+                <action android:name="org.dmfs.tasks.action.notification.DESTRUCT" />
+                <action android:name="org.dmfs.tasks.action.notification.ACTION_UNDO_TIMEOUT" />
             </intent-filter>
         </receiver>
         <receiver
@@ -322,26 +321,26 @@
                 android:enabled="@bool/opentasks_support_local_lists"
                 android:exported="false">
             <intent-filter>
-                <action android:name="org.dmfs.tasks.DATABASE_INITIALIZED"/>
+                <action android:name="org.dmfs.tasks.DATABASE_INITIALIZED" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.dir/vnd.org.dmfs.authority.mimetype"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
         </receiver>
         <receiver
                 android:name=".StaleListBroadcastReceiver"
                 android:exported="false">
             <intent-filter>
-                <action android:name="org.dmfs.tasks.action.STALE_LIST_BROADCAST"/>
+                <action android:name="org.dmfs.tasks.action.STALE_LIST_BROADCAST" />
             </intent-filter>
         </receiver>
 
         <service
                 android:name=".notification.TaskNotificationService"
                 android:exported="true"
-                android:permission="android.permission.BIND_JOB_SERVICE"/>
+                android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
                 android:name=".quicksettings.TaskQuickSettingsTile"
                 android:description="@string/quicksettingstile_create"
@@ -349,7 +348,7 @@
                 android:label="@string/quicksettingstile_create"
                 android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE"/>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
 
@@ -358,35 +357,35 @@
                 android:enabled="true"
                 android:exported="false">
             <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_DUE"/>
+                <action android:name="org.dmfs.android.tasks.TASK_DUE" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.dmfs.android.tasks.TASK_START"/>
+                <action android:name="org.dmfs.android.tasks.TASK_START" />
 
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.tasks"
-                        android:scheme="content"/>
+                        android:scheme="content" />
                 <data
                         android:host="@string/opentasks_authority"
                         android:mimeType="vnd.android.cursor.item/org.dmfs.tasks.instances"
-                        android:scheme="content"/>
+                        android:scheme="content" />
             </intent-filter>
         </receiver>
 
         <service
                 android:name=".notification.ActionService"
                 android:exported="true"
-                android:permission="android.permission.BIND_JOB_SERVICE"/>
+                android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
 </manifest>

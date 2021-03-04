@@ -20,7 +20,10 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
@@ -54,6 +57,7 @@ import org.dmfs.tasks.utils.SearchHistoryHelper;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.SearchView.OnQueryTextListener;
 import androidx.appcompat.widget.Toolbar;
@@ -61,6 +65,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.core.view.MenuItemCompat.OnActionExpandListener;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener;
 
@@ -94,6 +99,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     public static final String EXTRA_FORCE_LIST_SELECTION = "org.dmfs.tasks.FORCE_LIST_SELECTION";
 
     private final static int REQUEST_CODE_NEW_TASK = 2924;
+    private final static int REQUEST_CODE_PREFS = 2925;
 
     /**
      * The time to wait for a new key before updating the search view.
@@ -174,11 +180,15 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     private AppBarLayout mAppBarLayout;
 
     private FloatingActionButton mFloatingActionButton;
+    private SharedPreferences mPrefs;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        updateTheme();
         super.onCreate(savedInstanceState);
 
         if (mLastUsedColor == android.graphics.Color.TRANSPARENT)
@@ -341,6 +351,27 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
                     onAddNewTask();
                 }
             });
+        }
+    }
+
+
+    private void updateTheme()
+    {
+        if (Build.VERSION.SDK_INT >= 29)
+        {
+            boolean sysTheme = mPrefs.getBoolean(
+                    getString(R.string.opentasks_pref_appearance_system_theme),
+                    getResources().getBoolean(R.bool.opentasks_system_theme_default));
+            boolean darkTheme = mPrefs.getBoolean(
+                    getString(R.string.opentasks_pref_appearance_dark_theme),
+                    getResources().getBoolean(R.bool.opentasks_dark_theme_default));
+
+            AppCompatDelegate.setDefaultNightMode(
+                    sysTheme ?
+                            AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM :
+                            darkTheme ?
+                                    AppCompatDelegate.MODE_NIGHT_YES :
+                                    AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
@@ -520,7 +551,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent)
     {
-        if (resultCode == RESULT_OK && intent != null && intent.getData() != null)
+        if (requestCode == REQUEST_CODE_NEW_TASK && resultCode == RESULT_OK && intent != null && intent.getData() != null)
         {
             // Use the same flow to display the new task as if it was opened from the widget
             Intent displayIntent = new Intent(this, TaskListActivity.class);
@@ -535,6 +566,14 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
             and https://stackoverflow.com/questions/42209046/tablayout-icons-disappear-after-viewpager-refresh */
             setupTabIcons();
             return;
+        }
+        if (requestCode == REQUEST_CODE_PREFS)
+        {
+            updateTheme();
+            if (Build.VERSION.SDK_INT < 29)
+            {
+                recreate();
+            }
         }
         super.onActivityResult(requestCode, resultCode, intent);
     }
@@ -625,7 +664,7 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
         }
         else if (item.getItemId() == R.id.opentasks_menu_app_settings)
         {
-            startActivity(new Intent(this, AppSettingsActivity.class));
+            startActivityForResult(new Intent(this, AppSettingsActivity.class), REQUEST_CODE_PREFS);
             return true;
         }
         else
@@ -750,5 +789,23 @@ public class TaskListActivity extends BaseActivity implements TaskListFragment.C
     public boolean isInTransientState()
     {
         return mTransientState;
+    }
+
+
+    @Override
+    public Resources.Theme getTheme()
+    {
+        Resources.Theme theme = super.getTheme();
+        if (Build.VERSION.SDK_INT < 29)
+        {
+            theme.applyStyle(
+                    mPrefs.getBoolean(
+                            getString(R.string.opentasks_pref_appearance_dark_theme),
+                            getResources().getBoolean(R.bool.opentasks_dark_theme_default)) ?
+                            R.style.OpenTasks_Theme_Dark :
+                            R.style.OpenTasks_Theme_Light,
+                    true);
+        }
+        return theme;
     }
 }
