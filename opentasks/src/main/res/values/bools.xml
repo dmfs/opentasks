@@ -7,4 +7,7 @@
     <bool name="opentasks_system_theme_default">false</bool>
     <bool name="opentasks_dark_theme_default">false</bool>
 
+    <bool name="opentasks_list_check_list_summary_default">true</bool>
+    <bool name="opentasks_list_progress_gradient_default">false</bool>
+
 </resources>

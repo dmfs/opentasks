@@ -17,4 +17,6 @@
     <attr name="closedCardBackground"
             format="color|reference" />
 
+    <attr name="opentasks_progress_gradient_end_color"
+            format="color" />
 </resources>

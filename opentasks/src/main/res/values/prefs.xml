@@ -19,8 +19,11 @@
     <string name="opentasks_pref_appearance_list_description_lines"
             translatable="false">opentasks_pref_list_description_lines</string>
 
-    <string name="opentasks_pref_appearance_list_progress"
-            translatable="false">opentasks_pref_list_progress</string>
+    <string name="opentasks_pref_appearance_check_list_summary"
+            translatable="false">opentasks_pref_check_list_status</string>
+
+    <string name="opentasks_pref_appearance_progress_gradient"
+            translatable="false">opentasks_pref_progress_gradient</string>
 
     <string name="opentasks_pref_appearance_system_theme"
             translatable="false">opentasks_pref_system_theme</string>

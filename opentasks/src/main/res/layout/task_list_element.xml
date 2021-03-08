@@ -52,6 +52,12 @@
                 app:cardCornerRadius="@dimen/opentasks_tasklist_card_corner_radius">
 
             <View
+                    android:id="@+id/task_progress_background"
+                    android:background="@drawable/task_progress_background_shade"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            <View
                     android:id="@+id/card_background"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

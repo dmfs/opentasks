@@ -28,4 +28,6 @@
     <color name="material_deep_orange_500">#ff5722</color>
     <color name="material_deep_orange_900">#bf360c</color>
 
+    <color name="black_3_percent">#08000000</color>
+    <color name="white_6_percent">#10ffffff</color>
 </resources>
