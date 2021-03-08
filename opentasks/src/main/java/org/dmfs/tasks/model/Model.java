@@ -22,15 +22,21 @@ import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import androidx.collection.SparseArrayCompat;
 import android.text.TextUtils;
 
+import org.dmfs.iterables.decorators.Sieved;
+import org.dmfs.jems.optional.adapters.First;
+import org.dmfs.jems.single.combined.Backed;
 import org.dmfs.provider.tasks.AuthorityUtil;
+import org.dmfs.provider.tasks.utils.Range;
 import org.dmfs.tasks.ManageListActivity;
 import org.dmfs.tasks.contract.TaskContract.TaskLists;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.IdRes;
+import androidx.collection.SparseArrayCompat;
 
 
 /**
@@ -91,6 +97,24 @@ public abstract class Model
     protected void addField(FieldDescriptor descriptor)
     {
         mFields.add(descriptor);
+        mFieldIndex.put(descriptor.getFieldId(), descriptor);
+    }
+
+
+    /**
+     * Adds another field (identified by its field descriptor) to this model.
+     *
+     * @param descriptor
+     *         The {@link FieldDescriptor} of the field to add.
+     */
+    protected void addFieldAfter(@IdRes int id, FieldDescriptor descriptor)
+    {
+        mFields.add(
+                new Backed<>(
+                        new First<>(
+                                new Sieved<>(i -> mFields.get(i).getFieldId() == id,
+                                        new Range(0, mFields.size()))), mFields::size).value(),
+                descriptor);
         mFieldIndex.put(descriptor.getFieldId(), descriptor);
     }
 

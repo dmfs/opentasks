@@ -21,27 +21,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.OperationApplicationException;
 import android.content.res.ColorStateList;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.view.MenuItemCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ShareActionProvider;
-import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
+import android.os.RemoteException;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,11 +39,28 @@ import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import org.dmfs.android.bolts.color.Color;
 import org.dmfs.android.bolts.color.elementary.ValueColor;
+import org.dmfs.android.contentpal.Operation;
+import org.dmfs.android.contentpal.operations.BulkDelete;
+import org.dmfs.android.contentpal.predicates.AnyOf;
+import org.dmfs.android.contentpal.predicates.EqArg;
+import org.dmfs.android.contentpal.predicates.IdIn;
+import org.dmfs.android.contentpal.transactions.BaseTransaction;
 import org.dmfs.android.retentionmagic.SupportFragment;
 import org.dmfs.android.retentionmagic.annotations.Parameter;
 import org.dmfs.android.retentionmagic.annotations.Retain;
+import org.dmfs.jems.iterable.adapters.PresentValues;
+import org.dmfs.jems.optional.elementary.NullSafe;
+import org.dmfs.jems.single.combined.Backed;
+import org.dmfs.opentaskspal.tables.InstanceTable;
+import org.dmfs.opentaskspal.tables.TasksTable;
+import org.dmfs.tasks.contract.TaskContract;
 import org.dmfs.tasks.contract.TaskContract.Tasks;
 import org.dmfs.tasks.model.ContentSet;
 import org.dmfs.tasks.model.Model;
@@ -70,9 +75,17 @@ import org.dmfs.tasks.utils.SafeFragmentUiRunnable;
 import org.dmfs.tasks.utils.colors.AdjustedForFab;
 import org.dmfs.tasks.widget.TaskView;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.MenuItemCompat;
 
 
 /**
@@ -89,15 +102,15 @@ public class ViewTaskFragment extends SupportFragment
     private static final String ARG_STARTING_COLOR = "starting_color";
 
     /**
-     * A set of values that may affect the recurrence set of a task. If one of these values changes we have to submit all of them.
-     */
-    private final static Set<String> RECURRENCE_VALUES = new HashSet<String>(
-            Arrays.asList(Tasks.DUE, Tasks.DTSTART, Tasks.TZ, Tasks.IS_ALLDAY, Tasks.RRULE, Tasks.RDATE, Tasks.EXDATE));
-
-    /**
      * The {@link ContentValueMapper} that knows how to map the values in a cursor to {@link ContentValues}.
      */
-    private static final ContentValueMapper CONTENT_VALUE_MAPPER = EditTaskFragment.CONTENT_VALUE_MAPPER;
+
+    private static final ContentValueMapper CONTENT_VALUE_MAPPER = new ContentValueMapper()
+            .addString(Tasks.ACCOUNT_TYPE, Tasks.ACCOUNT_NAME, Tasks.TITLE, Tasks.LOCATION, Tasks.DESCRIPTION, Tasks.GEO, Tasks.URL, Tasks.TZ, Tasks.DURATION,
+                    Tasks.LIST_NAME, Tasks.RRULE, Tasks.RDATE)
+            .addInteger(Tasks.PRIORITY, Tasks.LIST_COLOR, Tasks.TASK_COLOR, Tasks.STATUS, Tasks.CLASSIFICATION, Tasks.PERCENT_COMPLETE, Tasks.IS_ALLDAY,
+                    Tasks.IS_CLOSED, Tasks.PINNED, TaskContract.Instances.IS_RECURRING)
+            .addLong(Tasks.LIST_ID, Tasks.DTSTART, Tasks.DUE, Tasks.COMPLETED, Tasks._ID, Tasks.ORIGINAL_INSTANCE_ID, TaskContract.Instances.TASK_ID);
 
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
@@ -550,36 +563,80 @@ public class ViewTaskFragment extends SupportFragment
         }
         else if (itemId == R.id.delete_task)
         {
-            new AlertDialog.Builder(getActivity()).setTitle(R.string.confirm_delete_title).setCancelable(true)
-                    .setNegativeButton(android.R.string.cancel, new OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
+            long originalInstanceId = new Backed<>(TaskFieldAdapters.ORIGINAL_INSTANCE_ID.get(mContentSet), () ->
+                    Long.valueOf(TaskFieldAdapters.INSTANCE_TASK_ID.get(mContentSet))).value();
+            boolean isRecurring = TaskFieldAdapters.IS_RECURRING_INSTANCE.get(mContentSet);
+            AtomicReference<Operation<?>> operation = new AtomicReference<>(
+                    new BulkDelete<>(
+                            new InstanceTable(mTaskUri.getAuthority()),
+                            new IdIn<>(mTaskUri.getLastPathSegment())));
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setCancelable(true)
+                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                        // nothing to do here
+                    })
+                    .setTitle(isRecurring ? R.string.opentasks_task_details_delete_recurring_task : R.string.confirm_delete_title)
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        if (mContentSet != null)
                         {
-                            // nothing to do here
+                            // TODO: remove the task in a background task
+                            try
+                            {
+                                new BaseTransaction()
+                                        .with(new PresentValues<>(new NullSafe<>(operation.get())))
+                                        .commit(getContext().getContentResolver().acquireContentProviderClient(mTaskUri));
+                            }
+                            catch (RemoteException | OperationApplicationException e)
+                            {
+                                Log.e(ViewTaskFragment.class.getSimpleName(), "Unable to delete task ", e);
+                            }
+
+                            mCallback.onTaskDeleted(mTaskUri);
+                            mTaskUri = null;
                         }
-                    }).setPositiveButton(android.R.string.ok, new OnClickListener()
+                    });
+            if (isRecurring)
             {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    if (mContentSet != null)
-                    {
-                        // TODO: remove the task in a background task
-                        mContentSet.delete(mAppContext);
-                        mCallback.onTaskDeleted(mTaskUri);
-                        mTaskUri = null;
-                    }
-                }
-            }).setMessage(R.string.confirm_delete_message).create().show();
+                builder.setSingleChoiceItems(
+                        new CharSequence[] {
+                                getString(R.string.opentasks_task_details_delete_this_task),
+                                getString(R.string.opentasks_task_details_delete_all_tasks)
+                        },
+                        0,
+                        (dialog, which) -> {
+                            switch (which)
+                            {
+                                case 0:
+                                    operation.set(new BulkDelete<>(
+                                            new InstanceTable(mTaskUri.getAuthority()),
+                                            new IdIn<>(mTaskUri.getLastPathSegment())));
+                                case 1:
+                                    operation.set(new BulkDelete<>(
+                                            new TasksTable(mTaskUri.getAuthority()),
+                                            new AnyOf<>(
+                                                    new IdIn<>(originalInstanceId),
+                                                    new EqArg<>(Tasks.ORIGINAL_INSTANCE_ID, originalInstanceId))));
+
+                            }
+                        });
+            }
+            else
+            {
+                builder.setMessage(R.string.confirm_delete_message);
+            }
+            builder.create().show();
+
             return true;
+
         }
         else if (itemId == R.id.complete_task)
+
         {
             completeTask();
             return true;
         }
         else if (itemId == R.id.pin_task)
+
         {
             if (TaskFieldAdapters.PINNED.get(mContentSet))
             {
@@ -595,14 +652,17 @@ public class ViewTaskFragment extends SupportFragment
             return true;
         }
         else if (itemId == R.id.opentasks_send_task)
+
         {
             setSendMenuIntent();
             return false;
         }
         else
+
         {
             return super.onOptionsItemSelected(item);
         }
+
     }
 
 

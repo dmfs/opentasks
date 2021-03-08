@@ -47,6 +47,13 @@
     <string name="opentasks_task_details_menu_send_short">Send</string>
     <string name="opentasks_task_details_menu_send">Send to</string>
 
+    <!-- Title of prompt to delete a recurring task -->
+    <string name="opentasks_task_details_delete_recurring_task">Delete recurring task</string>
+    <!-- Option to remove all instances of a recurring task -->
+    <string name="opentasks_task_details_delete_all_tasks">All occurrences</string>
+    <!-- Option to remove a single instances of a recurring task -->
+    <string name="opentasks_task_details_delete_this_task">This occurrence</string>
+
     <!-- Label of button to hide a tick box -->
     <string name="opentasks_hide_tick_box">Text</string>
 
@@ -93,6 +100,7 @@
     <string name="task_priority">Priority</string>
     <string name="task_timezone">Time Zone</string>
     <string name="task_all_day">All Day</string>
+    <string name="task_recurrence">Recurrence</string>
 
     <!-- Task list due group titles -->
     <string name="task_group_no_due">No due date</string>

@@ -100,6 +100,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'androidx.preference:preference:1.1.1'
+    implementation 'com.maltaisn:recurpicker:2.1.4'
 }
 
 if (project.hasProperty('PLAY_STORE_SERVICE_ACCOUNT_CREDENTIALS')) {

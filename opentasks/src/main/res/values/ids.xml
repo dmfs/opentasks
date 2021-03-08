@@ -18,6 +18,8 @@
             type="id"/>
     <item name="task_field_due"
             type="id"/>
+    <item name="task_field_rrule"
+            type="id"/>
     <item name="task_field_dtstart"
             type="id"/>
     <item name="task_field_location"
