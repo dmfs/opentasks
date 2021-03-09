@@ -310,13 +310,8 @@
     <string name="opentasks_preference_description_preview_summary">The maximum number of description lines to show.</string>
 
     <!-- If and how to show progress -->
-    <string name="opentasks_preference_show_progress">Show Progress</string>
-
-    <!-- Names of options to indicate progress on the task list -->
-    <string-array name="opentasks_preference_entry_names_show_progress">
-        <item>Never</item>
-        <item>Check list summary</item>
-    </string-array>
+    <string name="opentasks_preference_show_check_list_summary">Show check list summary</string>
+    <string name="opentasks_preference_show_progress_gradient">Show progress gradient</string>
 
     <!-- Whether to show the priority indicator -->
     <string name="opentasks_preference_show_priority">Show Priority</string>

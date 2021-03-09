@@ -298,11 +298,6 @@
     <string name="opentasks_preference_description_preview">Aperçu de la description</string>
     <string name="opentasks_preference_description_preview_summary">Le nombre maximum de lignes de description à afficher.</string>
 
-    <!-- If and how to show progress -->
-    <string name="opentasks_preference_show_progress">Afficher la progression</string>
-
-    <!-- Names of options to indicate progress on the task list -->
-
     <!-- Whether to show the priority indicator -->
     <string name="opentasks_preference_show_priority">Afficher la priorité</string>
 

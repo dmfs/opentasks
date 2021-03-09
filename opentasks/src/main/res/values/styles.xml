@@ -177,11 +177,6 @@
         <item name="android:background">@drawable/selectable_list_item</item>
     </style>
 
-    <style name="task_list_progress_background">
-        <item name="android:visibility">visible</item>
-        <item name="android:background">@android:color/white</item>
-    </style>
-
     <style name="time_forward_button"
             parent="@style/detail_label_text">
         <item name="android:background">?android:attr/selectableItemBackground</item>

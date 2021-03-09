@@ -176,10 +176,4 @@
         <item>"Pacific/Tongatapu"</item>
     </string-array>
 
-    <!-- List Appearance progress options -->
-    <string-array name="opentasks_preference_entry_values_show_progress">
-        <item>none</item>
-        <item>checked</item>
-    </string-array>
-
 </resources>

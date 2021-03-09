@@ -282,13 +282,8 @@
     <string name="opentasks_preference_description_preview_summary">Maximale Anzahl anzuzeigender Zeilen.</string>
 
     <!-- If and how to show progress -->
-    <string name="opentasks_preference_show_progress">Fortschritt zeigen</string>
-
-    <!-- Names of options to indicate progress on the task list -->
-    <string-array name="opentasks_preference_entry_names_show_progress">
-        <item>Nie</item>
-        <item>Zusammenfassung Checkliste</item>
-    </string-array>
+    <string name="opentasks_preference_show_check_list_summary">Checklisten Zusammenfassung</string>
+    <string name="opentasks_preference_show_progress_gradient">Fortschrittsgradienten zeigen</string>
 
     <!-- Whether to show the priority indicator -->
     <string name="opentasks_preference_show_priority">Priorität zeigen</string>

@@ -19,6 +19,7 @@ package org.dmfs.tasks.groupings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -56,7 +57,7 @@ import androidx.preference.PreferenceManager;
 
 import static android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
 import static org.dmfs.tasks.model.TaskFieldAdapters.IS_CLOSED;
-import static org.dmfs.tasks.model.TaskFieldAdapters.LIST_COLOR;
+import static org.dmfs.tasks.model.TaskFieldAdapters.LIST_COLOR_RAW;
 
 
 /**
@@ -138,6 +139,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
     protected void setDescription(View view, Cursor cursor)
     {
         Context context = view.getContext();
+        Resources res = context.getResources();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean isClosed = TaskAdapter.IS_CLOSED.getFrom(cursor);
         TextView descriptionView = getView(view, android.R.id.text1);
@@ -156,11 +158,13 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
             descriptionView.setVisibility(View.GONE);
         }
 
-        String progress = prefs.getString(context.getString(R.string.opentasks_pref_appearance_list_progress), "checked");
+        boolean showCheckListSummary = prefs.getBoolean(
+                context.getString(R.string.opentasks_pref_appearance_check_list_summary),
+                res.getBoolean(R.bool.opentasks_list_check_list_summary_default));
         TextView checkboxItemCountView = getView(view, R.id.checkbox_item_count);
         Iterable<DescriptionItem> checkedItems = new Sieved<>(item -> item.checkbox, checkList);
         int checkboxItemCount = new Reduced<DescriptionItem, Integer>(() -> 0, (count, ignored) -> count + 1, checkedItems).value();
-        if (checkboxItemCount == 0 || isClosed || "none".equals(progress))
+        if (checkboxItemCount == 0 || isClosed || !showCheckListSummary)
         {
             checkboxItemCountView.setVisibility(View.GONE);
         }
@@ -186,6 +190,20 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
                 checkboxItemCountView.setText(withCheckBoxes(checkboxItemCountView,
                         context.getString(R.string.opentasks_checkbox_item_count_partially_checked, checkboxItemCount - checked, checked)));
             }
+        }
+
+        View progressGradient = view.findViewById(R.id.task_progress_background);
+        if (!isClosed && TaskFieldAdapters.PERCENT_COMPLETE.get(cursor) > 0
+                && prefs.getBoolean(context.getString(R.string.opentasks_pref_appearance_progress_gradient),
+                res.getBoolean(R.bool.opentasks_list_progress_gradient_default)))
+        {
+            progressGradient.setVisibility(View.VISIBLE);
+            progressGradient.setPivotX(0);
+            progressGradient.setScaleX(TaskFieldAdapters.PERCENT_COMPLETE.get(cursor) / 100f);
+        }
+        else
+        {
+            progressGradient.setVisibility(View.GONE);
         }
     }
 
@@ -261,7 +279,7 @@ public abstract class BaseTaskViewDescriptor implements ViewDescriptor
         if (cardView != null)
         {
             boolean isClosed = IS_CLOSED.get(cursor);
-            cardView.findViewById(R.id.color_label).setBackgroundColor(LIST_COLOR.get(cursor));
+            cardView.findViewById(R.id.color_label).setBackgroundColor(LIST_COLOR_RAW.get(cursor));
             cardView.findViewById(R.id.card_background).setVisibility(isClosed ? View.VISIBLE : View.GONE);
             cardView.findViewById(R.id.color_label).setAlpha(isClosed ? 0.4f : 1f);
             cardView.setCardElevation(view.getResources().getDimensionPixelSize(
