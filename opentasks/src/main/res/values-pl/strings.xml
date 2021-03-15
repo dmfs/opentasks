@@ -44,6 +44,23 @@
     <string name="opentasks_details_no_task_selected">Nie wybrano żadnego zadania</string>
     <string name="opentasks_task_details_menu_send_short">Wyślij</string>
     <string name="opentasks_task_details_menu_send">Wyślij do</string>
+    
+    <!-- Title of prompt to delete a recurring task -->
+    <string name="opentasks_task_details_delete_recurring_task">Usuń powtarzające się zadanie</string>
+    <!-- Option to remove all instances of a recurring task -->
+    <string name="opentasks_task_details_delete_all_tasks">Wszystkie zdarzenia</string>
+    <!-- Option to remove a single instances of a recurring task -->
+    <string name="opentasks_task_details_delete_this_task">To zdarzenie</string>
+
+    <!-- Label of button to hide a tick box -->
+    <string name="opentasks_hide_tick_box">Tekst</string>
+
+    <!-- Label of button to show a tick box -->
+    <string name="opentasks_show_tick_box">Lista</string>
+
+    <!-- Label of button to delete checklist item -->
+    <string name="opentasks_delete_item">Usuń</string>
+    
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Dodaj pozycję</string>
@@ -81,6 +98,7 @@
     <string name="task_priority">Priorytet</string>
     <string name="task_timezone">Strefa czasowa</string>
     <string name="task_all_day">Cały dzień</string>
+    <string name="task_recurrence">Powtarzanie</string>
 
     <!-- Task list group titles -->
     <string name="task_group_no_due">Brak daty zakończenia</string>
@@ -267,6 +285,36 @@
     <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
     <string name="opentasks_settings_notification_lights">Światło pulsacyjne</string>
 
+        <!-- Title of the general appearance screen -->
+    <string name="opentasks_preference_appearance">Wygląd</string>
+
+    <!-- Theme category title -->
+    <string name="opentasks_preference_theme">Motyw</string>
+
+    <!-- Option to follow the system theme  -->
+    <string name="opentasks_preference_system_theme">Śledź system</string>
+
+    <!-- Option to use a dark theme -->
+    <string name="opentasks_preference_dark_theme">Ciemny motyw</string>
+
+    <!-- Dark theme disclaimer -->
+    <string name="opentasks_preference_dark_theme_disclaimer">Ciemny motyw jest eksperymentalny i zaimplementowany tylko częściowo.</string>
+
+    <!-- List appearance settings -->
+    <string name="opentasks_preference_appearance_task_list">Widok listy zadań</string>
+
+    <!-- Number of description lines to show -->
+    <string name="opentasks_preference_description_preview">Podgląd opisu</string>
+    <string name="opentasks_preference_description_preview_summary">Maksymalna liczba wyświetlanych linii tekstu.</string>
+
+    <!-- If and how to show progress -->
+    <string name="opentasks_preference_show_check_list_summary">Pokaż podsumowanie listy kontrolnej</string>
+    <string name="opentasks_preference_show_progress_gradient">Pokaż gradient postępu</string>
+
+    <!-- Whether to show the priority indicator -->
+    <string name="opentasks_preference_show_priority">Pokaż priorytet</string>
+
+
     <!-- Outgoing share -->
     <string name="opentasks_share_footer">Udostępnione przez OpenTasks</string>
 
@@ -288,4 +336,16 @@
     <!-- Title of the notification channel for start and due alerts -->
     <string name="opentasks_notification_channel_due_dates">Daty rozpoczęcia i realizacji</string>
 
+    
+    <!-- Titles of ActionMode Context menu -->
+
+    <!-- Action for URLs (most likely http/https)-->
+    <string name="opentasks_actionmode_open">Otwórz</string>
+
+    <!-- Action for Phone numbers -->
+    <string name="opentasks_actionmode_call">Połącz</string>
+
+    <!-- Action for Email addresses -->
+    <string name="opentasks_actionmode_mail_to">E-mail</string>
+    
 </resources>
