@@ -70,16 +70,18 @@ public class ActionModeLinkify
         Matcher m = LINK_PATTERN.matcher(text);
         SpannableString s = new SpannableString(text);
         new ForEach<>(new Seq<>(s.getSpans(0, s.length(), ClickableSpan.class))).process(s::removeSpan);
-        while (m.find())
+        int pos = 0;
+        while (m.find(pos))
         {
             int start = m.start(1);
             int end = m.end(1);
+            pos = end;
             Uri uri = null;
             if (m.group(2) != null)
             {
                 uri = Uri.parse("tel:" + PhoneNumberUtils.normalizeNumber(m.group(2)));
             }
-            if (m.group(3) != null)
+            else if (m.group(3) != null)
             {
                 uri = Uri.parse(m.group(3));
                 if (uri.getScheme() == null)
@@ -87,7 +89,7 @@ public class ActionModeLinkify
                     uri = uri.buildUpon().scheme("https").build();
                 }
             }
-            if (m.group(4) != null)
+            else if (m.group(4) != null)
             {
                 uri = Uri.parse("mailto:" + m.group(4));
             }
@@ -158,7 +160,10 @@ public class ActionModeLinkify
                                   };
 
                                   ActionMode am = textView.startActionMode(actionMode, android.view.ActionMode.TYPE_FLOATING);
-                                  closeActionTrigger.subscribe(am::finish);
+                                  if (am != null)
+                                  {
+                                      closeActionTrigger.subscribe(am::finish);
+                                  }
                               }
                           }
                       },
