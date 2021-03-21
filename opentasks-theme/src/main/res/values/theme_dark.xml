@@ -36,6 +36,7 @@
         <item name="tabIconTint">?attr/colorPrimary</item>
         <item name="tabIndicatorColor">?attr/colorPrimary</item>
 
+        <item name="opentasks_progress_gradient_start_color">#00000000</item>
         <item name="opentasks_progress_gradient_end_color">@color/white_6_percent</item>
 
         <item name="android:scrollbarTrackVertical">@null</item>
@@ -67,6 +68,7 @@
         <item name="tabIconTint">?attr/colorPrimary</item>
         <item name="tabIndicatorColor">?attr/colorPrimary</item>
 
+        <item name="opentasks_progress_gradient_start_color">#00000000</item>
         <item name="opentasks_progress_gradient_end_color">@color/white_6_percent</item>
 
         <item name="android:scrollbarTrackVertical">@null</item>

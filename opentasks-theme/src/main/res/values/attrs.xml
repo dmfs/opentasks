@@ -19,4 +19,6 @@
 
     <attr name="opentasks_progress_gradient_end_color"
             format="color" />
+    <attr name="opentasks_progress_gradient_start_color"
+            format="color" />
 </resources>
