@@ -25,7 +25,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -59,6 +58,7 @@ import org.dmfs.tasks.model.DescriptionItem;
 import org.dmfs.tasks.model.FieldDescriptor;
 import org.dmfs.tasks.model.adapters.DescriptionFieldAdapter;
 import org.dmfs.tasks.model.layout.LayoutOptions;
+import org.dmfs.tasks.utils.DescriptionMovementMethod;
 
 import java.util.List;
 
@@ -242,7 +242,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         transition.disableTransitionType(LayoutTransition.CHANGING);
         transition.disableTransitionType(LayoutTransition.APPEARING);
         transition.disableTransitionType(LayoutTransition.DISAPPEARING);
-        ((TextView) item.findViewById(android.R.id.title)).setMovementMethod(LinkMovementMethod.getInstance());
+        ((TextView) item.findViewById(android.R.id.title)).setMovementMethod(DescriptionMovementMethod.getInstance());
         return item;
     }
 
