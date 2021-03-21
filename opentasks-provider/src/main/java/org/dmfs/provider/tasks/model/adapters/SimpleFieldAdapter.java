@@ -59,12 +59,7 @@ public abstract class SimpleFieldAdapter<FieldType, EntityType> implements Field
     public boolean existsIn(Cursor cursor)
     {
         int columnIdx = cursor.getColumnIndex(fieldName());
-        if (columnIdx < 0)
-        {
-            throw new IllegalArgumentException("The column '" + fieldName() + "' is missing in cursor.");
-        }
-
-        return !cursor.isNull(columnIdx);
+        return columnIdx >= 0 && !cursor.isNull(columnIdx);
     }
 
 

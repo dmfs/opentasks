@@ -94,7 +94,7 @@ public class CursorContentValuesTaskAdapter extends AbstractTaskAdapter
         {
             return false;
         }
-        Object oldValue = fieldAdapter.getFrom(mCursor);
+        Object oldValue = fieldAdapter.existsIn(mCursor) ? fieldAdapter.getFrom(mCursor) : null;
         Object newValue = fieldAdapter.getFrom(mValues);
         // we need to special case RRULE, because RecurrenceRule doesn't support `equals`
         if (fieldAdapter != TaskAdapter.RRULE)
