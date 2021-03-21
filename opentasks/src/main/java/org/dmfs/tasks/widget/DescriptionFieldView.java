@@ -332,9 +332,10 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
                     return true;
                 }
                 // split current
-                int sel = text.getSelectionStart();
-                String newText = text.getText().toString().substring(sel);
-                item.text = text.getText().toString().substring(0, sel);
+                String current = text.getText().toString();
+                int sel = Math.max(0, Math.min(current.length(), text.getSelectionStart()));
+                String newText = current.substring(sel);
+                item.text = current.substring(0, sel);
                 text.setText(item.text);
                 text.clearFocus();
                 // create new item with new test
