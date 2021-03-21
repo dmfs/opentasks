@@ -5,8 +5,8 @@
         <shape android:shape="rectangle">
             <gradient
                     android:angle="180"
-                    android:centerColor="#00000000"
-                    android:endColor="#00000000"
+                    android:centerColor="?attr/opentasks_progress_gradient_start_color"
+                    android:endColor="?attr/opentasks_progress_gradient_start_color"
                     android:startColor="?attr/opentasks_progress_gradient_end_color" />
         </shape>
     </item>
