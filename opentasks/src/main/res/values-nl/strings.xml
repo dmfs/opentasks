@@ -49,7 +49,7 @@
 
     <!-- Task editor -->
     <string name="activity_edit_task_title">Pas taak aan</string>
-    <string name="activity_add_task_title">Maak aak aan</string>
+    <string name="activity_add_task_title">Maak taak aan</string>
     <string name="activity_edit_task_error_invalid_url">Ongeldige URL</string>
     <string name="activity_edit_task_task_saved">Taak is opgeslagen.</string>
     <string name="activity_edit_task_empty_task_not_saved">Een lege taak wordt niet opgeslagen.</string>
@@ -60,7 +60,7 @@
     <string name="task_title">Titel</string>
     <string name="task_location">Locatie</string>
     <string name="task_description">Beschrijving</string>
-    <string name="task_checklist">Controlelijst</string>
+    <string name="task_checklist">Afvinklijst</string>
     <string name="task_start">Start</string>
     <string name="task_due">Einde</string>
     <string name="task_completed">Afgerond</string>
@@ -108,7 +108,7 @@
 
     <!-- Task list priority group titles -->
     <string name="task_group_priority_high">Hoge prioriteit</string>
-    <string name="task_group_priority_medium">Middelmatige prioriteit</string>
+    <string name="task_group_priority_medium">Gemiddelde prioriteit</string>
     <string name="task_group_priority_low">Lage prioriteit</string>
     <string name="task_group_priority_none">Geen prioriteit</string>
 
@@ -124,7 +124,7 @@
     <string name="status_in_process">in behandeling</string>
     <string name="status_completed">afgerond</string>
     <string name="status_cancelled">geannuleerd</string>
-    <string name="status_incomplete">incompleet</string>
+    <string name="status_incomplete">onvolledig</string>
 
     <!-- Classification labels -->
 
@@ -137,7 +137,7 @@
 
     <string name="priority_undefined">geen</string>
     <string name="priority_low">laag</string>
-    <string name="priority_medium">middelmatig</string>
+    <string name="priority_medium">gemiddeld</string>
     <string name="priority_high">hoog</string>
     <string name="priority_urgent">urgent</string>
 
@@ -228,7 +228,7 @@
     <string name="dashclock_widget_title_due_expanded_allday">%1$s moet worden gedaan</string>
     <string name="dashclock_widget_title_start_expanded">%1$s start - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s start vandaag</string>
-    <string name="dashclock_pref_displayed_task_title">Toon evenementen</string>
+    <string name="dashclock_pref_displayed_task_title">Toon gebeurtenissen</string>
     <string name="dashclock_pref_displayed_task_summary">Selecteer taken en items om weer te geven in de DashClock-widget</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Activiteiten om weer te geven</string>
     <string name="dashclock_display_type_due">Taken te doen</string>
