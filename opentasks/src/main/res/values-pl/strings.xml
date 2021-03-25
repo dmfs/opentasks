@@ -293,6 +293,9 @@
 
     <!-- Option to follow the system theme  -->
     <string name="opentasks_preference_system_theme">Śledź system</string>
+    
+    <!-- System theme disclaimer -->
+    <string name="opentasks_preference_system_theme_disclaimer">Śledzenie systemu jest eksperymentalne i zaimplementowane tylko częściowo.</string>
 
     <!-- Option to use a dark theme -->
     <string name="opentasks_preference_dark_theme">Ciemny motyw</string>
