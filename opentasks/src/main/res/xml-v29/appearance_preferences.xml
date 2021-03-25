@@ -8,7 +8,7 @@
                 android:title="@string/opentasks_preference_system_theme"
                 android:key="@string/opentasks_pref_appearance_system_theme"
                 app:disableDependentsState="true"
-                app:summary="@string/opentasks_preference_dark_theme_disclaimer"
+                app:summary="@string/opentasks_preference_system_theme_disclaimer"
                 app:defaultValue="@bool/opentasks_system_theme_default" />
         <androidx.preference.SwitchPreferenceCompat
                 android:title="@string/opentasks_preference_dark_theme"
