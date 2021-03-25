@@ -252,7 +252,7 @@
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Zadania</string>
     <string name="dashclock_extension_description">Wyświetla informacje dla ostatnich zadań.</string>
-    <string name="dashclock_widget_title_due_expanded">%1$s zaplanowanych due - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s zaplanowane na - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s zaplanowane</string>
     <string name="dashclock_widget_title_start_expanded">%1$s zaczynające się - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s zaczynające się dziś</string>
