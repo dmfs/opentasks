@@ -48,9 +48,9 @@
     <!-- Title of prompt to delete a recurring task -->
     <string name="opentasks_task_details_delete_recurring_task">Usuń powtarzające się zadanie</string>
     <!-- Option to remove all instances of a recurring task -->
-    <string name="opentasks_task_details_delete_all_tasks">Wszystkie zdarzenia</string>
+    <string name="opentasks_task_details_delete_all_tasks">Wszystkie zadania</string>
     <!-- Option to remove a single instances of a recurring task -->
-    <string name="opentasks_task_details_delete_this_task">To zdarzenie</string>
+    <string name="opentasks_task_details_delete_this_task">To zadanie</string>
 
     <!-- Label of button to hide a tick box -->
     <string name="opentasks_hide_tick_box">Tekst</string>
@@ -252,12 +252,12 @@
     <!-- Dashclock -->
     <string name="dashclock_extension_title">Zadania</string>
     <string name="dashclock_extension_description">Wyświetla informacje dla ostatnich zadań.</string>
-    <string name="dashclock_widget_title_due_expanded">%1$s zaplanowanych due - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded">%1$s zaplanowane na - %2$s</string>
     <string name="dashclock_widget_title_due_expanded_allday">%1$s zaplanowane</string>
     <string name="dashclock_widget_title_start_expanded">%1$s zaczynające się - %2$s</string>
     <string name="dashclock_widget_title_start_expanded_allday">%1$s zaczynające się dziś</string>
-    <string name="dashclock_pref_displayed_task_title">Wyświetlone zadania</string>
-    <string name="dashclock_pref_displayed_task_summary">Wybierz, które zdarzenia zadań są wyświetlane w widżecie paska zadań</string>
+    <string name="dashclock_pref_displayed_task_title">Wyświetlane wydarzenia</string>
+    <string name="dashclock_pref_displayed_task_summary">Wybierz, które wydarzenia zadań mają być wyświetlane w widgecie DashClock</string>
     <string name="dashclock_pref_displayed_task_dialog_title">Wydarzenia do wyświetlenia</string>
     <string name="dashclock_display_type_due">zadania zaplanowane</string>
     <string name="dashclock_display_type_start">zadania rozpoczynające się</string>
@@ -293,6 +293,9 @@
 
     <!-- Option to follow the system theme  -->
     <string name="opentasks_preference_system_theme">Śledź system</string>
+    
+    <!-- System theme disclaimer -->
+    <string name="opentasks_preference_system_theme_disclaimer">Śledzenie systemu jest eksperymentalne i zaimplementowane tylko częściowo.</string>
 
     <!-- Option to use a dark theme -->
     <string name="opentasks_preference_dark_theme">Ciemny motyw</string>

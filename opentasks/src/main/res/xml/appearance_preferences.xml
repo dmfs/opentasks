@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         app:title="@string/opentasks_preference_appearance">
 
-    <androidx.preference.PreferenceCategory android:title="Theme">
+    <androidx.preference.PreferenceCategory android:title="@string/opentasks_preference_theme">
         <androidx.preference.SwitchPreferenceCompat
                 android:title="@string/opentasks_preference_dark_theme"
                 android:key="@string/opentasks_pref_appearance_dark_theme"
