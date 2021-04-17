@@ -679,7 +679,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
 
         if (mValues.isInsert() || mValues.isUpdate())
         {
-            if (TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)))
+            if (TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || TaskFieldAdapters.TITLE.get(mValues).trim().equals(""))
             {
                 // there is no title, try to set one from the description or check list
 
@@ -715,7 +715,7 @@ public class EditTaskFragment extends SupportFragment implements LoaderManager.L
                 }
             }
 
-            if (!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) || mValues.isUpdate())
+            if ((!TextUtils.isEmpty(TaskFieldAdapters.TITLE.get(mValues)) && !TaskFieldAdapters.TITLE.get(mValues).trim().equals("")) || mValues.isUpdate())
             {
                 if (mValues.isInsert())
                 {
