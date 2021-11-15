@@ -146,8 +146,8 @@
     <!-- Task editor labels -->
 
     <string name="action_save">حفظ</string>
-    <string name="action_cancel">حذف</string>
-    <string name="action_save_and_continue">حذف ومواصلة</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_save_and_continue">حفظ ومواصلة</string>
 
     <!-- Status labels -->
 
