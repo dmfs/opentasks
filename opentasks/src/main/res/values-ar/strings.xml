@@ -30,6 +30,7 @@
     <string name="opentasks_checkbox_item_count_partially_checked">[ ] %d / [x] %d</string>
 
     <plurals name="number_of_tasks">
+        <item quantity="zero">لا مهام</item>
         <item quantity="one">مهمة واحدة</item>
         <item quantity="two">مهمتان</item>
         <item quantity="few">%d مهام</item>
