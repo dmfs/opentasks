@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Manifest stuff -->
+    <string name="app_name">OpenTasks</string>
+
+    <!-- Task list -->
+    <string name="menu_add_task">إضافة مهمة</string>
+    <string name="menu_add_task_condensed">إضافة</string>
+    <string name="menu_show_completed">إظهار المهام المنجزة</string>
+    <string name="menu_show_completed_condensed">إظهار المهام المنجزة</string>
+    <string name="menu_sync_now">تحديث</string>
+    <string name="menu_sync_now_condensed">تحديث</string>
+    <string name="menu_search_hint">بحث</string>
+    <string name="toast_task_created">\"%1s\" أنشئت.</string>
+    <string name="toast_task_completed">\"%1s\" أنجزت.</string>
+    <string name="toast_task_uncompleted">\"%1s\" أعيد فتحها.</string>
+    <string name="toast_x_removed">\"%1s\" أزيلت.</string>
+    <string name="task_group_title_list">المهام</string>
+    <string name="task_group_title_start">بداية المهام</string>
+    <string name="task_group_title_due">التاريخ المستهدف للمهام</string>
+    <string name="task_group_title_priority">أولوية المهمات</string>
+    <string name="task_group_title_progress">مستوى إنجاز المهام</string>
+    <string name="task_group_title_default">المهام</string>
+    <string name="quick_add_task_created">أضيفت المهمة</string>
+    <string name="initial_local_task_list_name">مهامي</string>
+
+    <string name="opentasks_checkbox_item_count_none_checked">[ ] %d</string>
+    <string name="opentasks_checkbox_item_count_all_checked">[x] %d</string>
+    <string name="opentasks_checkbox_item_count_partially_checked">[ ] %d / [x] %d</string>
+
+    <plurals name="number_of_tasks">
+        <item quantity="zero">لا مهام</item>
+        <item quantity="one">مهمة واحدة</item>
+        <item quantity="two">مهمتان</item>
+        <item quantity="few">%d مهام</item>
+        <item quantity="many">%d مهمة</item>
+        <item quantity="other">%d مهمة</item>
+    </plurals>
+
+    <!-- Task detail view -->
+    <string name="activity_task_details_edit">تعديل</string>
+    <string name="activity_task_details_edit_task">تعديل المهمة</string>
+    <string name="activity_task_details_delete">حذف</string>
+    <string name="activity_task_details_delete_task">حذف المهمة</string>
+    <string name="activity_task_details_complete">إنجاز</string>
+    <string name="activity_task_details_complete_task">إنجاز المهمة</string>
+    <string name="activity_task_details_pin">تثبيت</string>
+    <string name="activity_task_details_pin_task">تثبيت المهمة</string>
+    <string name="opentasks_details_no_task_selected">لم يتم اختيار أي مهمة</string>
+    <string name="opentasks_task_details_menu_send_short">أرسل</string>
+    <string name="opentasks_task_details_menu_send">أرسل إلى</string>
+
+    <!-- Title of prompt to delete a recurring task -->
+    <string name="opentasks_task_details_delete_recurring_task">حذف المهمة المتكررة</string>
+    <!-- Option to remove all instances of a recurring task -->
+    <string name="opentasks_task_details_delete_all_tasks">حذف جميع التكرارات</string>
+    <!-- Option to remove a single instances of a recurring task -->
+    <string name="opentasks_task_details_delete_this_task">هذه النسخة المكررة</string>
+
+    <!-- Label of button to hide a tick box -->
+    <string name="opentasks_hide_tick_box">نص</string>
+
+    <!-- Label of button to show a tick box -->
+    <string name="opentasks_show_tick_box">قائمة مهام</string>
+
+    <!-- Label of button to delete checklist item -->
+    <string name="opentasks_delete_item">حذف</string>
+
+
+    <!-- The title of the button to add a new item to a check list. -->
+    <string name="opentasks_checklist_add_item">إضافة عنصر</string>
+
+    <!--
+    The hint that's shown for a check list item that has no text.
+    Should be something like "Item title", "Empty item", "new item" or "Enter item title", whatever works best in your language.
+    -->
+    <string name="opentasks_checklist_empty_item_hint">عنوان العنصر</string>
+
+    <!-- Task editor -->
+    <string name="activity_edit_task_title">تعديل</string>
+    <string name="activity_add_task_title">إنشاء</string>
+    <string name="activity_edit_task_error_invalid_url">عنوان URL غير صحيح</string>
+    <string name="activity_edit_task_task_saved">تم حفظ المهمة.</string>
+    <string name="activity_edit_task_empty_task_not_saved">لم يتم حفظ المهمة الفارغة.</string>
+
+    <!-- Names of task attributes -->
+
+    <string name="task_list">قائمة</string>
+    <string name="task_title">العنوان</string>
+    <string name="task_location">المكان</string>
+    <string name="task_description">الوصف</string>
+    <string name="task_checklist">قائمة مهام</string>
+    <string name="task_start">البداية</string>
+    <string name="task_due">التاريخ المستهدف</string>
+    <string name="task_completed">منجز</string>
+    <string name="task_percent_complete">نسبة الإنجاز</string>
+    <string name="task_status">الحالة</string>
+    <string name="task_classification">الخصوصية</string>
+    <string name="task_url">URL</string>
+    <string name="title_task_detail">تفاصيل المهمة</string>
+    <string name="title_task_list">المهمات</string>
+    <string name="task_detail_activity">تفاصيل المهمة</string>
+    <string name="task_priority">الأولوية</string>
+    <string name="task_timezone">المنطقة الزمنية</string>
+    <string name="task_all_day">كامل اليوم</string>
+    <string name="task_recurrence">التكرار</string>
+
+    <!-- Task list due group titles -->
+    <string name="task_group_no_due">بدون تاريخ مستهدف</string>
+    <string name="task_group_overdue">متأخر</string>
+    <string name="task_group_due_today">اليوم</string>
+    <string name="task_group_due_tomorrow">الغد</string>
+    <string name="task_group_due_within_7_days">الأيام القادمة</string>
+    <string name="task_group_due_in_month">التاريخ المستهدف %s</string>
+    <string name="task_group_due_in_year">التاريخ المستهدف %d</string>
+    <string name="task_group_due_in_future">يوما ما</string>
+
+    <!-- Task list start group titles -->
+    <string name="task_group_start_started">قد بدأ</string>
+    <string name="task_group_start_today">اليوم</string>
+    <string name="task_group_start_tomorrow">الغد</string>
+    <string name="task_group_start_within_7_days">يوما ما</string>
+    <string name="task_group_start_in_future">فيما بعد</string>
+    <string name="task_group_due_title">التاريخ المستهدف</string>
+    <string name="task_group_all_title">القوائم</string>
+    <string name="task_group_completed_title">منجز</string>
+    <string name="task_group_start_title">البداية</string>
+    <string name="task_group_search_title">بحث</string>
+    <string name="task_group_priority_title">الأولوية</string>
+    <string name="task_group_progress_title">الإنجاز</string>
+
+    <!-- Task list progress group titles -->
+    <string name="task_group_progress_0">لم ينجز شيء</string>
+    <string name="task_group_progress_40">تبقى الكثير</string>
+    <string name="task_group_progress_60">في منتصف الطريق</string>
+    <string name="task_group_progress_80">على وشك الانتهاء</string>
+    <string name="task_group_progress_100">منجز</string>
+
+    <!-- Task list priority group titles -->
+    <string name="task_group_priority_high">أولوية عالية</string>
+    <string name="task_group_priority_medium">أولوية متوسطة</string>
+    <string name="task_group_priority_low">أولوية منخفضة</string>
+    <string name="task_group_priority_none">ليست أولوية</string>
+
+    <!-- Task editor labels -->
+
+    <string name="action_save">حفظ</string>
+    <string name="action_cancel">إلغاء</string>
+    <string name="action_save_and_continue">حفظ ومواصلة</string>
+
+    <!-- Status labels -->
+
+    <string name="status_needs_action">بحاجة لعمل</string>
+    <string name="status_in_process">قيد العمل</string>
+    <string name="status_completed">منجز</string>
+    <string name="status_cancelled">ملغي</string>
+    <string name="status_incomplete">غير منجز</string>
+
+    <!-- Classification labels -->
+
+    <string name="classification_not_specified">غير محدد</string>
+    <string name="classification_public">عام</string>
+    <string name="classification_private">خاص</string>
+    <string name="classification_confidential">سري</string>
+
+    <!-- Priority labels -->
+
+    <string name="priority_undefined">بدون</string>
+    <string name="priority_low">منخفض</string>
+    <string name="priority_medium">متوسط</string>
+    <string name="priority_high">عالي</string>
+    <string name="priority_urgent">طارئ</string>
+
+    <!-- Label for Settings -->
+
+    <string name="title_activity_settings">الإعدادات</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="action_add_local_list">إضافة قائمة</string>
+    <string name="visible_task_lists">القوائم المعروضة</string>
+    <string name="synced_task_lists">القوائم المزامنة</string>
+
+    <!-- dialogs -->
+    <string name="task_list_settings_dialog_account_title">اختر حساباً</string>
+
+    <!-- manage task list activity -->
+
+    <string name="activity_manage_list_btn_save">حفظ</string>
+    <string name="activity_manage_list_btn_delete">حذف القائمة</string>
+    <string name="activity_add_list_title">إنشاء قائمة محلية</string>
+    <string name="activity_edit_list_title">إعدادات القائمة</string>
+    <string name="task_list_name_caption">الاسم</string>
+    <string name="task_list_no_sync">ملاحظة: سيتم إنشاء قائمة محلية. المهام في القوائم المحلية لن يتم مزامنتها.</string>
+    <string name="task_list_color_caption">لون القائمة</string>
+
+    <!-- input dialog -->
+    <string name="task_list_name_dialog_hint">اسم القائمة</string>
+    <string name="task_list_name_dialog_title">أدخل اسم القائمة</string>
+    <string name="task_list_name_dialog_error">أدخل الاسم.</string>
+
+    <!-- delete dialog -->
+    <string name="task_list_delete_dialog_title">حذف %s</string>
+    <string name="task_list_delete_dialog_message">حذف القائمة وجميع المهام التي تتضمنها؟\nملاحظة: لن تتمكن من استعادة القائمة المحذوفة.</string>
+    <string name="task_list_delete_toast">تم حذف %s</string>
+
+    <!-- Label for Expandable Group Descriptors -->
+    <string name="gd_by_due_date">بحسب التاريخ المستهدف</string>
+    <string name="gd_by_completed">بحسب المنجز</string>
+    <string name="gd_by_list">بحسب القائمة</string>
+
+    <!-- String for confirm delete dialog -->
+    <string name="confirm_delete_title">تأكيد الحذف</string>
+    <string name="confirm_delete_message">حذف هذه المهمة؟</string>
+    <string name="confirm_delete_message_with_title">حذف \"%1s\"؟</string>
+    <string name="toast_task_deleted">تم حذف \"%1s\".</string>
+
+    <!-- Strings in the Task List Selection Fragment -->
+    <string name="task_list_selection_empty">لا توجد أي قوائم مهام</string>
+    <string name="task_list_selection_title">تحديد القوائم التي تعرض</string>
+    <string name="task_list_selection_ok">تنفيذ</string>
+    <string name="task_list_selection_cancel">تراجع</string>
+
+    <!-- Strings for Task List Widget -->
+    <string name="task_list_widget_title">المهام الحالية</string>
+    <string name="task_list_widget_title_4x4">المهام الحالية 4x4</string>
+
+    <!-- Strings for fling actions -->
+    <string name="fling_task_complete">منجز</string>
+    <string name="fling_task_edit">تعديل</string>
+    <string name="fling_task_delete">حذف</string>
+    <string name="fling_task_uncomplete">استئناف</string>
+
+    <!-- Accessibility content description -->
+    <string name="cd_start_date">أيقونة تاريخ البداية للمهمة</string>
+    <string name="cd_due_date">أيقونة التاريخ المستهدف لإنجاز المهمة</string>
+
+    <!-- Strings for notification -->
+    <string name="notification_task_due_date">التاريخ المستهدف للمهمة, %1s</string>
+    <string name="notification_task_start_date">بداية المهمة, %1s</string>
+    <string name="notification_task_due_today">التاريخ المستهدف للمهمة هو اليوم</string>
+    <string name="notification_task_start_today">المهمة تبدأ اليوم</string>
+    <string name="notification_action_complete">منجز</string>
+    <string name="notification_action_completed">منجز</string>
+    <string name="notification_action_delay_1h">+1 ساعة</string>
+    <string name="notification_action_delay_1d">+1 يوم</string>
+    <string name="notification_action_delay_toast">تم تحديث التاريخ المستهدف للمهمة</string>
+    <string name="notification_undo">تراجع</string>
+    <string name="notification_action_unpin">إلغاء التثبيت</string>
+    <string name="notification_task_pin_ticker">تم تثبيت %1$s</string>
+
+    <!-- Strings for time UI widgets -->
+    <string name="button_add_one_hour">+1 ساعة</string>
+    <string name="button_add_one_day">+1 يوم</string>
+
+    <!-- Strings for QuickSettingsTile -->
+    <string name="quicksettingstile_create">إنشاء مهمة</string>
+
+    <!-- Dashclock -->
+    <string name="dashclock_extension_title">المهام</string>
+    <string name="dashclock_extension_description">تعرض معلومات للمهام الراهنة.</string>
+    <string name="dashclock_widget_title_due_expanded">التاريخ المستهدف لإنجاز المهمة %1$s - %2$s</string>
+    <string name="dashclock_widget_title_due_expanded_allday">التاريخ المستهدف لإنجاز %1$s قد حل</string>
+    <string name="dashclock_widget_title_start_expanded">%1$s تبدأ - %2$s</string>
+    <string name="dashclock_widget_title_start_expanded_allday">%1$s تبدأ اليوم</string>
+    <string name="dashclock_pref_displayed_task_title">الأنشطة المعروضة</string>
+    <string name="dashclock_pref_displayed_task_summary">حدد أي من أنشطة المهام سيتم عرضها في التطبيق المصغر DashClock</string>
+    <string name="dashclock_pref_displayed_task_dialog_title">الأنشطة المعروضة</string>
+    <string name="dashclock_display_type_due">المهام التي حل وقت إنجازها</string>
+    <string name="dashclock_display_type_start">المهام التي حل وقت بدايتها</string>
+    <string name="dashclock_display_type_start_and_due">المهام التي حل وقت ابتدائها أو إنجازها</string>
+    <string name="dashclock_display_type_all">الجميع</string>
+    <string name="dashclock_display_type_pinned">المهام المثبتة</string>
+    <string name="dashclock_preference_title">إعدادات Task DashClock</string>
+
+    <!-- General -->
+    <string name="accept">موافقة</string>
+    <string name="now">الآن</string>
+
+    <!-- Incoming share -->
+    <string name="share_as_task">إنشاء مهمة</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">إشعارات</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">أنواع الإشعارات</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">الصوت</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">الاهتزاز</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">الضوء المتردد</string>
+
+    <!-- Title of the general appearance screen -->
+    <string name="opentasks_preference_appearance">المظهر</string>
+
+    <!-- Theme category title -->
+    <string name="opentasks_preference_theme">التنسيق</string>
+
+    <!-- Option to follow the system theme  -->
+    <string name="opentasks_preference_system_theme">اتبع النظام</string>
+    
+    <!-- System theme disclaimer -->
+    <string name="opentasks_preference_system_theme_disclaimer">اتباع النظام ما زال تحت التجربة وتم تطبيقه جزئيا فقط.</string>
+
+    <!-- Option to use a dark theme -->
+    <string name="opentasks_preference_dark_theme">التنسيق الداكن</string>
+
+    <!-- Dark theme disclaimer -->
+    <string name="opentasks_preference_dark_theme_disclaimer">التنسيق الداكن ما زال تحت التجربة وتم تطبيقه جزئيا فقط.</string>
+
+    <!-- List appearance settings -->
+    <string name="opentasks_preference_appearance_task_list">عرض قائم المهام</string>
+
+    <!-- Number of description lines to show -->
+    <string name="opentasks_preference_description_preview">استعراض الوصف</string>
+    <string name="opentasks_preference_description_preview_summary">العدد الأقصى للأسطر التي يتم استعراضها من الوصف.</string>
+
+    <!-- If and how to show progress -->
+    <string name="opentasks_preference_show_check_list_summary">عرض ملخص قائمة المهام</string>
+    <string name="opentasks_preference_show_progress_gradient">عرض مدرج الإنجاز</string>
+
+    <!-- Whether to show the priority indicator -->
+    <string name="opentasks_preference_show_priority">عرض الأولوية</string>
+
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">تمت مشاركته بواسطة OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">الصلاحية مطلوبة</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_message"><![CDATA[لكي تتم قراءة قائمة الحسابات في جهازك التي تدعم خاصية مزامنة المهام، فإن %s تتطلب صلاحية GET_ACCOUNTS.<br/><br/>فضلا ملاحظة أنه بسبب اختيار جوجل فإنه للأسف يتم تصنيف الصلاحية المطلوبة بعنوان &quot;access your contacts&quot; (&quot;الوصول إلى جهات الاتصال&quot; ) بدلا عن &quot;read your accounts&quot; (&quot;الوصول إلى الحسابات&quot;.). راجع <a href="https://issuetracker.google.com/issues/37065963">Issue 37065963</a> للحصول على معلومات إضافية.]]></string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">متابعة</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">فتح الإعدادات</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <string name="opentasks_relative_time">%1$s, %2$s</string>
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
+    <string name="opentasks_date_time">%1$s, %2$s</string>
+
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">المهام المثبتة</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">تواريخ البدء والإنجاز المستهدف</string>
+
+
+    <!-- Titles of ActionMode Context menu -->
+
+    <!-- Action for URLs (most likely http/https)-->
+    <string name="opentasks_actionmode_open">فتح</string>
+
+    <!-- Action for Phone numbers -->
+    <string name="opentasks_actionmode_call">اتصال</string>
+
+    <!-- Action for Email addresses -->
+    <string name="opentasks_actionmode_mail_to">إرسال بريد</string>
+
+</resources>
