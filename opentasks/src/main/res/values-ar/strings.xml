@@ -15,7 +15,7 @@
     <string name="toast_task_created">\"%1s\" أنشئت.</string>
     <string name="toast_task_completed">\"%1s\" أنجزت.</string>
     <string name="toast_task_uncompleted">\"%1s\" أعيد فتحها.</string>
-    <string name="toast_x_removed">\"%1s\" حذفت.</string>
+    <string name="toast_x_removed">\"%1s\" أزيلت.</string>
     <string name="task_group_title_list">المهام</string>
     <string name="task_group_title_start">بداية المهام</string>
     <string name="task_group_title_due">التاريخ المستهدف للمهام</string>
@@ -62,7 +62,7 @@
     <string name="opentasks_hide_tick_box">نص</string>
 
     <!-- Label of button to show a tick box -->
-    <string name="opentasks_show_tick_box">قائمة</string>
+    <string name="opentasks_show_tick_box">قائمة مهام</string>
 
     <!-- Label of button to delete checklist item -->
     <string name="opentasks_delete_item">حذف</string>
@@ -90,13 +90,13 @@
     <string name="task_title">العنوان</string>
     <string name="task_location">المكان</string>
     <string name="task_description">الوصف</string>
-    <string name="task_checklist">قائمة</string>
-    <string name="task_start">البدية</string>
+    <string name="task_checklist">قائمة مهام</string>
+    <string name="task_start">البداية</string>
     <string name="task_due">التاريخ المستهدف</string>
     <string name="task_completed">منجز</string>
     <string name="task_percent_complete">نسبة الإنجاز</string>
     <string name="task_status">الحالة</string>
-    <string name="task_classification">الخاصة</string>
+    <string name="task_classification">الخصوصية</string>
     <string name="task_url">URL</string>
     <string name="title_task_detail">تفاصيل المهمة</string>
     <string name="title_task_list">المهمات</string>
@@ -134,7 +134,7 @@
     <string name="task_group_progress_0">لم ينجز شيء</string>
     <string name="task_group_progress_40">تبقى الكثير</string>
     <string name="task_group_progress_60">في منتصف الطريق</string>
-    <string name="task_group_progress_80">على وشك الوصول</string>
+    <string name="task_group_progress_80">على وشك الانتهاء</string>
     <string name="task_group_progress_100">منجز</string>
 
     <!-- Task list priority group titles -->
@@ -317,7 +317,7 @@
     <string name="opentasks_preference_description_preview_summary">العدد الأقصى للأسطر التي يتم استعراضها من الوصف.</string>
 
     <!-- If and how to show progress -->
-    <string name="opentasks_preference_show_check_list_summary">عرض ملخص قائمة الاختيار</string>
+    <string name="opentasks_preference_show_check_list_summary">عرض ملخص قائمة المهام</string>
     <string name="opentasks_preference_show_progress_gradient">عرض مدرج الإنجاز</string>
 
     <!-- Whether to show the priority indicator -->
