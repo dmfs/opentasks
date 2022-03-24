@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
  */
 public final class DescriptionFieldAdapter extends FieldAdapter<List<DescriptionItem>>
 {
-    private final static Pattern CHECKMARK_PATTERN = Pattern.compile("([-*] )?\\[([xX ])\\](.*)");
+    private final static Pattern CHECKMARK_PATTERN = Pattern.compile("(\\s*)([-*] )?\\[([xX ])\\](.*)");
 
     /**
      * The field name this adapter uses to store the values.
@@ -169,6 +169,7 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
         StringBuilder currentParagraph = new StringBuilder();
         boolean currentHasCheckedMark = false;
         boolean currentIsChecked = false;
+        int currentLevel = 0;
         for (String line : description.split("\n"))
         {
             matcher.reset(line);
@@ -179,12 +180,13 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
                 if (currentParagraph.length() > 0)
                 {
                     result.add(new DescriptionItem(currentHasCheckedMark, currentIsChecked,
-                            currentHasCheckedMark ? currentParagraph.toString().trim() : currentParagraph.toString()));
+                            currentHasCheckedMark ? currentParagraph.toString().trim() : currentParagraph.toString(), currentLevel));
                 }
                 currentHasCheckedMark = true;
-                currentIsChecked = "x".equals(matcher.group(2).toLowerCase());
+                currentIsChecked = "x".equals(matcher.group(3).toLowerCase());
                 currentParagraph.setLength(0);
-                currentParagraph.append(matcher.group(3));
+                currentParagraph.append(matcher.group(4));
+                currentLevel = (matcher.group(1).length() + 1) / 2; //FIXME: Make the levels not static
             }
             else
             {
@@ -194,7 +196,7 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
                     if (currentParagraph.length() > 0)
                     {
                         // close last paragraph
-                        result.add(new DescriptionItem(currentHasCheckedMark, currentIsChecked, currentParagraph.toString().trim()));
+                        result.add(new DescriptionItem(currentHasCheckedMark, currentIsChecked, currentParagraph.toString().trim(), currentLevel));
                     }
                     currentHasCheckedMark = false;
                     currentParagraph.setLength(0);
@@ -211,7 +213,7 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
         if (currentHasCheckedMark || currentParagraph.length() > 0)
         {
             result.add(new DescriptionItem(currentHasCheckedMark, currentIsChecked,
-                    currentHasCheckedMark ? currentParagraph.toString().trim() : currentParagraph.toString()));
+                    currentHasCheckedMark ? currentParagraph.toString().trim() : currentParagraph.toString(), currentLevel));
         }
         return result;
     }
@@ -234,6 +236,10 @@ public final class DescriptionFieldAdapter extends FieldAdapter<List<Description
             else
             {
                 sb.append('\n');
+            }
+            for (int i = 0; i < item.level; i++)
+            {
+                sb.append("  ");
             }
             if (item.checkbox)
             {

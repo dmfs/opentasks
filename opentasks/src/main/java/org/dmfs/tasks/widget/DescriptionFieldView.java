@@ -194,6 +194,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
             if (itemView == null || itemView.getId() != R.id.checklist_element)
             {
                 itemView = createItemView();
+
                 mContainer.addDragView(itemView, itemView.findViewById(R.id.drag_handle), mContainer.getChildCount() - 1);
             }
 
@@ -251,6 +252,11 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
     {
         // set the checkbox status
         CheckBox checkbox = itemView.findViewById(android.R.id.checkbox);
+
+        // set the left margin for hierarchical lists
+        MarginLayoutParams lp = (MarginLayoutParams) checkbox.getLayoutParams();
+        lp.leftMargin = checkbox.getPaddingLeft() * 10 * item.level;
+        checkbox.setLayoutParams(lp);
 
         // make sure we don't receive our own updates
         checkbox.setOnCheckedChangeListener(null);
@@ -463,7 +469,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
         mContainer.clearFocus();
 
         // create a new empty item
-        DescriptionItem item = new DescriptionItem(withCheckBox, false, initialText);
+        DescriptionItem item = new DescriptionItem(withCheckBox, false, initialText, 0);
         mCurrentValue.add(pos, item);
         View newItem = createItemView();
         bindItemView(newItem, item);
@@ -529,7 +535,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
 
                 if (lines.length == 1)
                 {
-                    DescriptionItem newItem = new DescriptionItem(true, item.checked, item.text);
+                    DescriptionItem newItem = new DescriptionItem(true, item.checked, item.text, 0);
                     mCurrentValue.add(idx, newItem);
                     new Animated(mContainer.getChildAt(origidx), v -> (ViewGroup) v).process(v -> bindItemView(v, newItem));
                     setupActionView(newItem);
@@ -538,7 +544,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
                 {
                     for (String i : lines)
                     {
-                        DescriptionItem newItem = new DescriptionItem(true, false, i);
+                        DescriptionItem newItem = new DescriptionItem(true, false, i, 0);
                         mCurrentValue.add(idx, newItem);
                         if (idx == origidx)
                         {
@@ -557,7 +563,7 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
             }
             else
             {
-                DescriptionItem newItem = new DescriptionItem(false, item.checked, item.text);
+                DescriptionItem newItem = new DescriptionItem(false, item.checked, item.text, item.level);
                 mCurrentValue.add(idx, newItem);
                 if (idx == 0 || mCurrentValue.get(idx - 1).checkbox)
                 {
