@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/checklist_element"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -7,32 +7,22 @@
         android:layout_marginLeft="-4dp"
         android:clipToPadding="false"
         android:clipChildren="false"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        android:orientation="horizontal">
 
 
     <androidx.appcompat.widget.AppCompatCheckBox
             android:id="@android:id/checkbox"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:background="@android:color/transparent"
-            android:padding="4dp" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/drag_handle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:padding="4dp"
-            android:src="@drawable/ic_drag_indicator_24px" />
+            android:padding="4dp"/>
 
     <androidx.appcompat.widget.AppCompatEditText
             android:id="@android:id/title"
             android:layout_width="0dp"
+            android:layout_weight="0.7"
             android:layout_height="wrap_content"
-            android:layout_alignWithParentIfMissing="true"
-            android:layout_toStartOf="@id/drag_handle"
-            android:layout_toEndOf="@android:id/checkbox"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="@string/opentasks_checklist_empty_item_hint"
@@ -42,13 +32,26 @@
             android:paddingBottom="8dp"
             android:scrollHorizontally="false"
             android:singleLine="false"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 
-    <FrameLayout
-            android:id="@+id/action_bar"
-            android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indend_left"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:layout_below="@android:id/title"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
-</RelativeLayout>
+            android:padding="4dp"
+            android:src="@drawable/ic_left_arrow"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/indend_right"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:src="@drawable/ic_right_arrow"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/drag_handle"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:src="@drawable/ic_drag_indicator_24px"/>
+</LinearLayout>

@@ -62,6 +62,7 @@ import org.dmfs.tasks.utils.DescriptionMovementMethod;
 
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.ViewCompat;
 
 import static org.dmfs.jems.optional.elementary.Absent.absent;
@@ -250,6 +251,20 @@ public class DescriptionFieldView extends AbstractFieldView implements OnChecked
 
     private void bindItemView(final View itemView, final DescriptionItem item)
     {
+        // set the left indend button listener
+        AppCompatImageView indend_left = itemView.findViewById(R.id.indend_left);
+        indend_left.setOnClickListener((view -> {
+            if (item.level > 0) {
+                item.level -= 1;
+                bindItemView(itemView, item);
+            }
+        }));
+        AppCompatImageView indend_right = itemView.findViewById(R.id.indend_right);
+        indend_right.setOnClickListener((view -> {
+            item.level += 1;
+            bindItemView(itemView, item);
+        }));
+
         // set the checkbox status
         CheckBox checkbox = itemView.findViewById(android.R.id.checkbox);
 
