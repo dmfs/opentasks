@@ -27,13 +27,15 @@ public final class DescriptionItem
     public boolean checkbox;
     public boolean checked;
     public String text;
+    public int level;
 
 
-    public DescriptionItem(boolean checkbox, boolean checked, String text)
+    public DescriptionItem(boolean checkbox, boolean checked, String text, int level)
     {
         this.checkbox = checkbox;
         this.checked = checked;
         this.text = text;
+        this.level = level;
     }
 
 
@@ -43,13 +45,14 @@ public final class DescriptionItem
         return obj instanceof DescriptionItem
                 && ((DescriptionItem) obj).checkbox == checkbox
                 && ((DescriptionItem) obj).checked == checked
-                && ((DescriptionItem) obj).text.equals(text);
+                && ((DescriptionItem) obj).text.equals(text)
+                && ((DescriptionItem) obj).level == level;
     }
 
 
     @Override
     public int hashCode()
     {
-        return text.hashCode() * 31 + (checkbox ? 1 : 0) + (checked ? 2 : 0);
+        return text.hashCode() * 31 + (checkbox ? 1 : 0) + (checked ? 2 : 0) + level * 17;
     }
 }
