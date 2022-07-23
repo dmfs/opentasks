@@ -22,7 +22,7 @@
     <string name="task_group_title_priority">Tarea por prioridad</string>
     <string name="task_group_title_progress">Tarea por progreso</string>
     <string name="task_group_title_default">Tareas</string>
-    <string name="quick_add_task_created">Tarea creadas</string>
+    <string name="quick_add_task_created">Tarea creada</string>
     <string name="initial_local_task_list_name">Mis tareas</string>
 
     <plurals name="number_of_tasks">
@@ -39,6 +39,18 @@
     <string name="activity_task_details_complete_task">Completar tarea</string>
     <string name="activity_task_details_pin">Marcar</string>
     <string name="activity_task_details_pin_task">Marcar tarea</string>
+	<string name="opentasks_details_no_task_selected">No se ha seleccionado ninguna tarea</string>
+    <string name="opentasks_task_details_menu_send_short">Enviar</string>
+    <string name="opentasks_task_details_menu_send">Enviar a</string>
+
+     <!-- Label of button to hide a tick box -->
+    <string name="opentasks_hide_tick_box">Texto</string>
+
+    <!-- Label of button to show a tick box -->
+    <string name="opentasks_show_tick_box">Lista</string>
+
+    <!-- Label of button to delete checklist item -->
+    <string name="opentasks_delete_item">Eliminar</string>
 
     <!-- The title of the button to add a new item to a check list. -->
     <string name="opentasks_checklist_add_item">Añadir elemento</string>
@@ -69,13 +81,14 @@
     <string name="task_percent_complete">Porcentaje completado</string>
     <string name="task_status">Estado</string>
     <string name="task_classification">Privacidad</string>
-    <string name="task_url">URL</string>
+    <string name="task_url">Enlace web</string>
     <string name="title_task_detail">Detalle de la tarea</string>
     <string name="title_task_list">Tareas</string>
     <string name="task_detail_activity">Detalle de la tarea</string>
     <string name="task_priority">Prioridad</string>
-    <string name="task_timezone">Zona Horaria</string>
+    <string name="task_timezone">Zona horaria</string>
     <string name="task_all_day">Todo el día</string>
+    <string name="task_recurrence">Repetición</string>
 
     <!-- Task list due group titles -->
     <string name="task_group_no_due">Sin vencimiento</string>
@@ -88,25 +101,25 @@
     <string name="task_group_due_in_future">Vence más tarde</string>
 
     <!-- Task list start group titles -->
-    <string name="task_group_start_started">Already Started</string>
-    <string name="task_group_start_today">Today</string>
-    <string name="task_group_start_tomorrow">Tomorrow</string>
-    <string name="task_group_start_within_7_days">Someday</string>
-    <string name="task_group_start_in_future">Later</string>
-    <string name="task_group_due_title">Due</string>
-    <string name="task_group_all_title">Lists</string>
-    <string name="task_group_completed_title">Completed</string>
-    <string name="task_group_start_title">Start</string>
-    <string name="task_group_search_title">Search</string>
-    <string name="task_group_priority_title">Priority</string>
-    <string name="task_group_progress_title">Progress</string>
+    <string name="task_group_start_started">Ya comenzada</string>
+    <string name="task_group_start_today">Hoy</string>
+    <string name="task_group_start_tomorrow">Mañana</string>
+    <string name="task_group_start_within_7_days">En una semana</string>
+    <string name="task_group_start_in_future">Más tarde</string>
+    <string name="task_group_due_title">Imprescindible</string>
+    <string name="task_group_all_title">Listas</string>
+    <string name="task_group_completed_title">Completada</string>
+    <string name="task_group_start_title">Inicio</string>
+    <string name="task_group_search_title">Buscar</string>
+    <string name="task_group_priority_title">Prioridad</string>
+    <string name="task_group_progress_title">Progreso</string>
 
     <!-- Task list progress group titles -->
-    <string name="task_group_progress_0">Nothing accomplished</string>
-    <string name="task_group_progress_40">Way to go</string>
-    <string name="task_group_progress_60">Halfway there</string>
-    <string name="task_group_progress_80">Almost done</string>
-    <string name="task_group_progress_100">Done</string>
+    <string name="task_group_progress_0">Nada hecho</string>
+    <string name="task_group_progress_40">Falta mucho</string>
+    <string name="task_group_progress_60">A medio camino</string>
+    <string name="task_group_progress_80">Casi hecha</string>
+    <string name="task_group_progress_100">Hecha</string>
 
     <!-- Task list priority group titles -->
     <string name="task_group_priority_high">Prioridad alta</string>
@@ -147,12 +160,12 @@
 
     <!-- Label for Settings -->
 
-    <string name="title_activity_settings">Ajustes</string>
-    <string name="action_settings">Ajustes</string>
-    <string name="action_add_local_list">Añadir Lista</string>
-    <string name="visible_task_lists">Listas Mostradas</string>
+    <string name="title_activity_settings">Preferencias</string>
+    <string name="action_settings">Preferencias</string>
+    <string name="action_add_local_list">Añadir lista</string>
+    <string name="visible_task_lists">Listas mostradas</string>
     <string name="opentasks_settings_notification_enable">Notificaciones</string>
-    <string name="synced_task_lists">Listas Sincronizadas</string>
+    <string name="synced_task_lists">Listas sincronizadas</string>
 
     <!-- dialogs -->
     <string name="task_list_settings_dialog_account_title">Elige una cuenta</string>
@@ -162,21 +175,20 @@
     <string name="activity_manage_list_btn_save">guardar</string>
     <string name="activity_manage_list_btn_delete">eliminar lista</string>
     <string name="activity_add_list_title">Crear lista local</string>
-    <string name="activity_edit_list_title">Ajustess de la lista</string>
+    <string name="activity_edit_list_title">Ajustes de la lista</string>
     <string name="task_list_name_caption">Nombre</string>
     <string name="task_list_no_sync">Nota: Esto creará una lista local. Las tareas en listas locales no se sincronizan.</string>
     <string name="task_list_color_caption">Color de la lista</string>
 
     <!-- input dialog -->
     <string name="task_list_name_dialog_hint">Nombre de la lista</string>
-    <string name="task_list_name_dialog_title">Introducir el nombre de  la lista</string>
+    <string name="task_list_name_dialog_title">Introducir el nombre de la lista</string>
     <string name="task_list_name_dialog_error">Introducir un nombre.</string>
 
     <!-- delete dialog -->
     <string name="task_list_delete_dialog_title">Eliminar %s</string>
     <string name="task_list_delete_dialog_message">¿Eliminar la lista y todas sus tareas?\nNota: No es posible recuperar las listas eliminadas.</string>
     <string name="task_list_delete_toast">%s elimminada</string>
-
 
     <!-- Label for Expandable Group Descriptors -->
     <string name="gd_by_due_date">Por vencimiento</string>
@@ -250,5 +262,78 @@
 
     <!-- Incoming share -->
     <string name="share_as_task">Crear Tarea</string>
+
+    <!-- Settings -->
+    <!-- Notification enable/disable switch label in settings -->
+    <string name="opentasks_settings_notification_enable">Notificaciones</string>
+    <!-- Section title in settings for the notification signals -->
+    <string name="opentasks_settings_notification_signals_section_title">Señales de notificación</string>
+    <!-- Notification Sound enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_sound">Sonido</string>
+    <!-- Notification Vibration enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_vibrate">Vibración</string>
+    <!-- Notification "Pulse light" enabling/disabling entry label in settings -->
+    <string name="opentasks_settings_notification_lights">Pulso de luz</string>
+
+    <!-- Title of the general appearance screen -->
+    <string name="opentasks_preference_appearance">Apariencia</string>
+
+    <!-- Theme category title -->
+    <string name="opentasks_preference_theme">Tema</string>
+
+    <!-- Option to follow the system theme  -->
+    <string name="opentasks_preference_system_theme">Tema del sistema por defecto</string>
+
+    <!-- System theme disclaimer -->
+    <string name="opentasks_preference_system_theme_disclaimer">El tema del sistema es experimental\ny sólo se ha implementado parcialmente.</string>
+
+    <!-- Option to use a dark theme -->
+    <string name="opentasks_preference_dark_theme">Tema oscuro</string>
+
+    <!-- Dark theme disclaimer -->
+    <string name="opentasks_preference_dark_theme_disclaimer">El tema oscuro es experimental\ny sólo se ha implementado parcialmente.</string>
+
+    <!-- List appearance settings -->
+    <string name="opentasks_preference_appearance_task_list">Vista de la lista de tareas</string>
+
+    <!-- Number of description lines to show -->
+    <string name="opentasks_preference_description_preview">Resumen de la descripción</string>
+    <string name="opentasks_preference_description_preview_summary">El número máximo de líneas de descripción que se mostrarán.</string>
+
+    <!-- If and how to show progress -->
+    <string name="opentasks_preference_show_check_list_summary">Mostrar resumen lista de comprobación</string>
+    <string name="opentasks_preference_show_progress_gradient">Mostrar gradiente de progreso</string>
+
+    <!-- Whether to show the priority indicator -->
+    <string name="opentasks_preference_show_priority">Mostrar prioridad</string>
+
+    <!-- Outgoing share -->
+    <string name="opentasks_share_footer">Compartir con OpenTasks</string>
+
+    <!-- GET_ACCOUNTS permission (in CONTACTS permission group) requesting dialog: -->
+    <string name="opentasks_permission_request_dialog_getaccounts_title">Autorización requerida</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_continue">Continuar</string>
+    <string name="opentasks_permission_request_dialog_getaccounts_button_settings">Abrir la configuración</string>
+
+    <!-- Format indicating a relative expression and time. Example: "4 hours ago, 11:00 am" -->
+    <!-- Format indicating a date and time. Example: "23 Aug, 11:00 am" -->
+    <string name="opentasks_date_time">%1$s, %2$s</string>
+
+    <!-- Title of the notification channel for pinned tasks -->
+    <string name="opentasks_notification_channel_pinned_tasks">Tareas marcadas</string>
+
+    <!-- Title of the notification channel for start and due alerts -->
+    <string name="opentasks_notification_channel_due_dates">Fechas de inicio y fin</string>
+
+    <!-- Titles of ActionMode Context menu -->
+
+    <!-- Action for URLs (most likely http/https)-->
+    <string name="opentasks_actionmode_open">Abrir</string>
+
+    <!-- Action for Phone numbers -->
+    <string name="opentasks_actionmode_call">Llamar</string>
+
+    <!-- Action for Email addresses -->
+    <string name="opentasks_actionmode_mail_to">Correo electrónico</string>
 
 </resources>
